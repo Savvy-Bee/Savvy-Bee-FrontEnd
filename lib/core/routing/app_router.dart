@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:savvy_bee_mobile/features/auth/signup/presentation/screens/signup_connect_bank_screen.dart';
-import 'package:savvy_bee_mobile/features/auth/signup/presentation/screens/signup_notifications_screen.dart';
+import 'package:savvy_bee_mobile/features/auth/presentation/screens/signup/presentation/screens/signup_connect_bank_screen.dart';
+import 'package:savvy_bee_mobile/features/auth/presentation/screens/signup/presentation/screens/signup_notifications_screen.dart';
+import 'package:savvy_bee_mobile/features/chat/presentation/screens/chat_screen.dart';
+import 'package:savvy_bee_mobile/features/chat/presentation/screens/choose_personality_screen.dart';
 import 'package:savvy_bee_mobile/features/password/presentation/screens/password_reset_complete.dart';
 import 'package:savvy_bee_mobile/features/password/presentation/screens/password_reset_screen.dart';
 import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
-import '../../features/auth/login/presentation/screens/login_screen.dart';
-import '../../features/auth/signup/presentation/screens/signup_complete_screen.dart';
-import '../../features/auth/signup/presentation/screens/signup_screen.dart';
+import '../../features/auth/presentation/screens/login/presentation/screens/login_screen.dart';
+import '../../features/auth/presentation/screens/signup/presentation/screens/signup_complete_screen.dart';
+import '../../features/auth/presentation/screens/signup/presentation/screens/signup_screen.dart';
 import '../../features/home/presentation/screens/home_screen.dart';
 import '../../features/splash/presentation/screens/splash_screen.dart';
 
@@ -82,6 +84,20 @@ final GoRouter appRouter = GoRouter(
       name: HomeScreen.path,
       builder: (BuildContext context, GoRouterState state) {
         return const HomeScreen();
+      },
+    ),
+    GoRoute(
+      path: ChatScreen.path,
+      name: ChatScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return const ChatScreen();
+      },
+    ),
+    GoRoute(
+      path: ChoosePersonalityScreen.path,
+      name: ChoosePersonalityScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return const ChoosePersonalityScreen();
       },
     ),
   ],

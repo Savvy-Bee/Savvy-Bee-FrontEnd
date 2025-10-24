@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
-import 'package:savvy_bee_mobile/core/widgets/app_button.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/intro_text.dart';
 
 import '../../../../../core/utils/assets.dart';
 import '../../../../../core/utils/image_shadow_effect.dart';
+import '../../../auth/presentation/screens/login/presentation/screens/login_screen.dart';
 
 class PasswordResetComplete extends StatefulWidget {
   static String path = '/password-reset-complete';
@@ -53,10 +55,10 @@ class _PasswordResetCompleteState extends State<PasswordResetComplete> {
                   horizontal: 16.0,
                   vertical: 32.0,
                 ),
-                child: AppButton(
+                child: CustomButton(
                   text: 'Continue',
                   onPressed: () {
-                    // context.pushNamed(PasswordResetComplete.path);
+                    context.goNamed(LoginScreen.path);
                   },
                 ),
               ),

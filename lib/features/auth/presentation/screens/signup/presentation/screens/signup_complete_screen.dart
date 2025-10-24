@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
-import 'package:savvy_bee_mobile/core/widgets/app_button.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/intro_text.dart';
-import 'package:savvy_bee_mobile/features/auth/signup/presentation/screens/signup_notifications_screen.dart';
+import 'package:savvy_bee_mobile/features/auth/presentation/screens/signup/presentation/screens/signup_notifications_screen.dart';
 
-import '../../../../../core/utils/assets.dart';
-import '../../../../../core/utils/image_shadow_effect.dart';
+import '../../../../../../../core/utils/assets.dart';
+import '../../../../../../../core/utils/image_shadow_effect.dart';
 
 class SignupCompleteScreen extends StatefulWidget {
   static String path = '/signup-complete';
@@ -55,7 +55,7 @@ class _SignupCompleteScreenState extends State<SignupCompleteScreen> {
                   horizontal: 16.0,
                   vertical: 32.0,
                 ),
-                child: AppButton(
+                child: CustomButton(
                   text: 'Continue',
                   onPressed: () {
                     context.pushNamed(SignupNotificationsScreen.path);

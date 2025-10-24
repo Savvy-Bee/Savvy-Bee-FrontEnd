@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 
-enum AppButtonColor { yellow, white, black }
+enum CustomButtonColor { yellow, white, black }
 
-class AppButton extends StatelessWidget {
+class CustomButton extends StatelessWidget {
   final String text;
   final VoidCallback? onPressed;
-  final AppButtonColor appButtonColor;
+  final CustomButtonColor appButtonColor;
   final bool isFullWidth;
+  final bool rounded;
 
-  const AppButton({
+  const CustomButton({
     super.key,
     required this.text,
     this.onPressed,
-    this.appButtonColor = AppButtonColor.yellow,
+    this.appButtonColor = CustomButtonColor.yellow,
     this.isFullWidth = true,
+    this.rounded = false,
   });
 
   @override
@@ -27,14 +29,16 @@ class AppButton extends StatelessWidget {
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
           backgroundColor: switch (appButtonColor) {
-            AppButtonColor.yellow => AppColors.primary,
-            AppButtonColor.white => AppColors.white,
-            AppButtonColor.black => AppColors.black,
+            CustomButtonColor.yellow => AppColors.primary,
+            CustomButtonColor.white => AppColors.white,
+            CustomButtonColor.black => AppColors.black,
           },
           padding: const EdgeInsets.symmetric(vertical: 12),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-            side: appButtonColor == AppButtonColor.white
+            borderRadius: rounded
+                ? BorderRadius.circular(99)
+                : BorderRadius.circular(12),
+            side: appButtonColor == CustomButtonColor.white
                 ? BorderSide(color: AppColors.primary, width: 1.0)
                 : BorderSide.none,
           ),
@@ -45,9 +49,9 @@ class AppButton extends StatelessWidget {
           style: theme.textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.w600,
             color: switch (appButtonColor) {
-              AppButtonColor.yellow => AppColors.black,
-              AppButtonColor.white => AppColors.primary,
-              AppButtonColor.black => AppColors.white,
+              CustomButtonColor.yellow => AppColors.black,
+              CustomButtonColor.white => AppColors.primary,
+              CustomButtonColor.black => AppColors.white,
             },
           ),
         ),

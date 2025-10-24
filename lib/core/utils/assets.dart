@@ -22,4 +22,18 @@ class Assets {
 
   static const String coinJar = '$_baseIllustrationPath/jar.png';
   static const String savvyCoin = '$_baseIllustrationPath/savvy_coin.png';
+
+  // Avatars
+  static const String dashAvatar = '$_baseIllustrationPath/dash_head.png';
+  static const String susuAvatar = '$_baseIllustrationPath/susu_head.png';
+  static const String budgetBeeAvatar =
+      '$_baseIllustrationPath/budget_bee_head.png';
+  static const String savingsBeeAvatar =
+      '$_baseIllustrationPath/savings_bee_head.png';
+  static const String quizBeeAvatar =
+      '$_baseIllustrationPath/quiz_bee_head.png';
+  static const String interestBeeAvatar =
+      '$_baseIllustrationPath/interest_bee_head.png';
+  static const String scammerBeeAvatar =
+      '$_baseIllustrationPath/scammer_bee_head.png';
 }

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../../core/theme/app_colors.dart';
-import '../../../../../core/utils/assets.dart';
-import '../../../../../core/utils/image_shadow_effect.dart';
-import '../../../../../core/widgets/app_button.dart';
-import '../../../../../core/widgets/intro_text.dart';
+import '../../../../../../../core/theme/app_colors.dart';
+import '../../../../../../../core/utils/assets.dart';
+import '../../../../../../../core/utils/image_shadow_effect.dart';
+import '../../../../../../../core/widgets/custom_button.dart';
+import '../../../../../../../core/widgets/intro_text.dart';
 import 'signup_connect_bank_screen.dart';
 
 class SignupNotificationsScreen extends StatefulWidget {
@@ -61,15 +61,15 @@ class _SignupNotificationsScreenState extends State<SignupNotificationsScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    AppButton(
+                    CustomButton(
                       text: 'Turn on notifications',
-                      appButtonColor: AppButtonColor.black,
+                      appButtonColor: CustomButtonColor.black,
                       onPressed: () {},
                     ),
                     const Gap(10.0),
-                    AppButton(
+                    CustomButton(
                       text: 'Not now',
-                      appButtonColor: AppButtonColor.white,
+                      appButtonColor: CustomButtonColor.white,
                       onPressed: () {
                         context.pushNamed(SignupConnectBankScreen.path);
                       },

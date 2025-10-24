@@ -3,15 +3,17 @@ import 'package:flutter/services.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_typography.dart';
 
-class CustomInputField extends StatelessWidget {
+class CustomTextFormField extends StatelessWidget {
   // final String label;
   final String? hint;
   final String? errorText;
   final bool obscureText;
+  final bool isRounded;
   final TextEditingController? controller;
   final TextInputType? keyboardType;
   final List<TextInputFormatter>? inputFormatters;
   final void Function(String)? onChanged;
+  final void Function(String)? onFieldSubmitted;
   final String? Function(String?)? validator;
   final Widget? prefix;
   final Widget? suffix;
@@ -26,16 +28,18 @@ class CustomInputField extends StatelessWidget {
   final EdgeInsets? contentPadding;
   final TextInputAction textInputAction;
 
-  const CustomInputField({
+  const CustomTextFormField({
     super.key,
     // required this.label,
     this.hint,
     this.errorText,
     this.obscureText = false,
+    this.isRounded = false,
     this.controller,
     this.keyboardType,
     this.inputFormatters,
     this.onChanged,
+    this.onFieldSubmitted,
     this.validator,
     this.prefix,
     this.suffix,
@@ -72,8 +76,11 @@ class CustomInputField extends StatelessWidget {
           readOnly: readOnly,
           // style: AppTypography.bodyMedium,
           onTapOutside: (event) => FocusScope.of(context).unfocus(),
+          onFieldSubmitted: onFieldSubmitted,
           textInputAction: textInputAction,
           decoration: InputDecoration(
+            filled: true,
+            fillColor: AppColors.white,
             hintText: hint,
             errorText: errorText,
             prefixIcon: prefix,
@@ -82,23 +89,23 @@ class CustomInputField extends StatelessWidget {
                 contentPadding ??
                 const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(isRounded ? 24 : 8),
               borderSide: BorderSide(color: AppColors.border),
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(isRounded ? 24 : 8),
               borderSide: BorderSide(color: AppColors.border),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(isRounded ? 24 : 8),
               borderSide: const BorderSide(color: AppColors.primary, width: 2),
             ),
             errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(isRounded ? 24 : 8),
               borderSide: const BorderSide(color: AppColors.error, width: 2),
             ),
             focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(isRounded ? 24 : 8),
               borderSide: const BorderSide(color: AppColors.error, width: 2),
             ),
           ),

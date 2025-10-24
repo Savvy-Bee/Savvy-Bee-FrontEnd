@@ -16,17 +16,17 @@ class AppTheme {
     ),
     scaffoldBackgroundColor: AppColors.background,
     fontFamily: Constants.generalSansFontFamily,
-    textTheme: TextTheme(
-      displayLarge: AppTypography.h1,
-      displayMedium: AppTypography.h2,
-      displaySmall: AppTypography.h3,
-      bodyLarge: AppTypography.bodyLarge,
-      bodyMedium: AppTypography.bodyMedium,
-      bodySmall: AppTypography.bodySmall,
-      labelLarge: AppTypography.buttonLarge,
-      labelMedium: AppTypography.buttonMedium,
-      labelSmall: AppTypography.buttonSmall,
-    ),
+    // textTheme: TextTheme(
+    //   displayLarge: AppTypography.h1,
+    //   displayMedium: AppTypography.h2,
+    //   displaySmall: AppTypography.h3,
+    //   bodyLarge: AppTypography.bodyLarge,
+    //   bodyMedium: AppTypography.bodyMedium,
+    //   bodySmall: AppTypography.bodySmall,
+    //   labelLarge: AppTypography.buttonLarge,
+    //   labelMedium: AppTypography.buttonMedium,
+    //   labelSmall: AppTypography.buttonSmall,
+    // ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.primary,

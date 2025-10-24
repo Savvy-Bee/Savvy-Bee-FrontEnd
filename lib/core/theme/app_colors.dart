@@ -10,10 +10,13 @@ class AppColors {
 
   static const bgBlue = Color(0xFFADE1F9);
 
+  static const purple = Color(0xFFC179AB);
+
   // Primary Colors
   static const Color primary = Color(0xFFFFB800);
-  static const Color primaryDark = Color(0xFFE6A600);
+  static const Color primaryDark = Color(0xFFFFC300);
   static const Color primaryLight = Color(0xFFFFCC33);
+  static const Color primaryFaint = Color(0xFFFFF7DC);
   static const Color primaryFaded = Color(0xFFFFEFB5);
 
   // Secondary Colors

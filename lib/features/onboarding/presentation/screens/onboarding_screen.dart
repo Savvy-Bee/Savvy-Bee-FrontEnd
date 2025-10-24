@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
-import '../../../../core/widgets/app_button.dart';
-import '../../../auth/signup/presentation/screens/signup_screen.dart';
+import '../../../../core/widgets/custom_button.dart';
+import '../../../auth/presentation/screens/signup/presentation/screens/signup_screen.dart';
 import '../../domain/models/onboarding_item.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../../../core/utils/breakpoints.dart';
 import '../../../../core/widgets/intro_text.dart';
-import '../../../auth/login/presentation/screens/login_screen.dart';
+import '../../../auth/presentation/screens/login/presentation/screens/login_screen.dart';
 
 class OnboardingScreen extends StatefulWidget {
   static String path = '/onboarding';
@@ -72,7 +72,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 showLogo: true,
               ),
             ),
-            Flexible(
+            Expanded(
               child: PageView(
                 controller: _pageController,
                 onPageChanged: (value) {
@@ -103,7 +103,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             ),
                           ),
                           // Image on top
-                          Image.asset(e.imagePath, scale: 0.1),
+                          Image.asset(
+                            e.imagePath,
+                            scale: switch (_currentIndex) {
+                              0 => 1.1,
+                              1 => 1.1,
+                              2 => 0.9,
+                              3 => 1.1,
+                              _ => 0.5,
+                            },
+                          ),
                         ],
                       ),
                     )
@@ -127,16 +136,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  AppButton(
+                  CustomButton(
                     text: 'Get Started',
                     onPressed: () {
                       context.pushNamed(SignupScreen.path);
                     },
                   ),
                   const Gap(10),
-                  AppButton(
+                  CustomButton(
                     text: 'I already have an account',
-                    appButtonColor: AppButtonColor.black,
+                    appButtonColor: CustomButtonColor.black,
                     onPressed: () {
                       context.pushNamed(LoginScreen.path);
                     },

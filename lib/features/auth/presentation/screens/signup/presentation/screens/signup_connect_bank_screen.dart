@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
+import 'package:savvy_bee_mobile/features/auth/presentation/screens/login/presentation/screens/login_screen.dart';
+import 'package:savvy_bee_mobile/features/chat/presentation/screens/chat_screen.dart';
 
-import '../../../../../core/utils/assets.dart';
-import '../../../../../core/widgets/app_button.dart';
-import '../../../../../core/widgets/intro_text.dart';
+import '../../../../../../../core/utils/assets.dart';
+import '../../../../../../../core/widgets/custom_button.dart';
+import '../../../../../../../core/widgets/intro_text.dart';
 
 class SignupConnectBankScreen extends StatefulWidget {
   static String path = '/signup-connect-bank';
@@ -69,15 +72,18 @@ class _SignupConnectBankScreenState extends State<SignupConnectBankScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    AppButton(
+                    CustomButton(
                       text: 'Connect me',
-                      appButtonColor: AppButtonColor.black,
-                      onPressed: () {},
+                      appButtonColor: CustomButtonColor.black,
+                      onPressed: () {
+                        // TODO: Connect bank account
+                        context.goNamed(LoginScreen.path);
+                      },
                     ),
                     const Gap(10.0),
-                    AppButton(
+                    CustomButton(
                       text: 'Tell me more about your security',
-                      appButtonColor: AppButtonColor.white,
+                      appButtonColor: CustomButtonColor.white,
                       onPressed: () {},
                     ),
                   ],

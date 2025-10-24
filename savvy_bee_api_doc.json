@@ -1,0 +1,1592 @@
+{
+    "item": [
+        {
+            "name": "Authentication",
+            "item": [
+                {
+                    "name": "Register1",
+                    "id": "d3f27fad-4edf-4de0-94c7-52f9b6eaccf0",
+                    "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                    },
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "FirstName",
+                                    "value": "Johny",
+                                    "type": "text",
+                                    "uuid": "249baafb-c5ec-4a37-950f-de7d3ba7d930"
+                                },
+                                {
+                                    "key": "LastName",
+                                    "value": "Doe",
+                                    "type": "text",
+                                    "uuid": "56ef63ac-28ad-4910-81c5-1b0fd1bfe794"
+                                },
+                                {
+                                    "key": "Email",
+                                    "value": "soluwizy@gmail.com",
+                                    "type": "text",
+                                    "uuid": "e85ab888-00d7-4b68-9fde-392c1e958ece"
+                                },
+                                {
+                                    "key": "Password",
+                                    "value": "Test123$$",
+                                    "type": "text",
+                                    "uuid": "9ff1e650-1cd7-4fd2-bdd6-3414204fa8d5"
+                                }
+                            ]
+                        },
+                        "url": "http://localhost:3000/auth/register",
+                        "urlObject": {
+                            "path": [
+                                "auth",
+                                "register"
+                            ],
+                            "host": [
+                                "http://localhost:3000"
+                            ],
+                            "query": [],
+                            "variable": []
+                        }
+                    },
+                    "response": [
+                        {
+                            "id": "c7383736-9756-4517-80e9-48c956a141d4",
+                            "name": "200",
+                            "originalRequest": {
+                                "method": "POST",
+                                "header": [],
+                                "body": {
+                                    "mode": "formdata",
+                                    "formdata": [
+                                        {
+                                            "key": "FirstName",
+                                            "value": "Johny",
+                                            "type": "text",
+                                            "uuid": "249baafb-c5ec-4a37-950f-de7d3ba7d930"
+                                        },
+                                        {
+                                            "key": "LastName",
+                                            "value": "Doe",
+                                            "type": "text",
+                                            "uuid": "56ef63ac-28ad-4910-81c5-1b0fd1bfe794"
+                                        },
+                                        {
+                                            "key": "Email",
+                                            "value": "soluwizy@gmail.com",
+                                            "type": "text",
+                                            "uuid": "e85ab888-00d7-4b68-9fde-392c1e958ece"
+                                        },
+                                        {
+                                            "key": "Password",
+                                            "value": "Test123$$",
+                                            "type": "text",
+                                            "uuid": "9ff1e650-1cd7-4fd2-bdd6-3414204fa8d5"
+                                        }
+                                    ]
+                                },
+                                "url": "http://localhost:3000/auth/register"
+                            },
+                            "status": "Created",
+                            "code": 201,
+                            "_postman_previewlanguage": null,
+                            "header": [
+                                {
+                                    "key": "X-Powered-By",
+                                    "value": "Express"
+                                },
+                                {
+                                    "key": "RateLimit",
+                                    "value": "\"30-in-1min\"; r=29; t=60"
+                                },
+                                {
+                                    "key": "RateLimit-Policy",
+                                    "value": "\"30-in-1min\"; q=30; w=60; pk=:YmIwY2Q1MTM2YWU1:"
+                                },
+                                {
+                                    "key": "Access-Control-Allow-Origin",
+                                    "value": "*"
+                                },
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json; charset=utf-8"
+                                },
+                                {
+                                    "key": "Content-Length",
+                                    "value": "223"
+                                },
+                                {
+                                    "key": "ETag",
+                                    "value": "W/\"df-oHkk6Q01sln812Ky39+lGXPPMY4\""
+                                },
+                                {
+                                    "key": "Set-Cookie",
+                                    "value": "connect.sid=s%3AxUC2itW-Yxe2GT5RyqeclkYPwa0tQuuU.u4sTOb0HUNPOCW5%2Foz2fqN%2F9d%2Bs0Pb%2B4g%2BiLerplaLU; Path=/; Expires=Tue, 14 Oct 2025 17:51:43 GMT; HttpOnly"
+                                },
+                                {
+                                    "key": "Date",
+                                    "value": "Sun, 12 Oct 2025 17:51:43 GMT"
+                                },
+                                {
+                                    "key": "Connection",
+                                    "value": "keep-alive"
+                                },
+                                {
+                                    "key": "Keep-Alive",
+                                    "value": "timeout=5"
+                                }
+                            ],
+                            "cookie": [],
+                            "responseTime": null,
+                            "body": "{\n    \"success\": true,\n    \"message\": \"User registered successfully, Otp has been sent, pls verify your email\",\n    \"data\": {\n        \"id\": \"68ebeaa98adb4fb4d3f0b6ee\",\n        \"FirstName\": \"Johny\",\n        \"LastName\": \"Doe\",\n        \"Email\": \"soluwizy@gmail.com\",\n        \"Verified\": false\n    }\n}"
+                        }
+                    ],
+                    "_postman_id": "d3f27fad-4edf-4de0-94c7-52f9b6eaccf0"
+                },
+                {
+                    "name": "Register Resend otp",
+                    "id": "3fdab9e1-7d44-47b9-9b2c-6dbf99de99e5",
+                    "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                    },
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": "http://localhost:3000/auth/register/resendOtp?Email=soluwizy@gmail.com",
+                        "urlObject": {
+                            "path": [
+                                "auth",
+                                "register",
+                                "resendOtp"
+                            ],
+                            "host": [
+                                "http://localhost:3000"
+                            ],
+                            "query": [
+                                {
+                                    "key": "Email",
+                                    "value": "soluwizy@gmail.com"
+                                }
+                            ],
+                            "variable": []
+                        }
+                    },
+                    "response": [
+                        {
+                            "id": "073423de-40bf-4da6-92e3-c35382419d4d",
+                            "name": "200",
+                            "originalRequest": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "http://localhost:3000/auth/register/resendOtp?Email=soluwizy@gmail.com",
+                                    "host": [
+                                        "http://localhost:3000"
+                                    ],
+                                    "path": [
+                                        "auth",
+                                        "register",
+                                        "resendOtp"
+                                    ],
+                                    "query": [
+                                        {
+                                            "key": "Email",
+                                            "value": "soluwizy@gmail.com"
+                                        }
+                                    ]
+                                }
+                            },
+                            "status": "Created",
+                            "code": 201,
+                            "_postman_previewlanguage": null,
+                            "header": [
+                                {
+                                    "key": "X-Powered-By",
+                                    "value": "Express"
+                                },
+                                {
+                                    "key": "RateLimit",
+                                    "value": "\"30-in-1min\"; r=29; t=60"
+                                },
+                                {
+                                    "key": "RateLimit-Policy",
+                                    "value": "\"30-in-1min\"; q=30; w=60; pk=:YmIwY2Q1MTM2YWU1:"
+                                },
+                                {
+                                    "key": "Access-Control-Allow-Origin",
+                                    "value": "*"
+                                },
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json; charset=utf-8"
+                                },
+                                {
+                                    "key": "Content-Length",
+                                    "value": "69"
+                                },
+                                {
+                                    "key": "ETag",
+                                    "value": "W/\"45-2ONTO7oQ8UyoVCt05VqtV1ibNl8\""
+                                },
+                                {
+                                    "key": "Set-Cookie",
+                                    "value": "connect.sid=s%3AOVtaWx9MGXJvm3SBzq_XUdceOKqfpoAO.nTmPmmYbZeOVOjVN0sETAez7gIjym3KfhfEIm2OZHMs; Path=/; Expires=Tue, 14 Oct 2025 21:32:57 GMT; HttpOnly"
+                                },
+                                {
+                                    "key": "Date",
+                                    "value": "Sun, 12 Oct 2025 21:32:57 GMT"
+                                },
+                                {
+                                    "key": "Connection",
+                                    "value": "keep-alive"
+                                },
+                                {
+                                    "key": "Keep-Alive",
+                                    "value": "timeout=5"
+                                }
+                            ],
+                            "cookie": [],
+                            "responseTime": null,
+                            "body": "{\n    \"success\": true,\n    \"message\": \"Otp has been sent, pls verify your email\"\n}"
+                        }
+                    ],
+                    "_postman_id": "3fdab9e1-7d44-47b9-9b2c-6dbf99de99e5"
+                },
+                {
+                    "name": "Verify Email",
+                    "id": "21605f95-d8a5-4379-8031-ed8a20806d4a",
+                    "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                    },
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "Email",
+                                    "value": "soluwizy@gmail.com",
+                                    "type": "text",
+                                    "uuid": "5694abcd-b3d5-48c1-b144-ca7332d9dca2"
+                                },
+                                {
+                                    "key": "OTP",
+                                    "value": "405485",
+                                    "type": "text",
+                                    "uuid": "4a563049-0cb9-49a7-90e0-6aac9f7eb5c3"
+                                }
+                            ]
+                        },
+                        "url": "http://localhost:3000/auth/register/verify-email",
+                        "urlObject": {
+                            "path": [
+                                "auth",
+                                "register",
+                                "verify-email"
+                            ],
+                            "host": [
+                                "http://localhost:3000"
+                            ],
+                            "query": [],
+                            "variable": []
+                        }
+                    },
+                    "response": [
+                        {
+                            "id": "cf216a5e-00a9-4dcb-9230-224886627bff",
+                            "name": "200",
+                            "originalRequest": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "http://localhost:3000/auth/register/resendOtp?Email=soluwizy@gmail.com",
+                                    "host": [
+                                        "http://localhost:3000"
+                                    ],
+                                    "path": [
+                                        "auth",
+                                        "register",
+                                        "resendOtp"
+                                    ],
+                                    "query": [
+                                        {
+                                            "key": "Email",
+                                            "value": "soluwizy@gmail.com"
+                                        }
+                                    ]
+                                }
+                            },
+                            "status": "Created",
+                            "code": 201,
+                            "_postman_previewlanguage": null,
+                            "header": [
+                                {
+                                    "key": "X-Powered-By",
+                                    "value": "Express"
+                                },
+                                {
+                                    "key": "RateLimit",
+                                    "value": "\"30-in-1min\"; r=29; t=60"
+                                },
+                                {
+                                    "key": "RateLimit-Policy",
+                                    "value": "\"30-in-1min\"; q=30; w=60; pk=:YmIwY2Q1MTM2YWU1:"
+                                },
+                                {
+                                    "key": "Access-Control-Allow-Origin",
+                                    "value": "*"
+                                },
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json; charset=utf-8"
+                                },
+                                {
+                                    "key": "Content-Length",
+                                    "value": "69"
+                                },
+                                {
+                                    "key": "ETag",
+                                    "value": "W/\"45-2ONTO7oQ8UyoVCt05VqtV1ibNl8\""
+                                },
+                                {
+                                    "key": "Set-Cookie",
+                                    "value": "connect.sid=s%3AOVtaWx9MGXJvm3SBzq_XUdceOKqfpoAO.nTmPmmYbZeOVOjVN0sETAez7gIjym3KfhfEIm2OZHMs; Path=/; Expires=Tue, 14 Oct 2025 21:32:57 GMT; HttpOnly"
+                                },
+                                {
+                                    "key": "Date",
+                                    "value": "Sun, 12 Oct 2025 21:32:57 GMT"
+                                },
+                                {
+                                    "key": "Connection",
+                                    "value": "keep-alive"
+                                },
+                                {
+                                    "key": "Keep-Alive",
+                                    "value": "timeout=5"
+                                }
+                            ],
+                            "cookie": [],
+                            "responseTime": null,
+                            "body": "{\n    \"success\": true,\n    \"message\": \"Otp has been sent, pls verify your email\"\n}"
+                        },
+                        {
+                            "id": "9b3b4992-c624-446a-ae23-4feee361dea8",
+                            "name": "200",
+                            "originalRequest": {
+                                "method": "POST",
+                                "header": [],
+                                "body": {
+                                    "mode": "formdata",
+                                    "formdata": [
+                                        {
+                                            "key": "Email",
+                                            "value": "soluwizy@gmail.com",
+                                            "type": "text",
+                                            "uuid": "5694abcd-b3d5-48c1-b144-ca7332d9dca2"
+                                        },
+                                        {
+                                            "key": "OTP",
+                                            "value": "607252",
+                                            "type": "text",
+                                            "uuid": "4a563049-0cb9-49a7-90e0-6aac9f7eb5c3"
+                                        }
+                                    ]
+                                },
+                                "url": "http://localhost:3000/auth/register/verify-email"
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": null,
+                            "header": [
+                                {
+                                    "key": "X-Powered-By",
+                                    "value": "Express"
+                                },
+                                {
+                                    "key": "RateLimit",
+                                    "value": "\"30-in-1min\"; r=28; t=36"
+                                },
+                                {
+                                    "key": "RateLimit-Policy",
+                                    "value": "\"30-in-1min\"; q=30; w=60; pk=:YmIwY2Q1MTM2YWU1:"
+                                },
+                                {
+                                    "key": "Access-Control-Allow-Origin",
+                                    "value": "*"
+                                },
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json; charset=utf-8"
+                                },
+                                {
+                                    "key": "Content-Length",
+                                    "value": "56"
+                                },
+                                {
+                                    "key": "ETag",
+                                    "value": "W/\"38-oYZCwGirBsI2TcYe2Zke76tAja8\""
+                                },
+                                {
+                                    "key": "Date",
+                                    "value": "Mon, 13 Oct 2025 09:50:11 GMT"
+                                },
+                                {
+                                    "key": "Connection",
+                                    "value": "keep-alive"
+                                },
+                                {
+                                    "key": "Keep-Alive",
+                                    "value": "timeout=5"
+                                }
+                            ],
+                            "cookie": [],
+                            "responseTime": null,
+                            "body": "{\n    \"success\": true,\n    \"message\": \"Email verified successfully\"\n}"
+                        }
+                    ],
+                    "_postman_id": "21605f95-d8a5-4379-8031-ed8a20806d4a"
+                },
+                {
+                    "name": "Register other Details",
+                    "id": "16e7eaf8-07ed-41aa-9b09-f21e3c296cbf",
+                    "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                    },
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "Email",
+                                    "value": "soluwizy@gmail.com",
+                                    "type": "text",
+                                    "uuid": "221764f6-2fb1-479a-b6d3-59c57d6e951e"
+                                },
+                                {
+                                    "key": "DOB",
+                                    "value": "1988-04-04",
+                                    "type": "text",
+                                    "uuid": "40ea887c-0ac5-4a93-8c2d-5a9c2b334fc9"
+                                },
+                                {
+                                    "key": "Country",
+                                    "value": "Nigeria",
+                                    "type": "text",
+                                    "uuid": "498ac366-dad2-4193-a411-da77f2b5866b"
+                                }
+                            ]
+                        },
+                        "url": "http://localhost:3000/auth/register/setotherDetails",
+                        "urlObject": {
+                            "path": [
+                                "auth",
+                                "register",
+                                "setotherDetails"
+                            ],
+                            "host": [
+                                "http://localhost:3000"
+                            ],
+                            "query": [],
+                            "variable": []
+                        }
+                    },
+                    "response": [
+                        {
+                            "id": "116c5666-a74f-4565-91da-d41b423f208e",
+                            "name": "Forget Password Send OTP",
+                            "originalRequest": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "http://localhost:3000/auth/reset-password/send-otp?Email=soluwizy@gmail.com",
+                                    "host": [
+                                        "http://localhost:3000"
+                                    ],
+                                    "path": [
+                                        "auth",
+                                        "reset-password",
+                                        "send-otp"
+                                    ],
+                                    "query": [
+                                        {
+                                            "key": "Email",
+                                            "value": "soluwizy@gmail.com"
+                                        }
+                                    ]
+                                }
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": null,
+                            "header": [
+                                {
+                                    "key": "X-Powered-By",
+                                    "value": "Express"
+                                },
+                                {
+                                    "key": "RateLimit",
+                                    "value": "\"30-in-1min\"; r=28; t=40"
+                                },
+                                {
+                                    "key": "RateLimit-Policy",
+                                    "value": "\"30-in-1min\"; q=30; w=60; pk=:YmIwY2Q1MTM2YWU1:"
+                                },
+                                {
+                                    "key": "Access-Control-Allow-Origin",
+                                    "value": "*"
+                                },
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json; charset=utf-8"
+                                },
+                                {
+                                    "key": "Content-Length",
+                                    "value": "61"
+                                },
+                                {
+                                    "key": "ETag",
+                                    "value": "W/\"3d-MFG4uGPuHyXw1bqAcSAtapTew6E\""
+                                },
+                                {
+                                    "key": "Date",
+                                    "value": "Mon, 13 Oct 2025 13:29:04 GMT"
+                                },
+                                {
+                                    "key": "Connection",
+                                    "value": "keep-alive"
+                                },
+                                {
+                                    "key": "Keep-Alive",
+                                    "value": "timeout=5"
+                                }
+                            ],
+                            "cookie": [],
+                            "responseTime": null,
+                            "body": "{\n    \"success\": true,\n    \"message\": \"Password reset OTP sent to email\"\n}"
+                        }
+                    ],
+                    "_postman_id": "16e7eaf8-07ed-41aa-9b09-f21e3c296cbf"
+                },
+                {
+                    "name": "Login",
+                    "id": "07ff5b28-1493-4667-b655-fa4f59ab8648",
+                    "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                    },
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "email",
+                                    "value": "soluwizy@gmail.com",
+                                    "type": "text",
+                                    "uuid": "e85ab888-00d7-4b68-9fde-392c1e958ece"
+                                },
+                                {
+                                    "key": "password",
+                                    "value": "Test123$$",
+                                    "type": "text",
+                                    "uuid": "9ff1e650-1cd7-4fd2-bdd6-3414204fa8d5"
+                                }
+                            ]
+                        },
+                        "url": "http://localhost:3000/auth/login",
+                        "urlObject": {
+                            "path": [
+                                "auth",
+                                "login"
+                            ],
+                            "host": [
+                                "http://localhost:3000"
+                            ],
+                            "query": [],
+                            "variable": []
+                        }
+                    },
+                    "response": [
+                        {
+                            "id": "03143b64-3ce0-4019-bd5f-517249d571b8",
+                            "name": "login incomplete",
+                            "originalRequest": {
+                                "method": "POST",
+                                "header": [],
+                                "body": {
+                                    "mode": "formdata",
+                                    "formdata": [
+                                        {
+                                            "key": "email",
+                                            "value": "soluwizy@gmail.com",
+                                            "type": "text",
+                                            "uuid": "e85ab888-00d7-4b68-9fde-392c1e958ece"
+                                        },
+                                        {
+                                            "key": "password",
+                                            "value": "Test123$$",
+                                            "type": "text",
+                                            "uuid": "9ff1e650-1cd7-4fd2-bdd6-3414204fa8d5"
+                                        }
+                                    ]
+                                },
+                                "url": "http://localhost:3000/auth/login"
+                            },
+                            "status": "Forbidden",
+                            "code": 403,
+                            "_postman_previewlanguage": null,
+                            "header": [
+                                {
+                                    "key": "X-Powered-By",
+                                    "value": "Express"
+                                },
+                                {
+                                    "key": "RateLimit",
+                                    "value": "\"30-in-1min\"; r=28; t=12"
+                                },
+                                {
+                                    "key": "RateLimit-Policy",
+                                    "value": "\"30-in-1min\"; q=30; w=60; pk=:YmIwY2Q1MTM2YWU1:"
+                                },
+                                {
+                                    "key": "Access-Control-Allow-Origin",
+                                    "value": "*"
+                                },
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json; charset=utf-8"
+                                },
+                                {
+                                    "key": "Content-Length",
+                                    "value": "151"
+                                },
+                                {
+                                    "key": "ETag",
+                                    "value": "W/\"97-HchfCypPalEJ8vfLVTaC+pad9RM\""
+                                },
+                                {
+                                    "key": "Date",
+                                    "value": "Mon, 13 Oct 2025 10:03:58 GMT"
+                                },
+                                {
+                                    "key": "Connection",
+                                    "value": "keep-alive"
+                                },
+                                {
+                                    "key": "Keep-Alive",
+                                    "value": "timeout=5"
+                                }
+                            ],
+                            "cookie": [],
+                            "responseTime": null,
+                            "body": "{\n    \"success\": false,\n    \"message\": \"Please complete your profile details\",\n    \"data\": {\n        \"token\": null,\n        \"verification\": {\n            \"EmailVerification\": true,\n            \"OtherDetails\": false\n        }\n    }\n}"
+                        },
+                        {
+                            "id": "4cfcfbbf-ec81-40bf-95cd-19830dc73694",
+                            "name": "login-complete",
+                            "originalRequest": {
+                                "method": "POST",
+                                "header": [],
+                                "body": {
+                                    "mode": "formdata",
+                                    "formdata": [
+                                        {
+                                            "key": "email",
+                                            "value": "soluwizy@gmail.com",
+                                            "type": "text",
+                                            "uuid": "e85ab888-00d7-4b68-9fde-392c1e958ece"
+                                        },
+                                        {
+                                            "key": "password",
+                                            "value": "Test123$$",
+                                            "type": "text",
+                                            "uuid": "9ff1e650-1cd7-4fd2-bdd6-3414204fa8d5"
+                                        }
+                                    ]
+                                },
+                                "url": "http://localhost:3000/auth/login"
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": null,
+                            "header": [
+                                {
+                                    "key": "X-Powered-By",
+                                    "value": "Express"
+                                },
+                                {
+                                    "key": "RateLimit",
+                                    "value": "\"30-in-1min\"; r=29; t=60"
+                                },
+                                {
+                                    "key": "RateLimit-Policy",
+                                    "value": "\"30-in-1min\"; q=30; w=60; pk=:YmIwY2Q1MTM2YWU1:"
+                                },
+                                {
+                                    "key": "Access-Control-Allow-Origin",
+                                    "value": "*"
+                                },
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json; charset=utf-8"
+                                },
+                                {
+                                    "key": "Content-Length",
+                                    "value": "298"
+                                },
+                                {
+                                    "key": "ETag",
+                                    "value": "W/\"12a-uFVp+3yl0qhP46SZiWrpJuGz8DI\""
+                                },
+                                {
+                                    "key": "Set-Cookie",
+                                    "value": "connect.sid=s%3ASfTQDH74hX2d1l3c5tYI4s2JmiMEtzU1.2mjv%2F2v0WRK8VkqGhAsUtsg8QkSxE4dPT7MxcRT8w8M; Path=/; Expires=Sat, 18 Oct 2025 16:59:37 GMT; HttpOnly"
+                                },
+                                {
+                                    "key": "Date",
+                                    "value": "Thu, 16 Oct 2025 16:59:37 GMT"
+                                },
+                                {
+                                    "key": "Connection",
+                                    "value": "keep-alive"
+                                },
+                                {
+                                    "key": "Keep-Alive",
+                                    "value": "timeout=5"
+                                }
+                            ],
+                            "cookie": [],
+                            "responseTime": null,
+                            "body": "{\n    \"success\": true,\n    \"message\": \"Login successful\",\n    \"data\": {\n        \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZjEyMWNhYWJiMGI2NWMxNzIzN2I3OSIsImlhdCI6MTc2MDYzMzk3NywiZXhwIjoxNzYxMTUyMzc3fQ.A25OFgbVaKRxItj7xqNNqhq4v1DeRnEzY2z4aSUQQQQ\",\n        \"verification\": {\n            \"EmailVerification\": true,\n            \"OtherDetails\": true\n        }\n    }\n}"
+                        }
+                    ],
+                    "_postman_id": "07ff5b28-1493-4667-b655-fa4f59ab8648"
+                },
+                {
+                    "name": "Forget Password Send OTP",
+                    "id": "015b07f2-471d-40ca-b828-afaf7982d3a0",
+                    "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                    },
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": "http://localhost:3000/auth/reset-password/send-otp?Email=soluwizy@gmail.com",
+                        "urlObject": {
+                            "path": [
+                                "auth",
+                                "reset-password",
+                                "send-otp"
+                            ],
+                            "host": [
+                                "http://localhost:3000"
+                            ],
+                            "query": [
+                                {
+                                    "key": "Email",
+                                    "value": "soluwizy@gmail.com"
+                                }
+                            ],
+                            "variable": []
+                        }
+                    },
+                    "response": [
+                        {
+                            "id": "47b60165-e8dd-4350-99d5-51008da8fa88",
+                            "name": "Forget Password Send OTP",
+                            "originalRequest": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "http://localhost:3000/auth/reset-password/send-otp?Email=soluwizy@gmail.com",
+                                    "host": [
+                                        "http://localhost:3000"
+                                    ],
+                                    "path": [
+                                        "auth",
+                                        "reset-password",
+                                        "send-otp"
+                                    ],
+                                    "query": [
+                                        {
+                                            "key": "Email",
+                                            "value": "soluwizy@gmail.com"
+                                        }
+                                    ]
+                                }
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": null,
+                            "header": [
+                                {
+                                    "key": "X-Powered-By",
+                                    "value": "Express"
+                                },
+                                {
+                                    "key": "RateLimit",
+                                    "value": "\"30-in-1min\"; r=28; t=40"
+                                },
+                                {
+                                    "key": "RateLimit-Policy",
+                                    "value": "\"30-in-1min\"; q=30; w=60; pk=:YmIwY2Q1MTM2YWU1:"
+                                },
+                                {
+                                    "key": "Access-Control-Allow-Origin",
+                                    "value": "*"
+                                },
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json; charset=utf-8"
+                                },
+                                {
+                                    "key": "Content-Length",
+                                    "value": "61"
+                                },
+                                {
+                                    "key": "ETag",
+                                    "value": "W/\"3d-MFG4uGPuHyXw1bqAcSAtapTew6E\""
+                                },
+                                {
+                                    "key": "Date",
+                                    "value": "Mon, 13 Oct 2025 13:29:04 GMT"
+                                },
+                                {
+                                    "key": "Connection",
+                                    "value": "keep-alive"
+                                },
+                                {
+                                    "key": "Keep-Alive",
+                                    "value": "timeout=5"
+                                }
+                            ],
+                            "cookie": [],
+                            "responseTime": null,
+                            "body": "{\n    \"success\": true,\n    \"message\": \"Password reset OTP sent to email\"\n}"
+                        }
+                    ],
+                    "_postman_id": "015b07f2-471d-40ca-b828-afaf7982d3a0"
+                },
+                {
+                    "name": "Forget Password Reset",
+                    "id": "e8cf3d4c-dc60-4ce6-b86c-571ffb161b7f",
+                    "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                    },
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "Email",
+                                    "value": "soluwizy@gmail.com",
+                                    "type": "text",
+                                    "uuid": "221764f6-2fb1-479a-b6d3-59c57d6e951e"
+                                },
+                                {
+                                    "key": "OTP",
+                                    "value": "447098",
+                                    "type": "text",
+                                    "uuid": "40ea887c-0ac5-4a93-8c2d-5a9c2b334fc9"
+                                },
+                                {
+                                    "key": "NewPassword",
+                                    "value": "Test123$$",
+                                    "type": "text",
+                                    "uuid": "498ac366-dad2-4193-a411-da77f2b5866b"
+                                }
+                            ]
+                        },
+                        "url": "http://localhost:3000/auth/reset-password/reset",
+                        "urlObject": {
+                            "path": [
+                                "auth",
+                                "reset-password",
+                                "reset"
+                            ],
+                            "host": [
+                                "http://localhost:3000"
+                            ],
+                            "query": [],
+                            "variable": []
+                        }
+                    },
+                    "response": [
+                        {
+                            "id": "b31814dd-7ea2-4b2e-b87a-36cd75be9e11",
+                            "name": "Forget Password Send OTP",
+                            "originalRequest": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "http://localhost:3000/auth/reset-password/send-otp?Email=soluwizy@gmail.com",
+                                    "host": [
+                                        "http://localhost:3000"
+                                    ],
+                                    "path": [
+                                        "auth",
+                                        "reset-password",
+                                        "send-otp"
+                                    ],
+                                    "query": [
+                                        {
+                                            "key": "Email",
+                                            "value": "soluwizy@gmail.com"
+                                        }
+                                    ]
+                                }
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": null,
+                            "header": [
+                                {
+                                    "key": "X-Powered-By",
+                                    "value": "Express"
+                                },
+                                {
+                                    "key": "RateLimit",
+                                    "value": "\"30-in-1min\"; r=28; t=40"
+                                },
+                                {
+                                    "key": "RateLimit-Policy",
+                                    "value": "\"30-in-1min\"; q=30; w=60; pk=:YmIwY2Q1MTM2YWU1:"
+                                },
+                                {
+                                    "key": "Access-Control-Allow-Origin",
+                                    "value": "*"
+                                },
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json; charset=utf-8"
+                                },
+                                {
+                                    "key": "Content-Length",
+                                    "value": "61"
+                                },
+                                {
+                                    "key": "ETag",
+                                    "value": "W/\"3d-MFG4uGPuHyXw1bqAcSAtapTew6E\""
+                                },
+                                {
+                                    "key": "Date",
+                                    "value": "Mon, 13 Oct 2025 13:29:04 GMT"
+                                },
+                                {
+                                    "key": "Connection",
+                                    "value": "keep-alive"
+                                },
+                                {
+                                    "key": "Keep-Alive",
+                                    "value": "timeout=5"
+                                }
+                            ],
+                            "cookie": [],
+                            "responseTime": null,
+                            "body": "{\n    \"success\": true,\n    \"message\": \"Password reset OTP sent to email\"\n}"
+                        }
+                    ],
+                    "_postman_id": "e8cf3d4c-dc60-4ce6-b86c-571ffb161b7f"
+                }
+            ],
+            "id": "511869ff-2783-481f-b4f3-e2b071fd540a",
+            "_postman_id": "511869ff-2783-481f-b4f3-e2b071fd540a",
+            "description": ""
+        },
+        {
+            "name": "KYC",
+            "item": [
+                {
+                    "name": "Nin",
+                    "id": "d090e20c-4713-467b-9379-3d4ebbad1515",
+                    "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                    },
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "Data",
+                                    "value": "ROWD2qdw58AAMqD32hnIioZPAwnJGxSTbgp5rdeiTlw=",
+                                    "type": "text",
+                                    "uuid": "498ac366-dad2-4193-a411-da77f2b5866b",
+                                    "description": "<p>encrypt the data in stringified json to have {Nin:\"55555555555\"}</p>\n"
+                                },
+                                {
+                                    "key": "Profile",
+                                    "type": "file",
+                                    "uuid": "30689b2f-1f78-4443-899e-c93fb4af3c5a",
+                                    "src": "postman-cloud:///1f0aab60-904e-4190-a7ea-1c87d220aae5"
+                                }
+                            ]
+                        },
+                        "url": "http://localhost:3000/auth/kyc/identity-number/nin/ng",
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": {
+                                "basicConfig": [
+                                    {
+                                        "key": "token",
+                                        "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZjEyMWNhYWJiMGI2NWMxNzIzN2I3OSIsImlhdCI6MTc2MDYzNDA1MiwiZXhwIjoxNzYxMTUyNDUyfQ.T3PLt8lXmmBaik3fcAy4BU6v2s_J4HSQXP3ZAhw_aCA"
+                                    }
+                                ]
+                            },
+                            "isInherited": true,
+                            "source": {
+                                "_postman_id": "e05ba081-c68b-4602-a2b8-a14d2922be5d",
+                                "id": "e05ba081-c68b-4602-a2b8-a14d2922be5d",
+                                "name": "KYC",
+                                "type": "folder"
+                            }
+                        },
+                        "urlObject": {
+                            "path": [
+                                "auth",
+                                "kyc",
+                                "identity-number",
+                                "nin",
+                                "ng"
+                            ],
+                            "host": [
+                                "http://localhost:3000"
+                            ],
+                            "query": [],
+                            "variable": []
+                        }
+                    },
+                    "response": [
+                        {
+                            "id": "8fcbb38e-1e36-429b-b460-e0a1db88ffd8",
+                            "name": "200",
+                            "originalRequest": {
+                                "method": "POST",
+                                "header": [],
+                                "body": {
+                                    "mode": "formdata",
+                                    "formdata": [
+                                        {
+                                            "key": "Data",
+                                            "value": "ROWD2qdw58AAMqD32hnIioZPAwnJGxSTbgp5rdeiTlw=",
+                                            "type": "text",
+                                            "uuid": "498ac366-dad2-4193-a411-da77f2b5866b",
+                                            "description": "encrypt the data in stringified json to have {Nin:\"55555555555\"}"
+                                        },
+                                        {
+                                            "key": "Profile",
+                                            "type": "file",
+                                            "uuid": "30689b2f-1f78-4443-899e-c93fb4af3c5a",
+                                            "src": "postman-cloud:///1f0aab60-904e-4190-a7ea-1c87d220aae5"
+                                        }
+                                    ]
+                                },
+                                "url": "http://localhost:3000/auth/kyc/identity-number/nin/ng"
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": null,
+                            "header": [
+                                {
+                                    "key": "X-Powered-By",
+                                    "value": "Express"
+                                },
+                                {
+                                    "key": "RateLimit",
+                                    "value": "\"30-in-1min\"; r=29; t=60"
+                                },
+                                {
+                                    "key": "RateLimit-Policy",
+                                    "value": "\"30-in-1min\"; q=30; w=60; pk=:YmIwY2Q1MTM2YWU1:"
+                                },
+                                {
+                                    "key": "Access-Control-Allow-Origin",
+                                    "value": "*"
+                                },
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json; charset=utf-8"
+                                },
+                                {
+                                    "key": "Content-Length",
+                                    "value": "7096"
+                                },
+                                {
+                                    "key": "ETag",
+                                    "value": "W/\"1bb8-KYLAb1xilAgar37Ady8rTXv+XXE\""
+                                },
+                                {
+                                    "key": "Set-Cookie",
+                                    "value": "connect.sid=s%3AudgM2mKi6hs-eFH6uiHqv3rVNO15MHg2.fxTR5ezt9Wgxri5T258yYKG51U8HV1Gy2K4XFlDsOwI; Path=/; Expires=Sat, 18 Oct 2025 18:03:19 GMT; HttpOnly"
+                                },
+                                {
+                                    "key": "Date",
+                                    "value": "Thu, 16 Oct 2025 18:03:19 GMT"
+                                },
+                                {
+                                    "key": "Connection",
+                                    "value": "keep-alive"
+                                },
+                                {
+                                    "key": "Keep-Alive",
+                                    "value": "timeout=5"
+                                }
+                            ],
+                            "cookie": [],
+                            "responseTime": null,
+                            "body": "{\n    \"success\": true,\n    \"message\": \"Nin Verified successfully\",\n    \"data\": {\n        \"reference\": \"VR-c63G9oHWz3TC0O2nd\",\n        \"id\": \"55555555555\",\n        \"id_type\": \"ng_nin\",\n        \"first_name\": \"Bimbo\",\n        \"last_name\": \"Olakunle\",\n        \"middle_name\": \"Doherty\",\n        \"date_of_birth\": \"1988-04-04\",\n        \"phone_number\": \"08000000000\",\n        \"address\": {\n            \"town\": \"SULEJA\",\n            \"lga\": \"Suleja\",\n            \"state\": \"Niger\",\n            \"street\": \"13B Fake Street, Ilupeju Niger State\"\n        },\n        \"email\": \"vino@viola.com\",\n        \"birth_state\": \"Edo\",\n        \"birth_lga\": \"Esan West\",\n        \"birth_country\": \"nigeria\",\n        \"next_of_kin_state\": \"Niger\",\n        \"religion\": \"christianity\",\n        \"gender\": \"female\",\n        \"validation\": {\n            \"first_name\": {\n                \"value\": \"Bimbo\",\n                \"match\": true\n            },\n            \"last_name\": {\n                \"value\": \"Olakunle\",\n                \"match\": true\n            },\n            \"date_of_birth\": {\n                \"value\": \"1988-04-04\",\n                \"match\": true\n            },\n            \"selfie\": {\n                \"value\": \"data:image/jpeg;base64,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\",\n                \"match\": true,\n                \"confidence_rating\": 94\n            }\n        },\n        \"requested_by\": \"API User\"\n    }\n}"
+                        }
+                    ],
+                    "_postman_id": "d090e20c-4713-467b-9379-3d4ebbad1515"
+                },
+                {
+                    "name": "BVN Verification",
+                    "id": "8c12f7e4-d1f1-446b-80fe-d7c05635a906",
+                    "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                    },
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "Data",
+                                    "value": "bYU04Xp6uhzxqGPtcChdyluRX1gNE3QHp9EGs52B6h8=",
+                                    "type": "text",
+                                    "uuid": "498ac366-dad2-4193-a411-da77f2b5866b",
+                                    "description": "<p>encrypt the data in stringified json to have {BVN:\"55555555555\"}</p>\n"
+                                },
+                                {
+                                    "key": "Profile",
+                                    "type": "file",
+                                    "uuid": "30689b2f-1f78-4443-899e-c93fb4af3c5a",
+                                    "src": "postman-cloud:///1f0aab60-904e-4190-a7ea-1c87d220aae5"
+                                }
+                            ]
+                        },
+                        "url": "http://localhost:3000/auth/kyc/identity-number/bvn/ng",
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": {
+                                "basicConfig": [
+                                    {
+                                        "key": "token",
+                                        "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZjEyMWNhYWJiMGI2NWMxNzIzN2I3OSIsImlhdCI6MTc2MDYzNDA1MiwiZXhwIjoxNzYxMTUyNDUyfQ.T3PLt8lXmmBaik3fcAy4BU6v2s_J4HSQXP3ZAhw_aCA"
+                                    }
+                                ]
+                            },
+                            "isInherited": true,
+                            "source": {
+                                "_postman_id": "e05ba081-c68b-4602-a2b8-a14d2922be5d",
+                                "id": "e05ba081-c68b-4602-a2b8-a14d2922be5d",
+                                "name": "KYC",
+                                "type": "folder"
+                            }
+                        },
+                        "urlObject": {
+                            "path": [
+                                "auth",
+                                "kyc",
+                                "identity-number",
+                                "bvn",
+                                "ng"
+                            ],
+                            "host": [
+                                "http://localhost:3000"
+                            ],
+                            "query": [],
+                            "variable": []
+                        }
+                    },
+                    "response": [
+                        {
+                            "id": "c4a68a49-02ef-47c4-8c27-cbbc627a33c8",
+                            "name": "400",
+                            "originalRequest": {
+                                "method": "POST",
+                                "header": [],
+                                "body": {
+                                    "mode": "formdata",
+                                    "formdata": [
+                                        {
+                                            "key": "Data",
+                                            "value": "bYU04Xp6uhzxqGPtcChdyluRX1gNE3QHp9EGs52B6h8=",
+                                            "type": "text",
+                                            "uuid": "498ac366-dad2-4193-a411-da77f2b5866b",
+                                            "description": "encrypt the data in stringified json to have {BVN:\"55555555555\"}"
+                                        },
+                                        {
+                                            "key": "Profile",
+                                            "type": "file",
+                                            "uuid": "30689b2f-1f78-4443-899e-c93fb4af3c5a",
+                                            "src": "postman-cloud:///1f0aab60-904e-4190-a7ea-1c87d220aae5"
+                                        }
+                                    ]
+                                },
+                                "url": "http://localhost:3000/auth/kyc/identity-number/bvn/ng"
+                            },
+                            "status": "Bad Request",
+                            "code": 400,
+                            "_postman_previewlanguage": "",
+                            "header": [
+                                {
+                                    "key": "X-Powered-By",
+                                    "value": "Express"
+                                },
+                                {
+                                    "key": "RateLimit",
+                                    "value": "\"30-in-1min\"; r=28; t=14"
+                                },
+                                {
+                                    "key": "RateLimit-Policy",
+                                    "value": "\"30-in-1min\"; q=30; w=60; pk=:YmIwY2Q1MTM2YWU1:"
+                                },
+                                {
+                                    "key": "Access-Control-Allow-Origin",
+                                    "value": "*"
+                                },
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json; charset=utf-8"
+                                },
+                                {
+                                    "key": "Content-Length",
+                                    "value": "83"
+                                },
+                                {
+                                    "key": "ETag",
+                                    "value": "W/\"53-AvQRemr9WYM2Xr2PMiXODyIueqA\""
+                                },
+                                {
+                                    "key": "Date",
+                                    "value": "Thu, 16 Oct 2025 18:30:46 GMT"
+                                },
+                                {
+                                    "key": "Connection",
+                                    "value": "keep-alive"
+                                },
+                                {
+                                    "key": "Keep-Alive",
+                                    "value": "timeout=5"
+                                }
+                            ],
+                            "cookie": [
+                                {
+                                    "expires": "Invalid Date",
+                                    "domain": "",
+                                    "path": ""
+                                }
+                            ],
+                            "responseTime": null,
+                            "body": "{\n    \"success\": 400,\n    \"message\": \"Your first name doesnt match, Go to settings to update\"\n}"
+                        },
+                        {
+                            "id": "794c6cb1-da1b-4885-bff4-72285bc13a11",
+                            "name": "200",
+                            "originalRequest": {
+                                "method": "POST",
+                                "header": [],
+                                "body": {
+                                    "mode": "formdata",
+                                    "formdata": [
+                                        {
+                                            "key": "Data",
+                                            "value": "bYU04Xp6uhzxqGPtcChdyluRX1gNE3QHp9EGs52B6h8=",
+                                            "type": "text",
+                                            "uuid": "498ac366-dad2-4193-a411-da77f2b5866b",
+                                            "description": "encrypt the data in stringified json to have {BVN:\"55555555555\"}"
+                                        },
+                                        {
+                                            "key": "Profile",
+                                            "type": "file",
+                                            "uuid": "30689b2f-1f78-4443-899e-c93fb4af3c5a",
+                                            "src": "postman-cloud:///1f0aab60-904e-4190-a7ea-1c87d220aae5"
+                                        }
+                                    ]
+                                },
+                                "url": "http://localhost:3000/auth/kyc/identity-number/bvn/ng"
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": null,
+                            "header": [
+                                {
+                                    "key": "X-Powered-By",
+                                    "value": "Express"
+                                },
+                                {
+                                    "key": "RateLimit",
+                                    "value": "\"30-in-1min\"; r=29; t=60"
+                                },
+                                {
+                                    "key": "RateLimit-Policy",
+                                    "value": "\"30-in-1min\"; q=30; w=60; pk=:YmIwY2Q1MTM2YWU1:"
+                                },
+                                {
+                                    "key": "Access-Control-Allow-Origin",
+                                    "value": "*"
+                                },
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json; charset=utf-8"
+                                },
+                                {
+                                    "key": "Content-Length",
+                                    "value": "7166"
+                                },
+                                {
+                                    "key": "ETag",
+                                    "value": "W/\"1bfe-iSumockcY1y14bnfWXtXFqvQ1Mw\""
+                                },
+                                {
+                                    "key": "Set-Cookie",
+                                    "value": "connect.sid=s%3AcxojhSURuhO9_3CsnoRN0mDr2_m-tcn3.3wUnXyFu7R0OTDtSchT8%2FWVsq3wvnc8iAYM5Pk37eig; Path=/; Expires=Sat, 18 Oct 2025 18:34:51 GMT; HttpOnly"
+                                },
+                                {
+                                    "key": "Date",
+                                    "value": "Thu, 16 Oct 2025 18:34:51 GMT"
+                                },
+                                {
+                                    "key": "Connection",
+                                    "value": "keep-alive"
+                                },
+                                {
+                                    "key": "Keep-Alive",
+                                    "value": "timeout=5"
+                                }
+                            ],
+                            "cookie": [],
+                            "responseTime": null,
+                            "body": "{\n    \"success\": true,\n    \"message\": \"BVN Verified successfully\",\n    \"data\": {\n        \"reference\": \"VR-n5Gs8jSlkLUK8W2qz\",\n        \"id\": \"22222222222\",\n        \"id_type\": \"ng_bvn\",\n        \"first_name\": \"Trevor\",\n        \"last_name\": \"Mandela\",\n        \"middle_name\": null,\n        \"date_of_birth\": \"1989-07-08\",\n        \"phone_number\": \"08031234567\",\n        \"gender\": \"male\",\n        \"enrollment_branch\": null,\n        \"enrollment_institution\": null,\n        \"registration_date\": \"2005-11-11\",\n        \"nin\": \"55555555555\",\n        \"level_of_account\": null,\n        \"address\": {\n            \"town\": null,\n            \"lga\": null,\n            \"state\": null,\n            \"street\": null\n        },\n        \"title\": null,\n        \"marital_status\": null,\n        \"lga_of_origin\": null,\n        \"other_mobile\": null,\n        \"state_of_origin\": null,\n        \"watch_listed\": null,\n        \"name_on_card\": null,\n        \"validation\": {\n            \"first_name\": {\n                \"value\": \"Trevor\",\n                \"match\": true\n            },\n            \"last_name\": {\n                \"value\": \"Mandela\",\n                \"match\": true\n            },\n            \"date_of_birth\": {\n                \"value\": \"1989-07-08\",\n                \"match\": true\n            },\n            \"selfie\": {\n                \"value\": \"data:image/jpeg;base64,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\",\n                \"match\": true,\n                \"confidence_rating\": 92\n            }\n        },\n        \"requested_by\": \"API User\"\n    }\n}"
+                        }
+                    ],
+                    "_postman_id": "8c12f7e4-d1f1-446b-80fe-d7c05635a906"
+                }
+            ],
+            "id": "e05ba081-c68b-4602-a2b8-a14d2922be5d",
+            "description": "<p>This is where you do kyc</p>\n",
+            "auth": {
+                "type": "bearer",
+                "bearer": {
+                    "basicConfig": [
+                        {
+                            "key": "token",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZjEyMWNhYWJiMGI2NWMxNzIzN2I3OSIsImlhdCI6MTc2MDYzNDA1MiwiZXhwIjoxNzYxMTUyNDUyfQ.T3PLt8lXmmBaik3fcAy4BU6v2s_J4HSQXP3ZAhw_aCA"
+                        }
+                    ]
+                },
+                "isInherited": false
+            },
+            "event": [
+                {
+                    "listen": "prerequest",
+                    "script": {
+                        "id": "aba8c37b-dd92-4dec-a04f-965e16f9f165",
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {},
+                        "exec": [
+                            ""
+                        ]
+                    }
+                },
+                {
+                    "listen": "test",
+                    "script": {
+                        "id": "b9f26b88-9a37-4da7-8b2b-3c6cb93d0002",
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {},
+                        "exec": [
+                            ""
+                        ]
+                    }
+                }
+            ],
+            "_postman_id": "e05ba081-c68b-4602-a2b8-a14d2922be5d"
+        },
+        {
+            "name": "Wallet",
+            "item": [
+                {
+                    "name": "Naira Account creation",
+                    "id": "259b553a-01f0-438b-a92e-2f26d0f37cec",
+                    "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                    },
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": "http://localhost:3000/Wallet/accountcreation/ng",
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": {
+                                "basicConfig": [
+                                    {
+                                        "key": "token",
+                                        "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZjEyMWNhYWJiMGI2NWMxNzIzN2I3OSIsImlhdCI6MTc2MDYzNDA1MiwiZXhwIjoxNzYxMTUyNDUyfQ.T3PLt8lXmmBaik3fcAy4BU6v2s_J4HSQXP3ZAhw_aCA"
+                                    }
+                                ]
+                            },
+                            "isInherited": true,
+                            "source": {
+                                "_postman_id": "c72eefb3-78c7-47cb-8a43-4cbd78ffc9ca",
+                                "id": "c72eefb3-78c7-47cb-8a43-4cbd78ffc9ca",
+                                "name": "Wallet",
+                                "type": "folder"
+                            }
+                        },
+                        "urlObject": {
+                            "path": [
+                                "Wallet",
+                                "accountcreation",
+                                "ng"
+                            ],
+                            "host": [
+                                "http://localhost:3000"
+                            ],
+                            "query": [],
+                            "variable": []
+                        }
+                    },
+                    "response": [
+                        {
+                            "id": "dff2df32-004b-47d8-af73-792b669160dd",
+                            "name": "200",
+                            "originalRequest": {
+                                "method": "POST",
+                                "header": [],
+                                "body": {
+                                    "mode": "formdata",
+                                    "formdata": [
+                                        {
+                                            "key": "Data",
+                                            "value": "ROWD2qdw58AAMqD32hnIioZPAwnJGxSTbgp5rdeiTlw=",
+                                            "type": "text",
+                                            "uuid": "498ac366-dad2-4193-a411-da77f2b5866b",
+                                            "description": "encrypt the data in stringified json to have {Nin:\"55555555555\"}"
+                                        },
+                                        {
+                                            "key": "Profile",
+                                            "type": "file",
+                                            "uuid": "30689b2f-1f78-4443-899e-c93fb4af3c5a",
+                                            "src": "postman-cloud:///1f0aab60-904e-4190-a7ea-1c87d220aae5"
+                                        }
+                                    ]
+                                },
+                                "url": "http://localhost:3000/auth/kyc/identity-number/nin/ng"
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": null,
+                            "header": [
+                                {
+                                    "key": "X-Powered-By",
+                                    "value": "Express"
+                                },
+                                {
+                                    "key": "RateLimit",
+                                    "value": "\"30-in-1min\"; r=29; t=60"
+                                },
+                                {
+                                    "key": "RateLimit-Policy",
+                                    "value": "\"30-in-1min\"; q=30; w=60; pk=:YmIwY2Q1MTM2YWU1:"
+                                },
+                                {
+                                    "key": "Access-Control-Allow-Origin",
+                                    "value": "*"
+                                },
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json; charset=utf-8"
+                                },
+                                {
+                                    "key": "Content-Length",
+                                    "value": "7096"
+                                },
+                                {
+                                    "key": "ETag",
+                                    "value": "W/\"1bb8-KYLAb1xilAgar37Ady8rTXv+XXE\""
+                                },
+                                {
+                                    "key": "Set-Cookie",
+                                    "value": "connect.sid=s%3AudgM2mKi6hs-eFH6uiHqv3rVNO15MHg2.fxTR5ezt9Wgxri5T258yYKG51U8HV1Gy2K4XFlDsOwI; Path=/; Expires=Sat, 18 Oct 2025 18:03:19 GMT; HttpOnly"
+                                },
+                                {
+                                    "key": "Date",
+                                    "value": "Thu, 16 Oct 2025 18:03:19 GMT"
+                                },
+                                {
+                                    "key": "Connection",
+                                    "value": "keep-alive"
+                                },
+                                {
+                                    "key": "Keep-Alive",
+                                    "value": "timeout=5"
+                                }
+                            ],
+                            "cookie": [],
+                            "responseTime": null,
+                            "body": "{\n    \"success\": true,\n    \"message\": \"Nin Verified successfully\",\n    \"data\": {\n        \"reference\": \"VR-c63G9oHWz3TC0O2nd\",\n        \"id\": \"55555555555\",\n        \"id_type\": \"ng_nin\",\n        \"first_name\": \"Bimbo\",\n        \"last_name\": \"Olakunle\",\n        \"middle_name\": \"Doherty\",\n        \"date_of_birth\": \"1988-04-04\",\n        \"phone_number\": \"08000000000\",\n        \"address\": {\n            \"town\": \"SULEJA\",\n            \"lga\": \"Suleja\",\n            \"state\": \"Niger\",\n            \"street\": \"13B Fake Street, Ilupeju Niger State\"\n        },\n        \"email\": \"vino@viola.com\",\n        \"birth_state\": \"Edo\",\n        \"birth_lga\": \"Esan West\",\n        \"birth_country\": \"nigeria\",\n        \"next_of_kin_state\": \"Niger\",\n        \"religion\": \"christianity\",\n        \"gender\": \"female\",\n        \"validation\": {\n            \"first_name\": {\n                \"value\": \"Bimbo\",\n                \"match\": true\n            },\n            \"last_name\": {\n                \"value\": \"Olakunle\",\n                \"match\": true\n            },\n            \"date_of_birth\": {\n                \"value\": \"1988-04-04\",\n                \"match\": true\n            },\n            \"selfie\": {\n                \"value\": \"data:image/jpeg;base64,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\",\n                \"match\": true,\n                \"confidence_rating\": 94\n            }\n        },\n        \"requested_by\": \"API User\"\n    }\n}"
+                        }
+                    ],
+                    "_postman_id": "259b553a-01f0-438b-a92e-2f26d0f37cec"
+                }
+            ],
+            "id": "c72eefb3-78c7-47cb-8a43-4cbd78ffc9ca",
+            "auth": {
+                "type": "bearer",
+                "bearer": {
+                    "basicConfig": [
+                        {
+                            "key": "token",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZjEyMWNhYWJiMGI2NWMxNzIzN2I3OSIsImlhdCI6MTc2MDYzNDA1MiwiZXhwIjoxNzYxMTUyNDUyfQ.T3PLt8lXmmBaik3fcAy4BU6v2s_J4HSQXP3ZAhw_aCA"
+                        }
+                    ]
+                },
+                "isInherited": false
+            },
+            "event": [
+                {
+                    "listen": "prerequest",
+                    "script": {
+                        "id": "3e8abb9b-20ae-4dd0-b1e3-98df21db81c5",
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {},
+                        "exec": [
+                            ""
+                        ]
+                    }
+                },
+                {
+                    "listen": "test",
+                    "script": {
+                        "id": "6cbc078c-5bb6-4759-ad9b-67d5eebf81aa",
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {},
+                        "exec": [
+                            ""
+                        ]
+                    }
+                }
+            ],
+            "_postman_id": "c72eefb3-78c7-47cb-8a43-4cbd78ffc9ca",
+            "description": ""
+        }
+    ]
+}

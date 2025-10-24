@@ -1,33 +1,39 @@
 class PasswordResetItems {
   final String title;
-  final String description;
+  final String Function(String? dynamicValue)? description;
+  final String? staticDescription;
 
-  const PasswordResetItems({required this.title, required this.description});
+  const PasswordResetItems({
+    required this.title,
+    this.description,
+    this.staticDescription,
+  }) : assert(
+         description != null || staticDescription != null,
+         'Either description or staticDescription must be provided',
+       );
+
+  /// Get the description with optional dynamic value
+  String getDescription([String? dynamicValue]) {
+    if (description != null) {
+      return description!(dynamicValue);
+    }
+    return staticDescription!;
+  }
 
   static List<PasswordResetItems> items = [
-    const PasswordResetItems(
+    PasswordResetItems(
       title: 'REQUEST NEW\nPASSWORD',
-      description: 'Enter the email address connected to your account.',
+      staticDescription: 'Enter the email address connected to your account.',
     ),
-    const PasswordResetItems(
+    PasswordResetItems(
       title: 'ENTER OTP',
-      description: "We sent a code to jonsnow11@gmail.com",
+      description: (email) => email != null && email.isNotEmpty
+          ? "We sent a code to $email"
+          : "We sent a code to your email",
     ),
-    const PasswordResetItems(
+    PasswordResetItems(
       title: 'RESET PASSWORD',
-      description: 'Create new password',
-    ),
-    const PasswordResetItems(
-      title: 'CONFIRM YOUR\nNEMAIL',
-      description: 'We sent a code to jonsnow11@gmail.com',
-    ),
-    const PasswordResetItems(
-      title: 'DATE OF BIRTH',
-      description: 'You must be 16 or older to use Savvy Bee',
-    ),
-    const PasswordResetItems(
-      title: 'WHICH COUNTRY\nDO YOU LIVE IN?',
-      description: 'Regulations may vary depending on where you live',
+      staticDescription: 'Create new password',
     ),
   ];
 }

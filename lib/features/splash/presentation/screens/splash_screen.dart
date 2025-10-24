@@ -1,30 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/assets.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/responsive_layout.dart';
+import 'package:savvy_bee_mobile/features/chat/presentation/screens/chat_screen.dart';
 import 'package:savvy_bee_mobile/features/onboarding/presentation/screens/onboarding_screen.dart';
 
-class SplashScreen extends StatefulWidget {
+import '../../../auth/presentation/providers/auth_providers.dart';
+
+class SplashScreen extends ConsumerStatefulWidget {
   static String path = '/splash';
 
   const SplashScreen({super.key});
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  ConsumerState<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>
+class _SplashScreenState extends ConsumerState<SplashScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
+  bool _hasNavigated = false;
 
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: const Duration(seconds: 3),
+      duration: const Duration(seconds: 2),
       vsync: this,
     );
 
@@ -33,13 +38,7 @@ class _SplashScreenState extends State<SplashScreen>
       end: 1.0,
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn));
 
-    _controller.forward().then((_) {
-      Future.delayed(const Duration(seconds: 3), () {
-        if (mounted) {
-          context.goNamed(OnboardingScreen.path);
-        }
-      });
-    });
+    _controller.forward();
   }
 
   @override
@@ -48,8 +47,45 @@ class _SplashScreenState extends State<SplashScreen>
     super.dispose();
   }
 
+  void _navigateAfterAuth() {
+    if (_hasNavigated) return;
+
+    final authState = ref.read(authProvider);
+    final isInitialized = authState.isInitialized;
+
+    if (!isInitialized) return; // Wait for auth to initialize
+
+    _hasNavigated = true;
+
+    // Delay for splash screen animation
+    Future.delayed(const Duration(seconds: 1), () {
+      if (!mounted) return;
+
+      if (authState.isAuthenticated) {
+        // User is logged in - go to home
+        // context.goNamed(HomeScreen.path);
+        context.goNamed(ChatScreen.path);
+      } else {
+        // User not logged in - go to onboarding
+        context.goNamed(OnboardingScreen.path);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    // Listen to auth state changes
+    ref.listen<AuthState>(authProvider, (previous, next) {
+      if (next.isInitialized) {
+        _navigateAfterAuth();
+      }
+    });
+
+    // Also check on build in case we missed the initialization
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _navigateAfterAuth();
+    });
+
     return Scaffold(
       body: ResponsiveLayout(
         mobile: _buildContent(context, isDesktop: false),
@@ -60,13 +96,7 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   Widget _buildContent(BuildContext context, {required bool isDesktop}) {
-    // final maxWidth = Breakpoints.contentMaxWidth(context);
-    // final padding = Breakpoints.screenPadding(context);
-    // final iconSize = isDesktop ? 150.0 : 100.0;
-    // final spacing = isDesktop ? 32.0 : 24.0;
-
     return Container(
-      // constraints: BoxConstraints(maxWidth: maxWidth),
       decoration: BoxDecoration(
         image: DecorationImage(
           image: AssetImage(Assets.hivePatternYellow),
@@ -92,8 +122,10 @@ class _SplashScreenState extends State<SplashScreen>
               ),
             ),
             Positioned(
-              bottom: -50,
-              right: -115,
+              bottom: 21,
+              right: -45,
+              // bottom: -50,
+              // right: -115,
               child: Image.asset(Assets.savingsBeePose2, scale: 1.15),
             ),
             Positioned(

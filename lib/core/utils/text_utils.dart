@@ -139,12 +139,43 @@ class TextUtils {
   /// - Contains at least one special character
   /// - Contains at least one number
   /// - Is at least eight characters long
-  static bool meetsAllRequirements(String? text) {
+  static bool isPasswordValid(String? text) {
     return hasLowercase(text) &&
         hasUppercase(text) &&
         hasSpecialCharacter(text) &&
         hasNumber(text) &&
         isAtLeastEightChars(text);
+  }
+
+  /// Get password strength (0-5)
+  static int getPasswordStrength(String password) {
+    int strength = 0;
+    if (hasUppercase(password)) strength++;
+    if (hasLowercase(password)) strength++;
+    if (hasNumber(password)) strength++;
+    if (hasSpecialCharacter(password)) strength++;
+    if (isAtLeastEightChars(password)) strength++;
+    return strength;
+  }
+
+  /// Get password strength label
+  static String getPasswordStrengthLabel(String password) {
+    final strength = getPasswordStrength(password);
+    switch (strength) {
+      case 0:
+      case 1:
+        return 'Very Weak';
+      case 2:
+        return 'Weak';
+      case 3:
+        return 'Fair';
+      case 4:
+        return 'Strong';
+      case 5:
+        return 'Very Strong';
+      default:
+        return 'Unknown';
+    }
   }
 
   /// Creates a list of TextSpan widgets with highlighted mentions
