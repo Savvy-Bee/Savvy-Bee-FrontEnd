@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:savvy_bee_mobile/core/services/service_locator.dart';
@@ -117,9 +118,9 @@ class ChatNotifier extends AsyncNotifier<ChatState> {
     }
   }
 
-  /// Send a message to the AI
-  Future<void> sendMessage(String message) async {
-    if (message.trim().isEmpty) return;
+  /// Send a message to the AI with optional image and document attachments
+  Future<void> sendMessage(String message, {File? image, File? document}) async {
+    if (message.trim().isEmpty && image == null && document == null) return;
 
     final currentState = state.value ?? ChatState();
 
@@ -149,8 +150,12 @@ class ChatNotifier extends AsyncNotifier<ChatState> {
     );
 
     try {
-      log('Sending message: $message');
-      final request = SendChatRequest(message: message.trim());
+      log('Sending message: $message${image != null ? " with image" : ""}${document != null ? " with document" : ""}');
+      final request = SendChatRequest(
+        message: message.trim(),
+        image: image,
+        document: document,
+      );
       final response = await _chatRepository.sendMessage(request);
 
       if (response != null && response.success) {

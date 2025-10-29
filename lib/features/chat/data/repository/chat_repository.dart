@@ -49,6 +49,7 @@ class ChatRepository {
 
   /// Send a chat message to the AI
   /// Requires authentication (Bearer token)
+  /// Supports optional image and document file uploads
   Future<ChatResponse?> sendMessage(SendChatRequest request) async {
     try {
       // Verify token exists
@@ -59,15 +60,56 @@ class ChatRepository {
         );
       }
 
-      // Use JSON instead of FormData for simple text messages
-      final response = await _apiClient.post(
-        ApiEndpoints.chatSend,
-        data: request.toJson(),
-        options: Options(
+      // Determine if we need to use FormData (for file uploads) or JSON
+      dynamic data;
+      Options? options;
+      
+      if (request.hasFiles) {
+        // Create FormData for file uploads
+        final formData = FormData.fromMap({'chat': request.message});
+        
+        // Add image file if provided
+        if (request.image != null) {
+          formData.files.add(
+            MapEntry(
+              'image',
+              await MultipartFile.fromFile(
+                request.image!.path,
+                filename: request.image!.path.split('/').last,
+              ),
+            ),
+          );
+        }
+        
+        // Add document file if provided
+        if (request.document != null) {
+          formData.files.add(
+            MapEntry(
+              'document',
+              await MultipartFile.fromFile(
+                request.document!.path,
+                filename: request.document!.path.split('/').last,
+              ),
+            ),
+          );
+        }
+        
+        data = formData;
+        // No need to set Content-Type as Dio will set it automatically with boundary
+      } else {
+        // Use JSON for text-only messages
+        data = request.toJson();
+        options = Options(
           headers: {
             'Content-Type': 'application/json',
           },
-        ),
+        );
+      }
+
+      final response = await _apiClient.post(
+        ApiEndpoints.chatSend,
+        data: data,
+        options: options,
       );
 
       return ChatResponse.fromJson(response.data);

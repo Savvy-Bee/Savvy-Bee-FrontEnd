@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
@@ -6,6 +8,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:readmore/readmore.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/assets.dart';
+import 'package:savvy_bee_mobile/core/utils/file_picker_util.dart';
 import 'package:savvy_bee_mobile/features/chat/presentation/widgets/quick_action_widget.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';
 import 'package:savvy_bee_mobile/features/chat/domain/models/chat_models.dart';
@@ -24,6 +27,8 @@ class ChatScreen extends ConsumerStatefulWidget {
 class _ChatScreenState extends ConsumerState<ChatScreen> {
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _messageController = TextEditingController();
+
+  File? _pickedFile;
 
   final Set<String> _quickActions = {
     'Heal me',
@@ -52,14 +57,42 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     });
   }
 
-  /// Send message
+  /// Send message with optional attachments
   Future<void> _sendMessage() async {
     final message = _messageController.text.trim();
-    if (message.isEmpty) return;
+
+    // Check if we have either a message or a file
+    if (message.isEmpty && _pickedFile == null) return;
 
     _messageController.clear();
 
-    await ref.read(chatProvider.notifier).sendMessage(message);
+    // Determine file type (image or document)
+    File? image;
+    File? document;
+
+    if (_pickedFile != null) {
+      final path = _pickedFile!.path.toLowerCase();
+      final isImage = FilePickerUtil.isImageFile(path);
+
+      if (isImage) {
+        image = _pickedFile;
+      } else {
+        document = _pickedFile;
+      }
+    }
+
+    await ref
+        .read(chatProvider.notifier)
+        .sendMessage(
+          message.isEmpty ? "Sending attachment" : message,
+          image: image,
+          document: document,
+        );
+
+    // Clear the picked file
+    setState(() {
+      _pickedFile = null;
+    });
 
     // Scroll to bottom after sending
     _scrollToBottom();
@@ -149,60 +182,95 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         ),
 
         // Quick actions
-        if (!chatState.isSending)
-          Container(
-            color: AppColors.primaryFaint.withValues(alpha: 0.3),
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // const Gap(10.0),
-                Row(
-                  children: [
-                    Text(
-                      'Quick actions',
-                      style: TextStyle(
-                        fontSize: 12.0,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    const Gap(2.0),
-                    Icon(
-                      Icons.auto_awesome_outlined,
-                      color: AppColors.primaryDark,
-                      size: 16,
-                    ),
-                  ],
-                ),
-                const Gap(10.0),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: _quickActions
-                        .map(
-                          (action) => Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
-                            child: QuickActionWidget(
-                              icon: Icon(
-                                Icons.auto_awesome_outlined,
-                                color: AppColors.primaryDark,
-                                size: 16,
-                              ),
-                              label: action,
-                              onTap: () => _sendQuickAction(action),
-                            ),
-                          ),
-                        )
-                        .toList(),
-                  ),
-                ),
-              ],
-            ),
-          ),
+        if (!chatState.isSending && _pickedFile != null)
+          _buildPickedFilePreview(),
+        if (!chatState.isSending && _pickedFile == null) _buildQuickActions(),
 
         // Message input
         _buildTextField(chatState),
       ],
+    );
+  }
+
+  Widget _buildPickedFilePreview() {
+    return Container(
+      padding: const EdgeInsets.all(8.0),
+      decoration: BoxDecoration(
+        color: AppColors.primaryFaint.withValues(alpha: 0.3),
+        borderRadius: BorderRadius.circular(8.0),
+      ),
+      child: Row(
+        children: [
+          Icon(
+            Icons.file_present_outlined,
+            color: AppColors.primaryDark,
+            size: 24,
+          ),
+          const Gap(8.0),
+          Text(
+            _pickedFile?.path.split('/').last ?? 'No file selected',
+            style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w500),
+          ),
+          const Gap(8.0),
+          IconButton(
+            icon: Icon(Icons.close_outlined, color: AppColors.error, size: 16),
+            onPressed: () {
+              setState(() {
+                _pickedFile = null;
+              });
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildQuickActions() {
+    return Container(
+      color: AppColors.primaryFaint.withValues(alpha: 0.3),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // const Gap(10.0),
+          Row(
+            children: [
+              Text(
+                'Quick actions',
+                style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w500),
+              ),
+              const Gap(2.0),
+              Icon(
+                Icons.auto_awesome_outlined,
+                color: AppColors.primaryDark,
+                size: 16,
+              ),
+            ],
+          ),
+          const Gap(10.0),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: _quickActions
+                  .map(
+                    (action) => Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: QuickActionWidget(
+                        icon: Icon(
+                          Icons.auto_awesome_outlined,
+                          color: AppColors.primaryDark,
+                          size: 16,
+                        ),
+                        label: action,
+                        onTap: () => _sendQuickAction(action),
+                      ),
+                    ),
+                  )
+                  .toList(),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -297,6 +365,10 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     // Determine border radii using the helper function
     final borderRadius = getBubbleBorderRadius();
 
+    // Check if the message has a GIF
+    final hasGif = message.gif != null && message.gif!.isNotEmpty;
+    final hasText = message.message.isNotEmpty;
+
     return Align(
       alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
@@ -309,32 +381,96 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           color: isMe ? AppColors.primaryDark : AppColors.primaryFaint,
           borderRadius: borderRadius,
         ),
-        child: ReadMoreText(
-          message.message,
-          trimLines: 8,
-          trimMode: TrimMode.Line,
-          trimCollapsedText: 'Show more',
-          trimExpandedText: 'Show less',
-          style: TextStyle(
-            color: isMe ? AppColors.background : Colors.black87,
-            fontSize: 15.0,
-            fontWeight: FontWeight.w500,
-            height: 1.4,
-          ),
-          moreStyle: TextStyle(
-            color: isMe
-                ? AppColors.background.withValues(alpha: 0.8)
-                : AppColors.primary,
-            fontSize: 15.0,
-            fontWeight: FontWeight.w600,
-          ),
-          lessStyle: TextStyle(
-            color: isMe
-                ? AppColors.background.withValues(alpha: 0.8)
-                : AppColors.primary,
-            fontSize: 15.0,
-            fontWeight: FontWeight.w600,
-          ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Display GIF if present
+            if (hasGif) ...[
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8.0),
+                child: Image.network(
+                  message.gif!,
+                  fit: BoxFit.cover,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Container(
+                      height: 150,
+                      alignment: Alignment.center,
+                      child: CircularProgressIndicator(
+                        value: loadingProgress.expectedTotalBytes != null
+                            ? loadingProgress.cumulativeBytesLoaded /
+                                  loadingProgress.expectedTotalBytes!
+                            : null,
+                        color: isMe ? AppColors.background : AppColors.primary,
+                      ),
+                    );
+                  },
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      height: 150,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.withValues(alpha: 0.2),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.broken_image,
+                            color: isMe ? AppColors.background : Colors.black54,
+                            size: 32,
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Failed to load GIF',
+                            style: TextStyle(
+                              color: isMe
+                                  ? AppColors.background
+                                  : Colors.black54,
+                              fontSize: 12.0,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
+              // Add spacing between GIF and text if both exist
+              if (hasText) const SizedBox(height: 8.0),
+            ],
+            // Display text if present
+            if (hasText)
+              ReadMoreText(
+                message.message,
+                trimLines: 8,
+                trimMode: TrimMode.Line,
+                trimCollapsedText: 'Show more',
+                trimExpandedText: 'Show less',
+                style: TextStyle(
+                  color: isMe ? AppColors.background : Colors.black87,
+                  fontSize: 15.0,
+                  fontWeight: FontWeight.w500,
+                  height: 1.4,
+                ),
+                moreStyle: TextStyle(
+                  color: isMe
+                      ? AppColors.background.withValues(alpha: 0.8)
+                      : AppColors.primary,
+                  fontSize: 15.0,
+                  fontWeight: FontWeight.w600,
+                ),
+                lessStyle: TextStyle(
+                  color: isMe
+                      ? AppColors.background.withValues(alpha: 0.8)
+                      : AppColors.primary,
+                  fontSize: 15.0,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+          ],
         ),
       ),
     );
@@ -373,11 +509,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         onFieldSubmitted: (_) => _sendMessage(),
         prefix: IconButton(
           icon: const Icon(Icons.add),
-          onPressed: chatState.isSending
-              ? null
-              : () {
-                  // Future: Add attachments functionality
-                },
+          onPressed: chatState.isSending ? null : _showAttachmentPicker,
           visualDensity: VisualDensity.compact,
           style: IconButton.styleFrom(
             foregroundColor: AppColors.primary,
@@ -388,7 +520,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           ),
         ),
         suffix: IconButton(
-          icon: _messageController.text.isNotEmpty
+          icon: _messageController.text.isNotEmpty || _pickedFile != null
               ? const Icon(Icons.send_rounded, color: AppColors.primary)
               : const Icon(
                   Icons.multitrack_audio_rounded,
@@ -397,7 +529,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           onPressed: chatState.isSending
               ? null
               : () {
-                  if (_messageController.text.isNotEmpty) {
+                  if (_messageController.text.isNotEmpty ||
+                      _pickedFile != null) {
                     _sendMessage();
                   } else {
                     // Future: Add voice input functionality
@@ -407,6 +540,43 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         onChanged: (value) {
           setState(() {}); // Update suffix icon
         },
+      ),
+    );
+  }
+
+  void _showAttachmentPicker() {
+    // Future: Implement attachment picker functionality
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextButton(
+              onPressed: () async {
+                FilePickerUtil.pickImage().then((value) {
+                  setState(() {
+                    _pickedFile = value;
+                  });
+                });
+              },
+              child: const Text('Pick Image'),
+            ),
+            TextButton(
+              onPressed: () {
+                FilePickerUtil.pickFile().then((value) {
+                  setState(() {
+                    _pickedFile = value;
+                  });
+                  context.pop();
+                });
+              },
+              child: const Text('Pick File'),
+            ),
+          ],
+        ),
       ),
     );
   }
