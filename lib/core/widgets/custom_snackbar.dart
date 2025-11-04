@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
+import 'package:savvy_bee_mobile/core/utils/constants.dart';
 
 enum SnackbarType { error, success, neutral }
 
@@ -14,48 +16,63 @@ class CustomSnackbar extends StatelessWidget {
       padding: const EdgeInsets.all(12.0),
       margin: const EdgeInsets.only(bottom: 16.0),
       decoration: BoxDecoration(
-        color: type == SnackbarType.error
-            ? Colors.red.shade50
-            : type == SnackbarType.success
-            ? Colors.green.shade50
-            : Colors.grey.shade50,
-        borderRadius: BorderRadius.circular(8.0),
-        border: Border.all(
-          color: type == SnackbarType.error
-              ? Colors.red.shade200
-              : type == SnackbarType.success
-              ? Colors.green.shade200
-              : Colors.grey.shade200,
-        ),
+        color: AppColors.background,
+        borderRadius: BorderRadius.circular(32.0),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.black.withValues(alpha: 0.1),
+            spreadRadius: 1,
+            blurRadius: 4,
+            offset: const Offset(0, 2), // changes position of shadow
+          ),
+        ],
       ),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(
-            type == SnackbarType.error
-                ? Icons.error_outline
-                : type == SnackbarType.success
-                ? Icons.check_circle_outline
-                : Icons.info_outline,
-            color: type == SnackbarType.error
-                ? Colors.red.shade700
-                : type == SnackbarType.success
-                ? Colors.green.shade700
-                : Colors.grey.shade700,
-            size: 20,
+          Padding(
+            padding: const EdgeInsets.only(top: 5.0),
+            child: Icon(
+              switch (type) {
+                SnackbarType.error => Icons.error_outline,
+                SnackbarType.success => Icons.check_circle_outline,
+                SnackbarType.neutral => Icons.info_outline,
+              },
+              color: switch (type) {
+                SnackbarType.error => AppColors.error,
+                SnackbarType.success => AppColors.success,
+                SnackbarType.neutral => AppColors.warning,
+              },
+              size: 20,
+            ),
           ),
           const Gap(8.0),
           Expanded(
-            child: Text(
-              text,
-              style: TextStyle(
-                color: type == SnackbarType.error
-                    ? Colors.red.shade700
-                    : type == SnackbarType.success
-                    ? Colors.green.shade700
-                    : Colors.grey.shade700,
-                fontSize: 14,
-              ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  text,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.black,
+                    fontFamily: Constants.neulisNeueFontFamily,
+                  ),
+                ),
+                Text(
+                  text,
+                  style: TextStyle(fontSize: 12, color: AppColors.black),
+                ),
+              ],
             ),
+          ),
+          IconButton(
+            onPressed: () {
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            },
+            style: Constants.collapsedIconButtonStyle,
+            icon: Icon(Icons.close, size: 20),
           ),
         ],
       ),

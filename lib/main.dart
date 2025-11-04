@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/theme/app_theme.dart';
 import 'core/routing/app_router.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,7 +22,14 @@ void main() {
     ),
   );
 
-  runApp(const ProviderScope(child: SavvyBeeApp()));
+  runApp(
+    ScreenUtilInit(
+      designSize: const Size(402, 874),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (context, child) => const ProviderScope(child: SavvyBeeApp()),
+    ),
+  );
 }
 
 class SavvyBeeApp extends StatelessWidget {

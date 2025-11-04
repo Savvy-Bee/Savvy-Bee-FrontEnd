@@ -7,8 +7,11 @@ import 'package:go_router/go_router.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:readmore/readmore.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
-import 'package:savvy_bee_mobile/core/utils/assets.dart';
+import 'package:savvy_bee_mobile/core/utils/assets/assets.dart';
+import 'package:savvy_bee_mobile/core/utils/assets/illustrations.dart';
 import 'package:savvy_bee_mobile/core/utils/file_picker_util.dart';
+import 'package:savvy_bee_mobile/features/chat/presentation/widgets/add_budget_category_bottom_sheet.dart';
+import 'package:savvy_bee_mobile/features/chat/presentation/widgets/picked_file_preview.dart';
 import 'package:savvy_bee_mobile/features/chat/presentation/widgets/quick_action_widget.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';
 import 'package:savvy_bee_mobile/features/chat/domain/models/chat_models.dart';
@@ -72,7 +75,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
     if (_pickedFile != null) {
       final path = _pickedFile!.path.toLowerCase();
-      final isImage = FilePickerUtil.isImageFile(path);
+      final isImage = FileUtils.isImageFile(path);
 
       if (isImage) {
         image = _pickedFile;
@@ -131,6 +134,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   Widget _buildChatView(ChatState chatState) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Messages list
         Expanded(
@@ -181,47 +185,11 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                 ),
         ),
 
-        // Quick actions
-        if (!chatState.isSending && _pickedFile != null)
-          _buildPickedFilePreview(),
         if (!chatState.isSending && _pickedFile == null) _buildQuickActions(),
 
         // Message input
         _buildTextField(chatState),
       ],
-    );
-  }
-
-  Widget _buildPickedFilePreview() {
-    return Container(
-      padding: const EdgeInsets.all(8.0),
-      decoration: BoxDecoration(
-        color: AppColors.primaryFaint.withValues(alpha: 0.3),
-        borderRadius: BorderRadius.circular(8.0),
-      ),
-      child: Row(
-        children: [
-          Icon(
-            Icons.file_present_outlined,
-            color: AppColors.primaryDark,
-            size: 24,
-          ),
-          const Gap(8.0),
-          Text(
-            _pickedFile?.path.split('/').last ?? 'No file selected',
-            style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w500),
-          ),
-          const Gap(8.0),
-          IconButton(
-            icon: Icon(Icons.close_outlined, color: AppColors.error, size: 16),
-            onPressed: () {
-              setState(() {
-                _pickedFile = null;
-              });
-            },
-          ),
-        ],
-      ),
     );
   }
 
@@ -498,85 +466,89 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
   /// Build message input field
   Widget _buildTextField(ChatState chatState) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-      child: CustomTextFormField(
-        controller: _messageController,
-        hint: 'Start a message',
-        isRounded: true,
-        enabled: !chatState.isSending,
-        textInputAction: TextInputAction.send,
-        onFieldSubmitted: (_) => _sendMessage(),
-        prefix: IconButton(
-          icon: const Icon(Icons.add),
-          onPressed: chatState.isSending ? null : _showAttachmentPicker,
-          visualDensity: VisualDensity.compact,
-          style: IconButton.styleFrom(
-            foregroundColor: AppColors.primary,
-            disabledBackgroundColor: AppColors.primary.withValues(alpha: 0.1),
-            disabledForegroundColor: AppColors.primary.withValues(alpha: 0.5),
-            visualDensity: VisualDensity.compact,
-            backgroundColor: AppColors.primary.withValues(alpha: 0.1),
-          ),
-        ),
-        suffix: IconButton(
-          icon: _messageController.text.isNotEmpty || _pickedFile != null
-              ? const Icon(Icons.send_rounded, color: AppColors.primary)
-              : const Icon(
-                  Icons.multitrack_audio_rounded,
-                  color: AppColors.primary,
-                ),
-          onPressed: chatState.isSending
-              ? null
-              : () {
-                  if (_messageController.text.isNotEmpty ||
-                      _pickedFile != null) {
-                    _sendMessage();
-                  } else {
-                    // Future: Add voice input functionality
-                  }
-                },
-        ),
-        onChanged: (value) {
-          setState(() {}); // Update suffix icon
-        },
+    return Container(
+      padding: const EdgeInsets.all(8.0),
+      margin: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: AppColors.background,
+        borderRadius: BorderRadius.circular(16.0),
       ),
-    );
-  }
-
-  void _showAttachmentPicker() {
-    // Future: Implement attachment picker functionality
-    showModalBottomSheet(
-      context: context,
-      builder: (context) => Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextButton(
-              onPressed: () async {
-                FilePickerUtil.pickImage().then((value) {
-                  setState(() {
-                    _pickedFile = value;
-                  });
-                });
-              },
-              child: const Text('Pick Image'),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (!chatState.isSending && _pickedFile != null)
+            Wrap(
+              children: [
+                PickedFilePreview(
+                  file: _pickedFile,
+                  onRemove: () {
+                    setState(() {
+                      _pickedFile = null;
+                    });
+                  },
+                ),
+              ],
             ),
-            TextButton(
-              onPressed: () {
-                FilePickerUtil.pickFile().then((value) {
-                  setState(() {
-                    _pickedFile = value;
-                  });
-                  context.pop();
-                });
-              },
-              child: const Text('Pick File'),
+          const Gap(10),
+          CustomTextFormField(
+            controller: _messageController,
+            hint: 'Start a message',
+            isRounded: true,
+            enabled: !chatState.isSending,
+            showOutline: _pickedFile == null,
+            textInputAction: TextInputAction.send,
+            onFieldSubmitted: (_) => _sendMessage(),
+            prefix: IconButton(
+              icon: const Icon(Icons.add),
+              constraints: BoxConstraints(),
+              onPressed: chatState.isSending
+                  ? null
+                  : () => FileUtils.pickFile().then((value) {
+                      setState(() {
+                        _pickedFile = value;
+                      });
+                      if (mounted) context.pop();
+                    }),
+              style: IconButton.styleFrom(
+                foregroundColor: AppColors.primary,
+                disabledBackgroundColor: AppColors.primary.withValues(
+                  alpha: 0.1,
+                ),
+                disabledForegroundColor: AppColors.primary.withValues(
+                  alpha: 0.5,
+                ),
+                visualDensity: VisualDensity.compact,
+                backgroundColor: AppColors.primary.withValues(alpha: 0.1),
+              ),
             ),
-          ],
-        ),
+            suffix: IconButton(
+              icon: _messageController.text.isNotEmpty || _pickedFile != null
+                  ? const Icon(Icons.send_rounded, color: AppColors.primary)
+                  : const Icon(
+                      Icons.multitrack_audio_rounded,
+                      color: AppColors.primary,
+                    ),
+              onPressed: chatState.isSending
+                  ? null
+                  : () {
+                      if (_messageController.text.isNotEmpty ||
+                          _pickedFile != null) {
+                        _sendMessage();
+                      } else {
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (context) => AddBudgetCategoryBottomSheet(),
+                        );
+                        // Future: Add voice input functionality
+                      }
+                    },
+            ),
+            onChanged: (value) {
+              setState(() {}); // Update suffix icon
+            },
+          ),
+        ],
       ),
     );
   }
@@ -595,7 +567,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                 shape: BoxShape.circle,
                 color: AppColors.primary.withValues(alpha: 0.1),
               ),
-              child: Image.asset(Assets.familyBee, scale: 4),
+              child: Image.asset(Illustrations.familyBee, scale: 4),
             ),
             const Gap(24.0),
             const Text(
@@ -704,7 +676,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                         color: AppColors.primary.withValues(alpha: 0.1),
                         border: Border.all(color: AppColors.primary),
                       ),
-                      child: Image.asset(Assets.dashAvatar, scale: 1.4),
+                      child: Image.asset(Illustrations.dashAvatar, scale: 1.4),
                     ),
                     const Text(
                       'dash',

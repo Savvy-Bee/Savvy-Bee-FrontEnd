@@ -1,0 +1,142 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
+import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
+import 'package:savvy_bee_mobile/core/utils/number_formatter.dart';
+import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
+
+import '../../../../core/utils/constants.dart';
+
+class AddBudgetCategoryBottomSheet extends ConsumerStatefulWidget {
+  const AddBudgetCategoryBottomSheet({super.key});
+
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _AddBudgetCategoryBottomSheetState();
+}
+
+class _AddBudgetCategoryBottomSheetState
+    extends ConsumerState<AddBudgetCategoryBottomSheet> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 24, 16, 16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Add budget category',
+                style: TextStyle(fontFamily: Constants.neulisNeueFontFamily),
+              ),
+              IconButton(
+                onPressed: () => context.pop(),
+                icon: const Icon(Icons.close),
+                constraints: BoxConstraints(),
+                style: Constants.collapsedIconButtonStyle,
+              ),
+            ],
+          ),
+        ),
+        const Divider(),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
+          child: OutlinedCard(
+            padding: const EdgeInsets.all(16.0),
+            borderColor: AppColors.grey.withValues(alpha: 0.3),
+            child: Column(
+              children: [
+                _buildCategoryListTile(),
+                const Gap(8),
+                _buildCategoryListTile(),
+                const Gap(8),
+                _buildCategoryListTile(),
+                const Gap(8),
+                _buildCategoryListTile(),
+                const Gap(8),
+                _buildCategoryListTile(),
+                const Gap(8),
+                _buildCategoryListTile(),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCategoryListTile() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CircleAvatar(),
+            const Gap(16),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Auto & transport',
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    fontFamily: Constants.neulisNeueFontFamily,
+                  ),
+                ),
+                Text(
+                  '${NumberFormatter.formatCurrency(40000, decimalDigits: 0)} last month',
+                  style: TextStyle(
+                    fontSize: 8.0,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.textSecondary,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (1 == 7)
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    NumberFormatter.formatCurrency(40000, decimalDigits: 0),
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: Constants.neulisNeueFontFamily,
+                    ),
+                  ),
+                  const Gap(8),
+                  IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.edit_outlined),
+                    iconSize: 20,
+                    constraints: BoxConstraints(),
+                    style: Constants.collapsedIconButtonStyle,
+                  ),
+                ],
+              ),
+            if (7 == 7)
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.add),
+                iconSize: 20,
+                constraints: BoxConstraints(),
+                style: Constants.collapsedIconButtonStyle,
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+}

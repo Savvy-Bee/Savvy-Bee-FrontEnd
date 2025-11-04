@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
-import 'package:savvy_bee_mobile/core/utils/assets.dart';
+import 'package:savvy_bee_mobile/core/utils/assets/illustrations.dart';
 import 'package:savvy_bee_mobile/core/utils/breakpoints.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
@@ -30,13 +30,13 @@ class _ChoosePersonalityScreenState
   final List<Personality> _personalities = Personalities.all;
 
   final List<String> _characters = [
-    Assets.loanBee,
-    Assets.savingsBeePose2,
-    Assets.interestBee,
-    Assets.savingsBeePose1,
-    Assets.savingsBeePose2,
-    Assets.familyBee,
-    Assets.familyBee,
+    Illustrations.loanBee,
+    Illustrations.savingsBeePose2,
+    Illustrations.interestBee,
+    Illustrations.savingsBeePose1,
+    Illustrations.savingsBeePose2,
+    Illustrations.familyBee,
+    Illustrations.familyBee,
   ];
 
   /// Update personality and navigate to chat
@@ -155,7 +155,7 @@ class _ChoosePersonalityScreenState
                   // Button above personality selector
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                    child: CustomButton(
+                    child: CustomElevatedButton(
                       text: _isUpdating
                           ? 'Setting up...'
                           : 'Talk to ${currentPersonality.name}',

@@ -4,17 +4,36 @@ import 'package:savvy_bee_mobile/features/auth/presentation/screens/signup/prese
 import 'package:savvy_bee_mobile/features/auth/presentation/screens/signup/presentation/screens/signup_notifications_screen.dart';
 import 'package:savvy_bee_mobile/features/chat/presentation/screens/chat_screen.dart';
 import 'package:savvy_bee_mobile/features/chat/presentation/screens/choose_personality_screen.dart';
+import 'package:savvy_bee_mobile/features/dashboard/presentation/screens/dashboard_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/spend_dashboard_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/add_money_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/bvn_verification_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/create_wallet_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/live_photo_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/nin_verification_screen.dart';
 import 'package:savvy_bee_mobile/features/password/presentation/screens/password_reset_complete.dart';
 import 'package:savvy_bee_mobile/features/password/presentation/screens/password_reset_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/wallet_creation_complete_screen.dart';
+import '../../features/spend/presentation/screens/wallet/photo_verification_screen.dart';
 import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
 import '../../features/auth/presentation/screens/login/presentation/screens/login_screen.dart';
 import '../../features/auth/presentation/screens/signup/presentation/screens/signup_complete_screen.dart';
 import '../../features/auth/presentation/screens/signup/presentation/screens/signup_screen.dart';
 import '../../features/home/presentation/screens/home_screen.dart';
 import '../../features/splash/presentation/screens/splash_screen.dart';
+import '../widgets/main_wrapper.dart';
+
+// Keys for navigating to specific tabs within MainWrapper
+final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>(
+  debugLabel: 'root',
+);
+final GlobalKey<NavigatorState> _shellNavigatorKey = GlobalKey<NavigatorState>(
+  debugLabel: 'shell',
+);
 
 final GoRouter appRouter = GoRouter(
-  initialLocation: SplashScreen.path,
+  navigatorKey: _rootNavigatorKey,
+  initialLocation: DashboardScreen.path,
   routes: [
     GoRoute(
       path: SplashScreen.path,
@@ -98,6 +117,77 @@ final GoRouter appRouter = GoRouter(
       name: ChoosePersonalityScreen.path,
       builder: (BuildContext context, GoRouterState state) {
         return const ChoosePersonalityScreen();
+      },
+    ),
+    ShellRoute(
+      navigatorKey: _shellNavigatorKey,
+      builder: (context, state, child) {
+        return MainWrapper(child: child);
+      },
+      routes: [
+        GoRoute(
+          path: DashboardScreen.path,
+          name: DashboardScreen.path,
+          builder: (BuildContext context, GoRouterState state) {
+            return DashboardScreen();
+          },
+        ),
+        GoRoute(
+          path: SpendScreen.path,
+          name: SpendScreen.path,
+          builder: (BuildContext context, GoRouterState state) {
+            return SpendScreen();
+          },
+        ),
+      ],
+    ),
+    GoRoute(
+      path: CreateWalletScreen.path,
+      name: CreateWalletScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return CreateWalletScreen();
+      },
+    ),
+    GoRoute(
+      path: NinVerificationScreen.path,
+      name: NinVerificationScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return NinVerificationScreen();
+      },
+    ),
+    GoRoute(
+      path: BvnVerificationScreen.path,
+      name: BvnVerificationScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return BvnVerificationScreen();
+      },
+    ),
+    GoRoute(
+      path: PhotoVerificationScreen.path,
+      name: PhotoVerificationScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return PhotoVerificationScreen();
+      },
+    ),
+    GoRoute(
+      path: LivePhotoScreen.path,
+      name: LivePhotoScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return LivePhotoScreen();
+      },
+    ),
+    GoRoute(
+      path: WalletCreationCompletionScreen.path,
+      name: WalletCreationCompletionScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return WalletCreationCompletionScreen();
+      },
+    ),
+    GoRoute(
+      path: AddMoneyScreen.path,
+      name: AddMoneyScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return AddMoneyScreen();
       },
     ),
   ],

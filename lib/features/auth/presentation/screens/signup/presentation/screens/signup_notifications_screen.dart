@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:savvy_bee_mobile/core/utils/assets/assets.dart';
 import '../../../../../../../core/theme/app_colors.dart';
-import '../../../../../../../core/utils/assets.dart';
+import '../../../../../../../core/utils/assets/illustrations.dart';
 import '../../../../../../../core/utils/image_shadow_effect.dart';
 import '../../../../../../../core/widgets/custom_button.dart';
 import '../../../../../../../core/widgets/intro_text.dart';
@@ -49,7 +50,7 @@ class _SignupNotificationsScreenState extends State<SignupNotificationsScreen> {
             Positioned(
               bottom: 0,
               right: 0,
-              child: imageShadowEffect(Assets.interestBee, scale: 1.1),
+              child: imageShadowEffect(Illustrations.interestBee, scale: 1.1),
             ),
             Align(
               alignment: Alignment.bottomCenter,
@@ -61,15 +62,15 @@ class _SignupNotificationsScreenState extends State<SignupNotificationsScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    CustomButton(
+                    CustomElevatedButton(
                       text: 'Turn on notifications',
-                      appButtonColor: CustomButtonColor.black,
+                      buttonColor: CustomButtonColor.black,
                       onPressed: () {},
                     ),
                     const Gap(10.0),
-                    CustomButton(
+                    CustomElevatedButton(
                       text: 'Not now',
-                      appButtonColor: CustomButtonColor.white,
+                      buttonColor: CustomButtonColor.white,
                       onPressed: () {
                         context.pushNamed(SignupConnectBankScreen.path);
                       },

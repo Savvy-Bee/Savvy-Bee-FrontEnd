@@ -340,7 +340,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                           textAlign: TextAlign.center,
                         ),
                       ),
-                    CustomButton(
+                    CustomElevatedButton(
                       text: authState.isLoading ? 'Processing...' : 'Continue',
                       onPressed: authState.isLoading ? null : _handleContinue,
                     ),

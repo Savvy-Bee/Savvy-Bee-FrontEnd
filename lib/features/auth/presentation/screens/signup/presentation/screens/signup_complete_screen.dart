@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
+import 'package:savvy_bee_mobile/core/utils/assets/assets.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/intro_text.dart';
 import 'package:savvy_bee_mobile/features/auth/presentation/screens/signup/presentation/screens/signup_notifications_screen.dart';
 
-import '../../../../../../../core/utils/assets.dart';
+import '../../../../../../../core/utils/assets/illustrations.dart';
 import '../../../../../../../core/utils/image_shadow_effect.dart';
 
 class SignupCompleteScreen extends StatefulWidget {
@@ -46,7 +47,7 @@ class _SignupCompleteScreenState extends State<SignupCompleteScreen> {
             Positioned(
               bottom: 0,
               right: 0,
-              child: imageShadowEffect(Assets.loanBee, scale: 1.1),
+              child: imageShadowEffect(Illustrations.loanBee, scale: 1.1),
             ),
             Align(
               alignment: Alignment.bottomCenter,
@@ -55,7 +56,7 @@ class _SignupCompleteScreenState extends State<SignupCompleteScreen> {
                   horizontal: 16.0,
                   vertical: 32.0,
                 ),
-                child: CustomButton(
+                child: CustomElevatedButton(
                   text: 'Continue',
                   onPressed: () {
                     context.pushNamed(SignupNotificationsScreen.path);

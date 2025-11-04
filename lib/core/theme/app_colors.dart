@@ -4,8 +4,8 @@ class AppColors {
   // Base colors
   static const white = Color(0xFFFFFFFF);
   static const black = Color(0xFF000000);
-  static const grey = Color(0xFFF5F5F5);
-  static const greyDark = Color(0xFF999999);
+  static const grey = Color(0xFFA5A5A5);
+  static const greyDark = Color.fromARGB(255, 102, 102, 102);
   static const greyLight = Color(0xFFF5F5F5);
 
   static const bgBlue = Color(0xFFADE1F9);
@@ -25,7 +25,7 @@ class AppColors {
   static const Color secondaryLight = Color(0xFF333333);
 
   // Background Colors
-  static const Color background = Color(0xFFFFFFFF);
+  static const Color background = Color(0xFFFFFEFA);
   static const Color backgroundDark = Color(0xFFF5F5F5);
   static const Color backgroundLight = Color(0xFFFAFAFA);
 

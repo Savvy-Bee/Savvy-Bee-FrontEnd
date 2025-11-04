@@ -40,15 +40,15 @@ class DateFormatter {
     if (difference.isNegative) {
       final absDifference = difference.abs();
       if (absDifference.inDays > 365) {
-        return 'in ${(absDifference.inDays / 365).floor()} years';
+        return 'in ${(absDifference.inDays / 365).floor()} yrs';
       } else if (absDifference.inDays > 30) {
-        return 'in ${(absDifference.inDays / 30).floor()} months';
+        return 'in ${(absDifference.inDays / 30).floor()} mons';
       } else if (absDifference.inDays > 0) {
         return 'in ${absDifference.inDays} days';
       } else if (absDifference.inHours > 0) {
-        return 'in ${absDifference.inHours} hours';
+        return 'in ${absDifference.inHours} hrs';
       } else if (absDifference.inMinutes > 0) {
-        return 'in ${absDifference.inMinutes} minutes';
+        return 'in ${absDifference.inMinutes} mins';
       } else {
         return 'in a moment';
       }
@@ -56,23 +56,23 @@ class DateFormatter {
 
     // If the date is in the past
     if (difference.inDays > 365) {
-      return '${(difference.inDays / 365).floor()} years ago';
+      return '${(difference.inDays / 365).floor()} yrs ago';
     } else if (difference.inDays > 30) {
-      return '${(difference.inDays / 30).floor()} months ago';
+      return '${(difference.inDays / 30).floor()} mons ago';
     } else if (difference.inDays > 7) {
-      return '${(difference.inDays / 7).floor()} weeks ago';
+      return '${(difference.inDays / 7).floor()} wks ago';
     } else if (difference.inDays > 1) {
       return '${difference.inDays} days ago';
     } else if (difference.inDays == 1) {
-      return 'yesterday';
+      return 'Yesterday';
     } else if (difference.inHours > 0) {
-      return '${difference.inHours} hours ago';
+      return '${difference.inHours} hrs ago';
     } else if (difference.inMinutes > 0) {
-      return '${difference.inMinutes} minutes ago';
+      return '${difference.inMinutes} mins ago';
     } else if (difference.inSeconds > 30) {
-      return '${difference.inSeconds} seconds ago';
+      return '${difference.inSeconds} secs ago';
     } else {
-      return 'just now';
+      return 'Just now';
     }
   }
 

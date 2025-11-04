@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
-import 'package:savvy_bee_mobile/core/utils/assets.dart';
+import 'package:savvy_bee_mobile/core/utils/assets/assets.dart';
+import 'package:savvy_bee_mobile/core/utils/assets/illustrations.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/responsive_layout.dart';
 import 'package:savvy_bee_mobile/features/chat/presentation/screens/chat_screen.dart';
@@ -126,12 +127,12 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
               right: -45,
               // bottom: -50,
               // right: -115,
-              child: Image.asset(Assets.savingsBeePose2, scale: 1.15),
+              child: Image.asset(Illustrations.savingsBeePose2, scale: 1.15),
             ),
             Positioned(
               bottom: -15,
               right: 75,
-              child: Image.asset(Assets.loanBee, scale: 1.5),
+              child: Image.asset(Illustrations.loanBee, scale: 1.5),
             ),
           ],
         ),

@@ -12,7 +12,7 @@ import 'package:savvy_bee_mobile/features/auth/presentation/providers/auth_provi
 import 'package:savvy_bee_mobile/features/chat/presentation/screens/chat_screen.dart';
 import 'package:savvy_bee_mobile/features/password/presentation/screens/password_reset_screen.dart';
 
-import '../../../../../../../core/utils/assets.dart';
+import '../../../../../../../core/utils/assets/illustrations.dart';
 import '../../../../../../../core/widgets/custom_snackbar.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -93,7 +93,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   top: -320,
                   left: 0,
                   right: 0,
-                  child: Image.asset(Assets.familyBee, scale: 1.1),
+                  child: Image.asset(Illustrations.familyBee, scale: 1.1),
                 ),
                 Form(
                   key: _formKey,
@@ -150,9 +150,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         ],
                       ),
                       const Gap(24.0),
-                      CustomButton(
+                      CustomElevatedButton(
                         text: authState.isLoading ? 'Please wait...' : 'Log in',
-                        appButtonColor: CustomButtonColor.black,
+                        buttonColor: CustomButtonColor.black,
                         onPressed: authState.isLoading ? null : _handleLogin,
                       ),
                     ],

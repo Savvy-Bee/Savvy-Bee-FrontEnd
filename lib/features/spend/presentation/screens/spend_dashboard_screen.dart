@@ -1,0 +1,310 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
+import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
+import 'package:savvy_bee_mobile/core/utils/constants.dart';
+import 'package:savvy_bee_mobile/core/utils/date_formatter.dart';
+import 'package:savvy_bee_mobile/core/utils/number_formatter.dart';
+import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/add_money_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/create_wallet_screen.dart';
+
+import '../../../../core/utils/assets/illustrations.dart';
+import '../../../chat/presentation/screens/chat_screen.dart';
+import '../../../dashboard/presentation/widgets/info_card.dart';
+
+class SpendScreen extends ConsumerStatefulWidget {
+  static String path = '/spend';
+
+  const SpendScreen({super.key});
+
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _SpendScreenState();
+}
+
+class _SpendScreenState extends ConsumerState<SpendScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
+        child: 1 != 1
+            ? _buildEmptyStateWidget()
+            : ListView(
+                children: [
+                  WalletBalanceCard(),
+                  const Gap(24.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    spacing: 24,
+                    children: [
+                      _buildQuickActionButton(
+                        Icons.account_balance_wallet_outlined,
+                        'Pay bills',
+                      ),
+                      _buildQuickActionButton(Icons.send_outlined, 'Transfer'),
+                      _buildQuickActionButton(
+                        Icons.receipt_outlined,
+                        'Details',
+                      ),
+                    ],
+                  ),
+                  const Gap(24.0),
+                  _buildEmptyTransactionsCard(),
+                  const Gap(24.0),
+                  _buildRecentTransactionCard(),
+                  const Gap(24.0),
+                  InfoCard(
+                    title: 'Ask Nahl',
+                    description:
+                        'Get answers to questions on your spending, saving, budgets and cashflow!',
+                    avatar: Illustrations.interestBeeAvatar,
+                    borderRadius: 32,
+                    onTap: () => context.pushNamed(ChatScreen.path),
+                  ),
+                ],
+              ),
+      ),
+    );
+  }
+
+  Widget _buildQuickActionButton(IconData icon, String label) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        IconButton.outlined(
+          onPressed: () {},
+          icon: Icon(icon),
+          padding: EdgeInsets.all(16),
+        ),
+        Text(label, style: TextStyle(fontSize: 12)),
+      ],
+    );
+  }
+
+  Widget _buildEmptyStateWidget() {
+    return OutlinedCard(
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton.filled(
+              onPressed: () => context.pushNamed(CreateWalletScreen.path),
+              icon: Icon(Icons.add),
+              style: IconButton.styleFrom(
+                backgroundColor: AppColors.black,
+                foregroundColor: AppColors.white,
+              ),
+            ),
+            const Gap(24.0),
+            Text(
+              'Create your Savvy Wallet Account to start spending',
+              style: TextStyle(fontSize: 12),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEmptyTransactionsCard() {
+    return OutlinedCard(
+      padding: EdgeInsets.symmetric(vertical: 24.0),
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.info_outline_rounded, size: 24),
+            const Gap(8),
+            Text(
+              'No recent transactions',
+              style: TextStyle(
+                fontSize: 12,
+                fontFamily: Constants.neulisNeueFontFamily,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRecentTransactionCard() {
+    final List<Map<String, dynamic>> transactions = [
+      {
+        'type': 'credit',
+        'description': 'Paycheck',
+        'amount': 1000.0,
+        'date': DateTime.now(),
+      },
+      {
+        'type': 'debit',
+        'description': 'Grocery store',
+        'amount': -200.0,
+        'date': DateTime.now().subtract(Duration(days: 1)),
+      },
+      {
+        'type': 'credit',
+        'description': 'Savings',
+        'amount': 500.0,
+        'date': DateTime.now().subtract(Duration(days: 2)),
+      },
+      {
+        'type': 'debit',
+        'description': 'Restaurant',
+        'amount': -150.0,
+        'date': DateTime.now().subtract(Duration(days: 3)),
+      },
+    ];
+
+    return OutlinedCard(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: List.generate(
+          transactions.length,
+          (index) => Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      transactions[index]['type'] == 'credit'
+                          ? Icons.arrow_upward
+                          : Icons.arrow_downward,
+                      color: transactions[index]['type'] == 'credit'
+                          ? AppColors.success
+                          : AppColors.error,
+                    ),
+                    const Gap(16.0),
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          transactions[index]['description'],
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: Constants.neulisNeueFontFamily,
+                          ),
+                        ),
+                        Text(
+                          DateFormatter.formatRelative(
+                            transactions[index]['date'],
+                          ),
+                          style: TextStyle(
+                            fontSize: 10,
+                            color: AppColors.textLight,
+                            fontFamily: Constants.neulisNeueFontFamily,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                Text(
+                  NumberFormatter.formatCurrency(transactions[index]['amount']),
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: Constants.neulisNeueFontFamily,
+                    color: transactions[index]['type'] == 'credit'
+                        ? AppColors.success
+                        : null,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class WalletBalanceCard extends ConsumerWidget {
+  const WalletBalanceCard({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return OutlinedCard(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Text(
+                    'SAVVY WALLET - 1234567890',
+                    style: TextStyle(
+                      fontSize: 10,
+                      color: AppColors.textLight,
+                      fontFamily: Constants.neulisNeueFontFamily,
+                    ),
+                  ),
+                  const Gap(8),
+                  InkWell(
+                    onTap: () {},
+                    child: Icon(
+                      Icons.copy,
+                      size: 14,
+                      weight: 2,
+                      color: AppColors.primary,
+                    ),
+                  ),
+                ],
+              ),
+              IconButton(
+                onPressed: () {},
+                style: Constants.collapsedIconButtonStyle,
+                icon: Icon(Icons.more_vert, color: AppColors.greyDark),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Text(
+                NumberFormatter.formatCurrency(0),
+                style: TextStyle(
+                  fontSize: 36,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: Constants.neulisNeueFontFamily,
+                ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                'Last updated ${DateFormatter.formatRelative(DateTime.now())}',
+                style: TextStyle(
+                  fontSize: 10,
+                  color: AppColors.textSecondary,
+                  fontFamily: Constants.neulisNeueFontFamily,
+                ),
+              ),
+              IconButton(
+                onPressed: () {
+                  context.pushNamed(AddMoneyScreen.path);
+                },
+                style: Constants.collapsedIconButtonStyle.copyWith(
+                  backgroundColor: WidgetStateProperty.all(AppColors.black),
+                ),
+                icon: Icon(Icons.add, color: AppColors.white),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}

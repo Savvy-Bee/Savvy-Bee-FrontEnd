@@ -72,10 +72,16 @@ class AppTheme {
         borderSide: const BorderSide(color: AppColors.error, width: 2),
       ),
     ),
-    appBarTheme: const AppBarTheme(
-      backgroundColor: AppColors.bgBlue,
-      foregroundColor: AppColors.textPrimary,
+    appBarTheme: AppBarTheme(
+      backgroundColor: AppColors.background,
       elevation: 0,
+      centerTitle: true,
+      titleTextStyle: TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.bold,
+        fontFamily: Constants.neulisNeueFontFamily,
+        color: AppColors.black,
+      ),
       systemOverlayStyle: SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
         statusBarIconBrightness: Brightness.dark,
@@ -92,16 +98,27 @@ class AppTheme {
       thickness: 1,
       space: 1,
     ),
-    progressIndicatorTheme: const ProgressIndicatorThemeData(
-      color: AppColors.primary,
-      linearTrackColor: AppColors.borderLight,
-      circularTrackColor: AppColors.borderLight,
-    ),
+    // progressIndicatorTheme: const ProgressIndicatorThemeData(
+    //   color: AppColors.primary,
+    //   linearTrackColor: AppColors.borderLight,
+    //   circularTrackColor: AppColors.borderLight,
+    // ),
     snackBarTheme: SnackBarThemeData(
       backgroundColor: AppColors.secondary,
       contentTextStyle: AppTypography.bodyMedium.copyWith(color: Colors.white),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       behavior: SnackBarBehavior.floating,
+    ),
+    bottomSheetTheme: const BottomSheetThemeData(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(32),
+          topLeft: Radius.circular(32),
+        ),
+      ),
+      modalBackgroundColor: AppColors.background,
+      backgroundColor: AppColors.background,
+      surfaceTintColor: AppColors.background,
     ),
   );
 

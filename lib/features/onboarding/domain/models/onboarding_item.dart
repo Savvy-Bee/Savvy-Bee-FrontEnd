@@ -1,4 +1,4 @@
-import 'package:savvy_bee_mobile/core/utils/assets.dart';
+import 'package:savvy_bee_mobile/core/utils/assets/illustrations.dart';
 
 class OnboardingItem {
   final String title;
@@ -15,22 +15,22 @@ class OnboardingItem {
     const OnboardingItem(
       title: 'LEARN TO\nSPEND BETTER',
       description: 'With spending limits & budget tips',
-      imagePath: Assets.savingsBeePose2,
+      imagePath: Illustrations.savingsBeePose2,
     ),
     const OnboardingItem(
       title: 'SIMPLIFY\nYOUR SAVINGS',
       description: 'With automatic transfers to savings wallet',
-      imagePath: Assets.savingsBeePose1,
+      imagePath: Illustrations.savingsBeePose1,
     ),
     const OnboardingItem(
       title: 'YOUR\nAI COACH',
       description: 'Personal guide for tips, insights, and daily wins.',
-      imagePath: Assets.loanBee,
+      imagePath: Illustrations.loanBee,
     ),
     const OnboardingItem(
       title: 'JOIN\nTHE HIVE',
       description: 'Connect with other bees & climb the leaderboard.',
-      imagePath: Assets.familyBee,
+      imagePath: Illustrations.familyBee,
     ),
   ];
 }

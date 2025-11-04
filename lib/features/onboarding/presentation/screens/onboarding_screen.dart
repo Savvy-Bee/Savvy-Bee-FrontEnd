@@ -136,16 +136,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  CustomButton(
+                  CustomElevatedButton(
                     text: 'Get Started',
                     onPressed: () {
                       context.pushNamed(SignupScreen.path);
                     },
                   ),
                   const Gap(10),
-                  CustomButton(
+                  CustomElevatedButton(
                     text: 'I already have an account',
-                    appButtonColor: CustomButtonColor.black,
+                    buttonColor: CustomButtonColor.black,
                     onPressed: () {
                       context.pushNamed(LoginScreen.path);
                     },

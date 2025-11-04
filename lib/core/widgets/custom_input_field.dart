@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gap/gap.dart';
+import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_typography.dart';
 
@@ -9,6 +11,7 @@ class CustomTextFormField extends StatelessWidget {
   final String? errorText;
   final bool obscureText;
   final bool isRounded;
+  final bool showOutline;
   final TextEditingController? controller;
   final TextInputType? keyboardType;
   final List<TextInputFormatter>? inputFormatters;
@@ -27,6 +30,7 @@ class CustomTextFormField extends StatelessWidget {
   final Color? fillColor;
   final EdgeInsets? contentPadding;
   final TextInputAction textInputAction;
+  final String? subText;
 
   const CustomTextFormField({
     super.key,
@@ -35,6 +39,7 @@ class CustomTextFormField extends StatelessWidget {
     this.errorText,
     this.obscureText = false,
     this.isRounded = false,
+    this.showOutline = true,
     this.controller,
     this.keyboardType,
     this.inputFormatters,
@@ -53,11 +58,13 @@ class CustomTextFormField extends StatelessWidget {
     this.fillColor,
     this.contentPadding,
     this.textInputAction = TextInputAction.next,
+    this.subText,
   });
 
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TextFormField(
@@ -78,38 +85,67 @@ class CustomTextFormField extends StatelessWidget {
           onTapOutside: (event) => FocusScope.of(context).unfocus(),
           onFieldSubmitted: onFieldSubmitted,
           textInputAction: textInputAction,
+          style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14.0),
           decoration: InputDecoration(
             filled: true,
-            fillColor: AppColors.white,
+            fillColor: AppColors.background,
             hintText: hint,
+            hintStyle: TextStyle(
+              fontWeight: FontWeight.w400,
+              fontSize: 14.0,
+              color: AppColors.grey,
+            ),
             errorText: errorText,
             prefixIcon: prefix,
             suffixIcon: suffix,
             contentPadding:
                 contentPadding ??
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(isRounded ? 24 : 8),
-              borderSide: BorderSide(color: AppColors.border),
+              borderSide: BorderSide(color: AppColors.greyDark),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(isRounded ? 24 : 8),
-              borderSide: BorderSide(color: AppColors.border),
+              borderSide: BorderSide(
+                color: showOutline ? AppColors.greyDark : Colors.transparent,
+              ),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(isRounded ? 24 : 8),
-              borderSide: const BorderSide(color: AppColors.primary, width: 2),
+              borderSide: BorderSide(
+                color: showOutline ? AppColors.primary : Colors.transparent,
+                width: 2,
+              ),
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(isRounded ? 24 : 8),
-              borderSide: const BorderSide(color: AppColors.error, width: 2),
+              borderSide: BorderSide(
+                color: showOutline ? AppColors.error : Colors.transparent,
+                width: 2,
+              ),
             ),
             focusedErrorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(isRounded ? 24 : 8),
-              borderSide: const BorderSide(color: AppColors.error, width: 2),
+              borderSide: BorderSide(
+                color: showOutline ? AppColors.error : Colors.transparent,
+                width: 2,
+              ),
             ),
           ),
         ),
+        const Gap(4.0),
+        if (subText != null)
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: Text(
+              subText!,
+              style: TextStyle(
+                fontSize: 10,
+                fontFamily: Constants.exconFontFamily,
+              ),
+            ),
+          ),
       ],
     );
   }
@@ -269,7 +305,7 @@ class _CustomOtpFieldState extends State<CustomOtpField> {
         // border: Border.all(
         //   color: _focusNodes[index].hasFocus
         //       ? AppColors.primary
-        //       : AppColors.border,
+        //       : AppColors.greyDark,
         //   width: _focusNodes[index].hasFocus ? 2 : 1,
         // ),
         borderRadius: BorderRadius.circular(8),

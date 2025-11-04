@@ -286,7 +286,7 @@ class _PasswordResetScreenState extends ConsumerState<PasswordResetScreen> {
               // Bottom CTA
               Padding(
                 padding: const EdgeInsets.all(16.0).copyWith(bottom: 32.0),
-                child: CustomButton(
+                child: CustomElevatedButton(
                   text: authState.isLoading
                       ? 'Processing...'
                       : _currentPage == 2

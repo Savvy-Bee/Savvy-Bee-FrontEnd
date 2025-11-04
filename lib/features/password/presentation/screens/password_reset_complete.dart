@@ -4,7 +4,8 @@ import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/intro_text.dart';
 
-import '../../../../../core/utils/assets.dart';
+import '../../../../core/utils/assets/assets.dart';
+import '../../../../core/utils/assets/illustrations.dart';
 import '../../../../../core/utils/image_shadow_effect.dart';
 import '../../../auth/presentation/screens/login/presentation/screens/login_screen.dart';
 
@@ -46,7 +47,7 @@ class _PasswordResetCompleteState extends State<PasswordResetComplete> {
             Positioned(
               bottom: 0,
               right: 0,
-              child: imageShadowEffect(Assets.loanBee, scale: 1.1),
+              child: imageShadowEffect(Illustrations.loanBee, scale: 1.1),
             ),
             Align(
               alignment: Alignment.bottomCenter,
@@ -55,7 +56,7 @@ class _PasswordResetCompleteState extends State<PasswordResetComplete> {
                   horizontal: 16.0,
                   vertical: 32.0,
                 ),
-                child: CustomButton(
+                child: CustomElevatedButton(
                   text: 'Continue',
                   onPressed: () {
                     context.goNamed(LoginScreen.path);

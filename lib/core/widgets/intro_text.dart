@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:savvy_bee_mobile/core/utils/assets.dart';
+import 'package:savvy_bee_mobile/core/utils/assets/logos.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 
 enum TextAlignment { center, left, right }
@@ -37,7 +37,7 @@ class IntroText extends StatelessWidget {
       children: [
         if (showLogo) ...[
           const Gap(8.0),
-          Image.asset(Assets.logo),
+          Image.asset(Logos.logoText),
           const Gap(16.0),
         ],
 

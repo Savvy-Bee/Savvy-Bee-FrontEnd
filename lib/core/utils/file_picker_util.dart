@@ -4,8 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-class FilePickerUtil {
-
+class FileUtils {
   static const List<String> supportedImageExtensions = [
     '.jpg',
     '.jpeg',
@@ -29,7 +28,7 @@ class FilePickerUtil {
     if (path == null) return false;
     final extension = path.toLowerCase().split('.').last;
     return supportedImageExtensions.contains('.$extension') ||
-           supportedDocumentExtensions.contains('.$extension');
+        supportedDocumentExtensions.contains('.$extension');
   }
 
   /// Check if the file is an image

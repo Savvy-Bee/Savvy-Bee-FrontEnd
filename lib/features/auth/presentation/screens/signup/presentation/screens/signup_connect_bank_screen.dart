@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
+import 'package:savvy_bee_mobile/core/utils/assets/assets.dart';
 import 'package:savvy_bee_mobile/features/auth/presentation/screens/login/presentation/screens/login_screen.dart';
-import 'package:savvy_bee_mobile/features/chat/presentation/screens/chat_screen.dart';
 
-import '../../../../../../../core/utils/assets.dart';
+import '../../../../../../../core/utils/assets/illustrations.dart';
 import '../../../../../../../core/widgets/custom_button.dart';
 import '../../../../../../../core/widgets/intro_text.dart';
 
@@ -37,7 +37,7 @@ class _SignupConnectBankScreenState extends State<SignupConnectBankScreen> {
             Positioned(
               top: 10,
               right: -100,
-              child: Image.asset(Assets.savvyCoin, scale: 4),
+              child: Image.asset(Illustrations.savvyCoin, scale: 4),
             ),
             Positioned(
               top: 100,
@@ -54,13 +54,13 @@ class _SignupConnectBankScreenState extends State<SignupConnectBankScreen> {
             Positioned(
               top: 170,
               left: -110,
-              child: Image.asset(Assets.savvyCoin, scale: 4),
+              child: Image.asset(Illustrations.savvyCoin, scale: 4),
             ),
             Positioned(
               bottom: 30,
               left: 0,
               right: 0,
-              child: Image.asset(Assets.coinJar, scale: 1.2),
+              child: Image.asset(Illustrations.coinJar, scale: 1.2),
             ),
             Align(
               alignment: Alignment.bottomCenter,
@@ -72,18 +72,18 @@ class _SignupConnectBankScreenState extends State<SignupConnectBankScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    CustomButton(
+                    CustomElevatedButton(
                       text: 'Connect me',
-                      appButtonColor: CustomButtonColor.black,
+                      buttonColor: CustomButtonColor.black,
                       onPressed: () {
                         // TODO: Connect bank account
                         context.goNamed(LoginScreen.path);
                       },
                     ),
                     const Gap(10.0),
-                    CustomButton(
+                    CustomElevatedButton(
                       text: 'Tell me more about your security',
-                      appButtonColor: CustomButtonColor.white,
+                      buttonColor: CustomButtonColor.white,
                       onPressed: () {},
                     ),
                   ],

@@ -1,4 +1,4 @@
-import '../../../../core/utils/assets.dart';
+import '../../../../core/utils/assets/illustrations.dart';
 
 class Personality {
   final String id;
@@ -53,7 +53,7 @@ class Personalities {
       characteristics: 'Reduce anxiety; reward micro-wins',
       tone: ['calm', 'gentle', 'supportive'],
       dashboardBias: 'soft progress waves',
-      image: Assets.dashAvatar,
+      image: Illustrations.dashAvatar,
     ),
     Personality(
       id: 'Analytical_Expert',
@@ -63,7 +63,7 @@ class Personalities {
       characteristics: 'Explain patterns precisely',
       tone: ['clear', 'numeric', 'transparent'],
       dashboardBias: 'line charts, tables',
-      image: Assets.budgetBeeAvatar,
+      image: Illustrations.budgetBeeAvatar,
     ),
     Personality(
       id: 'Motivational_Coach',
@@ -73,7 +73,7 @@ class Personalities {
       characteristics: 'Push streaks, challenges',
       tone: ['energetic', 'assertive'],
       dashboardBias: 'trophies, streak meters',
-      image: Assets.interestBeeAvatar,
+      image: Illustrations.interestBeeAvatar,
     ),
     Personality(
       id: 'Practical_Advisor',
@@ -83,7 +83,7 @@ class Personalities {
       characteristics: 'Simplify, offer steps',
       tone: ['direct', 'structured'],
       dashboardBias: 'task cards, checklists',
-      image: Assets.savingsBeeAvatar,
+      image: Illustrations.savingsBeeAvatar,
     ),
     Personality(
       id: 'Frugal_Minimalist',
@@ -93,7 +93,7 @@ class Personalities {
       characteristics: 'Remove waste, optimize',
       tone: ['witty', 'lean'],
       dashboardBias: 'efficiency meters',
-      image: Assets.susuAvatar,
+      image: Illustrations.susuAvatar,
     ),
     Personality(
       id: 'Faith_Centered_Steward',
@@ -103,7 +103,7 @@ class Personalities {
       characteristics: 'Link purpose/values',
       tone: ['reflective', 'humble'],
       dashboardBias: 'gratitude cards',
-      image: Assets.quizBeeAvatar,
+      image: Illustrations.quizBeeAvatar,
     ),
     Personality(
       id: 'Entrepreneur_Operator',
@@ -113,7 +113,7 @@ class Personalities {
       characteristics: 'ROI, runway, cashflow',
       tone: ['strategic', 'confident'],
       dashboardBias: 'ROI boards, runway days',
-      image: Assets.scammerBeeAvatar,
+      image: Illustrations.scammerBeeAvatar,
     ),
   ];
 
