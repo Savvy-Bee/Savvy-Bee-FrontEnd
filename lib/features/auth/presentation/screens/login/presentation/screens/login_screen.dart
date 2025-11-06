@@ -9,7 +9,7 @@ import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';
 import 'package:savvy_bee_mobile/core/widgets/intro_text.dart';
 import 'package:savvy_bee_mobile/features/auth/presentation/providers/auth_providers.dart';
-import 'package:savvy_bee_mobile/features/chat/presentation/screens/chat_screen.dart';
+import 'package:savvy_bee_mobile/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:savvy_bee_mobile/features/password/presentation/screens/password_reset_screen.dart';
 
 import '../../../../../../../core/utils/assets/illustrations.dart';
@@ -63,7 +63,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         );
       }
     } else {
-      if (mounted) context.goNamed(ChatScreen.path);
+      if (mounted) context.goNamed(DashboardScreen.path);
     }
   }
 
@@ -151,9 +151,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       ),
                       const Gap(24.0),
                       CustomElevatedButton(
-                        text: authState.isLoading ? 'Please wait...' : 'Log in',
+                        text: 'Log in',
+                        isLoading: authState.isLoading,
                         buttonColor: CustomButtonColor.black,
-                        onPressed: authState.isLoading ? null : _handleLogin,
+                        onPressed: _handleLogin,
                       ),
                     ],
                   ),

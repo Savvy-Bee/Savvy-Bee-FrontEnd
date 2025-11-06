@@ -92,6 +92,11 @@ class CustomSnackbar extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         duration: const Duration(seconds: 4),
+        dismissDirection: DismissDirection.up,
+        margin: EdgeInsets.only(
+          bottom: MediaQuery.sizeOf(context).height / 1.3,
+        ),
+        behavior: SnackBarBehavior.floating,
       ),
     );
   }

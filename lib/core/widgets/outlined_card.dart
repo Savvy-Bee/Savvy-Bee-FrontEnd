@@ -12,6 +12,8 @@ class OutlinedCard extends StatelessWidget {
   final bool hasShadow;
   final Color? bgColor;
   final Color? borderColor;
+  final double? width;
+  final double? height;
 
   const OutlinedCard({
     super.key,
@@ -22,6 +24,8 @@ class OutlinedCard extends StatelessWidget {
     this.hasShadow = false,
     this.bgColor,
     this.borderColor,
+    this.width,
+    this.height,
   });
 
   @override
@@ -30,6 +34,8 @@ class OutlinedCard extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(borderRadius),
       child: Container(
+        height: height,
+        width: width,
         clipBehavior: Clip.hardEdge,
         padding: padding ?? const EdgeInsets.all(16),
         decoration: BoxDecoration(

@@ -56,6 +56,7 @@ class _BvnVerificationScreenState extends ConsumerState<BvnVerificationScreen> {
               text: 'Continue',
               onPressed: _bvnController.text.trim().isEmpty ? null : () {},
               buttonColor: CustomButtonColor.black,
+              showArrow: true,
             ),
           ],
         ),

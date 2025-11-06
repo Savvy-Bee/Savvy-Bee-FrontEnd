@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/illustrations.dart';
@@ -9,10 +8,8 @@ import 'package:savvy_bee_mobile/core/widgets/section_title_widget.dart';
 import 'package:savvy_bee_mobile/features/chat/presentation/screens/chat_screen.dart';
 import 'package:savvy_bee_mobile/features/dashboard/presentation/widgets/savings_target_widget.dart';
 
-import '../../../../core/widgets/outlined_card.dart';
-import '../../../articles/presentation/widgets/article_bottom_sheet.dart';
 import '../widgets/article_card.dart';
-import '../widgets/budget_analysis_widget.dart';
+import '../../../articles/presentation/widgets/article_bottom_sheet.dart';
 import '../widgets/financial_health_widget.dart';
 import '../widgets/spending_category_widget.dart';
 import '../widgets/info_card.dart';

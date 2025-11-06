@@ -5,6 +5,13 @@ import 'package:savvy_bee_mobile/features/auth/presentation/screens/signup/prese
 import 'package:savvy_bee_mobile/features/chat/presentation/screens/chat_screen.dart';
 import 'package:savvy_bee_mobile/features/chat/presentation/screens/choose_personality_screen.dart';
 import 'package:savvy_bee_mobile/features/dashboard/presentation/screens/dashboard_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/bills/airtime_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/bills/bill_completion_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/bills/bill_confirmation_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/bills/pay_bills_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/fund/fund_with_card_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/fund/new_card_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/fund/fund_by_transfer_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/spend_dashboard_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/add_money_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/bvn_verification_screen.dart';
@@ -14,6 +21,8 @@ import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/nin_
 import 'package:savvy_bee_mobile/features/password/presentation/screens/password_reset_complete.dart';
 import 'package:savvy_bee_mobile/features/password/presentation/screens/password_reset_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/wallet_creation_complete_screen.dart';
+import '../../features/spend/presentation/screens/fund/username_screen.dart';
+import '../../features/spend/presentation/screens/transfer/transfer_screen.dart';
 import '../../features/spend/presentation/screens/wallet/photo_verification_screen.dart';
 import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
 import '../../features/auth/presentation/screens/login/presentation/screens/login_screen.dart';
@@ -141,6 +150,8 @@ final GoRouter appRouter = GoRouter(
         ),
       ],
     ),
+
+    // Wallet Routes
     GoRoute(
       path: CreateWalletScreen.path,
       name: CreateWalletScreen.path,
@@ -183,11 +194,78 @@ final GoRouter appRouter = GoRouter(
         return WalletCreationCompletionScreen();
       },
     ),
+
+    // Fund Wallet Routes
     GoRoute(
       path: AddMoneyScreen.path,
       name: AddMoneyScreen.path,
       builder: (BuildContext context, GoRouterState state) {
         return AddMoneyScreen();
+      },
+    ),
+    GoRoute(
+      path: UsernameScreen.path,
+      name: UsernameScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return UsernameScreen();
+      },
+    ),
+    GoRoute(
+      path: FundByTransferScreen.path,
+      name: FundByTransferScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return FundByTransferScreen();
+      },
+    ),
+    GoRoute(
+      path: FundWithCardScreen.path,
+      name: FundWithCardScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return FundWithCardScreen();
+      },
+    ),
+    GoRoute(
+      path: NewCardScreen.path,
+      name: NewCardScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return NewCardScreen();
+      },
+    ),
+    GoRoute(
+      path: PayBillsScreen.path,
+      name: PayBillsScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return PayBillsScreen();
+      },
+    ),
+    GoRoute(
+      path: AirtimeScreen.path,
+      name: AirtimeScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return AirtimeScreen();
+      },
+    ),
+    GoRoute(
+      path: BillConfirmationScreen.path,
+      name: BillConfirmationScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return BillConfirmationScreen();
+      },
+    ),
+    GoRoute(
+      path: BillCompletionScreen.path,
+      name: BillCompletionScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return BillCompletionScreen();
+      },
+    ),
+
+    // Transfer Routes
+    GoRoute(
+      path: TransferScreen.path,
+      name: TransferScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return TransferScreen();
       },
     ),
   ],

@@ -20,7 +20,7 @@ class CustomElevatedButton extends StatelessWidget {
     this.buttonColor = CustomButtonColor.yellow,
     this.isFullWidth = true,
     this.rounded = false,
-    this.showArrow = true,
+    this.showArrow = false,
     this.isLoading = false,
   });
 
@@ -30,7 +30,7 @@ class CustomElevatedButton extends StatelessWidget {
 
     var forgroundColor = switch (buttonColor) {
       CustomButtonColor.yellow => AppColors.black,
-      CustomButtonColor.white => AppColors.primary,
+      CustomButtonColor.white => AppColors.black,
       CustomButtonColor.black => AppColors.white,
     };
 
@@ -45,14 +45,15 @@ class CustomElevatedButton extends StatelessWidget {
             CustomButtonColor.white => AppColors.white,
             CustomButtonColor.black => AppColors.black,
           },
-          padding: const EdgeInsets.symmetric(vertical: 10),
+          padding: const EdgeInsets.symmetric(vertical: 14),
           shape: RoundedRectangleBorder(
             borderRadius: rounded
                 ? BorderRadius.circular(99)
                 : BorderRadius.circular(8),
-            side: buttonColor == CustomButtonColor.white
-                ? BorderSide(color: AppColors.primary, width: 1.0)
-                : BorderSide.none,
+            side: BorderSide.none,
+            // side: buttonColor == CustomButtonColor.white
+            //     ? BorderSide(color: AppColors.primary, width: 1.0)
+            //     : BorderSide.none,
           ),
           elevation: 0,
         ),
@@ -71,7 +72,7 @@ class CustomElevatedButton extends StatelessWidget {
           text,
           style: TextStyle(
             fontSize: 14,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.bold,
             color: forgroundColor,
           ),
           // style: theme.textTheme.titleMedium?.copyWith(

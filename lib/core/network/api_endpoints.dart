@@ -18,4 +18,15 @@ class ApiEndpoints {
   // Chat endpoints (NAHL - AI Assistant)
   static const String chatSend = '/nahl/chat/send';
   static const String chatHistory = '/nahl/chat/history';
+
+  // Mono Link Account endpoints
+  static const String fetchInstitutions =
+      '/wallet/mono/linkaccount/institutions';
+  static const String fetchMonoInputData =
+      '/wallet/mono/linkaccount/fetch_mono_inputdata';
+  static const String linkAccount = '/wallet/mono/linkaccount/link_account';
+  static const String allLinkedAccounts = '/wallet/mono/details/alluserbanks';
+
+  // Account Creation endpoints
+  static const String createNairaAccount = '/wallet/accountcreation/ng';
 }

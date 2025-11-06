@@ -1,4 +1,21 @@
 {
+    "info": {
+        "_postman_id": "cecb1c23-1412-4d9c-92ee-8fd2100fd11c",
+        "name": "Savvy Bee Api V1",
+        "description": "<html><head></head><body><p><strong>Live api Link</strong></p>\n<p><a href=\"https://savvy-bee-backend-nodejs-express-mongodb.onrender.com\">https://savvy-bee-backend-nodejs-express-mongodb.onrender.com</a></p>\n<p><strong>Demo api Link</strong></p>\n<p><a href=\"https://savvy-bee-backend-nodejs-express-mongodb.onrender.com\">https://savvy-bee-backend-nodejs-express-mongodb.onrender.com</a></p>\n<p><strong>Testing Api and Handle Error</strong></p>\n<p>Error from api are validated and should be passed to frontend</p>\n<pre class=\"click-to-expand-wrapper is-snippet-wrapper\"><code class=\"language-javascript\">try{\n  await axios({\n  ...\n  })\n}catch(error){\n  ...\n  error.response.data.message\n}\n\n</code></pre>\n<p><strong>Status Code</strong></p>\n<ul>\n<li><p><strong>200/300:</strong> You are safe</p>\n</li>\n<li><p><strong>500:</strong> you have a server error.</p>\n</li>\n<li><p><strong>400:</strong> Bad Request</p>\n</li>\n<li><p><strong>401:</strong> Unauthorized request</p>\n</li>\n<li><p><strong>402:</strong> Payment required</p>\n</li>\n<li><p><strong>403:</strong> Forbiden request.</p>\n</li>\n<li><p><strong>404:</strong> Page Not Found.</p>\n</li>\n</ul>\n<h3 id=\"encryption-body\">Encryption body</h3>\n<p>Some request do require encryptions if intigrating with React native, use the below code an ask dev for encrption key. Also insall crypto-js package to use it</p>\n<pre class=\"click-to-expand-wrapper is-snippet-wrapper\"><code class=\"language-javascript\">import CryptoJS from 'crypto-js';\nimport { ALERT_TYPE, Toast } from 'react-native-alert-notification';\nconst SECRET_KEY = 'key'; // Must be 32 characters long\n/**\n * Encrypts a string using AES encryption\n * @param {string} text - The text to encrypt\n * @param {string} key - The encryption key (must be 32 characters long)\n * @returns {string} The encrypted string in base64 format\n */\nexport function encrypt(text, key = SECRET_KEY) {\n    console.log(SECRET_KEY.length);\n    if (key.length !== 32) {\n        throw new Error('Key must be 32 characters long');\n    }\n    const encrypted = CryptoJS.AES.encrypt(text, CryptoJS.enc.Utf8.parse(key), {\n        mode: CryptoJS.mode.CBC,\n        padding: CryptoJS.pad.Pkcs7,\n        iv: CryptoJS.enc.Utf8.parse(key.substring(0, 16)) // Using the first 16 characters as IV\n    });\n    return encrypted.toString();\n}\n/**\n * Decrypts an AES encrypted string\n * @param {string} encryptedText - The encrypted text in base64 format\n * @param {string} key - The decryption key (must be 32 characters long)\n */\nexport function decrypt(encryptedText, key = SECRET_KEY) {\n    if (key.length !== 32) {\n        Toast.show({\n            title:\"Error occured. Enc-dcy\",\n            textBody:'Kindly contact admin',\n            type:ALERT_TYPE.DANGER\n        })\n        return null\n    }\n    try {\n        const decrypted = CryptoJS.AES.decrypt(encryptedText, CryptoJS.enc.Utf8.parse(key), {\n            mode: CryptoJS.mode.CBC,\n            padding: CryptoJS.pad.Pkcs7,\n            iv: CryptoJS.enc.Utf8.parse(key.substring(0, 16))\n        });\n        const decryptedText = decrypted.toString(CryptoJS.enc.Utf8);\n        return decryptedText || null; // Return null if decryption results in an empty string\n    } catch (error) {\n        console.error('Decryption failed:', error.message);\n        Toast.show({\n            title:\"Error occured. Enc-dcy\",\n            textBody:'Kindly contact admin',\n            type:ALERT_TYPE.DANGER\n        })\n        return null\n    }\n}\n\n</code></pre>\n<p>while for React use this:</p>\n<pre class=\"click-to-expand-wrapper is-snippet-wrapper\"><code class=\"language-javascript\">import CryptoJS from 'crypto-js';\nconst SECRET_KEY = 'kllop975ghjko8uhjydfgbjk997123lk'; // Must be 32 characters long\n/**\n * Encrypts a string using AES encryption\n * @param {string} text - The text to encrypt\n * @param {string} key - The encryption key (must be 32 characters long)\n * @returns {string} The encrypted string in base64 format\n */\nexport function encrypt(text, key = SECRET_KEY) {\n    if (key.length !== 32) {\n        throw new Error('Key must be 32 characters long');\n    }\n    const encrypted = CryptoJS.AES.encrypt(text, CryptoJS.enc.Utf8.parse(key), {\n        mode: CryptoJS.mode.CBC,\n        padding: CryptoJS.pad.Pkcs7,\n        iv: CryptoJS.enc.Utf8.parse(key.substring(0, 16)) // Using the first 16 characters as IV\n    });\n    return encrypted.toString();\n}\n/**\n * Decrypts an AES encrypted string\n * @param {string} encryptedText - The encrypted text in base64 format\n * @param {string} key - The decryption key (must be 32 characters long)\n */\nexport function decrypt(encryptedText, key = SECRET_KEY) {\n    if (key.length !== 32) {\n        alert(\"Error occured. Enc-dcy\")\n        return null\n    }\n    try {\n        const decrypted = CryptoJS.AES.decrypt(encryptedText, CryptoJS.enc.Utf8.parse(key), {\n            mode: CryptoJS.mode.CBC,\n            padding: CryptoJS.pad.Pkcs7,\n            iv: CryptoJS.enc.Utf8.parse(key.substring(0, 16))\n        });\n        const decryptedText = decrypted.toString(CryptoJS.enc.Utf8);\n        return decryptedText || null; // Return null if decryption results in an empty string\n    } catch (error) {\n        console.error('Decryption failed:', error.message);\n        alert(\"Error occured. Enc-dcy\")\n        return null\n    }\n}\n\n</code></pre>\n</body></html>",
+        "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+        "toc": [],
+        "owner": "39787330",
+        "collectionId": "cecb1c23-1412-4d9c-92ee-8fd2100fd11c",
+        "publishedId": "2sB3QMLotP",
+        "public": true,
+        "customColor": {
+            "top-bar": "FFFFFF",
+            "right-sidebar": "303030",
+            "highlight": "FF6C37"
+        },
+        "publishDate": "2025-10-13T13:31:59.000Z"
+    },
     "item": [
         {
             "name": "Authentication",
@@ -997,6 +1014,155 @@
                         }
                     ],
                     "_postman_id": "e8cf3d4c-dc60-4ce6-b86c-571ffb161b7f"
+                },
+                {
+                    "name": "Update Data",
+                    "id": "4317733b-89a6-4067-8918-619922099acd",
+                    "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                    },
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": {
+                                "basicConfig": [
+                                    {
+                                        "key": "token",
+                                        "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZjEyMWNhYWJiMGI2NWMxNzIzN2I3OSIsImlhdCI6MTc2MDYzNDA1MiwiZXhwIjoxNzYxMTUyNDUyfQ.T3PLt8lXmmBaik3fcAy4BU6v2s_J4HSQXP3ZAhw_aCA"
+                                    }
+                                ]
+                            },
+                            "isInherited": false
+                        },
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "AIPersonality",
+                                    "value": "Analytical_Expert",
+                                    "type": "text",
+                                    "uuid": "498ac366-dad2-4193-a411-da77f2b5866b"
+                                },
+                                {
+                                    "key": "AIStrictness",
+                                    "value": "Strict",
+                                    "description": "<p>\"Strict\", \"Moderate\", \"Lenient\"</p>\n",
+                                    "type": "text",
+                                    "uuid": "94eb5620-71ab-4347-9f35-62bf602b6990"
+                                },
+                                {
+                                    "key": "Language",
+                                    "value": "Pidgin",
+                                    "type": "text",
+                                    "uuid": "e6852b41-e8a9-4b3b-862f-0f311ac93aca"
+                                },
+                                {
+                                    "key": "Country",
+                                    "value": "Nigeria",
+                                    "type": "text",
+                                    "uuid": "f46306b2-ae1e-4ab1-9dce-ebc57a8038fc"
+                                }
+                            ]
+                        },
+                        "url": "http://localhost:3000/auth/update/userdata",
+                        "description": "<p>Pass the ID for the AIPersonality,</p>\n<pre class=\"click-to-expand-wrapper is-snippet-wrapper\"><code class=\"language-javascript\">[\n    {\n        ID: \"Nurturing_Guide\",\n        Name: \"Nurturing Guide\",\n        Description: \"A nurturing guide persona that provides empathetic and supportive responses, focusing on care and encouragement.\",\n        Characteristics: \"Reduce anxiety; reward micro-wins\",\n        Tone: [\"calm\", \"gentle\", \"supportive\"],\n        Dashboard_Bias: \"soft progress waves\"\n    },\n    {\n        ID: \"Analytical_Expert\",\n        Name: \"Analytical Expert\",\n        Description: \"An analytical expert persona that offers detailed, data-driven insights and logical reasoning to help users make informed decisions.\",\n        Characteristics: \"Explain patterns precisely\",\n        Tone: [\"clear\", \"numeric\", \"transparent\"],\n        Dashboard_Bias: \"line charts, tables\"\n    },\n    {\n        ID: \"Motivational_Coach\",\n        Name: \"Motivational Coach\",\n        Description: \"A motivational coach persona that inspires and encourages users to achieve their goals through positive reinforcement and actionable advice.\",\n        Characteristics: \"Push streaks, challenges\",\n        Tone: [\"energetic\", \"assertive\"],\n        Dashboard_Bias: \"trophies, streak meters\"\n    },\n    {\n        ID: \"Practical_Advisor\",\n        Name: \"Practical Advisor\",\n        Description: \"A practical advisor persona that focuses on simplifying complex tasks and offering clear, actionable steps to achieve results.\",\n        Characteristics: \"Simplify, offer steps\",\n        Tone: [\"direct\", \"structured\"],\n        Dashboard_Bias: \"task cards, checklists\"\n    },\n    {\n        ID: \"Frugal_Minimalist\",\n        Name: \"Frugal Minimalist\",\n        Description: \"A frugal minimalist persona that promotes efficiency by reducing waste and optimizing resources for maximum effectiveness.\",\n        Characteristics: \"Remove waste, optimize\",\n        Tone: [\"witty\", \"lean\"],\n        Dashboard_Bias: \"efficiency meters\"\n    },\n    {\n        ID: \"Faith_Centered_Steward\",\n        Name: \"Faith-Centered Steward\",\n        Description: \"A faith-centered steward persona that connects purpose and values, encouraging reflection and gratitude in decision-making.\",\n        Characteristics: \"Link purpose/values\",\n        Tone: [\"reflective\", \"humble\"],\n        Dashboard_Bias: \"gratitude cards\"\n    },\n    {\n        ID: \"Entrepreneur_Operator\",\n        Name: \"Entrepreneur Operator\",\n        Description: \"An entrepreneur operator persona that focuses on business growth, emphasizing ROI, runway, and cashflow for strategic decision-making.\",\n        Characteristics: \"ROI, runway, cashflow\",\n        Tone: [\"strategic\", \"confident\"],\n        Dashboard_Bias: \"ROI boards, runway days\"\n    }\n]\n\n</code></pre>\n",
+                        "urlObject": {
+                            "path": [
+                                "auth",
+                                "update",
+                                "userdata"
+                            ],
+                            "host": [
+                                "http://localhost:3000"
+                            ],
+                            "query": [],
+                            "variable": []
+                        }
+                    },
+                    "response": [
+                        {
+                            "id": "fdb92f74-2ac2-4446-914c-1ce33ecb564d",
+                            "name": "200",
+                            "originalRequest": {
+                                "method": "POST",
+                                "header": [],
+                                "body": {
+                                    "mode": "formdata",
+                                    "formdata": [
+                                        {
+                                            "key": "Data",
+                                            "value": "ROWD2qdw58AAMqD32hnIioZPAwnJGxSTbgp5rdeiTlw=",
+                                            "type": "text",
+                                            "uuid": "498ac366-dad2-4193-a411-da77f2b5866b",
+                                            "description": "encrypt the data in stringified json to have {Nin:\"55555555555\"}"
+                                        },
+                                        {
+                                            "key": "Profile",
+                                            "type": "file",
+                                            "uuid": "30689b2f-1f78-4443-899e-c93fb4af3c5a",
+                                            "src": "postman-cloud:///1f0aab60-904e-4190-a7ea-1c87d220aae5"
+                                        }
+                                    ]
+                                },
+                                "url": "http://localhost:3000/auth/kyc/identity-number/nin/ng"
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": null,
+                            "header": [
+                                {
+                                    "key": "X-Powered-By",
+                                    "value": "Express"
+                                },
+                                {
+                                    "key": "RateLimit",
+                                    "value": "\"30-in-1min\"; r=29; t=60"
+                                },
+                                {
+                                    "key": "RateLimit-Policy",
+                                    "value": "\"30-in-1min\"; q=30; w=60; pk=:YmIwY2Q1MTM2YWU1:"
+                                },
+                                {
+                                    "key": "Access-Control-Allow-Origin",
+                                    "value": "*"
+                                },
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json; charset=utf-8"
+                                },
+                                {
+                                    "key": "Content-Length",
+                                    "value": "7096"
+                                },
+                                {
+                                    "key": "ETag",
+                                    "value": "W/\"1bb8-KYLAb1xilAgar37Ady8rTXv+XXE\""
+                                },
+                                {
+                                    "key": "Set-Cookie",
+                                    "value": "connect.sid=s%3AudgM2mKi6hs-eFH6uiHqv3rVNO15MHg2.fxTR5ezt9Wgxri5T258yYKG51U8HV1Gy2K4XFlDsOwI; Path=/; Expires=Sat, 18 Oct 2025 18:03:19 GMT; HttpOnly"
+                                },
+                                {
+                                    "key": "Date",
+                                    "value": "Thu, 16 Oct 2025 18:03:19 GMT"
+                                },
+                                {
+                                    "key": "Connection",
+                                    "value": "keep-alive"
+                                },
+                                {
+                                    "key": "Keep-Alive",
+                                    "value": "timeout=5"
+                                }
+                            ],
+                            "cookie": [],
+                            "responseTime": null,
+                            "body": "{\n    \"success\": true,\n    \"message\": \"Nin Verified successfully\",\n    \"data\": {\n        \"reference\": \"VR-c63G9oHWz3TC0O2nd\",\n        \"id\": \"55555555555\",\n        \"id_type\": \"ng_nin\",\n        \"first_name\": \"Bimbo\",\n        \"last_name\": \"Olakunle\",\n        \"middle_name\": \"Doherty\",\n        \"date_of_birth\": \"1988-04-04\",\n        \"phone_number\": \"08000000000\",\n        \"address\": {\n            \"town\": \"SULEJA\",\n            \"lga\": \"Suleja\",\n            \"state\": \"Niger\",\n            \"street\": \"13B Fake Street, Ilupeju Niger State\"\n        },\n        \"email\": \"vino@viola.com\",\n        \"birth_state\": \"Edo\",\n        \"birth_lga\": \"Esan West\",\n        \"birth_country\": \"nigeria\",\n        \"next_of_kin_state\": \"Niger\",\n        \"religion\": \"christianity\",\n        \"gender\": \"female\",\n        \"validation\": {\n            \"first_name\": {\n                \"value\": \"Bimbo\",\n                \"match\": true\n            },\n            \"last_name\": {\n                \"value\": \"Olakunle\",\n                \"match\": true\n            },\n            \"date_of_birth\": {\n                \"value\": \"1988-04-04\",\n                \"match\": true\n            },\n            \"selfie\": {\n                \"value\": \"data:image/jpeg;base64,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\",\n                \"match\": true,\n                \"confidence_rating\": 94\n            }\n        },\n        \"requested_by\": \"API User\"\n    }\n}"
+                        }
+                    ],
+                    "_postman_id": "4317733b-89a6-4067-8918-619922099acd"
                 }
             ],
             "id": "511869ff-2783-481f-b4f3-e2b071fd540a",
@@ -1422,6 +1588,499 @@
             "name": "Wallet",
             "item": [
                 {
+                    "name": "Mono",
+                    "item": [
+                        {
+                            "name": "Link Accounts",
+                            "item": [
+                                {
+                                    "name": "Fetch Institutions/Bank",
+                                    "id": "e927f228-c4eb-4f6f-ba95-f32329333676",
+                                    "protocolProfileBehavior": {
+                                        "disableBodyPruning": true
+                                    },
+                                    "request": {
+                                        "method": "GET",
+                                        "header": [],
+                                        "url": "http://localhost:3000/wallet/mono/linkaccount/institutions",
+                                        "auth": {
+                                            "type": "bearer",
+                                            "bearer": {
+                                                "basicConfig": [
+                                                    {
+                                                        "key": "token",
+                                                        "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZjEyMWNhYWJiMGI2NWMxNzIzN2I3OSIsImlhdCI6MTc2MDYzNDA1MiwiZXhwIjoxNzYxMTUyNDUyfQ.T3PLt8lXmmBaik3fcAy4BU6v2s_J4HSQXP3ZAhw_aCA"
+                                                    }
+                                                ]
+                                            },
+                                            "isInherited": true,
+                                            "source": {
+                                                "_postman_id": "c72eefb3-78c7-47cb-8a43-4cbd78ffc9ca",
+                                                "id": "c72eefb3-78c7-47cb-8a43-4cbd78ffc9ca",
+                                                "name": "Wallet",
+                                                "type": "folder"
+                                            }
+                                        },
+                                        "urlObject": {
+                                            "path": [
+                                                "wallet",
+                                                "mono",
+                                                "linkaccount",
+                                                "institutions"
+                                            ],
+                                            "host": [
+                                                "http://localhost:3000"
+                                            ],
+                                            "query": [],
+                                            "variable": []
+                                        }
+                                    },
+                                    "response": [
+                                        {
+                                            "id": "5f9ab1bb-c412-4df6-ac1c-1e7b75adef72",
+                                            "name": "200",
+                                            "originalRequest": {
+                                                "method": "GET",
+                                                "header": [],
+                                                "url": "http://localhost:3000/wallet/mono/linkaccount/institutions"
+                                            },
+                                            "status": "OK",
+                                            "code": 200,
+                                            "_postman_previewlanguage": null,
+                                            "header": [
+                                                {
+                                                    "key": "X-Powered-By",
+                                                    "value": "Express"
+                                                },
+                                                {
+                                                    "key": "RateLimit",
+                                                    "value": "\"30-in-1min\"; r=28; t=33"
+                                                },
+                                                {
+                                                    "key": "RateLimit-Policy",
+                                                    "value": "\"30-in-1min\"; q=30; w=60; pk=:YmIwY2Q1MTM2YWU1:"
+                                                },
+                                                {
+                                                    "key": "Access-Control-Allow-Origin",
+                                                    "value": "*"
+                                                },
+                                                {
+                                                    "key": "Content-Type",
+                                                    "value": "application/json; charset=utf-8"
+                                                },
+                                                {
+                                                    "key": "Content-Length",
+                                                    "value": "22658"
+                                                },
+                                                {
+                                                    "key": "ETag",
+                                                    "value": "W/\"5882-VE8kIQusCYfNG2YobGWN56TjOio\""
+                                                },
+                                                {
+                                                    "key": "Date",
+                                                    "value": "Thu, 30 Oct 2025 23:37:55 GMT"
+                                                },
+                                                {
+                                                    "key": "Connection",
+                                                    "value": "keep-alive"
+                                                },
+                                                {
+                                                    "key": "Keep-Alive",
+                                                    "value": "timeout=5"
+                                                }
+                                            ],
+                                            "cookie": [],
+                                            "responseTime": null,
+                                            "body": "{\n    \"success\": true,\n    \"message\": \"Banks/institution fetched\",\n    \"data\": [\n        {\n            \"id\": \"5f2d08c060b92e2888287709\",\n            \"institution\": \"Piggyvest\",\n            \"type\": \"PERSONAL_BANKING\",\n            \"nip_code\": \"000000\",\n            \"bank_code\": null,\n            \"country\": \"ng\",\n            \"auth_methods\": [\n                {\n                    \"_id\": \"60d071aff73e6468062ae9d5\",\n                    \"type\": \"internet_banking\",\n                    \"name\": \"Internet Banking\",\n                    \"identifier\": \"connections.ng.piggyvest.retail.web.v1\"\n                }\n            ],\n            \"scope\": [\n                {\n                    \"name\": \"Financial Data\",\n                    \"type\": \"financial_data\"\n                }\n            ]\n        },\n        {\n            \"id\": \"603011ce8f7e2f4a3a6346d2\",\n            \"institution\": \"Providus Bank\",\n            \"type\": \"BUSINESS_BANKING\",\n            \"nip_code\": \"000023\",\n            \"bank_code\": \"101\",\n            \"country\": \"ng\",\n            \"auth_methods\": [\n                {\n                    \"_id\": \"60d071aff73e6468062aea01\",\n                    \"type\": \"internet_banking\",\n                    \"name\": \"Internet Banking\",\n                    \"identifier\": \"connections.ng.providus.corporate.web.v2\"\n                },\n                {\n                    \"_id\": \"64e5d07aa16c7730d56bfb30\",\n                    \"type\": \"providus_ibs\",\n                    \"name\": \"IBS Platform\",\n                    \"identifier\": \"connections.ng.providus.corporate.web.v1\"\n                },\n                {\n                    \"_id\": \"663a5a98da1ec97934891da0\",\n                    \"type\": \"account_number\",\n                    \"name\": \"Account Number\",\n                    \"identifier\": \"connections.account.authorisation.v1\"\n                }\n            ],\n            \"scope\": [\n                {\n                    \"name\": \"Financial Data\",\n                    \"type\": \"financial_data\"\n                },\n                {\n                    \"name\": \"Recurring Debit\",\n                    \"type\": \"recurring-debit\"\n                }\n            ]\n        },\n        {\n            \"id\": \"5f4564adbd54db725df6e2df\",\n            \"institution\": \"GTBank\",\n            \"type\": \"BUSINESS_BANKING\",\n            \"nip_code\": \"000013\",\n            \"bank_code\": \"058\",\n            \"country\": \"ng\",\n            \"auth_methods\": [\n                {\n                    \"_id\": \"6414c5fce9cb8546082b8c86\",\n                    \"type\": \"account_number\",\n                    \"name\": \"Account Number\",\n                    \"identifier\": \"connections.ng.gtbank.retail.pwa.v1\"\n                },\n                {\n                    \"_id\": \"60d071adf73e6468062ae936\",\n                    \"type\": \"internet_banking\",\n                    \"name\": \"Internet Banking\",\n                    \"identifier\": \"connections.ng.gtbank.corporate.web.v1\"\n                },\n                {\n                    \"_id\": \"60d071aef73e6468062ae93e\",\n                    \"type\": \"mobile_banking\",\n                    \"name\": \"Mobile Banking\",\n                    \"identifier\": \"connections.ng.gtbank.corporate.mobile.v1\"\n                },\n                {\n                    \"_id\": \"663a5a98da1ec97934891da0\",\n                    \"type\": \"account_number\",\n                    \"name\": \"Account Number\",\n                    \"identifier\": \"connections.account.authorisation.v1\"\n                }\n            ],\n            \"scope\": [\n                {\n                    \"name\": \"Financial Data\",\n                    \"type\": \"financial_data\"\n                },\n                {\n                    \"name\": \"Recurring Debit\",\n                    \"type\": \"recurring-debit\"\n                }\n            ]\n        },\n        {\n            \"id\": \"5f2d08c060b92e2888287707\",\n            \"institution\": \"First Bank\",\n            \"type\": \"PERSONAL_BANKING\",\n            \"nip_code\": \"000016\",\n            \"bank_code\": \"011\",\n            \"country\": \"ng\",\n            \"auth_methods\": [\n                {\n                    \"_id\": \"60d071adf73e6468062ae90a\",\n                    \"type\": \"internet_banking\",\n                    \"name\": \"Internet Banking\",\n                    \"identifier\": \"connections.ng.firstbank.retail.web.v1\"\n                },\n                {\n                    \"_id\": \"60d071adf73e6468062ae912\",\n                    \"type\": \"mobile_banking\",\n                    \"name\": \"Mobile Banking\",\n                    \"identifier\": \"connections.ng.firstbank.retail.mobile.v1\"\n                },\n                {\n                    \"_id\": \"663a5a98da1ec97934891da0\",\n                    \"type\": \"account_number\",\n                    \"name\": \"Account Number\",\n                    \"identifier\": \"connections.account.authorisation.v1\"\n                },\n                {\n                    \"_id\": \"688c84fbd61099d3258735d6\",\n                    \"type\": \"whatsapp\",\n                    \"name\": \"Pay via WhatsApp (Owo)\",\n                    \"identifier\": \"payments.general.pww.v1\"\n                }\n            ],\n            \"scope\": [\n                {\n                    \"name\": \"Financial Data\",\n                    \"type\": \"financial_data\"\n                },\n                {\n                    \"name\": \"Recurring Debit\",\n                    \"type\": \"recurring-debit\"\n                },\n                {\n                    \"name\": \"Onetime Debit\",\n                    \"type\": \"onetime-debit\"\n                }\n            ]\n        },\n        {\n            \"id\": \"5f2d08c060b92e2888287708\",\n            \"institution\": \"FCMB\",\n            \"type\": \"PERSONAL_BANKING\",\n            \"nip_code\": \"000003\",\n            \"bank_code\": \"214\",\n            \"country\": \"ng\",\n            \"auth_methods\": [\n                {\n                    \"_id\": \"64e370c8ef6c3c1ac20c2cf7\",\n                    \"type\": \"pwa\",\n                    \"name\": \"Pay with Account\",\n                    \"identifier\": \"connections.ng.fcmb.retail.pwa.v1\"\n                },\n                {\n                    \"_id\": \"60d071adf73e6468062ae916\",\n                    \"type\": \"internet_banking\",\n                    \"name\": \"Internet Banking\",\n                    \"identifier\": \"connections.ng.fcmb.retail.web.v1\"\n                },\n                {\n                    \"_id\": \"60d071adf73e6468062ae91c\",\n                    \"type\": \"mobile_banking\",\n                    \"name\": \"Mobile Banking\",\n                    \"identifier\": \"connections.ng.fcmb.retail.mobile.v1\"\n                },\n                {\n                    \"_id\": \"663a5a98da1ec97934891da0\",\n                    \"type\": \"account_number\",\n                    \"name\": \"Account Number\",\n                    \"identifier\": \"connections.account.authorisation.v1\"\n                },\n                {\n                    \"_id\": \"688c84fbd61099d3258735d6\",\n                    \"type\": \"whatsapp\",\n                    \"name\": \"Pay via WhatsApp (Owo)\",\n                    \"identifier\": \"payments.general.pww.v1\"\n                }\n            ],\n            \"scope\": [\n                {\n                    \"name\": \"Financial Data\",\n                    \"type\": \"financial_data\"\n                },\n                {\n                    \"name\": \"Onetime Debit\",\n                    \"type\": \"onetime-debit\"\n                },\n                {\n                    \"name\": \"Recurring Debit\",\n                    \"type\": \"recurring-debit\"\n                }\n            ]\n        },\n        {\n            \"id\": \"5f2d08bf60b92e2888287703\",\n            \"institution\": \"Access Bank\",\n            \"type\": \"PERSONAL_BANKING\",\n            \"nip_code\": \"000014\",\n            \"bank_code\": \"044\",\n            \"country\": \"ng\",\n            \"auth_methods\": [\n                {\n                    \"_id\": \"60d071adf73e6468062ae8ea\",\n                    \"type\": \"internet_banking\",\n                    \"name\": \"Internet Banking\",\n                    \"identifier\": \"connections.ng.access_bank.retail.web.v1\"\n                },\n                {\n                    \"_id\": \"60d071adf73e6468062ae8f0\",\n                    \"type\": \"mobile_banking\",\n                    \"name\": \"Mobile Banking\",\n                    \"identifier\": \"connections.ng.access_bank.retail.mobile.v1\"\n                },\n                {\n                    \"_id\": \"663a5a98da1ec97934891da0\",\n                    \"type\": \"account_number\",\n                    \"name\": \"Account Number\",\n                    \"identifier\": \"connections.account.authorisation.v1\"\n                },\n                {\n                    \"_id\": \"68174f5251ab56e5424f4eac\",\n                    \"type\": \"pwb\",\n                    \"name\": \"Pay with Bank\",\n                    \"identifier\": \"connections.generic.pwb.v1\"\n                },\n                {\n                    \"_id\": \"688c84fbd61099d3258735d6\",\n                    \"type\": \"whatsapp\",\n                    \"name\": \"Pay via WhatsApp (Owo)\",\n                    \"identifier\": \"payments.general.pww.v1\"\n                }\n            ],\n            \"scope\": [\n                {\n                    \"name\": \"Onetime Debit\",\n                    \"type\": \"onetime-debit\"\n                },\n                {\n                    \"name\": \"Financial Data\",\n                    \"type\": \"financial_data\"\n                },\n                {\n                    \"name\": \"Recurring Debit\",\n                    \"type\": \"recurring-debit\"\n                }\n            ]\n        },\n        {\n            \"id\": \"5f5a530b0221b6559aadf14b\",\n            \"institution\": \"Sterling Bank\",\n            \"type\": \"PERSONAL_BANKING\",\n            \"nip_code\": \"000001\",\n            \"bank_code\": \"232\",\n            \"country\": \"ng\",\n            \"auth_methods\": [\n                {\n                    \"_id\": \"663a5a98da1ec97934891da0\",\n                    \"type\": \"account_number\",\n                    \"name\": \"Account Number\",\n                    \"identifier\": \"connections.account.authorisation.v1\"\n                },\n                {\n                    \"_id\": \"688c84fbd61099d3258735d6\",\n                    \"type\": \"whatsapp\",\n                    \"name\": \"Pay via WhatsApp (Owo)\",\n                    \"identifier\": \"payments.general.pww.v1\"\n                },\n                {\n                    \"_id\": \"68c16519856fa3ec25948985\",\n                    \"type\": \"mobile_banking\",\n                    \"name\": \"Sterling\",\n                    \"identifier\": \"connections.ng.sterling.retail.email.v1\"\n                }\n            ],\n            \"scope\": [\n                {\n                    \"name\": \"Onetime Debit\",\n                    \"type\": \"onetime-debit\"\n                },\n                {\n                    \"name\": \"Financial Data\",\n                    \"type\": \"financial_data\"\n                },\n                {\n                    \"name\": \"Recurring Debit\",\n                    \"type\": \"recurring-debit\"\n                }\n            ]\n        },\n        {\n            \"id\": \"6112591e75430f68718902aa\",\n            \"institution\": \"Providus Bank\",\n            \"type\": \"PERSONAL_BANKING\",\n            \"nip_code\": \"000023\",\n            \"bank_code\": \"101\",\n            \"country\": \"ng\",\n            \"auth_methods\": [\n                {\n                    \"_id\": \"65a8d4c271cc7bf540271bdd\",\n                    \"type\": \"internet_banking\",\n                    \"name\": \"Internet Banking\",\n                    \"identifier\": \"connections.ng.providus.retail.web.v1\"\n                },\n                {\n                    \"_id\": \"64f031c2cdbaef08b3540a42\",\n                    \"type\": \"mobile_banking\",\n                    \"name\": \"Mobile Banking\",\n                    \"identifier\": \"connections.ng.providus.retail.mobile.v1\"\n                },\n                {\n                    \"_id\": \"663a5a98da1ec97934891da0\",\n                    \"type\": \"account_number\",\n                    \"name\": \"Account Number\",\n                    \"identifier\": \"connections.account.authorisation.v1\"\n                },\n                {\n                    \"_id\": \"688c84fbd61099d3258735d6\",\n                    \"type\": \"whatsapp\",\n                    \"name\": \"Pay via WhatsApp (Owo)\",\n                    \"identifier\": \"payments.general.pww.v1\"\n                }\n            ],\n            \"scope\": [\n                {\n                    \"name\": \"Financial Data\",\n                    \"type\": \"financial_data\"\n                },\n                {\n                    \"name\": \"Onetime Debit\",\n                    \"type\": \"onetime-debit\"\n                },\n                {\n                    \"name\": \"Recurring Debit\",\n                    \"type\": \"recurring-debit\"\n                }\n            ]\n        },\n        {\n            \"id\": \"618ba847f1be196145602f05\",\n            \"institution\": \"Risevest\",\n            \"type\": \"PERSONAL_BANKING\",\n            \"bank_code\": null,\n            \"country\": \"ng\",\n            \"auth_methods\": [\n                {\n                    \"_id\": \"618baab56c4540345be3842b\",\n                    \"type\": \"mobile_banking\",\n                    \"name\": \"Mobile Banking\",\n                    \"identifier\": \"connections.ng.risevest.retail.mobile.v1\"\n                }\n            ],\n            \"scope\": [\n                {\n                    \"name\": \"Financial Data\",\n                    \"type\": \"financial_data\"\n                }\n            ]\n        },\n        {\n            \"id\": \"5f2d08bf60b92e2888287704\",\n            \"institution\": \"Kuda Bank\",\n            \"type\": \"PERSONAL_BANKING\",\n            \"nip_code\": \"090267\",\n            \"bank_code\": \"672\",\n            \"country\": \"ng\",\n            \"auth_methods\": [\n                {\n                    \"_id\": \"64d8e1e499f42c2dbb8f5fde\",\n                    \"type\": \"pwa\",\n                    \"name\": \"Kuda PayID\",\n                    \"identifier\": \"connections.ng.kuda.retail.pwa.v1\"\n                },\n                {\n                    \"_id\": \"60d071adf73e6468062ae8f8\",\n                    \"type\": \"internet_banking\",\n                    \"name\": \"Internet Banking\",\n                    \"identifier\": \"connections.ng.kuda.retail.web.v1\"\n                },\n                {\n                    \"_id\": \"663a5a98da1ec97934891da0\",\n                    \"type\": \"account_number\",\n                    \"name\": \"Account Number\",\n                    \"identifier\": \"connections.account.authorisation.v1\"\n                },\n                {\n                    \"_id\": \"688c84fbd61099d3258735d6\",\n                    \"type\": \"whatsapp\",\n                    \"name\": \"Pay via WhatsApp (Owo)\",\n                    \"identifier\": \"payments.general.pww.v1\"\n                }\n            ],\n            \"scope\": [\n                {\n                    \"name\": \"Onetime Debit\",\n                    \"type\": \"onetime-debit\"\n                },\n                {\n                    \"name\": \"Financial Data\",\n                    \"type\": \"financial_data\"\n                },\n                {\n                    \"name\": \"Recurring Debit\",\n                    \"type\": \"recurring-debit\"\n                }\n            ]\n        },\n        {\n            \"id\": \"5f56783d46eda834b0846c68\",\n            \"institution\": \"Union Bank of Nigeria\",\n            \"type\": \"PERSONAL_BANKING\",\n            \"nip_code\": \"000018\",\n            \"bank_code\": \"032\",\n            \"country\": \"ng\",\n            \"auth_methods\": [\n                {\n                    \"_id\": \"636f1b5d3a60a10ef5e99a7a\",\n                    \"type\": \"internet_banking\",\n                    \"name\": \"Internet Banking\",\n                    \"identifier\": \"connections.ng.union.retail.web.v1\"\n                },\n                {\n                    \"_id\": \"636f1b5e3a60a10ef5e99a80\",\n                    \"type\": \"mobile_banking\",\n                    \"name\": \"Mobile Banking\",\n                    \"identifier\": \"connections.ng.union_bank.retail.mobile.v1\"\n                },\n                {\n                    \"_id\": \"663a5a98da1ec97934891da0\",\n                    \"type\": \"account_number\",\n                    \"name\": \"Account Number\",\n                    \"identifier\": \"connections.account.authorisation.v1\"\n                },\n                {\n                    \"_id\": \"688c84fbd61099d3258735d6\",\n                    \"type\": \"whatsapp\",\n                    \"name\": \"Pay via WhatsApp (Owo)\",\n                    \"identifier\": \"payments.general.pww.v1\"\n                }\n            ],\n            \"scope\": [\n                {\n                    \"name\": \"Financial Data\",\n                    \"type\": \"financial_data\"\n                },\n                {\n                    \"name\": \"Onetime Debit\",\n                    \"type\": \"onetime-debit\"\n                },\n                {\n                    \"name\": \"Recurring Debit\",\n                    \"type\": \"recurring-debit\"\n                }\n            ]\n        },\n        {\n            \"id\": \"5f5b530a67ffc15e5911e0d2\",\n            \"institution\": \"ALAT by WEMA\",\n            \"type\": \"PERSONAL_BANKING\",\n            \"nip_code\": \"000017\",\n            \"bank_code\": \"035\",\n            \"country\": \"ng\",\n            \"auth_methods\": [\n                {\n                    \"_id\": \"60d071aef73e6468062ae95e\",\n                    \"type\": \"pwa\",\n                    \"name\": \"Pay with Account\",\n                    \"identifier\": \"connections.ng.wema.retail.pwa.v1\"\n                },\n                {\n                    \"_id\": \"60d071aef73e6468062ae970\",\n                    \"type\": \"internet_banking\",\n                    \"name\": \"Internet Banking\",\n                    \"identifier\": \"connections.ng.alat.retail.web.v1\"\n                },\n                {\n                    \"_id\": \"663a5a98da1ec97934891da0\",\n                    \"type\": \"account_number\",\n                    \"name\": \"Account Number\",\n                    \"identifier\": \"connections.account.authorisation.v1\"\n                },\n                {\n                    \"_id\": \"688c84fbd61099d3258735d6\",\n                    \"type\": \"whatsapp\",\n                    \"name\": \"Pay via WhatsApp (Owo)\",\n                    \"identifier\": \"payments.general.pww.v1\"\n                }\n            ],\n            \"scope\": [\n                {\n                    \"name\": \"Onetime Debit\",\n                    \"type\": \"onetime-debit\"\n                },\n                {\n                    \"name\": \"Financial Data\",\n                    \"type\": \"financial_data\"\n                },\n                {\n                    \"name\": \"Recurring Debit\",\n                    \"type\": \"recurring-debit\"\n                }\n            ]\n        },\n        {\n            \"id\": \"60520927c8fc8b2e58411d4f\",\n            \"institution\": \"VULTe Digital Bank\",\n            \"type\": \"PERSONAL_BANKING\",\n            \"nip_code\": \"000008\",\n            \"bank_code\": \"076\",\n            \"country\": \"ng\",\n            \"auth_methods\": [\n                {\n                    \"_id\": \"60d071aff73e6468062ae9ed\",\n                    \"type\": \"internet_banking\",\n                    \"name\": \"Internet Banking\",\n                    \"identifier\": \"connections.ng.vulte.retail.web.v1\"\n                },\n                {\n                    \"_id\": \"663a5a98da1ec97934891da0\",\n                    \"type\": \"account_number\",\n                    \"name\": \"Account Number\",\n                    \"identifier\": \"connections.account.authorisation.v1\"\n                }\n            ],\n            \"scope\": [\n                {\n                    \"name\": \"Financial Data\",\n                    \"type\": \"financial_data\"\n                }\n            ]\n        },\n        {\n            \"id\": \"5f2d08c060b92e2888287706\",\n            \"institution\": \"Stanbic IBTC Bank\",\n            \"type\": \"PERSONAL_BANKING\",\n            \"nip_code\": \"000012\",\n            \"bank_code\": \"221\",\n            \"country\": \"ng\",\n            \"auth_methods\": [\n                {\n                    \"_id\": \"60d071adf73e6468062ae904\",\n                    \"type\": \"internet_banking\",\n                    \"name\": \"Internet Banking\",\n                    \"identifier\": \"connections.ng.stanbic.retail.web.v1\"\n                },\n                {\n                    \"_id\": \"663a5a98da1ec97934891da0\",\n                    \"type\": \"account_number\",\n                    \"name\": \"Account Number\",\n                    \"identifier\": \"connections.account.authorisation.v1\"\n                },\n                {\n                    \"_id\": \"688c84fbd61099d3258735d6\",\n                    \"type\": \"whatsapp\",\n                    \"name\": \"Pay via WhatsApp (Owo)\",\n                    \"identifier\": \"payments.general.pww.v1\"\n                }\n            ],\n            \"scope\": [\n                {\n                    \"name\": \"Financial Data\",\n                    \"type\": \"financial_data\"\n                },\n                {\n                    \"name\": \"Recurring Debit\",\n                    \"type\": \"recurring-debit\"\n                },\n                {\n                    \"name\": \"Onetime Debit\",\n                    \"type\": \"onetime-debit\"\n                }\n            ]\n        },\n        {\n            \"id\": \"5f2d08c060b92e288828770c\",\n            \"institution\": \"Fidelity Bank\",\n            \"type\": \"PERSONAL_BANKING\",\n            \"nip_code\": \"000007\",\n            \"bank_code\": \"070\",\n            \"country\": \"ng\",\n            \"auth_methods\": [\n                {\n                    \"_id\": \"60d071adf73e6468062ae930\",\n                    \"type\": \"internet_banking\",\n                    \"name\": \"Internet Banking\",\n                    \"identifier\": \"connections.ng.fidelity.retail.web.v1\"\n                },\n                {\n                    \"_id\": \"663a5a98da1ec97934891da0\",\n                    \"type\": \"account_number\",\n                    \"name\": \"Account Number\",\n                    \"identifier\": \"connections.account.authorisation.v1\"\n                },\n                {\n                    \"_id\": \"688c84fbd61099d3258735d6\",\n                    \"type\": \"whatsapp\",\n                    \"name\": \"Pay via WhatsApp (Owo)\",\n                    \"identifier\": \"payments.general.pww.v1\"\n                }\n            ],\n            \"scope\": [\n                {\n                    \"name\": \"Onetime Debit\",\n                    \"type\": \"onetime-debit\"\n                },\n                {\n                    \"name\": \"Financial Data\",\n                    \"type\": \"financial_data\"\n                },\n                {\n                    \"name\": \"Recurring Debit\",\n                    \"type\": \"recurring-debit\"\n                }\n            ]\n        },\n        {\n            \"id\": \"5f6de706800d071e5566ef7d\",\n            \"institution\": \"Access Bank\",\n            \"type\": \"BUSINESS_BANKING\",\n            \"nip_code\": \"000014\",\n            \"bank_code\": \"044\",\n            \"country\": \"ng\",\n            \"auth_methods\": [\n                {\n                    \"_id\": \"60d071aef73e6468062ae990\",\n                    \"type\": \"internet_banking\",\n                    \"name\": \"Internet Banking\",\n                    \"identifier\": \"connections.ng.access_bank.corporate.web.v1\"\n                },\n                {\n                    \"_id\": \"60d071aef73e6468062ae996\",\n                    \"type\": \"internet_banking\",\n                    \"name\": \"PrimusPlus\",\n                    \"identifier\": \"connections.ng.access_bank.corporate.primus_plus.v1\"\n                },\n                {\n                    \"_id\": \"663a5a98da1ec97934891da0\",\n                    \"type\": \"account_number\",\n                    \"name\": \"Account Number\",\n                    \"identifier\": \"connections.account.authorisation.v1\"\n                }\n            ],\n            \"scope\": [\n                {\n                    \"name\": \"Financial Data\",\n                    \"type\": \"financial_data\"\n                },\n                {\n                    \"name\": \"Recurring Debit\",\n                    \"type\": \"recurring-debit\"\n                },\n                {\n                    \"name\": \"Onetime Debit\",\n                    \"type\": \"onetime-debit\"\n                }\n            ]\n        },\n        {\n            \"id\": \"5f6de706800d071e5566ef7e\",\n            \"institution\": \"Fidelity Bank\",\n            \"type\": \"BUSINESS_BANKING\",\n            \"nip_code\": \"000007\",\n            \"bank_code\": \"070\",\n            \"country\": \"ng\",\n            \"auth_methods\": [\n                {\n                    \"_id\": \"60d071aef73e6468062ae99c\",\n                    \"type\": \"internet_banking\",\n                    \"name\": \"Internet Banking\",\n                    \"identifier\": \"connections.ng.fidelity.retail.web.v1\"\n                },\n                {\n                    \"_id\": \"663a5a98da1ec97934891da0\",\n                    \"type\": \"account_number\",\n                    \"name\": \"Account Number\",\n                    \"identifier\": \"connections.account.authorisation.v1\"\n                }\n            ],\n            \"scope\": [\n                {\n                    \"name\": \"Financial Data\",\n                    \"type\": \"financial_data\"\n                },\n                {\n                    \"name\": \"Recurring Debit\",\n                    \"type\": \"recurring-debit\"\n                },\n                {\n                    \"name\": \"Onetime Debit\",\n                    \"type\": \"onetime-debit\"\n                }\n            ]\n        },\n        {\n            \"id\": \"601d6087b2568f1b7f861594\",\n            \"institution\": \"Keystone Bank\",\n            \"type\": \"PERSONAL_BANKING\",\n            \"nip_code\": \"000002\",\n            \"bank_code\": \"082\",\n            \"country\": \"ng\",\n            \"auth_methods\": [\n                {\n                    \"_id\": \"60d071aff73e6468062ae9f9\",\n                    \"type\": \"mobile_banking\",\n                    \"name\": \"Mobile Banking\",\n                    \"identifier\": \"connections.ng.keystone.retail.mobile.v1\"\n                },\n                {\n                    \"_id\": \"663a5a98da1ec97934891da0\",\n                    \"type\": \"account_number\",\n                    \"name\": \"Account Number\",\n                    \"identifier\": \"connections.account.authorisation.v1\"\n                },\n                {\n                    \"_id\": \"688c84fbd61099d3258735d6\",\n                    \"type\": \"whatsapp\",\n                    \"name\": \"Pay via WhatsApp (Owo)\",\n                    \"identifier\": \"payments.general.pww.v1\"\n                }\n            ],\n            \"scope\": [\n                {\n                    \"name\": \"Financial Data\",\n                    \"type\": \"financial_data\"\n                },\n                {\n                    \"name\": \"Recurring Debit\",\n                    \"type\": \"recurring-debit\"\n                },\n                {\n                    \"name\": \"Onetime Debit\",\n                    \"type\": \"onetime-debit\"\n                }\n            ]\n        },\n        {\n            \"id\": \"61118329b6ab45e84e8c9b8f\",\n            \"institution\": \"United Bank For Africa\",\n            \"type\": \"BUSINESS_BANKING\",\n            \"nip_code\": \"000004\",\n            \"bank_code\": \"033\",\n            \"country\": \"ng\",\n            \"auth_methods\": [\n                {\n                    \"_id\": \"60d071aef73e6468062ae946\",\n                    \"type\": \"internet_banking\",\n                    \"name\": \"Internet Banking\",\n                    \"identifier\": \"connections.ng.uba.corporate.web.v1\"\n                },\n                {\n                    \"_id\": \"663a5a98da1ec97934891da0\",\n                    \"type\": \"account_number\",\n                    \"name\": \"Account Number\",\n                    \"identifier\": \"connections.account.authorisation.v1\"\n                }\n            ],\n            \"scope\": [\n                {\n                    \"name\": \"Financial Data\",\n                    \"type\": \"financial_data\"\n                },\n                {\n                    \"name\": \"Recurring Debit\",\n                    \"type\": \"recurring-debit\"\n                }\n            ]\n        },\n        {\n            \"id\": \"61812d91d8f2bd8a5953c796\",\n            \"institution\": \"Ecobank Nigeria\",\n            \"type\": \"BUSINESS_BANKING\",\n            \"nip_code\": \"000010\",\n            \"bank_code\": \"050\",\n            \"country\": \"ng\",\n            \"auth_methods\": [\n                {\n                    \"_id\": \"60d071aef73e6468062ae98a\",\n                    \"type\": \"internet_banking\",\n                    \"name\": \"Internet Banking\",\n                    \"identifier\": \"connections.ng.ecobank.retail.web.v1\"\n                },\n                {\n                    \"_id\": \"663a5a98da1ec97934891da0\",\n                    \"type\": \"account_number\",\n                    \"name\": \"Account Number\",\n                    \"identifier\": \"connections.account.authorisation.v1\"\n                }\n            ],\n            \"scope\": [\n                {\n                    \"name\": \"Financial Data\",\n                    \"type\": \"financial_data\"\n                },\n                {\n                    \"name\": \"Recurring Debit\",\n                    \"type\": \"recurring-debit\"\n                }\n            ]\n        },\n        {\n            \"id\": \"618ba847f1be196145602f04\",\n            \"institution\": \"Chaka\",\n            \"type\": \"PERSONAL_BANKING\",\n            \"bank_code\": null,\n            \"country\": \"ng\",\n            \"auth_methods\": [\n                {\n                    \"_id\": \"618baab56c4540345be38425\",\n                    \"type\": \"mobile_banking\",\n                    \"name\": \"Mobile Banking\",\n                    \"identifier\": \"connections.ng.chaka.retail.mobile.v1\"\n                }\n            ],\n            \"scope\": [\n                {\n                    \"name\": \"Financial Data\",\n                    \"type\": \"financial_data\"\n                }\n            ]\n        },\n        {\n            \"id\": \"5f2d08bf60b92e2888287705\",\n            \"institution\": \"Standard Chartered\",\n            \"type\": \"PERSONAL_BANKING\",\n            \"nip_code\": \"000021\",\n            \"bank_code\": \"068\",\n            \"country\": \"ng\",\n            \"auth_methods\": [\n                {\n                    \"_id\": \"60d071adf73e6468062ae8fe\",\n                    \"type\": \"internet_banking\",\n                    \"name\": \"Internet Banking\",\n                    \"identifier\": \"connections.ng.standard_chartered.retail.web.v1\"\n                },\n                {\n                    \"_id\": \"663a5a98da1ec97934891da0\",\n                    \"type\": \"account_number\",\n                    \"name\": \"Account Number\",\n                    \"identifier\": \"connections.account.authorisation.v1\"\n                },\n                {\n                    \"_id\": \"688c84fbd61099d3258735d6\",\n                    \"type\": \"whatsapp\",\n                    \"name\": \"Pay via WhatsApp (Owo)\",\n                    \"identifier\": \"payments.general.pww.v1\"\n                }\n            ],\n            \"scope\": [\n                {\n                    \"name\": \"Financial Data\",\n                    \"type\": \"financial_data\"\n                },\n                {\n                    \"name\": \"Recurring Debit\",\n                    \"type\": \"recurring-debit\"\n                },\n                {\n                    \"name\": \"Onetime Debit\",\n                    \"type\": \"onetime-debit\"\n                }\n            ]\n        },\n        {\n            \"id\": \"603606cf0de2f832ee2d2bb1\",\n            \"institution\": \"ALAT by WEMA\",\n            \"type\": \"BUSINESS_BANKING\",\n            \"nip_code\": null,\n            \"bank_code\": \"035A\",\n            \"country\": \"ng\",\n            \"auth_methods\": [\n                {\n                    \"_id\": \"60d071aef73e6468062ae976\",\n                    \"type\": \"internet_banking\",\n                    \"name\": \"Internet Banking\",\n                    \"identifier\": \"connections.ng.alat.corporate.mobile.v1\"\n                }\n            ],\n            \"scope\": [\n                {\n                    \"name\": \"Financial Data\",\n                    \"type\": \"financial_data\"\n                }\n            ]\n        },\n        {\n            \"id\": \"60c4bdcab95548b24fd11a64\",\n            \"institution\": \"Brass\",\n            \"type\": \"BUSINESS_BANKING\",\n            \"nip_code\": \"000000\",\n            \"bank_code\": \"000\",\n            \"country\": \"ng\",\n            \"auth_methods\": [\n                {\n                    \"_id\": \"60d071aff73e6468062aea07\",\n                    \"type\": \"internet_banking\",\n                    \"name\": \"Internet Banking\",\n                    \"identifier\": \"connections.ng.brass.corporate.web.v1\"\n                }\n            ],\n            \"scope\": [\n                {\n                    \"name\": \"Financial Data\",\n                    \"type\": \"financial_data\"\n                }\n            ]\n        },\n        {\n            \"id\": \"5f649377fc5cb9209956965a\",\n            \"institution\": \"Zenith Bank\",\n            \"type\": \"BUSINESS_BANKING\",\n            \"nip_code\": \"000015\",\n            \"bank_code\": \"057\",\n            \"country\": \"ng\",\n            \"auth_methods\": [\n                {\n                    \"_id\": \"60d071aef73e6468062ae982\",\n                    \"type\": \"internet_banking\",\n                    \"name\": \"Internet Banking\",\n                    \"identifier\": \"connections.ng.zenith.corporate.web.v1\"\n                },\n                {\n                    \"_id\": \"663a5a98da1ec97934891da0\",\n                    \"type\": \"account_number\",\n                    \"name\": \"Account Number\",\n                    \"identifier\": \"connections.account.authorisation.v1\"\n                }\n            ],\n            \"scope\": [\n                {\n                    \"name\": \"Financial Data\",\n                    \"type\": \"financial_data\"\n                },\n                {}\n            ]\n        },\n        {\n            \"id\": \"5f6d78d9a1c68d5049673554\",\n            \"institution\": \"Ecobank Nigeria\",\n            \"type\": \"PERSONAL_BANKING\",\n            \"nip_code\": \"000010\",\n            \"bank_code\": \"050\",\n            \"country\": \"ng\",\n            \"auth_methods\": [\n                {\n                    \"_id\": \"60d071aef73e6468062ae98a\",\n                    \"type\": \"internet_banking\",\n                    \"name\": \"Internet Banking\",\n                    \"identifier\": \"connections.ng.ecobank.retail.web.v1\"\n                },\n                {\n                    \"_id\": \"663a5a98da1ec97934891da0\",\n                    \"type\": \"account_number\",\n                    \"name\": \"Account Number\",\n                    \"identifier\": \"connections.account.authorisation.v1\"\n                },\n                {\n                    \"_id\": \"688c84fbd61099d3258735d6\",\n                    \"type\": \"whatsapp\",\n                    \"name\": \"Pay via WhatsApp (Owo)\",\n                    \"identifier\": \"payments.general.pww.v1\"\n                }\n            ],\n            \"scope\": [\n                {\n                    \"name\": \"Financial Data\",\n                    \"type\": \"financial_data\"\n                },\n                {\n                    \"name\": \"Recurring Debit\",\n                    \"type\": \"recurring-debit\"\n                },\n                {\n                    \"name\": \"Onetime Debit\",\n                    \"type\": \"onetime-debit\"\n                }\n            ]\n        },\n        {\n            \"id\": \"61813c72533d2aa13f539c49\",\n            \"institution\": \"Sterling Bank\",\n            \"type\": \"BUSINESS_BANKING\",\n            \"nip_code\": \"000001\",\n            \"bank_code\": \"232\",\n            \"country\": \"ng\",\n            \"auth_methods\": [\n                {\n                    \"_id\": \"61813cd91235c3410b8c0293\",\n                    \"type\": \"internet_banking\",\n                    \"name\": \"Internet Banking\",\n                    \"identifier\": \"connections.ng.sterling.corporate.web.v1\"\n                },\n                {\n                    \"_id\": \"663a5a98da1ec97934891da0\",\n                    \"type\": \"account_number\",\n                    \"name\": \"Account Number\",\n                    \"identifier\": \"connections.account.authorisation.v1\"\n                }\n            ],\n            \"scope\": [\n                {\n                    \"name\": \"Financial Data\",\n                    \"type\": \"financial_data\"\n                },\n                {\n                    \"name\": \"Recurring Debit\",\n                    \"type\": \"recurring-debit\"\n                }\n            ]\n        },\n        {\n            \"id\": \"5f2d08c060b92e288828770a\",\n            \"institution\": \"Cowrywise\",\n            \"type\": \"PERSONAL_BANKING\",\n            \"bank_code\": null,\n            \"country\": \"ng\",\n            \"auth_methods\": [\n                {\n                    \"_id\": \"60d071aff73e6468062ae9db\",\n                    \"type\": \"internet_banking\",\n                    \"name\": \"Internet Banking\",\n                    \"identifier\": \"connections.ng.cowrywise.retail.mobile.v1\"\n                }\n            ],\n            \"scope\": [\n                {\n                    \"name\": \"Financial Data\",\n                    \"type\": \"financial_data\"\n                }\n            ]\n        },\n        {\n            \"id\": \"5f860021e0df8262652b6770\",\n            \"institution\": \"Stanbic IBTC Bank\",\n            \"type\": \"BUSINESS_BANKING\",\n            \"nip_code\": \"000012\",\n            \"bank_code\": \"221\",\n            \"country\": \"ng\",\n            \"auth_methods\": [\n                {\n                    \"_id\": \"60d071aff73e6468062ae9c4\",\n                    \"type\": \"internet_banking\",\n                    \"name\": \"Internet Banking\",\n                    \"identifier\": \"connections.ng.stanbic.corporate.web.v1\"\n                },\n                {\n                    \"_id\": \"663a5a98da1ec97934891da0\",\n                    \"type\": \"account_number\",\n                    \"name\": \"Account Number\",\n                    \"identifier\": \"connections.account.authorisation.v1\"\n                }\n            ],\n            \"scope\": [\n                {\n                    \"name\": \"Financial Data\",\n                    \"type\": \"financial_data\"\n                },\n                {\n                    \"name\": \"Recurring Debit\",\n                    \"type\": \"recurring-debit\"\n                }\n            ]\n        },\n        {\n            \"id\": \"5f2d08be60b92e2888287702\",\n            \"institution\": \"GTBank\",\n            \"type\": \"PERSONAL_BANKING\",\n            \"nip_code\": \"000013\",\n            \"bank_code\": \"058\",\n            \"country\": \"ng\",\n            \"auth_methods\": [\n                {\n                    \"_id\": \"6414c5fce9cb8546082b8c86\",\n                    \"type\": \"account_number\",\n                    \"name\": \"Account Number\",\n                    \"identifier\": \"connections.ng.gtbank.retail.pwa.v1\"\n                },\n                {\n                    \"_id\": \"60d071adf73e6468062ae8e4\",\n                    \"type\": \"mobile_banking\",\n                    \"name\": \"Mobile Banking\",\n                    \"identifier\": \"connections.ng.gtbank.retail.mobile.v1\"\n                },\n                {\n                    \"_id\": \"60d071acf73e6468062ae8de\",\n                    \"type\": \"internet_banking\",\n                    \"name\": \"Internet Banking\",\n                    \"identifier\": \"connections.ng.gtbank.retail.web.old.v1\"\n                },\n                {\n                    \"_id\": \"663a5a98da1ec97934891da0\",\n                    \"type\": \"account_number\",\n                    \"name\": \"Account Number\",\n                    \"identifier\": \"connections.account.authorisation.v1\"\n                },\n                {\n                    \"_id\": \"688c84fbd61099d3258735d6\",\n                    \"type\": \"whatsapp\",\n                    \"name\": \"Pay via WhatsApp (Owo)\",\n                    \"identifier\": \"payments.general.pww.v1\"\n                }\n            ],\n            \"scope\": [\n                {\n                    \"name\": \"Onetime Debit\",\n                    \"type\": \"onetime-debit\"\n                },\n                {\n                    \"name\": \"Financial Data\",\n                    \"type\": \"financial_data\"\n                },\n                {\n                    \"name\": \"Recurring Debit\",\n                    \"type\": \"recurring-debit\"\n                }\n            ]\n        },\n        {\n            \"id\": \"5f2d08c060b92e288828770b\",\n            \"institution\": \"Zenith Bank\",\n            \"type\": \"PERSONAL_BANKING\",\n            \"nip_code\": \"000015\",\n            \"bank_code\": \"057\",\n            \"country\": \"ng\",\n            \"auth_methods\": [\n                {\n                    \"_id\": \"60d071adf73e6468062ae922\",\n                    \"type\": \"internet_banking\",\n                    \"name\": \"Internet Banking\",\n                    \"identifier\": \"connections.ng.zenith.retail.web.v1\"\n                },\n                {\n                    \"_id\": \"60d071adf73e6468062ae92a\",\n                    \"type\": \"mobile_banking\",\n                    \"name\": \"Mobile Banking\",\n                    \"identifier\": \"connections.ng.zenith.retail.mobile.v1\"\n                },\n                {\n                    \"_id\": \"663a5a98da1ec97934891da0\",\n                    \"type\": \"account_number\",\n                    \"name\": \"Account Number\",\n                    \"identifier\": \"connections.account.authorisation.v1\"\n                },\n                {\n                    \"_id\": \"688c84fbd61099d3258735d6\",\n                    \"type\": \"whatsapp\",\n                    \"name\": \"Pay via WhatsApp (Owo)\",\n                    \"identifier\": \"payments.general.pww.v1\"\n                }\n            ],\n            \"scope\": [\n                {\n                    \"name\": \"Financial Data\",\n                    \"type\": \"financial_data\"\n                },\n                {\n                    \"name\": \"Onetime Debit\",\n                    \"type\": \"onetime-debit\"\n                },\n                {\n                    \"name\": \"Recurring Debit\",\n                    \"type\": \"recurring-debit\"\n                }\n            ]\n        },\n        {\n            \"id\": \"5f8191b2a80d1d16e57dec14\",\n            \"institution\": \"FCMB\",\n            \"type\": \"BUSINESS_BANKING\",\n            \"nip_code\": \"000003\",\n            \"bank_code\": \"214\",\n            \"country\": \"ng\",\n            \"auth_methods\": [\n                {\n                    \"_id\": \"60d071aef73e6468062ae9ae\",\n                    \"type\": \"internet_banking\",\n                    \"name\": \"Internet Banking\",\n                    \"identifier\": \"connections.ng.fcmb.corporate.web.v1\"\n                },\n                {\n                    \"_id\": \"663a5a98da1ec97934891da0\",\n                    \"type\": \"account_number\",\n                    \"name\": \"Account Number\",\n                    \"identifier\": \"connections.account.authorisation.v1\"\n                }\n            ],\n            \"scope\": [\n                {\n                    \"name\": \"Financial Data\",\n                    \"type\": \"financial_data\"\n                },\n                {\n                    \"name\": \"Recurring Debit\",\n                    \"type\": \"recurring-debit\"\n                }\n            ]\n        },\n        {\n            \"id\": \"6177df33cda94ee0f96e9ede\",\n            \"institution\": \"Globus Bank\",\n            \"type\": \"BUSINESS_BANKING\",\n            \"nip_code\": \"000027\",\n            \"bank_code\": \"103\",\n            \"country\": \"ng\",\n            \"auth_methods\": [\n                {\n                    \"_id\": \"6177ded2cda94ee0f96e9edd\",\n                    \"type\": \"internet_banking\",\n                    \"name\": \"Internet Banking\",\n                    \"identifier\": \"connections.ng.globus.corporate.web.v1\"\n                },\n                {\n                    \"_id\": \"663a5a98da1ec97934891da0\",\n                    \"type\": \"account_number\",\n                    \"name\": \"Account Number\",\n                    \"identifier\": \"connections.account.authorisation.v1\"\n                }\n            ],\n            \"scope\": [\n                {\n                    \"name\": \"Financial Data\",\n                    \"type\": \"financial_data\"\n                },\n                {\n                    \"name\": \"Recurring Debit\",\n                    \"type\": \"recurring-debit\"\n                }\n            ]\n        },\n        {\n            \"id\": \"6467aad147ccd75fc766fd43\",\n            \"institution\": \"Opay\",\n            \"type\": \"PERSONAL_BANKING\",\n            \"nip_code\": \"100004\",\n            \"bank_code\": \"100004\",\n            \"country\": \"ng\",\n            \"auth_methods\": [\n                {\n                    \"_id\": \"6467ada6dc9910afde3516a4\",\n                    \"type\": \"mobile_banking\",\n                    \"name\": \"Mobile Banking\",\n                    \"identifier\": \"connections.ng.opay.retail.mobile.v1\"\n                }\n            ],\n            \"scope\": [\n                {\n                    \"name\": \"Onetime Debit\",\n                    \"type\": \"onetime-debit\"\n                },\n                {\n                    \"name\": \"Financial Data\",\n                    \"type\": \"financial_data\"\n                }\n            ]\n        },\n        {\n            \"id\": \"6578ab18b54419a86a23c553\",\n            \"institution\": \"AltBank\",\n            \"type\": \"PERSONAL_BANKING\",\n            \"nip_code\": \"000037\",\n            \"bank_code\": \"116\",\n            \"country\": \"ng\",\n            \"auth_methods\": [\n                {\n                    \"_id\": \"657c6955776ccd144cd4ea18\",\n                    \"type\": \"internet_banking\",\n                    \"name\": \"Internet Banking\",\n                    \"identifier\": \"connections.ng.altbank.retail.mobile.v1\"\n                },\n                {\n                    \"_id\": \"663a5a98da1ec97934891da0\",\n                    \"type\": \"account_number\",\n                    \"name\": \"Account Number\",\n                    \"identifier\": \"connections.account.authorisation.v1\"\n                },\n                {\n                    \"_id\": \"68dea289104a7752cfe7f246\",\n                    \"type\": \"mobile_banking\",\n                    \"name\": \"Email\",\n                    \"identifier\": \"connections-altbank-ng-retail-email\"\n                }\n            ],\n            \"scope\": [\n                {\n                    \"name\": \"Financial Data\",\n                    \"type\": \"financial_data\"\n                },\n                {\n                    \"name\": \"Onetime Debit\",\n                    \"type\": \"onetime-debit\"\n                }\n            ]\n        }\n    ]\n}"
+                                        }
+                                    ],
+                                    "_postman_id": "e927f228-c4eb-4f6f-ba95-f32329333676"
+                                },
+                                {
+                                    "name": "Fetch Input Data",
+                                    "id": "1783e648-529c-4eaa-a990-28eb0de3bf01",
+                                    "protocolProfileBehavior": {
+                                        "disableBodyPruning": true
+                                    },
+                                    "request": {
+                                        "method": "GET",
+                                        "header": [],
+                                        "url": "http://localhost:3000/wallet/mono/linkaccount/fetch_mono_inputdata",
+                                        "auth": {
+                                            "type": "bearer",
+                                            "bearer": {
+                                                "basicConfig": [
+                                                    {
+                                                        "key": "token",
+                                                        "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZjEyMWNhYWJiMGI2NWMxNzIzN2I3OSIsImlhdCI6MTc2MDYzNDA1MiwiZXhwIjoxNzYxMTUyNDUyfQ.T3PLt8lXmmBaik3fcAy4BU6v2s_J4HSQXP3ZAhw_aCA"
+                                                    }
+                                                ]
+                                            },
+                                            "isInherited": true,
+                                            "source": {
+                                                "_postman_id": "c72eefb3-78c7-47cb-8a43-4cbd78ffc9ca",
+                                                "id": "c72eefb3-78c7-47cb-8a43-4cbd78ffc9ca",
+                                                "name": "Wallet",
+                                                "type": "folder"
+                                            }
+                                        },
+                                        "urlObject": {
+                                            "path": [
+                                                "wallet",
+                                                "mono",
+                                                "linkaccount",
+                                                "fetch_mono_inputdata"
+                                            ],
+                                            "host": [
+                                                "http://localhost:3000"
+                                            ],
+                                            "query": [],
+                                            "variable": []
+                                        }
+                                    },
+                                    "response": [
+                                        {
+                                            "id": "01af4fcd-9051-4ad4-be59-f00a14e07200",
+                                            "name": "200",
+                                            "originalRequest": {
+                                                "method": "GET",
+                                                "header": [],
+                                                "url": "http://localhost:3000/wallet/mono/linkaccount/fetch_mono_inputdata"
+                                            },
+                                            "status": "OK",
+                                            "code": 200,
+                                            "_postman_previewlanguage": null,
+                                            "header": [
+                                                {
+                                                    "key": "X-Powered-By",
+                                                    "value": "Express"
+                                                },
+                                                {
+                                                    "key": "RateLimit",
+                                                    "value": "\"30-in-1min\"; r=29; t=60"
+                                                },
+                                                {
+                                                    "key": "RateLimit-Policy",
+                                                    "value": "\"30-in-1min\"; q=30; w=60; pk=:YmIwY2Q1MTM2YWU1:"
+                                                },
+                                                {
+                                                    "key": "Access-Control-Allow-Origin",
+                                                    "value": "*"
+                                                },
+                                                {
+                                                    "key": "Content-Type",
+                                                    "value": "application/json; charset=utf-8"
+                                                },
+                                                {
+                                                    "key": "Content-Length",
+                                                    "value": "174"
+                                                },
+                                                {
+                                                    "key": "ETag",
+                                                    "value": "W/\"ae-vD5WULXLEVSB4hy9qXHM+zyN6q4\""
+                                                },
+                                                {
+                                                    "key": "Set-Cookie",
+                                                    "value": "connect.sid=s%3Aot_aVyd2JkqAXBGzHNkYr-9eANE9vg2t.JPxq54mBqpgjwy7ZXMmReKhTibragc2FPp0Y8wcv%2B64; Path=/; Expires=Mon, 03 Nov 2025 19:56:48 GMT; HttpOnly"
+                                                },
+                                                {
+                                                    "key": "Date",
+                                                    "value": "Sat, 01 Nov 2025 19:56:48 GMT"
+                                                },
+                                                {
+                                                    "key": "Connection",
+                                                    "value": "keep-alive"
+                                                },
+                                                {
+                                                    "key": "Keep-Alive",
+                                                    "value": "timeout=5"
+                                                }
+                                            ],
+                                            "cookie": [],
+                                            "responseTime": null,
+                                            "body": "{\n    \"success\": true,\n    \"message\": \"Mono input data fetched\",\n    \"data\": {\n        \"name\": \"Trevor Mandela\",\n        \"email\": \"soluwizy@gmail.com\",\n        \"monoCustomerId\": null,\n        \"identity\": \"Baf88pO9D0DsiVcIv8U10A==\"\n    }\n}"
+                                        }
+                                    ],
+                                    "_postman_id": "1783e648-529c-4eaa-a990-28eb0de3bf01"
+                                },
+                                {
+                                    "name": "Fetch Input Data Copy",
+                                    "id": "3fc5729b-eb1c-4e1e-a141-80ff8c732626",
+                                    "protocolProfileBehavior": {
+                                        "disableBodyPruning": true
+                                    },
+                                    "request": {
+                                        "method": "POST",
+                                        "header": [],
+                                        "body": {
+                                            "mode": "formdata",
+                                            "formdata": [
+                                                {
+                                                    "key": "code",
+                                                    "value": "code_9vHiEud1xQQ2t1RLRNtJDsm4",
+                                                    "type": "text",
+                                                    "uuid": "8172fb8e-6d40-429d-a2f4-7e16c6d3a051"
+                                                },
+                                                {
+                                                    "key": "AcountName",
+                                                    "value": "Keystone Bank",
+                                                    "type": "text",
+                                                    "uuid": "8063d35b-c456-448a-ac3a-db0d5e8505cb"
+                                                }
+                                            ]
+                                        },
+                                        "url": "http://localhost:3000/wallet/mono/linkaccount/link_account",
+                                        "auth": {
+                                            "type": "bearer",
+                                            "bearer": {
+                                                "basicConfig": [
+                                                    {
+                                                        "key": "token",
+                                                        "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZjEyMWNhYWJiMGI2NWMxNzIzN2I3OSIsImlhdCI6MTc2MDYzNDA1MiwiZXhwIjoxNzYxMTUyNDUyfQ.T3PLt8lXmmBaik3fcAy4BU6v2s_J4HSQXP3ZAhw_aCA"
+                                                    }
+                                                ]
+                                            },
+                                            "isInherited": true,
+                                            "source": {
+                                                "_postman_id": "c72eefb3-78c7-47cb-8a43-4cbd78ffc9ca",
+                                                "id": "c72eefb3-78c7-47cb-8a43-4cbd78ffc9ca",
+                                                "name": "Wallet",
+                                                "type": "folder"
+                                            }
+                                        },
+                                        "urlObject": {
+                                            "path": [
+                                                "wallet",
+                                                "mono",
+                                                "linkaccount",
+                                                "link_account"
+                                            ],
+                                            "host": [
+                                                "http://localhost:3000"
+                                            ],
+                                            "query": [],
+                                            "variable": []
+                                        }
+                                    },
+                                    "response": [
+                                        {
+                                            "id": "bfacf0ff-36a8-4a23-8106-ad3b017a999a",
+                                            "name": "200",
+                                            "originalRequest": {
+                                                "method": "GET",
+                                                "header": [],
+                                                "url": "http://localhost:3000/wallet/mono/linkaccount/fetch_mono_inputdata"
+                                            },
+                                            "status": "OK",
+                                            "code": 200,
+                                            "_postman_previewlanguage": null,
+                                            "header": [
+                                                {
+                                                    "key": "X-Powered-By",
+                                                    "value": "Express"
+                                                },
+                                                {
+                                                    "key": "RateLimit",
+                                                    "value": "\"30-in-1min\"; r=29; t=60"
+                                                },
+                                                {
+                                                    "key": "RateLimit-Policy",
+                                                    "value": "\"30-in-1min\"; q=30; w=60; pk=:YmIwY2Q1MTM2YWU1:"
+                                                },
+                                                {
+                                                    "key": "Access-Control-Allow-Origin",
+                                                    "value": "*"
+                                                },
+                                                {
+                                                    "key": "Content-Type",
+                                                    "value": "application/json; charset=utf-8"
+                                                },
+                                                {
+                                                    "key": "Content-Length",
+                                                    "value": "174"
+                                                },
+                                                {
+                                                    "key": "ETag",
+                                                    "value": "W/\"ae-vD5WULXLEVSB4hy9qXHM+zyN6q4\""
+                                                },
+                                                {
+                                                    "key": "Set-Cookie",
+                                                    "value": "connect.sid=s%3Aot_aVyd2JkqAXBGzHNkYr-9eANE9vg2t.JPxq54mBqpgjwy7ZXMmReKhTibragc2FPp0Y8wcv%2B64; Path=/; Expires=Mon, 03 Nov 2025 19:56:48 GMT; HttpOnly"
+                                                },
+                                                {
+                                                    "key": "Date",
+                                                    "value": "Sat, 01 Nov 2025 19:56:48 GMT"
+                                                },
+                                                {
+                                                    "key": "Connection",
+                                                    "value": "keep-alive"
+                                                },
+                                                {
+                                                    "key": "Keep-Alive",
+                                                    "value": "timeout=5"
+                                                }
+                                            ],
+                                            "cookie": [],
+                                            "responseTime": null,
+                                            "body": "{\n    \"success\": true,\n    \"message\": \"Mono input data fetched\",\n    \"data\": {\n        \"name\": \"Trevor Mandela\",\n        \"email\": \"soluwizy@gmail.com\",\n        \"monoCustomerId\": null,\n        \"identity\": \"Baf88pO9D0DsiVcIv8U10A==\"\n    }\n}"
+                                        }
+                                    ],
+                                    "_postman_id": "3fc5729b-eb1c-4e1e-a141-80ff8c732626"
+                                }
+                            ],
+                            "id": "83aaaf0f-c1dc-4061-8b9d-8a2081ad3ef1",
+                            "_postman_id": "83aaaf0f-c1dc-4061-8b9d-8a2081ad3ef1",
+                            "description": "",
+                            "auth": {
+                                "type": "bearer",
+                                "bearer": {
+                                    "basicConfig": [
+                                        {
+                                            "key": "token",
+                                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZjEyMWNhYWJiMGI2NWMxNzIzN2I3OSIsImlhdCI6MTc2MDYzNDA1MiwiZXhwIjoxNzYxMTUyNDUyfQ.T3PLt8lXmmBaik3fcAy4BU6v2s_J4HSQXP3ZAhw_aCA"
+                                        }
+                                    ]
+                                },
+                                "isInherited": true,
+                                "source": {
+                                    "_postman_id": "c72eefb3-78c7-47cb-8a43-4cbd78ffc9ca",
+                                    "id": "c72eefb3-78c7-47cb-8a43-4cbd78ffc9ca",
+                                    "name": "Wallet",
+                                    "type": "folder"
+                                }
+                            }
+                        },
+                        {
+                            "name": "Fetch All Linked Account",
+                            "id": "2f5ca833-f2ba-4a39-831b-171ca0c8a763",
+                            "protocolProfileBehavior": {
+                                "disableBodyPruning": true
+                            },
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": "http://localhost:3000/wallet/mono/details/alluserbanks",
+                                "auth": {
+                                    "type": "bearer",
+                                    "bearer": {
+                                        "basicConfig": [
+                                            {
+                                                "key": "token",
+                                                "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZjEyMWNhYWJiMGI2NWMxNzIzN2I3OSIsImlhdCI6MTc2MDYzNDA1MiwiZXhwIjoxNzYxMTUyNDUyfQ.T3PLt8lXmmBaik3fcAy4BU6v2s_J4HSQXP3ZAhw_aCA"
+                                            }
+                                        ]
+                                    },
+                                    "isInherited": true,
+                                    "source": {
+                                        "_postman_id": "c72eefb3-78c7-47cb-8a43-4cbd78ffc9ca",
+                                        "id": "c72eefb3-78c7-47cb-8a43-4cbd78ffc9ca",
+                                        "name": "Wallet",
+                                        "type": "folder"
+                                    }
+                                },
+                                "urlObject": {
+                                    "path": [
+                                        "wallet",
+                                        "mono",
+                                        "details",
+                                        "alluserbanks"
+                                    ],
+                                    "host": [
+                                        "http://localhost:3000"
+                                    ],
+                                    "query": [],
+                                    "variable": []
+                                }
+                            },
+                            "response": [
+                                {
+                                    "id": "8d0b3b24-ece9-4757-a94b-0596c2700e4a",
+                                    "name": "200",
+                                    "originalRequest": {
+                                        "method": "GET",
+                                        "header": [],
+                                        "url": "http://localhost:3000/wallet/mono/details/alluserbanks"
+                                    },
+                                    "status": "OK",
+                                    "code": 200,
+                                    "_postman_previewlanguage": null,
+                                    "header": [
+                                        {
+                                            "key": "X-Powered-By",
+                                            "value": "Express"
+                                        },
+                                        {
+                                            "key": "RateLimit",
+                                            "value": "\"30-in-1min\"; r=29; t=60"
+                                        },
+                                        {
+                                            "key": "RateLimit-Policy",
+                                            "value": "\"30-in-1min\"; q=30; w=60; pk=:YmIwY2Q1MTM2YWU1:"
+                                        },
+                                        {
+                                            "key": "Access-Control-Allow-Origin",
+                                            "value": "*"
+                                        },
+                                        {
+                                            "key": "Content-Type",
+                                            "value": "application/json; charset=utf-8"
+                                        },
+                                        {
+                                            "key": "Content-Length",
+                                            "value": "284"
+                                        },
+                                        {
+                                            "key": "ETag",
+                                            "value": "W/\"11c-r4pZpzqlnNjk7M3ANJ/Q3N50nyI\""
+                                        },
+                                        {
+                                            "key": "Set-Cookie",
+                                            "value": "connect.sid=s%3AjYsPPRrVDaYP8JSrRDcFbk9-pggaKNox.G%2BuQ4nfEBmNCGN3aWQqSy35nl4Ei4%2BfRvo3N2RCpsh8; Path=/; Expires=Tue, 04 Nov 2025 19:33:06 GMT; HttpOnly"
+                                        },
+                                        {
+                                            "key": "Date",
+                                            "value": "Sun, 02 Nov 2025 19:33:06 GMT"
+                                        },
+                                        {
+                                            "key": "Connection",
+                                            "value": "keep-alive"
+                                        },
+                                        {
+                                            "key": "Keep-Alive",
+                                            "value": "timeout=5"
+                                        }
+                                    ],
+                                    "cookie": [],
+                                    "responseTime": null,
+                                    "body": "{\n    \"success\": true,\n    \"message\": \"data fetched\",\n    \"data\": [\n        {\n            \"_id\": \"6907b15d22f232e6328ce69d\",\n            \"UserID\": \"68f121caabb0b65c17237b79\",\n            \"MonoLinkedAcct_ID\": \"6907ade359d97431d4083afc\",\n            \"AccountName\": \"Keystone Bank\",\n            \"createdAt\": \"2025-11-02T19:30:37.090Z\",\n            \"updatedAt\": \"2025-11-02T19:30:37.090Z\",\n            \"__v\": 0\n        }\n    ]\n}"
+                                }
+                            ],
+                            "_postman_id": "2f5ca833-f2ba-4a39-831b-171ca0c8a763"
+                        }
+                    ],
+                    "id": "c3bbb9c4-55c6-4dc8-952e-e3cfa3be09b9",
+                    "description": "<p>This is for linking of mono accounts.</p>\n",
+                    "_postman_id": "c3bbb9c4-55c6-4dc8-952e-e3cfa3be09b9",
+                    "auth": {
+                        "type": "bearer",
+                        "bearer": {
+                            "basicConfig": [
+                                {
+                                    "key": "token",
+                                    "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZjEyMWNhYWJiMGI2NWMxNzIzN2I3OSIsImlhdCI6MTc2MDYzNDA1MiwiZXhwIjoxNzYxMTUyNDUyfQ.T3PLt8lXmmBaik3fcAy4BU6v2s_J4HSQXP3ZAhw_aCA"
+                                }
+                            ]
+                        },
+                        "isInherited": true,
+                        "source": {
+                            "_postman_id": "c72eefb3-78c7-47cb-8a43-4cbd78ffc9ca",
+                            "id": "c72eefb3-78c7-47cb-8a43-4cbd78ffc9ca",
+                            "name": "Wallet",
+                            "type": "folder"
+                        }
+                    }
+                },
+                {
                     "name": "Naira Account creation",
                     "id": "259b553a-01f0-438b-a92e-2f26d0f37cec",
                     "protocolProfileBehavior": {
@@ -1430,7 +2089,7 @@
                     "request": {
                         "method": "GET",
                         "header": [],
-                        "url": "http://localhost:3000/Wallet/accountcreation/ng",
+                        "url": "http://localhost:3000/wallet/accountcreation/ng",
                         "auth": {
                             "type": "bearer",
                             "bearer": {
@@ -1451,7 +2110,7 @@
                         },
                         "urlObject": {
                             "path": [
-                                "Wallet",
+                                "wallet",
                                 "accountcreation",
                                 "ng"
                             ],
@@ -1586,6 +2245,481 @@
                 }
             ],
             "_postman_id": "c72eefb3-78c7-47cb-8a43-4cbd78ffc9ca",
+            "description": ""
+        },
+        {
+            "name": "NAHL",
+            "item": [
+                {
+                    "name": "Chat",
+                    "item": [
+                        {
+                            "name": "Chat",
+                            "id": "bbfc8123-fe9c-4bf3-a5ae-99e852529a2a",
+                            "protocolProfileBehavior": {
+                                "disableBodyPruning": true
+                            },
+                            "request": {
+                                "method": "POST",
+                                "header": [],
+                                "body": {
+                                    "mode": "formdata",
+                                    "formdata": [
+                                        {
+                                            "key": "chat",
+                                            "value": "is this my bank statement?",
+                                            "type": "text",
+                                            "uuid": "eeafe310-34d1-4086-899e-e60ee7d2a139"
+                                        },
+                                        {
+                                            "key": "image",
+                                            "description": "<p>optional</p>\n",
+                                            "type": "file",
+                                            "uuid": "76e8b87d-4ab9-4dfe-bcf5-a32a8c408e04",
+                                            "src": "postman-cloud:///1efb23d6-ce34-4e80-abaa-5da9efcde2e4"
+                                        },
+                                        {
+                                            "key": "document",
+                                            "description": "<p>optional</p>\n",
+                                            "type": "file",
+                                            "uuid": "70652f78-8761-4f4d-96a9-77d92cf06e63",
+                                            "src": "/C:/Users/Solutech/Downloads/NAHL (Savvy Chat)_ Technical Architecture Whitepaper (1).pdf",
+                                            "disabled": true
+                                        }
+                                    ]
+                                },
+                                "url": "http://localhost:3000/nahl/chat/send",
+                                "auth": {
+                                    "type": "bearer",
+                                    "bearer": {
+                                        "basicConfig": [
+                                            {
+                                                "key": "token",
+                                                "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZjEyMWNhYWJiMGI2NWMxNzIzN2I3OSIsImlhdCI6MTc2MDYzNDA1MiwiZXhwIjoxNzYxMTUyNDUyfQ.T3PLt8lXmmBaik3fcAy4BU6v2s_J4HSQXP3ZAhw_aCA"
+                                            }
+                                        ]
+                                    },
+                                    "isInherited": true,
+                                    "source": {
+                                        "_postman_id": "cd6ee0c3-065f-45aa-acad-fb2b76cce257",
+                                        "id": "cd6ee0c3-065f-45aa-acad-fb2b76cce257",
+                                        "name": "NAHL",
+                                        "type": "folder"
+                                    }
+                                },
+                                "urlObject": {
+                                    "path": [
+                                        "nahl",
+                                        "chat",
+                                        "send"
+                                    ],
+                                    "host": [
+                                        "http://localhost:3000"
+                                    ],
+                                    "query": [],
+                                    "variable": []
+                                }
+                            },
+                            "response": [
+                                {
+                                    "id": "b68b2bbe-9f3a-4790-9f6d-25c48b02ec4c",
+                                    "name": "Chat",
+                                    "originalRequest": {
+                                        "method": "POST",
+                                        "header": [],
+                                        "body": {
+                                            "mode": "formdata",
+                                            "formdata": [
+                                                {
+                                                    "key": "chat",
+                                                    "value": "hello whats my name?",
+                                                    "type": "text",
+                                                    "uuid": "eeafe310-34d1-4086-899e-e60ee7d2a139"
+                                                }
+                                            ]
+                                        },
+                                        "url": "http://localhost:3000/nahl/chat/send"
+                                    },
+                                    "status": "OK",
+                                    "code": 200,
+                                    "_postman_previewlanguage": null,
+                                    "header": [
+                                        {
+                                            "key": "X-Powered-By",
+                                            "value": "Express"
+                                        },
+                                        {
+                                            "key": "RateLimit",
+                                            "value": "\"30-in-1min\"; r=29; t=60"
+                                        },
+                                        {
+                                            "key": "RateLimit-Policy",
+                                            "value": "\"30-in-1min\"; q=30; w=60; pk=:YmIwY2Q1MTM2YWU1:"
+                                        },
+                                        {
+                                            "key": "Access-Control-Allow-Origin",
+                                            "value": "*"
+                                        },
+                                        {
+                                            "key": "Content-Type",
+                                            "value": "application/json; charset=utf-8"
+                                        },
+                                        {
+                                            "key": "Content-Length",
+                                            "value": "569"
+                                        },
+                                        {
+                                            "key": "ETag",
+                                            "value": "W/\"239-WE9TXO0/3EQtxhFxFcIxuW49uYk\""
+                                        },
+                                        {
+                                            "key": "Set-Cookie",
+                                            "value": "connect.sid=s%3Asr62Jvk92aqlav8KfOeO4iQyymGQudoE.Vg5swyrCObu7OG3dZu6qQhc7Ede6Vpb0r%2BfGzIIhx5E; Path=/; Expires=Fri, 24 Oct 2025 13:31:57 GMT; HttpOnly"
+                                        },
+                                        {
+                                            "key": "Date",
+                                            "value": "Wed, 22 Oct 2025 13:31:57 GMT"
+                                        },
+                                        {
+                                            "key": "Connection",
+                                            "value": "keep-alive"
+                                        },
+                                        {
+                                            "key": "Keep-Alive",
+                                            "value": "timeout=5"
+                                        }
+                                    ],
+                                    "cookie": [],
+                                    "responseTime": null,
+                                    "body": "{\n    \"success\": true,\n    \"message\": \"Message sent successfully\",\n    \"data\": {\n        \"chats\": [\n            {\n                \"UserId\": \"68f121caabb0b65c17237b79\",\n                \"From\": \"user\",\n                \"Message\": \"hello whats my name?\",\n                \"_id\": \"68f8dcccb3ea589368c22b99\",\n                \"createdAt\": \"2025-10-22T13:31:56.984Z\",\n                \"updatedAt\": \"2025-10-22T13:31:56.984Z\",\n                \"__v\": 0\n            },\n            {\n                \"UserId\": \"68f121caabb0b65c17237b79\",\n                \"From\": \"ai\",\n                \"Message\": \"Hi Trevor! You’re Trevor Mandela. It’s lovely to see you—how can I support you with your finances today?\",\n                \"_id\": \"68f8dccdb3ea589368c22b9b\",\n                \"createdAt\": \"2025-10-22T13:31:57.150Z\",\n                \"updatedAt\": \"2025-10-22T13:31:57.150Z\",\n                \"__v\": 0\n            }\n        ]\n    }\n}"
+                                }
+                            ],
+                            "_postman_id": "bbfc8123-fe9c-4bf3-a5ae-99e852529a2a"
+                        },
+                        {
+                            "name": "All Chat",
+                            "id": "d495c2f3-012a-4eb7-9522-4cd188dacc3a",
+                            "protocolProfileBehavior": {
+                                "disableBodyPruning": true
+                            },
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": "http://localhost:3000/nahl/chat/history",
+                                "auth": {
+                                    "type": "bearer",
+                                    "bearer": {
+                                        "basicConfig": [
+                                            {
+                                                "key": "token",
+                                                "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZjEyMWNhYWJiMGI2NWMxNzIzN2I3OSIsImlhdCI6MTc2MDYzNDA1MiwiZXhwIjoxNzYxMTUyNDUyfQ.T3PLt8lXmmBaik3fcAy4BU6v2s_J4HSQXP3ZAhw_aCA"
+                                            }
+                                        ]
+                                    },
+                                    "isInherited": true,
+                                    "source": {
+                                        "_postman_id": "cd6ee0c3-065f-45aa-acad-fb2b76cce257",
+                                        "id": "cd6ee0c3-065f-45aa-acad-fb2b76cce257",
+                                        "name": "NAHL",
+                                        "type": "folder"
+                                    }
+                                },
+                                "urlObject": {
+                                    "path": [
+                                        "nahl",
+                                        "chat",
+                                        "history"
+                                    ],
+                                    "host": [
+                                        "http://localhost:3000"
+                                    ],
+                                    "query": [],
+                                    "variable": []
+                                }
+                            },
+                            "response": [
+                                {
+                                    "id": "08d731b4-01bc-47a8-aa05-de04d24695f5",
+                                    "name": "200",
+                                    "originalRequest": {
+                                        "method": "GET",
+                                        "header": [],
+                                        "url": "http://localhost:3000/nahl/chat/history"
+                                    },
+                                    "status": "OK",
+                                    "code": 200,
+                                    "_postman_previewlanguage": null,
+                                    "header": [
+                                        {
+                                            "key": "X-Powered-By",
+                                            "value": "Express"
+                                        },
+                                        {
+                                            "key": "RateLimit",
+                                            "value": "\"30-in-1min\"; r=29; t=60"
+                                        },
+                                        {
+                                            "key": "RateLimit-Policy",
+                                            "value": "\"30-in-1min\"; q=30; w=60; pk=:YmIwY2Q1MTM2YWU1:"
+                                        },
+                                        {
+                                            "key": "Access-Control-Allow-Origin",
+                                            "value": "*"
+                                        },
+                                        {
+                                            "key": "Content-Type",
+                                            "value": "application/json; charset=utf-8"
+                                        },
+                                        {
+                                            "key": "Content-Length",
+                                            "value": "7007"
+                                        },
+                                        {
+                                            "key": "ETag",
+                                            "value": "W/\"1b5f-SNDThzMcgck9ojP1Rn5isKXmUIQ\""
+                                        },
+                                        {
+                                            "key": "Set-Cookie",
+                                            "value": "connect.sid=s%3AnDOYkikuMBZiw0Sc6ZeRachR83YTHxWo.tVXOKEpUS%2BK8uWw%2BeFsRXY7mGBG4EYdQCZ4SqU7wwKk; Path=/; Expires=Fri, 24 Oct 2025 13:44:52 GMT; HttpOnly"
+                                        },
+                                        {
+                                            "key": "Date",
+                                            "value": "Wed, 22 Oct 2025 13:44:53 GMT"
+                                        },
+                                        {
+                                            "key": "Connection",
+                                            "value": "keep-alive"
+                                        },
+                                        {
+                                            "key": "Keep-Alive",
+                                            "value": "timeout=5"
+                                        }
+                                    ],
+                                    "cookie": [],
+                                    "responseTime": null,
+                                    "body": "{\n    \"success\": true,\n    \"message\": \"Message sent successfully\",\n    \"data\": {\n        \"allchat\": [\n            {\n                \"_id\": \"68f8dcccb3ea589368c22b99\",\n                \"UserId\": \"68f121caabb0b65c17237b79\",\n                \"From\": \"user\",\n                \"Message\": \"hello whats my name?\",\n                \"createdAt\": \"2025-10-22T13:31:56.984Z\",\n                \"updatedAt\": \"2025-10-22T13:31:56.984Z\",\n                \"__v\": 0\n            },\n            {\n                \"_id\": \"68f8dccdb3ea589368c22b9b\",\n                \"UserId\": \"68f121caabb0b65c17237b79\",\n                \"From\": \"ai\",\n                \"Message\": \"Hi Trevor! You’re Trevor Mandela. It’s lovely to see you—how can I support you with your finances today?\",\n                \"createdAt\": \"2025-10-22T13:31:57.150Z\",\n                \"updatedAt\": \"2025-10-22T13:31:57.150Z\",\n                \"__v\": 0\n            },\n            {\n                \"_id\": \"68f8dd5db3ea589368c22ba2\",\n                \"UserId\": \"68f121caabb0b65c17237b79\",\n                \"From\": \"user\",\n                \"Message\": \"how much do I have now please I need you to direct me!!!\",\n                \"createdAt\": \"2025-10-22T13:34:21.450Z\",\n                \"updatedAt\": \"2025-10-22T13:34:21.450Z\",\n                \"__v\": 0\n            },\n            {\n                \"_id\": \"68f8dd5db3ea589368c22ba4\",\n                \"UserId\": \"68f121caabb0b65c17237b79\",\n                \"From\": \"ai\",\n                \"Message\": \"I’ve got you, Trevor. Right now your wallet balance is NGN 0. No USD account is set up yet.\\n\\nIf you’d like to add money, the quickest way is a bank transfer to your NGN account:\\n- Account Name: Savvy_ Trevor Mandela\\n- Account Number: 1110031244\\n- Bank: Test Bank\\n\\nTransfers typically reflect within a few minutes, but can take a little longer depending on the bank network.\\n\\nTell me how you’d like me to direct you next:\\n- Add funds: How much do you want to deposit? I’ll guide you step-by-step.\\n- Plan before money arrives: I can set a simple micro-plan for your next inflow (needs, savings, wants) so you’re ready.\\n- Specific goal: Paying a bill, saving for something, or tracking spending this week?\\n\\nYou’re not alone—we’ll take this one small step at a time. What would you like to do first?\",\n                \"createdAt\": \"2025-10-22T13:34:21.627Z\",\n                \"updatedAt\": \"2025-10-22T13:34:21.627Z\",\n                \"__v\": 0\n            },\n            {\n                \"_id\": \"68f8ddd2b3ea589368c22bab\",\n                \"UserId\": \"68f121caabb0b65c17237b79\",\n                \"From\": \"user\",\n                \"Message\": \"I would love that, what was my first question btw\",\n                \"createdAt\": \"2025-10-22T13:36:18.420Z\",\n                \"updatedAt\": \"2025-10-22T13:36:18.420Z\",\n                \"__v\": 0\n            },\n            {\n                \"_id\": \"68f8ddd2b3ea589368c22bad\",\n                \"UserId\": \"68f121caabb0b65c17237b79\",\n                \"From\": \"ai\",\n                \"Message\": \"You got it, Trevor. Your first question was: “hello whats my name?”\\n\\nStill up for guidance? Pick one and I’ll handle the rest:\\n- Add funds now (I’ll resend your transfer details).\\n- Set a simple plan for your next deposit (e.g., 50% essentials, 30% savings, 20% wants — adjustable).\\n- Create a specific goal or bill to prepare for.\\n\\nWhich one feels right?\",\n                \"createdAt\": \"2025-10-22T13:36:18.589Z\",\n                \"updatedAt\": \"2025-10-22T13:36:18.589Z\",\n                \"__v\": 0\n            },\n            {\n                \"_id\": \"68f8de24b3ea589368c22bb4\",\n                \"UserId\": \"68f121caabb0b65c17237b79\",\n                \"From\": \"user\",\n                \"Message\": \"I am expecting 300k soon and its from a contract how do you think I can manage it\",\n                \"createdAt\": \"2025-10-22T13:37:40.480Z\",\n                \"updatedAt\": \"2025-10-22T13:37:40.480Z\",\n                \"__v\": 0\n            },\n            {\n                \"_id\": \"68f8de24b3ea589368c22bb6\",\n                \"UserId\": \"68f121caabb0b65c17237b79\",\n                \"From\": \"ai\",\n                \"Message\": \"Love that you’re planning ahead, Trevor—that’s a strong move. Since this is contract income, let’s protect it first, then spend with intention. Here’s a simple safety‑first plan for NGN 300,000:\\n\\n- 20% Taxes – NGN 60,000\\n  Keep this separate. If your client deducts withholding tax, we’ll adjust.\\n- 15% Business/Operations – NGN 45,000\\n  For tools, data, transport, and to fund the next gig.\\n- 15% Emergency fund – NGN 45,000\\n  Build a cushion for quiet months.\\n- 35% Living essentials – NGN 105,000\\n  Rent, food, transport, utilities.\\n- 10% Goals/Sinking funds – NGN 30,000\\n  Upcoming bills (rent top-up, school fees, phone, etc.).\\n- 5% Fun/Flex – NGN 15,000\\n  Guilt‑free spending so you don’t feel strained.\\n\\nWant me to set this up as auto-allocation the moment the 300k lands? If yes, I’ll create labeled “pots” and move the amounts instantly so your essentials and savings are protected.\\n\\nYour NGN account to receive the funds:\\n- Account Name: Savvy_ Trevor Mandela\\n- Account Number: 1110031244\\n- Bank: Test Bank\\n\\nQuick checks so I can tailor it perfectly:\\n1) Will any withholding tax be taken from this payment? (If yes, how much?)\\n2) Do you have any urgent bills or debt due this month?\\n3) Would you prefer to swap the 10% Goals for 10% Investing instead—or split it?\\n\\nIf you say “Yes, set it up,” I’ll auto-allocate exactly as above and keep your tax and savings out of harm’s way. We’ve got this—one smart step at a time.\",\n                \"createdAt\": \"2025-10-22T13:37:40.643Z\",\n                \"updatedAt\": \"2025-10-22T13:37:40.643Z\",\n                \"__v\": 0\n            },\n            {\n                \"_id\": \"68f8def462ebffd1172fdf46\",\n                \"UserId\": \"68f121caabb0b65c17237b79\",\n                \"From\": \"user\",\n                \"Message\": \"Omo its remote and I dont pay tax for now, but omo lets get on\",\n                \"createdAt\": \"2025-10-22T13:41:08.744Z\",\n                \"updatedAt\": \"2025-10-22T13:41:08.744Z\",\n                \"__v\": 0\n            },\n            {\n                \"_id\": \"68f8def462ebffd1172fdf48\",\n                \"UserId\": \"68f121caabb0b65c17237b79\",\n                \"From\": \"ai\",\n                \"Message\": \"Got you, Trevor. Since no tax set-aside for now, here’s a clean plan for the NGN 300,000 landing soon:\\n\\n- Emergency fund – 20% = NGN 60,000\\n- Business/Operations (data, tools, power) – 15% = NGN 45,000\\n- Living essentials – 35% = NGN 105,000\\n- Goals/Sinking funds – 10% = NGN 30,000\\n- Investing/Skill growth – 10% = NGN 30,000\\n- Buffer for surprises – 5% = NGN 15,000\\n- Fun/Flex – 5% = NGN 15,000\\n\\nWhy this works: it protects you first (emergency + buffer = 25%), keeps operations funded for the next gigs, and still gives room for growth and guilt‑free spending.\\n\\nWant me to set up these 7 pots and auto‑allocate the moment the 300k hits your Savvy NGN account (1110031244 – Test Bank)? Say “Yes, set it up.”\\n\\nQuick tweaks (optional):\\n- If income is very irregular, we can bump Emergency to 25% and take 5% from Fun/Goals.\\n- If you have an urgent bill, I’ll shift from Buffer/Fun to cover it.\\n\\nTiny heads‑up: remote income can still be taxable depending on rules. If that changes later, we’ll spin up a Tax pot in seconds. For now, your 5% Buffer quietly covers surprises.\\n\\nHow would you like to proceed—set it up as is, or adjust any percentages?\",\n                \"createdAt\": \"2025-10-22T13:41:08.946Z\",\n                \"updatedAt\": \"2025-10-22T13:41:08.946Z\",\n                \"__v\": 0\n            },\n            {\n                \"_id\": \"68f8df3b62ebffd1172fdf4f\",\n                \"UserId\": \"68f121caabb0b65c17237b79\",\n                \"From\": \"user\",\n                \"Message\": \"Nothing for now but you too de typw much you no fit speak pidgin\",\n                \"createdAt\": \"2025-10-22T13:42:19.761Z\",\n                \"updatedAt\": \"2025-10-22T13:42:19.761Z\",\n                \"__v\": 0\n            },\n            {\n                \"_id\": \"68f8df3b62ebffd1172fdf51\",\n                \"UserId\": \"68f121caabb0b65c17237b79\",\n                \"From\": \"ai\",\n                \"Message\": \"No wahala, Trevor. I fit yarn Pidgin. Sorry say I type long before—I'll keep am short now.\\n\\nNice one as you don plan ahead. When the 300k land, how you wan make we run am?\\n- A) Auto-split am like we plan\\n- B) Wait—remind me first before we split\\n- C) Adjust the percentages\\n\\nJust reply A, B, or C. And make I keep replies short like this going forward? (Yes/No) We dey together.\",\n                \"createdAt\": \"2025-10-22T13:42:19.907Z\",\n                \"updatedAt\": \"2025-10-22T13:42:19.907Z\",\n                \"__v\": 0\n            }\n        ]\n    }\n}"
+                                }
+                            ],
+                            "_postman_id": "d495c2f3-012a-4eb7-9522-4cd188dacc3a"
+                        }
+                    ],
+                    "id": "d80a1f59-029f-48d0-981c-43ff457c5c25",
+                    "description": "<p>This is section for nahl chat</p>\n",
+                    "_postman_id": "d80a1f59-029f-48d0-981c-43ff457c5c25",
+                    "auth": {
+                        "type": "bearer",
+                        "bearer": {
+                            "basicConfig": [
+                                {
+                                    "key": "token",
+                                    "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZjEyMWNhYWJiMGI2NWMxNzIzN2I3OSIsImlhdCI6MTc2MDYzNDA1MiwiZXhwIjoxNzYxMTUyNDUyfQ.T3PLt8lXmmBaik3fcAy4BU6v2s_J4HSQXP3ZAhw_aCA"
+                                }
+                            ]
+                        },
+                        "isInherited": true,
+                        "source": {
+                            "_postman_id": "cd6ee0c3-065f-45aa-acad-fb2b76cce257",
+                            "id": "cd6ee0c3-065f-45aa-acad-fb2b76cce257",
+                            "name": "NAHL",
+                            "type": "folder"
+                        }
+                    }
+                }
+            ],
+            "id": "cd6ee0c3-065f-45aa-acad-fb2b76cce257",
+            "auth": {
+                "type": "bearer",
+                "bearer": {
+                    "basicConfig": [
+                        {
+                            "key": "token",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZjEyMWNhYWJiMGI2NWMxNzIzN2I3OSIsImlhdCI6MTc2MDYzNDA1MiwiZXhwIjoxNzYxMTUyNDUyfQ.T3PLt8lXmmBaik3fcAy4BU6v2s_J4HSQXP3ZAhw_aCA"
+                        }
+                    ]
+                },
+                "isInherited": false
+            },
+            "event": [
+                {
+                    "listen": "prerequest",
+                    "script": {
+                        "id": "51e89873-6a0f-4e55-b387-f777be8b430c",
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {},
+                        "exec": [
+                            ""
+                        ]
+                    }
+                },
+                {
+                    "listen": "test",
+                    "script": {
+                        "id": "99b5ca4c-c255-49ef-b59d-6697d87064ab",
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {},
+                        "exec": [
+                            ""
+                        ]
+                    }
+                }
+            ],
+            "_postman_id": "cd6ee0c3-065f-45aa-acad-fb2b76cce257",
+            "description": ""
+        },
+        {
+            "name": "Home Data",
+            "item": [
+                {
+                    "name": "Fetch Dashboard data",
+                    "id": "58a424c8-f949-4952-bc25-db4f32d77712",
+                    "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                    },
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": "http://localhost:3000/wallet/mono/details/alluserbanks",
+                        "description": "<p>use the below code to help you with the main flowchart on the dashboard</p>\n<pre class=\"click-to-expand-wrapper is-snippet-wrapper\"><code>void main() {\n  final transactions = [\n    {\n      \"id\": \"664f080293b88c7cb32d227f\",\n      \"type\": \"debit\",\n      \"amount\": 20000,\n      \"narration\": \"AirtimeALATMTN2347062625859 348232666852\",\n      \"balance\": null,\n      \"date\": \"2024-05-23T09:43:32.267Z\",\n      \"category\": null\n    },\n    {\n      \"id\": \"664f080293b88c7cb32d2280\",\n      \"type\": \"credit\",\n      \"amount\": 20000,\n      \"narration\": \"ALAT NIP TRANSFER TO GLOBUS BANK-Mono-txd_7kt6nuk\",\n      \"balance\": null,\n      \"date\": \"2024-05-14T12:07:45.767Z\",\n      \"category\": null\n    },\n    // ... add more transactions\n  ];\n\n  // 1️⃣ Initialize monthly summary (Jan–Dec)\n  final months = List.generate(12, (i) {\n    final monthName = [\n      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',\n      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'\n    ][i];\n    return {\n      'month': monthName,\n      'credit': 0,\n      'debit': 0,\n      'net': 0,\n    };\n  });\n\n  // 2️⃣ Group and sum by month\n  for (var tx in transactions) {\n    final date = DateTime.parse(tx['date']);\n    final monthIndex = date.month - 1;\n    final type = tx['type'];\n    final amount = tx['amount'] as int;\n\n    months[monthIndex][type] = (months[monthIndex][type] as int) + amount;\n  }\n\n  // 3️⃣ Compute net inflow (credit - debit)\n  for (var m in months) {\n    m['net'] = (m['credit'] as int) - (m['debit'] as int);\n  }\n\n  print(months);\n}\n\n</code></pre>",
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": {
+                                "basicConfig": [
+                                    {
+                                        "key": "token",
+                                        "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZjEyMWNhYWJiMGI2NWMxNzIzN2I3OSIsImlhdCI6MTc2MDYzNDA1MiwiZXhwIjoxNzYxMTUyNDUyfQ.T3PLt8lXmmBaik3fcAy4BU6v2s_J4HSQXP3ZAhw_aCA"
+                                    }
+                                ]
+                            },
+                            "isInherited": true,
+                            "source": {
+                                "_postman_id": "06c5f469-d804-429d-8e95-b89124944248",
+                                "id": "06c5f469-d804-429d-8e95-b89124944248",
+                                "name": "Home Data",
+                                "type": "folder"
+                            }
+                        },
+                        "urlObject": {
+                            "path": [
+                                "wallet",
+                                "mono",
+                                "details",
+                                "alluserbanks"
+                            ],
+                            "host": [
+                                "http://localhost:3000"
+                            ],
+                            "query": [],
+                            "variable": []
+                        }
+                    },
+                    "response": [
+                        {
+                            "id": "fef2d01a-25da-47a1-b646-429785296a74",
+                            "name": "200",
+                            "originalRequest": {
+                                "method": "GET",
+                                "header": [],
+                                "url": "http://localhost:3000/wallet/mono/details/alluserbanks"
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": null,
+                            "header": [
+                                {
+                                    "key": "X-Powered-By",
+                                    "value": "Express"
+                                },
+                                {
+                                    "key": "RateLimit",
+                                    "value": "\"30-in-1min\"; r=29; t=60"
+                                },
+                                {
+                                    "key": "RateLimit-Policy",
+                                    "value": "\"30-in-1min\"; q=30; w=60; pk=:YmIwY2Q1MTM2YWU1:"
+                                },
+                                {
+                                    "key": "Access-Control-Allow-Origin",
+                                    "value": "*"
+                                },
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json; charset=utf-8"
+                                },
+                                {
+                                    "key": "Content-Length",
+                                    "value": "284"
+                                },
+                                {
+                                    "key": "ETag",
+                                    "value": "W/\"11c-r4pZpzqlnNjk7M3ANJ/Q3N50nyI\""
+                                },
+                                {
+                                    "key": "Set-Cookie",
+                                    "value": "connect.sid=s%3AjYsPPRrVDaYP8JSrRDcFbk9-pggaKNox.G%2BuQ4nfEBmNCGN3aWQqSy35nl4Ei4%2BfRvo3N2RCpsh8; Path=/; Expires=Tue, 04 Nov 2025 19:33:06 GMT; HttpOnly"
+                                },
+                                {
+                                    "key": "Date",
+                                    "value": "Sun, 02 Nov 2025 19:33:06 GMT"
+                                },
+                                {
+                                    "key": "Connection",
+                                    "value": "keep-alive"
+                                },
+                                {
+                                    "key": "Keep-Alive",
+                                    "value": "timeout=5"
+                                }
+                            ],
+                            "cookie": [],
+                            "responseTime": null,
+                            "body": "{\n    \"success\": true,\n    \"message\": \"data fetched\",\n    \"data\": [\n        {\n            \"_id\": \"6907b15d22f232e6328ce69d\",\n            \"UserID\": \"68f121caabb0b65c17237b79\",\n            \"MonoLinkedAcct_ID\": \"6907ade359d97431d4083afc\",\n            \"AccountName\": \"Keystone Bank\",\n            \"createdAt\": \"2025-11-02T19:30:37.090Z\",\n            \"updatedAt\": \"2025-11-02T19:30:37.090Z\",\n            \"__v\": 0\n        }\n    ]\n}"
+                        }
+                    ],
+                    "_postman_id": "58a424c8-f949-4952-bc25-db4f32d77712"
+                }
+            ],
+            "id": "06c5f469-d804-429d-8e95-b89124944248",
+            "auth": {
+                "type": "bearer",
+                "bearer": {
+                    "basicConfig": [
+                        {
+                            "key": "token",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZjEyMWNhYWJiMGI2NWMxNzIzN2I3OSIsImlhdCI6MTc2MDYzNDA1MiwiZXhwIjoxNzYxMTUyNDUyfQ.T3PLt8lXmmBaik3fcAy4BU6v2s_J4HSQXP3ZAhw_aCA"
+                        }
+                    ]
+                },
+                "isInherited": false
+            },
+            "event": [
+                {
+                    "listen": "prerequest",
+                    "script": {
+                        "id": "51e89873-6a0f-4e55-b387-f777be8b430c",
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {},
+                        "exec": [
+                            ""
+                        ]
+                    }
+                },
+                {
+                    "listen": "test",
+                    "script": {
+                        "id": "99b5ca4c-c255-49ef-b59d-6697d87064ab",
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {},
+                        "exec": [
+                            ""
+                        ]
+                    }
+                }
+            ],
+            "_postman_id": "06c5f469-d804-429d-8e95-b89124944248",
             "description": ""
         }
     ]

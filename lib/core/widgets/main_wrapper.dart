@@ -102,7 +102,6 @@ class MainWrapper extends ConsumerWidget {
         }
       },
       type: BottomNavigationBarType.fixed,
-      fixedColor: AppColors.black,
       unselectedLabelStyle: TextStyle(
         fontSize: 10,
         fontWeight: FontWeight.w500,
@@ -114,30 +113,26 @@ class MainWrapper extends ConsumerWidget {
         fontWeight: FontWeight.w500,
         fontFamily: Constants.neulisNeueFontFamily,
       ),
+      selectedItemColor: AppColors.black,
+      unselectedItemColor: AppColors.grey,
       items: const [
+        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
         BottomNavigationBarItem(
-          icon: Icon(Icons.home, color: AppColors.black),
-          label: 'Home',
+          icon: Icon(Icons.wallet_outlined),
+          label: 'Wallet',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.search, color: AppColors.black),
-          label: 'Search',
+          icon: Icon(Icons.bar_chart_rounded),
+          label: 'Budget',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.add_circle, color: AppColors.black),
-          label: 'Add',
+          icon: Icon(Icons.savings_outlined),
+          label: 'Save',
         ),
+        BottomNavigationBarItem(icon: Icon(Icons.hive_outlined), label: 'Hive'),
         BottomNavigationBarItem(
-          icon: Icon(Icons.notifications, color: AppColors.black),
-          label: 'Notifications',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.message, color: AppColors.black),
-          label: 'Messages',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.person, color: AppColors.black),
-          label: 'Profile',
+          icon: Icon(Icons.workspace_premium_outlined),
+          label: 'Premium',
         ),
       ],
     );

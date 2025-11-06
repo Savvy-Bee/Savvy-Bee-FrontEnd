@@ -7,6 +7,8 @@ import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/utils/date_formatter.dart';
 import 'package:savvy_bee_mobile/core/utils/number_formatter.dart';
 import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/bills/pay_bills_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/transfer/transfer_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/add_money_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/create_wallet_screen.dart';
 
@@ -42,18 +44,24 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
                       _buildQuickActionButton(
                         Icons.account_balance_wallet_outlined,
                         'Pay bills',
+                        () => context.pushNamed(PayBillsScreen.path),
                       ),
-                      _buildQuickActionButton(Icons.send_outlined, 'Transfer'),
+                      _buildQuickActionButton(
+                        Icons.send_outlined,
+                        'Transfer',
+                        () => context.pushNamed(TransferScreen.path),
+                      ),
                       _buildQuickActionButton(
                         Icons.receipt_outlined,
                         'Details',
+                        () {},
                       ),
                     ],
                   ),
                   const Gap(24.0),
-                  _buildEmptyTransactionsCard(),
-                  const Gap(24.0),
-                  _buildRecentTransactionCard(),
+                  if (1 == 2) _buildEmptyTransactionsCard(),
+                  if (1 == 2) const Gap(24.0),
+                  _buildRecentTransactionsCard(),
                   const Gap(24.0),
                   InfoCard(
                     title: 'Ask Nahl',
@@ -69,13 +77,17 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
     );
   }
 
-  Widget _buildQuickActionButton(IconData icon, String label) {
+  Widget _buildQuickActionButton(
+    IconData icon,
+    String label,
+    VoidCallback onPressed,
+  ) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         IconButton.outlined(
-          onPressed: () {},
+          onPressed: onPressed,
           icon: Icon(icon),
           padding: EdgeInsets.all(16),
         ),
@@ -131,7 +143,7 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
     );
   }
 
-  Widget _buildRecentTransactionCard() {
+  Widget _buildRecentTransactionsCard() {
     final List<Map<String, dynamic>> transactions = [
       {
         'type': 'credit',
@@ -160,68 +172,99 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
     ];
 
     return OutlinedCard(
+      padding: EdgeInsets.zero,
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        children: List.generate(
-          transactions.length,
-          (index) => Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0).copyWith(bottom: 8),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      transactions[index]['type'] == 'credit'
-                          ? Icons.arrow_upward
-                          : Icons.arrow_downward,
-                      color: transactions[index]['type'] == 'credit'
-                          ? AppColors.success
-                          : AppColors.error,
-                    ),
-                    const Gap(16.0),
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          transactions[index]['description'],
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: Constants.neulisNeueFontFamily,
-                          ),
-                        ),
-                        Text(
-                          DateFormatter.formatRelative(
-                            transactions[index]['date'],
-                          ),
-                          style: TextStyle(
-                            fontSize: 10,
-                            color: AppColors.textLight,
-                            fontFamily: Constants.neulisNeueFontFamily,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
                 Text(
-                  NumberFormatter.formatCurrency(transactions[index]['amount']),
+                  'RECENT TRANSACTIONS',
                   style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
+                    fontSize: 10,
                     fontFamily: Constants.neulisNeueFontFamily,
-                    color: transactions[index]['type'] == 'credit'
-                        ? AppColors.success
-                        : null,
+                  ),
+                ),
+                InkWell(
+                  onTap: () {},
+                  child: Text(
+                    'VIEW ALL',
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontFamily: Constants.neulisNeueFontFamily,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ],
             ),
           ),
-        ),
+          const Divider(),
+          const Gap(16),
+          ...List.generate(
+            transactions.length,
+            (index) => Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        transactions[index]['type'] == 'credit'
+                            ? Icons.arrow_upward
+                            : Icons.arrow_downward,
+                        color: transactions[index]['type'] == 'credit'
+                            ? AppColors.success
+                            : AppColors.error,
+                      ),
+                      const Gap(16.0),
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            transactions[index]['description'],
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              fontFamily: Constants.neulisNeueFontFamily,
+                            ),
+                          ),
+                          Text(
+                            '${DateFormatter.formatRelative(transactions[index]['date'])} ${DateFormatter.formatTime(transactions[index]['date'])}',
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: AppColors.textLight,
+                              fontFamily: Constants.neulisNeueFontFamily,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  Text(
+                    NumberFormatter.formatCurrency(
+                      transactions[index]['amount'],
+                    ),
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: Constants.neulisNeueFontFamily,
+                      color: transactions[index]['type'] == 'credit'
+                          ? AppColors.success
+                          : null,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -262,7 +305,8 @@ class WalletBalanceCard extends ConsumerWidget {
                 ],
               ),
               IconButton(
-                onPressed: () {},
+                onPressed: () =>
+                    _OptionsBottomSheet.showOptionsBottomSheet(context),
                 style: Constants.collapsedIconButtonStyle,
                 icon: Icon(Icons.more_vert, color: AppColors.greyDark),
               ),
@@ -305,6 +349,85 @@ class WalletBalanceCard extends ConsumerWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _OptionsBottomSheet extends StatelessWidget {
+  const _OptionsBottomSheet();
+
+  static void showOptionsBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => _OptionsBottomSheet(),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 24, 16, 16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'OPTIONS',
+                style: TextStyle(fontFamily: Constants.neulisNeueFontFamily),
+              ),
+              IconButton(
+                onPressed: () => context.pop(),
+                icon: const Icon(Icons.close),
+                constraints: BoxConstraints(),
+                style: Constants.collapsedIconButtonStyle,
+              ),
+            ],
+          ),
+        ),
+        const Divider(),
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              _buildOptionsTile(
+                title: 'Refresh',
+                icon: Icons.refresh,
+                onTap: () => context.pop(),
+              ),
+              _buildOptionsTile(
+                title: 'Turn on privacy',
+                icon: Icons.refresh,
+                onTap: () => context.pop(),
+              ),
+              _buildOptionsTile(
+                title: 'Manage accounts',
+                icon: Icons.refresh,
+                onTap: () => context.pop(),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildOptionsTile({
+    required String title,
+    required IconData icon,
+    required VoidCallback onTap,
+  }) {
+    return ListTile(
+      title: Text(title, style: TextStyle(fontSize: 16)),
+      leading: Icon(icon, size: 20),
+      onTap: onTap,
+      dense: true,
+      horizontalTitleGap: 5,
+      minVerticalPadding: 0,
+      visualDensity: VisualDensity.compact,
+      contentPadding: EdgeInsets.zero,
     );
   }
 }

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:savvy_bee_mobile/core/utils/text_utils.dart';
 import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
 
 import '../../../../core/theme/app_colors.dart';
@@ -52,32 +53,66 @@ class PickedFilePreview extends StatelessWidget {
               ),
             ),
           )
-        : Container(
-            padding: const EdgeInsets.all(8.0),
-            decoration: BoxDecoration(
-              color: AppColors.primaryFaint.withValues(alpha: 0.3),
-              borderRadius: BorderRadius.circular(8.0),
-            ),
+        : OutlinedCard(
+            padding: const EdgeInsets.all(5.0).copyWith(left: 8),
+            bgColor: AppColors.primaryFaint.withValues(alpha: 0.3),
+            borderRadius: 8,
             child: Row(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(
-                  Icons.file_present_outlined,
-                  color: AppColors.primaryDark,
-                  size: 24,
-                ),
-                const Gap(8.0),
-                Text(
-                  file?.path.split('/').last ?? 'No file selected',
-                  style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w500),
-                ),
-                const Gap(8.0),
-                IconButton(
-                  icon: Icon(
-                    Icons.close_outlined,
-                    color: AppColors.error,
-                    size: 16,
+                Container(
+                  padding: const EdgeInsets.all(8.0),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary,
+                    borderRadius: BorderRadius.circular(4),
                   ),
-                  onPressed: onRemove,
+                  child: Icon(Icons.file_present_outlined, size: 20),
+                ),
+                const Gap(8.0),
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          TextUtils.truncate(
+                            file?.path.split('/').last ?? 'No file selected',
+                            15,
+                            addEllipsis: true,
+                          ),
+                          style: TextStyle(
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        const Gap(16),
+                        GestureDetector(
+                          onTap: onRemove,
+                          child: Container(
+                            padding: const EdgeInsets.all(3),
+                            decoration: BoxDecoration(
+                              color: AppColors.black,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              Icons.close,
+                              size: 16,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Text(
+                      FileUtils.getMimeType(path),
+                      style: TextStyle(
+                        fontSize: 12.0,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

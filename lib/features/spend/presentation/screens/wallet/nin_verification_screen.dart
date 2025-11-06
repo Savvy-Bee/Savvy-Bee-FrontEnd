@@ -61,6 +61,7 @@ class _NinVerificationScreenState extends ConsumerState<NinVerificationScreen> {
               },
               // onPressed: _ninController.text.trim().isEmpty ? null : () {},
               buttonColor: CustomButtonColor.black,
+              showArrow: true,
             ),
           ],
         ),

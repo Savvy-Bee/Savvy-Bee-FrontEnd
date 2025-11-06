@@ -341,8 +341,9 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         ),
                       ),
                     CustomElevatedButton(
-                      text: authState.isLoading ? 'Processing...' : 'Continue',
-                      onPressed: authState.isLoading ? null : _handleContinue,
+                      text: 'Continue',
+                      isLoading: authState.isLoading,
+                      onPressed: _handleContinue,
                     ),
                   ],
                 ),

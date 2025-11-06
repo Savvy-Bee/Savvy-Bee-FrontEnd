@@ -10,7 +10,7 @@ import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/assets.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/illustrations.dart';
 import 'package:savvy_bee_mobile/core/utils/file_picker_util.dart';
-import 'package:savvy_bee_mobile/features/chat/presentation/widgets/add_budget_category_bottom_sheet.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_snackbar.dart';
 import 'package:savvy_bee_mobile/features/chat/presentation/widgets/picked_file_preview.dart';
 import 'package:savvy_bee_mobile/features/chat/presentation/widgets/quick_action_widget.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';
@@ -84,7 +84,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       }
     }
 
-    await ref
+    final success = await ref
         .read(chatProvider.notifier)
         .sendMessage(
           message.isEmpty ? "Sending attachment" : message,
@@ -92,10 +92,20 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           document: document,
         );
 
-    // Clear the picked file
-    setState(() {
-      _pickedFile = null;
-    });
+    if (success) {
+      // Clear the picked file
+      setState(() {
+        _pickedFile = null;
+      });
+    } else {
+      if (mounted) {
+        CustomSnackbar.show(
+          context,
+          'Failed to send message',
+          type: SnackbarType.error,
+        );
+      }
+    }
 
     // Scroll to bottom after sending
     _scrollToBottom();
@@ -508,7 +518,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                       setState(() {
                         _pickedFile = value;
                       });
-                      if (mounted) context.pop();
                     }),
               style: IconButton.styleFrom(
                 foregroundColor: AppColors.primary,
@@ -536,10 +545,10 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                           _pickedFile != null) {
                         _sendMessage();
                       } else {
-                        showModalBottomSheet(
-                          context: context,
-                          builder: (context) => AddBudgetCategoryBottomSheet(),
-                        );
+                        // showModalBottomSheet(
+                        //   context: context,
+                        //   builder: (context) => AddBudgetCategoryBottomSheet(),
+                        // );
                         // Future: Add voice input functionality
                       }
                     },
@@ -688,41 +697,55 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                   ],
                 ),
               ),
-              PopupMenuButton<String>(
-                icon: const Icon(Icons.more_vert),
-                onSelected: (value) {
-                  switch (value) {
-                    case 'refresh':
-                      ref.read(chatProvider.notifier).refresh();
-                      break;
-                    case 'clear':
-                      _showClearConfirmation();
-                      break;
-                  }
-                },
-                itemBuilder: (context) => [
-                  const PopupMenuItem(
-                    value: 'refresh',
-                    child: Row(
-                      children: [
-                        Icon(Icons.refresh, size: 20),
-                        Gap(12.0),
-                        Text('Refresh Chat'),
-                      ],
-                    ),
+
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    onPressed: () => ref.read(chatProvider.notifier).refresh(),
+                    icon: Icon(Icons.swap_horiz),
                   ),
-                  const PopupMenuItem(
-                    value: 'clear',
-                    child: Row(
-                      children: [
-                        Icon(Icons.delete_outline, size: 20, color: Colors.red),
-                        Gap(12.0),
-                        Text(
-                          'Clear History',
-                          style: TextStyle(color: Colors.red),
+                  PopupMenuButton<String>(
+                    icon: const Icon(Icons.more_vert),
+                    onSelected: (value) {
+                      switch (value) {
+                        case 'refresh':
+                          ref.read(chatProvider.notifier).refresh();
+                          break;
+                        case 'clear':
+                          _showClearConfirmation();
+                          break;
+                      }
+                    },
+                    itemBuilder: (context) => [
+                      const PopupMenuItem(
+                        value: 'refresh',
+                        child: Row(
+                          children: [
+                            Icon(Icons.refresh, size: 20),
+                            Gap(12.0),
+                            Text('Refresh Chat'),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                      const PopupMenuItem(
+                        value: 'clear',
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.delete_outline,
+                              size: 20,
+                              color: Colors.red,
+                            ),
+                            Gap(12.0),
+                            Text(
+                              'Clear History',
+                              style: TextStyle(color: Colors.red),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

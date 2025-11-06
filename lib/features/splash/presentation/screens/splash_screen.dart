@@ -6,7 +6,7 @@ import 'package:savvy_bee_mobile/core/utils/assets/assets.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/illustrations.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/responsive_layout.dart';
-import 'package:savvy_bee_mobile/features/chat/presentation/screens/chat_screen.dart';
+import 'package:savvy_bee_mobile/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:savvy_bee_mobile/features/onboarding/presentation/screens/onboarding_screen.dart';
 
 import '../../../auth/presentation/providers/auth_providers.dart';
@@ -65,7 +65,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
       if (authState.isAuthenticated) {
         // User is logged in - go to home
         // context.goNamed(HomeScreen.path);
-        context.goNamed(ChatScreen.path);
+        context.goNamed(DashboardScreen.path);
       } else {
         // User not logged in - go to onboarding
         context.goNamed(OnboardingScreen.path);

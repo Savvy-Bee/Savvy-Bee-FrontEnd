@@ -105,10 +105,7 @@ class ChatNotifier extends AsyncNotifier<ChatState> {
           needsReAuth: true,
         );
       }
-      return ChatState(
-        isLoading: false,
-        errorMessage: e.message,
-      );
+      return ChatState(isLoading: false, errorMessage: e.message);
     } catch (e) {
       log('Error loading chat history: $e');
       return ChatState(
@@ -119,15 +116,21 @@ class ChatNotifier extends AsyncNotifier<ChatState> {
   }
 
   /// Send a message to the AI with optional image and document attachments
-  Future<void> sendMessage(String message, {File? image, File? document}) async {
-    if (message.trim().isEmpty && image == null && document == null) return;
+  Future<bool> sendMessage(
+    String message, {
+    File? image,
+    File? document,
+  }) async {
+    if (message.trim().isEmpty && image == null && document == null) {
+      return false;
+    }
 
     final currentState = state.value ?? ChatState();
 
     // Check if re-authentication is needed
     if (currentState.needsReAuth) {
       log('Cannot send message - re-authentication required');
-      return;
+      return false;
     }
 
     // Show optimistic user message immediately
@@ -150,7 +153,6 @@ class ChatNotifier extends AsyncNotifier<ChatState> {
     );
 
     try {
-      log('Sending message: $message${image != null ? " with image" : ""}${document != null ? " with document" : ""}');
       final request = SendChatRequest(
         message: message.trim(),
         image: image,
@@ -174,8 +176,8 @@ class ChatNotifier extends AsyncNotifier<ChatState> {
         state = AsyncValue.data(
           currentState.copyWith(messages: updatedMessages, isSending: false),
         );
+        return true;
       } else {
-        log('Failed to send message: ${response?.message}');
         // Remove optimistic message and show error
         state = AsyncValue.data(
           currentState.copyWith(
@@ -186,13 +188,12 @@ class ChatNotifier extends AsyncNotifier<ChatState> {
             errorMessage: response?.message ?? 'Failed to send message',
           ),
         );
+        return false;
       }
     } on ApiException catch (e) {
-      log('ApiException sending message: ${e.message}');
-      
       // Check if it's an auth error
       final needsReAuth = e.statusCode == 401;
-      
+
       // Remove optimistic message and show error
       state = AsyncValue.data(
         currentState.copyWith(
@@ -200,12 +201,13 @@ class ChatNotifier extends AsyncNotifier<ChatState> {
               .where((msg) => msg.id != optimisticUserMessage.id)
               .toList(),
           isSending: false,
-          errorMessage: needsReAuth 
-              ? 'Session expired. Please login again.' 
+          errorMessage: needsReAuth
+              ? 'Session expired. Please login again.'
               : e.message,
           needsReAuth: needsReAuth,
         ),
       );
+      return false;
     } catch (e) {
       log('Error sending message: $e');
       // Remove optimistic message and show error
@@ -218,6 +220,7 @@ class ChatNotifier extends AsyncNotifier<ChatState> {
           errorMessage: 'Failed to send message',
         ),
       );
+      return false;
     }
   }
 

@@ -4,7 +4,7 @@ import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/assets.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/intro_text.dart';
-import 'package:savvy_bee_mobile/features/auth/presentation/screens/signup/presentation/screens/signup_notifications_screen.dart';
+import 'package:savvy_bee_mobile/features/dashboard/presentation/screens/dashboard_screen.dart';
 
 import '../../../../../../../core/utils/assets/illustrations.dart';
 import '../../../../../../../core/utils/image_shadow_effect.dart';
@@ -59,7 +59,7 @@ class _SignupCompleteScreenState extends State<SignupCompleteScreen> {
                 child: CustomElevatedButton(
                   text: 'Continue',
                   onPressed: () {
-                    context.pushNamed(SignupNotificationsScreen.path);
+                    context.goNamed(DashboardScreen.path);
                   },
                 ),
               ),

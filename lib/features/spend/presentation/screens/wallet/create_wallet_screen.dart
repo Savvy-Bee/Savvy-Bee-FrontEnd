@@ -31,6 +31,7 @@ class CreateWalletScreen extends ConsumerWidget {
               text: 'Get Started',
               onPressed: () => context.pushNamed(NinVerificationScreen.path),
               buttonColor: CustomButtonColor.black,
+              showArrow: true,
             ),
           ],
         ),

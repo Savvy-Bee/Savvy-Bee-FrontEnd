@@ -51,6 +51,7 @@ class PhotoVerificationScreen extends ConsumerWidget {
                 context.pushNamed(LivePhotoScreen.path);
               },
               buttonColor: CustomButtonColor.black,
+              showArrow: true,
             ),
           ],
         ),

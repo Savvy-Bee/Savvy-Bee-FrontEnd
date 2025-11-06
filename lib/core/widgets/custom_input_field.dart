@@ -6,7 +6,7 @@ import '../theme/app_colors.dart';
 import '../theme/app_typography.dart';
 
 class CustomTextFormField extends StatelessWidget {
-  // final String label;
+  final String? label, endLabel;
   final String? hint;
   final String? errorText;
   final bool obscureText;
@@ -18,6 +18,7 @@ class CustomTextFormField extends StatelessWidget {
   final void Function(String)? onChanged;
   final void Function(String)? onFieldSubmitted;
   final String? Function(String?)? validator;
+  final VoidCallback? onEndLabelPressed;
   final Widget? prefix;
   final Widget? suffix;
   final bool enabled;
@@ -34,7 +35,8 @@ class CustomTextFormField extends StatelessWidget {
 
   const CustomTextFormField({
     super.key,
-    // required this.label,
+    this.label,
+    this.endLabel,
     this.hint,
     this.errorText,
     this.obscureText = false,
@@ -46,6 +48,7 @@ class CustomTextFormField extends StatelessWidget {
     this.onChanged,
     this.onFieldSubmitted,
     this.validator,
+    this.onEndLabelPressed,
     this.prefix,
     this.suffix,
     this.enabled = true,
@@ -67,6 +70,31 @@ class CustomTextFormField extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            if (label != null)
+              Text(
+                label!,
+                style: TextStyle(
+                  fontSize: 10,
+                  fontFamily: Constants.neulisNeueFontFamily,
+                ),
+              ),
+            if (endLabel != null)
+              InkWell(
+                onTap: onEndLabelPressed,
+                child: Text(
+                  endLabel!,
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontFamily: Constants.neulisNeueFontFamily,
+                  ),
+                ),
+              ),
+          ],
+        ),
+        if (label != null) const Gap(4),
         TextFormField(
           controller: controller,
           obscureText: obscureText,
@@ -85,7 +113,7 @@ class CustomTextFormField extends StatelessWidget {
           onTapOutside: (event) => FocusScope.of(context).unfocus(),
           onFieldSubmitted: onFieldSubmitted,
           textInputAction: textInputAction,
-          style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14.0),
+          style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14.0),
           decoration: InputDecoration(
             filled: true,
             fillColor: AppColors.background,
@@ -108,7 +136,7 @@ class CustomTextFormField extends StatelessWidget {
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(isRounded ? 24 : 8),
               borderSide: BorderSide(
-                color: showOutline ? AppColors.greyDark : Colors.transparent,
+                color: showOutline ? AppColors.borderDark : Colors.transparent,
               ),
             ),
             focusedBorder: OutlineInputBorder(

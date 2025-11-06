@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mime/mime.dart';
 
 class FileUtils {
   static const List<String> supportedImageExtensions = [
@@ -22,6 +23,12 @@ class FileUtils {
     '.ppt',
     '.pptx',
   ];
+
+  /// Get the MIME type of a file
+  static String getMimeType(String? path) {
+    if (path == null) return 'Unknown';
+    return lookupMimeType(path)?.split('/').last.toUpperCase() ?? 'Unknown';
+  }
 
   /// Check if the file extension is supported
   static bool isSupportedFile(String? path) {
