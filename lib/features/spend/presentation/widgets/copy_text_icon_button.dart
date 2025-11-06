@@ -1,30 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
-import 'package:savvy_bee_mobile/core/widgets/custom_snackbar.dart';
 
 import '../../../../core/theme/app_colors.dart';
 
 class CopyTextIconButton extends StatelessWidget {
-  final String textToCopy;
-  const CopyTextIconButton({super.key, required this.textToCopy});
+  final String label;
+  final VoidCallback? onPressed;
+  const CopyTextIconButton({super.key, required this.label, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        ClipboardData(text: textToCopy);
-        CustomSnackbar.show(
-          context,
-          'Copied to clipboard',
-          type: SnackbarType.success,
-        );
-      },
+      onTap: onPressed,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            'COPY',
+            label.toUpperCase(),
             style: TextStyle(
               fontSize: 10,
               fontWeight: FontWeight.w900,

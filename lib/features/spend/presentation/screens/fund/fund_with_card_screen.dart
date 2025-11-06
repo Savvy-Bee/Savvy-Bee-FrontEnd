@@ -8,7 +8,7 @@ import 'package:savvy_bee_mobile/core/utils/assets/assets.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/fund/new_card_screen.dart';
-import 'package:savvy_bee_mobile/features/spend/presentation/widgets/mini_share_button.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/widgets/mini_button.dart';
 
 class FundWithCardScreen extends ConsumerStatefulWidget {
   static String path = '/fund-with-card';

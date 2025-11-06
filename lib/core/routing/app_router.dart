@@ -13,6 +13,7 @@ import 'package:savvy_bee_mobile/features/spend/presentation/screens/fund/fund_w
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/fund/new_card_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/fund/fund_by_transfer_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/spend_dashboard_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/transfer/send_money_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/add_money_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/bvn_verification_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/create_wallet_screen.dart';
@@ -138,14 +139,14 @@ final GoRouter appRouter = GoRouter(
           path: DashboardScreen.path,
           name: DashboardScreen.path,
           builder: (BuildContext context, GoRouterState state) {
-            return DashboardScreen();
+            return const DashboardScreen();
           },
         ),
         GoRoute(
           path: SpendScreen.path,
           name: SpendScreen.path,
           builder: (BuildContext context, GoRouterState state) {
-            return SpendScreen();
+            return const SpendScreen();
           },
         ),
       ],
@@ -156,42 +157,42 @@ final GoRouter appRouter = GoRouter(
       path: CreateWalletScreen.path,
       name: CreateWalletScreen.path,
       builder: (BuildContext context, GoRouterState state) {
-        return CreateWalletScreen();
+        return const CreateWalletScreen();
       },
     ),
     GoRoute(
       path: NinVerificationScreen.path,
       name: NinVerificationScreen.path,
       builder: (BuildContext context, GoRouterState state) {
-        return NinVerificationScreen();
+        return const NinVerificationScreen();
       },
     ),
     GoRoute(
       path: BvnVerificationScreen.path,
       name: BvnVerificationScreen.path,
       builder: (BuildContext context, GoRouterState state) {
-        return BvnVerificationScreen();
+        return const BvnVerificationScreen();
       },
     ),
     GoRoute(
       path: PhotoVerificationScreen.path,
       name: PhotoVerificationScreen.path,
       builder: (BuildContext context, GoRouterState state) {
-        return PhotoVerificationScreen();
+        return const PhotoVerificationScreen();
       },
     ),
     GoRoute(
       path: LivePhotoScreen.path,
       name: LivePhotoScreen.path,
       builder: (BuildContext context, GoRouterState state) {
-        return LivePhotoScreen();
+        return const LivePhotoScreen();
       },
     ),
     GoRoute(
       path: WalletCreationCompletionScreen.path,
       name: WalletCreationCompletionScreen.path,
       builder: (BuildContext context, GoRouterState state) {
-        return WalletCreationCompletionScreen();
+        return const WalletCreationCompletionScreen();
       },
     ),
 
@@ -200,63 +201,63 @@ final GoRouter appRouter = GoRouter(
       path: AddMoneyScreen.path,
       name: AddMoneyScreen.path,
       builder: (BuildContext context, GoRouterState state) {
-        return AddMoneyScreen();
+        return const AddMoneyScreen();
       },
     ),
     GoRoute(
       path: UsernameScreen.path,
       name: UsernameScreen.path,
       builder: (BuildContext context, GoRouterState state) {
-        return UsernameScreen();
+        return const UsernameScreen();
       },
     ),
     GoRoute(
       path: FundByTransferScreen.path,
       name: FundByTransferScreen.path,
       builder: (BuildContext context, GoRouterState state) {
-        return FundByTransferScreen();
+        return const FundByTransferScreen();
       },
     ),
     GoRoute(
       path: FundWithCardScreen.path,
       name: FundWithCardScreen.path,
       builder: (BuildContext context, GoRouterState state) {
-        return FundWithCardScreen();
+        return const FundWithCardScreen();
       },
     ),
     GoRoute(
       path: NewCardScreen.path,
       name: NewCardScreen.path,
       builder: (BuildContext context, GoRouterState state) {
-        return NewCardScreen();
+        return const NewCardScreen();
       },
     ),
     GoRoute(
       path: PayBillsScreen.path,
       name: PayBillsScreen.path,
       builder: (BuildContext context, GoRouterState state) {
-        return PayBillsScreen();
+        return const PayBillsScreen();
       },
     ),
     GoRoute(
       path: AirtimeScreen.path,
       name: AirtimeScreen.path,
       builder: (BuildContext context, GoRouterState state) {
-        return AirtimeScreen();
+        return const AirtimeScreen();
       },
     ),
     GoRoute(
       path: BillConfirmationScreen.path,
       name: BillConfirmationScreen.path,
       builder: (BuildContext context, GoRouterState state) {
-        return BillConfirmationScreen();
+        return const BillConfirmationScreen();
       },
     ),
     GoRoute(
       path: BillCompletionScreen.path,
       name: BillCompletionScreen.path,
       builder: (BuildContext context, GoRouterState state) {
-        return BillCompletionScreen();
+        return const BillCompletionScreen();
       },
     ),
 
@@ -265,7 +266,14 @@ final GoRouter appRouter = GoRouter(
       path: TransferScreen.path,
       name: TransferScreen.path,
       builder: (BuildContext context, GoRouterState state) {
-        return TransferScreen();
+        return const TransferScreen();
+      },
+    ),
+    GoRoute(
+      path: SendMoneyScreen.path,
+      name: SendMoneyScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return SendMoneyScreen(recipientName: state.extra as String);
       },
     ),
   ],

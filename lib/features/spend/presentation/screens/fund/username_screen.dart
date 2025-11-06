@@ -142,7 +142,7 @@ class UsernameScreen extends ConsumerWidget {
             ],
           ),
           Row(mainAxisSize: MainAxisSize.min, children: []),
-          CopyTextIconButton(textToCopy: username),
+          CopyTextIconButton(label: 'Copy', onPressed: () {}),
         ],
       ),
     );

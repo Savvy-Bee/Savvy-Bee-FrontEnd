@@ -71,7 +71,7 @@ class CustomSnackbar extends StatelessWidget {
             onPressed: () {
               ScaffoldMessenger.of(context).hideCurrentSnackBar();
             },
-            style: Constants.collapsedIconButtonStyle,
+            style: Constants.collapsedButtonStyle,
             icon: Icon(Icons.close, size: 20),
           ),
         ],

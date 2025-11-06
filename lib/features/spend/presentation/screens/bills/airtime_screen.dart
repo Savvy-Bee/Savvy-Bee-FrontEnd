@@ -9,7 +9,7 @@ import 'package:savvy_bee_mobile/core/utils/number_formatter.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';
 import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/bills/bill_completion_screen.dart';
-import 'package:savvy_bee_mobile/features/spend/presentation/widgets/mini_share_button.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/widgets/mini_button.dart';
 
 class AirtimeScreen extends ConsumerStatefulWidget {
   static String path = '/airtime';

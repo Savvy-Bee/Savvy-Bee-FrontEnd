@@ -8,6 +8,7 @@ class Assets {
   static const String verifyFilledSvg = '$_basePath/verify_filled.svg';
   static const String cardSvg = '$_basePath/card.svg';
   static const String successSvg = '$_basePath/success.svg';
+  static const String bankSvg = '$_basePath/bank.svg';
 
   static const String hivePatternYellow = '$_basePath/hive_pattern_yellow.png';
   static const String hivePatternWhite = '$_basePath/hive_pattern_white.png';

@@ -177,7 +177,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
             onPressed: () {},
             icon: const Icon(Icons.edit_square),
             constraints: BoxConstraints(),
-            style: Constants.collapsedIconButtonStyle,
+            style: Constants.collapsedButtonStyle,
           ),
         ),
         const Gap(16),

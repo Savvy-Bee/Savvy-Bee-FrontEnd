@@ -5,7 +5,8 @@ import '../../../../core/theme/app_colors.dart';
 class MiniButton extends StatelessWidget {
   final VoidCallback? onTap;
   final String text;
-  MiniButton({super.key, this.onTap, this.text = 'Share'});
+  final Widget? child;
+  MiniButton({super.key, this.onTap, this.text = 'Share', this.child});
 
   final borderRadius = BorderRadius.circular(8);
   @override
@@ -16,13 +17,21 @@ class MiniButton extends StatelessWidget {
       child: Ink(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: AppColors.buttonPrimary,
+          color: onTap == null
+              ? AppColors.buttonPrimary.withValues(alpha: 0.3)
+              : AppColors.buttonPrimary,
           borderRadius: borderRadius,
         ),
-        child: Text(
-          text,
-          style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
-        ),
+        child:
+            child ??
+            Text(
+              text,
+              style: TextStyle(
+                fontSize: 10,
+                fontWeight: FontWeight.w600,
+                color: onTap == null ? AppColors.grey : null,
+              ),
+            ),
       ),
     );
   }

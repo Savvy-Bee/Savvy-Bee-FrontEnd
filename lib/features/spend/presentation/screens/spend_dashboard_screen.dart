@@ -307,7 +307,7 @@ class WalletBalanceCard extends ConsumerWidget {
               IconButton(
                 onPressed: () =>
                     _OptionsBottomSheet.showOptionsBottomSheet(context),
-                style: Constants.collapsedIconButtonStyle,
+                style: Constants.collapsedButtonStyle,
                 icon: Icon(Icons.more_vert, color: AppColors.greyDark),
               ),
             ],
@@ -340,7 +340,7 @@ class WalletBalanceCard extends ConsumerWidget {
                 onPressed: () {
                   context.pushNamed(AddMoneyScreen.path);
                 },
-                style: Constants.collapsedIconButtonStyle.copyWith(
+                style: Constants.collapsedButtonStyle.copyWith(
                   backgroundColor: WidgetStateProperty.all(AppColors.black),
                 ),
                 icon: Icon(Icons.add, color: AppColors.white),
@@ -382,7 +382,7 @@ class _OptionsBottomSheet extends StatelessWidget {
                 onPressed: () => context.pop(),
                 icon: const Icon(Icons.close),
                 constraints: BoxConstraints(),
-                style: Constants.collapsedIconButtonStyle,
+                style: Constants.collapsedButtonStyle,
               ),
             ],
           ),

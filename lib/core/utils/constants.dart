@@ -7,7 +7,7 @@ class Constants {
   );
 
   // Collapsed Icon button style
-  static ButtonStyle collapsedIconButtonStyle = IconButton.styleFrom(
+  static ButtonStyle collapsedButtonStyle = IconButton.styleFrom(
     visualDensity: VisualDensity.compact,
     padding: EdgeInsets.zero,
     tapTargetSize: MaterialTapTargetSize.shrinkWrap,

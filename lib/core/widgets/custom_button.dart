@@ -110,6 +110,7 @@ class CustomOutlinedButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(8),
           side: BorderSide(color: AppColors.grey),
         ),
+        padding: const EdgeInsets.symmetric(vertical: 14),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -118,7 +119,7 @@ class CustomOutlinedButton extends StatelessWidget {
             text,
             style: const TextStyle(
               color: Colors.black,
-              fontWeight: FontWeight.w400,
+              fontWeight: FontWeight.bold,
             ),
           ),
           Gap(8),

@@ -3,17 +3,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';
-import 'package:savvy_bee_mobile/features/spend/presentation/widgets/mini_share_button.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/widgets/mini_button.dart';
 
 import '../../widgets/copy_text_icon_button.dart';
 
 class FundByTransferScreen extends ConsumerStatefulWidget {
-  static String path = '/transfer';
+  static String path = '/fund-by-transfer';
 
   const FundByTransferScreen({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _FundByTransferScreenState();
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _FundByTransferScreenState();
 }
 
 class _FundByTransferScreenState extends ConsumerState<FundByTransferScreen> {
@@ -55,9 +56,7 @@ class _FundByTransferScreenState extends ConsumerState<FundByTransferScreen> {
             controller: _accNumberController,
             suffix: Padding(
               padding: const EdgeInsets.only(right: 16),
-              child: CopyTextIconButton(
-                textToCopy: _accNumberController.text.trim(),
-              ),
+              child: CopyTextIconButton(label: 'Copy', onPressed: () {}),
             ),
           ),
           const Gap(8),

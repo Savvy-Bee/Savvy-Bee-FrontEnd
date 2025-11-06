@@ -28,6 +28,7 @@ class CustomTextFormField extends StatelessWidget {
   final FocusNode? focusNode;
   final VoidCallback? onTap;
   final bool readOnly;
+  final bool showCursor;
   final Color? fillColor;
   final EdgeInsets? contentPadding;
   final TextInputAction textInputAction;
@@ -58,6 +59,7 @@ class CustomTextFormField extends StatelessWidget {
     this.focusNode,
     this.onTap,
     this.readOnly = false,
+    this.showCursor = true,
     this.fillColor,
     this.contentPadding,
     this.textInputAction = TextInputAction.next,
@@ -109,6 +111,7 @@ class CustomTextFormField extends StatelessWidget {
           focusNode: focusNode,
           onTap: onTap,
           readOnly: readOnly,
+          showCursor: showCursor,
           // style: AppTypography.bodyMedium,
           onTapOutside: (event) => FocusScope.of(context).unfocus(),
           onFieldSubmitted: onFieldSubmitted,
