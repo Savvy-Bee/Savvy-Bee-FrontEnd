@@ -13,6 +13,8 @@ import 'package:savvy_bee_mobile/features/spend/presentation/screens/fund/fund_w
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/fund/new_card_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/fund/fund_by_transfer_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/spend_dashboard_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/transactions/account_statement_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/transactions/transaction_history_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/transfer/send_money_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/add_money_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/bvn_verification_screen.dart';
@@ -22,7 +24,9 @@ import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/nin_
 import 'package:savvy_bee_mobile/features/password/presentation/screens/password_reset_complete.dart';
 import 'package:savvy_bee_mobile/features/password/presentation/screens/password_reset_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/wallet_creation_complete_screen.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/tools_screen.dart';
 import '../../features/spend/presentation/screens/fund/username_screen.dart';
+import '../../features/spend/presentation/screens/transactions/statement_sent_screen.dart';
 import '../../features/spend/presentation/screens/transfer/transfer_screen.dart';
 import '../../features/spend/presentation/screens/wallet/photo_verification_screen.dart';
 import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
@@ -147,6 +151,13 @@ final GoRouter appRouter = GoRouter(
           name: SpendScreen.path,
           builder: (BuildContext context, GoRouterState state) {
             return const SpendScreen();
+          },
+        ),
+        GoRoute(
+          path: ToolsScreen.path,
+          name: ToolsScreen.path,
+          builder: (BuildContext context, GoRouterState state) {
+            return ToolsScreen();
           },
         ),
       ],
@@ -276,5 +287,35 @@ final GoRouter appRouter = GoRouter(
         return SendMoneyScreen(recipientName: state.extra as String);
       },
     ),
+    GoRoute(
+      path: TransactionHistoryScreen.path,
+      name: TransactionHistoryScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return TransactionHistoryScreen();
+      },
+    ),
+    GoRoute(
+      path: AccountStatementScreen.path,
+      name: AccountStatementScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return AccountStatementScreen();
+      },
+    ),
+    GoRoute(
+      path: StatementSentScreen.path,
+      name: StatementSentScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return StatementSentScreen();
+      },
+    ),
+
+    // Tools Routes
+    // GoRoute(
+    //   path: ToolsScreen.path,
+    //   name: ToolsScreen.path,
+    //   builder: (BuildContext context, GoRouterState state) {
+    //     return ToolsScreen();
+    //   },
+    // ),
   ],
 );

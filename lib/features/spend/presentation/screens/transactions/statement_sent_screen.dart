@@ -1,24 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
-import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 
 import '../../../../../core/utils/assets/assets.dart';
 import '../../../../../core/utils/constants.dart';
+import '../../../../../core/widgets/custom_button.dart';
 
-class BillCompletionScreen extends ConsumerStatefulWidget {
-  static String path = '/bill-completion';
+class StatementSentScreen extends StatelessWidget {
+  static const String path = '/statement-sent';
 
-  const BillCompletionScreen({super.key});
+  const StatementSentScreen({super.key});
 
-  @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      _BillCompletionScreenState();
-}
-
-class _BillCompletionScreenState extends ConsumerState<BillCompletionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +26,7 @@ class _BillCompletionScreenState extends ConsumerState<BillCompletionScreen> {
                 SvgPicture.asset(Assets.successSvg),
                 const Gap(16),
                 Text(
-                  'Recharged!',
+                  'Sent!',
                   style: TextStyle(
                     fontFamily: Constants.neulisNeueFontFamily,
                     fontSize: 20,
@@ -43,7 +35,7 @@ class _BillCompletionScreenState extends ConsumerState<BillCompletionScreen> {
                 ),
                 const Gap(8),
                 Text(
-                  'Successful',
+                  'Your statement is on its way to your inbox.',
                   style: TextStyle(
                     fontFamily: Constants.neulisNeueFontFamily,
                     fontSize: 12,
@@ -51,7 +43,7 @@ class _BillCompletionScreenState extends ConsumerState<BillCompletionScreen> {
                 ),
               ],
             ),
-            CustomElevatedButton(text: 'Okay', onPressed: () => context.pop()),
+            CustomElevatedButton(text: 'Okay', onPressed: () {}),
           ],
         ),
       ),

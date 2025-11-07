@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/features/chat/presentation/screens/chat_screen.dart';
 import 'package:savvy_bee_mobile/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/spend_dashboard_screen.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/tools_screen.dart';
 
 import '../utils/assets/illustrations.dart';
 import '../utils/assets/logos.dart';
@@ -53,7 +53,7 @@ class MainWrapper extends ConsumerWidget {
                   ),
                 ),
               ),
-              SvgPicture.asset(Logos.logoSvg, height: 40, width: 40),
+              Image.asset(Logos.logo, height: 40, width: 40),
               Container(
                 width: 40,
                 height: 40,
@@ -86,16 +86,13 @@ class MainWrapper extends ConsumerWidget {
             context.goNamed(SpendScreen.path);
             break;
           case 2:
-            context.goNamed('add');
+            context.goNamed(ToolsScreen.path);
             break;
           case 3:
             context.goNamed('notifications');
             break;
           case 4:
             context.goNamed('messages');
-            break;
-          case 5:
-            context.goNamed('profile');
             break;
           default:
             break;
@@ -123,11 +120,7 @@ class MainWrapper extends ConsumerWidget {
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.bar_chart_rounded),
-          label: 'Budget',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.savings_outlined),
-          label: 'Save',
+          label: 'Tools',
         ),
         BottomNavigationBarItem(icon: Icon(Icons.hive_outlined), label: 'Hive'),
         BottomNavigationBarItem(

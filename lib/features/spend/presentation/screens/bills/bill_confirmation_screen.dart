@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/utils/number_formatter.dart';
 import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/bills/bill_completion_screen.dart';
 
 class BillConfirmationScreen extends ConsumerStatefulWidget {
   static String path = '/confirmation';
@@ -15,7 +17,8 @@ class BillConfirmationScreen extends ConsumerStatefulWidget {
       _BillConfirmationScreenState();
 }
 
-class _BillConfirmationScreenState extends ConsumerState<BillConfirmationScreen> {
+class _BillConfirmationScreenState
+    extends ConsumerState<BillConfirmationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,6 +66,7 @@ class _BillConfirmationScreenState extends ConsumerState<BillConfirmationScreen>
           ),
           const Gap(16),
           OutlinedCard(
+            onTap: () => context.pushNamed(BillCompletionScreen.path),
             borderRadius: 50,
             padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
             child: Column(

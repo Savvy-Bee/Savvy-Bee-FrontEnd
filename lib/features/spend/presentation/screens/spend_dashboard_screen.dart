@@ -8,6 +8,7 @@ import 'package:savvy_bee_mobile/core/utils/date_formatter.dart';
 import 'package:savvy_bee_mobile/core/utils/number_formatter.dart';
 import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/bills/pay_bills_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/transactions/transaction_history_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/transfer/transfer_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/add_money_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/create_wallet_screen.dart';
@@ -54,7 +55,7 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
                       _buildQuickActionButton(
                         Icons.receipt_outlined,
                         'Details',
-                        () {},
+                        () => context.pushNamed(TransactionHistoryScreen.path),
                       ),
                     ],
                   ),

@@ -4,7 +4,6 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
-import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
 import 'package:savvy_bee_mobile/features/dashboard/presentation/widgets/info_card.dart';
 
 class ArticleBottomSheet extends ConsumerStatefulWidget {

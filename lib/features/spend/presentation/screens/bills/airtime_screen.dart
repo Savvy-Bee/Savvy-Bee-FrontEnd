@@ -8,7 +8,7 @@ import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/utils/number_formatter.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';
 import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
-import 'package:savvy_bee_mobile/features/spend/presentation/screens/bills/bill_completion_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/bills/bill_confirmation_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/widgets/mini_button.dart';
 
 class AirtimeScreen extends ConsumerStatefulWidget {
@@ -32,7 +32,7 @@ class _AirtimeScreenState extends ConsumerState<AirtimeScreen> {
           Padding(
             padding: const EdgeInsets.only(right: 16.0),
             child: MiniButton(
-              onTap: () => context.pushNamed(BillCompletionScreen.path),
+              onTap: () => context.pushNamed(BillConfirmationScreen.path),
               text: 'Next',
             ),
           ),
