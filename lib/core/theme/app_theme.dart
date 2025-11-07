@@ -74,6 +74,7 @@ class AppTheme {
     ),
     appBarTheme: AppBarTheme(
       backgroundColor: AppColors.background,
+      surfaceTintColor: AppColors.background,
       elevation: 0,
       centerTitle: true,
       titleTextStyle: TextStyle(

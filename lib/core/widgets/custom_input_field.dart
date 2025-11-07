@@ -79,7 +79,7 @@ class CustomTextFormField extends StatelessWidget {
               Text(
                 label!,
                 style: TextStyle(
-                  fontSize: 10,
+                  fontSize: 12,
                   fontFamily: Constants.neulisNeueFontFamily,
                 ),
               ),
@@ -89,7 +89,7 @@ class CustomTextFormField extends StatelessWidget {
                 child: Text(
                   endLabel!,
                   style: TextStyle(
-                    fontSize: 10,
+                    fontSize: 12,
                     fontFamily: Constants.neulisNeueFontFamily,
                   ),
                 ),

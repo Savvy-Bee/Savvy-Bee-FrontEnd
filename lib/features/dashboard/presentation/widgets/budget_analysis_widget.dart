@@ -3,6 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/utils/number_formatter.dart';
+import 'package:savvy_bee_mobile/core/widgets/category_progress_widget.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 
 import '../../../../core/widgets/outlined_card.dart';
@@ -100,14 +101,14 @@ class BudgetAnalysisWidget extends StatelessWidget {
                     ],
                   ),
                   const Gap(24.0),
-                  _buildBudgetWidget(
+                  CategoryProgressWidget(
                     title: 'Dining & drinks',
                     totalAmount: 100000,
                     totalSpent: 10000,
                     color: AppColors.primary,
                   ),
                   const Gap(8.0),
-                  _buildBudgetWidget(
+                  CategoryProgressWidget(
                     title: 'Dining & drinks',
                     totalAmount: 100000,
                     totalSpent: 10000,
@@ -137,80 +138,6 @@ class BudgetAnalysisWidget extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildBudgetWidget({
-    required String title,
-    required double totalAmount,
-    required double totalSpent,
-    required Color color,
-  }) {
-    return OutlinedCard(
-      borderColor: AppColors.grey.withValues(alpha: 0.7),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            spacing: 8,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(5.0),
-                decoration: BoxDecoration(color: color, shape: BoxShape.circle),
-                child: Icon(
-                  Icons.dinner_dining_outlined,
-                  size: 20,
-                  color: AppColors.white,
-                ),
-              ),
-              Text(
-                title,
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-              ),
-            ],
-          ),
-          const Gap(6),
-          LinearProgressIndicator(
-            value: totalSpent / totalAmount,
-            backgroundColor: color.withValues(alpha: 0.2),
-            minHeight: 5,
-            borderRadius: BorderRadius.circular(10),
-            valueColor: AlwaysStoppedAnimation<Color>(color),
-          ),
-          const Gap(6),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                '${(totalSpent / totalAmount * 100).toStringAsFixed(2)}%',
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
-              ),
-              Text.rich(
-                TextSpan(
-                  text: NumberFormatter.formatCurrency(
-                    totalSpent,
-                    decimalDigits: 0,
-                  ),
-                  children: [
-                    TextSpan(
-                      text:
-                          ' of ${NumberFormatter.formatCurrency(totalAmount, decimalDigits: 0)}',
-                      style: TextStyle(fontWeight: FontWeight.w500),
-                    ),
-                  ],
-                ),
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: Constants.neulisNeueFontFamily,
-                ),
-              ),
-            ],
-          ),
-        ],
       ),
     );
   }

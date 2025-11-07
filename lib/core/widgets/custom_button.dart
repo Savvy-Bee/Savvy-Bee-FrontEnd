@@ -8,7 +8,7 @@ class CustomElevatedButton extends StatelessWidget {
   final String text;
   final VoidCallback? onPressed;
   final CustomButtonColor buttonColor;
-  final bool isFullWidth;
+  final bool isSmall;
   final bool rounded;
   final bool showArrow;
   final bool isLoading;
@@ -19,7 +19,7 @@ class CustomElevatedButton extends StatelessWidget {
     required this.text,
     this.onPressed,
     this.buttonColor = CustomButtonColor.yellow,
-    this.isFullWidth = true,
+    this.isSmall = true,
     this.rounded = false,
     this.showArrow = false,
     this.isLoading = false,
@@ -37,7 +37,7 @@ class CustomElevatedButton extends StatelessWidget {
     };
 
     return SizedBox(
-      width: isFullWidth ? double.infinity : null,
+      width: isSmall ? double.infinity : null,
       child: ElevatedButton.icon(
         iconAlignment: IconAlignment.end,
         onPressed: isLoading ? null : onPressed,

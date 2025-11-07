@@ -24,6 +24,10 @@ import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/nin_
 import 'package:savvy_bee_mobile/features/password/presentation/screens/password_reset_complete.dart';
 import 'package:savvy_bee_mobile/features/password/presentation/screens/password_reset_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/wallet_creation_complete_screen.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/budget_dashboard.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/edit_budget_screen.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/set_income_screen.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/set_budget_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/tools_screen.dart';
 import '../../features/spend/presentation/screens/fund/username_screen.dart';
 import '../../features/spend/presentation/screens/transactions/statement_sent_screen.dart';
@@ -310,12 +314,33 @@ final GoRouter appRouter = GoRouter(
     ),
 
     // Tools Routes
-    // GoRoute(
-    //   path: ToolsScreen.path,
-    //   name: ToolsScreen.path,
-    //   builder: (BuildContext context, GoRouterState state) {
-    //     return ToolsScreen();
-    //   },
-    // ),
+    GoRoute(
+      path: BudgetDashboard.path,
+      name: BudgetDashboard.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return BudgetDashboard();
+      },
+    ),
+    GoRoute(
+      path: EditBudgetScreen.path,
+      name: EditBudgetScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return EditBudgetScreen();
+      },
+    ),
+    GoRoute(
+      path: SetIncomeScreen.path,
+      name: SetIncomeScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return SetIncomeScreen();
+      },
+    ),
+    GoRoute(
+      path: SetBudgetScreen.path,
+      name: SetBudgetScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return SetBudgetScreen();
+      },
+    ),
   ],
 );

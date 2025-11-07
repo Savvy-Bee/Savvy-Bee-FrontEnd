@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/assets.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
+
+import 'budget/budget_dashboard.dart';
 
 class ToolsScreen extends ConsumerStatefulWidget {
   static const String path = '/tools';
@@ -51,6 +54,7 @@ class _ToolsScreenState extends ConsumerState<ToolsScreen> {
                 _buildToolItem(
                   'Budget',
                   'Create smart budgets, track spending, and get personalized insights.',
+                  onPressed: () => context.pushNamed(BudgetDashboard.path),
                 ),
                 const Gap(8),
                 _buildToolItem(
@@ -70,8 +74,13 @@ class _ToolsScreenState extends ConsumerState<ToolsScreen> {
     );
   }
 
-  Widget _buildToolItem(String title, String subtitle) {
+  Widget _buildToolItem(
+    String title,
+    String subtitle, {
+    VoidCallback? onPressed,
+  }) {
     return OutlinedCard(
+      onTap: onPressed,
       child: Row(
         children: [
           SvgPicture.asset(Assets.honeyJarSvg),

@@ -6,18 +6,27 @@ import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/number_formatter.dart';
 import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
 
-import '../../../../core/utils/constants.dart';
+import '../../utils/constants.dart';
 
-class AddBudgetCategoryBottomSheet extends ConsumerStatefulWidget {
-  const AddBudgetCategoryBottomSheet({super.key});
+class BudgetCategoryBottomSheet extends ConsumerStatefulWidget {
+  const BudgetCategoryBottomSheet({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
-      _AddBudgetCategoryBottomSheetState();
+      _BudgetCategoryBottomSheetState();
+
+  static void show(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      builder: (context) => const BudgetCategoryBottomSheet(),
+    );
+  }
 }
 
-class _AddBudgetCategoryBottomSheetState
-    extends ConsumerState<AddBudgetCategoryBottomSheet> {
+class _BudgetCategoryBottomSheetState
+    extends ConsumerState<BudgetCategoryBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -50,6 +59,16 @@ class _AddBudgetCategoryBottomSheetState
             borderColor: AppColors.grey.withValues(alpha: 0.3),
             child: Column(
               children: [
+                _buildCategoryListTile(),
+                const Gap(8),
+                _buildCategoryListTile(),
+                const Gap(8),
+                _buildCategoryListTile(),
+                const Gap(8),
+                _buildCategoryListTile(),
+                const Gap(8),
+                _buildCategoryListTile(),
+                const Gap(8),
                 _buildCategoryListTile(),
                 const Gap(8),
                 _buildCategoryListTile(),
