@@ -12,6 +12,7 @@ class CustomElevatedButton extends StatelessWidget {
   final bool rounded;
   final bool showArrow;
   final bool isLoading;
+  final Widget? icon;
 
   const CustomElevatedButton({
     super.key,
@@ -22,6 +23,7 @@ class CustomElevatedButton extends StatelessWidget {
     this.rounded = false,
     this.showArrow = false,
     this.isLoading = false,
+    this.icon,
   });
 
   @override
@@ -65,9 +67,10 @@ class CustomElevatedButton extends StatelessWidget {
                   color: forgroundColor,
                 ),
               )
-            : showArrow
-            ? Icon(Icons.arrow_forward, color: forgroundColor)
-            : null,
+            : icon ??
+                  (showArrow
+                      ? Icon(Icons.arrow_forward, color: forgroundColor)
+                      : null),
         label: Text(
           text,
           style: TextStyle(

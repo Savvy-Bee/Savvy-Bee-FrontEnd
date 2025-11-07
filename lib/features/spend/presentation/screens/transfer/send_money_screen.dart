@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
-import 'package:savvy_bee_mobile/features/spend/presentation/widgets/number_pad_widget.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/widgets/send_money_bottom_sheets.dart';
 
 import '../../../../../core/theme/app_colors.dart';
 
@@ -42,7 +42,10 @@ class _SendMoneyScreenState extends ConsumerState<SendMoneyScreen> {
             Expanded(child: ListView(children: [])),
             CustomElevatedButton(
               text: 'Send money',
-              onPressed: () => NumberPadWidget.show(context),
+              onPressed: () => EnterAmountBottomSheet.show(
+                context,
+                recipientName: widget.recipientName,
+              ),
             ),
           ],
         ),
