@@ -11,6 +11,16 @@ class AppIcons {
   static const String sendIcon = '$_basePath/send.svg';
   static const String infoIcon = '$_basePath/info.svg';
   static const String bankIcon = '$_basePath/bank.svg';
+  static const String arrowRightIcon = '$_basePath/arrow-right.svg';
+  static const String copyIcon = '$_basePath/copy.svg';
+  static const String goalIcon = '$_basePath/goal.svg';
+  static const String lifeBuoyIcon = '$_basePath/life-buoy.svg';
+  static const String lineChartIcon = '$_basePath/line-chart.svg';
+  static const String pieChartIcon = '$_basePath/pie-chart.svg';
+  static const String walletIcon = '$_basePath/wallet.svg';
+  static const String chartSquareIcon = '$_basePath/chart-square.svg';
+  static const String externalLinkIcon = '$_basePath/external-link.svg';
+  static const String progressIcon = '$_basePath/progress.svg';
 }
 
 class AppIcon extends StatelessWidget {

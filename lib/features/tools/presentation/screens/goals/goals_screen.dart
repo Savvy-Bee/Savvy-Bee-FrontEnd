@@ -74,7 +74,7 @@ class _GoalsScreenState extends ConsumerState<GoalsScreen>
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () => context.pushNamed(CreateGoalScreen.path),
         backgroundColor: AppColors.buttonPrimary,
         foregroundColor: AppColors.white,
         shape: RoundedRectangleBorder(
@@ -82,7 +82,6 @@ class _GoalsScreenState extends ConsumerState<GoalsScreen>
         ),
         child: Icon(Icons.add),
       ),
-    
     );
   }
 

@@ -5,6 +5,8 @@ import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/features/chat/presentation/screens/chat_screen.dart';
 import 'package:savvy_bee_mobile/features/dashboard/presentation/screens/dashboard_screen.dart';
+import 'package:savvy_bee_mobile/features/hive/presentation/screens/hive_screen.dart';
+import 'package:savvy_bee_mobile/features/premium/presentation/screens/premium_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/spend_dashboard_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/tools_screen.dart';
 
@@ -77,7 +79,7 @@ class MainWrapper extends ConsumerWidget {
     return BottomNavigationBar(
       currentIndex: selectedIndex,
       onTap: (index) {
-        ref.read(bottomNavIndexProvider.notifier).state = index;
+        if (index != 4) ref.read(bottomNavIndexProvider.notifier).state = index;
         switch (index) {
           case 0:
             context.goNamed(DashboardScreen.path);
@@ -89,10 +91,10 @@ class MainWrapper extends ConsumerWidget {
             context.goNamed(ToolsScreen.path);
             break;
           case 3:
-            context.goNamed('notifications');
+            context.goNamed(HiveScreen.path);
             break;
           case 4:
-            context.goNamed('messages');
+            context.pushNamed(PremiumScreen.path);
             break;
           default:
             break;

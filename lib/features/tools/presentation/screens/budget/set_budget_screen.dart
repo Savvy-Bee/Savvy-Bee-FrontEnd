@@ -48,7 +48,7 @@ class _SetBudgetScreenState extends ConsumerState<SetBudgetScreen> {
                   ),
                   const Gap(28),
                   InsightCard(
-                    insightType: InsightType.nextBestAction,
+                    insightType: InsightType.nahlInsight,
                     text:
                         'Based on your past spending, Nahl recommends allocating 30% to needs, 20% to wants, and saving 50%.',
                   ),

@@ -8,6 +8,7 @@ class Illustrations {
   static const String loanBee = '$_basePath/loan_bee_pose.png';
   static const String familyBee = '$_basePath/family_bee.png';
   static const String interestBee = '$_basePath/interest_bee_pose.png';
+  static const String scammerBee = '$_basePath/scammer-bee.png';
 
   static const String coinJar = '$_basePath/jar.png';
   static const String savvyCoin = '$_basePath/savvy_coin.png';

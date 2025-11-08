@@ -11,8 +11,15 @@ enum InsightType { nahlInsight, nextBestAction, alert }
 class InsightCard extends StatelessWidget {
   final String text;
   final InsightType insightType;
+  final bool isExpandable, showText;
 
-  const InsightCard({super.key, required this.text, required this.insightType});
+  const InsightCard({
+    super.key,
+    required this.text,
+    required this.insightType,
+    this.isExpandable = false,
+    this.showText = true,
+  });
 
   @override
   Widget build(BuildContext context) {

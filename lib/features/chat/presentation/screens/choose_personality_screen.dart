@@ -8,6 +8,7 @@ import 'package:savvy_bee_mobile/core/utils/breakpoints.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_snackbar.dart';
+import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
 
 import '../../domain/models/personality.dart';
 import '../providers/chat_providers.dart';
@@ -15,7 +16,9 @@ import '../providers/chat_providers.dart';
 class ChoosePersonalityScreen extends ConsumerStatefulWidget {
   static const String path = '/choose-personality';
 
-  const ChoosePersonalityScreen({super.key});
+  final bool isFromSignup;
+
+  const ChoosePersonalityScreen({super.key, required this.isFromSignup});
 
   @override
   ConsumerState<ChoosePersonalityScreen> createState() =>
@@ -114,59 +117,90 @@ class _ChoosePersonalityScreenState
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // Main content
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // Title and description
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                    child: Column(
-                      children: [
-                        Text(
-                          currentPersonality.name,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 40,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: Constants.exconFontFamily,
-                          ),
-                        ),
-                        // const Gap(16.0),
-                        SizedBox(
-                          width: Breakpoints.screenWidth(context) / 1.2,
-                          child: Text(
-                            currentPersonality.description,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(fontSize: 18, height: 1.4),
-                          ),
-                        ),
-                      ],
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                child: Column(
+                  children: [
+                    Text(
+                      'Choose your AI\npersona',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 40,
+                        height: 0.9,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: Constants.neulisNeueFontFamily,
+                      ),
                     ),
-                  ),
-                ],
+                    const Gap(16.0),
+                    Text(
+                      'Select which finance persona best applies to you',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(height: 0.9),
+                    ),
+                  ],
+                ),
               ),
 
               // Personality image
-              Image.asset(_characters[_selectedPersonality], scale: 1.3),
+              Image.asset(_characters[_selectedPersonality], scale: 2),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                child: Column(
+                  children: [
+                    Text(
+                      currentPersonality.name,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 36,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: Constants.neulisNeueFontFamily,
+                      ),
+                    ),
+                    const Gap(16.0),
+                    OutlinedCard(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 4,
+                      ),
+                      bgColor: AppColors.primaryFaint.withValues(alpha: 0.6),
+                      borderColor: AppColors.primary,
+                      child: Text(
+                        'Motivational coach',
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                    const Gap(16.0),
+                    SizedBox(
+                      width: Breakpoints.screenWidth(context) / 1.2,
+                      child: Text(
+                        currentPersonality.description,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(fontSize: 14, height: 1.1),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
 
               Column(
                 children: [
-                  // Button above personality selector
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                    child: CustomElevatedButton(
-                      text: _isUpdating
-                          ? 'Setting up...'
-                          : 'Talk to ${currentPersonality.name}',
-                      onPressed: _isUpdating ? null : _selectPersonality,
-                      rounded: true,
-                    ),
-                  ),
-                  const Gap(16.0),
-
                   // Personality selector
                   _buildPersonalitySelector(),
+
+                  // Button above personality selector
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: CustomElevatedButton(
+                      text: _isUpdating ? 'Setting up...' : 'Select',
+                      showArrow: true,
+                      buttonColor: CustomButtonColor.black,
+                      onPressed: _isUpdating ? null : _selectPersonality,
+                    ),
+                  ),
                 ],
               ),
             ],
@@ -193,70 +227,35 @@ class _ChoosePersonalityScreenState
   }
 
   Widget _buildPersonalitySelector() {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(16.0),
-          topRight: Radius.circular(16.0),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, -2),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          const Gap(10),
-          Container(
-            height: 4.0,
-            width: 60.0,
-            decoration: BoxDecoration(
-              color: AppColors.grey,
-              borderRadius: BorderRadius.circular(2.0),
-            ),
-          ),
-          SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 8.0,
-              vertical: 16.0,
-            ),
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: List.generate(
-                _personalities.length,
-                (index) => GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _selectedPersonality = index;
-                    });
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.only(right: 8.0),
-                    // padding: const EdgeInsets.all(8.0),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: AppColors.primaryFaded,
-                      border: _selectedPersonality == index
-                          ? Border.all(
-                              color: AppColors.primary.withValues(alpha: 0.5),
-                              width: 2,
-                            )
-                          : null,
-                    ),
-                    child: Image.asset(
-                      _personalities[index].image!,
-                      scale: 1.15,
-                    ),
-                  ),
-                ),
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: List.generate(
+          _personalities.length,
+          (index) => GestureDetector(
+            onTap: () {
+              setState(() {
+                _selectedPersonality = index;
+              });
+            },
+            child: Container(
+              margin: const EdgeInsets.only(right: 8.0),
+              // padding: const EdgeInsets.all(8.0),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColors.primaryFaded,
+                border: _selectedPersonality == index
+                    ? Border.all(
+                        color: AppColors.primary.withValues(alpha: 0.5),
+                        width: 2,
+                      )
+                    : null,
               ),
+              child: Image.asset(_personalities[index].image!, scale: 1.15),
             ),
           ),
-        ],
+        ),
       ),
     );
   }

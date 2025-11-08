@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
+import 'package:savvy_bee_mobile/core/utils/assets/app_icons.dart';
 
 enum CustomButtonColor { yellow, white, black }
 
@@ -56,9 +56,6 @@ class CustomElevatedButton extends StatelessWidget {
                 ? BorderRadius.circular(99)
                 : BorderRadius.circular(8),
             side: BorderSide.none,
-            // side: buttonColor == CustomButtonColor.white
-            //     ? BorderSide(color: AppColors.primary, width: 1.0)
-            //     : BorderSide.none,
           ),
           elevation: 0,
         ),
@@ -72,7 +69,7 @@ class CustomElevatedButton extends StatelessWidget {
               )
             : icon ??
                   (showArrow
-                      ? Icon(Icons.arrow_forward, color: forgroundColor)
+                      ? AppIcon(AppIcons.arrowRightIcon, color: forgroundColor)
                       : null),
         label: Text(
           text,
@@ -81,14 +78,6 @@ class CustomElevatedButton extends StatelessWidget {
             fontWeight: FontWeight.bold,
             color: forgroundColor,
           ),
-          // style: theme.textTheme.titleMedium?.copyWith(
-          //   fontWeight: FontWeight.w600,
-          //   color: switch (buttonColor) {
-          //     CustomButtonColor.yellow => AppColors.black,
-          //     CustomButtonColor.white => AppColors.primary,
-          //     CustomButtonColor.black => AppColors.white,
-          //   },
-          // ),
         ),
       ),
     );
@@ -98,39 +87,62 @@ class CustomElevatedButton extends StatelessWidget {
 class CustomOutlinedButton extends StatelessWidget {
   final String text;
   final VoidCallback? onPressed;
+  final bool isFullWidth;
+  final bool rounded;
+  final bool showArrow;
+  final bool isLoading;
+  final bool isSmall;
   final Widget? icon;
 
   const CustomOutlinedButton({
     super.key,
     required this.text,
     this.onPressed,
+    this.isFullWidth = true,
+    this.rounded = false,
+    this.showArrow = false,
+    this.isLoading = false,
+    this.isSmall = false,
     this.icon,
   });
 
   @override
   Widget build(BuildContext context) {
-    return OutlinedButton(
-      onPressed: onPressed,
-      style: OutlinedButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-          side: BorderSide(color: AppColors.grey),
-        ),
-        padding: const EdgeInsets.symmetric(vertical: 14),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            text,
-            style: const TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-            ),
+    return SizedBox(
+      width: isFullWidth ? double.infinity : null,
+      child: OutlinedButton.icon(
+        onPressed: isLoading ? null : onPressed,
+        style: OutlinedButton.styleFrom(
+          iconAlignment: IconAlignment.end,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+            side: BorderSide(color: AppColors.grey),
           ),
-          Gap(8),
-          if (icon != null) icon!,
-        ],
+          padding: EdgeInsets.symmetric(
+            vertical: isSmall ? 10 : 14,
+            horizontal: 44,
+          ),
+        ),
+        icon: isLoading
+            ? SizedBox.square(
+                dimension: 16,
+                child: CircularProgressIndicator(
+                  strokeWidth: 1.5,
+                  color: AppColors.black,
+                ),
+              )
+            : icon ??
+                  (showArrow
+                      ? AppIcon(AppIcons.arrowRightIcon, color: AppColors.black)
+                      : null),
+        label: Text(
+          text,
+          style: TextStyle(
+            fontSize: isSmall ? 12 : 14,
+            fontWeight: FontWeight.bold,
+            color: AppColors.black,
+          ),
+        ),
       ),
     );
   }

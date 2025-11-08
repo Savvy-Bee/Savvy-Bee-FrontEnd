@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:savvy_bee_mobile/features/auth/presentation/screens/signup/presentation/screens/select_priority_screen.dart';
 import 'package:savvy_bee_mobile/features/auth/presentation/screens/signup/presentation/screens/signup_connect_bank_screen.dart';
 import 'package:savvy_bee_mobile/features/auth/presentation/screens/signup/presentation/screens/signup_notifications_screen.dart';
 import 'package:savvy_bee_mobile/features/chat/presentation/screens/chat_screen.dart';
 import 'package:savvy_bee_mobile/features/chat/presentation/screens/choose_personality_screen.dart';
 import 'package:savvy_bee_mobile/features/dashboard/presentation/screens/dashboard_screen.dart';
+import 'package:savvy_bee_mobile/features/hive/presentation/screens/hive_screen.dart';
+import 'package:savvy_bee_mobile/features/premium/presentation/screens/premium_screen.dart';
+import 'package:savvy_bee_mobile/features/referral/presentation/screens/referral_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/bills/airtime_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/bills/bill_completion_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/bills/bill_confirmation_screen.dart';
@@ -56,7 +60,7 @@ final GlobalKey<NavigatorState> _shellNavigatorKey = GlobalKey<NavigatorState>(
 
 final GoRouter appRouter = GoRouter(
   navigatorKey: _rootNavigatorKey,
-  initialLocation: DashboardScreen.path,
+  initialLocation: SplashScreen.path,
   routes: [
     GoRoute(
       path: SplashScreen.path,
@@ -122,6 +126,13 @@ final GoRouter appRouter = GoRouter(
       },
     ),
     GoRoute(
+      path: SelectPriorityScreen.path,
+      name: SelectPriorityScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return const SelectPriorityScreen();
+      },
+    ),
+    GoRoute(
       path: HomeScreen.path,
       name: HomeScreen.path,
       builder: (BuildContext context, GoRouterState state) {
@@ -139,7 +150,9 @@ final GoRouter appRouter = GoRouter(
       path: ChoosePersonalityScreen.path,
       name: ChoosePersonalityScreen.path,
       builder: (BuildContext context, GoRouterState state) {
-        return const ChoosePersonalityScreen();
+        return ChoosePersonalityScreen(
+          isFromSignup: state.extra as bool? ?? false,
+        );
       },
     ),
     ShellRoute(
@@ -167,6 +180,13 @@ final GoRouter appRouter = GoRouter(
           name: ToolsScreen.path,
           builder: (BuildContext context, GoRouterState state) {
             return ToolsScreen();
+          },
+        ),
+        GoRoute(
+          path: HiveScreen.path,
+          name: HiveScreen.path,
+          builder: (BuildContext context, GoRouterState state) {
+            return HiveScreen();
           },
         ),
       ],
@@ -380,6 +400,31 @@ final GoRouter appRouter = GoRouter(
       name: DebtRepaymentDetailsScreen.path,
       builder: (BuildContext context, GoRouterState state) {
         return DebtRepaymentDetailsScreen();
+      },
+    ),
+
+    // Hive Routes
+    // GoRoute(
+    //   path: HiveScreen.path,
+    //   name: HiveScreen.path,
+    //   builder: (BuildContext context, GoRouterState state) {
+    //     return HiveScreen();
+    //   },
+    // ),
+
+    // Premium Routes
+    GoRoute(
+      path: PremiumScreen.path,
+      name: PremiumScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return PremiumScreen();
+      },
+    ),
+    GoRoute(
+      path: ReferralScreen.path,
+      name: ReferralScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return ReferralScreen();
       },
     ),
   ],

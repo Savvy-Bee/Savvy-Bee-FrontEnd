@@ -47,7 +47,7 @@ class _EditBudgetScreenState extends ConsumerState<EditBudgetScreen> {
           ),
           const Gap(24),
           InsightCard(
-            insightType: InsightType.nahlInsight,
+            insightType: InsightType.nextBestAction,
             text:
                 "You've spent 15% more on transport this month. Try adjusting your allocation.",
           ),
