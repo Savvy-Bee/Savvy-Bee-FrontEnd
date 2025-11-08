@@ -9,7 +9,7 @@ import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/debt/debt_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/goals/goals_screen.dart';
 
-import 'budget/budget_dashboard.dart';
+import 'budget/budget_screen.dart';
 
 class ToolsScreen extends ConsumerStatefulWidget {
   static const String path = '/tools';

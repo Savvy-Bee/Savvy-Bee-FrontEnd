@@ -24,7 +24,7 @@ import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/nin_
 import 'package:savvy_bee_mobile/features/password/presentation/screens/password_reset_complete.dart';
 import 'package:savvy_bee_mobile/features/password/presentation/screens/password_reset_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/wallet_creation_complete_screen.dart';
-import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/budget_dashboard.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/budget_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/edit_budget_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/set_income_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/set_budget_screen.dart';

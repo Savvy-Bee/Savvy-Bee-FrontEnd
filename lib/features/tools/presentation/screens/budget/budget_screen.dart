@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/app_icons.dart';
+import 'package:savvy_bee_mobile/core/widgets/charts/custom_circular_progress_indicator.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/edit_budget_screen.dart';
 
@@ -16,8 +17,7 @@ class BudgetScreen extends ConsumerStatefulWidget {
   const BudgetScreen({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      _BudgetScreenState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _BudgetScreenState();
 }
 
 class _BudgetScreenState extends ConsumerState<BudgetScreen> {
@@ -28,8 +28,14 @@ class _BudgetScreenState extends ConsumerState<BudgetScreen> {
       body: ListView(
         padding: EdgeInsets.all(16),
         children: [
-          CircularProgressIndicator(),
-          const Gap(37),
+          const Gap(20),
+          CustomCircularProgressIndicator(
+            progress: 0.32, // 32%
+            currentAmount: "\$192,000",
+            totalBudget: "\$600,000 budget",
+            size: 280, // You can adjust the size of the widget
+          ),
+          const Gap(47),
           CustomElevatedButton(
             text: 'Edit budget',
             icon: AppIcon(AppIcons.editIcon),
