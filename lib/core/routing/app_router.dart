@@ -28,6 +28,7 @@ import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/budg
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/edit_budget_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/set_income_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/set_budget_screen.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/goals/create_goal_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/tools_screen.dart';
 import '../../features/spend/presentation/screens/fund/username_screen.dart';
 import '../../features/spend/presentation/screens/transactions/statement_sent_screen.dart';
@@ -39,6 +40,7 @@ import '../../features/auth/presentation/screens/signup/presentation/screens/sig
 import '../../features/auth/presentation/screens/signup/presentation/screens/signup_screen.dart';
 import '../../features/home/presentation/screens/home_screen.dart';
 import '../../features/splash/presentation/screens/splash_screen.dart';
+import '../../features/tools/presentation/screens/goals/goals_dashboard.dart';
 import '../widgets/main_wrapper.dart';
 
 // Keys for navigating to specific tabs within MainWrapper
@@ -340,6 +342,20 @@ final GoRouter appRouter = GoRouter(
       name: SetBudgetScreen.path,
       builder: (BuildContext context, GoRouterState state) {
         return SetBudgetScreen();
+      },
+    ),
+    GoRoute(
+      path: GoalsDashboard.path,
+      name: GoalsDashboard.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return GoalsDashboard();
+      },
+    ),
+    GoRoute(
+      path: CreateGoalScreen.path,
+      name: CreateGoalScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return CreateGoalScreen();
       },
     ),
   ],

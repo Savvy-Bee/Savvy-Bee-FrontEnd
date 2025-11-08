@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class AppIcons {
-  static const String _basePath = 'assets/icons/';
+  static const String _basePath = 'assets/icons';
   static const String sparklesIcon = '$_basePath/sparkles.svg';
   static const String zapIcon = '$_basePath/zap.svg';
   static const String shareIcon = '$_basePath/share.svg';

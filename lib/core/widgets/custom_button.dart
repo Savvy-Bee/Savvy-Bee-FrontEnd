@@ -8,10 +8,11 @@ class CustomElevatedButton extends StatelessWidget {
   final String text;
   final VoidCallback? onPressed;
   final CustomButtonColor buttonColor;
-  final bool isSmall;
+  final bool isFullWidth;
   final bool rounded;
   final bool showArrow;
   final bool isLoading;
+  final bool isSmall;
   final Widget? icon;
 
   const CustomElevatedButton({
@@ -19,17 +20,16 @@ class CustomElevatedButton extends StatelessWidget {
     required this.text,
     this.onPressed,
     this.buttonColor = CustomButtonColor.yellow,
-    this.isSmall = true,
+    this.isFullWidth = true,
     this.rounded = false,
     this.showArrow = false,
     this.isLoading = false,
+    this.isSmall = false,
     this.icon,
   });
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     var forgroundColor = switch (buttonColor) {
       CustomButtonColor.yellow => AppColors.black,
       CustomButtonColor.white => AppColors.black,
@@ -37,7 +37,7 @@ class CustomElevatedButton extends StatelessWidget {
     };
 
     return SizedBox(
-      width: isSmall ? double.infinity : null,
+      width: isFullWidth ? double.infinity : null,
       child: ElevatedButton.icon(
         iconAlignment: IconAlignment.end,
         onPressed: isLoading ? null : onPressed,
@@ -47,7 +47,10 @@ class CustomElevatedButton extends StatelessWidget {
             CustomButtonColor.white => AppColors.white,
             CustomButtonColor.black => AppColors.black,
           },
-          padding: const EdgeInsets.symmetric(vertical: 14),
+          padding: EdgeInsets.symmetric(
+            vertical: isSmall ? 10 : 14,
+            horizontal: 44,
+          ),
           shape: RoundedRectangleBorder(
             borderRadius: rounded
                 ? BorderRadius.circular(99)
@@ -74,7 +77,7 @@ class CustomElevatedButton extends StatelessWidget {
         label: Text(
           text,
           style: TextStyle(
-            fontSize: 14,
+            fontSize: isSmall ? 12 : 14,
             fontWeight: FontWeight.bold,
             color: forgroundColor,
           ),
