@@ -14,6 +14,7 @@ class OutlinedCard extends StatelessWidget {
   final Color? borderColor;
   final double? width;
   final double? height;
+  final double? borderWidth;
 
   const OutlinedCard({
     super.key,
@@ -26,6 +27,7 @@ class OutlinedCard extends StatelessWidget {
     this.borderColor,
     this.width,
     this.height,
+    this.borderWidth,
   });
 
   @override
@@ -42,7 +44,7 @@ class OutlinedCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(borderRadius),
           border: Border.all(
             color: borderColor ?? AppColors.black.withValues(alpha: 0.5),
-            width: 1,
+            width: borderWidth ?? 1,
           ),
           boxShadow: hasShadow
               ? [

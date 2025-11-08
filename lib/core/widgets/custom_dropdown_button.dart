@@ -8,6 +8,7 @@ class CustomDropdownButton extends StatelessWidget {
   final String? label, hint;
   final List<String> items;
   final void Function(String?)? onChanged;
+  final Widget? leadingIcon;
 
   const CustomDropdownButton({
     super.key,
@@ -15,6 +16,7 @@ class CustomDropdownButton extends StatelessWidget {
     this.hint,
     required this.items,
     this.onChanged,
+    this.leadingIcon,
   });
 
   @override
@@ -35,6 +37,7 @@ class CustomDropdownButton extends StatelessWidget {
           ),
         if (label != null) const Gap(4),
         DropdownMenu<String>(
+          leadingIcon: leadingIcon,
           trailingIcon: Icon(Icons.keyboard_arrow_down),
           selectedTrailingIcon: Icon(Icons.keyboard_arrow_up),
           hintText: hint,

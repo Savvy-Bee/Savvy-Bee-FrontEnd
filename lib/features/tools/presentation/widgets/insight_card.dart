@@ -1,32 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 
 import '../../../../core/utils/assets/app_icons.dart';
 import '../../../../core/utils/constants.dart';
 import '../../../../core/widgets/outlined_card.dart';
 
-class InsightCard extends StatelessWidget {
-  final String iconPath;
-  final String text;
-  final Color color;
+enum InsightType { nahlInsight, nextBestAction, alert }
 
-  const InsightCard({
-    super.key,
-    required this.iconPath,
-    required this.text,
-    required this.color,
-  });
+class InsightCard extends StatelessWidget {
+  final String text;
+  final InsightType insightType;
+
+  const InsightCard({super.key, required this.text, required this.insightType});
 
   @override
   Widget build(BuildContext context) {
     return OutlinedCard(
-      bgColor: color.withValues(alpha: 0.1),
-      borderColor: color,
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+      bgColor: switch (insightType) {
+        InsightType.alert => AppColors.error,
+        InsightType.nahlInsight => AppColors.primary,
+        InsightType.nextBestAction => AppColors.bgBlue,
+      }.withValues(alpha: 0.1),
+      borderColor: switch (insightType) {
+        InsightType.alert => AppColors.error,
+        InsightType.nahlInsight => AppColors.primary,
+        InsightType.nextBestAction => AppColors.bgBlue,
+      },
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AppIcon(iconPath, color: color),
+          AppIcon(
+            switch (insightType) {
+              InsightType.alert => AppIcons.infoIcon,
+              InsightType.nahlInsight => AppIcons.sparklesIcon,
+              InsightType.nextBestAction => AppIcons.zapIcon,
+            },
+            color: switch (insightType) {
+              InsightType.alert => AppColors.error,
+              InsightType.nahlInsight => AppColors.primary,
+              InsightType.nextBestAction => AppColors.bgBlue,
+            },
+          ),
           const Gap(10),
           Expanded(
             child: Text(

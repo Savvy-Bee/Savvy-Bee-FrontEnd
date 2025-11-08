@@ -36,6 +36,12 @@ class AppTheme {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
     ),
+    tabBarTheme: TabBarThemeData(
+      // labelColor: AppColors.primary,
+      unselectedLabelColor: AppColors.greyDark,
+      indicatorColor: AppColors.primary,
+      indicatorSize: TabBarIndicatorSize.tab,
+    ),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
         textStyle: TextStyle(fontWeight: FontWeight.w600),

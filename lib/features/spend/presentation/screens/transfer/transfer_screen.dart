@@ -5,7 +5,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
+import 'package:savvy_bee_mobile/core/utils/assets/app_icons.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/assets.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_dropdown_button.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/transfer/send_money_screen.dart';
 
 import '../../../../../core/utils/constants.dart';
@@ -97,25 +99,11 @@ class _TransferScreenState extends ConsumerState<TransferScreen> {
             ],
           ),
           const Gap(16),
-          CustomTextFormField(
+          CustomDropdownButton(
+            items: [],
+            hint: 'Bank name',
             label: 'Bank',
-            isRounded: true,
-            readOnly: true,
-            controller: _accNumberController,
-            prefix: Padding(
-              padding: const EdgeInsets.only(left: 16),
-              child: Icon(
-                Icons.account_balance_outlined,
-                color: AppColors.primary,
-              ),
-            ),
-            suffix: Padding(
-              padding: const EdgeInsets.only(right: 16),
-              child: Icon(Icons.keyboard_arrow_down),
-            ),
-            onTap: () {
-              // Select bank
-            },
+            leadingIcon: AppIcon(AppIcons.bankIcon),
           ),
         ],
       ),
@@ -242,5 +230,4 @@ class _AccountConfirmationBottomSheet extends StatelessWidget {
       ),
     );
   }
-
 }

@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
-import 'package:savvy_bee_mobile/core/utils/assets/app_icons.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';
@@ -49,10 +47,9 @@ class _SetIncomeScreenState extends ConsumerState<SetIncomeScreen> {
                   ),
                   const Gap(28),
                   InsightCard(
-                    iconPath: AppIcons.zapIcon,
+                    insightType: InsightType.nextBestAction,
                     text:
                         'Based on your accounts, Nahl estimated your take-home pay at ₦800,000.',
-                    color: AppColors.bgBlue,
                   ),
                   const Gap(28),
                   Text(

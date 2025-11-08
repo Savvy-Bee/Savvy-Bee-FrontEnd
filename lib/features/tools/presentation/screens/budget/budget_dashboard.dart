@@ -10,17 +10,17 @@ import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/edit
 import '../../../../../core/widgets/category_progress_widget.dart';
 import '../../widgets/insight_card.dart';
 
-class BudgetDashboard extends ConsumerStatefulWidget {
-  static String path = '/budget-dashboard';
+class BudgetScreen extends ConsumerStatefulWidget {
+  static String path = '/budget-screen';
 
-  const BudgetDashboard({super.key});
+  const BudgetScreen({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
-      _BudgetDashboardState();
+      _BudgetScreenState();
 }
 
-class _BudgetDashboardState extends ConsumerState<BudgetDashboard> {
+class _BudgetScreenState extends ConsumerState<BudgetScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,16 +37,14 @@ class _BudgetDashboardState extends ConsumerState<BudgetDashboard> {
           ),
           const Gap(37),
           InsightCard(
-            iconPath: AppIcons.sparklesIcon,
             text: 'You saved 12% more than last month — amazing work!',
-            color: AppColors.primary,
+            insightType: InsightType.nahlInsight,
           ),
           const Gap(8),
           InsightCard(
-            iconPath: AppIcons.zapIcon,
+            insightType: InsightType.nextBestAction,
             text:
                 'Your dining expenses are trending upward. Try setting a ₦10,000 cap next month.',
-            color: AppColors.bgBlue,
           ),
           const Gap(16),
           CategoryProgressWidget(

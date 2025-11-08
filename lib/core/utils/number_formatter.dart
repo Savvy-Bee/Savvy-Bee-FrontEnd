@@ -1,6 +1,8 @@
 import 'package:intl/intl.dart';
 
 class NumberFormatter {
+  static const String defaultLocale = 'en_US';
+  static const String defaultSymbol = '\$';
   /// Formats a double as currency (e.g., $1,234.56).
   /// Uses the default locale if not specified.
   static String formatCurrency(
@@ -11,8 +13,8 @@ class NumberFormatter {
     int? decimalDigits = 2,
   }) {
     final format = NumberFormat.currency(
-      locale: locale,
-      symbol: symbol,
+      locale: locale ?? defaultLocale,
+      symbol: symbol ?? defaultSymbol,
       decimalDigits: decimalDigits,
     );
     return format.format(amount);
@@ -26,17 +28,16 @@ class NumberFormatter {
     int? decimalDigits,
   }) {
     final format = NumberFormat.currency(
-      locale: locale,
-      symbol: '',
+      locale: locale ?? defaultLocale,
+      symbol: symbol ?? defaultSymbol,
       decimalDigits: decimalDigits ?? 2,
     );
     final formatted = format.format(amount);
     if (amount > 0) {
-      return '+$symbol$formatted';
+      return '+${symbol ?? defaultSymbol}$formatted';
     }
-    return '-$symbol${formatted.substring(1)}';
+    return '-${symbol ?? defaultSymbol}${formatted.substring(1)}';
 
-    /// Remove the negative sign and add it before symbol
   }
 
   /// Formats a double as a percentage (e.g., 12.34%).
@@ -89,6 +90,19 @@ class NumberFormatter {
   static String compact(num number) {
     final format = NumberFormat.compact();
 
+    return format.format(number);
+  }
+
+  /// Format compact currency (e.g. "1.2M" instead of "1,200,000")
+  static String compactCurrency(
+    num number, {
+    String? locale,
+    String? symbol = '\$',
+  }) {
+    final format = NumberFormat.compactCurrency(
+      locale: locale ?? defaultLocale,
+      symbol: symbol ?? defaultSymbol,
+    );
     return format.format(number);
   }
 }

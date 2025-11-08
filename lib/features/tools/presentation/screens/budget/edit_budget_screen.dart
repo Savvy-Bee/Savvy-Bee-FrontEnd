@@ -47,10 +47,9 @@ class _EditBudgetScreenState extends ConsumerState<EditBudgetScreen> {
           ),
           const Gap(24),
           InsightCard(
-            iconPath: AppIcons.sparklesIcon,
+            insightType: InsightType.nahlInsight,
             text:
                 "You've spent 15% more on transport this month. Try adjusting your allocation.",
-            color: AppColors.bgBlue,
           ),
           const Gap(28),
           _buildBudgetBasicsCard(),
@@ -65,7 +64,10 @@ class _EditBudgetScreenState extends ConsumerState<EditBudgetScreen> {
           const Gap(28),
           CustomOutlinedButton(text: 'Add category', onPressed: () {}),
           const Gap(8),
-          CustomElevatedButton(text: 'Save', onPressed: () => context.pushNamed(SetIncomeScreen.path)),
+          CustomElevatedButton(
+            text: 'Save',
+            onPressed: () => context.pushNamed(SetIncomeScreen.path),
+          ),
         ],
       ),
     );

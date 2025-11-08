@@ -3,12 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:savvy_bee_mobile/core/utils/assets/app_icons.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/widgets/insight_card.dart';
 
-import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/widgets/custom_dropdown_button.dart';
 
 enum GoalType { save, increase }
@@ -58,7 +56,7 @@ class _CreateGoalScreenState extends ConsumerState<CreateGoalScreen> {
                   const Gap(8),
                   if (_goalType != null) ...[
                     InsightCard(
-                      iconPath: AppIcons.zapIcon,
+                      insightType: InsightType.nextBestAction,
                       text: switch (_goalType) {
                         GoalType.save =>
                           'Save ₦500,000 by March 2026 to build your emergency fund.',
@@ -66,7 +64,6 @@ class _CreateGoalScreenState extends ConsumerState<CreateGoalScreen> {
                           'Increase earnings by 10% through by the end of the first quarter',
                         null => '',
                       },
-                      color: AppColors.bgBlue,
                     ),
                     const Gap(16),
                     CustomTextFormField(

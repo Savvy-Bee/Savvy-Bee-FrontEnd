@@ -28,6 +28,7 @@ import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/budg
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/edit_budget_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/set_income_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/set_budget_screen.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/debt/debt_repayment_details_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/goals/create_goal_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/tools_screen.dart';
 import '../../features/spend/presentation/screens/fund/username_screen.dart';
@@ -40,7 +41,9 @@ import '../../features/auth/presentation/screens/signup/presentation/screens/sig
 import '../../features/auth/presentation/screens/signup/presentation/screens/signup_screen.dart';
 import '../../features/home/presentation/screens/home_screen.dart';
 import '../../features/splash/presentation/screens/splash_screen.dart';
-import '../../features/tools/presentation/screens/goals/goals_dashboard.dart';
+import '../../features/tools/presentation/screens/debt/add_debt_screen.dart';
+import '../../features/tools/presentation/screens/debt/debt_screen.dart';
+import '../../features/tools/presentation/screens/goals/goals_screen.dart';
 import '../widgets/main_wrapper.dart';
 
 // Keys for navigating to specific tabs within MainWrapper
@@ -317,10 +320,10 @@ final GoRouter appRouter = GoRouter(
 
     // Tools Routes
     GoRoute(
-      path: BudgetDashboard.path,
-      name: BudgetDashboard.path,
+      path: BudgetScreen.path,
+      name: BudgetScreen.path,
       builder: (BuildContext context, GoRouterState state) {
-        return BudgetDashboard();
+        return BudgetScreen();
       },
     ),
     GoRoute(
@@ -345,10 +348,10 @@ final GoRouter appRouter = GoRouter(
       },
     ),
     GoRoute(
-      path: GoalsDashboard.path,
-      name: GoalsDashboard.path,
+      path: GoalsScreen.path,
+      name: GoalsScreen.path,
       builder: (BuildContext context, GoRouterState state) {
-        return GoalsDashboard();
+        return GoalsScreen();
       },
     ),
     GoRoute(
@@ -356,6 +359,27 @@ final GoRouter appRouter = GoRouter(
       name: CreateGoalScreen.path,
       builder: (BuildContext context, GoRouterState state) {
         return CreateGoalScreen();
+      },
+    ),
+    GoRoute(
+      path: DebtScreen.path,
+      name: DebtScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return DebtScreen();
+      },
+    ),
+    GoRoute(
+      path: AddDebtScreen.path,
+      name: AddDebtScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return AddDebtScreen();
+      },
+    ),
+    GoRoute(
+      path: DebtRepaymentDetailsScreen.path,
+      name: DebtRepaymentDetailsScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return DebtRepaymentDetailsScreen();
       },
     ),
   ],

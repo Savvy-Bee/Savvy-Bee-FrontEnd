@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
-import 'package:savvy_bee_mobile/core/utils/assets/assets.dart';
-import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/goals/create_goal_screen.dart';
 
-class GoalsDashboard extends ConsumerStatefulWidget {
-  static String path = '/goals-dashboard';
+import '../../widgets/goal_stats_card.dart';
 
-  const GoalsDashboard({super.key});
+class GoalsScreen extends ConsumerStatefulWidget {
+  static String path = '/goals';
+
+  const GoalsScreen({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _GoalsDashboardState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _GoalsScreenState();
 }
 
-class _GoalsDashboardState extends ConsumerState<GoalsDashboard>
+class _GoalsScreenState extends ConsumerState<GoalsScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
@@ -57,7 +56,12 @@ class _GoalsDashboardState extends ConsumerState<GoalsDashboard>
                   ListView.separated(
                     padding: const EdgeInsets.only(top: 24),
                     itemBuilder: (context, index) {
-                      return _buildGoalCard();
+                      return GoalStatsCard(
+                        title: 'Save for emergency fund',
+                        amountSaved: 800000,
+                        totalTarget: 1200000,
+                        daysLeft: 90,
+                      );
                     },
                     separatorBuilder: (context, index) => const Gap(16),
                     itemCount: 1,
@@ -78,85 +82,7 @@ class _GoalsDashboardState extends ConsumerState<GoalsDashboard>
         ),
         child: Icon(Icons.add),
       ),
-    );
-  }
-
-  Widget _buildGoalCard() {
-    Widget buildStatItem(String title, String value) {
-      return Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-              fontFamily: Constants.neulisNeueFontFamily,
-            ),
-          ),
-          Text(
-            value,
-            style: TextStyle(fontSize: 10, color: AppColors.textSecondary),
-          ),
-        ],
-      );
-    }
-
-    return OutlinedCard(
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SvgPicture.asset(Assets.honeyJarSvg),
-          const Gap(24),
-          Expanded(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Save for emergency fund',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: Constants.neulisNeueFontFamily,
-                  ),
-                ),
-                const Gap(8),
-                Row(
-                  spacing: 24,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    buildStatItem('₦800k', 'Saved'),
-                    buildStatItem('₦1.2M', 'Total Target'),
-                    buildStatItem('90', 'Days Left'),
-                  ],
-                ),
-                const Gap(8),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Expanded(
-                      child: LinearProgressIndicator(
-                        value: 0.67,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    const Gap(4),
-                    Text(
-                      '67%',
-                      style: TextStyle(
-                        fontSize: 8,
-                        fontFamily: Constants.neulisNeueFontFamily,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+    
     );
   }
 

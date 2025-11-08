@@ -6,7 +6,6 @@ import 'package:savvy_bee_mobile/core/widgets/bottom_sheets/edit_budget_bottom_s
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 
 import '../../../../../core/theme/app_colors.dart';
-import '../../../../../core/utils/assets/app_icons.dart';
 import '../../../../../core/utils/constants.dart';
 import '../../../../../core/utils/number_formatter.dart';
 import '../../widgets/insight_card.dart';
@@ -49,10 +48,9 @@ class _SetBudgetScreenState extends ConsumerState<SetBudgetScreen> {
                   ),
                   const Gap(28),
                   InsightCard(
-                    iconPath: AppIcons.zapIcon,
+                    insightType: InsightType.nextBestAction,
                     text:
                         'Based on your past spending, Nahl recommends allocating 30% to needs, 20% to wants, and saving 50%.',
-                    color: AppColors.bgBlue,
                   ),
                   const Gap(28),
                   Row(

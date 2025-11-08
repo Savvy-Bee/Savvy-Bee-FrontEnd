@@ -6,7 +6,8 @@ import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/assets.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
-import 'package:savvy_bee_mobile/features/tools/presentation/screens/goals/goals_dashboard.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/debt/debt_screen.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/goals/goals_screen.dart';
 
 import 'budget/budget_dashboard.dart';
 
@@ -56,19 +57,19 @@ class _ToolsScreenState extends ConsumerState<ToolsScreen> {
                 _buildToolItem(
                   'Budget',
                   'Create smart budgets, track spending, and get personalized insights.',
-                  onPressed: () => context.pushNamed(BudgetDashboard.path),
+                  onPressed: () => context.pushNamed(BudgetScreen.path),
                 ),
                 const Gap(8),
                 _buildToolItem(
                   'Goals',
                   'Set goals, get AI-powered suggestions, and track your progress.',
-                  onPressed: () => context.pushNamed(GoalsDashboard.path),
+                  onPressed: () => context.pushNamed(GoalsScreen.path),
                 ),
                 const Gap(8),
                 _buildToolItem(
                   'Debt tracker',
                   'Stay on top of your debts and plan your payoff with ease.',
-                  onPressed: () => context.pushNamed(GoalsDashboard.path),
+                  onPressed: () => context.pushNamed(DebtScreen.path),
                 ),
               ],
             ),

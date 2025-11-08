@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
-import 'package:savvy_bee_mobile/core/utils/assets/app_icons.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/utils/number_formatter.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
@@ -76,10 +75,9 @@ class _EditBudgetBottomSheetState extends ConsumerState<EditBudgetBottomSheet> {
               ),
               const Gap(24),
               InsightCard(
-                iconPath: AppIcons.zapIcon,
+                insightType: InsightType.nextBestAction,
                 text:
                     "You've spent 15% more on transport this month. Try adjusting your allocation.",
-                color: AppColors.bgBlue,
               ),
               const Gap(24),
               CustomTextFormField(
