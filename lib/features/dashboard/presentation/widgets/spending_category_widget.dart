@@ -63,18 +63,21 @@ class SpendingCategoryWidget extends ConsumerWidget {
                       onPressed: () {},
                     ),
                   ),
+                  const Gap(8),
                   InsightCard(
                     text:
                         "I'm having trouble analyzing your spending patterns right now",
                     insightType: InsightType.nahlInsight,
                     isExpandable: true,
-                  ),const Gap(8),
+                  ),
+                  const Gap(8),
                   InsightCard(
                     text:
                         "I'm having trouble analyzing your spending patterns right now",
                     insightType: InsightType.nextBestAction,
                     isExpandable: true,
-                  ),const Gap(8),
+                  ),
+                  const Gap(8),
                   InsightCard(
                     text:
                         "I'm having trouble analyzing your spending patterns right now",
