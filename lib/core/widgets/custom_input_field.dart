@@ -5,6 +5,8 @@ import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_typography.dart';
 
+enum LabelType { standalone, embedded }
+
 class CustomTextFormField extends StatelessWidget {
   final String? label, endLabel;
   final String? hint;
@@ -28,11 +30,14 @@ class CustomTextFormField extends StatelessWidget {
   final FocusNode? focusNode;
   final VoidCallback? onTap;
   final bool readOnly;
+  final bool autofocus;
   final bool showCursor;
   final Color? fillColor;
   final EdgeInsets? contentPadding;
   final TextInputAction textInputAction;
   final String? subText;
+  final double? borderRadius;
+  final LabelType labelType;
 
   const CustomTextFormField({
     super.key,
@@ -59,11 +64,14 @@ class CustomTextFormField extends StatelessWidget {
     this.focusNode,
     this.onTap,
     this.readOnly = false,
+    this.autofocus = false,
     this.showCursor = true,
     this.fillColor,
     this.contentPadding,
     this.textInputAction = TextInputAction.next,
     this.subText,
+    this.borderRadius,
+    this.labelType = LabelType.standalone,
   });
 
   @override
@@ -75,7 +83,7 @@ class CustomTextFormField extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            if (label != null)
+            if (label != null && labelType == LabelType.standalone)
               Text(
                 label!,
                 style: TextStyle(
@@ -83,7 +91,7 @@ class CustomTextFormField extends StatelessWidget {
                   fontFamily: Constants.neulisNeueFontFamily,
                 ),
               ),
-            if (endLabel != null)
+            if (endLabel != null && labelType == LabelType.standalone)
               InkWell(
                 onTap: onEndLabelPressed,
                 child: Text(
@@ -96,7 +104,7 @@ class CustomTextFormField extends StatelessWidget {
               ),
           ],
         ),
-        if (label != null) const Gap(4),
+        if (label != null && labelType == LabelType.standalone) const Gap(4),
         TextFormField(
           controller: controller,
           obscureText: obscureText,
@@ -109,15 +117,18 @@ class CustomTextFormField extends StatelessWidget {
           minLines: minLines,
           textCapitalization: textCapitalization,
           focusNode: focusNode,
+          autofocus: autofocus,
           onTap: onTap,
           readOnly: readOnly,
           showCursor: showCursor,
-          // style: AppTypography.bodyMedium,
           onTapOutside: (event) => FocusScope.of(context).unfocus(),
           onFieldSubmitted: onFieldSubmitted,
           textInputAction: textInputAction,
           style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14.0),
           decoration: InputDecoration(
+            label: label != null && labelType == LabelType.embedded
+                ? Text(label!)
+                : null,
             filled: true,
             fillColor: AppColors.background,
             hintText: hint,
@@ -133,31 +144,41 @@ class CustomTextFormField extends StatelessWidget {
                 contentPadding ??
                 const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(isRounded ? 24 : 8),
+              borderRadius: BorderRadius.circular(
+                isRounded ? 24 : borderRadius ?? 8,
+              ),
               borderSide: BorderSide(color: AppColors.greyDark),
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(isRounded ? 24 : 8),
+              borderRadius: BorderRadius.circular(
+                isRounded ? 24 : borderRadius ?? 8,
+              ),
               borderSide: BorderSide(
                 color: showOutline ? AppColors.borderDark : Colors.transparent,
               ),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(isRounded ? 24 : 8),
+              borderRadius: BorderRadius.circular(
+                isRounded ? 24 : borderRadius ?? 8,
+              ),
               borderSide: BorderSide(
                 color: showOutline ? AppColors.primary : Colors.transparent,
                 width: 2,
               ),
             ),
             errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(isRounded ? 24 : 8),
+              borderRadius: BorderRadius.circular(
+                isRounded ? 24 : borderRadius ?? 8,
+              ),
               borderSide: BorderSide(
                 color: showOutline ? AppColors.error : Colors.transparent,
                 width: 2,
               ),
             ),
             focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(isRounded ? 24 : 8),
+              borderRadius: BorderRadius.circular(
+                isRounded ? 24 : borderRadius ?? 8,
+              ),
               borderSide: BorderSide(
                 color: showOutline ? AppColors.error : Colors.transparent,
                 width: 2,

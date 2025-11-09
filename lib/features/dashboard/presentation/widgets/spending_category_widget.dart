@@ -1,30 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
-import 'package:savvy_bee_mobile/core/widgets/charts/multi_segment_circular_progress_indicator.dart';
-import 'package:savvy_bee_mobile/features/tools/presentation/widgets/insight_card.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/constants.dart';
 import '../../../../core/utils/number_formatter.dart';
+import '../../../../core/widgets/charts/custom_donut_chart.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/outlined_card.dart';
+import '../../../tools/presentation/widgets/insight_card.dart';
 import '../screens/dashboard_screen.dart';
 
 class SpendingCategoryWidget extends ConsumerWidget {
-  SpendingCategoryWidget({super.key});
-
-  final List<SegmentData> budgetSegments = [
-    SegmentData(color: Colors.red.shade700, value: 0.25), // 25%
-    SegmentData(color: Colors.purple.shade200, value: 0.35), // 35%
-    SegmentData(color: Colors.green.shade400, value: 0.15), // 15%
-    SegmentData(color: Colors.amber.shade600, value: 0.25), // 25%
-  ];
+  const SpendingCategoryWidget({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final categories = ref.watch(expenseCategoriesProvider);
-    // final total = categories.fold<double>(0, (sum, cat) => sum + cat.amount);
+    final total = categories.fold<double>(0, (sum, cat) => sum + cat.amount);
 
     return SizedBox(
       width: MediaQuery.of(context).size.width / 1.25,
@@ -52,43 +45,41 @@ class SpendingCategoryWidget extends ConsumerWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const Gap(10),
-                  MultiSegmentCircularProgressIndicator(
-                    segments: budgetSegments,
-                    centerAmount: "₦192,000",
-                    centerLabel: "Spent this month",
-                  ),
-                  // CustomDonutChart(categories: categories, total: total),
-                  const Gap(20),
-                  InsightCard(
-                    text:
-                        "I'm having trouble analyzing your spending patterns right now",
-                    insightType: InsightType.nahlInsight,
-                    isExpandable: true,
-                  ),
-                  const Gap(8),
-                  InsightCard(
-                    text:
-                        "I'm having trouble analyzing your spending patterns right now",
-                    insightType: InsightType.nextBestAction,
-                    isExpandable: true,
-                  ),
-                  const Gap(8),
-                  InsightCard(
-                    text:
-                        "I'm having trouble analyzing your spending patterns right now",
-                    insightType: InsightType.alert,
-                    isExpandable: true,
-                  ),
+                  CustomDonutChart(categories: categories, total: total),
                   const Gap(20),
                   ...categories
                       .take(2)
                       .map((cat) => _buildExpenseCategoryTile(cat)),
                   const Gap(12),
-                  CustomOutlinedButton(
-                    text: 'See all',
-                    // isSmall: true,
-                    showArrow: true,
-                    onPressed: () {},
+                  SizedBox(
+                    width: double.infinity,
+                    child: CustomOutlinedButton(
+                      text: 'See all',
+                      icon: Icon(
+                        Icons.arrow_forward,
+                        size: 16,
+                        color: Colors.black,
+                      ),
+                      onPressed: () {},
+                    ),
+                  ),
+                  InsightCard(
+                    text:
+                        "I'm having trouble analyzing your spending patterns right now",
+                    insightType: InsightType.nahlInsight,
+                    isExpandable: true,
+                  ),const Gap(8),
+                  InsightCard(
+                    text:
+                        "I'm having trouble analyzing your spending patterns right now",
+                    insightType: InsightType.nextBestAction,
+                    isExpandable: true,
+                  ),const Gap(8),
+                  InsightCard(
+                    text:
+                        "I'm having trouble analyzing your spending patterns right now",
+                    insightType: InsightType.alert,
+                    isExpandable: true,
                   ),
                 ],
               ),

@@ -28,7 +28,7 @@ class GoalStatsCard extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          SvgPicture.asset(Assets.honeyJarSvg),
+          Image.asset(Assets.honeyJar),
           const Gap(24),
           Expanded(
             child: Column(

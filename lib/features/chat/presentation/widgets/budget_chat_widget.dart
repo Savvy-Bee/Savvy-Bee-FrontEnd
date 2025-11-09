@@ -4,9 +4,19 @@ import 'package:gap/gap.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/number_formatter.dart';
 import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
+import 'package:savvy_bee_mobile/features/chat/domain/models/chat_models.dart';
 
 class BudgetChatWidget extends ConsumerStatefulWidget {
-  const BudgetChatWidget({super.key});
+  final List<BudgetData>? budgetData;
+  final VoidCallback? onAdjustBudget;
+  final VoidCallback? onViewDetails;
+
+  const BudgetChatWidget({
+    super.key,
+    this.budgetData,
+    this.onAdjustBudget,
+    this.onViewDetails,
+  });
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -15,12 +25,41 @@ class BudgetChatWidget extends ConsumerStatefulWidget {
 
 class _BudgetChatWidgetState extends ConsumerState<BudgetChatWidget> {
   bool showMore = false;
+
   @override
   Widget build(BuildContext context) {
+    final budgets = widget.budgetData ?? [];
+    final hasData = budgets.isNotEmpty;
+
+    // Calculate totals
+    double totalBudget = 0;
+    double totalSpent = 0;
+    int overBudgetCount = 0;
+
+    if (hasData) {
+      for (final budget in budgets) {
+        totalBudget += budget.targetAmountMonthly;
+        totalSpent += budget.balance;
+        if (budget.balance > budget.targetAmountMonthly) {
+          overBudgetCount++;
+        }
+      }
+    }
+
+    final overallProgress = totalBudget > 0 ? (totalSpent / totalBudget) : 0.0;
+    final isOverBudget = totalSpent > totalBudget;
+
     return Container(
       decoration: BoxDecoration(
         color: AppColors.background,
         borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -32,6 +71,7 @@ class _BudgetChatWidgetState extends ConsumerState<BudgetChatWidget> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
               children: [
+                // Header info card
                 OutlinedCard(
                   borderRadius: 8,
                   borderColor: AppColors.border,
@@ -44,13 +84,13 @@ class _BudgetChatWidgetState extends ConsumerState<BudgetChatWidget> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(
-                            Icons.attach_file,
+                            Icons.analytics_outlined,
                             color: AppColors.primary,
                             size: 14,
                           ),
                           const Gap(4),
                           Text(
-                            'Heres your spending analysis',
+                            'Budget Analysis',
                             style: TextStyle(
                               fontSize: 8,
                               fontWeight: FontWeight.w500,
@@ -60,7 +100,9 @@ class _BudgetChatWidgetState extends ConsumerState<BudgetChatWidget> {
                       ),
                       const Gap(4),
                       Text(
-                        "You've spent ₦200,000 this month",
+                        hasData
+                            ? "You've spent ${NumberFormatter.formatCurrency(totalSpent, decimalDigits: 0)} this month"
+                            : "No budget data available",
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
@@ -69,106 +111,166 @@ class _BudgetChatWidgetState extends ConsumerState<BudgetChatWidget> {
                     ],
                   ),
                 ),
-                const Gap(16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Budget',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16,
-                      ),
-                    ),
-                    Text('₦200,000/₦600,000', style: TextStyle(fontSize: 8)),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: LinearProgressIndicator(
-                        value: 0.3,
-                        backgroundColor: AppColors.success.withValues(
-                          alpha: 0.34,
-                        ),
-                        minHeight: 10,
-                        borderRadius: BorderRadius.circular(10),
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                          AppColors.success,
-                        ),
-                      ),
-                    ),
-                    const Gap(4),
-                    Text('33%', style: TextStyle(fontWeight: FontWeight.w500)),
-                  ],
-                ),
-                const Gap(24),
-                ...List.generate(
-                  2,
-                  (index) => _buildCategoryInfo(
-                    'Drinks & dining',
-                    totalAmount: 35000,
-                    amountSpent: 45000,
-                    gainLoss: 30,
-                    color: index.isEven ? AppColors.bgBlue : AppColors.primary,
-                  ),
-                ),
-                const Gap(16),
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      showMore = !showMore;
-                    });
-                  },
-                  child: Row(
+
+                if (hasData) ...[
+                  const Gap(16),
+                  // Overall budget progress
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Show more categories',
+                        'Total Budget',
                         style: TextStyle(
-                          fontSize: 12,
                           fontWeight: FontWeight.w500,
-                          color: AppColors.primary,
+                          fontSize: 16,
                         ),
                       ),
-                      Icon(
-                        showMore
-                            ? Icons.keyboard_arrow_up
-                            : Icons.keyboard_arrow_down,
-                        size: 16,
-                        color: AppColors.primary,
+                      Text(
+                        '${NumberFormatter.formatCurrency(totalSpent, decimalDigits: 0)}/${NumberFormatter.formatCurrency(totalBudget, decimalDigits: 0)}',
+                        style: TextStyle(fontSize: 10),
                       ),
                     ],
                   ),
-                ),
-                if (showMore) const Gap(16),
-                if (showMore) Text('More'),
-                const Gap(16),
-                OutlinedCard(
-                  padding: const EdgeInsets.all(8),
-                  borderRadius: 8,
-                  borderColor: AppColors.border,
-                  bgColor: AppColors.primaryFaint.withValues(alpha: 0.5),
-                  child: Text(
-                    "⚠️ You're over budget in 2 categories",
-                    style: TextStyle(fontSize: 8, fontWeight: FontWeight.w500),
+                  const Gap(4),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: LinearProgressIndicator(
+                          value: overallProgress.clamp(0.0, 1.0),
+                          backgroundColor:
+                              (isOverBudget
+                                      ? AppColors.error
+                                      : AppColors.success)
+                                  .withValues(alpha: 0.2),
+                          minHeight: 10,
+                          borderRadius: BorderRadius.circular(10),
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            isOverBudget ? AppColors.error : AppColors.success,
+                          ),
+                        ),
+                      ),
+                      const Gap(4),
+                      Text(
+                        '${(overallProgress * 100).toStringAsFixed(0)}%',
+                        style: TextStyle(fontWeight: FontWeight.w500),
+                      ),
+                    ],
                   ),
-                ),
+                  const Gap(24),
+
+                  // Show first 2 budgets
+                  ...budgets
+                      .take(2)
+                      .map(
+                        (budget) => Padding(
+                          padding: const EdgeInsets.only(bottom: 12),
+                          child: _buildCategoryInfo(
+                            budget.budgetName,
+                            totalAmount: budget.targetAmountMonthly,
+                            amountSpent: budget.balance,
+                            color: budget.balance > budget.targetAmountMonthly
+                                ? AppColors.error
+                                : AppColors.primary,
+                          ),
+                        ),
+                      ),
+
+                  // Show more button if there are more than 2 budgets
+                  if (budgets.length > 2) ...[
+                    const Gap(4),
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          showMore = !showMore;
+                        });
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            showMore
+                                ? 'Show less categories'
+                                : 'Show ${budgets.length - 2} more categories',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: AppColors.primary,
+                            ),
+                          ),
+                          Icon(
+                            showMore
+                                ? Icons.keyboard_arrow_up
+                                : Icons.keyboard_arrow_down,
+                            size: 16,
+                            color: AppColors.primary,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+
+                  // Show remaining budgets when expanded
+                  if (showMore && budgets.length > 2) ...[
+                    const Gap(16),
+                    ...budgets
+                        .skip(2)
+                        .map(
+                          (budget) => Padding(
+                            padding: const EdgeInsets.only(bottom: 12),
+                            child: _buildCategoryInfo(
+                              budget.budgetName,
+                              totalAmount: budget.targetAmountMonthly,
+                              amountSpent: budget.balance,
+                              color: budget.balance > budget.targetAmountMonthly
+                                  ? AppColors.error
+                                  : AppColors.bgBlue,
+                            ),
+                          ),
+                        ),
+                  ],
+
+                  const Gap(16),
+
+                  // Warning card if over budget
+                  if (overBudgetCount > 0)
+                    OutlinedCard(
+                      padding: const EdgeInsets.all(8),
+                      borderRadius: 8,
+                      borderColor: AppColors.warning,
+                      bgColor: AppColors.warning.withValues(alpha: 0.1),
+                      child: Text(
+                        "⚠️ You're over budget in $overBudgetCount ${overBudgetCount == 1 ? 'category' : 'categories'}",
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.warning.withValues(alpha: 0.9),
+                        ),
+                      ),
+                    ),
+                ],
               ],
             ),
           ),
+
+          // Action buttons
           const Divider(height: 0),
           TextButton(
-            onPressed: () {},
-            style: TextButton.styleFrom(padding: const EdgeInsets.all(20)),
-            child: Text('Adjust Budget'),
+            onPressed: widget.onAdjustBudget,
+            style: TextButton.styleFrom(
+              padding: const EdgeInsets.all(20),
+              foregroundColor: AppColors.primary,
+            ),
+            child: const Text('Adjust Budget'),
           ),
           const Divider(height: 0),
           TextButton(
-            onPressed: () {},
-            style: TextButton.styleFrom(padding: const EdgeInsets.all(20)),
-            child: Text('Adjust Budget'),
+            onPressed: widget.onViewDetails,
+            style: TextButton.styleFrom(
+              padding: const EdgeInsets.all(20),
+              foregroundColor: AppColors.primary,
+            ),
+            child: const Text('View Details'),
           ),
         ],
       ),
@@ -179,9 +281,14 @@ class _BudgetChatWidgetState extends ConsumerState<BudgetChatWidget> {
     String title, {
     required double totalAmount,
     required double amountSpent,
-    required double gainLoss,
     required Color color,
   }) {
+    final percentage = totalAmount > 0
+        ? (amountSpent / totalAmount * 100)
+        : 0.0;
+    final isOverBudget = amountSpent > totalAmount;
+    final difference = amountSpent - totalAmount;
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -189,7 +296,7 @@ class _BudgetChatWidgetState extends ConsumerState<BudgetChatWidget> {
           padding: const EdgeInsets.all(5.0),
           decoration: BoxDecoration(color: color, shape: BoxShape.circle),
           child: Icon(
-            Icons.dinner_dining_outlined,
+            Icons.account_balance_wallet_outlined,
             size: 20,
             color: AppColors.white,
           ),
@@ -202,16 +309,24 @@ class _BudgetChatWidgetState extends ConsumerState<BudgetChatWidget> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    title,
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                  Expanded(
+                    child: Text(
+                      title,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
+                  const Gap(8),
                   Text(
                     '${NumberFormatter.formatCurrency(amountSpent, decimalDigits: 0)} of ${NumberFormatter.formatCurrency(totalAmount, decimalDigits: 0)}',
-                    style: TextStyle(fontSize: 8),
+                    style: TextStyle(fontSize: 9),
                   ),
                 ],
               ),
+              const Gap(4),
               Row(
                 children: [
                   Expanded(
@@ -225,11 +340,14 @@ class _BudgetChatWidgetState extends ConsumerState<BudgetChatWidget> {
                   ),
                   const Gap(4),
                   Text(
-                    NumberFormatter.formatSignedPercentage(
-                      gainLoss,
-                      decimalPlaces: 0,
+                    isOverBudget
+                        ? '+${NumberFormatter.formatCurrency(difference, decimalDigits: 0)}'
+                        : '${percentage.toStringAsFixed(0)}%',
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.w500,
+                      color: isOverBudget ? AppColors.error : color,
                     ),
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
                   ),
                 ],
               ),

@@ -71,16 +71,16 @@ class _ChoosePersonalityScreenState
         selectedPersonality.id,
       );
 
-      if (success && mounted) {
+      if (success) {
         // Show success message
-        CustomSnackbar.show(
-          context,
-          'Personality set to ${selectedPersonality.name}',
-          type: SnackbarType.success,
-        );
-
-        // Navigate to chat screen
-        context.pop();
+        if (mounted) {
+          CustomSnackbar.show(
+            context,
+            'Personality set to ${selectedPersonality.name}',
+            type: SnackbarType.success,
+          ); // Navigate to chat screen
+          context.pop();
+        }
       } else if (mounted) {
         // Show error message
         CustomSnackbar.show(
@@ -121,154 +121,160 @@ class _ChoosePersonalityScreenState
   Widget build(BuildContext context) {
     final personalities = ref.watch(aiPersonalityProvider);
 
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(35),
-        child: SafeArea(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const BackButton(),
-              IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert)),
-            ],
-          ),
-        ),
-      ),
-      extendBodyBehindAppBar: true,
-      body: personalities.when(
-        data: (data) {
-          final currentPersonality =
-              data.isNotEmpty && _selectedPersonality < data.length
-              ? data[_selectedPersonality]
-              : null;
-
-          if (currentPersonality == null) {
-            return const Center(child: Text('No personalities available'));
-          }
-
-          return SafeArea(
-            child: Column(
+    return PopScope(
+      onPopInvokedWithResult: (didPop, result) {
+        ref.read(chatProvider.notifier).refresh();
+      },
+      child: Scaffold(
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(35),
+          child: SafeArea(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                  child: Column(
-                    children: [
-                      Text(
-                        'Choose your AI\npersona',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 40,
-                          height: 0.9,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: Constants.neulisNeueFontFamily,
+                const BackButton(),
+                IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert)),
+              ],
+            ),
+          ),
+        ),
+        extendBodyBehindAppBar: true,
+        body: personalities.when(
+          data: (data) {
+            final currentPersonality =
+                data.isNotEmpty && _selectedPersonality < data.length
+                ? data[_selectedPersonality]
+                : null;
+
+            if (currentPersonality == null) {
+              return const Center(child: Text('No personalities available'));
+            }
+
+            return SafeArea(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                    child: Column(
+                      children: [
+                        Text(
+                          'Choose your AI\npersona',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 40,
+                            height: 0.9,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: Constants.neulisNeueFontFamily,
+                          ),
                         ),
-                      ),
-                      const Gap(16.0),
-                      const Text(
-                        'Select which finance persona best applies to you',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(height: 0.9),
+                        const Gap(16.0),
+                        const Text(
+                          'Select which finance persona best applies to you',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(height: 0.9),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Gap(24),
+                  // Personality image
+                  Image.asset(
+                    _selectedPersonality < _characters.length
+                        ? _characters[_selectedPersonality]
+                        : _characters[0],
+                    height: 150,
+                    width: 150,
+                  ),
+
+                  // PageView with personality details
+                  Expanded(
+                    child: PageView.builder(
+                      controller: _pageController,
+                      itemCount: data.length,
+                      onPageChanged: (index) {
+                        setState(() {
+                          _selectedPersonality = index;
+                        });
+                      },
+                      itemBuilder: (context, index) {
+                        final personality = data[index];
+
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                          child: Column(
+                            children: [
+                              Text(
+                                personality.name,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 36,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: Constants.neulisNeueFontFamily,
+                                ),
+                              ),
+                              const Gap(16.0),
+                              OutlinedCard(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 4,
+                                ),
+                                bgColor: AppColors.primaryFaint.withValues(
+                                  alpha: 0.6,
+                                ),
+                                borderColor: AppColors.primary,
+                                child: Text(
+                                  personality.id.replaceAll(r'_', ' '),
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                              const Gap(16.0),
+                              SizedBox(
+                                width: Breakpoints.screenWidth(context) / 1.2,
+                                child: Text(
+                                  personality.description,
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    height: 1.1,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+
+                  Column(
+                    children: [
+                      // Personality selector
+                      _buildPersonalitySelector(data),
+
+                      // Button above personality selector
+                      Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: CustomElevatedButton(
+                          text: _isUpdating ? 'Setting up...' : 'Select',
+                          showArrow: true,
+                          buttonColor: CustomButtonColor.black,
+                          onPressed: _isUpdating ? null : _selectPersonality,
+                        ),
                       ),
                     ],
                   ),
-                ),
-                const Gap(24),
-                // Personality image
-                Image.asset(
-                  _selectedPersonality < _characters.length
-                      ? _characters[_selectedPersonality]
-                      : _characters[0],
-                  scale: 2,
-                ),
-
-                // PageView with personality details
-                Expanded(
-                  child: PageView.builder(
-                    controller: _pageController,
-                    itemCount: data.length,
-                    onPageChanged: (index) {
-                      setState(() {
-                        _selectedPersonality = index;
-                      });
-                    },
-                    itemBuilder: (context, index) {
-                      final personality = data[index];
-
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                        child: Column(
-                          children: [
-                            Text(
-                              personality.name,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 36,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: Constants.neulisNeueFontFamily,
-                              ),
-                            ),
-                            const Gap(16.0),
-                            OutlinedCard(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 4,
-                              ),
-                              bgColor: AppColors.primaryFaint.withValues(
-                                alpha: 0.6,
-                              ),
-                              borderColor: AppColors.primary,
-                              child: Text(
-                                personality.name.replaceFirst(r'_', ' '),
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                            const Gap(16.0),
-                            SizedBox(
-                              width: Breakpoints.screenWidth(context) / 1.2,
-                              child: Text(
-                                personality.description,
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  height: 1.1,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                ),
-
-                Column(
-                  children: [
-                    // Personality selector
-                    _buildPersonalitySelector(data),
-
-                    // Button above personality selector
-                    Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: CustomElevatedButton(
-                        text: _isUpdating ? 'Setting up...' : 'Select',
-                        showArrow: true,
-                        buttonColor: CustomButtonColor.black,
-                        onPressed: _isUpdating ? null : _selectPersonality,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          );
-        },
-        error: (error, stackTrace) =>
-            const Center(child: Text('Error loading AI Personalities')),
-        loading: () => const Center(child: CircularProgressIndicator()),
+                ],
+              ),
+            );
+          },
+          error: (error, stackTrace) =>
+              const Center(child: Text('Error loading AI Personalities')),
+          loading: () => const Center(child: CircularProgressIndicator()),
+        ),
       ),
     );
   }

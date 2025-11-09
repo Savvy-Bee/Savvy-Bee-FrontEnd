@@ -136,7 +136,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Gap(20),
-                NetWorthCard(bankId: '',),
+                NetWorthCard(),
                 const Gap(16),
                 InfoCard(
                   title: 'Smart Recommendation',

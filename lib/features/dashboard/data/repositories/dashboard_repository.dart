@@ -33,7 +33,9 @@ class DashboardRepository {
   /// Fetch Dashboard Data
   Future<ApiResponse<DashboardData>> fetchDashboardData(String bankId) async {
     try {
-      final response = await _apiClient.get(ApiEndpoints.dashboardData);
+      final response = await _apiClient.get(
+        '${ApiEndpoints.dashboardData}/664f080293b88c7cb32d227f',
+      );
 
       final data = ApiResponse.fromJson(
         response.data,

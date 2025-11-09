@@ -30,7 +30,8 @@ class ChatState {
   final bool isSending;
   final String? errorMessage;
   final bool hasError;
-  final bool needsReAuth; // New field to indicate authentication required
+  final bool needsReAuth;
+  final Persona? persona;
 
   ChatState({
     this.messages = const [],
@@ -38,6 +39,7 @@ class ChatState {
     this.isSending = false,
     this.errorMessage,
     this.needsReAuth = false,
+    this.persona,
   }) : hasError = errorMessage != null;
 
   ChatState copyWith({
@@ -47,6 +49,7 @@ class ChatState {
     String? errorMessage,
     bool? needsReAuth,
     bool clearError = false,
+    Persona? persona,
   }) {
     return ChatState(
       messages: messages ?? this.messages,
@@ -54,6 +57,7 @@ class ChatState {
       isSending: isSending ?? this.isSending,
       errorMessage: clearError ? null : (errorMessage ?? this.errorMessage),
       needsReAuth: needsReAuth ?? this.needsReAuth,
+      persona: persona ?? this.persona,
     );
   }
 
@@ -148,6 +152,8 @@ class ChatNotifier extends AsyncNotifier<ChatState> {
       userId: 'current_user',
       from: 'user',
       message: message.trim(),
+      chatType: ChatType.general, // User messages are always general
+      otherData: null,
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
     );
@@ -173,6 +179,13 @@ class ChatNotifier extends AsyncNotifier<ChatState> {
         log(
           'Message sent successfully. Received ${response.chats.length} messages',
         );
+
+        // Log chat types for debugging
+        for (final chat in response.chats) {
+          log(
+            'Received message: type=${chat.chatType}, hasWidget=${chat.hasWidget}',
+          );
+        }
 
         // Replace optimistic message with actual messages from server
         final updatedMessages = [

@@ -5,14 +5,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:readmore/readmore.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/assets.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/illustrations.dart';
 import 'package:savvy_bee_mobile/core/utils/file_picker_util.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_snackbar.dart';
-import 'package:savvy_bee_mobile/features/chat/presentation/widgets/budget_chat_widget.dart';
-import 'package:savvy_bee_mobile/features/chat/presentation/widgets/goal_chat_widget.dart';
+import 'package:savvy_bee_mobile/features/chat/presentation/screens/chat_bubble_widget.dart';
+import 'package:savvy_bee_mobile/features/chat/presentation/widgets/bottom_sheets/create_goal_bottom_sheet.dart';
 import 'package:savvy_bee_mobile/features/chat/presentation/widgets/picked_file_preview.dart';
 import 'package:savvy_bee_mobile/features/chat/presentation/widgets/quick_action_widget.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';
@@ -123,24 +122,42 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   Widget build(BuildContext context) {
     final chatAsync = ref.watch(chatProvider);
 
-    return Scaffold(
-      appBar: _buildAppBar(context),
-      body: Center(child: GoalChatWidget()),
-      // body: Container(
-      //   decoration: BoxDecoration(
-      //     color: AppColors.primaryFaint.withValues(alpha: 0.3),
-      //     image: DecorationImage(
-      //       image: AssetImage(Assets.hivePatternYellow),
-      //       fit: BoxFit.cover,
-      //     ),
-      //   ),
-      //   child: chatAsync.when(
-      //     loading: () => _buildLoadingView(),
-      //     error: (error, stack) => _buildErrorView(error.toString()),
-      //     data: (chatState) => _buildChatView(chatState),
-      //   ),
-      // ),
+    return chatAsync.when(
+      data: (chatState) => Scaffold(
+        appBar: _buildAppBar(context, chatState.persona?.name ?? '____'),
+        body: Container(
+          decoration: BoxDecoration(
+            color: AppColors.primaryFaint.withValues(alpha: 0.3),
+            image: DecorationImage(
+              image: AssetImage(Assets.hivePatternYellow),
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: _buildChatView(chatState),
+        ),
+      ),
+      error: (error, stackTrace) =>
+          Scaffold(body: Center(child: Text('Error loading chat'))),
+      loading: () => Scaffold(body: Center(child: CircularProgressIndicator())),
     );
+
+    // return Scaffold(
+    //   appBar: _buildAppBar(context),
+    //   body: Container(
+    //     decoration: BoxDecoration(
+    //       color: AppColors.primaryFaint.withValues(alpha: 0.3),
+    //       image: DecorationImage(
+    //         image: AssetImage(Assets.hivePatternYellow),
+    //         fit: BoxFit.cover,
+    //       ),
+    //     ),
+    //     child: chatAsync.when(
+    //       loading: () => _buildLoadingView(),
+    //       error: (error, stack) => _buildErrorView(error.toString()),
+    //       data: (chatState) => _buildChatView(chatState),
+    //     ),
+    //   ),
+    // );
   }
 
   /// Build main chat view
@@ -162,12 +179,10 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                         padding: const EdgeInsets.all(8.0),
                         itemCount: chatState.messages.length,
                         itemBuilder: (context, index) {
-                          // Reverse index since list is reversed
                           final reversedIndex =
                               chatState.messages.length - 1 - index;
                           final message = chatState.messages[reversedIndex];
 
-                          // Determine bubble styling based on sequence
                           final isFirst =
                               reversedIndex == 0 ||
                               chatState.messages[reversedIndex - 1].from !=
@@ -178,10 +193,13 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                   chatState.messages[reversedIndex + 1].from !=
                                       message.from);
 
-                          return _buildChatBubble(
+                          return buildChatBubble(
+                            context: context,
                             message: message,
                             isFirst: isFirst,
                             isLast: isLast,
+                            onBudgetAction: () => _handleBudgetAction(message),
+                            onGoalAction: () => _handleGoalAction(message),
                           );
                         },
                       ),
@@ -204,6 +222,40 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         _buildTextField(chatState),
       ],
     );
+  }
+
+  void _handleBudgetAction(ChatMessage message) {
+    // Parse budget data if needed
+    final budgetData = ChatWidgetDataParser.parseBudgetData(message.otherData);
+
+    if (budgetData != null && budgetData.isNotEmpty) {
+      // Navigate to budget adjustment screen with data
+      // context.push('/budget/adjust', extra: budgetData);
+
+      // Or show a bottom sheet
+      // showModalBottomSheet(
+      //   context: context,
+      //   builder: (context) =>
+      //       BudgetAdjustmentBottomSheet(budgetData: budgetData),
+      // );
+    }
+  }
+
+  void _handleGoalAction(ChatMessage message) {
+    // Parse goal data if needed
+    final goalData = ChatWidgetDataParser.parseGoalData(message.otherData);
+
+    if (goalData != null) {
+      // Navigate to goal creation screen with pre-filled data
+      // context.push('/goals/create', extra: goalData);
+
+      // Or show a bottom sheet
+      // showModalBottomSheet(
+      //   context: context,
+      //   isScrollControlled: true,
+      //   builder: (context) => GoalCreationBottomSheet(suggestedGoal: goalData),
+      // );
+    }
   }
 
   Widget _buildQuickActions() {
@@ -251,208 +303,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  /// Build chat bubble
-  Widget _buildChatBubble({
-    required ChatMessage message,
-    required bool isFirst,
-    required bool isLast,
-  }) {
-    final isMe = message.isFromUser;
-
-    // --- Constants and Local Helper Function ---
-    const double sharpRadius = 0.0;
-    const double roundedRadius = 16.0;
-    Radius radius(double value) => Radius.circular(value);
-
-    /// Calculates the specific BorderRadius for a chat bubble.
-    BorderRadiusGeometry getBubbleBorderRadius() {
-      // Single message case: sharp corner on the "tail" side
-      if (isFirst) {
-        if (isMe) {
-          // User (Right side): sharp bottom-right
-          return BorderRadius.only(
-            topLeft: radius(roundedRadius),
-            topRight: radius(roundedRadius),
-            bottomLeft: radius(roundedRadius),
-            bottomRight: radius(sharpRadius),
-          );
-        } else {
-          // Other (Left side): sharp bottom-left
-          return BorderRadius.only(
-            topLeft: radius(roundedRadius),
-            topRight: radius(roundedRadius),
-            bottomLeft: radius(sharpRadius),
-            bottomRight: radius(roundedRadius),
-          );
-        }
-      } else if (isLast) {
-        if (isMe) {
-          // User (Right side): sharp bottom-right
-          return BorderRadius.only(
-            topLeft: radius(roundedRadius),
-            topRight: radius(sharpRadius),
-            bottomLeft: radius(roundedRadius),
-            bottomRight: radius(roundedRadius),
-          );
-        } else {
-          // Other (Left side): sharp bottom-left
-          return BorderRadius.only(
-            topLeft: radius(sharpRadius),
-            topRight: radius(roundedRadius),
-            bottomLeft: radius(roundedRadius),
-            bottomRight: radius(roundedRadius),
-          );
-        }
-      }
-
-      // Sequence messages (First, Last, Middle)
-      // Determine the radii for the four corners.
-      // The side of the message flow (right for isMe, left for others) should be sharp
-      // if it connects to another message (i.e., not the end of the sequence).
-
-      // Top-Right: Sharp if isMe AND NOT the last message (connects to the message below).
-      final double tr = isMe
-          ? (isLast ? roundedRadius : sharpRadius)
-          : roundedRadius;
-
-      // Bottom-Right: Sharp if isMe AND NOT the first message (connects to the message above).
-      final double br = isMe
-          ? (isFirst ? roundedRadius : sharpRadius)
-          : roundedRadius;
-
-      // Top-Left: Sharp if NOT isMe AND NOT the last message.
-      final double tl = isMe
-          ? roundedRadius
-          : (isLast ? roundedRadius : sharpRadius);
-
-      // Bottom-Left: Sharp if NOT isMe AND NOT the first message.
-      final double bl = isMe
-          ? roundedRadius
-          : (isFirst ? roundedRadius : sharpRadius);
-
-      return BorderRadius.only(
-        topLeft: radius(tl),
-        topRight: radius(tr),
-        bottomLeft: radius(bl),
-        bottomRight: radius(br),
-      );
-    }
-    // --------------------------------------------------------------------------
-
-    // Determine border radii using the helper function
-    final borderRadius = getBubbleBorderRadius();
-
-    // Check if the message has a GIF
-    final hasGif = message.gif != null && message.gif!.isNotEmpty;
-    final hasText = message.message.isNotEmpty;
-
-    return Align(
-      alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
-      child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 8.0),
-        padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 14.0),
-        constraints: BoxConstraints(
-          maxWidth: MediaQuery.of(context).size.width * 0.75,
-        ),
-        decoration: BoxDecoration(
-          color: isMe ? AppColors.primaryDark : AppColors.primaryFaint,
-          borderRadius: borderRadius,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Display GIF if present
-            if (hasGif) ...[
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8.0),
-                child: Image.network(
-                  message.gif!,
-                  fit: BoxFit.cover,
-                  loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return Container(
-                      height: 150,
-                      alignment: Alignment.center,
-                      child: CircularProgressIndicator(
-                        value: loadingProgress.expectedTotalBytes != null
-                            ? loadingProgress.cumulativeBytesLoaded /
-                                  loadingProgress.expectedTotalBytes!
-                            : null,
-                        color: isMe ? AppColors.background : AppColors.primary,
-                      ),
-                    );
-                  },
-                  errorBuilder: (context, error, stackTrace) {
-                    return Container(
-                      height: 150,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.broken_image,
-                            color: isMe ? AppColors.background : Colors.black54,
-                            size: 32,
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            'Failed to load GIF',
-                            style: TextStyle(
-                              color: isMe
-                                  ? AppColors.background
-                                  : Colors.black54,
-                              fontSize: 12.0,
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              ),
-              // Add spacing between GIF and text if both exist
-              if (hasText) const SizedBox(height: 8.0),
-            ],
-            // Display text if present
-            if (hasText)
-              ReadMoreText(
-                message.message,
-                trimLines: 8,
-                trimMode: TrimMode.Line,
-                trimCollapsedText: 'Show more',
-                trimExpandedText: 'Show less',
-                style: TextStyle(
-                  color: isMe ? AppColors.background : Colors.black87,
-                  fontSize: 15.0,
-                  fontWeight: FontWeight.w500,
-                  height: 1.4,
-                ),
-                moreStyle: TextStyle(
-                  color: isMe
-                      ? AppColors.background.withValues(alpha: 0.8)
-                      : AppColors.primary,
-                  fontSize: 15.0,
-                  fontWeight: FontWeight.w600,
-                ),
-                lessStyle: TextStyle(
-                  color: isMe
-                      ? AppColors.background.withValues(alpha: 0.8)
-                      : AppColors.primary,
-                  fontSize: 15.0,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-          ],
-        ),
       ),
     );
   }
@@ -515,13 +365,14 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
             prefix: IconButton(
               icon: const Icon(Icons.add),
               constraints: BoxConstraints(),
-              onPressed: chatState.isSending
-                  ? null
-                  : () => FileUtils.pickFile().then((value) {
-                      setState(() {
-                        _pickedFile = value;
-                      });
-                    }),
+              onPressed: () => CreateGoalBottomSheet.show(context),
+              // onPressed: chatState.isSending
+              //     ? null
+              //     : () => FileUtils.pickFile().then((value) {
+              //         setState(() {
+              //           _pickedFile = value;
+              //         });
+              //       }),
               style: IconButton.styleFrom(
                 foregroundColor: AppColors.primary,
                 disabledBackgroundColor: AppColors.primary.withValues(
@@ -607,65 +458,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     );
   }
 
-  /// Build loading view
-  Widget _buildLoadingView() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          LoadingAnimationWidget.waveDots(color: AppColors.primary, size: 50),
-          const Gap(16.0),
-          const Text(
-            'Loading chat...',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-          ),
-        ],
-      ),
-    );
-  }
-
-  /// Build error view
-  Widget _buildErrorView(String error) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.error_outline, size: 64, color: Colors.red.shade400),
-            const Gap(16.0),
-            const Text(
-              'Failed to load chat',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const Gap(8.0),
-            Text(
-              error,
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
-            ),
-            const Gap(24.0),
-            ElevatedButton.icon(
-              onPressed: () => ref.read(chatProvider.notifier).refresh(),
-              icon: const Icon(Icons.refresh),
-              label: const Text('Retry'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24.0,
-                  vertical: 12.0,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   /// Build app bar
-  PreferredSize _buildAppBar(BuildContext context) {
+  PreferredSize _buildAppBar(BuildContext context, String personaName) {
     return PreferredSize(
       preferredSize: const Size.fromHeight(90),
       child: Container(
@@ -682,7 +476,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Container(
-                      // padding: const EdgeInsets.all(8.0),
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: AppColors.primary.withValues(alpha: 0.1),
@@ -690,9 +483,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                       ),
                       child: Image.asset(Illustrations.dashAvatar, scale: 1.4),
                     ),
-                    const Text(
-                      'dash',
-                      style: TextStyle(
+                    Text(
+                      personaName,
+                      style: const TextStyle(
                         fontSize: 12.0,
                         fontWeight: FontWeight.w500,
                       ),
@@ -700,7 +493,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                   ],
                 ),
               ),
-
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [

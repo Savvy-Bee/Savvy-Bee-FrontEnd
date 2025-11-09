@@ -88,7 +88,7 @@ class _ToolsScreenState extends ConsumerState<ToolsScreen> {
       onTap: onPressed,
       child: Row(
         children: [
-          SvgPicture.asset(Assets.honeyJarSvg),
+          Image.asset(Assets.honeyJar),
           const Gap(16),
           Expanded(
             child: Column(
