@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:savvy_bee_mobile/core/utils/assets/app_icons.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/illustrations.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/section_title_widget.dart';
@@ -135,7 +136,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Gap(20),
-                NetWorthCard(),
+                NetWorthCard(bankId: '',),
                 const Gap(16),
                 InfoCard(
                   title: 'Smart Recommendation',
@@ -175,7 +176,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
           title: 'Widgets',
           actionWidget: IconButton(
             onPressed: () {},
-            icon: const Icon(Icons.edit_square),
+            icon: const AppIcon(AppIcons.editIcon),
             constraints: BoxConstraints(),
             style: Constants.collapsedButtonStyle,
           ),
@@ -187,7 +188,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             spacing: 16,
             children: [
-              const SpendingCategoryWidget(),
+              SpendingCategoryWidget(),
               const FinancialHealthWidget(),
               const SavingsTargetWidget(),
               // const BudgetAnalysisWidget(),

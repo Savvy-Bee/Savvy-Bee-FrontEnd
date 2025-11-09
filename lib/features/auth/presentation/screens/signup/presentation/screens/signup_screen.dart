@@ -579,6 +579,10 @@ class _CountryPicker extends StatelessWidget {
           ),
           const Gap(10),
           ListTile(
+            title: const Text('Nigeria'),
+            onTap: () => onCountrySelected('Nigeria'),
+          ),
+          ListTile(
             title: const Text('United States'),
             onTap: () => onCountrySelected('United States'),
           ),

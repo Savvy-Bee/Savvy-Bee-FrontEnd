@@ -21,6 +21,8 @@ class AppIcons {
   static const String chartSquareIcon = '$_basePath/chart-square.svg';
   static const String externalLinkIcon = '$_basePath/external-link.svg';
   static const String progressIcon = '$_basePath/progress.svg';
+  static const String openBookIcon = '$_basePath/open-book.svg';
+  static const String chartIncreasingIcon = '$_basePath/chart-increasing.svg';
 }
 
 class AppIcon extends StatelessWidget {

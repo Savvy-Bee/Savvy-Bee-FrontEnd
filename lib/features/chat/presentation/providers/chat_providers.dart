@@ -5,8 +5,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:savvy_bee_mobile/core/services/service_locator.dart';
 import 'package:savvy_bee_mobile/features/chat/domain/models/chat_models.dart';
 import 'package:savvy_bee_mobile/core/network/api_client.dart';
+import 'package:savvy_bee_mobile/features/chat/domain/models/personality.dart';
 
 import '../../data/repository/chat_repository.dart';
+
+final aiPersonalityProvider = FutureProvider<List<Personality>>((ref) async {
+  final repo = ref.read(chatRepositoryProvider);
+
+  final personalities = await repo.fetchPersonalities();
+
+  return personalities;
+});
 
 // Chat repository provider
 final chatRepositoryProvider = Provider<ChatRepository>((ref) {

@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:savvy_bee_mobile/core/network/api_client.dart';
 import 'package:savvy_bee_mobile/core/network/api_endpoints.dart';
+import 'package:savvy_bee_mobile/core/network/models/api_response_model.dart';
 import 'package:savvy_bee_mobile/core/services/storage_service.dart';
 import 'package:savvy_bee_mobile/features/auth/domain/models/auth_models.dart';
 

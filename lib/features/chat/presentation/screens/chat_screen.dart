@@ -11,6 +11,8 @@ import 'package:savvy_bee_mobile/core/utils/assets/assets.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/illustrations.dart';
 import 'package:savvy_bee_mobile/core/utils/file_picker_util.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_snackbar.dart';
+import 'package:savvy_bee_mobile/features/chat/presentation/widgets/budget_chat_widget.dart';
+import 'package:savvy_bee_mobile/features/chat/presentation/widgets/goal_chat_widget.dart';
 import 'package:savvy_bee_mobile/features/chat/presentation/widgets/picked_file_preview.dart';
 import 'package:savvy_bee_mobile/features/chat/presentation/widgets/quick_action_widget.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';
@@ -123,20 +125,21 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
     return Scaffold(
       appBar: _buildAppBar(context),
-      body: Container(
-        decoration: BoxDecoration(
-          color: AppColors.primaryFaint.withValues(alpha: 0.3),
-          image: DecorationImage(
-            image: AssetImage(Assets.hivePatternYellow),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: chatAsync.when(
-          loading: () => _buildLoadingView(),
-          error: (error, stack) => _buildErrorView(error.toString()),
-          data: (chatState) => _buildChatView(chatState),
-        ),
-      ),
+      body: Center(child: GoalChatWidget()),
+      // body: Container(
+      //   decoration: BoxDecoration(
+      //     color: AppColors.primaryFaint.withValues(alpha: 0.3),
+      //     image: DecorationImage(
+      //       image: AssetImage(Assets.hivePatternYellow),
+      //       fit: BoxFit.cover,
+      //     ),
+      //   ),
+      //   child: chatAsync.when(
+      //     loading: () => _buildLoadingView(),
+      //     error: (error, stack) => _buildErrorView(error.toString()),
+      //     data: (chatState) => _buildChatView(chatState),
+      //   ),
+      // ),
     );
   }
 

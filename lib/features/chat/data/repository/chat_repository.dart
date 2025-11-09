@@ -140,6 +140,18 @@ class ChatRepository {
     }
   }
 
+  Future<List<Personality>> fetchPersonalities() async {
+    try {
+      final response = await _apiClient.get(ApiEndpoints.allPersona);
+
+      return (response.data['data'] as List)
+          .map((e) => Personality.fromJson(e))
+          .toList();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   /// Update user data (personality, strictness, language, country)
   /// Requires authentication (Bearer token)
   Future<bool> updateUserData(UpdateUserDataRequest request) async {

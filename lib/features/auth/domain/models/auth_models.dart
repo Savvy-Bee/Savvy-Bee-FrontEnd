@@ -109,29 +109,6 @@ class RegisterOtherDetailsRequest {
   }
 }
 
-// API response model
-class ApiResponse<T> {
-  final bool success;
-  final String message;
-  final T? data;
-
-  ApiResponse({required this.success, required this.message, this.data});
-
-  factory ApiResponse.fromJson(
-    Map<String, dynamic> json,
-    T? Function(dynamic)? fromJsonT,
-  ) {
-    return ApiResponse(
-      success: json['success'] ?? false,
-      message: json['message'] ?? '',
-      data:
-          json.containsKey('data') && json['data'] != null && fromJsonT != null
-          ? fromJsonT(json['data'])
-          : null,
-    );
-  }
-}
-
 // Login response data model
 class LoginResponse {
   final bool success;

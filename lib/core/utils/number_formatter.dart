@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 class NumberFormatter {
   static const String defaultLocale = 'en_US';
   static const String defaultSymbol = '\$';
+
   /// Formats a double as currency (e.g., $1,234.56).
   /// Uses the default locale if not specified.
   static String formatCurrency(
@@ -37,7 +38,6 @@ class NumberFormatter {
       return '+${symbol ?? defaultSymbol}$formatted';
     }
     return '-${symbol ?? defaultSymbol}${formatted.substring(1)}';
-
   }
 
   /// Formats a double as a percentage (e.g., 12.34%).

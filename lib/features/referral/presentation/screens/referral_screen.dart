@@ -5,9 +5,9 @@ import 'package:savvy_bee_mobile/core/utils/assets/app_icons.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/illustrations.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
-import 'package:savvy_bee_mobile/core/widgets/text_icon_button.dart';
 
 import '../../../../core/utils/assets/logos.dart';
+import '../../../../core/widgets/icon_text_row_widget.dart';
 
 class ReferralScreen extends ConsumerWidget {
   static String path = '/referral';
@@ -22,7 +22,13 @@ class ReferralScreen extends ConsumerWidget {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Image.asset(Logos.logo),
-        actions: [TextIconButton(text: 'Next', onTap: () {})],
+        actions: [
+          IconTextRowWidget(
+            'Next',
+            AppIcon(AppIcons.arrowRightIcon),
+            textDirection: TextDirection.rtl,
+          ),
+        ],
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),

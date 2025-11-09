@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/widgets/insight_card.dart';
 
 import '../../../../core/widgets/outlined_card.dart';
 
@@ -34,11 +35,19 @@ class SavingsTargetWidget extends StatelessWidget {
               child: Column(
                 children: [
                   const Text('Semi Circular Progress indicator'),
+
                   const Gap(24.0),
                   CustomElevatedButton(
                     text: 'Get more insights',
                     onPressed: () {},
                     buttonColor: CustomButtonColor.black,
+                  ),
+                  const Gap(24.0),
+                  InsightCard(
+                    text:
+                        "I'm having trouble analyzing your spending patterns right now",
+                    insightType: InsightType.nextBestAction,
+                    isExpandable: true,
                   ),
                 ],
               ),

@@ -29,6 +29,7 @@ class _ChoosePersonalityScreenState
     extends ConsumerState<ChoosePersonalityScreen> {
   int _selectedPersonality = 0;
   bool _isUpdating = false;
+  late PageController _pageController;
 
   final List<Personality> _personalities = Personalities.all;
 
@@ -41,6 +42,18 @@ class _ChoosePersonalityScreenState
     Illustrations.familyBee,
     Illustrations.familyBee,
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(initialPage: _selectedPersonality);
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
 
   /// Update personality and navigate to chat
   Future<void> _selectPersonality() async {
@@ -93,9 +106,20 @@ class _ChoosePersonalityScreenState
     }
   }
 
+  void _onPersonalityChanged(int index) {
+    setState(() {
+      _selectedPersonality = index;
+    });
+    _pageController.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final currentPersonality = _personalities[_selectedPersonality];
+    final personalities = ref.watch(aiPersonalityProvider);
 
     return Scaffold(
       appBar: PreferredSize(
@@ -104,144 +128,162 @@ class _ChoosePersonalityScreenState
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              BackButton(),
+              const BackButton(),
               IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert)),
             ],
           ),
         ),
       ),
       extendBodyBehindAppBar: true,
-      body: Container(
-        color: _getBackgroundColour(),
-        child: SafeArea(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                child: Column(
-                  children: [
-                    Text(
-                      'Choose your AI\npersona',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 40,
-                        height: 0.9,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: Constants.neulisNeueFontFamily,
-                      ),
-                    ),
-                    const Gap(16.0),
-                    Text(
-                      'Select which finance persona best applies to you',
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(height: 0.9),
-                    ),
-                  ],
-                ),
-              ),
+      body: personalities.when(
+        data: (data) {
+          final currentPersonality =
+              data.isNotEmpty && _selectedPersonality < data.length
+              ? data[_selectedPersonality]
+              : null;
 
-              // Personality image
-              Image.asset(_characters[_selectedPersonality], scale: 2),
+          if (currentPersonality == null) {
+            return const Center(child: Text('No personalities available'));
+          }
 
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                child: Column(
-                  children: [
-                    Text(
-                      currentPersonality.name,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 36,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: Constants.neulisNeueFontFamily,
-                      ),
-                    ),
-                    const Gap(16.0),
-                    OutlinedCard(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 4,
-                      ),
-                      bgColor: AppColors.primaryFaint.withValues(alpha: 0.6),
-                      borderColor: AppColors.primary,
-                      child: Text(
-                        'Motivational coach',
+          return SafeArea(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: Column(
+                    children: [
+                      Text(
+                        'Choose your AI\npersona',
+                        textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w500,
+                          fontSize: 40,
+                          height: 0.9,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: Constants.neulisNeueFontFamily,
                         ),
                       ),
-                    ),
-                    const Gap(16.0),
-                    SizedBox(
-                      width: Breakpoints.screenWidth(context) / 1.2,
-                      child: Text(
-                        currentPersonality.description,
+                      const Gap(16.0),
+                      const Text(
+                        'Select which finance persona best applies to you',
                         textAlign: TextAlign.center,
-                        style: const TextStyle(fontSize: 14, height: 1.1),
+                        style: TextStyle(height: 0.9),
+                      ),
+                    ],
+                  ),
+                ),
+                const Gap(24),
+                // Personality image
+                Image.asset(
+                  _selectedPersonality < _characters.length
+                      ? _characters[_selectedPersonality]
+                      : _characters[0],
+                  scale: 2,
+                ),
+
+                // PageView with personality details
+                Expanded(
+                  child: PageView.builder(
+                    controller: _pageController,
+                    itemCount: data.length,
+                    onPageChanged: (index) {
+                      setState(() {
+                        _selectedPersonality = index;
+                      });
+                    },
+                    itemBuilder: (context, index) {
+                      final personality = data[index];
+
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                        child: Column(
+                          children: [
+                            Text(
+                              personality.name,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 36,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: Constants.neulisNeueFontFamily,
+                              ),
+                            ),
+                            const Gap(16.0),
+                            OutlinedCard(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 4,
+                              ),
+                              bgColor: AppColors.primaryFaint.withValues(
+                                alpha: 0.6,
+                              ),
+                              borderColor: AppColors.primary,
+                              child: Text(
+                                personality.name.replaceFirst(r'_', ' '),
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                            const Gap(16.0),
+                            SizedBox(
+                              width: Breakpoints.screenWidth(context) / 1.2,
+                              child: Text(
+                                personality.description,
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  height: 1.1,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
+
+                Column(
+                  children: [
+                    // Personality selector
+                    _buildPersonalitySelector(data),
+
+                    // Button above personality selector
+                    Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: CustomElevatedButton(
+                        text: _isUpdating ? 'Setting up...' : 'Select',
+                        showArrow: true,
+                        buttonColor: CustomButtonColor.black,
+                        onPressed: _isUpdating ? null : _selectPersonality,
                       ),
                     ),
                   ],
                 ),
-              ),
-
-              Column(
-                children: [
-                  // Personality selector
-                  _buildPersonalitySelector(),
-
-                  // Button above personality selector
-                  Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: CustomElevatedButton(
-                      text: _isUpdating ? 'Setting up...' : 'Select',
-                      showArrow: true,
-                      buttonColor: CustomButtonColor.black,
-                      onPressed: _isUpdating ? null : _selectPersonality,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
+              ],
+            ),
+          );
+        },
+        error: (error, stackTrace) =>
+            const Center(child: Text('Error loading AI Personalities')),
+        loading: () => const Center(child: CircularProgressIndicator()),
       ),
     );
   }
 
-  Color _getBackgroundColour() {
-    return _selectedPersonality == 0
-        ? AppColors.white
-        : _selectedPersonality == 1
-        ? AppColors.purple
-        : _selectedPersonality == 2
-        ? AppColors.primary
-        : _selectedPersonality == 3
-        ? AppColors.warning
-        : _selectedPersonality == 4
-        ? AppColors.success
-        : _selectedPersonality == 5
-        ? AppColors.warning
-        : AppColors.error;
-  }
-
-  Widget _buildPersonalitySelector() {
+  Widget _buildPersonalitySelector(List<Personality> personalities) {
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
       scrollDirection: Axis.horizontal,
       child: Row(
-        children: List.generate(
-          _personalities.length,
-          (index) => GestureDetector(
-            onTap: () {
-              setState(() {
-                _selectedPersonality = index;
-              });
-            },
+        children: List.generate(personalities.length, (index) {
+          return GestureDetector(
+            onTap: () => _onPersonalityChanged(index),
             child: Container(
               margin: const EdgeInsets.only(right: 8.0),
-              // padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(16.0),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: AppColors.primaryFaded,
@@ -252,10 +294,10 @@ class _ChoosePersonalityScreenState
                       )
                     : null,
               ),
-              child: Image.asset(_personalities[index].image!, scale: 1.15),
+              // child: Image.asset(persona.image ?? _characters[0], scale: 1.15),
             ),
-          ),
-        ),
+          );
+        }),
       ),
     );
   }

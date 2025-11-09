@@ -21,8 +21,10 @@ class MainWrapper extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final index = ref.watch(bottomNavIndexProvider);
+
     return Scaffold(
-      appBar: _buildHeader(context),
+      appBar: index == 3 ? null : _buildHeader(context),
       body: child,
       bottomNavigationBar: _buildBottomNavigationBar(
         context,

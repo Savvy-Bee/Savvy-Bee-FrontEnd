@@ -43,7 +43,6 @@ import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
 import '../../features/auth/presentation/screens/login/presentation/screens/login_screen.dart';
 import '../../features/auth/presentation/screens/signup/presentation/screens/signup_complete_screen.dart';
 import '../../features/auth/presentation/screens/signup/presentation/screens/signup_screen.dart';
-import '../../features/home/presentation/screens/home_screen.dart';
 import '../../features/splash/presentation/screens/splash_screen.dart';
 import '../../features/tools/presentation/screens/debt/add_debt_screen.dart';
 import '../../features/tools/presentation/screens/debt/debt_screen.dart';
@@ -130,13 +129,6 @@ final GoRouter appRouter = GoRouter(
       name: SelectPriorityScreen.path,
       builder: (BuildContext context, GoRouterState state) {
         return const SelectPriorityScreen();
-      },
-    ),
-    GoRoute(
-      path: HomeScreen.path,
-      name: HomeScreen.path,
-      builder: (BuildContext context, GoRouterState state) {
-        return const HomeScreen();
       },
     ),
     GoRoute(

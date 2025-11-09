@@ -11,6 +11,8 @@ class ApiEndpoints {
   static const String login = '/auth/login';
   static const String updateUserData = '/auth/update/userdata';
 
+  static const String allPersona = '/auth/update/allpersona';
+
   // Password reset endpoints
   static const String sendResetOtp = '/auth/reset-password/send-otp';
   static const String verifyResetOtp = '/auth/reset-password/reset';
@@ -29,4 +31,8 @@ class ApiEndpoints {
 
   // Account Creation endpoints
   static const String createNairaAccount = '/wallet/accountcreation/ng';
+
+  // Dashboard Data endpoint
+  static const String dashboardData = '/wallet/mono/details/dashboard';
+  static const String linkedAccounts = '/wallet/mono/details/alluserbanks';
 }

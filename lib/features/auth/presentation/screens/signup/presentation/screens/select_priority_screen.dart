@@ -7,7 +7,7 @@ import 'package:savvy_bee_mobile/core/utils/assets/logos.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
-import 'package:savvy_bee_mobile/core/widgets/text_icon_button.dart';
+import 'package:savvy_bee_mobile/core/widgets/icon_text_row_widget.dart';
 
 enum Priority {
   manageSpending,
@@ -71,7 +71,13 @@ class _SelectPriorityScreenState extends ConsumerState<SelectPriorityScreen> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Image.asset(Logos.logo),
-        actions: [TextIconButton(text: 'Skip', onTap: () {})],
+        actions: [
+          IconTextRowWidget(
+            'Skip',
+            AppIcon(AppIcons.arrowRightIcon),
+            textDirection: TextDirection.rtl,
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),

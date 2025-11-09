@@ -1,6 +1,7 @@
 // class WalletRepository {
 import 'package:dio/dio.dart';
 import 'package:savvy_bee_mobile/core/network/api_endpoints.dart';
+import 'package:savvy_bee_mobile/core/network/models/api_response_model.dart';
 import 'package:savvy_bee_mobile/features/spend/domain/models/institution.dart';
 
 import '../../../../../core/network/api_client.dart';
