@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/assets.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
@@ -85,10 +85,18 @@ class _ToolsScreenState extends ConsumerState<ToolsScreen> {
     VoidCallback? onPressed,
   }) {
     return OutlinedCard(
+      padding: const EdgeInsets.all(14),
       onTap: onPressed,
       child: Row(
         children: [
-          Image.asset(Assets.honeyJar),
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: AppColors.primaryFaint,
+              borderRadius: BorderRadius.circular(5),
+            ),
+            child: Image.asset(Assets.honeyJar, height: 25, width: 25),
+          ),
           const Gap(16),
           Expanded(
             child: Column(
@@ -103,7 +111,7 @@ class _ToolsScreenState extends ConsumerState<ToolsScreen> {
                     fontFamily: Constants.neulisNeueFontFamily,
                   ),
                 ),
-                Text(subtitle, style: TextStyle(fontSize: 12)),
+                Text(subtitle, style: TextStyle(fontSize: 12, height: 1.2)),
               ],
             ),
           ),

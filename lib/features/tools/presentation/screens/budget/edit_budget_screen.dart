@@ -2,15 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
+import 'package:savvy_bee_mobile/core/utils/assets/app_icons.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/utils/number_formatter.dart';
+import 'package:savvy_bee_mobile/core/widgets/bottom_sheets/edit_budget_bottom_sheet.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
 import 'package:savvy_bee_mobile/core/widgets/section_title_widget.dart';
+import 'package:savvy_bee_mobile/features/tools/domain/models/budget.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/providers/tools_provider.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/set_income_screen.dart';
 
-import '../../../../../core/theme/app_colors.dart';
-import '../../../../../core/utils/assets/app_icons.dart';
 import '../../widgets/insight_card.dart';
 
 class EditBudgetScreen extends ConsumerStatefulWidget {
@@ -26,59 +29,116 @@ class EditBudgetScreen extends ConsumerStatefulWidget {
 class _EditBudgetScreenState extends ConsumerState<EditBudgetScreen> {
   @override
   Widget build(BuildContext context) {
+    // 2. Watch the provider
+    final budgetState = ref.watch(budgetHomeNotifierProvider);
+
     return Scaffold(
-      appBar: AppBar(title: Text('Budgets')),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          Row(
-            spacing: 8,
-            children: List.generate(
-              3,
-              (index) => Expanded(
-                child: OutlinedCard(
-                  borderColor: index == 2 ? AppColors.primary : null,
-                  bgColor: index == 2 ? AppColors.primaryFaint : null,
-                  borderRadius: 8,
-                  child: Center(child: Text('Aug')),
+      appBar: AppBar(title: const Text('Budgets')),
+      // 3. Use .when to handle states
+      body: budgetState.when(
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (error, stack) => Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Error: $error', textAlign: TextAlign.center),
+                const Gap(20),
+                CustomElevatedButton(
+                  text: 'Retry',
+                  onPressed: () => ref
+                      .read(budgetHomeNotifierProvider.notifier)
+                      .fetchBudgetHomeData(),
                 ),
-              ),
+              ],
             ),
           ),
-          const Gap(24),
-          InsightCard(
-            insightType: InsightType.nextBestAction,
-            text:
-                "You've spent 15% more on transport this month. Try adjusting your allocation.",
-          ),
-          const Gap(28),
-          _buildBudgetBasicsCard(),
-          const Gap(28),
-          SectionTitleWidget(title: 'Category limits'),
-          const Gap(8),
-          _buildCategoryItem('Dining & drinks', 0, 50000, AppIcons.editIcon),
-          const Gap(8),
-          _buildCategoryItem('Auto & transport', 0, 40000, AppIcons.editIcon),
-          const Gap(8),
-          _buildCategoryItem('Everything else', 0, 510000, AppIcons.infoIcon),
-          const Gap(28),
-          CustomOutlinedButton(text: 'Add category', onPressed: () {}),
-          const Gap(8),
-          CustomElevatedButton(
-            text: 'Save',
-            onPressed: () => context.pushNamed(SetIncomeScreen.path),
-          ),
-        ],
+        ),
+        data: (data) {
+          // 4. Calculate derived values
+          final totalBudget = data.budgets.fold<num>(
+            0,
+            (prev, budget) => prev + budget.targetAmountMonthly,
+          );
+          final remaining = data.totalEarnings - totalBudget;
+
+          return ListView(
+            padding: const EdgeInsets.all(16),
+            children: [
+              // --- Static Month Selector (as before) ---
+              Row(
+                spacing: 8,
+                children: List.generate(
+                  3,
+                  (index) => Expanded(
+                    child: OutlinedCard(
+                      borderColor: index == 2 ? AppColors.primary : null,
+                      bgColor: index == 2 ? AppColors.primaryFaint : null,
+                      borderRadius: 8,
+                      child: Center(child: Text('Aug')), // TODO: Make dynamic
+                    ),
+                  ),
+                ),
+              ),
+              const Gap(24),
+              // --- Static Insight (as before) ---
+              const InsightCard(
+                insightType: InsightType.nextBestAction,
+                text:
+                    "You've spent 15% more on transport this month. Try adjusting your allocation.",
+              ),
+              const Gap(28),
+              // 5. Build Budget Basics with live data
+              _buildBudgetBasicsCard(data, totalBudget, remaining),
+              const Gap(28),
+              SectionTitleWidget(title: 'Category limits'),
+              const Gap(8),
+
+              // 6. Dynamically build category list
+              ...data.budgets.map((budget) {
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: _buildCategoryItem(
+                    budget.budgetName,
+                    budget.balance, // 'amountSpent'
+                    budget.targetAmountMonthly, // 'amount'
+                    AppIcons.editIcon,
+                    onEditPressed: () {
+                      // 7. Pass the budget object to the bottom sheet
+                      EditBudgetBottomSheet.show(context, budget: budget);
+                    },
+                  ),
+                );
+              }),
+              const Gap(28),
+              CustomOutlinedButton(
+                text: 'Add category',
+                onPressed: () {
+                  // TODO: Implement 'Add Category' logic.
+                  // This might show the same bottom sheet but with
+                  // a null budget object to signify "create" mode.
+                },
+              ),
+              const Gap(8),
+              CustomElevatedButton(
+                text: 'Save', // This button's action is unclear from spec
+                onPressed: () => context.pop(), // Changed to pop
+              ),
+            ],
+          );
+        },
       ),
     );
   }
 
   Widget _buildCategoryItem(
     String title,
-    double amountSpent,
-    double amount,
-    String iconPath,
-  ) {
+    num amountSpent, // Changed type
+    num amount, // Changed type
+    String iconPath, {
+    VoidCallback? onEditPressed,
+  }) {
     return OutlinedCard(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -86,7 +146,7 @@ class _EditBudgetScreenState extends ConsumerState<EditBudgetScreen> {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.circle),
+              const Icon(Icons.circle), // TODO: Use dynamic category icon
               const Gap(16),
               Column(
                 mainAxisSize: MainAxisSize.min,
@@ -100,7 +160,8 @@ class _EditBudgetScreenState extends ConsumerState<EditBudgetScreen> {
                     ),
                   ),
                   Text(
-                    '${NumberFormatter.formatCurrency(amount, decimalDigits: 0)} last month',
+                    // Using amountSpent here, was 'last month' before
+                    '${NumberFormatter.formatCurrency(amountSpent.toDouble(), decimalDigits: 0)} spent',
                     style: TextStyle(
                       fontFamily: Constants.neulisNeueFontFamily,
                       fontSize: 8,
@@ -116,14 +177,17 @@ class _EditBudgetScreenState extends ConsumerState<EditBudgetScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                NumberFormatter.formatCurrency(amount, decimalDigits: 0),
+                NumberFormatter.formatCurrency(
+                  amount.toDouble(),
+                  decimalDigits: 0,
+                ),
                 style: TextStyle(
                   fontFamily: Constants.neulisNeueFontFamily,
                   fontSize: 16,
                 ),
               ),
               const Gap(16),
-              InkWell(onTap: () {}, child: AppIcon(AppIcons.editIcon)),
+              InkWell(onTap: onEditPressed, child: AppIcon(AppIcons.editIcon)),
             ],
           ),
         ],
@@ -131,7 +195,11 @@ class _EditBudgetScreenState extends ConsumerState<EditBudgetScreen> {
     );
   }
 
-  Widget _buildBudgetBasicsCard() {
+  Widget _buildBudgetBasicsCard(
+    BudgetHomeData data,
+    num totalBudget,
+    num remaining,
+  ) {
     return OutlinedCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -145,26 +213,53 @@ class _EditBudgetScreenState extends ConsumerState<EditBudgetScreen> {
             ),
           ),
           const Gap(24),
-          _buildBudgetBasicsItem('Monthly income', 1000000, AppIcons.editIcon),
+          _buildBudgetBasicsItem(
+            'Monthly income',
+            data.totalEarnings,
+            AppIcons.editIcon,
+            // Navigate to the screen to set income
+            onPressed: () => context.pushNamed(SetIncomeScreen.path),
+          ),
           const Gap(16),
-          _buildBudgetBasicsItem('Monthly budget', 600000, AppIcons.editIcon),
+          _buildBudgetBasicsItem(
+            'Monthly budget',
+            totalBudget,
+            AppIcons.editIcon,
+            onPressed: () {
+              // This is just a sum, not editable directly.
+              // Maybe tap to see all categories?
+            },
+          ),
           const Divider(height: 48),
-          _buildBudgetBasicsItem('Monthly income', 400000, AppIcons.editIcon),
+          // Renamed this from 'Monthly income' to 'Remaining'
+          _buildBudgetBasicsItem(
+            'Unbudgeted',
+            remaining,
+            AppIcons.infoIcon, // Changed icon
+            onPressed: () {
+              // Show info about unbudgeted funds
+            },
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildBudgetBasicsItem(String title, double amount, String iconPath) {
+  Widget _buildBudgetBasicsItem(
+    String title,
+    num amount, // Changed type
+    String iconPath, {
+    VoidCallback? onPressed,
+  }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(title, style: TextStyle(fontSize: 16)),
+        Text(title, style: const TextStyle(fontSize: 16)),
         Text(
-          NumberFormatter.formatCurrency(amount, decimalDigits: 0),
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+          NumberFormatter.formatCurrency(amount.toDouble(), decimalDigits: 0),
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
         ),
-        InkWell(onTap: () {}, child: AppIcon(iconPath)),
+        InkWell(onTap: onPressed, child: AppIcon(iconPath)),
       ],
     );
   }

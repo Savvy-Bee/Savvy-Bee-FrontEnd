@@ -1,171 +1,171 @@
+// // class WalletRepository {
+// import 'package:dio/dio.dart';
+// import 'package:savvy_bee_mobile/core/network/api_endpoints.dart';
+// import 'package:savvy_bee_mobile/core/network/models/api_response_model.dart';
+// import 'package:savvy_bee_mobile/features/spend/domain/models/institution.dart';
+
+// import '../../../../../core/network/api_client.dart';
+// import '../../../../../core/services/storage_service.dart';
+
 // class WalletRepository {
-import 'package:dio/dio.dart';
-import 'package:savvy_bee_mobile/core/network/api_endpoints.dart';
-import 'package:savvy_bee_mobile/core/network/models/api_response_model.dart';
-import 'package:savvy_bee_mobile/features/spend/domain/models/institution.dart';
+//   final ApiClient _apiClient;
+//   final StorageService _storageService;
 
-import '../../../../../core/network/api_client.dart';
-import '../../../../../core/services/storage_service.dart';
+//   WalletRepository({
+//     required ApiClient apiClient,
+//     required StorageService storageService,
+//   }) : _apiClient = apiClient,
+//        _storageService = storageService;
 
-class WalletRepository {
-  final ApiClient _apiClient;
-  final StorageService _storageService;
+//   /// Initialize auth token from storage
+//   Future<void> initializeAuth() async {
+//     final token = await _storageService.getAuthToken();
+//     if (token != null && token.isNotEmpty) {
+//       _apiClient.setAuthToken(token);
+//     }
+//   }
 
-  WalletRepository({
-    required ApiClient apiClient,
-    required StorageService storageService,
-  }) : _apiClient = apiClient,
-       _storageService = storageService;
+//   // ========================================================================
+//   // Mono Link Account APIs
+//   // ========================================================================
 
-  /// Initialize auth token from storage
-  Future<void> initializeAuth() async {
-    final token = await _storageService.getAuthToken();
-    if (token != null && token.isNotEmpty) {
-      _apiClient.setAuthToken(token);
-    }
-  }
+//   /// Fetch available institutions/banks
+//   Future<ApiResponse<List<Institution>>> fetchInstitutions() async {
+//     try {
+//       await initializeAuth();
 
-  // ========================================================================
-  // Mono Link Account APIs
-  // ========================================================================
+//       final response = await _apiClient.get(ApiEndpoints.fetchInstitutions);
 
-  /// Fetch available institutions/banks
-  Future<ApiResponse<List<Institution>>> fetchInstitutions() async {
-    try {
-      await initializeAuth();
+//       final List<Institution> institutions = (response.data['data'] as List)
+//           .map((json) => Institution.fromJson(json))
+//           .toList();
 
-      final response = await _apiClient.get(ApiEndpoints.fetchInstitutions);
+//       return ApiResponse(
+//         success: response.data['success'] as bool,
+//         message: response.data['message'] as String,
+//         data: institutions,
+//       );
+//     } on ApiException catch (e) {
+//       throw ApiException(
+//         message: e.message,
+//         statusCode: e.statusCode,
+//         data: e.data,
+//       );
+//     } catch (e) {
+//       throw ApiException(message: 'Failed to fetch institutions: $e');
+//     }
+//   }
 
-      final List<Institution> institutions = (response.data['data'] as List)
-          .map((json) => Institution.fromJson(json))
-          .toList();
+//   /// Fetch Mono input data for current user
+//   Future<ApiResponse<MonoInputData>> fetchMonoInputData() async {
+//     try {
+//       await initializeAuth();
 
-      return ApiResponse(
-        success: response.data['success'] as bool,
-        message: response.data['message'] as String,
-        data: institutions,
-      );
-    } on ApiException catch (e) {
-      throw ApiException(
-        message: e.message,
-        statusCode: e.statusCode,
-        data: e.data,
-      );
-    } catch (e) {
-      throw ApiException(message: 'Failed to fetch institutions: $e');
-    }
-  }
+//       final response = await _apiClient.get(ApiEndpoints.fetchMonoInputData);
 
-  /// Fetch Mono input data for current user
-  Future<ApiResponse<MonoInputData>> fetchMonoInputData() async {
-    try {
-      await initializeAuth();
+//       final inputData = MonoInputData.fromJson(response.data['data']);
 
-      final response = await _apiClient.get(ApiEndpoints.fetchMonoInputData);
+//       return ApiResponse(
+//         success: response.data['success'] as bool,
+//         message: response.data['message'] as String,
+//         data: inputData,
+//       );
+//     } on ApiException catch (e) {
+//       throw ApiException(
+//         message: e.message,
+//         statusCode: e.statusCode,
+//         data: e.data,
+//       );
+//     } catch (e) {
+//       throw ApiException(message: 'Failed to fetch Mono input data: $e');
+//     }
+//   }
 
-      final inputData = MonoInputData.fromJson(response.data['data']);
+//   /// Link a bank account using Mono code
+//   Future<ApiResponse<dynamic>> linkAccount({
+//     required String code,
+//     required String accountName,
+//   }) async {
+//     try {
+//       await initializeAuth();
 
-      return ApiResponse(
-        success: response.data['success'] as bool,
-        message: response.data['message'] as String,
-        data: inputData,
-      );
-    } on ApiException catch (e) {
-      throw ApiException(
-        message: e.message,
-        statusCode: e.statusCode,
-        data: e.data,
-      );
-    } catch (e) {
-      throw ApiException(message: 'Failed to fetch Mono input data: $e');
-    }
-  }
+//       final formData = FormData.fromMap({
+//         'code': code,
+//         'AcountName': accountName, // Note: API has typo "Account"
+//       });
 
-  /// Link a bank account using Mono code
-  Future<ApiResponse<dynamic>> linkAccount({
-    required String code,
-    required String accountName,
-  }) async {
-    try {
-      await initializeAuth();
+//       final response = await _apiClient.post(
+//         ApiEndpoints.linkAccount,
+//         data: formData,
+//       );
 
-      final formData = FormData.fromMap({
-        'code': code,
-        'AcountName': accountName, // Note: API has typo "Account"
-      });
+//       return ApiResponse(
+//         success: response.data['success'] as bool,
+//         message: response.data['message'] as String,
+//         data: response.data['data'],
+//       );
+//     } on ApiException catch (e) {
+//       throw ApiException(
+//         message: e.message,
+//         statusCode: e.statusCode,
+//         data: e.data,
+//       );
+//     } catch (e) {
+//       throw ApiException(message: 'Failed to link account: $e');
+//     }
+//   }
 
-      final response = await _apiClient.post(
-        ApiEndpoints.linkAccount,
-        data: formData,
-      );
+//   /// Fetch all linked accounts for current user
+//   Future<ApiResponse<List<LinkedAccount>>> fetchAllLinkedAccounts() async {
+//     try {
+//       await initializeAuth();
 
-      return ApiResponse(
-        success: response.data['success'] as bool,
-        message: response.data['message'] as String,
-        data: response.data['data'],
-      );
-    } on ApiException catch (e) {
-      throw ApiException(
-        message: e.message,
-        statusCode: e.statusCode,
-        data: e.data,
-      );
-    } catch (e) {
-      throw ApiException(message: 'Failed to link account: $e');
-    }
-  }
+//       final response = await _apiClient.get(ApiEndpoints.allLinkedAccounts);
 
-  /// Fetch all linked accounts for current user
-  Future<ApiResponse<List<LinkedAccount>>> fetchAllLinkedAccounts() async {
-    try {
-      await initializeAuth();
+//       final List<LinkedAccount> accounts = (response.data['data'] as List)
+//           .map((json) => LinkedAccount.fromJson(json))
+//           .toList();
 
-      final response = await _apiClient.get(ApiEndpoints.allLinkedAccounts);
+//       return ApiResponse(
+//         success: response.data['success'] as bool,
+//         message: response.data['message'] as String,
+//         data: accounts,
+//       );
+//     } on ApiException catch (e) {
+//       throw ApiException(
+//         message: e.message,
+//         statusCode: e.statusCode,
+//         data: e.data,
+//       );
+//     } catch (e) {
+//       throw ApiException(message: 'Failed to fetch linked accounts: $e');
+//     }
+//   }
 
-      final List<LinkedAccount> accounts = (response.data['data'] as List)
-          .map((json) => LinkedAccount.fromJson(json))
-          .toList();
+//   // ========================================================================
+//   // Account Creation
+//   // ========================================================================
 
-      return ApiResponse(
-        success: response.data['success'] as bool,
-        message: response.data['message'] as String,
-        data: accounts,
-      );
-    } on ApiException catch (e) {
-      throw ApiException(
-        message: e.message,
-        statusCode: e.statusCode,
-        data: e.data,
-      );
-    } catch (e) {
-      throw ApiException(message: 'Failed to fetch linked accounts: $e');
-    }
-  }
+//   /// Create Naira account
+//   Future<ApiResponse<dynamic>> createNairaAccount({required String pin}) async {
+//     try {
+//       await initializeAuth();
 
-  // ========================================================================
-  // Account Creation
-  // ========================================================================
+//       final response = await _apiClient.get(ApiEndpoints.createNairaAccount);
 
-  /// Create Naira account
-  Future<ApiResponse<dynamic>> createNairaAccount() async {
-    try {
-      await initializeAuth();
-
-      final response = await _apiClient.get(ApiEndpoints.createNairaAccount);
-
-      return ApiResponse(
-        success: response.data['success'] as bool,
-        message: response.data['message'] as String,
-        data: response.data['data'],
-      );
-    } on ApiException catch (e) {
-      throw ApiException(
-        message: e.message,
-        statusCode: e.statusCode,
-        data: e.data,
-      );
-    } catch (e) {
-      throw ApiException(message: 'Failed to create Naira account: $e');
-    }
-  }
-}
+//       return ApiResponse(
+//         success: response.data['success'] as bool,
+//         message: response.data['message'] as String,
+//         data: response.data['data'],
+//       );
+//     } on ApiException catch (e) {
+//       throw ApiException(
+//         message: e.message,
+//         statusCode: e.statusCode,
+//         data: e.data,
+//       );
+//     } catch (e) {
+//       throw ApiException(message: 'Failed to create Naira account: $e');
+//     }
+//   }
+// }

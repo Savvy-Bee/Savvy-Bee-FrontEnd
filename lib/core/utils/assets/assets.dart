@@ -27,4 +27,6 @@ class Assets {
   // Honey Jars
   static const String honeyJar = '$_basePath/honey-jar.png';
   // static const String honeyJarSvg = '$_basePath/honey-jar.svg';
+
+  static const String lessonProgress1 = '$_basePath/lesson-progress-1.png';
 }

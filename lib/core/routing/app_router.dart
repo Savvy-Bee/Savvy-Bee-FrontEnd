@@ -7,6 +7,7 @@ import 'package:savvy_bee_mobile/features/chat/presentation/screens/chat_screen.
 import 'package:savvy_bee_mobile/features/chat/presentation/screens/choose_personality_screen.dart';
 import 'package:savvy_bee_mobile/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/hive_screen.dart';
+import 'package:savvy_bee_mobile/features/hive/presentation/screens/lesson_home_screen.dart';
 import 'package:savvy_bee_mobile/features/premium/presentation/screens/premium_screen.dart';
 import 'package:savvy_bee_mobile/features/referral/presentation/screens/referral_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/bills/airtime_screen.dart';
@@ -35,6 +36,7 @@ import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/set_
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/debt/debt_repayment_details_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/goals/create_goal_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/tools_screen.dart';
+import '../../features/hive/presentation/screens/lesson_screen.dart';
 import '../../features/spend/presentation/screens/fund/username_screen.dart';
 import '../../features/spend/presentation/screens/transactions/statement_sent_screen.dart';
 import '../../features/spend/presentation/screens/transfer/transfer_screen.dart';
@@ -396,13 +398,20 @@ final GoRouter appRouter = GoRouter(
     ),
 
     // Hive Routes
-    // GoRoute(
-    //   path: HiveScreen.path,
-    //   name: HiveScreen.path,
-    //   builder: (BuildContext context, GoRouterState state) {
-    //     return HiveScreen();
-    //   },
-    // ),
+    GoRoute(
+      path: LessonHomeScreen.path,
+      name: LessonHomeScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return LessonHomeScreen();
+      },
+    ),
+    GoRoute(
+      path: LessonScreen.path,
+      name: LessonScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return LessonScreen();
+      },
+    ),
 
     // Premium Routes
     GoRoute(

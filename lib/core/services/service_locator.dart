@@ -1,6 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:savvy_bee_mobile/features/spend/data/repositories/transfer_repository.dart.dart';
+import 'package:savvy_bee_mobile/features/tools/data/repositories/tools_repository.dart';
 
 import '../../features/auth/data/repositories/auth_repository.dart';
+import '../../features/spend/data/repositories/wallet_repository.dart';
 import '../network/api_client.dart';
 import '../network/api_endpoints.dart';
 import 'storage_service.dart';
@@ -19,4 +22,19 @@ final authRepositoryProvider = Provider<AuthRepository>((ref) {
   final storageService = ref.watch(storageServiceProvider);
 
   return AuthRepository(apiClient: apiClient, storageService: storageService);
+});
+
+final transferRepositoryProvider = Provider<TransferRepository>((ref) {
+  final apiClient = ref.watch(apiClientProvider);
+  return TransferRepository(apiClient: apiClient);
+});
+
+final walletRepositoryProvider = Provider<WalletRepository>((ref) {
+  final apiClient = ref.watch(apiClientProvider);
+  return WalletRepository(apiClient: apiClient);
+});
+
+final toolsRepositoryProvider = Provider<ToolsRepository>((ref) {
+  final apiClient = ref.watch(apiClientProvider);
+  return ToolsRepository(apiClient: apiClient);
 });

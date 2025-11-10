@@ -7,6 +7,7 @@ import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/utils/date_formatter.dart';
 import 'package:savvy_bee_mobile/core/utils/number_formatter.dart';
 import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/providers/wallet_provider.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/bills/pay_bills_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/transactions/transaction_history_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/transfer/transfer_screen.dart';
@@ -29,14 +30,32 @@ class SpendScreen extends ConsumerStatefulWidget {
 class _SpendScreenState extends ConsumerState<SpendScreen> {
   @override
   Widget build(BuildContext context) {
+    final dashboardAsync = ref.watch(dashboardDataProvider);
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
-        child: 1 != 1
-            ? _buildEmptyStateWidget()
-            : ListView(
+        child: dashboardAsync.when(
+          data: (response) {
+            if (response.data == null) {
+              return _buildEmptyStateWidget();
+            }
+
+            final dashboard = response.data!;
+            final hasWallet = dashboard.accounts.ngnAccount != null;
+
+            if (!hasWallet) {
+              return _buildEmptyStateWidget();
+            }
+
+            return RefreshIndicator(
+              onRefresh: () async {
+                ref.invalidate(dashboardDataProvider);
+                ref.invalidate(transactionListProvider);
+              },
+              child: ListView(
                 children: [
-                  WalletBalanceCard(),
+                  WalletBalanceCard(dashboard: dashboard),
                   const Gap(24.0),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -60,8 +79,6 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
                     ],
                   ),
                   const Gap(24.0),
-                  if (1 == 2) _buildEmptyTransactionsCard(),
-                  if (1 == 2) const Gap(24.0),
                   _buildRecentTransactionsCard(),
                   const Gap(24.0),
                   InfoCard(
@@ -74,6 +91,34 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
                   ),
                 ],
               ),
+            );
+          },
+          loading: () => Center(child: CircularProgressIndicator()),
+          error: (error, stack) => Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.error_outline, size: 48, color: AppColors.error),
+                const Gap(16),
+                Text(
+                  'Failed to load dashboard',
+                  style: TextStyle(fontSize: 16),
+                ),
+                const Gap(8),
+                Text(
+                  error.toString(),
+                  style: TextStyle(fontSize: 12, color: AppColors.textLight),
+                  textAlign: TextAlign.center,
+                ),
+                const Gap(16),
+                ElevatedButton(
+                  onPressed: () => ref.invalidate(dashboardDataProvider),
+                  child: Text('Retry'),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -145,137 +190,161 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
   }
 
   Widget _buildRecentTransactionsCard() {
-    final List<Map<String, dynamic>> transactions = [
-      {
-        'type': 'credit',
-        'description': 'Paycheck',
-        'amount': 1000.0,
-        'date': DateTime.now(),
-      },
-      {
-        'type': 'debit',
-        'description': 'Grocery store',
-        'amount': -200.0,
-        'date': DateTime.now().subtract(Duration(days: 1)),
-      },
-      {
-        'type': 'credit',
-        'description': 'Savings',
-        'amount': 500.0,
-        'date': DateTime.now().subtract(Duration(days: 2)),
-      },
-      {
-        'type': 'debit',
-        'description': 'Restaurant',
-        'amount': -150.0,
-        'date': DateTime.now().subtract(Duration(days: 3)),
-      },
-    ];
+    final transactionsAsync = ref.watch(transactionListProvider);
 
-    return OutlinedCard(
-      padding: EdgeInsets.zero,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0).copyWith(bottom: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'RECENT TRANSACTIONS',
-                  style: TextStyle(
-                    fontSize: 10,
-                    fontFamily: Constants.neulisNeueFontFamily,
-                  ),
-                ),
-                InkWell(
-                  onTap: () {},
-                  child: Text(
-                    'VIEW ALL',
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontFamily: Constants.neulisNeueFontFamily,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const Divider(),
-          const Gap(16),
-          ...List.generate(
-            transactions.length,
-            (index) => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        transactions[index]['type'] == 'credit'
-                            ? Icons.arrow_upward
-                            : Icons.arrow_downward,
-                        color: transactions[index]['type'] == 'credit'
-                            ? AppColors.success
-                            : AppColors.error,
+    return transactionsAsync.when(
+      data: (response) {
+        final transactions = response.data?.transactions ?? [];
+
+        if (transactions.isEmpty) {
+          return _buildEmptyTransactionsCard();
+        }
+
+        return OutlinedCard(
+          padding: EdgeInsets.zero,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16.0).copyWith(bottom: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'RECENT TRANSACTIONS',
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontFamily: Constants.neulisNeueFontFamily,
                       ),
-                      const Gap(16.0),
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                    ),
+                    InkWell(
+                      onTap: () =>
+                          context.pushNamed(TransactionHistoryScreen.path),
+                      child: Text(
+                        'VIEW ALL',
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontFamily: Constants.neulisNeueFontFamily,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Divider(),
+              const Gap(16),
+              ...transactions
+                  .take(4)
+                  .map(
+                    (transaction) => Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 8,
+                        horizontal: 16,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                transaction.type == 'credit'
+                                    ? Icons.arrow_upward
+                                    : Icons.arrow_downward,
+                                color: transaction.type == 'credit'
+                                    ? AppColors.success
+                                    : AppColors.error,
+                              ),
+                              const Gap(16.0),
+                              Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    transaction.narration,
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                      fontFamily:
+                                          Constants.neulisNeueFontFamily,
+                                    ),
+                                  ),
+                                  Text(
+                                    '${DateFormatter.formatRelative(transaction.createdAt)} ${DateFormatter.formatTime(transaction.createdAt)}',
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                      color: AppColors.textLight,
+                                      fontFamily:
+                                          Constants.neulisNeueFontFamily,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                           Text(
-                            transactions[index]['description'],
+                            NumberFormatter.formatCurrency(
+                              transaction.type == 'credit'
+                                  ? transaction.amount
+                                  : -transaction.amount,
+                            ),
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
                               fontFamily: Constants.neulisNeueFontFamily,
-                            ),
-                          ),
-                          Text(
-                            '${DateFormatter.formatRelative(transactions[index]['date'])} ${DateFormatter.formatTime(transactions[index]['date'])}',
-                            style: TextStyle(
-                              fontSize: 10,
-                              color: AppColors.textLight,
-                              fontFamily: Constants.neulisNeueFontFamily,
+                              color: transaction.type == 'credit'
+                                  ? AppColors.success
+                                  : null,
                             ),
                           ),
                         ],
                       ),
-                    ],
-                  ),
-                  Text(
-                    NumberFormatter.formatCurrency(
-                      transactions[index]['amount'],
-                    ),
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      fontFamily: Constants.neulisNeueFontFamily,
-                      color: transactions[index]['type'] == 'credit'
-                          ? AppColors.success
-                          : null,
                     ),
                   ),
-                ],
-              ),
-            ),
+            ],
           ),
-        ],
+        );
+      },
+      loading: () => OutlinedCard(
+        padding: EdgeInsets.symmetric(vertical: 48.0),
+        child: Center(child: CircularProgressIndicator()),
+      ),
+      error: (error, stack) => OutlinedCard(
+        padding: EdgeInsets.symmetric(vertical: 24.0),
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.error_outline, size: 24, color: AppColors.error),
+              const Gap(8),
+              Text(
+                'Failed to load transactions',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontFamily: Constants.neulisNeueFontFamily,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
 }
 
 class WalletBalanceCard extends ConsumerWidget {
-  const WalletBalanceCard({super.key});
+  final dynamic dashboard;
+
+  const WalletBalanceCard({super.key, required this.dashboard});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final primaryAccount = dashboard.accounts.firstWhere(
+      (account) => account.isPrimary,
+      orElse: () => dashboard.accounts.first,
+    );
+
     return OutlinedCard(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -286,7 +355,7 @@ class WalletBalanceCard extends ConsumerWidget {
               Row(
                 children: [
                   Text(
-                    'SAVVY WALLET - 1234567890',
+                    'SAVVY WALLET - ${primaryAccount.accountNumber}',
                     style: TextStyle(
                       fontSize: 10,
                       color: AppColors.textLight,
@@ -295,7 +364,9 @@ class WalletBalanceCard extends ConsumerWidget {
                   ),
                   const Gap(8),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      // Copy account number to clipboard
+                    },
                     child: Icon(
                       Icons.copy,
                       size: 14,
@@ -307,7 +378,7 @@ class WalletBalanceCard extends ConsumerWidget {
               ),
               IconButton(
                 onPressed: () =>
-                    _OptionsBottomSheet.showOptionsBottomSheet(context),
+                    _OptionsBottomSheet.showOptionsBottomSheet(context, ref),
                 style: Constants.collapsedButtonStyle,
                 icon: Icon(Icons.more_vert, color: AppColors.greyDark),
               ),
@@ -316,7 +387,7 @@ class WalletBalanceCard extends ConsumerWidget {
           Row(
             children: [
               Text(
-                NumberFormatter.formatCurrency(0),
+                NumberFormatter.formatCurrency(primaryAccount.balance),
                 style: TextStyle(
                   fontSize: 36,
                   fontWeight: FontWeight.bold,
@@ -330,7 +401,7 @@ class WalletBalanceCard extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                'Last updated ${DateFormatter.formatRelative(DateTime.now())}',
+                'Last updated ${DateFormatter.formatRelative(dashboard.lastUpdated ?? DateTime.now())}',
                 style: TextStyle(
                   fontSize: 10,
                   color: AppColors.textSecondary,
@@ -355,12 +426,14 @@ class WalletBalanceCard extends ConsumerWidget {
 }
 
 class _OptionsBottomSheet extends StatelessWidget {
-  const _OptionsBottomSheet();
+  final WidgetRef ref;
 
-  static void showOptionsBottomSheet(BuildContext context) {
+  const _OptionsBottomSheet({required this.ref});
+
+  static void showOptionsBottomSheet(BuildContext context, WidgetRef ref) {
     showModalBottomSheet(
       context: context,
-      builder: (context) => _OptionsBottomSheet(),
+      builder: (context) => _OptionsBottomSheet(ref: ref),
     );
   }
 
@@ -396,17 +469,27 @@ class _OptionsBottomSheet extends StatelessWidget {
               _buildOptionsTile(
                 title: 'Refresh',
                 icon: Icons.refresh,
-                onTap: () => context.pop(),
+                onTap: () {
+                  ref.invalidate(dashboardDataProvider);
+                  ref.invalidate(transactionListProvider);
+                  context.pop();
+                },
               ),
               _buildOptionsTile(
                 title: 'Turn on privacy',
-                icon: Icons.refresh,
-                onTap: () => context.pop(),
+                icon: Icons.visibility_off,
+                onTap: () {
+                  // TODO: Implement privacy toggle
+                  context.pop();
+                },
               ),
               _buildOptionsTile(
                 title: 'Manage accounts',
-                icon: Icons.refresh,
-                onTap: () => context.pop(),
+                icon: Icons.account_balance,
+                onTap: () {
+                  // TODO: Navigate to manage accounts screen
+                  context.pop();
+                },
               ),
             ],
           ),

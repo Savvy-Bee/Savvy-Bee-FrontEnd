@@ -45,6 +45,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
   final _emailController = TextEditingController();
+  final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _otpController = TextEditingController();
   final _dobController = TextEditingController();
@@ -131,10 +132,11 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
           if (!_passwordFormKey.currentState!.validate()) return;
 
           final request = RegisterRequest(
-            firstName: _firstNameController.text,
-            lastName: _lastNameController.text,
-            email: _emailController.text,
-            password: _passwordController.text,
+            firstName: _firstNameController.text.trim(),
+            lastName: _lastNameController.text.trim(),
+            email: _emailController.text.trim(),
+            password: _passwordController.text.trim(),
+            username: _usernameController.text.trim(),
           );
 
           final success = await authNotifier.register(request);
@@ -386,12 +388,23 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   Widget _emailView() {
     return Form(
       key: _emailFormKey,
-      child: CustomTextFormField(
-        hint: 'Email address',
-        controller: _emailController,
-        keyboardType: TextInputType.emailAddress,
-        textInputAction: TextInputAction.done,
-        validator: (value) => InputValidator.validateEmail(value),
+      child: Column(
+        children: [
+          CustomTextFormField(
+            hint: 'Email address',
+            controller: _emailController,
+            keyboardType: TextInputType.emailAddress,
+            validator: (value) => InputValidator.validateEmail(value),
+          ),
+          const Gap(5.0),
+          CustomTextFormField(
+            hint: 'Username',
+            controller: _usernameController,
+            textInputAction: TextInputAction.done,
+            validator: (value) =>
+                InputValidator.validateName(value, 'Username'),
+          ),
+        ],
       ),
     );
   }

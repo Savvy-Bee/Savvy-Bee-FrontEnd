@@ -9,7 +9,7 @@ import 'package:savvy_bee_mobile/core/widgets/section_title_widget.dart';
 import 'package:savvy_bee_mobile/features/chat/presentation/screens/chat_screen.dart';
 import 'package:savvy_bee_mobile/features/dashboard/presentation/widgets/savings_target_widget.dart';
 
-import '../widgets/article_card.dart';
+import '../../../../core/widgets/article_card.dart';
 import '../../../articles/presentation/widgets/article_bottom_sheet.dart';
 import '../widgets/financial_health_widget.dart';
 import '../widgets/spending_category_widget.dart';

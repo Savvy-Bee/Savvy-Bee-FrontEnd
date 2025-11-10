@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/utils/constants.dart';
-import '../../../../core/widgets/outlined_card.dart';
+import '../theme/app_colors.dart';
+import '../utils/constants.dart';
+import 'outlined_card.dart';
 
 class ArticleCard extends StatelessWidget {
   final String title;

@@ -24,4 +24,11 @@ class Illustrations {
   static const String quizBeeAvatar = '$_basePath/quiz_bee_head.png';
   static const String interestBeeAvatar = '$_basePath/interest_bee_head.png';
   static const String scammerBeeAvatar = '$_basePath/scammer_bee_head.png';
+
+  // Lessons Illustrations
+  static const String lesson1 = '$_basePath/lesson-1.png';
+  static const String lesson2 = '$_basePath/lesson-2.png';
+  static const String lesson3 = '$_basePath/lesson-3.png';
+
+  static const String hiveFlower = '$_basePath/hive-flower.png';
 }

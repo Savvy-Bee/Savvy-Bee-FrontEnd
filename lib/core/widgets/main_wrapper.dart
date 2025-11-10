@@ -36,10 +36,10 @@ class MainWrapper extends ConsumerWidget {
 
   PreferredSize _buildHeader(BuildContext context) {
     return PreferredSize(
-      preferredSize: Size.fromHeight(50),
+      preferredSize: Size.fromHeight(60),
       child: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(top: 16),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/assets.dart';
@@ -25,10 +24,18 @@ class GoalStatsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OutlinedCard(
+      padding: const EdgeInsets.all(14),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Image.asset(Assets.honeyJar),
+          Container(
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: AppColors.primaryFaint,
+              borderRadius: BorderRadius.circular(5),
+            ),
+            child: Image.asset(Assets.honeyJar, height: 50, width: 50),
+          ),
           const Gap(24),
           Expanded(
             child: Column(
@@ -45,7 +52,7 @@ class GoalStatsCard extends StatelessWidget {
                 ),
                 const Gap(8),
                 Row(
-                  spacing: 24,
+                  spacing: 14,
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     buildStatItem(
