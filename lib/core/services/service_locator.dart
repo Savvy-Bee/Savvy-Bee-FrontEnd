@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:savvy_bee_mobile/features/spend/data/repositories/kyc_repository.dart';
 import 'package:savvy_bee_mobile/features/spend/data/repositories/transfer_repository.dart.dart';
 import 'package:savvy_bee_mobile/features/tools/data/repositories/tools_repository.dart';
 
@@ -37,4 +38,9 @@ final walletRepositoryProvider = Provider<WalletRepository>((ref) {
 final toolsRepositoryProvider = Provider<ToolsRepository>((ref) {
   final apiClient = ref.watch(apiClientProvider);
   return ToolsRepository(apiClient: apiClient);
+});
+
+final kycRepositoryProvider = Provider<KycRepository>((ref) {
+  final apiClient = ref.watch(apiClientProvider);
+  return KycRepository(apiClient: apiClient);
 });

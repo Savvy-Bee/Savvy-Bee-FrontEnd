@@ -35,4 +35,8 @@ class ApiEndpoints {
   // Dashboard Data endpoint
   static const String dashboardData = '/wallet/mono/details/dashboard';
   static const String linkedAccounts = '/wallet/mono/details/alluserbanks';
+
+  // KYC Endpoints
+  static const String verifyNin = '/auth/kyc/identity-number/nin/ng';
+  static const String verifyBvn = '/auth/kyc/identity-number/bvn/ng';
 }

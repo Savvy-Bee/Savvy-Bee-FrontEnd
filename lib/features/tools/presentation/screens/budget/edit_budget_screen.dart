@@ -12,6 +12,7 @@ import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
 import 'package:savvy_bee_mobile/core/widgets/section_title_widget.dart';
 import 'package:savvy_bee_mobile/features/tools/domain/models/budget.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/providers/tools_provider.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/set_budget_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/set_income_screen.dart';
 
 import '../../widgets/insight_card.dart';
@@ -29,12 +30,10 @@ class EditBudgetScreen extends ConsumerStatefulWidget {
 class _EditBudgetScreenState extends ConsumerState<EditBudgetScreen> {
   @override
   Widget build(BuildContext context) {
-    // 2. Watch the provider
     final budgetState = ref.watch(budgetHomeNotifierProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Budgets')),
-      // 3. Use .when to handle states
       body: budgetState.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stack) => Center(
@@ -56,7 +55,6 @@ class _EditBudgetScreenState extends ConsumerState<EditBudgetScreen> {
           ),
         ),
         data: (data) {
-          // 4. Calculate derived values
           final totalBudget = data.budgets.fold<num>(
             0,
             (prev, budget) => prev + budget.targetAmountMonthly,
@@ -66,7 +64,6 @@ class _EditBudgetScreenState extends ConsumerState<EditBudgetScreen> {
           return ListView(
             padding: const EdgeInsets.all(16),
             children: [
-              // --- Static Month Selector (as before) ---
               Row(
                 spacing: 8,
                 children: List.generate(
@@ -82,14 +79,12 @@ class _EditBudgetScreenState extends ConsumerState<EditBudgetScreen> {
                 ),
               ),
               const Gap(24),
-              // --- Static Insight (as before) ---
               const InsightCard(
                 insightType: InsightType.nextBestAction,
                 text:
                     "You've spent 15% more on transport this month. Try adjusting your allocation.",
               ),
               const Gap(28),
-              // 5. Build Budget Basics with live data
               _buildBudgetBasicsCard(data, totalBudget, remaining),
               const Gap(28),
               SectionTitleWidget(title: 'Category limits'),
@@ -225,10 +220,7 @@ class _EditBudgetScreenState extends ConsumerState<EditBudgetScreen> {
             'Monthly budget',
             totalBudget,
             AppIcons.editIcon,
-            onPressed: () {
-              // This is just a sum, not editable directly.
-              // Maybe tap to see all categories?
-            },
+            onPressed: () => context.pushNamed(SetBudgetScreen.path),
           ),
           const Divider(height: 48),
           // Renamed this from 'Monthly income' to 'Remaining'

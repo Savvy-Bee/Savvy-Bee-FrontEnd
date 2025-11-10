@@ -205,7 +205,7 @@ final GoRouter appRouter = GoRouter(
       path: BvnVerificationScreen.path,
       name: BvnVerificationScreen.path,
       builder: (BuildContext context, GoRouterState state) {
-        return const BvnVerificationScreen();
+        return BvnVerificationScreen(data: state.extra as Map<String, dynamic>);
       },
     ),
     GoRoute(
@@ -219,7 +219,7 @@ final GoRouter appRouter = GoRouter(
       path: LivePhotoScreen.path,
       name: LivePhotoScreen.path,
       builder: (BuildContext context, GoRouterState state) {
-        return const LivePhotoScreen();
+        return LivePhotoScreen(data: state.extra as Map<String, dynamic>);
       },
     ),
     GoRoute(

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
-import 'package:savvy_bee_mobile/core/widgets/bottom_sheets/edit_budget_bottom_sheet.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 
 import '../../../../../core/theme/app_colors.dart';
@@ -39,12 +38,13 @@ class _SetBudgetScreenState extends ConsumerState<SetBudgetScreen> {
                       fontSize: 28,
                       fontWeight: FontWeight.w500,
                       fontFamily: Constants.neulisNeueFontFamily,
+                      height: 1,
                     ),
                   ),
-                  const Gap(16),
+                  const Gap(14),
                   Text(
                     "We'll subtract your monthly budget from your income to determine your savings.",
-                    style: TextStyle(fontSize: 16),
+                    style: TextStyle(fontSize: 16, height: 1),
                   ),
                   const Gap(28),
                   InsightCard(
@@ -109,7 +109,7 @@ class _SetBudgetScreenState extends ConsumerState<SetBudgetScreen> {
                   ),
                   Text.rich(
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
                     TextSpan(
                       text: "At this rate you'll save ",
                       children: [
