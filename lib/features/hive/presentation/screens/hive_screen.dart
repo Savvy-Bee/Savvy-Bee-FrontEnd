@@ -24,54 +24,168 @@ class HiveScreen extends ConsumerStatefulWidget {
 }
 
 class _HiveScreenState extends ConsumerState<HiveScreen> {
+  final List<Map<String, dynamic>> insights = [
+    {
+      'title': 'Should you save financially with your partner?',
+      'subtitle': 'Let\'s get financially intimate',
+      'imagePath': Illustrations.matchingAndQuizBee,
+      'color': AppColors.primary,
+    },
+    {
+      'title': 'How to build an emergency fund on a tight budget',
+      'subtitle': 'Small steps, big safety net',
+      'imagePath': Illustrations.savingsBeePose2,
+      'color': AppColors.success,
+    },
+    {
+      'title': 'Investing vs. saving: which is right for you?',
+      'subtitle': 'Understanding your financial goals',
+      'imagePath': Illustrations.interestBee,
+      'color': AppColors.bgBlue,
+    },
+    {
+      'title': 'Smart spending: needs vs. wants',
+      'subtitle': 'Make every dollar count',
+      'imagePath': Illustrations.familyBee,
+      'color': AppColors.primary,
+    },
+    {
+      'title': 'Side-hustle starter guide',
+      'subtitle': 'Turn skills into extra income',
+      'imagePath': Illustrations.matchingAndQuizBee,
+      'color': AppColors.purple,
+    },
+  ];
+
+  final List<Map<String, String>> courses = [
+    {
+      'title': 'Savings 101',
+      'bodyText':
+          'Master the fundamentals of saving money, from setting goals to building emergency funds.',
+      'lessonCount': '5',
+      'difficultyLevel': 'Beginner-friendly',
+    },
+    {
+      'title': 'Budgeting Basics',
+      'bodyText':
+          'Learn how to create and stick to a budget that works for your lifestyle and goals.',
+      'lessonCount': '7',
+      'difficultyLevel': 'Beginner-friendly',
+    },
+    {
+      'title': 'Investing Intro',
+      'bodyText':
+          'Discover the basics of investing and how to make your money work for you.',
+      'lessonCount': '6',
+      'difficultyLevel': 'Intermediate',
+    },
+    {
+      'title': 'Debt Management',
+      'bodyText':
+          'Understand how to tackle debt strategically and avoid common pitfalls.',
+      'lessonCount': '4',
+      'difficultyLevel': 'Beginner-friendly',
+    },
+    {
+      'title': 'Credit Scores',
+      'bodyText':
+          'Learn what affects your credit score and how to improve it over time.',
+      'lessonCount': '5',
+      'difficultyLevel': 'Beginner-friendly',
+    },
+    {
+      'title': 'Emergency Funds',
+      'bodyText':
+          'Build a safety net that protects you from unexpected financial shocks.',
+      'lessonCount': '3',
+      'difficultyLevel': 'Beginner-friendly',
+    },
+    {
+      'title': 'Retirement Planning',
+      'bodyText':
+          'Start planning early for retirement with the right accounts and strategies.',
+      'lessonCount': '8',
+      'difficultyLevel': 'Intermediate',
+    },
+    {
+      'title': 'Tax Basics',
+      'bodyText':
+          'Navigate the essentials of income tax and maximize your deductions.',
+      'lessonCount': '6',
+      'difficultyLevel': 'Intermediate',
+    },
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          SectionTitleWidget(title: 'Explore courses'),
-          const Gap(16),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              spacing: 8,
-              children: List.generate(
-                3,
-                (index) => _buildCourseCard(
-                  title: 'Savings 101',
-                  bodyText:
-                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-                  lessonCount: 5,
-                  difficultyLevel: 'Beginner-friendly',
-                  onStartLesson: () => context.pushNamed(LessonHomeScreen.path),
-                ),
-              ),
-            ),
-          ),
-          const Gap(24),
-          SectionTitleWidget(title: 'Recent insights'),
-          const Gap(16),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              spacing: 8,
-              children: List.generate(
-                3,
-                (index) => ArticleCard(
-                  title: 'Should you save financially with your partner?',
-                  backgroundColor: AppColors.primary,
-                  imagePath: Illustrations.matchingAndQuizBee,
-                  subtitle: "Let's get financially intimate",
-                  onTap: () {},
-                ),
-              ),
-            ),
-          ),
-          const Gap(24),
-          SectionTitleWidget(title: 'Arcade'),
-          const Gap(16),
+      appBar: AppBar(
+        title: Text(
+          'Hi Danny!',
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+        centerTitle: false,
+        actions: [
+          IconButton(onPressed: () {}, icon: Icon(Icons.more_vert_rounded)),
         ],
+      ),
+      body: SafeArea(
+        child: ListView(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 16),
+              child: SectionTitleWidget(title: 'Explore courses'),
+            ),
+            const Gap(16),
+            SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: 8,
+                children: courses
+                    .map(
+                      (course) => _buildCourseCard(
+                        title: course['title']!,
+                        bodyText: course['bodyText']!,
+                        lessonCount: int.parse(course['lessonCount']!),
+                        difficultyLevel: course['difficultyLevel']!,
+                        onStartLesson: () =>
+                            context.pushNamed(LessonHomeScreen.path),
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
+            const Gap(24),
+            Padding(
+              padding: const EdgeInsets.only(left: 16),
+              child: SectionTitleWidget(title: 'Recent insights'),
+            ),
+            const Gap(16),
+            SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                spacing: 8,
+                children: insights
+                    .map(
+                      (insight) => ArticleCard(
+                        title: insight['title']!,
+                        backgroundColor: insight['color'],
+                        imagePath: insight['imagePath']!,
+                        subtitle: insight['subtitle']!,
+                        onTap: () {},
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
+            const Gap(24),
+            // SectionTitleWidget(title: 'Arcade'),
+            const Gap(16),
+          ],
+        ),
       ),
     );
   }
@@ -92,7 +206,7 @@ class _HiveScreenState extends ConsumerState<HiveScreen> {
           Text(
             title,
             style: TextStyle(
-              fontSize: 28,
+              fontSize: 24,
               fontWeight: FontWeight.bold,
               fontFamily: Constants.neulisNeueFontFamily,
             ),

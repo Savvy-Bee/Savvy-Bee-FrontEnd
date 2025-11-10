@@ -49,7 +49,7 @@ class CategoryProgressWidget extends StatelessWidget {
           ),
           const Gap(6),
           LinearProgressIndicator(
-            value: totalSpent / totalAmount,
+            value: totalAmount == 0 ? 0 : totalSpent / totalAmount,
             backgroundColor: color.withValues(alpha: 0.2),
             minHeight: 5,
             borderRadius: BorderRadius.circular(10),
@@ -60,7 +60,9 @@ class CategoryProgressWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '${(totalSpent / totalAmount * 100)}%',
+                totalAmount == 0
+                    ? '0%'
+                    : '${(totalSpent / totalAmount * 100).toStringAsFixed(0)}%',
                 style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
               ),
               Text.rich(

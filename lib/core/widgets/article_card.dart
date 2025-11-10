@@ -33,6 +33,7 @@ class ArticleCard extends StatelessWidget {
           child: Stack(
             children: [
               Container(
+                width: double.infinity,
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: AppColors.white,
@@ -57,8 +58,8 @@ class ArticleCard extends StatelessWidget {
                 right: 0,
                 child: Image.asset(
                   imagePath,
-                  height: 150,
-                  width: 150,
+                  height: 130,
+                  width: 130,
                   fit: BoxFit.contain,
                 ),
               ),

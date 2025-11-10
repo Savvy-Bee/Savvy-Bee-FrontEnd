@@ -21,24 +21,71 @@ class LessonHomeScreen extends ConsumerStatefulWidget {
 }
 
 class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
+  final List<Map<String, dynamic>> lessons = [
+    {
+      'status': 'Completed',
+      'points': 50,
+      'lessonNumber': 1,
+      'illustrationAsset': Illustrations.lesson3,
+      'title': 'Ways people save money',
+      'description':
+          'There are different ways to save money: bank accounts, apps, and piggy banks.',
+    },
+    {
+      'status': 'Current',
+      'points': 50,
+      'lessonNumber': 2,
+      'illustrationAsset': Illustrations.lesson2,
+      'title': 'Good vs. Not-so-Good',
+      'description': 'Learn which saving habits help and which ones hurt.',
+    },
+    {
+      'status': 'Not started',
+      'points': 50,
+      'lessonNumber': 3,
+      'illustrationAsset': Illustrations.lesson1,
+      'title': 'Needs vs. Wants',
+      'description':
+          'Understand the difference between what you need and what you want.',
+    },
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _buildAppBar(),
       body: ListView(
-        padding: const EdgeInsets.all(16),
         children: [
           SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16,
+            ).copyWith(top: 35),
             scrollDirection: Axis.horizontal,
             child: Row(
               spacing: 12,
-              children: List.generate(3, (index) => _buildLessonCard()),
+              children: List.generate(
+                lessons.length,
+                (index) => _buildLessonCard(
+                  status: lessons[index]['status'],
+                  points: lessons[index]['points'],
+                  lessonNumber: lessons[index]['lessonNumber'],
+                  illustrationAsset: lessons[index]['illustrationAsset'],
+                  title: lessons[index]['title'],
+                  description: lessons[index]['description'],
+                ),
+              ),
             ),
           ),
-          const Gap(40),
-          CustomElevatedButton(
-            text: 'Continue',
-            onPressed: () => context.pushNamed(LessonScreen.path),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                const Gap(40),
+                CustomElevatedButton(
+                  text: 'Continue',
+                  onPressed: () => context.pushNamed(LessonScreen.path),
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -83,8 +130,17 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
     );
   }
 
-  Widget _buildLessonCard() {
+  Widget _buildLessonCard({
+    required String status,
+    required int points,
+    required int lessonNumber,
+    required String illustrationAsset,
+    required String title,
+    required String description,
+  }) {
     var width = MediaQuery.sizeOf(context).width / 1.2;
+    final locked = status == "Not started";
+
     return Column(
       spacing: 8,
       mainAxisSize: MainAxisSize.min,
@@ -95,36 +151,39 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'In progress',
+                status,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontFamily: Constants.neulisNeueFontFamily,
+                  color: locked ? AppColors.buttonDisabled : null,
                 ),
               ),
               const Spacer(),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                spacing: 4,
-                children: [
-                  Text(
-                    '+20',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontFamily: Constants.neulisNeueFontFamily,
+              locked
+                  ? Icon(Icons.lock_outline)
+                  : Row(
+                      mainAxisSize: MainAxisSize.min,
+                      spacing: 4,
+                      children: [
+                        Text(
+                          '+$points',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontFamily: Constants.neulisNeueFontFamily,
+                          ),
+                        ),
+                        Image.asset(Illustrations.hiveFlower),
+                      ],
                     ),
-                  ),
-                  Image.asset(Illustrations.hiveFlower),
-                ],
-              ),
             ],
           ),
         ),
         OutlinedCard(
           hasShadow: true,
           width: width,
-          borderColor: AppColors.primary,
+          borderColor: locked ? AppColors.grey : AppColors.primary,
           borderWidth: 3,
-          bgColor: AppColors.primaryFaded,
+          bgColor: locked ? AppColors.greyLight : AppColors.primaryFaded,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 45),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -145,7 +204,7 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
                         ),
                       ),
                       Text(
-                        '1',
+                        '$lessonNumber',
                         style: TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.bold,
@@ -158,22 +217,23 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
                 ],
               ),
               const Gap(8),
-              Image.asset(Illustrations.lesson1),
+              Image.asset(illustrationAsset),
               Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    'What is Saving?',
+                    title,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 32,
+                      fontSize: 28,
                       fontWeight: FontWeight.bold,
                       fontFamily: Constants.neulisNeueFontFamily,
+                      height: 0.9,
                     ),
                   ),
                   const Gap(8),
                   Text(
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut',
+                    description,
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 12),
                   ),

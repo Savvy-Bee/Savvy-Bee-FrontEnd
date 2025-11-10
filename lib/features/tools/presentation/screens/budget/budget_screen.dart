@@ -72,53 +72,59 @@ class _BudgetScreenState extends ConsumerState<BudgetScreen> {
           ];
 
           // 6. Return the UI with live data
-          return ListView(
-            padding: const EdgeInsets.all(16),
-            children: [
-              const Gap(20),
-              CustomCircularProgressIndicator(
-                // Use calculated progress
-                progress: progress.toDouble(),
-                // Format numbers as strings (assuming NGN currency from insight)
-                currentAmount: "₦${totalSpent.toStringAsFixed(0)}",
-                totalBudget: "₦${totalBudget.toStringAsFixed(0)} budget",
-                size: 280,
-              ),
-              const Gap(47),
-              CustomElevatedButton(
-                text: 'Edit budget',
-                icon: AppIcon(AppIcons.editIcon),
-                onPressed: () => context.pushNamed(EditBudgetScreen.path),
-              ),
-              const Gap(37),
-              // --- Static Insight Cards (as before) ---
-              const InsightCard(
-                text: 'You saved 12% more than last month — amazing work!',
-                insightType: InsightType.nahlInsight,
-              ),
-              const Gap(8),
-              const InsightCard(
-                insightType: InsightType.nextBestAction,
-                text:
-                    'Your dining expenses are trending upward. Try setting a ₦10,000 cap next month.',
-              ),
-              const Gap(16),
+          return RefreshIndicator(
+            onRefresh: () async {
+              ref.invalidate(budgetHomeNotifierProvider);
+            },
+            child: ListView(
+              padding: const EdgeInsets.all(16),
+              children: [
+                const Gap(20),
+                CustomCircularProgressIndicator(
+                  // Use calculated progress
+                  progress: progress.toDouble(),
+                  // Format numbers as strings (assuming NGN currency from insight)
+                  currentAmount: "₦${totalSpent.toStringAsFixed(0)}",
+                  totalBudget: "₦${totalBudget.toStringAsFixed(0)} budget",
+                  size: 280,
+                ),
+                const Gap(47),
+                CustomElevatedButton(
+                  text: 'Edit budget',
+                  icon: AppIcon(AppIcons.editIcon),
+                  onPressed: () => context.pushNamed(EditBudgetScreen.path),
+                ),
+                const Gap(37),
+                // --- Static Insight Cards (as before) ---
+                const InsightCard(
+                  text: 'You saved 12% more than last month — amazing work!',
+                  insightType: InsightType.nahlInsight,
+                ),
+                const Gap(8),
+                const InsightCard(
+                  insightType: InsightType.nextBestAction,
+                  text:
+                      'Your dining expenses are trending upward. Try setting a ₦10,000 cap next month.',
+                ),
+                const Gap(16),
 
-              // 7. Dynamically build category list from data.budgets
-              ...List.generate(data.budgets.length, (index) {
-                final budget = data.budgets[index];
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: CategoryProgressWidget(
-                    title: budget.budgetName,
-                    totalAmount: budget.targetAmountMonthly.toDouble(),
-                    totalSpent: budget.balance.toDouble(),
-                    // Cycle through colors
-                    color: categoryColors[index % categoryColors.length],
-                  ),
-                );
-              }),
-            ],
+                // 7. Dynamically build category list from data.budgets
+                ...List.generate(data.budgets.length, (index) {
+                  final budget = data.budgets[index];
+
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: CategoryProgressWidget(
+                      title: budget.budgetName,
+                      totalAmount: budget.targetAmountMonthly.toDouble(),
+                      totalSpent: budget.balance.toDouble(),
+                      // Cycle through colors
+                      color: categoryColors[index % categoryColors.length],
+                    ),
+                  );
+                }),
+              ],
+            ),
           );
         },
       ),
