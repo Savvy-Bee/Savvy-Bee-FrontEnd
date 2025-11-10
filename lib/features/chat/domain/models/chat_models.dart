@@ -315,7 +315,7 @@ class ChatHistoryResponse {
     return ChatHistoryResponse(
       success: json['success'] ?? false,
       message: json['message'] ?? '',
-      persona: Persona.fromJson(data?['Persona']),
+      persona: Persona.fromJson(data!['Persona']),
       allChats: chatsList.map((chat) => ChatMessage.fromJson(chat)).toList(),
     );
   }

@@ -100,7 +100,11 @@ class ChatNotifier extends AsyncNotifier<ChatState> {
 
       if (response != null && response.success) {
         log('Chat history loaded: ${response.allChats.length} messages');
-        return ChatState(messages: response.allChats, isLoading: false);
+        return ChatState(
+          messages: response.allChats,
+          isLoading: false,
+          persona: response.persona,
+        );
       } else {
         log('Failed to load chat history: ${response?.message}');
         return ChatState(

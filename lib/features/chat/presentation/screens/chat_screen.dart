@@ -8,6 +8,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/assets.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/illustrations.dart';
+import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/utils/file_picker_util.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_snackbar.dart';
 import 'package:savvy_bee_mobile/features/chat/presentation/screens/chat_bubble_widget.dart';
@@ -124,7 +125,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
     return chatAsync.when(
       data: (chatState) => Scaffold(
-        appBar: _buildAppBar(context, chatState.persona?.name ?? '____'),
+        appBar: _buildAppBar(context, chatState.persona?.name ?? '-------'),
         body: Container(
           decoration: BoxDecoration(
             color: AppColors.primaryFaint.withValues(alpha: 0.3),
@@ -447,11 +448,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                 height: 1.5,
               ),
             ),
-            const Gap(32.0),
-            const Text(
-              'Try asking:',
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-            ),
           ],
         ),
       ),
@@ -470,6 +466,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               BackButton(),
+              const SizedBox(),
+              const SizedBox(),
               InkWell(
                 onTap: () => context.pushNamed(ChoosePersonalityScreen.path),
                 child: Column(
@@ -481,7 +479,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                         color: AppColors.primary.withValues(alpha: 0.1),
                         border: Border.all(color: AppColors.primary),
                       ),
-                      child: Image.asset(Illustrations.dashAvatar, scale: 1.4),
+                      child: Image.asset(Illustrations.dashAvatar, scale: 1.5),
                     ),
                     Text(
                       personaName,
@@ -493,14 +491,18 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                   ],
                 ),
               ),
+              const SizedBox(),
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   IconButton(
-                    onPressed: () => ref.read(chatProvider.notifier).refresh(),
+                    onPressed: () =>
+                        context.pushNamed(ChoosePersonalityScreen.path),
+                    // style: Constants.collapsedButtonStyle,
                     icon: Icon(Icons.swap_horiz),
                   ),
                   PopupMenuButton<String>(
+                    style: Constants.collapsedButtonStyle,
                     icon: const Icon(Icons.more_vert),
                     onSelected: (value) {
                       switch (value) {
@@ -520,23 +522,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                             Icon(Icons.refresh, size: 20),
                             Gap(12.0),
                             Text('Refresh Chat'),
-                          ],
-                        ),
-                      ),
-                      const PopupMenuItem(
-                        value: 'clear',
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.delete_outline,
-                              size: 20,
-                              color: Colors.red,
-                            ),
-                            Gap(12.0),
-                            Text(
-                              'Clear History',
-                              style: TextStyle(color: Colors.red),
-                            ),
                           ],
                         ),
                       ),

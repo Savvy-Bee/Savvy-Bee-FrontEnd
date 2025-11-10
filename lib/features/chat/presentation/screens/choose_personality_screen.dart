@@ -31,10 +31,8 @@ class _ChoosePersonalityScreenState
   bool _isUpdating = false;
   late PageController _pageController;
 
-  final List<Personality> _personalities = Personalities.all;
-
   final List<String> _characters = [
-    Illustrations.loanBee,
+    Illustrations.dashAvatar,
     Illustrations.savingsBeePose2,
     Illustrations.interestBee,
     Illustrations.savingsBeePose1,
@@ -56,12 +54,12 @@ class _ChoosePersonalityScreenState
   }
 
   /// Update personality and navigate to chat
-  Future<void> _selectPersonality() async {
+  Future<void> _selectPersonality(List<Personality> personalities) async {
     setState(() {
       _isUpdating = true;
     });
 
-    final selectedPersonality = _personalities[_selectedPersonality];
+    final selectedPersonality = personalities[_selectedPersonality];
 
     try {
       // Update personality via repository
@@ -78,7 +76,8 @@ class _ChoosePersonalityScreenState
             context,
             'Personality set to ${selectedPersonality.name}',
             type: SnackbarType.success,
-          ); // Navigate to chat screen
+          );
+          // Navigate to chat screen
           context.pop();
         }
       } else if (mounted) {
@@ -141,14 +140,22 @@ class _ChoosePersonalityScreenState
         extendBodyBehindAppBar: true,
         body: personalities.when(
           data: (data) {
-            final currentPersonality =
-                data.isNotEmpty && _selectedPersonality < data.length
-                ? data[_selectedPersonality]
-                : null;
-
-            if (currentPersonality == null) {
+            if (data.isEmpty) {
               return const Center(child: Text('No personalities available'));
             }
+
+            // Ensure selected index is within bounds
+            if (_selectedPersonality >= data.length) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (mounted) {
+                  setState(() {
+                    _selectedPersonality = 0;
+                  });
+                }
+              });
+            }
+
+            final currentPersonality = data[_selectedPersonality];
 
             return SafeArea(
               child: Column(
@@ -178,11 +185,12 @@ class _ChoosePersonalityScreenState
                     ),
                   ),
                   const Gap(24),
-                  // Personality image
+                  // Personality image - use image from personality data if available
                   Image.asset(
-                    _selectedPersonality < _characters.length
-                        ? _characters[_selectedPersonality]
-                        : _characters[0],
+                    currentPersonality.image ??
+                        (_selectedPersonality < _characters.length
+                            ? _characters[_selectedPersonality]
+                            : _characters[0]),
                     height: 150,
                     width: 150,
                   ),
@@ -225,7 +233,7 @@ class _ChoosePersonalityScreenState
                                 borderColor: AppColors.primary,
                                 child: Text(
                                   personality.id.replaceAll(r'_', ' '),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 10,
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -262,7 +270,9 @@ class _ChoosePersonalityScreenState
                           text: _isUpdating ? 'Setting up...' : 'Select',
                           showArrow: true,
                           buttonColor: CustomButtonColor.black,
-                          onPressed: _isUpdating ? null : _selectPersonality,
+                          onPressed: _isUpdating
+                              ? null
+                              : () => _selectPersonality(data),
                         ),
                       ),
                     ],
@@ -285,11 +295,12 @@ class _ChoosePersonalityScreenState
       scrollDirection: Axis.horizontal,
       child: Row(
         children: List.generate(personalities.length, (index) {
+          final personality = personalities[index];
           return GestureDetector(
             onTap: () => _onPersonalityChanged(index),
             child: Container(
               margin: const EdgeInsets.only(right: 8.0),
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: AppColors.primaryFaded,
@@ -300,7 +311,15 @@ class _ChoosePersonalityScreenState
                       )
                     : null,
               ),
-              // child: Image.asset(persona.image ?? _characters[0], scale: 1.15),
+              child: personality.image != null
+                  ? Image.asset(personality.image!, scale: 1.15)
+                  : Image.asset(
+                      index < _characters.length
+                          ? _characters[index]
+                          : _characters[0],
+                      height: 40,
+                      width: 40,
+                    ),
             ),
           );
         }),
