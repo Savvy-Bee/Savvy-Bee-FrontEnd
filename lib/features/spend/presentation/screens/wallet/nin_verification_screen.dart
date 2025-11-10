@@ -49,7 +49,6 @@ class _NinVerificationScreenState extends ConsumerState<NinVerificationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Note: We don't watch the kycNotifierProvider here, as the verification API call happens on the final screen.
 
     return Scaffold(
       appBar: AppBar(title: const Text('NIN Verification')),

@@ -388,7 +388,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   Widget _emailView() {
     return Form(
       key: _emailFormKey,
-      child: Column(
+      child: ListView(
         children: [
           CustomTextFormField(
             hint: 'Email address',
@@ -401,8 +401,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
             hint: 'Username',
             controller: _usernameController,
             textInputAction: TextInputAction.done,
-            validator: (value) =>
-                InputValidator.validateName(value, 'Username'),
+            // validator: (value) =>
+            //     InputValidator.validateName(value, 'Username'),
           ),
         ],
       ),
