@@ -112,14 +112,14 @@ class _PremiumScreenState extends ConsumerState<PremiumScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildPerkItem(
-            'Unlock Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.',
+            'Premium (Bee+): Access to full AI co-pilot (Nahl) with personalized daily insights, habit tracking, and step by step financial plans',
           ),
           _buildPerkItem(
-            'Unlock Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.',
+            'Unlocks the entire financial literacy library (12+ modules) including advanced topics like investing, debt management, taxation etc',
           ),
-          _buildPerkItem(
-            'Unlock Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.',
-          ),
+          // _buildPerkItem(
+          //   'Unlock Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.',
+          // ),
         ],
       ),
     );
