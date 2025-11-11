@@ -366,14 +366,14 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
             prefix: IconButton(
               icon: const Icon(Icons.add),
               constraints: BoxConstraints(),
-              onPressed: () => CreateGoalBottomSheet.show(context),
-              // onPressed: chatState.isSending
-              //     ? null
-              //     : () => FileUtils.pickFile().then((value) {
-              //         setState(() {
-              //           _pickedFile = value;
-              //         });
-              //       }),
+              // onPressed: () => CreateGoalBottomSheet.show(context),
+              onPressed: chatState.isSending
+                  ? null
+                  : () => FileUtils.pickFile().then((value) {
+                      setState(() {
+                        _pickedFile = value;
+                      });
+                    }),
               style: IconButton.styleFrom(
                 foregroundColor: AppColors.primary,
                 disabledBackgroundColor: AppColors.primary.withValues(
