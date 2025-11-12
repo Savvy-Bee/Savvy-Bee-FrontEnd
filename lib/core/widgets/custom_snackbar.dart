@@ -53,6 +53,8 @@ class CustomSnackbar extends StatelessWidget {
               children: [
                 Text(
                   text,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,

@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:savvy_bee_mobile/core/services/service_locator.dart';
-import 'package:savvy_bee_mobile/features/tools/data/repositories/tools_repository.dart';
+import 'package:savvy_bee_mobile/features/tools/data/repositories/budget_repository.dart';
 import 'package:savvy_bee_mobile/features/tools/domain/models/budget.dart';
 
 /// A simple FutureProvider to fetch the budget home data.
@@ -14,7 +14,7 @@ final budgetHomeDataProvider = FutureProvider<BudgetHomeData>((ref) {
 /// Manages the state for the budget home screen, handling fetching
 /// and mutations.
 class BudgetHomeNotifier extends StateNotifier<AsyncValue<BudgetHomeData>> {
-  final ToolsRepository _toolsRepository;
+  final BudgetRepository _toolsRepository;
   final Ref _ref; // Store Ref to read other providers
 
   BudgetHomeNotifier(this._toolsRepository, this._ref)

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:savvy_bee_mobile/core/utils/encrypt_decrypt.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';
 
 import '../../../../../core/widgets/custom_button.dart';
@@ -11,7 +12,7 @@ import 'nin_verification_screen.dart'; // Import keys
 import 'live_photo_screen.dart';
 
 class BvnVerificationScreen extends ConsumerStatefulWidget {
-static String path = '/bvn-verification';
+  static String path = '/bvn-verification';
 
   // NIN is passed via the GoRouter 'extra' property, but defining a property is helpful
   final Map<String, dynamic> data;
@@ -36,19 +37,34 @@ class _BvnVerificationScreenState extends ConsumerState<BvnVerificationScreen> {
   // Helper to check if the input meets the required length (11 digits for BVN)
   bool get _isBvnValid => _bvnController.text.trim().length == 11;
 
-  void _navigateToLivePhoto() {
+  void _navigateToLivePhoto() async {
     if (_formKey.currentState?.validate() ?? false) {
-      // Retrieve NIN passed from the previous screen
-      final nin = widget.data[kKycNinKey] as String;
-      
-      // Navigate to the LivePhotoScreen, passing both NIN and BVN
-      context.pushNamed(
-        LivePhotoScreen.path,
-        extra: {
-          kKycNinKey: nin,
-          kKycBvnKey: _bvnController.text.trim(),
-        },
-      );
+      // Retrieve encrypted NIN passed from the previous screen
+      final encryptedNin = widget.data[kKycNinKey] as String;
+
+      final plainBvn = _bvnController.text.trim();
+
+      // Encrypt the BVN
+      final encryptedBvn = await EncryptionService.encryptText(plainBvn);
+
+      if (encryptedBvn == null) {
+        // Handle encryption error
+        // You might want to show a snackbar or error message
+        return;
+      }
+
+      print(encryptedBvn); // Base64 string with IV prepended
+
+      // Navigate to the LivePhotoScreen, passing both encrypted NIN and BVN
+      if (mounted) {
+        context.pushNamed(
+          LivePhotoScreen.path,
+          extra: {
+            kKycNinKey: encryptedNin, // Already encrypted from previous screen
+            kKycBvnKey: encryptedBvn, // Newly encrypted BVN
+          },
+        );
+      }
     }
   }
 

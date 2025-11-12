@@ -1,7 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:savvy_bee_mobile/features/spend/data/repositories/kyc_repository.dart';
 import 'package:savvy_bee_mobile/features/spend/data/repositories/transfer_repository.dart.dart';
-import 'package:savvy_bee_mobile/features/tools/data/repositories/tools_repository.dart';
+import 'package:savvy_bee_mobile/features/tools/data/repositories/budget_repository.dart';
+import 'package:savvy_bee_mobile/features/tools/data/repositories/goals_repository.dart';
 
 import '../../features/auth/data/repositories/auth_repository.dart';
 import '../../features/spend/data/repositories/wallet_repository.dart';
@@ -35,12 +36,17 @@ final walletRepositoryProvider = Provider<WalletRepository>((ref) {
   return WalletRepository(apiClient: apiClient);
 });
 
-final toolsRepositoryProvider = Provider<ToolsRepository>((ref) {
+final toolsRepositoryProvider = Provider<BudgetRepository>((ref) {
   final apiClient = ref.watch(apiClientProvider);
-  return ToolsRepository(apiClient: apiClient);
+  return BudgetRepository(apiClient: apiClient);
 });
 
 final kycRepositoryProvider = Provider<KycRepository>((ref) {
   final apiClient = ref.watch(apiClientProvider);
   return KycRepository(apiClient: apiClient);
+});
+
+final goalsRepositoryProvider = Provider<GoalsRepository>((ref) {
+  final apiClient = ref.watch(apiClientProvider);
+  return GoalsRepository(apiClient: apiClient);
 });

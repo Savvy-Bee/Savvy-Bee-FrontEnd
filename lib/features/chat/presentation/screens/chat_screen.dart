@@ -12,7 +12,6 @@ import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/utils/file_picker_util.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_snackbar.dart';
 import 'package:savvy_bee_mobile/features/chat/presentation/screens/chat_bubble_widget.dart';
-import 'package:savvy_bee_mobile/features/chat/presentation/widgets/bottom_sheets/create_goal_bottom_sheet.dart';
 import 'package:savvy_bee_mobile/features/chat/presentation/widgets/picked_file_preview.dart';
 import 'package:savvy_bee_mobile/features/chat/presentation/widgets/quick_action_widget.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';

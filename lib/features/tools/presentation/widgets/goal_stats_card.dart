@@ -72,13 +72,13 @@ class GoalStatsCard extends StatelessWidget {
                   children: [
                     Expanded(
                       child: LinearProgressIndicator(
-                        value: 0.67,
+                        value: totalTarget == 0 ? 0 : amountSaved / totalTarget,
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
                     const Gap(4),
                     Text(
-                      '67%',
+                      '${((amountSaved / totalTarget) * 100).toStringAsFixed(1)}%',
                       style: TextStyle(
                         fontSize: 8,
                         fontFamily: Constants.neulisNeueFontFamily,

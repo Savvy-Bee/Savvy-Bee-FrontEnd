@@ -8,7 +8,7 @@ import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/widgets/insight_card.dart';
 
-import '../../providers/tools_provider.dart';
+import '../../providers/budget_provider.dart';
 
 class SetIncomeScreen extends ConsumerStatefulWidget {
   static String path = '/set-income';

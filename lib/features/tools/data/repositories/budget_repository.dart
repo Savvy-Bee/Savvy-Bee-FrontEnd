@@ -2,10 +2,10 @@ import 'package:dio/dio.dart';
 import 'package:savvy_bee_mobile/features/tools/domain/models/budget.dart';
 import '../../../../core/network/api_client.dart';
 
-class ToolsRepository {
+class BudgetRepository {
   final ApiClient _apiClient;
 
-  ToolsRepository({required ApiClient apiClient}) : _apiClient = apiClient;
+  BudgetRepository({required ApiClient apiClient}) : _apiClient = apiClient;
 
   /// Fetches budget home data (TotalEarnings and Budgets list)
   /// Corresponds to [GET /tools/budget/home]

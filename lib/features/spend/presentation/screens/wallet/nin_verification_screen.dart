@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:savvy_bee_mobile/core/utils/encrypt_decrypt.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';
 
 import '../../../../../core/widgets/custom_button.dart';
@@ -37,19 +38,30 @@ class _NinVerificationScreenState extends ConsumerState<NinVerificationScreen> {
   // Helper to check if the input meets the required length (11 digits for NIN)
   bool get _isNinValid => _ninController.text.trim().length == 11;
 
-  void _navigateToBvnVerification() {
+  void _navigateToBvnVerification() async {
     if (_formKey.currentState?.validate() ?? false) {
-      // Navigate to the next screen, passing the captured NIN
-      context.pushNamed(
-        BvnVerificationScreen.path,
-        extra: {kKycNinKey: _ninController.text.trim()},
-      );
+      final plainNin = _ninController.text.trim();
+
+      final encryptedNin = await EncryptionService.encryptText(plainNin);
+
+      if (encryptedNin == null) {
+        // Handle error
+        return;
+      }
+
+      print(encryptedNin); // Base64 string with IV prepended
+
+      if (mounted) {
+        context.pushNamed(
+          BvnVerificationScreen.path,
+          extra: {kKycNinKey: encryptedNin},
+        );
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(title: const Text('NIN Verification')),
       body: Padding(

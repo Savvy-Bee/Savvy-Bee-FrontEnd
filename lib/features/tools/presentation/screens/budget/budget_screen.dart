@@ -6,7 +6,7 @@ import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/app_icons.dart';
 import 'package:savvy_bee_mobile/core/widgets/charts/custom_circular_progress_indicator.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
-import 'package:savvy_bee_mobile/features/tools/presentation/providers/tools_provider.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/providers/budget_provider.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/edit_budget_screen.dart';
 
 import '../../../../../core/widgets/category_progress_widget.dart';

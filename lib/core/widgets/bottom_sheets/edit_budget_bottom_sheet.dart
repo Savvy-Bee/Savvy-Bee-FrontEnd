@@ -10,7 +10,7 @@ import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';
 import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
 import 'package:savvy_bee_mobile/features/tools/domain/models/budget.dart';
-import 'package:savvy_bee_mobile/features/tools/presentation/providers/tools_provider.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/providers/budget_provider.dart';
 
 import 'package:savvy_bee_mobile/features/tools/presentation/widgets/insight_card.dart';
 

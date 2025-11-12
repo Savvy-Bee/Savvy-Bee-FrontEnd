@@ -46,7 +46,7 @@ class CustomTextFormField extends StatelessWidget {
     this.hint,
     this.errorText,
     this.obscureText = false,
-    this.isRounded = false,
+    this.isRounded = true,
     this.showOutline = true,
     this.controller,
     this.keyboardType,

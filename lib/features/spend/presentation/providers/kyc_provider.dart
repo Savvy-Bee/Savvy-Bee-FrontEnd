@@ -32,20 +32,28 @@ class KycNotifier extends AsyncNotifier<KycData?> {
     try {
       KycVerificationResponse response;
 
-      if (type == KycIdentityType.nin) {
-        response = await kycRepository.verifyNin(
-          encryptedData: encryptedData,
-          profileImageFile: profileImageFile,
-        );
-      } else if (type == KycIdentityType.bvn) {
-        response = await kycRepository.verifyBvn(
-          encryptedData: encryptedData,
-          profileImageFile: profileImageFile,
-        );
-      } else {
-        // Handle unexpected type
-        throw Exception('Unsupported KYC identity type.');
-      }
+      // if (type == KycIdentityType.nin) {
+      response = await kycRepository
+          .verifyNin(
+            encryptedData: encryptedData,
+            profileImageFile: profileImageFile,
+          )
+          .then((value) async {
+            response = await kycRepository.verifyBvn(
+              encryptedData: encryptedData,
+              profileImageFile: profileImageFile,
+            );
+            return value;
+          });
+      // } else if (type == KycIdentityType.bvn) {
+      // response = await kycRepository.verifyBvn(
+      //   encryptedData: encryptedData,
+      //   profileImageFile: profileImageFile,
+      // );
+      // } else {
+      // Handle unexpected type
+      // throw Exception('Unsupported KYC identity type.');
+      // }
 
       // 3. Set state to data with the successful KYC result
       // Assuming 'data' will be non-null on successful verification (code 200)
