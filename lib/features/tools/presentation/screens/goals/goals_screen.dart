@@ -4,7 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
-import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/providers/goals_provider.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/goals/create_goal_screen.dart';
 
@@ -217,7 +217,7 @@ class _GoalsScreenState extends ConsumerState<GoalsScreen>
   }
 
   Widget _buildEmptyStateWidget(BuildContext context) {
-    return OutlinedCard(
+    return CustomCard(
       child: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,

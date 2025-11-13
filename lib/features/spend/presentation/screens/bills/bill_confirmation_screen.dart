@@ -4,7 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/utils/number_formatter.dart';
-import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/bills/bill_completion_screen.dart';
 
 class BillConfirmationScreen extends ConsumerStatefulWidget {
@@ -65,7 +65,7 @@ class _BillConfirmationScreenState
             ],
           ),
           const Gap(16),
-          OutlinedCard(
+          CustomCard(
             onTap: () => context.pushNamed(BillCompletionScreen.path),
             borderRadius: 50,
             padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),

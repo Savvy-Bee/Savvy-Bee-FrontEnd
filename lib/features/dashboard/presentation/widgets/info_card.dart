@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 
-import '../../../../core/widgets/outlined_card.dart';
+import '../../../../core/widgets/custom_card.dart';
 
 class InfoCard extends StatelessWidget {
   final String title;
@@ -25,7 +25,7 @@ class InfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return OutlinedCard(
+    return CustomCard(
       onTap: onTap,
       borderRadius: borderRadius,
       bgColor: backgroundColor,

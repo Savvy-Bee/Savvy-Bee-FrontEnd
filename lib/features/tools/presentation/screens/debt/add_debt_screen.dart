@@ -7,7 +7,7 @@ import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_dropdown_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';
-import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/debt/debt_repayment_details_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/widgets/insight_card.dart';
 
@@ -168,7 +168,7 @@ class _AddDebtScreenState extends ConsumerState<AddDebtScreen> {
     isSelected = false,
     VoidCallback? onTap,
   }) {
-    return OutlinedCard(
+    return CustomCard(
       borderWidth: isSelected ? 2 : null,
       borderRadius: 8,
       onTap: onTap,

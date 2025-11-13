@@ -6,7 +6,7 @@ import 'package:savvy_bee_mobile/features/tools/presentation/widgets/insight_car
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/charts/arc_progress_indicator.dart';
-import '../../../../core/widgets/outlined_card.dart';
+import '../../../../core/widgets/custom_card.dart';
 
 class SavingsTargetWidget extends StatelessWidget {
   const SavingsTargetWidget({super.key});
@@ -15,7 +15,7 @@ class SavingsTargetWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: MediaQuery.of(context).size.width / 1.25,
-      child: OutlinedCard(
+      child: CustomCard(
         hasShadow: true,
         padding: EdgeInsets.zero,
         child: Column(

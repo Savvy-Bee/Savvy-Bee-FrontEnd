@@ -9,7 +9,7 @@ import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/utils/number_formatter.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';
-import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/transfer/send_money_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/widgets/mini_button.dart';
 
@@ -95,7 +95,7 @@ class _EnterAmountBottomSheetState
         mainAxisSize: MainAxisSize.min,
         children: [
           const Gap(24),
-          OutlinedCard(
+          CustomCard(
             borderColor: AppColors.primary,
             bgColor: AppColors.primaryFaint,
             padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 16),
@@ -317,7 +317,7 @@ class _EnterPinBottomSheetState extends ConsumerState<EnterPinBottomSheet> {
                 ],
               ),
               const Gap(24),
-              OutlinedCard(
+              CustomCard(
                 padding: const EdgeInsets.symmetric(
                   vertical: 16,
                   horizontal: 24,

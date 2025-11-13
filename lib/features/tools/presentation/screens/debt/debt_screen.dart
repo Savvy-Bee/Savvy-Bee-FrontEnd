@@ -4,7 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/utils/number_formatter.dart';
-import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 
 import '../../../../../core/theme/app_colors.dart';
 import '../../widgets/goal_stats_card.dart';
@@ -94,7 +94,7 @@ class _DebtScreenState extends ConsumerState<DebtScreen>
   }
 
   Widget _buildDebtCard(double amountRemaining) {
-    return OutlinedCard(
+    return CustomCard(
       padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
       child: Column(
         mainAxisSize: MainAxisSize.min,

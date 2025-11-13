@@ -8,7 +8,7 @@ import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/utils/number_formatter.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';
-import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/features/tools/domain/models/budget.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/providers/budget_provider.dart';
 
@@ -197,7 +197,7 @@ class _EditBudgetBottomSheetState extends ConsumerState<EditBudgetBottomSheet> {
                   ],
                 ),
                 const Gap(24),
-                OutlinedCard(
+                CustomCard(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 32,
                     vertical: 24,

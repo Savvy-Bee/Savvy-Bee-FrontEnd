@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/assets.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
-import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/debt/debt_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/goals/goals_screen.dart';
 
@@ -48,7 +48,7 @@ class _ToolsScreenState extends ConsumerState<ToolsScreen> {
             ),
           ),
           Gap(8),
-          OutlinedCard(
+          CustomCard(
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 24),
             child: ListView(
               shrinkWrap: true,
@@ -84,7 +84,7 @@ class _ToolsScreenState extends ConsumerState<ToolsScreen> {
     String subtitle, {
     VoidCallback? onPressed,
   }) {
-    return OutlinedCard(
+    return CustomCard(
       padding: const EdgeInsets.all(14),
       onTap: onPressed,
       child: Row(

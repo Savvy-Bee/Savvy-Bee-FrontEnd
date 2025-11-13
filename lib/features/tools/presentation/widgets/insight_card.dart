@@ -4,7 +4,7 @@ import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 
 import '../../../../core/utils/assets/app_icons.dart';
 import '../../../../core/utils/constants.dart';
-import '../../../../core/widgets/outlined_card.dart';
+import '../../../../core/widgets/custom_card.dart';
 
 enum InsightType { nahlInsight, nextBestAction, alert }
 
@@ -35,7 +35,7 @@ class _InsightCardState extends State<InsightCard> {
       fontWeight: FontWeight.w500,
       fontFamily: Constants.neulisNeueFontFamily,
     );
-    return OutlinedCard(
+    return CustomCard(
       onTap: widget.isExpandable
           ? () {
               setState(() {

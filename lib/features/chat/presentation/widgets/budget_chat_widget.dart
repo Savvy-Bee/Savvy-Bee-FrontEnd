@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/number_formatter.dart';
-import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/features/chat/domain/models/chat_models.dart';
 
 class BudgetChatWidget extends ConsumerStatefulWidget {
@@ -72,7 +72,7 @@ class _BudgetChatWidgetState extends ConsumerState<BudgetChatWidget> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 // Header info card
-                OutlinedCard(
+                CustomCard(
                   borderRadius: 8,
                   borderColor: AppColors.border,
                   padding: const EdgeInsets.all(8),
@@ -234,7 +234,7 @@ class _BudgetChatWidgetState extends ConsumerState<BudgetChatWidget> {
 
                   // Warning card if over budget
                   if (overBudgetCount > 0)
-                    OutlinedCard(
+                    CustomCard(
                       padding: const EdgeInsets.all(8),
                       borderRadius: 8,
                       borderColor: AppColors.warning,

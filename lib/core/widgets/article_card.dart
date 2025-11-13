@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../theme/app_colors.dart';
 import '../utils/constants.dart';
-import 'outlined_card.dart';
+import 'custom_card.dart';
 
 class ArticleCard extends StatelessWidget {
   final String title;
@@ -27,7 +27,7 @@ class ArticleCard extends StatelessWidget {
       child: SizedBox(
         height: 200,
         width: MediaQuery.sizeOf(context).width / 1.7,
-        child: OutlinedCard(
+        child: CustomCard(
           padding: EdgeInsets.zero,
           bgColor: backgroundColor,
           child: Stack(

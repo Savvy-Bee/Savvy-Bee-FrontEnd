@@ -4,7 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/number_formatter.dart';
-import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 
 import '../../utils/constants.dart';
 
@@ -54,7 +54,7 @@ class _BudgetCategoryBottomSheetState
         const Divider(),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
-          child: OutlinedCard(
+          child: CustomCard(
             padding: const EdgeInsets.all(16.0),
             borderColor: AppColors.grey.withValues(alpha: 0.3),
             child: Column(

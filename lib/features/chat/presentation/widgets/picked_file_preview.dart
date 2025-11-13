@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:savvy_bee_mobile/core/utils/text_utils.dart';
-import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/file_picker_util.dart';
@@ -21,7 +21,7 @@ class PickedFilePreview extends StatelessWidget {
     return isImage
         ? Padding(
             padding: const EdgeInsets.only(right: 5.0, bottom: 5.0),
-            child: OutlinedCard(
+            child: CustomCard(
               borderRadius: 5,
               padding: EdgeInsets.zero,
               child: Stack(
@@ -53,7 +53,7 @@ class PickedFilePreview extends StatelessWidget {
               ),
             ),
           )
-        : OutlinedCard(
+        : CustomCard(
             padding: const EdgeInsets.all(5.0).copyWith(left: 8),
             bgColor: AppColors.primaryFaint.withValues(alpha: 0.3),
             borderRadius: 8,

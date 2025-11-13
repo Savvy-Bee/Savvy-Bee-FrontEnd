@@ -6,7 +6,7 @@ import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/app_icons.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/logos.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
-import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 
 class ProcessingConnectionBottomSheet extends ConsumerStatefulWidget {
   const ProcessingConnectionBottomSheet({super.key});
@@ -51,13 +51,13 @@ class _ProcessingConnectionBottomSheetState
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              OutlinedCard(
+              CustomCard(
                 padding: const EdgeInsets.all(20),
                 borderRadius: 8,
                 child: Image.asset(Logos.logo),
               ),
               SizedBox(width: 37, child: const Divider()),
-              OutlinedCard(
+              CustomCard(
                 padding: const EdgeInsets.symmetric(
                   vertical: 24,
                   horizontal: 16,

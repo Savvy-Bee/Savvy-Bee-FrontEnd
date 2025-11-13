@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/app_icons.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
-import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/features/auth/presentation/screens/signup/presentation/screens/bottom_sheets/select_bank_bottom_sheet.dart';
 
 class ConnectBankSecurityBottomSheet extends StatelessWidget {
@@ -117,7 +117,7 @@ class ConnectBankSecurityBottomSheet extends StatelessWidget {
   }
 
   Widget _buildInfoCard() {
-    return OutlinedCard(
+    return CustomCard(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

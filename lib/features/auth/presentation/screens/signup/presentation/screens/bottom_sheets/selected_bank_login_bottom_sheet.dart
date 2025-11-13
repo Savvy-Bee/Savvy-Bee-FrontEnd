@@ -4,7 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/app_icons.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
-import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/features/auth/presentation/screens/signup/presentation/screens/bottom_sheets/bank_connection_status_bottom_sheet.dart';
 import 'package:savvy_bee_mobile/features/auth/presentation/screens/signup/presentation/screens/bottom_sheets/processing_connection_bottom_sheet.dart';
 
@@ -50,7 +50,7 @@ class _SelectedBankLoginBottomSheetState
             ],
           ),
           const Gap(32),
-          OutlinedCard(
+          CustomCard(
             borderRadius: 8,
             padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
             child: Text(

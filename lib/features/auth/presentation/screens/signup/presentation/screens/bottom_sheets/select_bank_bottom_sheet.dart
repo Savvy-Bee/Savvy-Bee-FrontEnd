@@ -4,7 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';
-import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/core/widgets/section_title_widget.dart';
 import 'package:savvy_bee_mobile/features/auth/presentation/screens/signup/presentation/screens/bottom_sheets/selected_bank_login_bottom_sheet.dart';
 
@@ -80,7 +80,7 @@ class _SelectBankBottomSheetState extends ConsumerState<SelectBankBottomSheet> {
   }
 
   Widget _buildBankCard() {
-    return OutlinedCard(
+    return CustomCard(
       onTap: () => SelectedBankLoginBottomSheet.show(context),
       borderRadius: 8,
       child: Text(

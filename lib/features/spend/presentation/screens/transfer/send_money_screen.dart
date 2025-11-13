@@ -4,7 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
-import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/widgets/send_money_bottom_sheets.dart';
 
 import '../../../../../core/theme/app_colors.dart';
@@ -126,7 +126,7 @@ class CutomChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return OutlinedCard(
+    return CustomCard(
       onTap: onPressed,
       borderRadius: 20,
       borderColor: AppColors.borderDark,

@@ -7,7 +7,7 @@ import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/utils/number_formatter.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';
-import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/bills/bill_confirmation_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/widgets/mini_button.dart';
 
@@ -140,7 +140,7 @@ class _AirtimeScreenState extends ConsumerState<AirtimeScreen> {
   }
 
   Widget _buildNetworkItem(String label, Widget icon, VoidCallback onTap) {
-    return OutlinedCard(
+    return CustomCard(
       borderColor: AppColors.borderDark,
       onTap: onTap,
       borderRadius: 8,
@@ -167,7 +167,7 @@ class _AirtimeScreenState extends ConsumerState<AirtimeScreen> {
 
   Widget _buildRechargeAmountItem(String amount) {
     return Expanded(
-      child: OutlinedCard(
+      child: CustomCard(
         borderColor: AppColors.borderDark,
         padding: const EdgeInsets.symmetric(vertical: 8),
         borderRadius: 8,

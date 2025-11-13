@@ -7,7 +7,7 @@ import '../../../../core/utils/constants.dart';
 import '../../../../core/utils/number_formatter.dart';
 import '../../../../core/widgets/charts/custom_donut_chart.dart';
 import '../../../../core/widgets/custom_button.dart';
-import '../../../../core/widgets/outlined_card.dart';
+import '../../../../core/widgets/custom_card.dart';
 import '../../../tools/presentation/widgets/insight_card.dart';
 import '../screens/dashboard_screen.dart';
 
@@ -21,7 +21,7 @@ class SpendingCategoryWidget extends ConsumerWidget {
 
     return SizedBox(
       width: MediaQuery.of(context).size.width / 1.25,
-      child: OutlinedCard(
+      child: CustomCard(
         hasShadow: true,
         padding: EdgeInsets.zero,
         child: Column(

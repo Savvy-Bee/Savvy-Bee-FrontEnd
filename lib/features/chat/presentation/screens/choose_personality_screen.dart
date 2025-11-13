@@ -8,7 +8,7 @@ import 'package:savvy_bee_mobile/core/utils/breakpoints.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_snackbar.dart';
-import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 
 import '../../domain/models/personality.dart';
 import '../providers/chat_providers.dart';
@@ -222,7 +222,7 @@ class _ChoosePersonalityScreenState
                                 ),
                               ),
                               const Gap(16.0),
-                              OutlinedCard(
+                              CustomCard(
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 16,
                                   vertical: 4,

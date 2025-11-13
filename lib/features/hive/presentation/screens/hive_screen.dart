@@ -7,12 +7,12 @@ import 'package:savvy_bee_mobile/core/utils/assets/illustrations.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/article_card.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
-import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
 import 'package:savvy_bee_mobile/core/widgets/section_title_widget.dart';
 import 'package:savvy_bee_mobile/core/widgets/icon_text_row_widget.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/lesson_home_screen.dart';
 
 import '../../../../core/utils/assets/app_icons.dart';
+import '../../../../core/widgets/custom_card.dart';
 
 class HiveScreen extends ConsumerStatefulWidget {
   static String path = '/hive';
@@ -197,7 +197,7 @@ class _HiveScreenState extends ConsumerState<HiveScreen> {
     required String difficultyLevel,
     required VoidCallback onStartLesson,
   }) {
-    return OutlinedCard(
+    return CustomCard(
       width: MediaQuery.sizeOf(context).width / 1.3,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -211,7 +211,7 @@ class _HiveScreenState extends ConsumerState<HiveScreen> {
               fontFamily: Constants.neulisNeueFontFamily,
             ),
           ),
-          const Gap(24),
+          const Gap(8),
           Text(bodyText, style: TextStyle()),
           const Gap(24),
           Row(
@@ -227,7 +227,9 @@ class _HiveScreenState extends ConsumerState<HiveScreen> {
               ),
             ],
           ),
-          const Gap(24),
+          // const Gap(24),
+          Image.asset(Illustrations.savingsBeePose1),
+          // const Gap(24),
           CustomElevatedButton(
             text: 'Start lesson',
             rounded: true,

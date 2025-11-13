@@ -4,7 +4,7 @@ import 'package:gap/gap.dart';
 import '../theme/app_colors.dart';
 import '../utils/constants.dart';
 import '../utils/number_formatter.dart';
-import 'outlined_card.dart';
+import 'custom_card.dart';
 
 class CategoryProgressWidget extends StatelessWidget {
   final String title;
@@ -22,7 +22,7 @@ class CategoryProgressWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return OutlinedCard(
+    return CustomCard(
       borderColor: AppColors.grey.withValues(alpha: 0.7),
       child: Column(
         mainAxisSize: MainAxisSize.min,

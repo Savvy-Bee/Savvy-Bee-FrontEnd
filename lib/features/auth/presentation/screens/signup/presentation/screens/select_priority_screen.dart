@@ -6,7 +6,7 @@ import 'package:savvy_bee_mobile/core/utils/assets/app_icons.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/logos.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
-import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/core/widgets/icon_text_row_widget.dart';
 
 enum Priority {
@@ -145,7 +145,7 @@ class _SelectPriorityScreenState extends ConsumerState<SelectPriorityScreen> {
     bool isSelected = false,
     VoidCallback? onTap,
   }) {
-    return OutlinedCard(
+    return CustomCard(
       onTap: onTap,
       borderRadius: 8,
       bgColor: isSelected ? AppColors.primaryFaint : null,

@@ -4,7 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
-import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/features/dashboard/presentation/screens/dashboard_screen.dart';
 
 import '../../../../core/utils/number_formatter.dart';
@@ -22,7 +22,7 @@ class NetWorthCard extends ConsumerWidget {
     final chartData = ref.watch(chartDataProvider);
     final selectedRange = ref.watch(selectedTimeRangeProvider);
 
-    return OutlinedCard(
+    return CustomCard(
       onTap: onTap,
       padding: EdgeInsets.zero,
       hasShadow: true,

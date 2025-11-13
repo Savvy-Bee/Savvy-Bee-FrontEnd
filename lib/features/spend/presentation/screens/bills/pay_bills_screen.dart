@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
-import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/bills/airtime_screen.dart';
 
 import '../../../../../core/widgets/custom_input_field.dart';
@@ -67,7 +67,7 @@ class _PayBillsScreenState extends ConsumerState<PayBillsScreen> {
   }
 
   Widget _buildBillItem(String label, Widget icon, VoidCallback onTap) {
-    return OutlinedCard(
+    return CustomCard(
       onTap: onTap,
       borderRadius: 8,
       width: 90.dg,
@@ -90,5 +90,4 @@ class _PayBillsScreenState extends ConsumerState<PayBillsScreen> {
       ),
     );
   }
-
 }

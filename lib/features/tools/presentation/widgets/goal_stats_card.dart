@@ -4,7 +4,7 @@ import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/assets.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/utils/number_formatter.dart';
-import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 
 class GoalStatsCard extends StatelessWidget {
   final String title;
@@ -23,7 +23,7 @@ class GoalStatsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return OutlinedCard(
+    return CustomCard(
       padding: const EdgeInsets.all(14),
       child: Row(
         mainAxisSize: MainAxisSize.min,

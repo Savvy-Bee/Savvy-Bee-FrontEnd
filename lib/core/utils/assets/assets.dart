@@ -17,7 +17,7 @@ class Assets {
 
   static const String happyBeesSvg = '$_basePath/happy-bees.png';
 
-  static const String quizzesBg = '$_basePath/quizzes_bg.png';
+  static const String quizzesBg = '$_basePath/quizzes-bg.png';
 
   static const String hivePatternYellow = '$_basePath/hive_pattern_yellow.png';
   static const String hivePatternWhite = '$_basePath/hive_pattern_white.png';

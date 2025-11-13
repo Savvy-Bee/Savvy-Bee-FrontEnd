@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/illustrations.dart';
-import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/fund/fund_with_card_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/fund/fund_by_transfer_screen.dart';
 
@@ -58,7 +58,7 @@ class _AddMoneyScreenState extends ConsumerState<AddMoneyScreen> {
     required Widget icon,
     VoidCallback? onTap,
   }) {
-    return OutlinedCard(
+    return CustomCard(
       borderRadius: 32,
       onTap: onTap,
       child: Row(

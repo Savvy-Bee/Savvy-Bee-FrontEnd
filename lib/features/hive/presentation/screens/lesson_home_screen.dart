@@ -7,8 +7,8 @@ import 'package:savvy_bee_mobile/core/utils/assets/assets.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/illustrations.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
-import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
-import 'package:savvy_bee_mobile/features/hive/presentation/screens/lesson_screen.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
+import 'package:savvy_bee_mobile/features/hive/presentation/screens/levels_screen.dart';
 
 class LessonHomeScreen extends ConsumerStatefulWidget {
   static String path = '/lesson-home';
@@ -27,7 +27,7 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
       'points': 50,
       'lessonNumber': 1,
       'illustrationAsset': Illustrations.lesson3,
-      'title': 'Ways people save money',
+      'title': 'What is Saving',
       'description':
           'There are different ways to save money: bank accounts, apps, and piggy banks.',
     },
@@ -82,7 +82,7 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
                 const Gap(40),
                 CustomElevatedButton(
                   text: 'Continue',
-                  onPressed: () => context.pushNamed(LessonScreen.path),
+                  onPressed: () => context.pushNamed(LevelsScreen.path),
                 ),
               ],
             ),
@@ -100,7 +100,7 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
         mainAxisSize: MainAxisSize.min,
         children: [
           BackButton(),
-          Image.asset(Assets.honeyJar, height: 35, width: 35),
+          Image.asset(Assets.lessonProgress1, scale: 1.3),
           const Gap(8),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -126,7 +126,40 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
           ),
         ],
       ),
-      actions: [Image.asset(Assets.lessonProgress1)],
+      actions: [
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset(Illustrations.hiveFlower),
+            const Gap(4),
+            Text(
+              '200',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                fontFamily: Constants.neulisNeueFontFamily,
+              ),
+            ),
+          ],
+        ),
+        const Gap(12),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.hive, color: AppColors.primary),
+            const Gap(4),
+            Text(
+              '200',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                fontFamily: Constants.neulisNeueFontFamily,
+              ),
+            ),
+          ],
+        ),
+        const Gap(16),
+      ],
     );
   }
 
@@ -138,7 +171,11 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
     required String title,
     required String description,
   }) {
-    var width = MediaQuery.sizeOf(context).width / 1.2;
+    final size = MediaQuery.sizeOf(context);
+
+    final width = size.width / 1.2;
+    final height = size.height / 1.5;
+
     final locked = status == "Not started";
 
     return Column(
@@ -178,12 +215,13 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
             ],
           ),
         ),
-        OutlinedCard(
+        CustomCard(
           hasShadow: true,
           width: width,
+          height: height,
           borderColor: locked ? AppColors.grey : AppColors.primary,
           borderWidth: 3,
-          bgColor: locked ? AppColors.greyLight : AppColors.primaryFaded,
+          bgColor: locked ? AppColors.greyMid : AppColors.primaryFaded,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 45),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -216,8 +254,7 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
                   ),
                 ],
               ),
-              const Gap(8),
-              Image.asset(illustrationAsset),
+              Image.asset(illustrationAsset, scale: 1.3),
               Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -225,7 +262,7 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
                     title,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 28,
+                      fontSize: 24,
                       fontWeight: FontWeight.bold,
                       fontFamily: Constants.neulisNeueFontFamily,
                       height: 0.9,
@@ -235,7 +272,7 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
                   Text(
                     description,
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 12),
+                    style: TextStyle(fontSize: 12, height: 0.9),
                   ),
                 ],
               ),

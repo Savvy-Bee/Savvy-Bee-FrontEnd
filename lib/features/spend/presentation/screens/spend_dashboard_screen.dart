@@ -6,7 +6,7 @@ import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/utils/date_formatter.dart';
 import 'package:savvy_bee_mobile/core/utils/number_formatter.dart';
-import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/providers/wallet_provider.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/bills/pay_bills_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/transactions/transaction_history_screen.dart';
@@ -143,7 +143,7 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
   }
 
   Widget _buildEmptyStateWidget() {
-    return OutlinedCard(
+    return CustomCard(
       child: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -168,7 +168,7 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
   }
 
   Widget _buildEmptyTransactionsCard() {
-    return OutlinedCard(
+    return CustomCard(
       padding: EdgeInsets.symmetric(vertical: 24.0),
       child: Center(
         child: Column(
@@ -200,7 +200,7 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
           return _buildEmptyTransactionsCard();
         }
 
-        return OutlinedCard(
+        return CustomCard(
           padding: EdgeInsets.zero,
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -306,11 +306,11 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
           ),
         );
       },
-      loading: () => OutlinedCard(
+      loading: () => CustomCard(
         padding: EdgeInsets.symmetric(vertical: 48.0),
         child: Center(child: CircularProgressIndicator()),
       ),
-      error: (error, stack) => OutlinedCard(
+      error: (error, stack) => CustomCard(
         padding: EdgeInsets.symmetric(vertical: 24.0),
         child: Center(
           child: Column(
@@ -345,7 +345,7 @@ class WalletBalanceCard extends ConsumerWidget {
       orElse: () => dashboard.accounts.first,
     );
 
-    return OutlinedCard(
+    return CustomCard(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

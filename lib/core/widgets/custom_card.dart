@@ -4,7 +4,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 
-class OutlinedCard extends StatelessWidget {
+class CustomCard extends StatelessWidget {
   final Widget child;
   final EdgeInsetsGeometry? padding;
   final VoidCallback? onTap;
@@ -16,7 +16,7 @@ class OutlinedCard extends StatelessWidget {
   final double? height;
   final double? borderWidth;
 
-  const OutlinedCard({
+  const CustomCard({
     super.key,
     required this.child,
     this.padding,

@@ -5,7 +5,7 @@ import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/charts/arc_progress_indicator.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/widgets/insight_card.dart';
 
-import '../../../../core/widgets/outlined_card.dart';
+import '../../../../core/widgets/custom_card.dart';
 
 class FinancialHealthWidget extends StatelessWidget {
   const FinancialHealthWidget({super.key});
@@ -14,7 +14,7 @@ class FinancialHealthWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: MediaQuery.of(context).size.width / 1.25,
-      child: OutlinedCard(
+      child: CustomCard(
         hasShadow: true,
         padding: EdgeInsets.zero,
         child: Column(

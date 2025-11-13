@@ -7,7 +7,7 @@ import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/utils/number_formatter.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';
-import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/transactions/account_statement_screen.dart';
 
 import '../../../../../core/utils/assets/assets.dart';
@@ -87,7 +87,7 @@ class TransactionHistoryCard extends StatelessWidget {
           ),
         ),
         const Gap(8),
-        OutlinedCard(
+        CustomCard(
           child: Column(
             spacing: 16,
             mainAxisSize: MainAxisSize.min,

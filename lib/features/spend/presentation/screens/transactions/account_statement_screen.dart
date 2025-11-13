@@ -8,7 +8,7 @@ import 'package:savvy_bee_mobile/features/spend/presentation/screens/transaction
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/utils/constants.dart';
 import '../../../../../core/widgets/custom_input_field.dart';
-import '../../../../../core/widgets/outlined_card.dart';
+import '../../../../../core/widgets/custom_card.dart';
 
 class AccountStatementScreen extends ConsumerStatefulWidget {
   static String path = '/account-statement';
@@ -149,7 +149,7 @@ class _AccountStatementScreenState
     isSelected = false,
     VoidCallback? onTap,
   }) {
-    return OutlinedCard(
+    return CustomCard(
       borderRadius: 50,
       onTap: onTap,
       borderColor: isSelected ? AppColors.primary : null,

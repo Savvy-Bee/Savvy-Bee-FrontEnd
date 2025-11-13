@@ -6,7 +6,7 @@ import 'package:savvy_bee_mobile/core/utils/number_formatter.dart';
 import 'package:savvy_bee_mobile/core/widgets/category_progress_widget.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 
-import '../../../../core/widgets/outlined_card.dart';
+import '../../../../core/widgets/custom_card.dart';
 
 class BudgetAnalysisWidget extends StatelessWidget {
   const BudgetAnalysisWidget({super.key});
@@ -15,7 +15,7 @@ class BudgetAnalysisWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: MediaQuery.of(context).size.width / 1.1,
-      child: OutlinedCard(
+      child: CustomCard(
         hasShadow: true,
         padding: EdgeInsets.zero,
         child: Column(

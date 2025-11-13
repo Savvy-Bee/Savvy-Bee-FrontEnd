@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/number_formatter.dart';
-import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/features/chat/domain/models/chat_models.dart';
 
 class GoalChatWidget extends ConsumerStatefulWidget {
@@ -65,7 +65,7 @@ Every small step counts toward your financial goals 🌱''',
                 const Gap(16),
 
                 // Goal suggestion card
-                OutlinedCard(
+                CustomCard(
                   borderRadius: 8,
                   borderColor: AppColors.primary.withValues(alpha: 0.3),
                   bgColor: AppColors.primaryFaint.withValues(alpha: 0.3),

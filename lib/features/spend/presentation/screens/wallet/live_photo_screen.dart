@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_snackbar.dart';
-import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/providers/kyc_provider.dart';
 
 import '../../../../../core/widgets/custom_button.dart';
@@ -260,7 +260,7 @@ class _LivePhotoScreenState extends ConsumerState<LivePhotoScreen>
                   children: [
                     // Square Camera/Photo Preview
                     Center(
-                      child: OutlinedCard(
+                      child: CustomCard(
                         padding: EdgeInsets.zero,
                         width: squareSize,
                         height: squareSize,
@@ -292,10 +292,8 @@ class _LivePhotoScreenState extends ConsumerState<LivePhotoScreen>
 
               // Capture/Submit Button
               CustomElevatedButton(
-                text: isVerifying
-                    ? 'Verifying...'
-                    : _profileImageFile == null
-                    ? (_isCapturing ? 'Capturing...' : 'Capture Photo')
+                text: _profileImageFile == null
+                    ? 'Capture Photo'
                     : 'Submit Verification',
                 onPressed: isVerifying
                     ? null

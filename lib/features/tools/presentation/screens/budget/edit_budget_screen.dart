@@ -8,7 +8,7 @@ import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/utils/number_formatter.dart';
 import 'package:savvy_bee_mobile/core/widgets/bottom_sheets/edit_budget_bottom_sheet.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
-import 'package:savvy_bee_mobile/core/widgets/outlined_card.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/core/widgets/section_title_widget.dart';
 import 'package:savvy_bee_mobile/features/tools/domain/models/budget.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/providers/budget_provider.dart';
@@ -69,7 +69,7 @@ class _EditBudgetScreenState extends ConsumerState<EditBudgetScreen> {
                 children: List.generate(
                   3,
                   (index) => Expanded(
-                    child: OutlinedCard(
+                    child: CustomCard(
                       borderColor: index == 2 ? AppColors.primary : null,
                       bgColor: index == 2 ? AppColors.primaryFaint : null,
                       borderRadius: 8,
@@ -134,7 +134,7 @@ class _EditBudgetScreenState extends ConsumerState<EditBudgetScreen> {
     String iconPath, {
     VoidCallback? onEditPressed,
   }) {
-    return OutlinedCard(
+    return CustomCard(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -195,7 +195,7 @@ class _EditBudgetScreenState extends ConsumerState<EditBudgetScreen> {
     num totalBudget,
     num remaining,
   ) {
-    return OutlinedCard(
+    return CustomCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,

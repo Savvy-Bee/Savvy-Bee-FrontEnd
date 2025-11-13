@@ -10,7 +10,7 @@ import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/widgets/insight_card.dart';
 
 import '../../../../../core/theme/app_colors.dart';
-import '../../../../../core/widgets/outlined_card.dart';
+import '../../../../../core/widgets/custom_card.dart';
 import '../../../../spend/presentation/widgets/copy_text_icon_button.dart';
 
 enum DebtRepaymentMethod { bankTransfer, card }
@@ -196,7 +196,7 @@ class _DebtRepaymentDetailsScreenState
     isSelected = false,
     VoidCallback? onTap,
   }) {
-    return OutlinedCard(
+    return CustomCard(
       borderWidth: isSelected ? 2 : null,
       borderRadius: 8,
       onTap: onTap,
