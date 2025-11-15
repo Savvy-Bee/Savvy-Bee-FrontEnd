@@ -1,0 +1,610 @@
+import 'dart:developer';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
+import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
+import 'package:savvy_bee_mobile/core/utils/date_formatter.dart';
+import 'package:savvy_bee_mobile/core/utils/input_validator.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_dropdown_button.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';
+import 'package:savvy_bee_mobile/core/widgets/intro_text.dart';
+import 'package:savvy_bee_mobile/core/widgets/password_requirement_widget.dart';
+import 'package:savvy_bee_mobile/features/auth/domain/models/auth_models.dart';
+import 'package:savvy_bee_mobile/features/auth/presentation/providers/auth_providers.dart';
+import 'package:savvy_bee_mobile/features/auth/domain/models/signup_items.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+
+import '../../../../core/utils/custom_page_indicator.dart';
+import '../../../../core/widgets/custom_snackbar.dart';
+import 'post_signup/signup_complete_screen.dart';
+
+class SignupScreen extends ConsumerStatefulWidget {
+  static String path = '/signup-name';
+
+  const SignupScreen({super.key});
+
+  @override
+  ConsumerState<SignupScreen> createState() => _SignupScreenState();
+}
+
+class _SignupScreenState extends ConsumerState<SignupScreen> {
+  final _pageController = PageController();
+
+  // Form keys for step-specific validation
+  final _nameFormKey = GlobalKey<FormState>();
+  final _emailFormKey = GlobalKey<FormState>();
+  final _passwordFormKey = GlobalKey<FormState>();
+  // Note: OTP uses its own field logic, so no FormKey needed for that view.
+  final _dobFormKey = GlobalKey<FormState>();
+  final _countryFormKey = GlobalKey<FormState>();
+
+  // Form controllers
+  final _firstNameController = TextEditingController();
+  final _lastNameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _otpController = TextEditingController();
+  final _dobController = TextEditingController();
+  final _countryController = TextEditingController();
+
+  int _currentPage = 0;
+  bool showPassword = false;
+  String? _errorMessage;
+
+  // Total number of steps in the signup flow
+  // final int _dotCount = 6;
+
+  @override
+  void initState() {
+    super.initState();
+    // Listen to page changes to clear error messages
+    _pageController.addListener(() {
+      final newPage = _pageController.page?.round() ?? 0;
+      if (newPage != _currentPage) {
+        setState(() {
+          _currentPage = newPage;
+          _errorMessage = null; // Clear error on page change
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _otpController.dispose();
+    _dobController.dispose();
+    _countryController.dispose();
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  // --- Core Navigation and Submission Logic ---
+
+  void _goToPreviousPage() {
+    _pageController.previousPage(
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  void _goToNextPage() {
+    _pageController.nextPage(
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  void _showError(String message) {
+    CustomSnackbar.show(context, message, type: SnackbarType.error);
+    // setState(() {
+    //   _errorMessage = message;
+    // });
+  }
+
+  void _handleContinue() async {
+    // Clear previous error message first
+    _errorMessage = null;
+
+    final authNotifier = ref.read(authProvider.notifier);
+    final authState = ref.read(authProvider);
+
+    if (authState.isLoading) return;
+
+    try {
+      switch (_currentPage) {
+        case 0:
+          // Page 0: Name Input
+          // if (_nameFormKey.currentState!.validate()) {
+          //   _goToNextPage();
+          // }
+          _goToNextPage();
+          break;
+
+        case 1:
+          // Page 1: Email Input
+          // if (_emailFormKey.currentState!.validate()) {
+          //   _goToNextPage();
+          // }
+          _goToNextPage();
+          break;
+
+        case 2:
+          // Page 2: Password Input & API Registration
+          // if (!_passwordFormKey.currentState!.validate()) return;
+
+          // final request = RegisterRequest(
+          //   firstName: _firstNameController.text.trim(),
+          //   lastName: _lastNameController.text.trim(),
+          //   email: _emailController.text.trim(),
+          //   password: _passwordController.text.trim(),
+          //   username: _usernameController.text.trim(),
+          // );
+
+          // final success = await authNotifier.register(request);
+
+          _goToNextPage();
+          // if (success) {
+          //   _goToNextPage();
+          // } else {
+          //   _showError(authState.errorMessage ?? 'Registration failed');
+          // }
+          break;
+
+        case 3:
+          // Page 3: OTP Verification
+          // if (_otpController.text.length < 4) {
+          //   _showError('Please enter a valid OTP (at least 4 digits)');
+          //   return;
+          // }
+
+          // final verifyRequest = VerifyEmailRequest(
+          //   email: _emailController.text,
+          //   otp: _otpController.text,
+          // );
+
+          // final success = await authNotifier.verifyEmail(verifyRequest);
+
+          _goToNextPage();
+          // if (success) {
+          //   _goToNextPage();
+          // } else {
+          //   _showError(authState.errorMessage ?? 'Verification failed');
+          // }
+          break;
+
+        case 4:
+          // Page 4: Date of Birth Input
+          // if (_dobFormKey.currentState!.validate()) {
+          //   _goToNextPage();
+          // }
+          _goToNextPage();
+          break;
+
+        case 5:
+          // Page 5: Country Input & Final Profile Update
+          // if (!_countryFormKey.currentState!.validate()) return;
+
+          // // Register Other Details with DOB and Country
+          // final registerOtherDetailsRequest = RegisterOtherDetailsRequest(
+          //   email: _emailController.text,
+          //   dob: _dobController.text,
+          //   country: _countryController.text,
+          // );
+
+          // final success = await authNotifier.registerOtherDetails(
+          //   registerOtherDetailsRequest,
+          // );
+
+          context.pushNamed(SignupCompleteScreen.path);
+          // if (success) {
+          //   // Final success, navigate to completion screen
+          //   if (mounted) {
+          //     context.pushNamed(SignupCompleteScreen.path);
+          //   }
+          // } else {
+          //   _showError(
+          //     authState.errorMessage ?? 'Failed to register other details',
+          //   );
+          // }
+          break;
+
+        default:
+          // Should not happen, but safe fallback
+          _goToNextPage();
+          break;
+      }
+    } catch (e) {
+      // Catch any synchronous errors during validation or navigation
+      _showError('An unexpected error occurred.');
+      log('Error in _handleContinue: $e');
+    }
+  }
+
+  /// Get the subtitle for the current page with dynamic content
+  String _getPageSubtitle() {
+    final item = SignupItems.items[_currentPage];
+
+    // For the OTP page (index 3), pass the email
+    if (_currentPage == 3) {
+      return item.getDescription(_emailController.text.trim());
+    }
+
+    // For all other pages, no dynamic value needed
+    return item.getDescription();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final authState = ref.watch(authProvider);
+
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Column(
+                children: [
+                  // Top Bar (Back and Close buttons)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      BackButton(onPressed: _goToPreviousPage),
+                      Expanded(
+                        child: SmoothPageIndicator(
+                          controller: _pageController,
+                          count: 6,
+                          effect: PreviousColoredSlideEffect(
+                            dotHeight: 4.0,
+                            spacing: 5,
+                            activeDotColor: AppColors.primary,
+                            dotColor: AppColors.grey,
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () => context.pop(),
+                        icon: const Icon(Icons.close),
+                      ),
+                    ],
+                  ),
+                  const Gap(10.0),
+                  // Content Area (Intro Text + PageView)
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        children: [
+                          IntroText(
+                            title: SignupItems.items[_currentPage].title,
+                            subtitle: _getPageSubtitle(),
+                          ),
+                          const Gap(20.0),
+                          Expanded(
+                            child: PageView(
+                              controller: _pageController,
+                              physics: const NeverScrollableScrollPhysics(),
+                              children: [
+                                _nameView(),
+                                _emailView(),
+                                _passwordView(),
+                                _otpView(),
+                                _dobView(),
+                                _countryView(),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            Padding(
+              padding: const EdgeInsets.all(16).copyWith(bottom: 24, top: 0),
+              child: CustomElevatedButton(
+                text: 'Continue',
+                isLoading: authState.isLoading,
+                onPressed: _handleContinue,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // --- Page Views ---
+
+  Widget _nameView() {
+    return Form(
+      key: _nameFormKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CustomTextFormField(
+            label: 'First name',
+            hint: 'First Name',
+            controller: _firstNameController,
+            textInputAction: TextInputAction.next,
+            validator: (value) =>
+                InputValidator.validateName(value, 'First Name'),
+          ),
+          const Gap(16.0),
+          CustomTextFormField(
+            label: 'Last name',
+            hint: 'Last Name',
+            controller: _lastNameController,
+            textInputAction: TextInputAction.done,
+            validator: (value) =>
+                InputValidator.validateName(value, 'Last Name'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _emailView() {
+    return Form(
+      key: _emailFormKey,
+      child: ListView(
+        children: [
+          CustomTextFormField(
+            label: 'Email address',
+            hint: 'Email address',
+            controller: _emailController,
+            keyboardType: TextInputType.emailAddress,
+            validator: (value) => InputValidator.validateEmail(value),
+          ),
+          const Gap(16),
+          CustomTextFormField(
+            label: 'Username',
+            hint: 'Username',
+            controller: _usernameController,
+            textInputAction: TextInputAction.done,
+            validator: (value) => InputValidator.validateRequired(
+              value,
+              'Username',
+              minLength: 6,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _passwordView() {
+    return Form(
+      key: _passwordFormKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CustomTextFormField(
+            label: 'Password',
+            hint: 'Password',
+            controller: _passwordController,
+            obscureText: !showPassword,
+            textInputAction: TextInputAction.done,
+            suffix: IconButton(
+              onPressed: () {
+                setState(() {
+                  showPassword = !showPassword;
+                });
+              },
+              icon: Icon(
+                showPassword
+                    ? Icons.visibility_outlined
+                    : Icons.visibility_off_outlined,
+              ),
+            ),
+            onChanged: (_) {
+              setState(() {});
+            },
+            validator: (value) => InputValidator.validatePassword(value),
+          ),
+          const Gap(24),
+          PasswordRequirementWidget(password: _passwordController.text.trim()),
+        ],
+      ),
+    );
+  }
+
+  Widget _otpView() {
+    final authNotifier = ref.read(authProvider.notifier);
+    final isResending = ref.watch(authProvider).isLoading;
+
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            InkWell(
+              onTap: isResending
+                  ? null
+                  : () {
+                      // Go back to email page (Page 1)
+                      _pageController.jumpToPage(1);
+                    },
+              child: Padding(
+                padding: const EdgeInsets.all(5),
+                child: Text(
+                  'Send to a different email',
+                  style: TextStyle(
+                    decoration: TextDecoration.underline,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ),
+            // InkWell(
+            //   onTap: isResending
+            //       ? null
+            //       : () async {
+            //           setState(() {
+            //             _errorMessage = null;
+            //           });
+            //           final success = await authNotifier.resendOtp(
+            //             _emailController.text,
+            //           );
+            //           if (!success) {
+            //             _showError(
+            //               ref.read(authProvider).errorMessage ??
+            //                   'Failed to resend OTP',
+            //             );
+            //           } else {
+            //             if (mounted) {
+            //               CustomSnackbar.show(
+            //                 context,
+            //                 'OTP sent successfully',
+            //                 type: SnackbarType.success,
+            //               );
+            //             }
+            //           }
+            //         },
+            //   child: Text(
+            //     'Resend OTP',
+            //     style: TextStyle(
+            //       decoration: isResending ? null : TextDecoration.underline,
+            //       color: isResending ? AppColors.grey : AppColors.primary,
+            //       decorationColor: AppColors.primary,
+            //       fontSize: 16,
+            //       fontWeight: FontWeight.w500,
+            //     ),
+            //   ),
+            // ),
+          ],
+        ),
+        const Gap(16),
+        CustomOtpField(
+          onCompleted: (value) {
+            _otpController.text = value;
+            _handleContinue(); // Auto-continue on OTP completion
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _dobView() {
+    return Form(
+      key: _dobFormKey,
+      child: CustomTextFormField(
+        hint: 'Date of birth (DD/MM/YYYY)',
+        controller: _dobController,
+        readOnly: true,
+        onTap: () async {
+          final initialDate = DateTime.now().subtract(
+            const Duration(days: 365 * 18),
+          );
+          final date = await showDatePicker(
+            context: context,
+            initialDate: initialDate,
+            firstDate: DateTime(1900),
+            lastDate: initialDate, // Ensure user is at least 18
+            helpText: 'Select Date of Birth',
+          );
+          if (date != null) {
+            setState(() {
+              // Format date consistently
+              _dobController.text = DateFormatter.formatDateForRequest(date);
+            });
+          }
+        },
+        validator: (value) =>
+            InputValidator.validateRequired(value, 'Date of birth'),
+        suffix: const Icon(Icons.calendar_today_outlined),
+      ),
+    );
+  }
+
+  Widget _countryView() {
+    return Form(
+      key: _countryFormKey,
+      child: CustomDropdownButton(
+        hint: 'Country of residence',
+        items: [
+          'Nigeria',
+          'United States of America',
+          'United Kindom',
+          'Canada',
+        ],
+        onChanged: (value) {
+          setState(() {
+            _countryController.text = value ?? '';
+          });
+        },
+        // controller: _countryController,
+        // readOnly: true,
+        // onTap: () async {
+        //   // TODO: For now, we simulate selection to validate the form.
+        //   final selectedCountry = await showModalBottomSheet<String>(
+        //     context: context,
+        //     builder: (_) => _CountryPicker(
+        //       onCountrySelected: (country) => Navigator.pop(context, country),
+        //     ),
+        //   );
+
+        //   if (selectedCountry != null) {
+        //     setState(() {
+        //       _countryController.text = selectedCountry;
+        //     });
+        //   }
+        // },
+        // validator: (value) =>
+        //     InputValidator.validateRequired(value, 'Country of residence'),
+        // suffix: const Icon(Icons.keyboard_arrow_down),
+      ),
+    );
+  }
+}
+
+// Dummy Widget for Country Picker Simulation
+class _CountryPicker extends StatelessWidget {
+  final Function(String) onCountrySelected;
+
+  const _CountryPicker({required this.onCountrySelected});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Text(
+            'Select Your Country',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          const Gap(10),
+          ListTile(
+            title: const Text('Nigeria'),
+            onTap: () => onCountrySelected('Nigeria'),
+          ),
+          ListTile(
+            title: const Text('United States'),
+            onTap: () => onCountrySelected('United States'),
+          ),
+          ListTile(
+            title: const Text('Canada'),
+            onTap: () => onCountrySelected('Canada'),
+          ),
+          ListTile(
+            title: const Text('United Kingdom'),
+            onTap: () => onCountrySelected('United Kingdom'),
+          ),
+        ],
+      ),
+    );
+  }
+}

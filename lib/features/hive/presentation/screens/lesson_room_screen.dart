@@ -59,7 +59,7 @@ class _LessonRoomScreenState extends ConsumerState<LessonRoomScreen> {
     final double calculatedDotWidth = availableWidthForDots / _dotCount;
 
     return Scaffold(
-      backgroundColor: AppColors.bgBlue,
+      backgroundColor: AppColors.blue,
       // extendBodyBehindAppBar: true,
       appBar: _buildAppBar(calculatedDotWidth, spacingValue, horizontalPadding),
       body: Stack(
@@ -189,7 +189,7 @@ class _LessonRoomScreenState extends ConsumerState<LessonRoomScreen> {
     double horizontalPadding,
   ) {
     return AppBar(
-      backgroundColor: AppColors.bgBlue,
+      backgroundColor: AppColors.blue,
       centerTitle: false,
       automaticallyImplyLeading: false,
       titleSpacing: 0,

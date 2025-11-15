@@ -41,7 +41,7 @@ class _HiveScreenState extends ConsumerState<HiveScreen> {
       'title': 'Investing vs. saving: which is right for you?',
       'subtitle': 'Understanding your financial goals',
       'imagePath': Illustrations.interestBee,
-      'color': AppColors.bgBlue,
+      'color': AppColors.blue,
     },
     {
       'title': 'Smart spending: needs vs. wants',

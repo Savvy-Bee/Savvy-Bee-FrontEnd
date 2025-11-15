@@ -10,6 +10,8 @@ class Illustrations {
   static const String interestBee = '$_basePath/interest_bee_pose.png';
   static const String scammerBee = '$_basePath/scammer-bee.png';
 
+  static const String happyBee = '$_basePath/happy-bee.png';
+
   static const String coinJar = '$_basePath/jar.png';
   static const String savvyCoin = '$_basePath/savvy_coin.png';
 
@@ -31,4 +33,10 @@ class Illustrations {
   static const String lesson3 = '$_basePath/lesson-3.png';
 
   static const String hiveFlower = '$_basePath/hive-flower.png';
+
+  // Financial health avatars
+  static const String financialHealth1 = '$_basePath/financial-health-1.png';
+  static const String financialHealth2 = '$_basePath/financial-health-2.png';
+  static const String financialHealth3 = '$_basePath/financial-health-3.png';
+  static const String financialHealth4 = '$_basePath/financial-health-4.png';
 }

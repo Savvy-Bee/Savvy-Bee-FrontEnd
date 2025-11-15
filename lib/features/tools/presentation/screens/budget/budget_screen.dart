@@ -66,7 +66,7 @@ class _BudgetScreenState extends ConsumerState<BudgetScreen> {
           final categoryColors = [
             AppColors.primary,
             AppColors.success,
-            AppColors.bgBlue, // Assuming AppColors has other colors
+            AppColors.blue, // Assuming AppColors has other colors
             AppColors.primaryFaded,
             AppColors.error,
           ];

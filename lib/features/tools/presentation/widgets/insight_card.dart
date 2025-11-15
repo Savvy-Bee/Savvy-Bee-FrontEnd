@@ -46,12 +46,12 @@ class _InsightCardState extends State<InsightCard> {
       bgColor: switch (widget.insightType) {
         InsightType.alert => AppColors.error,
         InsightType.nahlInsight => AppColors.primary,
-        InsightType.nextBestAction => AppColors.bgBlue,
+        InsightType.nextBestAction => AppColors.blue,
       }.withValues(alpha: 0.1),
       borderColor: switch (widget.insightType) {
         InsightType.alert => AppColors.error,
         InsightType.nahlInsight => AppColors.primary,
-        InsightType.nextBestAction => AppColors.bgBlue,
+        InsightType.nextBestAction => AppColors.blue,
       },
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -69,7 +69,7 @@ class _InsightCardState extends State<InsightCard> {
                 color: switch (widget.insightType) {
                   InsightType.alert => AppColors.error,
                   InsightType.nahlInsight => AppColors.primary,
-                  InsightType.nextBestAction => AppColors.bgBlue,
+                  InsightType.nextBestAction => AppColors.blue,
                 },
               ),
               const Gap(10),

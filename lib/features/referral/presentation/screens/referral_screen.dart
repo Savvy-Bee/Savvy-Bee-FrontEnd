@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/app_icons.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/illustrations.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
+import 'package:savvy_bee_mobile/core/widgets/intro_text.dart';
+import 'package:savvy_bee_mobile/features/auth/presentation/screens/post_signup/select_priority_screen.dart';
 
 import '../../../../core/utils/assets/logos.dart';
 import '../../../../core/widgets/icon_text_row_widget.dart';
@@ -16,34 +19,36 @@ class ReferralScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    double size = MediaQuery.sizeOf(context).width / 1.5;
+    double size = MediaQuery.sizeOf(context).width / 1.7;
 
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Image.asset(Logos.logo),
+        title: Image.asset(Logos.logo, scale: 1.5),
         actions: [
-          IconTextRowWidget(
-            'Next',
-            AppIcon(AppIcons.arrowRightIcon),
-            textDirection: TextDirection.rtl,
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: IconTextRowWidget(
+              'Next',
+              AppIcon(AppIcons.arrowRightIcon),
+              textDirection: TextDirection.rtl,
+              textStyle: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+                fontFamily: Constants.neulisNeueFontFamily,
+              ),
+              onTap: () => context.pushNamed(SelectPriorityScreen.path),
+            ),
           ),
         ],
       ),
       body: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16).copyWith(top: 0),
+        physics: const ClampingScrollPhysics(),
         children: [
           Image.asset(Illustrations.savvyCoin, height: size, width: size),
-          Text(
-            'Refer friends, get 1 year free.',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 32,
-              fontWeight: FontWeight.bold,
-              fontFamily: Constants.neulisNeueFontFamily,
-              height: 1.1,
-            ),
-          ),
+          const Gap(16),
+          IntroText(title: 'Refer friends, get 1 year free.'),
           const Gap(8),
           Text(
             'Refer 2 friends to cover 6 months of Savvy Bee. Refer 1 more friend and earn 1 year free',
@@ -103,7 +108,7 @@ class ReferralScreen extends ConsumerWidget {
           child: Text(
             number,
             style: TextStyle(
-              fontSize: 16,
+              fontSize: 14,
               fontWeight: FontWeight.bold,
               fontFamily: Constants.neulisNeueFontFamily,
             ),
@@ -124,7 +129,7 @@ class ReferralScreen extends ConsumerWidget {
                   height: 1.1,
                 ),
               ),
-              const Gap(16),
+              const Gap(12),
               Text(
                 subtitle,
                 style: TextStyle(

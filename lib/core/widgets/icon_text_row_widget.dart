@@ -7,6 +7,9 @@ class IconTextRowWidget extends StatelessWidget {
   final Widget icon;
   final TextDirection? textDirection;
   final VoidCallback? onTap;
+  final TextStyle? textStyle;
+  final double? spacing;
+  final EdgeInsetsGeometry? padding;
 
   const IconTextRowWidget(
     this.text,
@@ -14,26 +17,34 @@ class IconTextRowWidget extends StatelessWidget {
     super.key,
     this.textDirection,
     this.onTap,
+    this.textStyle,
+    this.spacing,
+    this.padding,
   });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      child: Row(
-        spacing: 5,
-        textDirection: textDirection,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          icon,
-          Text(
-            text,
-            style: TextStyle(
-              fontSize: 12,
-              fontFamily: Constants.exconFontFamily,
+      child: Padding(
+        padding: padding ?? const EdgeInsets.all(5),
+        child: Row(
+          spacing: spacing ?? 5,
+          textDirection: textDirection,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            icon,
+            Text(
+              text,
+              style:
+                  textStyle ??
+                  TextStyle(
+                    fontSize: 12,
+                    fontFamily: Constants.neulisNeueFontFamily,
+                  ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

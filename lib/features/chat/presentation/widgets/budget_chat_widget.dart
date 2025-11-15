@@ -224,7 +224,7 @@ class _BudgetChatWidgetState extends ConsumerState<BudgetChatWidget> {
                               amountSpent: budget.balance,
                               color: budget.balance > budget.targetAmountMonthly
                                   ? AppColors.error
-                                  : AppColors.bgBlue,
+                                  : AppColors.blue,
                             ),
                           ),
                         ),

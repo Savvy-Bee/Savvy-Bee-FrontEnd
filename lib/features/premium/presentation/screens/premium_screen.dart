@@ -7,11 +7,15 @@ import 'package:savvy_bee_mobile/core/utils/assets/assets.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/logos.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
+import 'package:savvy_bee_mobile/core/widgets/intro_text.dart';
+import 'package:savvy_bee_mobile/features/referral/presentation/screens/referral_screen.dart';
 
 class PremiumScreen extends ConsumerStatefulWidget {
   static String path = '/premium';
 
-  const PremiumScreen({super.key});
+  final bool isFromSignup;
+
+  const PremiumScreen({super.key, required this.isFromSignup});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _PremiumScreenState();
@@ -25,23 +29,20 @@ class _PremiumScreenState extends ConsumerState<PremiumScreen> {
         automaticallyImplyLeading: false,
         title: Image.asset(Logos.logoText),
         actions: [
-          IconButton(onPressed: () => context.pop(), icon: Icon(Icons.close)),
+          IconButton(
+            onPressed: widget.isFromSignup
+                ? () => context.pushNamed(ReferralScreen.path)
+                : () => context.pop(),
+            icon: Icon(Icons.close),
+          ),
         ],
       ),
       body: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16).copyWith(top: 0),
+        physics: const ClampingScrollPhysics(),
         children: [
-          Text(
-            'Your one-time offer.',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 38,
-              height: 1.0,
-              fontWeight: FontWeight.bold,
-              fontFamily: Constants.neulisNeueFontFamily,
-            ),
-          ),
-          Image.asset(Assets.happyBeesSvg),
+          IntroText(title: 'Your one-time\noffer.'),
+          Image.asset(Assets.happyBees),
           _buildPerksCard(),
           const Gap(24),
           Text(

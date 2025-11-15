@@ -5,13 +5,13 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/custom_button.dart';
-import '../../../auth/presentation/screens/signup/presentation/screens/signup_screen.dart';
+import '../../../auth/presentation/screens/signup_screen.dart';
 import '../../domain/models/onboarding_item.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../../../core/utils/breakpoints.dart';
 import '../../../../core/widgets/intro_text.dart';
-import '../../../auth/presentation/screens/login/presentation/screens/login_screen.dart';
+import '../../../auth/presentation/screens/login_screen.dart';
 
 class OnboardingScreen extends StatefulWidget {
   static String path = '/onboarding';
@@ -85,31 +85,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       (e) => Stack(
                         alignment: Alignment.center,
                         children: [
-                          // Glow effect layer
-                          Container(
-                            width: 350, // Adjust to match your image size
-                            height: 350,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              gradient: RadialGradient(
-                                colors: [
-                                  AppColors.primary.withValues(alpha: 0.4),
-                                  AppColors.primary.withValues(alpha: 0.2),
-                                  AppColors.primary.withValues(alpha: 0.05),
-                                  Colors.transparent,
-                                ],
-                                stops: const [0.0, 0.4, 0.7, 1.0],
-                              ),
-                            ),
-                          ),
-                          // Image on top
                           Image.asset(
                             e.imagePath,
                             scale: switch (_currentIndex) {
                               0 => 1.1,
                               1 => 1.1,
-                              2 => 0.9,
-                              3 => 1.1,
+                              2 => 1.3,
+                              3 => 1.3,
                               _ => 0.5,
                             },
                           ),
@@ -136,18 +118,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  CustomElevatedButton(
-                    text: 'Get Started',
+                  CustomOutlinedButton(
+                    text: 'I already have an account',
                     onPressed: () {
-                      context.pushNamed(SignupScreen.path);
+                      context.pushNamed(LoginScreen.path);
                     },
                   ),
                   const Gap(10),
                   CustomElevatedButton(
-                    text: 'I already have an account',
-                    buttonColor: CustomButtonColor.black,
+                    text: 'Get started',
                     onPressed: () {
-                      context.pushNamed(LoginScreen.path);
+                      context.pushNamed(SignupScreen.path);
                     },
                   ),
                 ],

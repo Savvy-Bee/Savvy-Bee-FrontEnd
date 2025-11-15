@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:savvy_bee_mobile/features/auth/presentation/screens/signup/presentation/screens/select_priority_screen.dart';
-import 'package:savvy_bee_mobile/features/auth/presentation/screens/signup/presentation/screens/signup_connect_bank_screen.dart';
-import 'package:savvy_bee_mobile/features/auth/presentation/screens/signup/presentation/screens/signup_notifications_screen.dart';
+import 'package:savvy_bee_mobile/features/auth/presentation/screens/post_signup/architype/financial_architype_screen.dart';
+import 'package:savvy_bee_mobile/features/auth/presentation/screens/post_signup/select_priority_screen.dart';
+import 'package:savvy_bee_mobile/features/auth/presentation/screens/post_signup/signup_connect_bank_screen.dart';
+import 'package:savvy_bee_mobile/features/auth/presentation/screens/post_signup/signup_notifications_screen.dart';
 import 'package:savvy_bee_mobile/features/chat/presentation/screens/chat_screen.dart';
 import 'package:savvy_bee_mobile/features/chat/presentation/screens/choose_personality_screen.dart';
 import 'package:savvy_bee_mobile/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/hive_screen.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/lesson_home_screen.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/lesson_room_screen.dart';
+import 'package:savvy_bee_mobile/features/home/presentation/screens/home_screen.dart';
 import 'package:savvy_bee_mobile/features/premium/presentation/screens/premium_screen.dart';
 import 'package:savvy_bee_mobile/features/referral/presentation/screens/referral_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/bills/airtime_screen.dart';
@@ -27,8 +29,8 @@ import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/bvn_
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/create_wallet_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/live_photo_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/nin_verification_screen.dart';
-import 'package:savvy_bee_mobile/features/password/presentation/screens/password_reset_complete.dart';
-import 'package:savvy_bee_mobile/features/password/presentation/screens/password_reset_screen.dart';
+import 'package:savvy_bee_mobile/features/auth/presentation/screens/password_reset/password_reset_complete.dart';
+import 'package:savvy_bee_mobile/features/auth/presentation/screens/password_reset/password_reset_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/wallet_creation_complete_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/budget_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/edit_budget_screen.dart';
@@ -43,9 +45,9 @@ import '../../features/spend/presentation/screens/transactions/statement_sent_sc
 import '../../features/spend/presentation/screens/transfer/transfer_screen.dart';
 import '../../features/spend/presentation/screens/wallet/photo_verification_screen.dart';
 import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
-import '../../features/auth/presentation/screens/login/presentation/screens/login_screen.dart';
-import '../../features/auth/presentation/screens/signup/presentation/screens/signup_complete_screen.dart';
-import '../../features/auth/presentation/screens/signup/presentation/screens/signup_screen.dart';
+import '../../features/auth/presentation/screens/login_screen.dart';
+import '../../features/auth/presentation/screens/post_signup/signup_complete_screen.dart';
+import '../../features/auth/presentation/screens/signup_screen.dart';
 import '../../features/splash/presentation/screens/splash_screen.dart';
 import '../../features/tools/presentation/screens/debt/add_debt_screen.dart';
 import '../../features/tools/presentation/screens/debt/debt_screen.dart';
@@ -62,7 +64,7 @@ final GlobalKey<NavigatorState> _shellNavigatorKey = GlobalKey<NavigatorState>(
 
 final GoRouter appRouter = GoRouter(
   navigatorKey: _rootNavigatorKey,
-  initialLocation: DashboardScreen.path,
+  initialLocation: SplashScreen.path,
   routes: [
     GoRoute(
       path: SplashScreen.path,
@@ -142,6 +144,13 @@ final GoRouter appRouter = GoRouter(
       },
     ),
     GoRoute(
+      path: FinancialArchitypeScreen.path,
+      name: FinancialArchitypeScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return const FinancialArchitypeScreen();
+      },
+    ),
+    GoRoute(
       path: ChoosePersonalityScreen.path,
       name: ChoosePersonalityScreen.path,
       builder: (BuildContext context, GoRouterState state) {
@@ -156,6 +165,13 @@ final GoRouter appRouter = GoRouter(
         return MainWrapper(child: child);
       },
       routes: [
+        GoRoute(
+          path: HomeScreen.path,
+          name: HomeScreen.path,
+          builder: (BuildContext context, GoRouterState state) {
+            return const HomeScreen();
+          },
+        ),
         GoRoute(
           path: DashboardScreen.path,
           name: DashboardScreen.path,
@@ -426,7 +442,7 @@ final GoRouter appRouter = GoRouter(
       path: PremiumScreen.path,
       name: PremiumScreen.path,
       builder: (BuildContext context, GoRouterState state) {
-        return PremiumScreen();
+        return PremiumScreen(isFromSignup: state.extra as bool? ?? false);
       },
     ),
     GoRoute(

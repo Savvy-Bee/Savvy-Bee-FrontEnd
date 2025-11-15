@@ -39,4 +39,7 @@ class ApiEndpoints {
   // KYC Endpoints
   static const String verifyNin = '/auth/kyc/identity-number/nin/ng';
   static const String verifyBvn = '/auth/kyc/identity-number/bvn/ng';
+
+  // Home Endpoints
+  static const String homeDashboard = '/auth/profile/user/dashboard';
 }

@@ -337,21 +337,17 @@ class _CustomOtpFieldState extends State<CustomOtpField> {
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      spacing: 10,
       children: List.generate(
         widget.length,
-        (index) => Expanded(
-          child: Padding(
-            padding: EdgeInsets.only(right: index < widget.length - 1 ? 10 : 0),
-            child: _buildOtpBox(index),
-          ),
-        ),
+        (index) => Expanded(child: _buildOtpBox(index)),
       ),
     );
   }
 
   Widget _buildOtpBox(int index) {
     return Container(
-      height: 48,
+      height: 50,
       width: 48,
       decoration: BoxDecoration(
         // border: Border.all(
@@ -360,7 +356,7 @@ class _CustomOtpFieldState extends State<CustomOtpField> {
         //       : AppColors.greyDark,
         //   width: _focusNodes[index].hasFocus ? 2 : 1,
         // ),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(99),
       ),
       child: TextField(
         controller: _controllers[index],
@@ -374,10 +370,16 @@ class _CustomOtpFieldState extends State<CustomOtpField> {
         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
         decoration: InputDecoration(
           counterText: '',
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+          hintText: '0',
+          hintStyle: TextStyle(color: AppColors.greyMid),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(99)),
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(color: AppColors.black, width: 1.0),
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(99),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: AppColors.grey),
+            borderRadius: BorderRadius.circular(99),
           ),
           contentPadding: EdgeInsets.zero,
         ),

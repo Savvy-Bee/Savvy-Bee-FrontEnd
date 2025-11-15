@@ -15,7 +15,7 @@ class Assets {
   static const String savvyBeeNotificationSvg =
       '$_basePath/savvy-bee-notification.png';
 
-  static const String happyBeesSvg = '$_basePath/happy-bees.png';
+  static const String happyBees = '$_basePath/happy-bees.png';
 
   static const String quizzesBg = '$_basePath/quizzes-bg.png';
 
@@ -29,4 +29,9 @@ class Assets {
   // static const String honeyJarSvg = '$_basePath/honey-jar.svg';
 
   static const String lessonProgress1 = '$_basePath/lesson-progress-1.png';
+
+  static const String financialHealthCanvas =
+      '$_basePath/financial-health-canvas.png';
+  static const String financialHealthCanvasSvg =
+      '$_basePath/financial-health-canvas.svg';
 }

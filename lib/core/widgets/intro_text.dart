@@ -7,7 +7,7 @@ enum TextAlignment { center, left, right }
 
 class IntroText extends StatelessWidget {
   final String title;
-  final String subtitle;
+  final String? subtitle;
   final TextAlignment alignment;
   final bool showLogo;
   final bool isLarge;
@@ -17,10 +17,10 @@ class IntroText extends StatelessWidget {
   const IntroText({
     super.key,
     required this.title,
-    required this.subtitle,
+    this.subtitle,
     this.alignment = TextAlignment.center,
     this.showLogo = false,
-    this.isLarge = false,
+    this.isLarge = true,
     this.mainTextColor,
     this.subTextColor,
   });
@@ -49,29 +49,29 @@ class IntroText extends StatelessWidget {
               ? TextAlign.left
               : TextAlign.right,
           style: TextStyle(
-            fontSize: isLarge ? 50 : 32,
+            fontSize: isLarge ? 32 : 24,
             fontWeight: FontWeight.w900,
-            fontFamily: Constants.exconFontFamily,
+            fontFamily: Constants.neulisNeueFontFamily,
             height: 0.9,
             color: mainTextColor,
           ),
         ),
-        const Gap(12.0),
-        Text(
-          subtitle,
-          textAlign: alignment == TextAlignment.center
-              ? TextAlign.center
-              : alignment == TextAlignment.left
-              ? TextAlign.left
-              : TextAlign.right,
-          style: TextStyle(
-            fontSize: isLarge
-                ? 14
-                : 16, // Sub text is smaller when main text is larger
-            fontWeight: FontWeight.normal,
-            color: subTextColor,
+        if (subtitle != null && subtitle!.isNotEmpty) const Gap(12.0),
+        if (subtitle != null && subtitle!.isNotEmpty)
+          Text(
+            subtitle!,
+            textAlign: alignment == TextAlignment.center
+                ? TextAlign.center
+                : alignment == TextAlignment.left
+                ? TextAlign.left
+                : TextAlign.right,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.normal,
+              color: subTextColor,
+              fontFamily: Constants.neulisNeueFontFamily,
+            ),
           ),
-        ),
       ],
     );
   }

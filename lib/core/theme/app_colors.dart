@@ -9,7 +9,7 @@ class AppColors {
   static const greyMid = Color(0xFFE7E4E7);
   static const greyLight = Color(0xFFF5F5F5);
 
-  static const bgBlue = Color(0xFFADE1F9);
+  static const blue = Color(0xFFADE1F9);
 
   static const purple = Color(0xFFC179AB);
 

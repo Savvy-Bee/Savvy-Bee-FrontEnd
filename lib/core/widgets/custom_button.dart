@@ -36,6 +36,8 @@ class CustomElevatedButton extends StatelessWidget {
       CustomButtonColor.black => AppColors.white,
     };
 
+    final disabledForegroundColor = AppColors.grey;
+
     return SizedBox(
       width: isFullWidth ? double.infinity : null,
       child: ElevatedButton.icon(
@@ -64,19 +66,26 @@ class CustomElevatedButton extends StatelessWidget {
                 dimension: 16,
                 child: CircularProgressIndicator(
                   strokeWidth: 1.5,
-                  color: forgroundColor,
+                  color: onPressed == null
+                      ? disabledForegroundColor
+                      : forgroundColor,
                 ),
               )
             : icon ??
                   (showArrow
-                      ? AppIcon(AppIcons.arrowRightIcon, color: forgroundColor)
+                      ? AppIcon(
+                          AppIcons.arrowRightIcon,
+                          color: onPressed == null
+                              ? disabledForegroundColor
+                              : forgroundColor,
+                        )
                       : null),
         label: Text(
           text,
           style: TextStyle(
             fontSize: isSmall ? 12 : 14,
             fontWeight: FontWeight.bold,
-            color: forgroundColor,
+            color: onPressed == null ? disabledForegroundColor : forgroundColor,
           ),
         ),
       ),

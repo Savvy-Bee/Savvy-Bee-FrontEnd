@@ -16,9 +16,13 @@ class PreviousColoredDotPainter extends BasicIndicatorPainter {
     final SlideEffect slideEffect = effect as SlideEffect;
 
     final int activeIndex = offset.floor();
-    final double dotWidth = slideEffect.dotWidth;
-    final double dotHeight = slideEffect.dotHeight;
     final double spacing = slideEffect.spacing;
+    final double dotHeight = slideEffect.dotHeight;
+
+    // Calculate dot width dynamically based on available canvas width
+    final double totalSpacing = spacing * (count - 1);
+    final double dotWidth = (size.width - totalSpacing) / count;
+
     final double initialX = dotWidth / 2;
     final double centerY = size.height / 2;
     final double totalDotWidth = dotWidth + spacing;
@@ -30,19 +34,14 @@ class PreviousColoredDotPainter extends BasicIndicatorPainter {
 
     // Draw all the dots
     for (int i = 0; i < count; i++) {
-      // The critical coloring logic:
       if (i <= activeIndex) {
-        // Dot is the active one OR has already been passed -> PRIMARY COLOR
         paint.color = slideEffect.activeDotColor;
       } else {
-        // Dot is in the future -> DEFAULT COLOR
         paint.color = slideEffect.dotColor;
       }
 
-      // Calculate the center x position for the current dot
       final double xPos = initialX + (i * totalDotWidth);
 
-      // Draw the dot (a rounded rectangle)
       canvas.drawRRect(
         RRect.fromLTRBAndCorners(
           xPos - dotWidth / 2,
