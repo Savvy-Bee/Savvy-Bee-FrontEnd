@@ -8,8 +8,17 @@ import 'package:savvy_bee_mobile/features/chat/presentation/screens/chat_screen.
 import 'package:savvy_bee_mobile/features/chat/presentation/screens/choose_personality_screen.dart';
 import 'package:savvy_bee_mobile/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/hive_screen.dart';
-import 'package:savvy_bee_mobile/features/hive/presentation/screens/lesson_home_screen.dart';
-import 'package:savvy_bee_mobile/features/hive/presentation/screens/lesson_room_screen.dart';
+import 'package:savvy_bee_mobile/features/hive/presentation/screens/leaderboard/leaderboard_screen.dart';
+import 'package:savvy_bee_mobile/features/hive/presentation/screens/leaderboard/league_promotion_screen.dart';
+import 'package:savvy_bee_mobile/features/hive/presentation/screens/leaderboard/league_screen.dart';
+import 'package:savvy_bee_mobile/features/hive/presentation/screens/leaderboard/weekly_position_screen.dart';
+import 'package:savvy_bee_mobile/features/hive/presentation/screens/lesson/lesson_unlocked_screen.dart';
+import 'package:savvy_bee_mobile/features/hive/presentation/screens/lesson/lesson_home_screen.dart';
+import 'package:savvy_bee_mobile/features/hive/presentation/screens/level/quest_reward_screen.dart';
+import 'package:savvy_bee_mobile/features/hive/presentation/screens/level/quest_update_screen.dart';
+import 'package:savvy_bee_mobile/features/hive/presentation/screens/quiz/quiz_screen.dart';
+import 'package:savvy_bee_mobile/features/hive/presentation/screens/streak/new_streak_screen.dart';
+import 'package:savvy_bee_mobile/features/hive/presentation/screens/streak/streak_dashboard_screen.dart';
 import 'package:savvy_bee_mobile/features/home/presentation/screens/home_screen.dart';
 import 'package:savvy_bee_mobile/features/premium/presentation/screens/premium_screen.dart';
 import 'package:savvy_bee_mobile/features/referral/presentation/screens/referral_screen.dart';
@@ -39,6 +48,8 @@ import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/set_
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/debt/debt_repayment_details_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/goals/create_goal_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/tools_screen.dart';
+import '../../features/hive/presentation/screens/lesson/lesson_room_screen.dart';
+import '../../features/hive/presentation/screens/level/level_complete_screen.dart';
 import '../../features/hive/presentation/screens/levels_screen.dart';
 import '../../features/spend/presentation/screens/fund/username_screen.dart';
 import '../../features/spend/presentation/screens/transactions/statement_sent_screen.dart';
@@ -434,6 +445,73 @@ final GoRouter appRouter = GoRouter(
       name: LessonRoomScreen.path,
       builder: (BuildContext context, GoRouterState state) {
         return LessonRoomScreen();
+      },
+    ),
+    GoRoute(
+      path: LessonUnlockedScreen.path,
+      name: LessonUnlockedScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return const LessonUnlockedScreen();
+      },
+    ),
+    GoRoute(
+      path: QuestRewardScreen.path,
+      name: QuestRewardScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return const QuestRewardScreen();
+      },
+    ),
+    GoRoute(
+      path: QuestUpdateScreen.path,
+      name: QuestUpdateScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return const QuestUpdateScreen();
+      },
+    ),
+
+    // Streak Routes
+    GoRoute(
+      path: StreakDashboardScreen.path,
+      name: StreakDashboardScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return StreakDashboardScreen();
+      },
+    ),
+    GoRoute(
+      path: NewStreakScreen.path,
+      name: NewStreakScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return NewStreakScreen();
+      },
+    ),
+
+    // Leaderboard Routes
+    GoRoute(
+      path: LeaderboardScreen.path,
+      name: LeaderboardScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return LeaderboardScreen();
+      },
+    ),
+    GoRoute(
+      path: LeagueScreen.path,
+      name: LeagueScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return LeagueScreen();
+      },
+    ),
+    GoRoute(
+      path: WeeklyPositionScreen.path,
+      name: WeeklyPositionScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return WeeklyPositionScreen();
+      },
+    ),
+    GoRoute(
+      path: LeaguePromotionScreen.path,
+      name: LeaguePromotionScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return LeaguePromotionScreen();
       },
     ),
 

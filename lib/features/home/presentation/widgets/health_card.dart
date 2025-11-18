@@ -53,7 +53,8 @@ class HealthCardWidget extends StatelessWidget {
 
                 // Honey Jar
                 Image.asset(
-                  _getHoneyJarImage(rating),
+                  Assets.honeyJar,
+                  // _getHoneyJarImage(rating),
                   width: 110,
                   height: 110,
                   fit: BoxFit.cover,
@@ -78,8 +79,8 @@ class HealthCardWidget extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.white.withValues(alpha: 0.85),
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ],
@@ -89,13 +90,13 @@ class HealthCardWidget extends StatelessWidget {
 
         // Avatar
         Positioned(
-          left: 25,
-          bottom: -10,
+          left: 28,
+          bottom: -3,
           child: Image.asset(
             _getAvatarImage(rating),
-            width: 110,
-            height: 110,
-            fit: BoxFit.cover,
+            width: 95,
+            height: 95,
+            fit: BoxFit.contain,
           ),
         ),
       ],

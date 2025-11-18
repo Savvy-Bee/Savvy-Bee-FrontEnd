@@ -1,0 +1,622 @@
+{
+    "level": 2,
+    "title": "Tracking Your Money",
+    "modules": [
+        {
+            "moduleNumber": 1,
+            "title": "Tracking Your Money",
+            "lesson": {
+                "introduction": "Tracking your money helps you stay in control of your finances. It shows where your money comes from and where it goes, helping you make smarter decisions.",
+                "sections": [
+                    {
+                        "heading": "Why is Tracking Important?",
+                        "bulletPoints": [
+                            "Keeps You in Control - Helps you avoid overspending.",
+                            "Reveals Spending Habits - Shows where you can cut back.",
+                            "Ensures Your Needs Are Covered - Prevents running out of money.",
+                            "Makes Budgeting Easier - Helps you create a plan that works.",
+                            "Supports Savings Goals - Helps you save for things you want."
+                        ]
+                    },
+                    {
+                        "heading": "How to Track Your Money:",
+                        "bulletPoints": [
+                            "Write it down in a notebook.",
+                            "Use an app or spreadsheet.",
+                            "Keep and review receipts.",
+                            "Check your spending weekly."
+                        ]
+                    }
+                ],
+                "funFact": "People who track their money are more likely to reach their financial goals!",
+                "highlights": [
+                    "Know Where Your Money Goes - Track income and expenses.",
+                    "Avoid Overspending - Keep finances under control.",
+                    "Spot Spending Patterns - Identify areas to save.",
+                    "Make Budgeting Easier - Plan your finances effectively.",
+                    "Achieve Savings Goals - Set aside money for future needs.",
+                    "Simple Tracking Methods - Use a notebook, app, receipts, or a spreadsheet."
+                ],
+                "tip": "Regularly reviewing your spending leads to better financial habits!"
+            },
+            "quiz": {
+                "focus": "Understanding the importance of tracking income and expenses, different methods of tracking, and how it helps with budgeting.",
+                "questions": [
+                    {
+                        "type": "multiChoice",
+                        "question": "Why is tracking your money important?",
+                        "options": [
+                            "It helps you spend money faster.",
+                            "It ensures you never receive money.",
+                            "It helps you avoid overspending and reach savings goals.",
+                            "It makes money disappear from your account."
+                        ],
+                        "correctAnswer": 2
+                    },
+                    {
+                        "type": "fillInTheGap",
+                        "question": "One way to track your money is by keeping and reviewing your ______.",
+                        "correctAnswer": "Budget"
+                    },
+                    {
+                        "type": "match",
+                        "question": "Match each tracking method with its correct description.",
+                        "leftOptions": [
+                            "Spreadsheet",
+                            "Notebook",
+                            "App",
+                            "Receipts"
+                        ],
+                        "rightOptions": [
+                            "Writing down income and expenses manually.",
+                            "Using technology to track money easily.",
+                            "Keeping records of purchases for review.",
+                            "Organizing finances in a structured format."
+                        ],
+                        "correctMatches": {
+                            "0": 3,
+                            "1": 0,
+                            "2": 1,
+                            "3": 2
+                        }
+                    },
+                    {
+                        "type": "trueFalse",
+                        "question": "Tracking both income and expenses helps you know exactly where your money comes from and where it goes.",
+                        "correctAnswer": true
+                    },
+                    {
+                        "type": "reorder",
+                        "question": "Arrange the steps in the correct order for tracking your money:",
+                        "options": [
+                            "Check your spending weekly",
+                            "Record income and expenses",
+                            "Identify areas to save",
+                            "Use a tracking method (notebook, app, receipts, or spreadsheet)"
+                        ],
+                        "correctAnswer": [
+                            "Record income and expenses",
+                            "Use a tracking method (notebook, app, receipts, or spreadsheet)",
+                            "Check your spending weekly",
+                            "Identify areas to save"
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "moduleNumber": 2,
+            "title": "Recording Transactions Accurately",
+            "lesson": {
+                "introduction": "Tracking your money helps prevent errors, manage your budget, and avoid overspending. Recording transactions immediately ensures accuracy and keeps your finances organized.",
+                "sections": [
+                    {
+                        "heading": "Why It's Important:",
+                        "bulletPoints": [
+                            "Prevents mistakes and forgotten expenses",
+                            "Helps track spending habits and adjust budgets",
+                            "Avoids overspending by showing real-time balances"
+                        ]
+                    },
+                    {
+                        "heading": "Ways to Record Transactions:",
+                        "bulletPoints": [
+                            "Notebook: Write transactions by hand",
+                            "Apps: Automatically track and categorize spending",
+                            "Spreadsheets: Organize and calculate expenses",
+                            "Envelope System: Allocate cash for specific needs"
+                        ]
+                    },
+                    {
+                        "heading": "Key Steps:",
+                        "orderedList": [
+                            "Record transactions as they happen",
+                            "Save receipts for verification",
+                            "Regularly review entries for accuracy"
+                        ]
+                    }
+                ],
+                "highlights": [
+                    "Prevents mistakes and tracks spending",
+                    "Avoids overspending with real-time updates",
+                    "Recording Methods: Notebook, Apps, Spreadsheets, Envelope System",
+                    "Best Practices: Record instantly, save receipts, review regularly"
+                ],
+                "conclusion": "Good record-keeping leads to better budgeting and smarter financial decisions!"
+            },
+            "quiz": {
+                "focus": "Understanding the importance of recording transactions accurately and immediately.",
+                "questions": [
+                    {
+                        "type": "multiChoice",
+                        "question": "Why is it important to record every transaction as it happens?",
+                        "options": [
+                            "To make your budget look better than it is",
+                            "To ensure you don't forget any details about your spending",
+                            "To impress your friends with your record-keeping skills",
+                            "To delay updating your budget later"
+                        ],
+                        "correctAnswer": 1
+                    },
+                    {
+                        "type": "fillInTheGap",
+                        "question": "Recording transactions right away helps you avoid ______ in your budget.",
+                        "correctAnswer": "errors"
+                    },
+                    {
+                        "type": "match",
+                        "question": "Match each method of recording with its description.",
+                        "leftOptions": [
+                            "Spreadsheet",
+                            "Digital App",
+                            "Manual Notebook",
+                            "Envelope System"
+                        ],
+                        "rightOptions": [
+                            "Writing down transactions by hand",
+                            "Using a software tool to track income and expenses",
+                            "Organizing data in rows and columns for calculations",
+                            "Physically dividing cash for different spending categories"
+                        ],
+                        "correctMatches": {
+                            "0": 2,
+                            "1": 1,
+                            "2": 0,
+                            "3": 3
+                        }
+                    },
+                    {
+                        "type": "trueFalse",
+                        "question": "It is acceptable to record transactions at the end of the month as long as you remember everything.",
+                        "correctAnswer": false
+                    },
+                    {
+                        "type": "reorder",
+                        "question": "Arrange these steps for proper transaction recording:",
+                        "options": [
+                            "File or save receipts",
+                            "Make a purchase or receive income",
+                            "Review your entries for accuracy",
+                            "Immediately record the transaction"
+                        ],
+                        "correctAnswer": [
+                            "Make a purchase or receive income",
+                            "Immediately record the transaction",
+                            "File or save receipts",
+                            "Review your entries for accuracy"
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "moduleNumber": 3,
+            "title": "Tools for Tracking Money",
+            "lesson": {
+                "introduction": "Keeping track of your money helps you stay in control of your spending and savings. There are two main ways to do this: traditional methods and digital tools.",
+                "sections": [
+                    {
+                        "heading": "Traditional Tracking Methods:",
+                        "bulletPoints": [
+                            "Handwritten ledger: Writing transactions in a notebook",
+                            "Envelope system: Separating cash into labeled envelopes for different expenses"
+                        ]
+                    },
+                    {
+                        "heading": "Digital Tracking Tools:",
+                        "bulletPoints": [
+                            "Budgeting apps & online trackers: Automatically categorize expenses and generate reports",
+                            "Spreadsheets: Organize and calculate transactions easily"
+                        ]
+                    },
+                    {
+                        "heading": "Why Use Digital Tools?",
+                        "bulletPoints": [
+                            "Saves time - Automates calculations and categorization",
+                            "Increases accuracy - Reduces manual errors",
+                            "Provides reports - Shows spending patterns for better budgeting"
+                        ]
+                    },
+                    {
+                        "heading": "How to Set Up a Digital Tracker:",
+                        "orderedList": [
+                            "Choose a budgeting app or software",
+                            "Enter your income and expense categories",
+                            "Record transactions as they happen",
+                            "Review reports to track progress"
+                        ]
+                    }
+                ],
+                "highlights": [
+                    "Traditional Methods: Handwritten ledgers & envelope system for manual tracking.",
+                    "Digital Tools: Budgeting apps & spreadsheets for automated tracking.",
+                    "Benefits of Digital Tracking: Saves time, improves accuracy, and provides spending reports.",
+                    "Steps to Set Up a Digital Tracker: Choose a budgeting app → Set income & expense categories → Record transactions regularly → Review reports for insights"
+                ],
+                "conclusion": "Using the right tools makes money management easier and helps you stay financially responsible."
+            },
+            "quiz": {
+                "focus": "Understanding different tools for tracking money and their benefits.",
+                "questions": [
+                    {
+                        "type": "multiChoice",
+                        "question": "Which of the following is the most efficient tool for tracking daily transactions?",
+                        "options": [
+                            "A budgeting app or online tracker",
+                            "A basic calculator only",
+                            "A handwritten list with no categories",
+                            "A random notebook with no structure"
+                        ],
+                        "correctAnswer": 0
+                    },
+                    {
+                        "type": "fillInTheGap",
+                        "question": "Digital tools can help ______ your financial records by automatically calculating totals and generating reports.",
+                        "correctAnswer": "organize"
+                    },
+                    {
+                        "type": "dragAndDrop",
+                        "question": "Drag each item into the correct group: Digital Tools vs. Traditional Methods.",
+                        "items": [
+                            "Budgeting app",
+                            "Handwritten ledger",
+                            "Online expense tracker",
+                            "Envelope system"
+                        ],
+                        "categories": {
+                            "Digital Tools": [
+                                "Budgeting app",
+                                "Online expense tracker"
+                            ],
+                            "Traditional Methods": [
+                                "Handwritten ledger",
+                                "Envelope system"
+                            ]
+                        }
+                    },
+                    {
+                        "type": "multiChoice",
+                        "question": "What is one key benefit of using a digital tracking tool?",
+                        "options": [
+                            "It automatically categorizes and sums up your transactions",
+                            "It makes your phone run slower",
+                            "It hides your spending details",
+                            "It is only useful for saving receipts"
+                        ],
+                        "correctAnswer": 0
+                    },
+                    {
+                        "type": "reorder",
+                        "question": "Arrange these steps to set up a digital tracking system:",
+                        "options": [
+                            "Choose a budgeting app or software",
+                            "Review the summary reports regularly",
+                            "Record your transactions as they occur",
+                            "Enter your income and expense categories"
+                        ],
+                        "correctAnswer": [
+                            "Choose a budgeting app or software",
+                            "Enter your income and expense categories",
+                            "Record your transactions as they occur",
+                            "Review the summary reports regularly"
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "moduleNumber": 4,
+            "title": "Analyzing Spending Habits",
+            "lesson": {
+                "introduction": "Tracking your money is just the first step—understanding your spending habits helps you make smarter financial choices. Reviewing your transactions regularly allows you to spot patterns, cut unnecessary expenses, and improve budgeting.",
+                "sections": [
+                    {
+                        "heading": "Why Analyze Your Spending?",
+                        "bulletPoints": [
+                            "Helps identify where you're overspending.",
+                            "Ensures your spending aligns with your budget.",
+                            "Detects errors or unexpected charges.",
+                            "Guides you in making adjustments to save more."
+                        ]
+                    },
+                    {
+                        "heading": "How to Review Spending Effectively",
+                        "orderedList": [
+                            "Gather your transaction records & receipts.",
+                            "Compare actual spending with your budget.",
+                            "Categorize expenses to see where most of your money goes.",
+                            "Check for mistakes or unusual expenses.",
+                            "Make a plan to adjust spending and save more."
+                        ]
+                    }
+                ],
+                "highlights": [
+                    "Review spending regularly to track patterns and identify unnecessary expenses.",
+                    "Compare actual spending to your budget to stay on track.",
+                    "Categorize expenses to see where your money goes.",
+                    "Check for errors or unusual charges to avoid mistakes.",
+                    "Adjust spending habits to save more and improve financial health."
+                ],
+                "conclusion": "By regularly analyzing your spending, you gain better control of your money and make informed financial decisions."
+            },
+            "quiz": {
+                "focus": "Learning how to review your recorded transactions to understand and improve your spending.",
+                "questions": [
+                    {
+                        "type": "multiChoice",
+                        "question": "Why should you review your spending records regularly?",
+                        "options": [
+                            "To celebrate spending as much as possible",
+                            "To understand your spending patterns and make improvements",
+                            "To confuse your friends",
+                            "To justify spending without limits"
+                        ],
+                        "correctAnswer": 1
+                    },
+                    {
+                        "type": "fillInTheGap",
+                        "question": "By analyzing your transactions, you can identify areas where you need to ______ your spending.",
+                        "correctAnswer": "cut"
+                    },
+                    {
+                        "type": "match",
+                        "question": "Match each review activity with its benefit.",
+                        "leftOptions": [
+                            "Comparing monthly spending to your budget",
+                            "Categorizing expenses",
+                            "Checking receipts against records",
+                            "Noting unusual expenses"
+                        ],
+                        "rightOptions": [
+                            "Ensures accuracy of your records",
+                            "Highlights where spending is above or below expectations",
+                            "Helps understand which areas cost the most",
+                            "Identifies errors or unexpected charges"
+                        ],
+                        "correctMatches": {
+                            "0": 1,
+                            "1": 2,
+                            "2": 0,
+                            "3": 3
+                        }
+                    },
+                    {
+                        "type": "dragAndDrop",
+                        "question": "Drag each action into the correct group: Review Actions vs. Recording Actions.",
+                        "items": [
+                            "Recording each transaction immediately",
+                            "Comparing your monthly totals with your budget",
+                            "Filing receipts for future reference",
+                            "Checking for discrepancies in your records"
+                        ],
+                        "categories": {
+                            "Review Actions": [
+                                "Comparing your monthly totals with your budget",
+                                "Checking for discrepancies in your records"
+                            ],
+                            "Recording Actions": [
+                                "Recording each transaction immediately",
+                                "Filing receipts for future reference"
+                            ]
+                        }
+                    },
+                    {
+                        "type": "reorder",
+                        "question": "Arrange these steps for a monthly spending analysis:",
+                        "options": [
+                            "Gather all your transaction records and receipts",
+                            "Identify any areas where spending exceeded expectations",
+                            "Compare recorded spending to your planned budget",
+                            "Plan changes to reduce unnecessary expenses"
+                        ],
+                        "correctAnswer": [
+                            "Gather all your transaction records and receipts",
+                            "Compare recorded spending to your planned budget",
+                            "Identify any areas where spending exceeded expectations",
+                            "Plan changes to reduce unnecessary expenses"
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "moduleNumber": 5,
+            "title": "Comprehensive Review - Tracking Your Money",
+            "lesson": {
+                "introduction": "Managing money wisely starts with tracking your income and expenses. This helps you stay in control, avoid overspending, and save for future goals. Without proper tracking, it's easy to lose sight of where your money goes.",
+                "sections": [
+                    {
+                        "heading": "Recording Transactions Accurately",
+                        "content": "Writing down every transaction, whether using a notebook, budgeting app, or spreadsheet, ensures accuracy. Recording transactions immediately prevents mistakes, forgotten expenses, and budget miscalculations."
+                    },
+                    {
+                        "heading": "Tools for Tracking Money",
+                        "content": "There are traditional and digital ways to track money.",
+                        "bulletPoints": [
+                            "Digital tools (budgeting apps, online trackers) automatically organize spending.",
+                            "Traditional methods (handwritten records, envelope system) provide hands-on budgeting control."
+                        ],
+                        "note": "Choosing the right tool makes financial tracking easier and more effective."
+                    },
+                    {
+                        "heading": "Analyzing Spending Habits",
+                        "content": "Regularly reviewing your spending helps you identify areas to cut costs and improve savings. Compare your actual expenses to your budget, categorize spending, and look for unnecessary purchases. This allows you to adjust habits and make better financial decisions."
+                    }
+                ],
+                "highlights": [
+                    "Why Track Money? Stay in control, avoid overspending, and save effectively.",
+                    "Recording Transactions: Use a notebook, app, or spreadsheet—record immediately to prevent mistakes.",
+                    "Tracking Tools: Digital (Budgeting apps, online trackers - easy & automated) vs Traditional (Notebooks, envelope system - manual but effective).",
+                    "Reviewing Spending: Compare expenses to your budget, spot unnecessary costs, and adjust habits.",
+                    "Smart Money Choices: Tracking and analyzing spending leads to better financial decisions and savings growth."
+                ]
+            },
+            "quiz": {
+                "focus": "Comprehensive review of all tracking concepts.",
+                "questions": [
+                    {
+                        "type": "multiChoice",
+                        "question": "What is the first step in tracking your money?",
+                        "options": [
+                            "Recording your income",
+                            "Ignoring small expenses",
+                            "Estimating your spending at the end of the month",
+                            "Setting a savings goal"
+                        ],
+                        "correctAnswer": 0
+                    },
+                    {
+                        "type": "fillInTheGap",
+                        "question": "Net income is found by subtracting total ______ from total income.",
+                        "correctAnswer": "expenses"
+                    },
+                    {
+                        "type": "match",
+                        "question": "Match each term with its correct meaning.",
+                        "leftOptions": [
+                            "Income",
+                            "Expense",
+                            "Savings",
+                            "Net Income"
+                        ],
+                        "rightOptions": [
+                            "Money left after all expenses",
+                            "Money received or earned",
+                            "Money set aside for future use",
+                            "Money spent on goods or services"
+                        ],
+                        "correctMatches": {
+                            "0": 1,
+                            "1": 3,
+                            "2": 2,
+                            "3": 0
+                        }
+                    },
+                    {
+                        "type": "multiChoice",
+                        "question": "Why is it important to record transactions as they occur?",
+                        "options": [
+                            "To reduce errors and keep an accurate record",
+                            "To make your budget look more complicated",
+                            "To avoid having to review your spending later",
+                            "To keep your income hidden"
+                        ],
+                        "correctAnswer": 0
+                    },
+                    {
+                        "type": "fillInTheGap",
+                        "question": "Using a digital budgeting tool can help you ______ your transactions automatically.",
+                        "correctAnswer": "track"
+                    },
+                    {
+                        "type": "match",
+                        "question": "Match the tracking tool with its key benefit.",
+                        "leftOptions": [
+                            "Budgeting App",
+                            "Envelope System",
+                            "Spreadsheet",
+                            "Handwritten Ledger"
+                        ],
+                        "rightOptions": [
+                            "Automatically calculates totals and categorizes spending",
+                            "Allows for creative, personal record keeping",
+                            "Organizes data in a structured format",
+                            "Physically limits spending with cash"
+                        ],
+                        "correctMatches": {
+                            "0": 0,
+                            "1": 3,
+                            "2": 2,
+                            "3": 1
+                        }
+                    },
+                    {
+                        "type": "dragAndDrop",
+                        "question": "Drag each activity into the correct group: Recording Actions vs. Review Actions.",
+                        "items": [
+                            "Recording each expense immediately",
+                            "Filing receipts",
+                            "Comparing your monthly spending to your budget",
+                            "Checking receipts for discrepancies"
+                        ],
+                        "categories": {
+                            "Recording Actions": [
+                                "Recording each expense immediately",
+                                "Filing receipts"
+                            ],
+                            "Review Actions": [
+                                "Comparing your monthly spending to your budget",
+                                "Checking receipts for discrepancies"
+                            ]
+                        }
+                    },
+                    {
+                        "type": "multiChoice",
+                        "question": "Which of the following best describes why reviewing your spending is important?",
+                        "options": [
+                            "It helps you understand where you might be overspending",
+                            "It makes you feel bad about your purchases",
+                            "It allows you to change your income",
+                            "It is only necessary if you want to quit spending"
+                        ],
+                        "correctAnswer": 0
+                    },
+                    {
+                        "type": "reorder",
+                        "question": "Arrange these steps for recording a transaction:",
+                        "options": [
+                            "File or save the receipt",
+                            "Review your records for accuracy later",
+                            "Make a purchase or receive money",
+                            "Record the transaction immediately"
+                        ],
+                        "correctAnswer": [
+                            "Make a purchase or receive money",
+                            "Record the transaction immediately",
+                            "File or save the receipt",
+                            "Review your records for accuracy later"
+                        ]
+                    },
+                    {
+                        "type": "reorder",
+                        "question": "Arrange these steps for a monthly spending review:",
+                        "options": [
+                            "Update your budget for the month",
+                            "Identify areas where spending was higher than expected",
+                            "Decide on changes to reduce unnecessary expenses",
+                            "Gather receipts and transaction records",
+                            "Compare actual spending to your planned budget"
+                        ],
+                        "correctAnswer": [
+                            "Gather receipts and transaction records",
+                            "Compare actual spending to your planned budget",
+                            "Identify areas where spending was higher than expected",
+                            "Decide on changes to reduce unnecessary expenses",
+                            "Update your budget for the month"
+                        ]
+                    }
+                ]
+            }
+        }
+    ]
+}

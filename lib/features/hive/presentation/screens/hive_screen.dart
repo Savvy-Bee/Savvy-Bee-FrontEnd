@@ -3,13 +3,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
+import 'package:savvy_bee_mobile/core/utils/assets/assets.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/illustrations.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/article_card.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/section_title_widget.dart';
 import 'package:savvy_bee_mobile/core/widgets/icon_text_row_widget.dart';
-import 'package:savvy_bee_mobile/features/hive/presentation/screens/lesson_home_screen.dart';
+import 'package:savvy_bee_mobile/features/hive/presentation/screens/leaderboard/leaderboard_screen.dart';
+import 'package:savvy_bee_mobile/features/hive/presentation/screens/lesson/lesson_home_screen.dart';
+import 'package:savvy_bee_mobile/features/hive/presentation/screens/streak/streak_dashboard_screen.dart';
 
 import '../../../../core/utils/assets/app_icons.dart';
 import '../../../../core/widgets/custom_card.dart';
@@ -119,16 +122,7 @@ class _HiveScreenState extends ConsumerState<HiveScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Hi Danny!',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        ),
-        centerTitle: false,
-        actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.more_vert_rounded)),
-        ],
-      ),
+      appBar: _buildAppBar(),
       body: SafeArea(
         child: ListView(
           children: [
@@ -186,6 +180,61 @@ class _HiveScreenState extends ConsumerState<HiveScreen> {
             const Gap(16),
           ],
         ),
+      ),
+    );
+  }
+
+  AppBar _buildAppBar() {
+    return AppBar(
+      title: Text(
+        'Hi Danny!',
+        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+      ),
+      centerTitle: false,
+      actions: [
+        _buildActionButton(
+          icon: Image.asset(Illustrations.hiveFlower),
+          text: '200',
+        ),
+        const Gap(4),
+        _buildActionButton(
+          icon: Icon(Icons.hive, size: 20, color: AppColors.primary),
+          text: '4',
+          onTap: () => context.pushNamed(StreakDashboardScreen.path),
+        ),
+        const Gap(4),
+        _buildActionButton(
+          icon: Image.asset(Assets.trophy, height: 20, width: 20),
+          onTap: () => context.pushNamed(LeaderboardScreen.path),
+        ),
+        const Gap(12),
+      ],
+    );
+  }
+
+  Widget _buildActionButton({
+    required Widget icon,
+    String? text,
+    VoidCallback? onTap,
+  }) {
+    return CustomCard(
+      onTap: onTap,
+      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+      borderColor: AppColors.greyMid,
+      child: Row(
+        spacing: 4,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          icon,
+          if (text != null && text.isNotEmpty)
+            Text(
+              text,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontFamily: Constants.neulisNeueFontFamily,
+              ),
+            ),
+        ],
       ),
     );
   }

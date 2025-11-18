@@ -7,6 +7,7 @@ import 'package:savvy_bee_mobile/features/tools/data/repositories/goals_reposito
 
 import '../../features/auth/data/repositories/auth_repository.dart';
 import '../../features/spend/data/repositories/wallet_repository.dart';
+import '../../features/tools/data/repositories/debt_repository.dart';
 import '../network/api_client.dart';
 import '../network/api_endpoints.dart';
 import 'storage_service.dart';
@@ -55,4 +56,9 @@ final goalsRepositoryProvider = Provider<GoalsRepository>((ref) {
 final homeRepositoryProvider = Provider<HomeRepository>((ref) {
   final apiClient = ref.watch(apiClientProvider);
   return HomeRepository(apiClient: apiClient);
+});
+
+final debtRepositoryProvider = Provider<DebtRepository>((ref) {
+  final apiClient = ref.watch(apiClientProvider);
+  return DebtRepository(apiClient: apiClient);
 });

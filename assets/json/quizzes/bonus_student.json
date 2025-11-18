@@ -1,0 +1,481 @@
+{
+  "bonusLevel": "Student",
+  "title": "Budgeting as a Student",
+  "quizzes": [
+    {
+      "quizNumber": 1,
+      "title": "Understanding Your Income & Expenses",
+      "questions": [
+        {
+          "type": "multiChoice",
+          "question": "What is the first step in creating a budget as a student?",
+          "options": [
+            "Spend money and track it later",
+            "Guess how much you have and plan around it",
+            "List your income and expenses",
+            "Buy essential items first, then budget the rest"
+          ],
+          "correctAnswer": 2
+        },
+        {
+          "type": "fillInTheGap",
+          "question": "Fixed expenses remain the same over time, while ______ expenses change based on spending habits.",
+          "correctAnswer": "variable"
+        },
+        {
+          "type": "match",
+          "question": "Match each budgeting term with its correct example.",
+          "leftOptions": ["Savings", "Variable Expense", "Fixed Expense", "Income Source"],
+          "rightOptions": [
+            "School fees",
+            "Snacks and entertainment",
+            "Allowance from parents",
+            "Money set aside for future needs"
+          ],
+          "correctMatches": {
+            "0": 3,
+            "1": 1,
+            "2": 0,
+            "3": 2
+          }
+        },
+        {
+          "type": "dragAndDrop",
+          "question": "Drag the following expenses into the correct category: Needs vs. Wants.",
+          "items": [
+            "School supplies",
+            "Movie tickets",
+            "Lunch money",
+            "New headphones"
+          ],
+          "categories": {
+            "Needs": [
+              "School supplies",
+              "Lunch money"
+            ],
+            "Wants": [
+              "Movie tickets",
+              "New headphones"
+            ]
+          }
+        },
+        {
+          "type": "reorder",
+          "question": "Arrange these budgeting steps in the correct order.",
+          "options": [
+            "Track expenses regularly",
+            "Categorize spending into needs and wants",
+            "Set spending limits for different categories",
+            "Record income and expenses",
+            "Adjust your budget as needed"
+          ],
+          "correctAnswer": [
+            "Record income and expenses",
+            "Categorize spending into needs and wants",
+            "Set spending limits for different categories",
+            "Track expenses regularly",
+            "Adjust your budget as needed"
+          ]
+        }
+      ]
+    },
+    {
+      "quizNumber": 2,
+      "title": "Smart Spending & Avoiding Overspending",
+      "questions": [
+        {
+          "type": "multiChoice",
+          "question": "What is the best way to decide if you should buy something?",
+          "options": [
+            "Buy it immediately before it sells out",
+            "Check if you really need it and compare prices",
+            "Always buy the most expensive option",
+            "Spend all your money first and save later"
+          ],
+          "correctAnswer": 1
+        },
+        {
+          "type": "fillInTheGap",
+          "question": "Tracking your ______ helps you see where your money is going and avoid wasteful spending.",
+          "correctAnswer": "expenses"
+        },
+        {
+          "type": "match",
+          "question": "Match each spending habit with its benefit.",
+          "leftOptions": [
+            "Tracking daily expenses",
+            "Comparing prices before buying",
+            "Avoiding impulse buying",
+            "Setting spending limits"
+          ],
+          "rightOptions": [
+            "Helps you get the best deal",
+            "Prevents overspending",
+            "Keeps you aware of where your money goes",
+            "Ensures you don't waste money on things you don't need"
+          ],
+          "correctMatches": {
+            "0": 2,
+            "1": 0,
+            "2": 3,
+            "3": 1
+          }
+        },
+        {
+          "type": "dragAndDrop",
+          "question": "Drag the following actions into the correct category: Smart Spending vs. Wasteful Spending.",
+          "items": [
+            "Creating a shopping list before buying",
+            "Buying something just because it's on sale",
+            "Comparing prices before a purchase",
+            "Spending all your money on non-essentials"
+          ],
+          "categories": {
+            "Smart Spending": [
+              "Creating a shopping list before buying",
+              "Comparing prices before a purchase"
+            ],
+            "Wasteful Spending": [
+              "Buying something just because it's on sale",
+              "Spending all your money on non-essentials"
+            ]
+          }
+        },
+        {
+          "type": "reorder",
+          "question": "Arrange these steps in the correct order for making a smart purchase.",
+          "options": [
+            "Decide if the item is a need or a want",
+            "Track the expense in your budget",
+            "Plan how the purchase fits into your budget",
+            "Make the purchase if it fits within your budget",
+            "Compare prices and check reviews"
+          ],
+          "correctAnswer": [
+            "Decide if the item is a need or a want",
+            "Plan how the purchase fits into your budget",
+            "Compare prices and check reviews",
+            "Make the purchase if it fits within your budget",
+            "Track the expense in your budget"
+          ]
+        }
+      ]
+    },
+    {
+      "quizNumber": 3,
+      "title": "Saving for Short- and Long-Term Goals",
+      "questions": [
+        {
+          "type": "multiChoice",
+          "question": "What is the main difference between short-term and long-term savings goals?",
+          "options": [
+            "Short-term goals take longer to achieve than long-term goals",
+            "Long-term goals require less money than short-term goals",
+            "Short-term goals are for immediate needs, while long-term goals require more time to achieve",
+            "There is no difference between short-term and long-term savings"
+          ],
+          "correctAnswer": 2
+        },
+        {
+          "type": "fillInTheGap",
+          "question": "To successfully reach a savings goal, it is important to set a clear ______ and a deadline.",
+          "correctAnswer": "target"
+        },
+        {
+          "type": "match",
+          "question": "Match each savings goal with its category.",
+          "leftOptions": [
+            "Saving for a school trip",
+            "Saving for a new laptop in 6 months",
+            "Saving for a future home",
+            "Saving for college tuition"
+          ],
+          "rightOptions": [
+            "Short-term savings",
+            "Long-term savings"
+          ],
+          "correctMatches": {
+            "0": 0,
+            "1": 0,
+            "2": 1,
+            "3": 1
+          }
+        },
+        {
+          "type": "dragAndDrop",
+          "question": "Drag each step into the correct order for setting up a savings goal.",
+          "items": [
+            "Choose a savings method (piggy bank, bank account, etc.)",
+            "Identify what you're saving for",
+            "Decide how much to save and set a timeline",
+            "Track progress and adjust if necessary"
+          ],
+          "categories": {
+            "Step 1": ["Identify what you're saving for"],
+            "Step 2": ["Decide how much to save and set a timeline"],
+            "Step 3": ["Choose a savings method (piggy bank, bank account, etc.)"],
+            "Step 4": ["Track progress and adjust if necessary"]
+          }
+        },
+        {
+          "type": "reorder",
+          "question": "Arrange these actions in the right sequence for achieving a savings goal.",
+          "options": [
+            "Monitor and adjust savings plan",
+            "Determine the total amount needed",
+            "Set a deadline to reach the goal",
+            "Start saving regularly",
+            "Choose a secure place to keep the money"
+          ],
+          "correctAnswer": [
+            "Determine the total amount needed",
+            "Set a deadline to reach the goal",
+            "Choose a secure place to keep the money",
+            "Start saving regularly",
+            "Monitor and adjust savings plan"
+          ]
+        }
+      ]
+    },
+    {
+      "quizNumber": 4,
+      "title": "Handling Peer Pressure and Social Spending",
+      "questions": [
+        {
+          "type": "multiChoice",
+          "question": "Your friends invite you to an expensive restaurant, but it doesn't fit your budget. What is the best response?",
+          "options": [
+            "Go anyway and figure out the cost later.",
+            "Politely decline or suggest a more affordable alternative.",
+            "Borrow money to cover the expense.",
+            "Avoid socializing altogether."
+          ],
+          "correctAnswer": 1
+        },
+        {
+          "type": "fillInTheGap",
+          "question": "One way to avoid overspending on social activities is to set a ______ for outings.",
+          "correctAnswer": "budget"
+        },
+        {
+          "type": "match",
+          "question": "Match each action with the best budgeting strategy for handling social spending.",
+          "leftOptions": [
+            "Suggesting free or low-cost activities",
+            "Tracking how much you spend on social outings",
+            "Learning to say no when something is too expensive",
+            "Choosing friends who respect your financial limits"
+          ],
+          "rightOptions": [
+            "Helps you avoid unnecessary pressure to spend",
+            "Keeps you aware of your spending habits",
+            "Allows you to have fun without overspending",
+            "Prevents you from exceeding your budget"
+          ],
+          "correctMatches": {
+            "0": 2,
+            "1": 1,
+            "2": 3,
+            "3": 0
+          }
+        },
+        {
+          "type": "dragAndDrop",
+          "question": "Drag the following into the correct categories: Smart Social Spending vs. Poor Social Spending Habits.",
+          "items": [
+            "Borrowing money to go out",
+            "Planning social activities within your budget",
+            "Tracking spending on social events",
+            "Always saying yes to expensive outings"
+          ],
+          "categories": {
+            "Smart Social Spending": [
+              "Planning social activities within your budget",
+              "Tracking spending on social events"
+            ],
+            "Poor Social Spending Habits": [
+              "Borrowing money to go out",
+              "Always saying yes to expensive outings"
+            ]
+          }
+        },
+        {
+          "type": "reorder",
+          "question": "Arrange the steps for making a budget-friendly social decision.",
+          "options": [
+            "Consider your budget before agreeing to plans.",
+            "Suggest an affordable alternative if needed.",
+            "Reflect on your spending to improve future choices.",
+            "Enjoy the activity without overspending.",
+            "Politely decline if the cost is too high."
+          ],
+          "correctAnswer": [
+            "Consider your budget before agreeing to plans.",
+            "Suggest an affordable alternative if needed.",
+            "Politely decline if the cost is too high.",
+            "Enjoy the activity without overspending.",
+            "Reflect on your spending to improve future choices."
+          ]
+        }
+      ]
+    },
+    {
+      "quizNumber": 5,
+      "title": "Mastering Student Budgeting - Complete Review",
+      "questions": [
+        {
+          "type": "multiChoice",
+          "question": "What is the most important reason for tracking income and expenses?",
+          "options": [
+            "To remember how much you spent on entertainment",
+            "To ensure you have enough for necessities and savings",
+            "To compare spending with your friends",
+            "To spend all your income before the next allowance"
+          ],
+          "correctAnswer": 1
+        },
+        {
+          "type": "fillInTheGap",
+          "question": "A student's budget should focus on covering ______ first before spending on wants.",
+          "correctAnswer": "needs"
+        },
+        {
+          "type": "match",
+          "question": "Match each budgeting habit with its benefit.",
+          "leftOptions": [
+            "Reviewing spending regularly",
+            "Using student discounts",
+            "Setting a savings goal",
+            "Comparing prices before buying"
+          ],
+          "rightOptions": [
+            "Helps prevent impulse buying.",
+            "Ensures you have money for emergencies.",
+            "Reduces spending and saves money.",
+            "Helps you understand where your money goes."
+          ],
+          "correctMatches": {
+            "0": 3,
+            "1": 2,
+            "2": 1,
+            "3": 0
+          }
+        },
+        {
+          "type": "dragAndDrop",
+          "question": "Drag each item into the correct category: Planned Expenses vs. Unexpected Expenses.",
+          "items": [
+            "School tuition",
+            "Sudden phone repair",
+            "Last-minute school trip fee",
+            "Monthly transport costs"
+          ],
+          "categories": {
+            "Planned Expenses": [
+              "School tuition",
+              "Monthly transport costs"
+            ],
+            "Unexpected Expenses": [
+              "Sudden phone repair",
+              "Last-minute school trip fee"
+            ]
+          }
+        },
+        {
+          "type": "reorder",
+          "question": "Arrange these budgeting steps in the correct order for managing student finances.",
+          "options": [
+            "Allocate money for savings.",
+            "List essential expenses first.",
+            "Track all sources of income.",
+            "Plan for entertainment and personal spending.",
+            "Review and adjust the budget regularly."
+          ],
+          "correctAnswer": [
+            "Track all sources of income.",
+            "List essential expenses first.",
+            "Allocate money for savings.",
+            "Plan for entertainment and personal spending.",
+            "Review and adjust the budget regularly."
+          ]
+        },
+        {
+          "type": "multiChoice",
+          "question": "What is the best way to handle an unexpected expense without ruining your budget?",
+          "options": [
+            "Borrow money immediately",
+            "Use emergency savings or adjust spending",
+            "Ignore the expense until later",
+            "Spend less on essentials to cover the cost"
+          ],
+          "correctAnswer": 1
+        },
+        {
+          "type": "fillInTheGap",
+          "question": "Reviewing your budget regularly helps you ______ spending habits and make improvements.",
+          "correctAnswer": "identify"
+        },
+        {
+          "type": "match",
+          "question": "Match each budgeting challenge with a solution.",
+          "leftOptions": [
+            "Running out of money too soon",
+            "Unexpected school expenses",
+            "Forgetting to track expenses",
+            "No savings at the end of the month"
+          ],
+          "rightOptions": [
+            "Use a budgeting app or notebook.",
+            "Set aside money before spending.",
+            "Reduce unnecessary expenses.",
+            "Set up an emergency fund."
+          ],
+          "correctMatches": {
+            "0": 2,
+            "1": 3,
+            "2": 0,
+            "3": 1
+          }
+        },
+        {
+          "type": "dragAndDrop",
+          "question": "Drag the following budgeting tips into the correct categories: Good Budgeting Habits vs. Poor Budgeting Habits.",
+          "items": [
+            "Saving a percentage of income",
+            "Buying on impulse without planning",
+            "Ignoring small daily expenses",
+            "Sticking to a spending plan"
+          ],
+          "categories": {
+            "Good Budgeting Habits": [
+              "Saving a percentage of income",
+              "Sticking to a spending plan"
+            ],
+            "Poor Budgeting Habits": [
+              "Buying on impulse without planning",
+              "Ignoring small daily expenses"
+            ]
+          }
+        },
+        {
+          "type": "reorder",
+          "question": "Arrange these steps for adjusting your budget after a review.",
+          "options": [
+            "Compare actual spending with your budget.",
+            "Track progress over time.",
+            "Adjust your budget to fix spending issues.",
+            "Set new financial goals.",
+            "Identify overspending areas."
+          ],
+          "correctAnswer": [
+            "Compare actual spending with your budget.",
+            "Identify overspending areas.",
+            "Adjust your budget to fix spending issues.",
+            "Set new financial goals.",
+            "Track progress over time."
+          ]
+        }
+      ]
+    }
+  ]
+}

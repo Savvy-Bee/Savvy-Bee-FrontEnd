@@ -24,11 +24,18 @@ class Assets {
 
   static const String shareUsernameBg = '$_basePath/share-username-bg.png';
 
+  static const String trophySvg = '$_basePath/trophy.svg';
+  static const String trophy = '$_basePath/trophy.png';
+
   // Honey Jars
   static const String honeyJar = '$_basePath/honey-jar.png';
-  // static const String honeyJarSvg = '$_basePath/honey-jar.svg';
+  static const String honeyJarSvg = '$_basePath/honey-jar.svg';
 
   static const String lessonProgress1 = '$_basePath/lesson-progress-1.png';
+
+  static const String hexagonStar = '$_basePath/hexagon-star.png';
+
+  static const String fire = '$_basePath/fire.png';
 
   static const String financialHealthCanvas =
       '$_basePath/financial-health-canvas.png';

@@ -39,4 +39,17 @@ class Illustrations {
   static const String financialHealth2 = '$_basePath/financial-health-2.png';
   static const String financialHealth3 = '$_basePath/financial-health-3.png';
   static const String financialHealth4 = '$_basePath/financial-health-4.png';
+
+  // Quiz bee
+  static const String quizBeeWrong = '$_basePath/quiz-bee-wrong.png';
+  static const String quizBeeRight = '$_basePath/quiz-bee-right.png';
+
+  // Sleeping bee
+  static const String sleepingBee = '$_basePath/sleeping-bee.png';
+
+  // Matching bee
+  static const String matchingBeeSmile = '$_basePath/matching-bee-smile.png';
+
+  // Leaderboard
+  static const String leaderboardBee = '$_basePath/leaderboard.png';
 }

@@ -1,0 +1,485 @@
+{
+    "level": 5,
+    "title": "Budgeting in the Real World",
+    "quizzes": [
+        {
+            "quizNumber": 1,
+            "title": "Planning Real-Life Shopping",
+            "questions": [
+                {
+                    "type": "multiChoice",
+                    "question": "When you create a budget for a week, what is the first step in planning your spending?",
+                    "options": [
+                        "Guess how much you might spend",
+                        "Record your income and list your planned expenses",
+                        "Buy all your favorite items first",
+                        "Wait until the end of the week to see what happens"
+                    ],
+                    "correctAnswer": 1
+                },
+                {
+                    "type": "fillInTheGap",
+                    "question": "A realistic budget should cover both ______ expenses and discretionary spending.",
+                    "correctAnswer": "essential"
+                },
+                {
+                    "type": "match",
+                    "question": "Match each real-life budgeting action with its benefit.",
+                    "leftOptions": [
+                        "Tracking daily expenses",
+                        "Setting spending limits",
+                        "Comparing prices before buying",
+                        "Recording unexpected costs"
+                    ],
+                    "rightOptions": [
+                        "Prevents overspending by establishing boundaries",
+                        "Helps identify patterns in your spending",
+                        "Saves money by ensuring you get the best deal",
+                        "Keeps your budget accurate when surprises occur"
+                    ],
+                    "correctMatches": {
+                        "0": 1,
+                        "1": 0,
+                        "2": 2,
+                        "3": 3
+                    }
+                },
+                {
+                    "type": "dragAndDrop",
+                    "question": "Drag the following actions into the correct groups: Pre-Purchase Planning vs. Post-Purchase Review.",
+                    "items": [
+                        "Creating a shopping list",
+                        "Comparing prices across stores",
+                        "Filing receipts",
+                        "Checking if the purchase fits your budget"
+                    ],
+                    "categories": {
+                        "Pre-Purchase Planning": [
+                            "Creating a shopping list",
+                            "Comparing prices across stores",
+                            "Checking if the purchase fits your budget"
+                        ],
+                        "Post-Purchase Review": [
+                            "Filing receipts"
+                        ]
+                    }
+                },
+                {
+                    "type": "reorder",
+                    "question": "Arrange these steps in the correct order for applying budgeting techniques in a typical shopping trip:",
+                    "options": [
+                        "Check your budget to see how much you can spend",
+                        "Make a shopping list of needed items",
+                        "Compare prices at different stores",
+                        "Make the purchase",
+                        "Record the transaction in your budget"
+                    ],
+                    "correctAnswer": [
+                        "Make a shopping list of needed items",
+                        "Check your budget to see how much you can spend",
+                        "Compare prices at different stores",
+                        "Make the purchase",
+                        "Record the transaction in your budget"
+                    ]
+                }
+            ]
+        },
+        {
+            "quizNumber": 2,
+            "title": "Handling Unexpected Expenses",
+            "questions": [
+                {
+                    "type": "multiChoice",
+                    "question": "What is the purpose of an emergency fund?",
+                    "options": [
+                        "To cover planned vacations",
+                        "To save for long-term investments",
+                        "To have money available for unexpected expenses",
+                        "To spend on luxuries when income increases"
+                    ],
+                    "correctAnswer": 2
+                },
+                {
+                    "type": "fillInTheGap",
+                    "question": "Unexpected expenses, like a car repair or medical bill, require you to ______ your budget.",
+                    "correctAnswer": "adjust"
+                },
+                {
+                    "type": "match",
+                    "question": "Match each unexpected expense with an appropriate budgeting action.",
+                    "leftOptions": [
+                        "Medical emergency",
+                        "Car repair",
+                        "Surprise school trip fee",
+                        "Broken household item"
+                    ],
+                    "rightOptions": [
+                        "Use funds from your emergency savings",
+                        "Reallocate money from non-essential spending",
+                        "Adjust your budget and plan for future similar costs",
+                        "Review and modify your spending plan immediately"
+                    ],
+                    "correctMatches": {
+                        "0": 0,
+                        "1": 0,
+                        "2": 1,
+                        "3": 3
+                    }
+                },
+                {
+                    "type": "dragAndDrop",
+                    "question": "Drag the following items into the correct groups: Planned Expenses vs. Unexpected Expenses.",
+                    "items": [
+                        "Monthly rent",
+                        "Utility bill",
+                        "Sudden appliance repair",
+                        "Regular grocery shopping"
+                    ],
+                    "categories": {
+                        "Planned Expenses": [
+                            "Monthly rent",
+                            "Utility bill",
+                            "Regular grocery shopping"
+                        ],
+                        "Unexpected Expenses": [
+                            "Sudden appliance repair"
+                        ]
+                    }
+                },
+                {
+                    "type": "reorder",
+                    "question": "Arrange these steps for managing an unexpected expense:",
+                    "options": [
+                        "Identify the unexpected cost",
+                        "Check your emergency fund or available savings",
+                        "Adjust your monthly budget to accommodate the expense",
+                        "Record the expense in your tracking tool",
+                        "Reflect on how to prevent or plan for similar expenses in the future"
+                    ],
+                    "correctAnswer": [
+                        "Identify the unexpected cost",
+                        "Check your emergency fund or available savings",
+                        "Adjust your monthly budget to accommodate the expense",
+                        "Record the expense in your tracking tool",
+                        "Reflect on how to prevent or plan for similar expenses in the future"
+                    ]
+                }
+            ]
+        },
+        {
+            "quizNumber": 3,
+            "title": "Budget Forecasting",
+            "questions": [
+                {
+                    "type": "multiChoice",
+                    "question": "What does forecasting in budgeting involve?",
+                    "options": [
+                        "Ignoring future expenses",
+                        "Predicting upcoming expenses and income trends",
+                        "Spending all your income quickly",
+                        "Avoiding any adjustments to your budget"
+                    ],
+                    "correctAnswer": 1
+                },
+                {
+                    "type": "fillInTheGap",
+                    "question": "Forecasting helps you plan for upcoming expenses by predicting future ______ and costs.",
+                    "correctAnswer": "income"
+                },
+                {
+                    "type": "match",
+                    "question": "Match each forecasting activity with its purpose.",
+                    "leftOptions": [
+                        "Reviewing past spending trends",
+                        "Estimating future income",
+                        "Anticipating seasonal expenses",
+                        "Adjusting the budget based on predictions"
+                    ],
+                    "rightOptions": [
+                        "Helps determine expected costs during certain times",
+                        "Provides data for making informed predictions",
+                        "Allows you to plan adjustments before expenses occur",
+                        "Estimates how much money will be available"
+                    ],
+                    "correctMatches": {
+                        "0": 1,
+                        "1": 3,
+                        "2": 0,
+                        "3": 2
+                    }
+                },
+                {
+                    "type": "dragAndDrop",
+                    "question": "Drag the following activities into the correct groups: Data Collection vs. Budget Adjustment.",
+                    "items": [
+                        "Tracking past monthly expenses",
+                        "Calculating average income over several months",
+                        "Updating expense categories for upcoming changes",
+                        "Predicting higher costs for certain seasons"
+                    ],
+                    "categories": {
+                        "Data Collection": [
+                            "Tracking past monthly expenses",
+                            "Calculating average income over several months"
+                        ],
+                        "Budget Adjustment": [
+                            "Updating expense categories for upcoming changes",
+                            "Predicting higher costs for certain seasons"
+                        ]
+                    }
+                },
+                {
+                    "type": "reorder",
+                    "question": "Arrange these steps for forecasting your future budget:",
+                    "options": [
+                        "Monitor and update the forecast regularly",
+                        "Estimate future income and upcoming expenses",
+                        "Identify trends and seasonal patterns",
+                        "Adjust your current budget to reflect these forecasts",
+                        "Gather data on past spending and income"
+                    ],
+                    "correctAnswer": [
+                        "Gather data on past spending and income",
+                        "Estimate future income and upcoming expenses",
+                        "Identify trends and seasonal patterns",
+                        "Adjust your current budget to reflect these forecasts",
+                        "Monitor and update the forecast regularly"
+                    ]
+                }
+            ]
+        },
+        {
+            "quizNumber": 4,
+            "title": "Budget Adjustments and Feedback",
+            "questions": [
+                {
+                    "type": "multiChoice",
+                    "question": "What is the first step in adjusting your budget based on real-life spending?",
+                    "options": [
+                        "Ignoring discrepancies",
+                        "Comparing your actual spending with your planned budget",
+                        "Immediately cutting all non-essential expenses",
+                        "Increasing your income arbitrarily"
+                    ],
+                    "correctAnswer": 1
+                },
+                {
+                    "type": "fillInTheGap",
+                    "question": "Regular budget reviews allow you to ______ your spending habits and make improvements.",
+                    "correctAnswer": "adjust"
+                },
+                {
+                    "type": "match",
+                    "question": "Match each feedback action with its benefit.",
+                    "leftOptions": [
+                        "Setting new savings targets",
+                        "Identifying areas of overspending",
+                        "Reallocating funds to meet actual needs",
+                        "Reviewing monthly spending reports"
+                    ],
+                    "rightOptions": [
+                        "Helps you see where your money is going",
+                        "Allows you to correct your budget based on actual expenses",
+                        "Improves your ability to meet essential expenses",
+                        "Motivates you to save even more"
+                    ],
+                    "correctMatches": {
+                        "0": 3,
+                        "1": 1,
+                        "2": 2,
+                        "3": 0
+                    }
+                },
+                {
+                    "type": "dragAndDrop",
+                    "question": "Drag each item into the correct category: Feedback Analysis vs. Action Steps.",
+                    "items": [
+                        "Comparing actual spending to planned spending",
+                        "Cutting non-essential expenses",
+                        "Updating your budget plan",
+                        "Noting discrepancies in spending"
+                    ],
+                    "categories": {
+                        "Feedback Analysis": [
+                            "Comparing actual spending to planned spending",
+                            "Noting discrepancies in spending"
+                        ],
+                        "Action Steps": [
+                            "Cutting non-essential expenses",
+                            "Updating your budget plan"
+                        ]
+                    }
+                },
+                {
+                    "type": "reorder",
+                    "question": "Arrange these steps for adjusting your budget after a review:",
+                    "options": [
+                        "Decide on changes (such as cutting back or reallocating funds)",
+                        "Compare them with your original budget",
+                        "Collect your spending records and receipts",
+                        "Identify areas where spending was higher or lower than planned",
+                        "Update your budget for the upcoming period"
+                    ],
+                    "correctAnswer": [
+                        "Collect your spending records and receipts",
+                        "Compare them with your original budget",
+                        "Identify areas where spending was higher or lower than planned",
+                        "Decide on changes (such as cutting back or reallocating funds)",
+                        "Update your budget for the upcoming period"
+                    ]
+                }
+            ]
+        },
+        {
+            "quizNumber": 5,
+            "title": "Real-World Budgeting - Comprehensive Review",
+            "questions": [
+                {
+                    "type": "multiChoice",
+                    "question": "What is the best first step when planning a shopping trip using your budget?",
+                    "options": [
+                        "Buy items immediately if they are on sale",
+                        "Create a shopping list and check your budget first",
+                        "Shop without a plan",
+                        "Increase your budget to cover all desires"
+                    ],
+                    "correctAnswer": 1
+                },
+                {
+                    "type": "fillInTheGap",
+                    "question": "An emergency fund is used to cover ______ expenses that were not planned.",
+                    "correctAnswer": "unexpected"
+                },
+                {
+                    "type": "match",
+                    "question": "Match each real-world budgeting tool or technique with its benefit.",
+                    "leftOptions": [
+                        "Tracking daily expenses",
+                        "Setting spending limits",
+                        "Using a budgeting app",
+                        "Forecasting future costs"
+                    ],
+                    "rightOptions": [
+                        "Helps you stick to your plan by limiting overspending",
+                        "Provides a clear record of your money usage",
+                        "Automates calculations and categorizes spending",
+                        "Prepares you for upcoming expenses"
+                    ],
+                    "correctMatches": {
+                        "0": 1,
+                        "1": 0,
+                        "2": 2,
+                        "3": 3
+                    }
+                },
+                {
+                    "type": "multiChoice",
+                    "question": "What should you do when an unexpected expense occurs?",
+                    "options": [
+                        "Ignore it and hope it goes away",
+                        "Adjust your budget and use funds from your emergency savings if needed",
+                        "Immediately cancel all planned spending",
+                        "Increase your income overnight"
+                    ],
+                    "correctAnswer": 1
+                },
+                {
+                    "type": "fillInTheGap",
+                    "question": "Forecasting involves reviewing past spending and predicting future ______ to adjust your budget accordingly.",
+                    "correctAnswer": "income"
+                },
+                {
+                    "type": "match",
+                    "question": "Match each feedback action with its purpose.",
+                    "leftOptions": [
+                        "Reviewing spending reports",
+                        "Identifying discrepancies",
+                        "Reallocating funds",
+                        "Updating savings targets"
+                    ],
+                    "rightOptions": [
+                        "Adjust your plan based on actual spending",
+                        "Ensure that your budget reflects your real needs",
+                        "Recognize differences between planned and actual spending",
+                        "Set more realistic saving goals"
+                    ],
+                    "correctMatches": {
+                        "0": 2,
+                        "1": 0,
+                        "2": 1,
+                        "3": 3
+                    }
+                },
+                {
+                    "type": "dragAndDrop",
+                    "question": "Drag each action into the correct group: Preparation Steps vs. Review and Adjustment Steps.",
+                    "items": [
+                        "Creating a shopping list",
+                        "Setting aside funds for emergencies",
+                        "Recording daily transactions",
+                        "Comparing actual spending with your budget",
+                        "Adjusting your budget for future periods"
+                    ],
+                    "categories": {
+                        "Preparation Steps": [
+                            "Creating a shopping list",
+                            "Setting aside funds for emergencies",
+                            "Recording daily transactions"
+                        ],
+                        "Review and Adjustment Steps": [
+                            "Comparing actual spending with your budget",
+                            "Adjusting your budget for future periods"
+                        ]
+                    }
+                },
+                {
+                    "type": "multiChoice",
+                    "question": "Which of the following best describes \"forecasting\" in budgeting?",
+                    "options": [
+                        "Ignoring past trends and guessing future expenses",
+                        "Analyzing past spending to predict future income and costs",
+                        "Increasing your budget without reason",
+                        "Planning your budget only once a year"
+                    ],
+                    "correctAnswer": 1
+                },
+                {
+                    "type": "reorder",
+                    "question": "Arrange these steps for handling an unexpected expense in order:",
+                    "options": [
+                        "Adjust your budget to accommodate the expense",
+                        "Record the expense in your tracking tool",
+                        "Reflect on how to plan for similar expenses in the future",
+                        "Check your emergency fund",
+                        "Identify the unexpected expense"
+                    ],
+                    "correctAnswer": [
+                        "Identify the unexpected expense",
+                        "Check your emergency fund",
+                        "Adjust your budget to accommodate the expense",
+                        "Record the expense in your tracking tool",
+                        "Reflect on how to plan for similar expenses in the future"
+                    ]
+                },
+                {
+                    "type": "reorder",
+                    "question": "Arrange these steps for a complete monthly budget review:",
+                    "options": [
+                        "Gather all receipts and transaction records",
+                        "Update your budget for the next month",
+                        "Decide on necessary adjustments",
+                        "Identify any discrepancies or unexpected trends",
+                        "Compare actual spending with your planned budget"
+                    ],
+                    "correctAnswer": [
+                        "Gather all receipts and transaction records",
+                        "Compare actual spending with your planned budget",
+                        "Identify any discrepancies or unexpected trends",
+                        "Decide on necessary adjustments",
+                        "Update your budget for the next month"
+                    ]
+                }
+            ]
+        }
+    ]
+}

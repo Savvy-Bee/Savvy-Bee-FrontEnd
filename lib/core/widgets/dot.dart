@@ -5,7 +5,8 @@ import '../theme/app_colors.dart';
 class Dot extends StatelessWidget {
   final double? size;
   final Color? color;
-  const Dot({super.key, this.size = 8, this.color});
+  final BoxBorder? border;
+  const Dot({super.key, this.size = 8, this.color, this.border});
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +16,7 @@ class Dot extends StatelessWidget {
       decoration: BoxDecoration(
         color: color ?? AppColors.primary,
         shape: BoxShape.circle,
+        border: border,
       ),
     );
   }

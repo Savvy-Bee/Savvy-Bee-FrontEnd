@@ -42,4 +42,10 @@ class ApiEndpoints {
 
   // Home Endpoints
   static const String homeDashboard = '/auth/profile/user/dashboard';
+
+  // Debt Endpoints
+  static const String debtHome = '/tools/debt/home';
+  static String createDebtStep(String stepNumber) =>
+      '/tools/debt/create/$stepNumber';
+  static String manualFundDebt(String debtId) => '/tools/debt/fund/$debtId';
 }

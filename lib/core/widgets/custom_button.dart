@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/app_icons.dart';
 
-enum CustomButtonColor { yellow, white, black }
+enum CustomButtonColor { yellow, white, black, red, green }
 
 class CustomElevatedButton extends StatelessWidget {
   final String text;
@@ -13,6 +13,7 @@ class CustomElevatedButton extends StatelessWidget {
   final bool showArrow;
   final bool isLoading;
   final bool isSmall;
+  final bool isGamePlay;
   final Widget? icon;
 
   const CustomElevatedButton({
@@ -25,6 +26,7 @@ class CustomElevatedButton extends StatelessWidget {
     this.showArrow = false,
     this.isLoading = false,
     this.isSmall = false,
+    this.isGamePlay = false,
     this.icon,
   });
 
@@ -34,21 +36,39 @@ class CustomElevatedButton extends StatelessWidget {
       CustomButtonColor.yellow => AppColors.black,
       CustomButtonColor.white => AppColors.black,
       CustomButtonColor.black => AppColors.white,
+      CustomButtonColor.red => AppColors.white,
+      CustomButtonColor.green => AppColors.white,
     };
 
     final disabledForegroundColor = AppColors.grey;
 
-    return SizedBox(
+    var backgroundColor = switch (buttonColor) {
+      CustomButtonColor.yellow => AppColors.primary,
+      CustomButtonColor.white => AppColors.white,
+      CustomButtonColor.black => AppColors.black,
+      CustomButtonColor.red => AppColors.error,
+      CustomButtonColor.green => AppColors.success,
+    };
+    var boxShadow = [
+      BoxShadow(
+        offset: Offset(0, 2),
+        blurRadius: 0,
+        spreadRadius: 0,
+        color: backgroundColor.withValues(alpha: 0.5),
+      ),
+    ];
+
+    return Container(
       width: isFullWidth ? double.infinity : null,
+      decoration: BoxDecoration(
+        boxShadow: isGamePlay ? boxShadow : null,
+        borderRadius: BorderRadius.circular(8),
+      ),
       child: ElevatedButton.icon(
         iconAlignment: IconAlignment.end,
         onPressed: isLoading ? null : onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: switch (buttonColor) {
-            CustomButtonColor.yellow => AppColors.primary,
-            CustomButtonColor.white => AppColors.white,
-            CustomButtonColor.black => AppColors.black,
-          },
+          backgroundColor: backgroundColor,
           padding: EdgeInsets.symmetric(
             vertical: isSmall ? 10 : 14,
             horizontal: 44,

@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/utils/number_formatter.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/providers/debt_provider.dart';
 
 import '../../../../../core/theme/app_colors.dart';
 import '../../widgets/goal_stats_card.dart';
@@ -26,21 +27,57 @@ class _DebtScreenState extends ConsumerState<DebtScreen>
   @override
   void initState() {
     super.initState();
+    // Start fetching data immediately
+    ref.read(debtListNotifierProvider.notifier).refresh();
 
     _tabController = TabController(length: 2, vsync: this);
   }
 
   @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    // 2. WATCH THE DEBT LIST STATE
+    final debtState = ref.watch(debtListNotifierProvider);
+
     return Scaffold(
       appBar: AppBar(title: const Text('Debt')),
-      body: SingleChildScrollView(
-        child: Padding(
+      body: RefreshIndicator(
+        onRefresh: () => ref.read(debtListNotifierProvider.notifier).refresh(),
+        child: SingleChildScrollView(
+          physics:
+              const AlwaysScrollableScrollPhysics(), // Allows pull-to-refresh
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              _buildDebtCard(800000),
+              // 3. BUILD THE DEBT CARD BASED ON STATE
+              debtState.when(
+                data: (data) {
+                  final activeDebts = data
+                      .where((item) => item['status'] == 'active')
+                      .toList();
+                  final totalRemaining = activeDebts.fold<double>(
+                    0.0,
+                    (sum, debt) =>
+                        sum + (debt['amountRemaining'] as double? ?? 0.0),
+                  );
+                  return _buildDebtCard(totalRemaining);
+                },
+                loading: () => _buildDebtCard(0.0, isLoading: true),
+                error: (e, st) => _buildDebtCard(
+                  0.0,
+                  isError: true,
+                  errorMessage: 'Failed to load debts',
+                ),
+              ),
+              const Gap(16),
+
+              // TAB BAR
               TabBar(
                 controller: _tabController,
                 dividerColor: Colors.transparent,
@@ -50,32 +87,43 @@ class _DebtScreenState extends ConsumerState<DebtScreen>
                   Tab(text: 'Paid off'),
                 ],
               ),
-              // Constrain the TabBarView height to its content
-              SizedBox(
-                height: 300, // Adjust as needed or calculate dynamically
-                child: TabBarView(
-                  controller: _tabController,
-                  physics: const NeverScrollableScrollPhysics(),
-                  children: [
-                    ListView.separated(
-                      padding: const EdgeInsets.only(top: 24),
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        return const GoalStatsCard(
-                          title: 'Student loan',
-                          amountSaved: 800000,
-                          totalTarget: 1200000,
-                          daysLeft: 90,
-                          isDebt: true,
-                        );
-                      },
-                      separatorBuilder: (context, index) => const Gap(16),
-                      itemCount: 1,
-                    ),
-                    const Center(child: Text('Paid off')),
-                  ],
+
+              // 4. DISPLAY LISTS IN TABBARVIEW BASED ON STATE
+              debtState.when(
+                loading: () => SizedBox(
+                  height: 300,
+                  child: const Center(child: CircularProgressIndicator()),
                 ),
+                error: (e, st) => SizedBox(
+                  height: 300,
+                  child: Center(child: Text('Error: ${e.toString()}')),
+                ),
+                data: (data) {
+                  final activeDebts = data
+                      .where((item) => item['status'] == 'active')
+                      .toList();
+                  final paidOffDebts = data
+                      .where((item) => item['status'] == 'paid_off')
+                      .toList();
+
+                  return SizedBox(
+                    // Dynamically set height based on the active tab content
+                    height: _tabController.index == 0
+                        ? activeDebts.length * 106.0 + 24.0
+                        : 300,
+                    child: TabBarView(
+                      controller: _tabController,
+                      // We can allow scrolling within the ListView, but not the TabBarView itself
+                      physics: const NeverScrollableScrollPhysics(),
+                      children: [
+                        // Active Debts List
+                        _buildDebtList(activeDebts, true),
+                        // Paid Off Debts List
+                        _buildDebtList(paidOffDebts, false),
+                      ],
+                    ),
+                  );
+                },
               ),
             ],
           ),
@@ -85,15 +133,52 @@ class _DebtScreenState extends ConsumerState<DebtScreen>
         onPressed: () => context.pushNamed(AddDebtScreen.path),
         backgroundColor: AppColors.buttonPrimary,
         foregroundColor: AppColors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadiusGeometry.circular(50),
-        ),
-        child: Icon(Icons.add),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+        child: const Icon(Icons.add),
       ),
     );
   }
 
-  Widget _buildDebtCard(double amountRemaining) {
+  // Helper method to build the list of debt items
+  Widget _buildDebtList(List<dynamic> debts, bool isActive) {
+    if (debts.isEmpty) {
+      return Padding(
+        padding: const EdgeInsets.only(top: 24),
+        child: Center(
+          child: Text('No ${isActive ? 'active' : 'paid off'} debts yet.'),
+        ),
+      );
+    }
+
+    return ListView.separated(
+      padding: const EdgeInsets.only(top: 24),
+      shrinkWrap: true,
+      physics:
+          const NeverScrollableScrollPhysics(), // Handled by SingleChildScrollView
+      itemBuilder: (context, index) {
+        final debt = debts[index];
+        return GoalStatsCard(
+          // Assuming the API returns these keys:
+          title: debt['title'] ?? 'N/A',
+          amountSaved: debt['amountPaid'] as double? ?? 0.0,
+          totalTarget: debt['totalAmount'] as double? ?? 0.0,
+          daysLeft: debt['daysLeft'] as int? ?? 0,
+          isDebt: true,
+          // You might need to pass the full debt object for navigation/manual funding later
+          // debtData: debt,
+        );
+      },
+      separatorBuilder: (context, index) => const Gap(16),
+      itemCount: debts.length,
+    );
+  }
+
+  Widget _buildDebtCard(
+    double amountRemaining, {
+    bool isLoading = false,
+    bool isError = false,
+    String errorMessage = '',
+  }) {
     return CustomCard(
       padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
       child: Column(
@@ -101,7 +186,7 @@ class _DebtScreenState extends ConsumerState<DebtScreen>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'DEBTS',
+            'TOTAL DEBTS REMAINING',
             style: TextStyle(
               fontWeight: FontWeight.w500,
               fontSize: 12,
@@ -109,17 +194,25 @@ class _DebtScreenState extends ConsumerState<DebtScreen>
             ),
           ),
           const Gap(8),
-          Text(
-            NumberFormatter.formatCurrency(amountRemaining),
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 36,
-              fontFamily: Constants.neulisNeueFontFamily,
+          if (isLoading)
+            const SizedBox(
+              height: 36,
+              child: Center(child: LinearProgressIndicator()),
+            )
+          else if (isError)
+            Text(errorMessage, style: const TextStyle(color: AppColors.error))
+          else
+            Text(
+              NumberFormatter.formatCurrency(amountRemaining),
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 36,
+                fontFamily: Constants.neulisNeueFontFamily,
+              ),
             ),
-          ),
           const Gap(8),
           Text(
-            'Last updated 49 sec ago',
+            isLoading ? 'Loading...' : 'Last updated 49 sec ago',
             style: TextStyle(
               fontSize: 12,
               fontFamily: Constants.neulisNeueFontFamily,

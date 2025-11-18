@@ -15,6 +15,8 @@ class CustomCard extends StatelessWidget {
   final double? width;
   final double? height;
   final double? borderWidth;
+  final List<BoxShadow>? shadow;
+
 
   const CustomCard({
     super.key,
@@ -28,6 +30,7 @@ class CustomCard extends StatelessWidget {
     this.width,
     this.height,
     this.borderWidth,
+    this.shadow,
   });
 
   @override
@@ -47,7 +50,7 @@ class CustomCard extends StatelessWidget {
             width: borderWidth ?? 1,
           ),
           boxShadow: hasShadow
-              ? [
+              ? shadow ?? [
                   BoxShadow(
                     color: AppColors.black.withValues(alpha: 0.1),
                     offset: const Offset(0, 2),

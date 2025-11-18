@@ -95,6 +95,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     controller: emailController,
                     keyboardType: TextInputType.emailAddress,
                     validator: (value) => InputValidator.validateEmail(value),
+                    onChanged: (_) {
+                      setState(() {});
+                    },
                   ),
                   const Gap(8.0),
                   CustomTextFormField(
@@ -117,6 +120,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     ),
                     validator: (value) =>
                         InputValidator.validatePassword(value),
+                    onChanged: (_) {
+                      setState(() {});
+                    },
                   ),
                   const Gap(8.0),
                   Row(

@@ -35,25 +35,42 @@ class AppIcons {
   static const String chartIncreasingIcon = '$_basePath/chart-increasing.svg';
 
   static const String scanFaceIcon = '$_basePath/scan-face.svg';
+
+  static const String gripIcon = '$_basePath/grip.svg';
+
+  static const String scoreIcon = '$_basePath/score.svg';
+
+  static const String checkIcon = '$_basePath/check.svg';
+
+  static const String freezeIcon = '$_basePath/freeze.svg';
 }
 
 class AppIcon extends StatelessWidget {
   final String iconPath;
-  final double size;
+  final double? size;
   final Color? color;
+  final bool useOriginal; // Use the original asset withou color filter and size
 
-  const AppIcon(this.iconPath, {super.key, this.size = 16, this.color});
+  const AppIcon(
+    this.iconPath, {
+    super.key,
+    this.size,
+    this.color,
+    this.useOriginal = false,
+  });
 
   @override
   Widget build(BuildContext context) {
     return SvgPicture.asset(
       iconPath,
-      height: size,
-      width: size,
-      colorFilter: ColorFilter.mode(
-        color ?? Theme.of(context).iconTheme.color!,
-        BlendMode.srcIn,
-      ),
+      height: useOriginal ? null : (size ?? 16),
+      width: useOriginal ? null : (size ?? 16),
+      colorFilter: useOriginal
+          ? null
+          : ColorFilter.mode(
+              color ?? Theme.of(context).iconTheme.color!,
+              BlendMode.srcIn,
+            ),
     );
   }
 }

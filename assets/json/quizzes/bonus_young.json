@@ -1,0 +1,490 @@
+{
+    "bonusLevel": "Young Professional",
+    "title": "Budgeting as a Young Professional",
+    "quizzes": [
+        {
+            "quizNumber": 1,
+            "title": "Creating Your First Budget",
+            "questions": [
+                {
+                    "type": "multiChoice",
+                    "question": "What is the first step in creating a budget as a young professional?",
+                    "options": [
+                        "Estimate your expenses without checking your income",
+                        "Spend money first, then track where it goes",
+                        "Calculate your total income after taxes",
+                        "Avoid setting any savings goals"
+                    ],
+                    "correctAnswer": 2
+                },
+                {
+                    "type": "fillInTheGap",
+                    "question": "Rent, utilities, and food are examples of ______ expenses that should be prioritized in a budget.",
+                    "correctAnswer": "essential"
+                },
+                {
+                    "type": "match",
+                    "question": "Match each budgeting step with its correct description.",
+                    "leftOptions": [
+                        "Calculate income",
+                        "List necessary expenses",
+                        "Set savings goals",
+                        "Track spending regularly"
+                    ],
+                    "rightOptions": [
+                        "Ensures that all basic needs are covered",
+                        "Helps prevent overspending and stay on budget",
+                        "Determines how much money is available for budgeting",
+                        "Prepares for future needs and emergencies"
+                    ],
+                    "correctMatches": {
+                        "0": 2,
+                        "1": 0,
+                        "2": 3,
+                        "3": 1
+                    }
+                },
+                {
+                    "type": "dragAndDrop",
+                    "question": "Drag the following expenses into the correct categories: Fixed Expenses vs. Variable Expenses.",
+                    "items": [
+                        "Rent",
+                        "Internet bill",
+                        "Groceries",
+                        "Entertainment"
+                    ],
+                    "categories": {
+                        "Fixed Expenses": [
+                            "Rent",
+                            "Internet bill"
+                        ],
+                        "Variable Expenses": [
+                            "Groceries",
+                            "Entertainment"
+                        ]
+                    }
+                },
+                {
+                    "type": "reorder",
+                    "question": "Arrange the steps of setting up a budget in the correct order.",
+                    "options": [
+                        "Identify essential expenses",
+                        "Track actual spending habits",
+                        "Calculate total income",
+                        "Set savings and spending goals",
+                        "Adjust budget as needed"
+                    ],
+                    "correctAnswer": [
+                        "Calculate total income",
+                        "Identify essential expenses",
+                        "Track actual spending habits",
+                        "Set savings and spending goals",
+                        "Adjust budget as needed"
+                    ]
+                }
+            ]
+        },
+        {
+            "quizNumber": 2,
+            "title": "Managing Monthly Expenses",
+            "questions": [
+                {
+                    "type": "multiChoice",
+                    "question": "What is the best way to ensure you never miss a monthly bill payment?",
+                    "options": [
+                        "Wait until the due date before paying",
+                        "Only pay bills when you have extra money",
+                        "Set up automatic payments or reminders",
+                        "Borrow money to cover your bills"
+                    ],
+                    "correctAnswer": 2
+                },
+                {
+                    "type": "fillInTheGap",
+                    "question": "Fixed expenses like rent and loan payments stay the same each month, while ______ expenses, such as groceries and transport, can change.",
+                    "correctAnswer": "variable"
+                },
+                {
+                    "type": "match",
+                    "question": "Match each expense with its correct category.",
+                    "leftOptions": [
+                        "Rent",
+                        "Electricity bill",
+                        "Dining out",
+                        "Public transportation fare"
+                    ],
+                    "rightOptions": [
+                        "Fixed Expense",
+                        "Variable Expense"
+                    ],
+                    "correctMatches": {
+                        "0": 0,
+                        "1": 1,
+                        "2": 1,
+                        "3": 1
+                    }
+                },
+                {
+                    "type": "dragAndDrop",
+                    "question": "Drag the following expenses into the correct categories: Essential Expenses vs. Non-Essential Expenses.",
+                    "items": [
+                        "Monthly rent",
+                        "Streaming subscription",
+                        "Grocery shopping",
+                        "Gym membership"
+                    ],
+                    "categories": {
+                        "Essential Expenses": [
+                            "Monthly rent",
+                            "Grocery shopping"
+                        ],
+                        "Non-Essential Expenses": [
+                            "Streaming subscription",
+                            "Gym membership"
+                        ]
+                    }
+                },
+                {
+                    "type": "reorder",
+                    "question": "Arrange the steps for managing monthly expenses effectively in the correct order.",
+                    "options": [
+                        "Adjust spending if needed",
+                        "Identify fixed and variable costs",
+                        "Set priorities and allocate funds",
+                        "Pay essential bills first",
+                        "Track your income and expenses"
+                    ],
+                    "correctAnswer": [
+                        "Track your income and expenses",
+                        "Identify fixed and variable costs",
+                        "Set priorities and allocate funds",
+                        "Pay essential bills first",
+                        "Adjust spending if needed"
+                    ]
+                }
+            ]
+        },
+        {
+            "quizNumber": 3,
+            "title": "Building a Savings Habit",
+            "questions": [
+                {
+                    "type": "multiChoice",
+                    "question": "What is the main advantage of the \"pay yourself first\" method?",
+                    "options": [
+                        "It ensures you save money before spending on other things",
+                        "It helps you spend more on entertainment",
+                        "It allows you to avoid paying rent and bills",
+                        "It encourages spending all your income before saving"
+                    ],
+                    "correctAnswer": 0
+                },
+                {
+                    "type": "fillInTheGap",
+                    "question": "The ______ rule helps divide income into spending, wants, and savings categories.",
+                    "correctAnswer": "50/30/20"
+                },
+                {
+                    "type": "match",
+                    "question": "Match each savings habit with its benefit.",
+                    "leftOptions": [
+                        "Paying yourself first",
+                        "Setting savings goals",
+                        "Saving consistently, even in small amounts",
+                        "Automatic savings"
+                    ],
+                    "rightOptions": [
+                        "Makes saving effortless by removing manual effort",
+                        "Helps maintain motivation and financial discipline",
+                        "Ensures savings grow over time, even with small deposits",
+                        "Guarantees money is saved before any spending occurs"
+                    ],
+                    "correctMatches": {
+                        "0": 3,
+                        "1": 1,
+                        "2": 2,
+                        "3": 0
+                    }
+                },
+                {
+                    "type": "dragAndDrop",
+                    "question": "Drag each action into the correct category: Good Savings Habit or Poor Savings Habit.",
+                    "items": [
+                        "Spending first and saving what's left",
+                        "Setting automatic transfers for savings",
+                        "Using a separate account for savings",
+                        "Waiting until the end of the month to decide on savings"
+                    ],
+                    "categories": {
+                        "Good Savings Habits": [
+                            "Setting automatic transfers for savings",
+                            "Using a separate account for savings"
+                        ],
+                        "Poor Savings Habits": [
+                            "Spending first and saving what's left",
+                            "Waiting until the end of the month to decide on savings"
+                        ]
+                    }
+                },
+                {
+                    "type": "reorder",
+                    "question": "Arrange these steps in the correct order for building a strong savings habit:",
+                    "options": [
+                        "Track progress and adjust if needed",
+                        "Automate savings or transfer money manually",
+                        "Decide how much to save each month",
+                        "Set a clear savings goal",
+                        "Stick to the habit consistently"
+                    ],
+                    "correctAnswer": [
+                        "Set a clear savings goal",
+                        "Decide how much to save each month",
+                        "Automate savings or transfer money manually",
+                        "Stick to the habit consistently",
+                        "Track progress and adjust if needed"
+                    ]
+                }
+            ]
+        },
+        {
+            "quizNumber": 4,
+            "title": "Handling Unexpected Job-Related Costs",
+            "questions": [
+                {
+                    "type": "multiChoice",
+                    "question": "Why is it important to budget for unexpected job-related costs?",
+                    "options": [
+                        "Employers always cover all work-related expenses",
+                        "Unexpected costs can arise before your first paycheck",
+                        "You won't need extra money once you start earning",
+                        "You can rely on loans to cover surprise expenses"
+                    ],
+                    "correctAnswer": 1
+                },
+                {
+                    "type": "fillInTheGap",
+                    "question": "Setting aside money for unexpected ______ costs can help you stay financially stable.",
+                    "correctAnswer": "job-related"
+                },
+                {
+                    "type": "match",
+                    "question": "Match each unexpected job-related cost with its example.",
+                    "leftOptions": [
+                        "Relocation costs",
+                        "Work-related expenses",
+                        "Job transition costs",
+                        "Emergency costs"
+                    ],
+                    "rightOptions": [
+                        "Buying a laptop or upgrading internet for remote work",
+                        "Paying for work trips or conference fees before reimbursement",
+                        "Moving to a new city and paying rent before your first salary",
+                        "Fixing a broken phone or transport fare increase"
+                    ],
+                    "correctMatches": {
+                        "0": 2,
+                        "1": 1,
+                        "2": 0,
+                        "3": 3
+                    }
+                },
+                {
+                    "type": "dragAndDrop",
+                    "question": "Drag each item into the correct category: Planned Expenses vs. Unexpected Expenses.",
+                    "items": [
+                        "Monthly salary deductions",
+                        "Buying work clothes last minute",
+                        "Relocation costs",
+                        "Paying for job training upfront"
+                    ],
+                    "categories": {
+                        "Planned Expenses": [
+                            "Monthly salary deductions",
+                            "Paying for job training upfront"
+                        ],
+                        "Unexpected Expenses": [
+                            "Buying work clothes last minute",
+                            "Relocation costs"
+                        ]
+                    }
+                },
+                {
+                    "type": "reorder",
+                    "question": "Arrange these steps in the correct order to handle an unexpected job-related expense.",
+                    "options": [
+                        "Plan for similar future costs",
+                        "Adjust your budget to cover the expense",
+                        "Check your emergency savings",
+                        "Reduce non-essential spending if necessary",
+                        "Identify the unexpected cost"
+                    ],
+                    "correctAnswer": [
+                        "Identify the unexpected cost",
+                        "Check your emergency savings",
+                        "Adjust your budget to cover the expense",
+                        "Reduce non-essential spending if necessary",
+                        "Plan for similar future costs"
+                    ]
+                }
+            ]
+        },
+        {
+            "quizNumber": 5,
+            "title": "Young Professional Budgeting - Final Review",
+            "questions": [
+                {
+                    "type": "multiChoice",
+                    "question": "What is the best way to ensure you save consistently?",
+                    "options": [
+                        "Save whatever is left after spending",
+                        "Set up automatic transfers to your savings",
+                        "Only save when you have extra income",
+                        "Wait until the end of the year to save"
+                    ],
+                    "correctAnswer": 1
+                },
+                {
+                    "type": "multiChoice",
+                    "question": "Which expense should always be prioritized in your budget?",
+                    "options": [
+                        "Dining out",
+                        "Rent and utilities",
+                        "Entertainment",
+                        "Shopping for new clothes"
+                    ],
+                    "correctAnswer": 1
+                },
+                {
+                    "type": "fillInTheGap",
+                    "question": "An emergency fund helps protect you from unexpected expenses such as ______ or urgent home repairs.",
+                    "correctAnswer": "medical bills"
+                },
+                {
+                    "type": "fillInTheGap",
+                    "question": "Tracking your expenses allows you to identify areas where you might be ______ too much and need to cut back.",
+                    "correctAnswer": "spending"
+                },
+                {
+                    "type": "match",
+                    "question": "Match each budgeting action with its benefit.",
+                    "leftOptions": [
+                        "Tracking monthly expenses",
+                        "Setting aside savings first",
+                        "Reviewing your budget regularly",
+                        "Prioritizing essential expenses"
+                    ],
+                    "rightOptions": [
+                        "Helps you avoid unnecessary spending",
+                        "Ensures you meet basic financial needs first",
+                        "Allows you to adjust spending based on real-life needs",
+                        "Builds a habit of consistent saving"
+                    ],
+                    "correctMatches": {
+                        "0": 0,
+                        "1": 3,
+                        "2": 2,
+                        "3": 1
+                    }
+                },
+                {
+                    "type": "match",
+                    "question": "Match each financial term with its correct definition.",
+                    "leftOptions": [
+                        "Fixed expense",
+                        "Variable expense",
+                        "Emergency fund",
+                        "Disposable income"
+                    ],
+                    "rightOptions": [
+                        "Money left after paying taxes and essential expenses",
+                        "An expense that remains the same each month",
+                        "A fund set aside for unexpected costs",
+                        "An expense that changes based on usage"
+                    ],
+                    "correctMatches": {
+                        "0": 1,
+                        "1": 3,
+                        "2": 2,
+                        "3": 0
+                    }
+                },
+                {
+                    "type": "dragAndDrop",
+                    "question": "Drag each item into the correct category: Fixed Expenses vs. Variable Expenses.",
+                    "items": [
+                        "Internet bill",
+                        "Groceries",
+                        "Monthly rent",
+                        "Entertainment"
+                    ],
+                    "categories": {
+                        "Fixed Expenses": [
+                            "Monthly rent",
+                            "Internet bill"
+                        ],
+                        "Variable Expenses": [
+                            "Groceries",
+                            "Entertainment"
+                        ]
+                    }
+                },
+                {
+                    "type": "dragAndDrop",
+                    "question": "Drag each item into the correct category: Short-Term vs. Long-Term Savings.",
+                    "items": [
+                        "Emergency fund",
+                        "Retirement savings",
+                        "Vacation fund",
+                        "House down payment"
+                    ],
+                    "categories": {
+                        "Short-Term Savings": [
+                            "Emergency fund",
+                            "Vacation fund"
+                        ],
+                        "Long-Term Savings": [
+                            "Retirement savings",
+                            "House down payment"
+                        ]
+                    }
+                },
+                {
+                    "type": "reorder",
+                    "question": "Arrange these steps in the correct order for reviewing and adjusting your budget.",
+                    "options": [
+                        "Compare actual spending with your budget",
+                        "Identify areas where adjustments are needed",
+                        "Set new financial goals if necessary",
+                        "Track all income and expenses",
+                        "Apply changes to your budget"
+                    ],
+                    "correctAnswer": [
+                        "Track all income and expenses",
+                        "Compare actual spending with your budget",
+                        "Identify areas where adjustments are needed",
+                        "Set new financial goals if necessary",
+                        "Apply changes to your budget"
+                    ]
+                },
+                {
+                    "type": "reorder",
+                    "question": "Arrange these steps in the correct order for building a successful budget as a young professional.",
+                    "options": [
+                        "Set savings and investment goals",
+                        "Identify and categorize expenses",
+                        "Allocate money to each category",
+                        "List your income sources",
+                        "Monitor and adjust regularly"
+                    ],
+                    "correctAnswer": [
+                        "List your income sources",
+                        "Identify and categorize expenses",
+                        "Allocate money to each category",
+                        "Set savings and investment goals",
+                        "Monitor and adjust regularly"
+                    ]
+                }
+            ]
+        }
+    ]
+}

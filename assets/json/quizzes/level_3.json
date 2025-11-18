@@ -1,0 +1,627 @@
+{
+  "level": 3,
+  "title": "Budget Hacks and Smart Spending",
+  "modules": [
+    {
+      "moduleNumber": 1,
+      "title": "Budget Hacks",
+      "lesson": {
+        "introduction": "A budget hack is a smart way to save money by cutting unnecessary spending. The goal is to make the most of every naira spent.",
+        "sections": [
+          {
+            "heading": "Key Concepts:",
+            "bulletPoints": [
+              "Budget Hack: A trick to reduce daily expenses.",
+              "Optimization: Making your money work efficiently.",
+              "Expense: Money spent on goods or services.",
+              "Savings Goal: A target amount you aim to save."
+            ]
+          },
+          {
+            "heading": "How to Apply a Budget Hack:",
+            "orderedList": [
+              "Identify an expense that seems too high.",
+              "Research cheaper alternatives.",
+              "Set a small savings goal.",
+              "Apply the hack and track your progress."
+            ]
+          }
+        ],
+        "highlights": [
+          "Budget hacks help reduce unnecessary spending.",
+          "Optimization means making the most of your money.",
+          "Identify expenses, find cheaper alternatives, and set savings goals.",
+          "Applying hacks can cut costs and improve financial habits."
+        ],
+        "conclusion": "Budget hacks help you spot and adjust regular costs, leading to better money management!"
+      },
+      "quiz": {
+        "focus": "Understanding budget hacks and optimization techniques.",
+        "questions": [
+          {
+            "type": "multiChoice",
+            "question": "What is a \"budget hack\"?",
+            "options": [
+              "A clever trick to save money by cutting down on unnecessary spending",
+              "A secret method to instantly earn extra money",
+              "A complicated plan only experts use",
+              "A way to avoid paying bills on time"
+            ],
+            "correctAnswer": 0
+          },
+          {
+            "type": "fillInTheGap",
+            "question": "Budget optimisation means getting the most value out of every ______ you spend.",
+            "correctAnswer": "Naira"
+          },
+          {
+            "type": "match",
+            "question": "Match each term with its meaning.",
+            "leftOptions": ["Budget Hack", "Optimisation", "Expense", "Savings Goal"],
+            "rightOptions": [
+              "A target you want to reach by saving money",
+              "A trick to reduce daily spending",
+              "Making your money work as hard as possible",
+              "Money you spend on goods or services"
+            ],
+            "correctMatches": {
+              "0": 1,
+              "1": 2,
+              "2": 3,
+              "3": 0
+            }
+          },
+          {
+            "type": "trueFalse",
+            "question": "Budget hacks can help you spot regular costs that might be reduced or switched for cheaper alternatives.",
+            "correctAnswer": true
+          },
+          {
+            "type": "reorder",
+            "question": "Arrange these steps for using a budget hack in the correct order:",
+            "options": [
+              "Identify a recurring expense that seems too high",
+              "Try the hack and monitor the results",
+              "Set a small savings target related to the expense",
+              "Research ways to lower that cost or find an alternative"
+            ],
+            "correctAnswer": [
+              "Identify a recurring expense that seems too high",
+              "Research ways to lower that cost or find an alternative",
+              "Set a small savings target related to the expense",
+              "Try the hack and monitor the results"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "moduleNumber": 2,
+      "title": "Budgeting Tools and Automation",
+      "lesson": {
+        "introduction": "Effective budgeting requires the right tools and strategies. Budgeting apps or spreadsheets help track income and expenses, making money management easier than using a simple calculator or unstructured notebook.",
+        "sections": [
+          {
+            "heading": "Key Strategies",
+            "content": "Automation is a key trick—setting up automatic bill payments prevents late fees and improves financial discipline.",
+            "bulletPoints": [
+              "Digital tools (budgeting apps, online trackers) for automatic calculations.",
+              "Traditional methods (handwritten journals, envelope system) for hands-on control."
+            ]
+          },
+          {
+            "heading": "Budget Hack - Envelope System",
+            "content": "A useful budget hack is the envelope system, which limits spending by dividing cash into labeled envelopes for different categories."
+          },
+          {
+            "heading": "Steps for Setting Up a Budget:",
+            "orderedList": [
+              "List income.",
+              "Record expenses.",
+              "Set a savings goal.",
+              "Track daily transactions.",
+              "Review and adjust regularly."
+            ]
+          }
+        ],
+        "highlights": [
+          "Use Budgeting Tools: Apps or spreadsheets help track income and expenses efficiently.",
+          "Automate Payments: Prevents late fees and improves budgeting discipline.",
+          "Tracking Methods: Digital tools offer automation, while traditional methods (e.g., envelope system) provide hands-on control.",
+          "Budget Hack – Envelope System: Allocate cash into labeled envelopes to limit spending per category.",
+          "Budget Setup Steps: List income → Record expenses → Set savings goal → Track daily spending → Review & adjust regularly."
+        ]
+      },
+      "quiz": {
+        "focus": "Understanding budgeting tools and automation strategies.",
+        "questions": [
+          {
+            "type": "multiChoice",
+            "question": "Which tool is most useful for tracking your spending accurately?",
+            "options": [
+              "A basic budgeting app or spreadsheet",
+              "A simple calculator only",
+              "A notebook without categorising expenses",
+              "A photo album for receipts"
+            ],
+            "correctAnswer": 0
+          },
+          {
+            "type": "fillInTheGap",
+            "question": "Setting up automatic bill payments can help ______ your budget by avoiding late fees.",
+            "correctAnswer": "improve"
+          },
+          {
+            "type": "dragAndDrop",
+            "question": "Drag each item into the correct group: Digital Tools vs. Traditional Methods.",
+            "items": [
+              "Budgeting app",
+              "Handwritten expense journal",
+              "Online expense tracker",
+              "Envelope system (using cash divided into envelopes)"
+            ],
+            "categories": {
+              "Digital Tools": ["Budgeting app", "Online expense tracker"],
+              "Traditional Methods": ["Envelope system (using cash divided into envelopes)", "Handwritten expense journal"]
+            }
+          },
+          {
+            "type": "multiChoice",
+            "question": "Which technique is a practical budget hack to help control spending?",
+            "options": [
+              "Using the envelope system to limit cash for each category",
+              "Relying on credit cards so you don't notice spending",
+              "Buying items immediately when on sale, without comparison",
+              "Ignoring small daily expenses"
+            ],
+            "correctAnswer": 0
+          },
+          {
+            "type": "reorder",
+            "question": "Arrange these steps to set up your budgeting tool:",
+            "options": [
+              "Set a realistic savings target",
+              "Review and update your records regularly",
+              "Write down your total income",
+              "Record your daily transactions",
+              "List all your total expenses"
+            ],
+            "correctAnswer": [
+              "List all your total expenses",
+              "Write down your total income",
+              "Record your daily transactions",
+              "Set a realistic savings target",
+              "Review and update your records regularly"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "moduleNumber": 3,
+      "title": "Smart Spending Choices",
+      "lesson": {
+        "introduction": "Making smart spending choices helps you get the best value for your money. Instead of buying the cheapest option, compare prices and focus on quality to avoid unnecessary costs.",
+        "sections": [
+          {
+            "heading": "Key Strategy",
+            "content": "Planning purchases wisely—checking prices, using discounts, and avoiding impulse buying."
+          },
+          {
+            "heading": "Two Main Approaches to Smart Spending:",
+            "bulletPoints": [
+              "Effective strategies: Price comparisons, buying in bulk, using coupons.",
+              "Risky habits: Impulse purchases, buying without research, spending on unnecessary sales."
+            ]
+          },
+          {
+            "heading": "Useful Habit",
+            "content": "Creating a shopping list and setting a budget before buying to control spending."
+          },
+          {
+            "heading": "Steps for a Cost-Effective Shopping Trip:",
+            "orderedList": [
+              "Make a detailed shopping list.",
+              "Set a spending limit.",
+              "Look for discounts and deals.",
+              "Compare prices across stores.",
+              "Review spending after shopping."
+            ]
+          }
+        ],
+        "highlights": [
+          "Plan purchases and compare prices.",
+          "Use discounts and avoid impulse buying.",
+          "Make a shopping list and set a budget.",
+          "Check for deals before purchasing.",
+          "Review spending to improve habits."
+        ],
+        "conclusion": "Following these strategies helps you manage money wisely and avoid financial mistakes."
+      },
+      "quiz": {
+        "focus": "Learning smart spending strategies.",
+        "questions": [
+          {
+            "type": "multiChoice",
+            "question": "What does \"smart spending\" mean?",
+            "options": [
+              "Buying only the cheapest items even if quality is low",
+              "Carefully planning purchases by comparing prices and needs",
+              "Not spending any money at all",
+              "Spending money on every new gadget"
+            ],
+            "correctAnswer": 1
+          },
+          {
+            "type": "fillInTheGap",
+            "question": "By checking prices and using discounts, you can ______ your overall spending.",
+            "correctAnswer": "reduce"
+          },
+          {
+            "type": "match",
+            "question": "Match each smart spending tip with its benefit.",
+            "leftOptions": [
+              "Using discount coupons",
+              "Buying in bulk (when appropriate)",
+              "Comparing Prices",
+              "Waiting before making unplanned purchases"
+            ],
+            "rightOptions": [
+              "Helps you find the best deal",
+              "Lowers the cost per unit for regular items",
+              "Prevents impulse buying",
+              "Saves money on each purchase"
+            ],
+            "correctMatches": {
+              "0": 3,
+              "1": 1,
+              "2": 0,
+              "3": 2
+            }
+          },
+          {
+            "type": "dragAndDrop",
+            "question": "Drag each action into the correct group: Smart Spending vs. Risky Spending.",
+            "items": [
+              "Checking for deals and reading product reviews before buying",
+              "Making an impulse purchase during a flash sale without comparing prices",
+              "Planning your shopping with a list",
+              "Buying something immediately just because it's marked down"
+            ],
+            "categories": {
+              "Smart Spending": [
+                "Planning your shopping with a list",
+                "Checking for deals and reading product reviews before buying"
+              ],
+              "Risky Spending": [
+                "Buying something immediately just because it's marked down",
+                "Making an impulse purchase during a flash sale without comparing prices"
+              ]
+            }
+          },
+          {
+            "type": "reorder",
+            "question": "Arrange these steps for planning a cost-effective shopping trip:",
+            "options": [
+              "Create a detailed shopping list",
+              "Compare prices at a different store",
+              "Check for current deals and discounts",
+              "Set a strict spending limit",
+              "Review your spending after the trip"
+            ],
+            "correctAnswer": [
+              "Set a strict spending limit",
+              "Create a detailed shopping list",
+              "Check for current deals and discounts",
+              "Compare prices at a different store",
+              "Review your spending after the trip"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "moduleNumber": 4,
+      "title": "Cost-Cutting Strategies",
+      "lesson": {
+        "introduction": "Saving money requires smart planning and reducing unnecessary expenses. One effective way to lower costs is by negotiating with service providers for better rates instead of upgrading or ignoring bills.",
+        "sections": [
+          {
+            "heading": "Key Tools",
+            "content": "A monthly budget is key to tracking spending and savings. Simple strategies like canceling unused subscriptions, planning home-cooked meals, using public transport, and reducing energy use can significantly cut costs."
+          },
+          {
+            "heading": "Two Types of Savings:",
+            "bulletPoints": [
+              "Quick Savings: Using discount coupons, cutting daily expenses like snacks or coffee.",
+              "Long-Term Savings: Investing in energy-efficient appliances, opening a high-yield savings account."
+            ]
+          },
+          {
+            "heading": "Steps for a Cost-Cutting Plan:",
+            "orderedList": [
+              "Review spending to find high-cost areas.",
+              "Identify expenses to reduce or eliminate.",
+              "Research cheaper alternatives or discounts.",
+              "Adjust spending habits.",
+              "Monitor savings over time."
+            ]
+          }
+        ],
+        "highlights": [
+          "Negotiate bills to save money.",
+          "Create a budget to track spending.",
+          "Cut costs: Cancel unused subscriptions, cook at home, use public transport, reduce energy use.",
+          "Save smart: Use discounts for quick savings, invest in efficiency for long-term benefits.",
+          "Follow a plan: Review spending → Cut costs → Adjust habits → Monitor savings."
+        ],
+        "conclusion": "By following these strategies, you can save more and improve financial stability."
+      },
+      "quiz": {
+        "focus": "Understanding cost-cutting strategies.",
+        "questions": [
+          {
+            "type": "multiChoice",
+            "question": "What is an effective way to lower your regular costs?",
+            "options": [
+              "Ignoring your monthly bills",
+              "Negotiating with service providers for a better rate or plan",
+              "Upgrading to a more expensive plan for extra features",
+              "Delaying bill payments until a discount appears"
+            ],
+            "correctAnswer": 1
+          },
+          {
+            "type": "fillInTheGap",
+            "question": "Creating a monthly ______ is important to know how much you can safely spend and save.",
+            "correctAnswer": "budget"
+          },
+          {
+            "type": "match",
+            "question": "Match each cost-cutting idea with its benefit.",
+            "leftOptions": [
+              "Cancel unused subscriptions",
+              "Planning meals at home",
+              "Using public transport or carpooling",
+              "Reducing energy use at home"
+            ],
+            "rightOptions": [
+              "Cuts transport expenses",
+              "Decreases utility bills",
+              "Lowers food costs and reduces waste",
+              "Saves money on recurring costs"
+            ],
+            "correctMatches": {
+              "0": 3,
+              "1": 2,
+              "2": 0,
+              "3": 1
+            }
+          },
+          {
+            "type": "dragAndDrop",
+            "question": "Drag these saving ideas into the correct groups: Quick Savings vs. Long-Term Savings.",
+            "items": [
+              "Using discount coupons at checkout",
+              "Cutting out a daily snack or coffee run",
+              "Upgrading to energy-efficient appliances",
+              "Opening a high-yield savings account"
+            ],
+            "categories": {
+              "Quick Savings": [
+                "Using discount coupons at checkout",
+                "Cutting out a daily snack or coffee run"
+              ],
+              "Long-Term Savings": [
+                "Upgrading to energy-efficient appliances",
+                "Opening a high-yield savings account"
+              ]
+            }
+          },
+          {
+            "type": "reorder",
+            "question": "Arrange these steps for a cost-cutting plan in order:",
+            "options": [
+              "Review your monthly spending to spot high-cost areas",
+              "Identify expenses you can reduce or eliminate",
+              "Monitor your savings over time",
+              "Change your spending habits accordingly",
+              "Research cheaper alternatives or discount"
+            ],
+            "correctAnswer": [
+              "Review your monthly spending to spot high-cost areas",
+              "Identify expenses you can reduce or eliminate",
+              "Research cheaper alternatives or discount",
+              "Change your spending habits accordingly",
+              "Monitor your savings over time"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "moduleNumber": 5,
+      "title": "Growing Your Savings - Comprehensive Review",
+      "lesson": {
+        "introduction": "Growing your savings goes beyond setting money aside—it requires smart spending, budgeting, and cost-cutting strategies. Budgeting tools like apps and spreadsheets help track income and expenses, while automation ensures bills are paid on time, avoiding unnecessary fees.",
+        "sections": [
+          {
+            "heading": "Smart Spending",
+            "content": "Smart spending means making thoughtful financial decisions. Comparing prices, using discounts, and planning purchases prevent impulse buying and maximize value."
+          },
+          {
+            "heading": "Two Key Savings Strategies:",
+            "bulletPoints": [
+              "Quick Savings: Using discount coupons, reducing daily expenses, and tracking spending habits.",
+              "Long-Term Savings: Investing in high-yield savings accounts and making cost-effective choices like energy-efficient appliances."
+            ]
+          },
+          {
+            "heading": "Steps to Strengthen Savings:",
+            "orderedList": [
+              "Identify unnecessary expenses and cut costs.",
+              "Use budgeting tools to manage finances.",
+              "Develop disciplined spending habits.",
+              "Track and adjust financial goals regularly."
+            ]
+          }
+        ],
+        "highlights": [
+          "Use budgeting tools like apps or spreadsheets to track income and expenses.",
+          "Automate bill payments to avoid late fees.",
+          "Spend wisely by comparing prices, using discounts, and avoiding impulse purchases.",
+          "Quick Savings: Use discount coupons and cut small daily expenses.",
+          "Long-Term Savings: Invest in high-yield savings accounts and energy-efficient choices.",
+          "Steps to Save More: Identify unnecessary costs → Use budgeting tools → Control spending → Track and adjust goals.",
+          "Smart financial habits lead to long-term stability."
+        ],
+        "conclusion": "By applying these strategies, you can build stronger savings and achieve long-term financial stability."
+      },
+      "quiz": {
+        "focus": "Comprehensive review of budget hacks and smart spending.",
+        "questions": [
+          {
+            "type": "multiChoice",
+            "question": "What is a \"budget hack\" and why is it useful?",
+            "options": [
+              "A clever tip that helps you save money by reducing unnecessary spending",
+              "A secret plan to double your income overnight",
+              "A method used only by professional investors",
+              "A way to hide your spending from others"
+            ],
+            "correctAnswer": 0
+          },
+          {
+            "type": "fillInTheGap",
+            "question": "Budget optimisation means getting the most value out of every ______ you spend.",
+            "correctAnswer": "naira"
+          },
+          {
+            "type": "match",
+            "question": "Match each term with its meaning.",
+            "leftOptions": ["Expense", "Savings Goal", "Budget Hack", "Goal Optimisation"],
+            "rightOptions": [
+              "A trick to reduce everyday spending",
+              "The process of making your money work harder",
+              "Money you spend on goods or services",
+              "A target you plan to reach by saving money"
+            ],
+            "correctMatches": {
+              "0": 2,
+              "1": 3,
+              "2": 0,
+              "3": 1
+            }
+          },
+          {
+            "type": "multiChoice",
+            "question": "Which tool is most useful for keeping track of your spending?",
+            "options": [
+              "A basic budgeting app or spreadsheet",
+              "A simple calculator without records",
+              "A diary that only writes down dates",
+              "A photo album for receipts"
+            ],
+            "correctAnswer": 0
+          },
+          {
+            "type": "fillInTheGap",
+            "question": "Setting up automatic bill payments can help ______ your budget by preventing late fees.",
+            "correctAnswer": "improve"
+          },
+          {
+            "type": "match",
+            "question": "Match each smart spending tip with its benefit.",
+            "leftOptions": [
+              "Buying in bulk (when it makes sense)",
+              "Comparing prices",
+              "Waiting before making unplanned purchases",
+              "Using discount coupons"
+            ],
+            "rightOptions": [
+              "Helps you find the best deal available",
+              "Lowers the cost per unit for items bought regularly",
+              "Saves money on individual purchases",
+              "Prevents impulse buying"
+            ],
+            "correctMatches": {
+              "0": 1,
+              "1": 0,
+              "2": 3,
+              "3": 2
+            }
+          },
+          {
+            "type": "dragAndDrop",
+            "question": "Drag each action into the correct group: Smart Spending vs. Cost-Cutting/Saving Strategies.",
+            "items": [
+              "Checking for deals before a purchase",
+              "Using discount coupons at checkout",
+              "Planning meals at home instead of dining out",
+              "Keeping a detailed record of monthly expenses",
+              "Using the envelope system for cash"
+            ],
+            "categories": {
+              "Smart Spending": [
+                "Checking for deals before a purchase",
+                "Keeping a detailed record of monthly expenses"
+              ],
+              "Cost-Cutting/Saving Strategies": [
+                "Using discount coupons at checkout",
+                "Planning meals at home instead of dining out",
+                "Using the envelope system for cash"
+              ]
+            }
+          },
+          {
+            "type": "reorder",
+            "question": "Arrange these steps in the correct order for setting up a budgeting tool:",
+            "options": [
+              "Review and update your records regularly",
+              "List all your regular expenses",
+              "Set a realistic savings target",
+              "Record your daily transactions",
+              "Write down your total income"
+            ],
+            "correctAnswer": [
+              "Write down your total income",
+              "List all your regular expenses",
+              "Set a realistic savings target",
+              "Record your daily transactions",
+              "Review and update your records regularly"
+            ]
+          },
+          {
+            "type": "multiChoice",
+            "question": "Which of the following is an effective way to lower your regular costs?",
+            "options": [
+              "Ignoring your monthly bills",
+              "Negotiating with service providers for a better rate or switching plans",
+              "Upgrading to a more expensive plan for extra features",
+              "Delaying bill payments to wait for discounts"
+            ],
+            "correctAnswer": 1
+          },
+          {
+            "type": "reorder",
+            "question": "Arrange these steps for a complete monthly budget review and adjustment:",
+            "options": [
+              "Update your budget for the next month",
+              "Collect all receipts and transaction records",
+              "Identify areas where spending was higher than expected",
+              "Decide on changes such as cutting back or reallocating funds",
+              "Compare your actual spending to your planned budget"
+            ],
+            "correctAnswer": [
+              "Collect all receipts and transaction records",
+              "Compare your actual spending to your planned budget",
+              "Identify areas where spending was higher than expected",
+              "Decide on changes such as cutting back or reallocating funds",
+              "Update your budget for the next month"
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

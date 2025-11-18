@@ -1,0 +1,454 @@
+{
+    "level": 4,
+    "title": "Setting Financial Goals & Prioritizing Expenses",
+    "quizzes": [
+        {
+            "quizNumber": 1,
+            "title": "Introduction to Financial Goals",
+            "questions": [
+                {
+                    "type": "multiChoice",
+                    "question": "What is a financial goal?",
+                    "options": [
+                        "A wish that has no clear plan",
+                        "A specific target for saving or spending money",
+                        "A way to spend money quickly",
+                        "An expense that you cannot control"
+                    ],
+                    "correctAnswer": 1
+                },
+                {
+                    "type": "fillInTheGap",
+                    "question": "A financial goal gives you a ______ to work toward and helps you plan how to use your money wisely.",
+                    "correctAnswer": "target"
+                },
+                {
+                    "type": "match",
+                    "question": "Match each type of financial goal with its description.",
+                    "leftOptions": [
+                        "Short-term Goal",
+                        "Long-term Goal",
+                        "Emergency Fund",
+                        "Purchase Goal"
+                    ],
+                    "rightOptions": [
+                        "Saving money to cover unexpected expenses",
+                        "A goal you want to achieve in a few months",
+                        "A goal that takes several years to accomplish",
+                        "Saving for something specific like a gadget or bike"
+                    ],
+                    "correctMatches": {
+                        "0": 1,
+                        "1": 2,
+                        "2": 0,
+                        "3": 3
+                    }
+                },
+                {
+                    "type": "trueFalse",
+                    "question": "Having clear financial goals helps you make better choices with your money.",
+                    "correctAnswer": true
+                },
+                {
+                    "type": "reorder",
+                    "question": "Arrange these steps for setting a basic financial goal in order:",
+                    "options": [
+                        "Decide what you want to achieve with your money",
+                        "Determine the amount you need",
+                        "Set a timeline for reaching your goal",
+                        "Plan how to adjust your spending to meet that goal"
+                    ],
+                    "correctAnswer": [
+                        "Decide what you want to achieve with your money",
+                        "Determine the amount you need",
+                        "Set a timeline for reaching your goal",
+                        "Plan how to adjust your spending to meet that goal"
+                    ]
+                }
+            ]
+        },
+        {
+            "quizNumber": 2,
+            "title": "SMART Financial Goals",
+            "questions": [
+                {
+                    "type": "multiChoice",
+                    "question": "Which statement best defines a SMART goal?",
+                    "options": [
+                        "A goal that is vague and changes often",
+                        "A goal that is specific, measurable, achievable, relevant, and time-bound",
+                        "A goal that focuses only on saving money",
+                        "A goal with no deadline"
+                    ],
+                    "correctAnswer": 1
+                },
+                {
+                    "type": "fillInTheGap",
+                    "question": "SMART goals are ______, ______, achievable, relevant, and time-bound.",
+                    "correctAnswer": "specific, measurable"
+                },
+                {
+                    "type": "match",
+                    "question": "Match each SMART criterion with its meaning.",
+                    "leftOptions": [
+                        "Specific",
+                        "Relevant",
+                        "Time bound",
+                        "Measurable",
+                        "Achievable"
+                    ],
+                    "rightOptions": [
+                        "Has a set deadline",
+                        "You can track your progress",
+                        "Realistic and possible",
+                        "Matters to your overall life or plans",
+                        "Clearly defined and focused"
+                    ],
+                    "correctMatches": {
+                        "0": 4,
+                        "1": 3,
+                        "2": 0,
+                        "3": 1,
+                        "4": 2
+                    }
+                },
+                {
+                    "type": "trueFalse",
+                    "question": "Using SMART criteria for your financial goals makes them easier to achieve.",
+                    "correctAnswer": true
+                },
+                {
+                    "type": "reorder",
+                    "question": "Arrange these steps for creating a SMART goal:",
+                    "options": [
+                        "Set a deadline for achievement",
+                        "Decide how you will measure progress",
+                        "Determine if the goal is realistic",
+                        "Check that the goal is important to you",
+                        "Define exactly what you want to achieve"
+                    ],
+                    "correctAnswer": [
+                        "Define exactly what you want to achieve",
+                        "Decide how you will measure progress",
+                        "Determine if the goal is realistic",
+                        "Check that the goal is important to you",
+                        "Set a deadline for achievement"
+                    ]
+                }
+            ]
+        },
+        {
+            "quizNumber": 3,
+            "title": "Planning Savings Strategies",
+            "questions": [
+                {
+                    "type": "multiChoice",
+                    "question": "What is the first step in planning a savings strategy for a financial goal?",
+                    "options": [
+                        "Deciding what to spend your money on immediately",
+                        "Identifying your financial goal and how much it will cost",
+                        "Ignoring small expenses",
+                        "Borrowing money from friends"
+                    ],
+                    "correctAnswer": 1
+                },
+                {
+                    "type": "fillInTheGap",
+                    "question": "A savings strategy helps you set aside money regularly so you can ______ your financial goal.",
+                    "correctAnswer": "reach"
+                },
+                {
+                    "type": "match",
+                    "question": "Match each savings method with its description.",
+                    "leftOptions": [
+                        "Automatic Transfers",
+                        "Envelope System",
+                        "Saving a Percentage of Income",
+                        "Cutting Unnecessary Expenses"
+                    ],
+                    "rightOptions": [
+                        "Setting aside money by physically separating cash",
+                        "Scheduling regular transfers to a savings account",
+                        "Dedicating a fixed percentage of your income to savings",
+                        "Reducing spending to increase available savings"
+                    ],
+                    "correctMatches": {
+                        "0": 1,
+                        "1": 0,
+                        "2": 2,
+                        "3": 3
+                    }
+                },
+                {
+                    "type": "dragAndDrop",
+                    "question": "Drag each action into the correct group: Savings Actions vs. Spending Adjustments.",
+                    "items": [
+                        "Setting up automatic transfers",
+                        "Using an envelope system",
+                        "Tracking discretionary spending",
+                        "Cutting back on impulse purchases"
+                    ],
+                    "categories": {
+                        "Savings Actions": [
+                            "Setting up automatic transfers",
+                            "Using an envelope system"
+                        ],
+                        "Spending Adjustments": [
+                            "Tracking discretionary spending",
+                            "Cutting back on impulse purchases"
+                        ]
+                    }
+                },
+                {
+                    "type": "reorder",
+                    "question": "Arrange these steps for creating a savings plan:",
+                    "options": [
+                        "Identify your financial goal and its cost",
+                        "Determine how much you can save each week or month",
+                        "Monitor your progress towards the goal",
+                        "Adjust your spending to free up savings",
+                        "Choose a savings method (e.g., automatic transfers)"
+                    ],
+                    "correctAnswer": [
+                        "Identify your financial goal and its cost",
+                        "Determine how much you can save each week or month",
+                        "Adjust your spending to free up savings",
+                        "Choose a savings method (e.g., automatic transfers)",
+                        "Monitor your progress towards the goal"
+                    ]
+                }
+            ]
+        },
+        {
+            "quizNumber": 4,
+            "title": "Budgeting for Financial Goals",
+            "questions": [
+                {
+                    "type": "multiChoice",
+                    "question": "When creating a budget to reach your financial goals, what should you do first?",
+                    "options": [
+                        "List all sources of income",
+                        "Buy what you want immediately",
+                        "Skip tracking small expenses",
+                        "Increase your spending on fun items"
+                    ],
+                    "correctAnswer": 0
+                },
+                {
+                    "type": "fillInTheGap",
+                    "question": "A well-planned budget helps you cover ______ expenses and allocate money toward your goals.",
+                    "correctAnswer": "essential"
+                },
+                {
+                    "type": "match",
+                    "question": "Match each budgeting step with its benefit.",
+                    "leftOptions": [
+                        "Reviewing the budget regularly",
+                        "Categorizing expenses",
+                        "Allocating funds for savings",
+                        "Listing all income"
+                    ],
+                    "rightOptions": [
+                        "Ensures you know how much money you have",
+                        "Helps you prioritize spending on essentials",
+                        "Makes sure you're saving toward your goals",
+                        "Keeps your budget up-to-date with your spending habits"
+                    ],
+                    "correctMatches": {
+                        "0": 3,
+                        "1": 1,
+                        "2": 2,
+                        "3": 0
+                    }
+                },
+                {
+                    "type": "dragAndDrop",
+                    "question": "Drag each item into the correct category: Income/Essential Expenses vs. Savings/Goals.",
+                    "items": [
+                        "Monthly salary or allowance",
+                        "Rent or housing costs",
+                        "Savings for a new computer",
+                        "Groceries"
+                    ],
+                    "categories": {
+                        "Income/Essential Expenses": [
+                            "Monthly salary or allowance",
+                            "Rent or housing costs",
+                            "Groceries"
+                        ],
+                        "Savings/Goals": [
+                            "Savings for a new computer"
+                        ]
+                    }
+                },
+                {
+                    "type": "reorder",
+                    "question": "Arrange these steps for creating a budget that supports your financial goals:",
+                    "options": [
+                        "Prioritize covering essential expenses",
+                        "Review and adjust your budget monthly",
+                        "List all sources of income",
+                        "Allocate a portion of income to savings for goals",
+                        "Identify and categorize all expenses"
+                    ],
+                    "correctAnswer": [
+                        "List all sources of income",
+                        "Identify and categorize all expenses",
+                        "Prioritize covering essential expenses",
+                        "Allocate a portion of income to savings for goals",
+                        "Review and adjust your budget monthly"
+                    ]
+                }
+            ]
+        },
+        {
+            "quizNumber": 5,
+            "title": "Comprehensive Financial Goals Review",
+            "questions": [
+                {
+                    "type": "multiChoice",
+                    "question": "What is the main purpose of setting a financial goal?",
+                    "options": [
+                        "To decide how to spend money without planning",
+                        "To have a clear target to work toward and save for",
+                        "To make impulse purchases easier",
+                        "To avoid tracking your income"
+                    ],
+                    "correctAnswer": 1
+                },
+                {
+                    "type": "fillInTheGap",
+                    "question": "SMART goals are ______, measurable, achievable, relevant, and time-bound.",
+                    "correctAnswer": "specific"
+                },
+                {
+                    "type": "match",
+                    "question": "Match each type of financial goal with its example.",
+                    "leftOptions": [
+                        "Purchase Goal",
+                        "Emergency Fund",
+                        "Long-term Goal",
+                        "Short-term Goal"
+                    ],
+                    "rightOptions": [
+                        "Saving for a new smartphone within a few months",
+                        "Saving for college tuition over several years",
+                        "Setting aside money for unexpected repairs",
+                        "Saving for a bicycle"
+                    ],
+                    "correctMatches": {
+                        "0": 3,
+                        "1": 2,
+                        "2": 1,
+                        "3": 0
+                    }
+                },
+                {
+                    "type": "multiChoice",
+                    "question": "Why is it important to plan a savings strategy for your financial goal?",
+                    "options": [
+                        "To spend money on non-essentials",
+                        "To know exactly how much to save and when to reach your goal",
+                        "To avoid adjusting your spending habits",
+                        "To create a vague idea of saving"
+                    ],
+                    "correctAnswer": 1
+                },
+                {
+                    "type": "fillInTheGap",
+                    "question": "A well-designed budget helps you cover essential expenses and ______ money toward your goals.",
+                    "correctAnswer": "allocate"
+                },
+                {
+                    "type": "match",
+                    "question": "Match each budgeting step with its benefit.",
+                    "leftOptions": [
+                        "Categorizing expenses",
+                        "Regularly reviewing the budget",
+                        "Allocating funds for savings",
+                        "Listing all income"
+                    ],
+                    "rightOptions": [
+                        "Helps you know your available money",
+                        "Prioritizes spending on essentials",
+                        "Ensures you are progressing toward your goals",
+                        "Keeps your plan accurate and up-to-date"
+                    ],
+                    "correctMatches": {
+                        "0": 1,
+                        "1": 3,
+                        "2": 2,
+                        "3": 0
+                    }
+                },
+                {
+                    "type": "dragAndDrop",
+                    "question": "Drag each action into the correct group: Goal Setting Actions vs. Budgeting Actions.",
+                    "items": [
+                        "Defining a clear financial target",
+                        "Deciding how much money is needed for a goal",
+                        "Recording daily transactions",
+                        "Categorizing expenses"
+                    ],
+                    "categories": {
+                        "Goal Setting Actions": [
+                            "Defining a clear financial target",
+                            "Deciding how much money is needed for a goal"
+                        ],
+                        "Budgeting Actions": [
+                            "Recording daily transactions",
+                            "Categorizing expenses"
+                        ]
+                    }
+                },
+                {
+                    "type": "multiChoice",
+                    "question": "What should you do first when creating a budget to support your financial goals?",
+                    "options": [
+                        "List all your income sources",
+                        "Immediately allocate money for savings",
+                        "Buy the items you want",
+                        "Skip tracking small expenses"
+                    ],
+                    "correctAnswer": 0
+                },
+                {
+                    "type": "reorder",
+                    "question": "Arrange these steps for planning a savings strategy:",
+                    "options": [
+                        "Determine how much you can save each month",
+                        "Monitor your progress regularly",
+                        "Choose a savings method (like automatic transfers)",
+                        "Adjust your spending to free up more savings",
+                        "Identify your financial goal and its cost"
+                    ],
+                    "correctAnswer": [
+                        "Identify your financial goal and its cost",
+                        "Determine how much you can save each month",
+                        "Choose a savings method (like automatic transfers)",
+                        "Adjust your spending to free up more savings",
+                        "Monitor your progress regularly"
+                    ]
+                },
+                {
+                    "type": "reorder",
+                    "question": "Arrange these steps to create a budget that prioritizes your financial goals:",
+                    "options": [
+                        "Prioritize essential expenses",
+                        "Identify and categorize all expenses",
+                        "Review and adjust the budget monthly",
+                        "List all income sources",
+                        "Allocate funds for savings and goals"
+                    ],
+                    "correctAnswer": [
+                        "List all income sources",
+                        "Identify and categorize all expenses",
+                        "Prioritize essential expenses",
+                        "Allocate funds for savings and goals",
+                        "Review and adjust the budget monthly"
+                    ]
+                }
+            ]
+        }
+    ]
+}

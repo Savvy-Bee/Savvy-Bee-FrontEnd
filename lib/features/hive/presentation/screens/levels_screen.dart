@@ -6,7 +6,8 @@ import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/assets.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/hexagonal_button.dart';
-import 'package:savvy_bee_mobile/features/hive/presentation/screens/lesson_room_screen.dart';
+
+import 'lesson/lesson_room_screen.dart';
 
 class LevelsScreen extends ConsumerStatefulWidget {
   static String path = '/levels';

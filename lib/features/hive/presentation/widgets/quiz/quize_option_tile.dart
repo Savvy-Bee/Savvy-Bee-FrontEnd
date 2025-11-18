@@ -1,0 +1,86 @@
+import 'package:flutter/material.dart';
+import 'package:savvy_bee_mobile/core/utils/constants.dart';
+import 'package:savvy_bee_mobile/core/widgets/dot.dart';
+
+import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/utils/assets/app_icons.dart';
+import '../../../domain/models/quiz_question.dart';
+
+class QuizeOptionTile extends StatelessWidget {
+  final QuizType quizType;
+  final String text;
+  final Color? color;
+  final VoidCallback? onTap;
+  final bool isSelected;
+  final TextAlign? textAlign;
+
+  const QuizeOptionTile({
+    super.key,
+    this.quizType = QuizType.multiChoice,
+    required this.text,
+    this.color,
+    this.onTap,
+    this.isSelected = false,
+    this.textAlign,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: quizType == QuizType.multiChoice ? 30 : 16,
+          vertical: 16,
+        ),
+        decoration: BoxDecoration(
+          color: AppColors.backgroundLight,
+          border: Border.all(
+            width: isSelected ? 2 : 1,
+            color:
+                color ??
+                (isSelected
+                    ? AppColors.primary
+                    : AppColors.grey.withValues(alpha: 0.6)),
+          ),
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              offset: Offset(0, 4),
+              color: AppColors.grey.withValues(alpha: 0.6),
+            ),
+          ],
+        ),
+        child: Row(
+          spacing: quizType == QuizType.match ? 0 : 16,
+          children: [
+            switch (quizType) {
+              QuizType.reorder => AppIcon(AppIcons.gripIcon, size: 20),
+              QuizType.multiChoice => Dot(
+                size: 20,
+                color: color ?? (isSelected ? null : AppColors.greyMid),
+                border: Border.all(
+                  color: AppColors.greyMid,
+                  width: 4,
+                  strokeAlign: BorderSide.strokeAlignOutside,
+                ),
+              ),
+              QuizType.match => SizedBox.shrink(),
+            },
+            Expanded(
+              child: Text(
+                text,
+                textAlign: textAlign,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  fontFamily: Constants.neulisNeueFontFamily,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
