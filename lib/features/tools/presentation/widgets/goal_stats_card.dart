@@ -34,7 +34,7 @@ class GoalStatsCard extends StatelessWidget {
               color: AppColors.primaryFaint,
               borderRadius: BorderRadius.circular(5),
             ),
-            child: Image.asset(Assets.honeyJar, height: 50, width: 50),
+            child: Image.asset(Assets.honeyJar4, height: 50, width: 50),
           ),
           const Gap(24),
           Expanded(

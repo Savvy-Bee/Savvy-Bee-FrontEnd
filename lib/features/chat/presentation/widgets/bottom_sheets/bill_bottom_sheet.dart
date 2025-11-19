@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
+import 'package:savvy_bee_mobile/core/utils/date_time_utils.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';
 import 'package:savvy_bee_mobile/core/widgets/dot.dart';
 
@@ -126,8 +127,8 @@ class _BillBottomSheetState extends ConsumerState<BillBottomSheet> {
                   readOnly: true,
                   suffix: Dot(size: 20),
                   onTap: () {
-                    showDatePicker(
-                      context: context,
+                    DateTimeUtils.pickDate(
+                      context,
                       initialDate: DateTime.now(),
                       firstDate: DateTime.now(),
                       lastDate: DateTime(2100),

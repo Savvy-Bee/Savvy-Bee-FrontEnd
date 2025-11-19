@@ -48,7 +48,7 @@ class _QuestCompleteScreenState extends ConsumerState<QuestRewardScreen> {
                         fontFamily: Constants.neulisNeueFontFamily,
                       ),
                     ),
-                    Image.asset(Assets.honeyJar),
+                    Image.asset(Assets.honeyJar4),
                     Text(
                       "You earned 50 honey drops for completing today's quests",
                       textAlign: TextAlign.center,

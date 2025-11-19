@@ -9,6 +9,7 @@ import 'package:savvy_bee_mobile/core/widgets/custom_snackbar.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/providers/goals_provider.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/widgets/insight_card.dart';
 
+import '../../../../../core/utils/date_time_utils.dart';
 import '../../../../../core/widgets/custom_dropdown_button.dart';
 
 enum GoalType { save, increase }
@@ -43,8 +44,8 @@ class _CreateGoalScreenState extends ConsumerState<CreateGoalScreen> {
   }
 
   Future<void> _selectDate() async {
-    final date = await showDatePicker(
-      context: context,
+    final date = await DateTimeUtils.pickDate(
+      context,
       initialDate: DateTime.now().add(const Duration(days: 30)),
       firstDate: DateTime.now(),
       lastDate: DateTime(2050),

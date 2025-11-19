@@ -6,6 +6,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/date_formatter.dart';
+import 'package:savvy_bee_mobile/core/utils/date_time_utils.dart';
 import 'package:savvy_bee_mobile/core/utils/input_validator.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_dropdown_button.dart';
@@ -505,10 +506,10 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
         readOnly: true,
         onTap: () async {
           final initialDate = DateTime.now().subtract(
-            const Duration(days: 365 * 18),
+            const Duration(days: 365 * 16),
           );
-          final date = await showDatePicker(
-            context: context,
+          final date = await DateTimeUtils.pickDate(
+            context,
             initialDate: initialDate,
             firstDate: DateTime(1900),
             lastDate: initialDate, // Ensure user is at least 18

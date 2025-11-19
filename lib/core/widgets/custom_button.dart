@@ -176,3 +176,42 @@ class CustomOutlinedButton extends StatelessWidget {
     );
   }
 }
+
+class ShareButton extends StatelessWidget {
+  final VoidCallback? onPressed;
+
+  const ShareButton({super.key, this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    var borderRadius = BorderRadius.circular(8);
+
+    return Container(
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            offset: Offset(0, 2),
+            blurRadius: 0,
+            spreadRadius: 0,
+            color: AppColors.greyMid,
+          ),
+        ],
+        borderRadius: borderRadius,
+      ),
+      child: IconButton(
+        onPressed: onPressed,
+        icon: AppIcon(AppIcons.shareIcon, color: AppColors.black),
+        style: IconButton.styleFrom(
+          shape: RoundedRectangleBorder(borderRadius: borderRadius),
+          side: BorderSide(
+            color: AppColors.greyMid,
+            strokeAlign: BorderSide.strokeAlignOutside,
+          ),
+          padding: const EdgeInsets.all(14),
+          backgroundColor: AppColors.white,
+          foregroundColor: AppColors.black,
+        ),
+      ),
+    );
+  }
+}

@@ -95,7 +95,7 @@ class _ToolsScreenState extends ConsumerState<ToolsScreen> {
               color: AppColors.primaryFaint,
               borderRadius: BorderRadius.circular(5),
             ),
-            child: Image.asset(Assets.honeyJar, height: 25, width: 25),
+            child: Image.asset(Assets.honeyJar4, height: 25, width: 25),
           ),
           const Gap(16),
           Expanded(

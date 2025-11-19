@@ -95,7 +95,7 @@ class _QuestUpdateScreenState extends ConsumerState<QuestUpdateScreen> {
                       value: 0.5,
                       color: AppColors.primary,
                     ),
-                    Image.asset(Assets.honeyJar, height: 30),
+                    Image.asset(Assets.honeyJar4, height: 30),
                   ],
                 ),
               ],

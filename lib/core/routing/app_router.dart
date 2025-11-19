@@ -21,6 +21,15 @@ import 'package:savvy_bee_mobile/features/hive/presentation/screens/streak/new_s
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/streak/streak_dashboard_screen.dart';
 import 'package:savvy_bee_mobile/features/home/presentation/screens/home_screen.dart';
 import 'package:savvy_bee_mobile/features/premium/presentation/screens/premium_screen.dart';
+import 'package:savvy_bee_mobile/features/profile/presentation/screens/achievements_screen.dart';
+import 'package:savvy_bee_mobile/features/profile/presentation/screens/change_app_icon_screen.dart';
+import 'package:savvy_bee_mobile/features/profile/presentation/screens/choose_avatar_screen.dart';
+import 'package:savvy_bee_mobile/features/profile/presentation/screens/complete_profile_screen.dart';
+import 'package:savvy_bee_mobile/features/profile/presentation/screens/financial_health_screen.dart';
+import 'package:savvy_bee_mobile/features/profile/presentation/screens/library_screen.dart';
+import 'package:savvy_bee_mobile/features/profile/presentation/screens/next_of_kin_screen.dart';
+import 'package:savvy_bee_mobile/features/profile/presentation/screens/next_of_kin_updated_screen.dart';
+import 'package:savvy_bee_mobile/features/profile/presentation/screens/profile_screen.dart';
 import 'package:savvy_bee_mobile/features/referral/presentation/screens/referral_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/bills/airtime_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/bills/bill_completion_screen.dart';
@@ -75,7 +84,7 @@ final GlobalKey<NavigatorState> _shellNavigatorKey = GlobalKey<NavigatorState>(
 
 final GoRouter appRouter = GoRouter(
   navigatorKey: _rootNavigatorKey,
-  initialLocation: SplashScreen.path,
+  initialLocation: ProfileScreen.path,
   routes: [
     GoRoute(
       path: SplashScreen.path,
@@ -528,6 +537,71 @@ final GoRouter appRouter = GoRouter(
       name: ReferralScreen.path,
       builder: (BuildContext context, GoRouterState state) {
         return ReferralScreen();
+      },
+    ),
+
+    // Profile Routes
+    GoRoute(
+      path: ProfileScreen.path,
+      name: ProfileScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return ProfileScreen();
+      },
+    ),
+    GoRoute(
+      path: ChooseAvatarScreen.path,
+      name: ChooseAvatarScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return ChooseAvatarScreen();
+      },
+    ),
+    GoRoute(
+      path: AchievementsScreen.path,
+      name: AchievementsScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return AchievementsScreen();
+      },
+    ),
+    GoRoute(
+      path: CompleteProfileScreen.path,
+      name: CompleteProfileScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return CompleteProfileScreen();
+      },
+    ),
+    GoRoute(
+      path: FinancialHealthScreen.path,
+      name: FinancialHealthScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return FinancialHealthScreen();
+      },
+    ),
+    GoRoute(
+      path: NextOfKinScreen.path,
+      name: NextOfKinScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return NextOfKinScreen();
+      },
+    ),
+    GoRoute(
+      path: NextOfKinUpdatedScreen.path,
+      name: NextOfKinUpdatedScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return NextOfKinUpdatedScreen();
+      },
+    ),
+    GoRoute(
+      path: LibraryScreen.path,
+      name: LibraryScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return LibraryScreen();
+      },
+    ),
+    GoRoute(
+      path: ChangeAppIconScreen.path,
+      name: ChangeAppIconScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return ChangeAppIconScreen();
       },
     ),
   ],

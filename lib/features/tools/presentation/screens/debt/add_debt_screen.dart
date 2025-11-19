@@ -12,6 +12,7 @@ import 'package:savvy_bee_mobile/features/tools/presentation/screens/debt/debt_r
 import 'package:savvy_bee_mobile/features/tools/presentation/widgets/insight_card.dart';
 
 import '../../../../../core/utils/constants.dart';
+import '../../../../../core/utils/date_time_utils.dart';
 
 enum LoanRepaymentFrequency { weekly, monthly, quarterly, manually }
 
@@ -134,8 +135,8 @@ class _AddDebtScreenState extends ConsumerState<AddDebtScreen> {
                     label: 'Target payoff date',
                     suffix: Icon(Icons.calendar_month),
                     onTap: () async {
-                      final date = await showDatePicker(
-                        context: context,
+                      final date = await DateTimeUtils.pickDate(
+                      context,
                         initialDate: DateTime.now(),
                         firstDate: DateTime.now(),
                         lastDate: DateTime(2050),

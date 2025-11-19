@@ -7,6 +7,7 @@ import 'package:savvy_bee_mobile/features/spend/presentation/screens/transaction
 
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/utils/constants.dart';
+import '../../../../../core/utils/date_time_utils.dart';
 import '../../../../../core/widgets/custom_input_field.dart';
 import '../../../../../core/widgets/custom_card.dart';
 
@@ -45,6 +46,11 @@ class _AccountStatementScreenState
             Expanded(
               child: ListView(
                 children: [
+                  Text(
+                    'Generate your Savvy Wallet statement',
+                    style: TextStyle(fontSize: 12),
+                  ),
+                  const Gap(16),
                   CustomTextFormField(
                     label: 'Start Date',
                     hint: 'DD/MM/YYYY',
@@ -52,8 +58,8 @@ class _AccountStatementScreenState
                     isRounded: true,
                     readOnly: true,
                     onTap: () {
-                      showDatePicker(
-                        context: context,
+                      DateTimeUtils.pickDate(
+                        context,
                         initialDate: DateTime.now(),
                         firstDate: DateTime(2000),
                         lastDate: DateTime.now(),
@@ -75,8 +81,8 @@ class _AccountStatementScreenState
                     isRounded: true,
                     readOnly: true,
                     onTap: () {
-                      showDatePicker(
-                        context: context,
+                      DateTimeUtils.pickDate(
+                        context,
                         initialDate: DateTime.now(),
                         firstDate: DateTime(2000),
                         lastDate: DateTime.now(),

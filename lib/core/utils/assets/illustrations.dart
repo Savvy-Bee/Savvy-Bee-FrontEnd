@@ -39,6 +39,7 @@ class Illustrations {
   static const String financialHealth2 = '$_basePath/financial-health-2.png';
   static const String financialHealth3 = '$_basePath/financial-health-3.png';
   static const String financialHealth4 = '$_basePath/financial-health-4.png';
+  static const String financialHealth5 = '$_basePath/financial-health-5.png';
 
   // Quiz bee
   static const String quizBeeWrong = '$_basePath/quiz-bee-wrong.png';

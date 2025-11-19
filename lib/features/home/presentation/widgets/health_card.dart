@@ -53,8 +53,7 @@ class HealthCardWidget extends StatelessWidget {
 
                 // Honey Jar
                 Image.asset(
-                  Assets.honeyJar,
-                  // _getHoneyJarImage(rating),
+                  _getHoneyJarImage(rating),
                   width: 110,
                   height: 110,
                   fit: BoxFit.cover,
@@ -90,12 +89,12 @@ class HealthCardWidget extends StatelessWidget {
 
         // Avatar
         Positioned(
-          left: 28,
-          bottom: -3,
+          left: 25,
+          bottom: -10,
           child: Image.asset(
             _getAvatarImage(rating),
-            width: 95,
-            height: 95,
+            width: 110,
+            height: 110,
             fit: BoxFit.contain,
           ),
         ),
@@ -104,28 +103,31 @@ class HealthCardWidget extends StatelessWidget {
   }
 
   String _getAvatarImage(double rating) {
-    if (rating > 0 && rating <= 25) {
+    if (rating > 0 && rating <= 20) {
       return Illustrations.financialHealth1;
-    } else if (rating > 25 && rating <= 50) {
+    } else if (rating > 20 && rating <= 40) {
       return Illustrations.financialHealth2;
-    } else if (rating > 50 && rating <= 75) {
+    } else if (rating > 40 && rating <= 60) {
       return Illustrations.financialHealth3;
+    } else if (rating > 60 && rating <= 80) {
+      return Illustrations.financialHealth4;
     } else {
       return Illustrations
-          .financialHealth4; // Covers 75-100 and any other cases
+          .financialHealth5; // Covers 80-100 and any other cases
     }
   }
 
   String _getHoneyJarImage(double rating) {
-    if (rating > 0 && rating <= 25) {
-      return Illustrations.financialHealth1;
-    } else if (rating > 25 && rating <= 50) {
-      return Illustrations.financialHealth2;
-    } else if (rating > 50 && rating <= 75) {
-      return Illustrations.financialHealth3;
+    if (rating > 0 && rating <= 20) {
+      return Assets.honeyJar1;
+    } else if (rating > 20 && rating <= 40) {
+      return Assets.honeyJar2;
+    } else if (rating > 40 && rating <= 60) {
+      return Assets.honeyJar3;
+    } else if (rating > 60 && rating <= 80) {
+      return Assets.honeyJar4;
     } else {
-      return Illustrations
-          .financialHealth4; // Covers 75-100 and any other cases
+      return Assets.honeyJar5; // Covers 80-100 and any other cases
     }
   }
 }

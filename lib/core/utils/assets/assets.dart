@@ -28,7 +28,11 @@ class Assets {
   static const String trophy = '$_basePath/trophy.png';
 
   // Honey Jars
-  static const String honeyJar = '$_basePath/honey-jar.png';
+  static const String honeyJar1 = '$_basePath/honey-jar-1.png';
+  static const String honeyJar2 = '$_basePath/honey-jar-2.png';
+  static const String honeyJar3 = '$_basePath/honey-jar-3.png';
+  static const String honeyJar4 = '$_basePath/honey-jar-4.png';
+  static const String honeyJar5 = '$_basePath/honey-jar-5.png';
   static const String honeyJarSvg = '$_basePath/honey-jar.svg';
 
   static const String lessonProgress1 = '$_basePath/lesson-progress-1.png';
@@ -37,8 +41,43 @@ class Assets {
 
   static const String fire = '$_basePath/fire.png';
 
+  // Badges
+  static const String pollenLeagueBadge = '$_basePath/pollen-league.png';
+  static const String masonLeagueBadge = '$_basePath/mason-league.png';
+  static const String honeyLeagueBadge = '$_basePath/honey-league.png';
+  static const String bumblebeeLeagueBadge = '$_basePath/bumblebee-league.png';
+  static const String queensguardLeagueBadge =
+      '$_basePath/queensguard-league.png';
+  static const String queenbeeLeagueBadge = '$_basePath/queenbee-league.png';
+  static const String orchidLeagueBadge = '$_basePath/orchid-league.png';
+  static const String royalLeagueBadge = '$_basePath/royal-league.png';
+
+  static List<String> leagueBadges = [
+    // pollenLeagueBadge,
+    bumblebeeLeagueBadge,
+    honeyLeagueBadge,
+    masonLeagueBadge,
+    queensguardLeagueBadge,
+    queenbeeLeagueBadge,
+    orchidLeagueBadge,
+    royalLeagueBadge,
+  ];
+
+  static List<String> leagueNames = [
+    // 'Pollen',
+    'Bumblebee',
+    'Honey',
+    'Mason',
+    'Queensguard',
+    'Queenbee',
+    'Orchid',
+    'Royal',
+  ];
+
+  // Financial Health
   static const String financialHealthCanvas =
       '$_basePath/financial-health-canvas.png';
-  static const String financialHealthCanvasSvg =
-      '$_basePath/financial-health-canvas.svg';
+
+  // Blank profile
+  static const String profileBlank = '$_basePath/profile-blank.png';
 }

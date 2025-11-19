@@ -76,7 +76,7 @@ class _LevelsScreenState extends ConsumerState<LevelsScreen> {
         mainAxisSize: MainAxisSize.min,
         children: [
           BackButton(),
-          Image.asset(Assets.honeyJar, height: 40, width: 40),
+          Image.asset(Assets.honeyJar4, height: 40, width: 40),
           const Gap(8),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,

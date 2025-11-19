@@ -9,6 +9,7 @@ import 'package:savvy_bee_mobile/core/utils/assets/assets.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/illustrations.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
+import 'package:savvy_bee_mobile/core/widgets/game_card.dart';
 import 'package:savvy_bee_mobile/core/widgets/section_title_widget.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/streak/new_streak_screen.dart';
 
@@ -128,7 +129,7 @@ class _StreakDashboardScreenState extends ConsumerState<StreakDashboardScreen> {
   }
 
   Widget _buildStatItem(String title, String value, String iconPath) {
-    return _cardTemplate(
+    return GameCard(
       child: Row(
         spacing: 8,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -163,7 +164,7 @@ class _StreakDashboardScreenState extends ConsumerState<StreakDashboardScreen> {
   }
 
   Widget _buildStreakCard() {
-    return _cardTemplate(
+    return GameCard(
       padding: const EdgeInsets.all(16).copyWith(bottom: 4),
       child: Column(
         children: [
@@ -197,7 +198,7 @@ class _StreakDashboardScreenState extends ConsumerState<StreakDashboardScreen> {
   }
 
   Widget _buildMessageCard(String message) {
-    return _cardTemplate(
+    return GameCard(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
       child: Row(
         spacing: 16,
@@ -218,24 +219,6 @@ class _StreakDashboardScreenState extends ConsumerState<StreakDashboardScreen> {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _cardTemplate({EdgeInsetsGeometry? padding, required Widget child}) {
-    return CustomCard(
-      padding: padding,
-      hasShadow: true,
-      shadow: [
-        BoxShadow(
-          offset: Offset(0, 2),
-          blurRadius: 0,
-          spreadRadius: 0,
-          color: AppColors.black.withValues(alpha: 0.25),
-        ),
-      ],
-      bgColor: AppColors.white,
-      borderColor: AppColors.grey,
-      child: child,
     );
   }
 

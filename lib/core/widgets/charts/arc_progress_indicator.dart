@@ -32,15 +32,15 @@ class ArcProgressIndicator extends StatelessWidget {
   /// Selects the correct honey jar image based on the progress.
   String _getHoneyJarImage(double progress) {
     if (progress <= 0.0) {
-      return Assets.honeyJar;
+      return Assets.honeyJar4;
     } else if (progress <= 0.25) {
-      return Assets.honeyJar;
+      return Assets.honeyJar4;
     } else if (progress <= 0.50) {
-      return Assets.honeyJar;
+      return Assets.honeyJar4;
     } else if (progress <= 0.75) {
-      return Assets.honeyJar;
+      return Assets.honeyJar4;
     } else {
-      return Assets.honeyJar;
+      return Assets.honeyJar4;
     }
   }
 

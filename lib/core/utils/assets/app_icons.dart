@@ -43,6 +43,34 @@ class AppIcons {
   static const String checkIcon = '$_basePath/check.svg';
 
   static const String freezeIcon = '$_basePath/freeze.svg';
+
+  static const String appIconIcon = '$_basePath/app-icon.svg';
+
+  static const String bankNoteIcon = '$_basePath/bank-note.svg';
+
+  static const String chatboxIcon = '$_basePath/chatbox.svg';
+
+  static const String creditCardIcon = '$_basePath/credit-card.svg';
+
+  static const String documentIcon = '$_basePath/document.svg';
+
+  static const String healthIcon = '$_basePath/health.svg';
+
+  static const String homeSecureIcon = '$_basePath/home-secure.svg';
+
+  static const String libraryIcon = '$_basePath/library.svg';
+
+  static const String logOutIcon = '$_basePath/log-out.svg';
+
+  static const String moonIcon = '$_basePath/moon.svg';
+
+  static const String personIcon = '$_basePath/person.svg';
+
+  static const String verifiedUserIcon = '$_basePath/verified-user.svg';
+
+  static const String questionIcon = '$_basePath/question.svg';
+
+  static const String videoIcon = '$_basePath/video.svg';
 }
 
 class AppIcon extends StatelessWidget {
