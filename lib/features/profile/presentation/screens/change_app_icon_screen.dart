@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
-import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/logos.dart';
-import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 
 class ChangeAppIconScreen extends ConsumerStatefulWidget {
   static String path = '/app-icon';
@@ -34,11 +32,20 @@ class _ChangeAppIconScreenState extends ConsumerState<ChangeAppIconScreen> {
           ),
           const Gap(24),
           Wrap(
-            spacing: 16,
-            runSpacing: 16,
+            spacing: 5,
+            runSpacing: 8,
             children: List.generate(Logos.appIcons.length, (index) {
               final double screenWidth = MediaQuery.of(context).size.width;
-              final double itemWidth = (screenWidth - (16 * 2) - (16 * 2)) / 3;
+              final double itemWidth =
+                  (screenWidth - (16 * 2) - (5 * 2)) /
+                  3; // Explanation of itemWidth calculation:
+              // screenWidth: Total width of the device screen.
+              // (16 * 2): Accounts for the left and right padding of the ListView (16 on each side).
+              // (5 * 2): Accounts for the total spacing between the three items.
+              //            There are two gaps between three items, and each gap is 5 units wide.
+              // / 3: Divides the remaining width by 3 to get the width for each item.
+              // Calculate item width to fit 3 items per row with spacing
+
               return Image.asset(
                 Logos.appIcons[index],
                 width: itemWidth,

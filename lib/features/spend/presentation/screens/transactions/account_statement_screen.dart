@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
+import 'package:savvy_bee_mobile/features/action_completed_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/transactions/statement_sent_screen.dart';
 
 import '../../../../../core/theme/app_colors.dart';
@@ -141,7 +142,14 @@ class _AccountStatementScreenState
                   _selectedFileType.isNotEmpty &&
                       _startDateController.text.trim().isNotEmpty &&
                       _endDateController.text.trim().isNotEmpty
-                  ? () => context.pushNamed(StatementSentScreen.path)
+                  ? () => context.pushNamed(
+                      ActionCompletedScreen.path,
+                      extra: ActionInfo(
+                        title: 'Sent!',
+                        message: 'Your statement is on its way to your inbox.',
+                        actionText: 'Okay',
+                      ),
+                    )
                   : null,
             ),
           ],

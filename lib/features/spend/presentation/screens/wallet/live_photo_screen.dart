@@ -7,6 +7,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_snackbar.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
+import 'package:savvy_bee_mobile/features/action_completed_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/providers/kyc_provider.dart';
 
 import '../../../../../core/widgets/custom_button.dart';
@@ -241,7 +242,14 @@ class _LivePhotoScreenState extends ConsumerState<LivePhotoScreen>
           );
           ref.read(kycNotifierProvider.notifier).resetState();
         } else if (next.hasValue && next.value != null) {
-          context.goNamed(WalletCreationCompletionScreen.path);
+          context.goNamed(
+            ActionCompletedScreen.path,
+            extra: ActionInfo(
+              title: 'Wallet Created',
+              message: 'Your wallet has been created successfully',
+              actionText: 'Okay',
+            ),
+          );
         }
       }
     });

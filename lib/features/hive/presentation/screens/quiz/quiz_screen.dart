@@ -6,8 +6,12 @@ import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/assets.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';
+import 'package:savvy_bee_mobile/features/auth/presentation/widgets/toggleable_list_tile.dart';
+import 'package:savvy_bee_mobile/features/hive/domain/models/course.dart';
 import 'package:savvy_bee_mobile/features/hive/domain/models/quiz_page_state.dart';
-import 'package:savvy_bee_mobile/features/hive/domain/models/quiz_question.dart';
+import 'package:savvy_bee_mobile/features/hive/presentation/screens/level/level_complete_screen.dart';
+import 'package:savvy_bee_mobile/features/hive/presentation/widgets/quiz/drag_and_drop_option.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/widgets/quiz/match_options.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/widgets/quiz/multi_choice_options.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/widgets/quiz/quiz_header.dart';
@@ -17,52 +21,52 @@ import 'package:savvy_bee_mobile/features/hive/presentation/widgets/quiz/reorder
 class QuizScreen extends ConsumerStatefulWidget {
   static String path = '/quiz';
 
-  const QuizScreen({super.key});
+  final List<QuizQuestion> quizData;
+  const QuizScreen({super.key, required this.quizData});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _QuizScreenState();
+  ConsumerState<QuizScreen> createState() => _QuizScreenState();
 }
 
 class _QuizScreenState extends ConsumerState<QuizScreen> {
-  final _pageController = PageController();
+  late final PageController _pageController;
+  final TextEditingController _fillInGapTextController =
+      TextEditingController();
+
   int _currentPage = 0;
   int _score = 0;
 
-  // Track state for each page
   final Map<int, QuizPageState> _pageStates = {};
 
-  // Quiz data - mixed types
   late final List<QuizQuestion> _quizData;
 
   @override
   void initState() {
     super.initState();
-    _initializeQuizData();
+
+    _pageController = PageController();
+    _quizData = widget.quizData;
+
+    for (int i = 0; i < _quizData.length; i++) {
+      final q = _quizData[i];
+      List<String>? initialReorderOptions;
+
+      if (q is ReorderQuestion) {
+        initialReorderOptions = List.from(q.options);
+      }
+
+      _pageStates[i] = QuizPageState(
+        reorderedOptions: initialReorderOptions,
+        matches: q is MatchQuestion ? {} : null,
+      );
+    }
 
     _pageController.addListener(() {
       final newPage = _pageController.page?.round() ?? 0;
       if (newPage != _currentPage) {
-        setState(() {
-          _currentPage = newPage;
-        });
+        setState(() => _currentPage = newPage);
       }
     });
-  }
-
-  void _initializeQuizData() {
-    // Get mixed quiz or structured quiz
-    _quizData = QuizData.getStructuredQuiz(); // or getMixedQuiz()
-
-    // Initialize page states based on each question's type
-    for (int i = 0; i < _quizData.length; i++) {
-      final question = _quizData[i];
-      _pageStates[i] = QuizPageState(
-        reorderedOptions: question.type == QuizType.reorder
-            ? List.from(question.options)
-            : null,
-        matches: question.type == QuizType.match ? {} : null,
-      );
-    }
   }
 
   @override
@@ -71,79 +75,153 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
     super.dispose();
   }
 
-  // Check if a specific match is correct
   bool _isMatchCorrect(int leftIndex, int rightIndex) {
     final question = _quizData[_currentPage];
-    final correctMatches = question.correctMatches!;
-    return correctMatches[leftIndex] == rightIndex;
+    if (question is! MatchQuestion) return false;
+
+    final leftOption = question.leftOptions[leftIndex];
+    final correctRightIndex = question.correctMatches[leftOption];
+    return correctRightIndex == rightIndex;
   }
 
-  // Auto-check match and provide immediate feedback
   void _checkMatchPair(int leftIndex, int rightIndex) {
-    final state = _pageStates[_currentPage]!;
     final question = _quizData[_currentPage];
+    if (question is! MatchQuestion) return;
+
+    final state = _pageStates[_currentPage]!;
 
     setState(() {
-      final newMatches = Map<int, int>.from(state.matches!);
+      final newMatches = Map<int, int>.from(state.matches ?? {});
 
-      // Remove any existing match for this right option
+      // Remove any previous match where this right option was used
       newMatches.removeWhere((key, value) => value == rightIndex);
 
-      // Add new match
+      // Remove any previous match for this left option
+      newMatches.remove(leftIndex);
+
+      // Add the new match
       newMatches[leftIndex] = rightIndex;
 
       _pageStates[_currentPage] = state.copyWith(
         matches: newMatches,
-        selectedLeftIndex: null,
+        selectedLeftIndex: null, // Deselect after matching
         errorMessage: null,
       );
 
-      // Check if all matches are complete and correct
-      if (newMatches.length == question.leftOptions!.length) {
-        final allCorrect = newMatches.entries.every(
-          (entry) => _isMatchCorrect(entry.key, entry.value),
+      // Check if all matches are made
+      if (newMatches.length == question.leftOptions.length) {
+        // Check if all matches are correct
+        final allCorrect = newMatches.entries.every((entry) {
+          return _isMatchCorrect(entry.key, entry.value);
+        });
+
+        _pageStates[_currentPage] = _pageStates[_currentPage]!.copyWith(
+          isChecked: true,
+          isCorrect: allCorrect,
         );
 
         if (allCorrect) {
-          _pageStates[_currentPage] = _pageStates[_currentPage]!.copyWith(
-            isChecked: true,
-            isCorrect: true,
-          );
           _score += 20;
-
-          // Show success for match type
-          QuizSuccessErrorBottomSheet.show(
-            context: context,
-            isSuccess: true,
-            onButtonPressed: _goToNextPage,
-          );
         }
+
+        // Show result bottom sheet
+        QuizSuccessErrorBottomSheet.show(
+          context: context,
+          isSuccess: allCorrect,
+          onButtonPressed: _goToNextPage,
+        );
       }
     });
   }
 
+  bool _isAnswerCorrect(QuizQuestion question, QuizPageState state) {
+    if (question is MultiChoiceQuestion) {
+      return state.selectedOption == question.correctAnswer;
+    } else if (question is ReorderQuestion) {
+      return _listEquals(state.reorderedOptions!, question.correctAnswer);
+    } else if (question is MatchQuestion) {
+      if (state.matches == null ||
+          state.matches!.length != question.correctMatches.length) {
+        return false;
+      }
+      return state.matches!.entries.every((entry) {
+        final leftOption = question.leftOptions[entry.key];
+        final correctRightIndex = question.correctMatches[leftOption];
+        return correctRightIndex == entry.value;
+      });
+    } else if (question is DragAndDropQuestion) {
+      return _isDragAndDropCorrect(question, state);
+    } else if (question is FillInTheGapQuestion) {
+      return _isFillInTheGapCorrect(question, state);
+    } else if (question is TrueFalseQuestion) {
+      return state.selectedBool == question.correctAnswer;
+    }
+    return false;
+  }
+
+  bool _isFillInTheGapCorrect(
+    FillInTheGapQuestion question,
+    QuizPageState state,
+  ) {
+    return question.correctAnswer.contains(
+      state.filledGap!.trim().toLowerCase(),
+    );
+  }
+
+  bool _isDragAndDropCorrect(
+    DragAndDropQuestion question,
+    QuizPageState state,
+  ) {
+    final droppedItems = state.droppedItems;
+    if (droppedItems == null) return false;
+    // 1. Check if all items have been dropped.
+    int totalDroppedCount = 0;
+    for (var list in droppedItems.values) {
+      totalDroppedCount += list.length;
+    }
+    if (totalDroppedCount != question.items.length) {
+      return false; // Not all items are placed.
+    }
+    // 2. Check if each item is in the correct group.
+    for (var groupEntry in droppedItems.entries) {
+      final String groupName = groupEntry.key;
+      final List<int> itemIndices = groupEntry.value;
+
+      // Get the list of correct item indices for this group from the question data.
+      final correctIndicesForGroup = question.groups[groupName] ?? [];
+
+      // Check if the dropped items match the correct items for this group.
+      // We can convert to sets to ignore order.
+      if (Set<int>.from(itemIndices).length !=
+              Set<int>.from(correctIndicesForGroup).length ||
+          !Set<int>.from(itemIndices).containsAll(correctIndicesForGroup)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  bool _isTrueFalseCorrect(TrueFalseQuestion question, QuizPageState state) {
+    return state.selectedBool == question.correctAnswer;
+  }
+
   void _checkAnswer() {
+    FocusScope.of(context).unfocus();
+
     final state = _pageStates[_currentPage]!;
     final question = _quizData[_currentPage];
-    bool isCorrect = false;
 
-    switch (question.type) {
-      case QuizType.multiChoice:
-        isCorrect = state.selectedOption == question.correctAnswer;
-        break;
+    if (question.type == 'match') return;
 
-      case QuizType.reorder:
-        final correctOrder = question.correctAnswer as List<String>;
-        isCorrect = _listEquals(state.reorderedOptions!, correctOrder);
-        break;
-
-      case QuizType.match:
-        final correctMatches = question.correctMatches!;
-        isCorrect = state.matches!.length == correctMatches.length &&
-            state.matches!.entries.every(
-              (entry) => correctMatches[entry.key] == entry.value,
-            );
-        break;
+    bool isCorrect;
+    if (question is FillInTheGapQuestion) {
+      isCorrect = _isFillInTheGapCorrect(question, state);
+    } else if (question is TrueFalseQuestion) {
+      isCorrect = _isTrueFalseCorrect(question, state);
+    } else if (question is DragAndDropQuestion) {
+      isCorrect = _isDragAndDropCorrect(question, state);
+    } else {
+      isCorrect = _isAnswerCorrect(question, state);
     }
 
     setState(() {
@@ -154,17 +232,20 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
       );
 
       if (isCorrect) {
-        _score += 20; // Award points for correct answer
+        _score += 20;
       }
 
-      // Show wrong/right message
       QuizSuccessErrorBottomSheet.show(
         context: context,
         isSuccess: isCorrect,
         onButtonPressed: () {
-          if (isCorrect) {
-            _goToNextPage();
-          }
+          _goToNextPage();
+
+          // if (isCorrect) {
+          //   _goToNextPage();
+          // } else {
+          //   context.pop();
+          // }
         },
       );
     });
@@ -179,39 +260,66 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
   }
 
   void _goToNextPage() {
+    context.pop();
+
     if (_currentPage < _quizData.length - 1) {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
     } else {
-      // Quiz completed - show results
       _showResults();
     }
   }
 
-  void _showResults() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => AlertDialog(
-        title: Text('Quiz Complete!'),
-        content: Text('Your score: $_score/${_quizData.length * 20}'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              context.pop(); // Close dialog
-              context.pop(); // Go back to previous screen
-            },
-            child: Text('Done'),
-          ),
-        ],
-      ),
-    );
+  bool _canCheckAnswer(QuizPageState state) {
+    final question = _quizData[_currentPage];
+
+    if (state.isChecked) return false;
+
+    if (question is MultiChoiceQuestion) {
+      return state.selectedOption != null;
+    } else if (question is ReorderQuestion) {
+      return true;
+    } else if (question is FillInTheGapQuestion) {
+      return state.filledGap != null && state.filledGap!.isNotEmpty;
+    } else if (question is TrueFalseQuestion) {
+      return state.selectedBool != null;
+    } else if (question is DragAndDropQuestion) {
+      // Enable check only when all items have been dropped into a group.
+      final totalDropped =
+          state.droppedItems?.values.fold<int>(
+            0,
+            (prev, list) => prev + list.length,
+          ) ??
+          0;
+      return totalDropped == question.items.length;
+    } else if (question is MatchQuestion) {
+      return false;
+    }
+    return false;
+  }
+
+  String _getInstructionText(String type) {
+    switch (type) {
+      case 'multiChoice':
+        return 'SELECT ONE';
+      case 'reorder':
+        return 'REORDER';
+      case 'match':
+        return 'MATCH THE PAIRS';
+      case 'dragAndDrop':
+        return 'GROUP THE ITEMS';
+      default:
+        return 'ANSWER';
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final state = _pageStates[_currentPage]!;
+    final bool isCheckEnabled = _canCheckAnswer(state);
+
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -234,7 +342,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
               Expanded(
                 child: PageView.builder(
                   controller: _pageController,
-                  physics: NeverScrollableScrollPhysics(), // Prevent manual swiping
+                  physics: const NeverScrollableScrollPhysics(),
                   itemCount: _quizData.length,
                   itemBuilder: (context, pageIndex) {
                     return _buildQuizPage(pageIndex);
@@ -244,10 +352,10 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
               Padding(
                 padding: const EdgeInsets.all(16),
                 child: CustomElevatedButton(
-                  text: 'Check',
-                  onPressed: _canCheckAnswer(_pageStates[_currentPage]!)
-                      ? _checkAnswer
-                      : null,
+                  text: state.isChecked
+                      ? (state.isCorrect ? 'Correct!' : 'Incorrect')
+                      : 'Check Answer',
+                  onPressed: isCheckEnabled ? _checkAnswer : null,
                 ),
               ),
             ],
@@ -305,9 +413,8 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
           ),
         ),
         const Gap(24),
-        
-        // Dynamically render based on question type
         _buildQuestionContent(question, state, pageIndex),
+        const Gap(16),
       ],
     );
   }
@@ -317,217 +424,380 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
     QuizPageState state,
     int pageIndex,
   ) {
-    switch (question.type) {
-      case QuizType.multiChoice:
-        return MultiChoiceOptions(
-          question: question,
-          state: state,
-          onOptionSelected: (index) {
-            setState(() {
-              _pageStates[pageIndex] = state.copyWith(
-                selectedOption: index,
-                errorMessage: null,
-                isChecked: false,
-              );
-            });
-          },
-        );
+    if (question is MultiChoiceQuestion) {
+      return MultiChoiceOptions(
+        question: question,
+        state: state,
+        onOptionSelected: (index) {
+          setState(() {
+            _pageStates[pageIndex] = state.copyWith(
+              selectedOption: index,
+              errorMessage: null,
+              isChecked: false,
+            );
+          });
+        },
+      );
+    } else if (question is ReorderQuestion) {
+      return ReorderOptions(
+        question: question,
+        state: state,
+        onReorder: (oldIndex, newIndex) {
+          final options = List<String>.from(state.reorderedOptions!);
+          if (newIndex > oldIndex) newIndex--;
+          final item = options.removeAt(oldIndex);
+          options.insert(newIndex, item);
 
-      case QuizType.reorder:
-        return ReorderOptions(
-          question: question,
-          state: state,
-          onReorder: (oldIndex, newIndex) {
-            final options = state.reorderedOptions!;
-            if (newIndex > oldIndex) newIndex--;
-            final item = options.removeAt(oldIndex);
-            options.insert(newIndex, item);
-            setState(() {
-              _pageStates[pageIndex] = state.copyWith(
-                reorderedOptions: options,
-                errorMessage: null,
-                isChecked: false,
-              );
-            });
-          },
-        );
+          setState(() {
+            _pageStates[pageIndex] = state.copyWith(
+              reorderedOptions: options,
+              errorMessage: null,
+              isChecked: false,
+            );
+          });
+        },
+      );
+    } else if (question is MatchQuestion) {
+      return MatchOptions(
+        question: question,
+        state: state,
+        onLeftSelected: (leftIndex) {
+          setState(() {
+            _pageStates[pageIndex] = state.copyWith(
+              selectedLeftIndex: leftIndex,
+              errorMessage: null,
+            );
+          });
+        },
+        onMatchPair: _checkMatchPair,
+        isMatchCorrect: _isMatchCorrect,
+      );
+    } else if (question is FillInTheGapQuestion) {
+      return CustomTextFormField(
+        controller: _fillInGapTextController,
+        onChanged: (value) {
+          setState(() {
+            _pageStates[pageIndex] = state.copyWith(
+              filledGap: value.toLowerCase().trim(),
+              errorMessage: null,
+              isChecked: false,
+            );
+          });
+        },
+      );
+    } else if (question is TrueFalseQuestion) {
+      return TrueFalseOptions(
+        question: question,
+        selectedOption: state.selectedBool,
+        onOptionSelected: (bool value) {
+          setState(() {
+            _pageStates[pageIndex] = state.copyWith(
+              selectedBool: value,
+              errorMessage: null,
+              isChecked: false,
+            );
+          });
+        },
+        state: state,
+      );
+    } else if (question is DragAndDropQuestion) {
+      return DragAndDropOptions(
+        question: question,
+        droppedItems: state.droppedItems ?? {},
+        onItemDropped: (String group, int itemIndex) {
+          // Create a deep copy of the current map
+          final newDroppedItems = Map<String, List<int>>.from(
+            (state.droppedItems ?? {}).map(
+              (k, v) => MapEntry(k, List<int>.from(v)),
+            ),
+          );
 
-      case QuizType.match:
-        return MatchOptions(
-          question: question,
-          state: state,
-          onLeftSelected: (leftIndex) {
-            setState(() {
-              _pageStates[pageIndex] = state.copyWith(
-                selectedLeftIndex: leftIndex,
-                errorMessage: null,
-              );
-            });
-          },
-          onMatchPair: _checkMatchPair,
-          isMatchCorrect: _isMatchCorrect,
-        );
+          // 1. Remove item from any previous group it might be in
+          for (var list in newDroppedItems.values) {
+            list.remove(itemIndex);
+          }
+
+          // 2. Add item to the new group
+          if (!newDroppedItems.containsKey(group)) {
+            newDroppedItems[group] = [];
+          }
+          newDroppedItems[group]!.add(itemIndex);
+          setState(() {
+            _pageStates[pageIndex] = state.copyWith(
+              droppedItems: newDroppedItems,
+              errorMessage: null,
+              isChecked: false,
+            );
+          });
+        },
+
+        isItemCorrect: (itemIndex) {
+          if (!state.isChecked)
+            return null; // Don't show correctness before check
+
+          // Find which group the user dropped this item into.
+          String? userGroup;
+          for (var entry in state.droppedItems!.entries) {
+            if (entry.value.contains(itemIndex)) {
+              userGroup = entry.key;
+              break;
+            }
+          }
+
+          // Find the correct group for this item from the question data.
+          for (var entry in question.groups.entries) {
+            if (entry.value.contains(itemIndex)) {
+              return entry.key ==
+                  userGroup; // Compare user's group with correct group.
+            }
+          }
+          return false; // Item was not found in any correct group definition.
+        },
+        state: state,
+      );
     }
+    return const SizedBox.shrink();
   }
 
-  bool _canCheckAnswer(QuizPageState state) {
-    final question = _quizData[_currentPage];
-    
-    switch (question.type) {
-      case QuizType.multiChoice:
-        return state.selectedOption != null && !state.isChecked;
-      case QuizType.reorder:
-        return !state.isChecked; // Can always check reorder
-      case QuizType.match:
-        return false; // Match type doesn't need check button (auto-checks)
-    }
-  }
-
-  String _getInstructionText(QuizType type) {
-    switch (type) {
-      case QuizType.multiChoice:
-        return 'SELECT ONE';
-      case QuizType.reorder:
-        return 'REORDER';
-      case QuizType.match:
-        return 'MATCH';
-    }
+  void _showResults() {
+    context.pushReplacementNamed(
+      LevelCompleteScreen.path,
+      extra: LevelCompleteArgs(
+        score: _score.toDouble(),
+        newFlowers: _currentPage + 1,
+      ),
+    );
+    // showDialog(
+    //   context: context,
+    //   barrierDismissible: false,
+    //   builder: (context) => AlertDialog(
+    //     title: const Text('Quiz Complete!'),
+    //     content: Text('Your score: $_score/${_quizData.length * 20}'),
+    //     actions: [
+    //       TextButton(
+    //         onPressed: () {
+    //           context.pop();
+    //           context.pop();
+    //         },
+    //         child: const Text('Done'),
+    //       ),
+    //     ],
+    //   ),
+    // );
   }
 }
 
-// QuizData class
-class QuizData {
-  // Mixed quiz containing all three types
-  static List<QuizQuestion> getMixedQuiz() {
-    final allQuestions = [
-      ..._multiChoiceQuestions,
-      ..._reorderQuestions,
-      ..._matchQuestions,
-    ];
-    
-    // Shuffle for variety
-    allQuestions.shuffle();
-    
-    return allQuestions;
+class TrueFalseOptions extends StatelessWidget {
+  final TrueFalseQuestion question;
+  final bool? selectedOption;
+  final ValueChanged<bool> onOptionSelected;
+  // Pass the whole state if you want to show correct/incorrect styling
+  final QuizPageState state;
+
+  const TrueFalseOptions({
+    super.key,
+    required this.question,
+    required this.selectedOption,
+    required this.onOptionSelected,
+    required this.state,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        ToggleableListTile(
+          text: "True",
+          isSelected: selectedOption == true,
+          onTap: () => onOptionSelected(true),
+        ),
+        const SizedBox(height: 12),
+        ToggleableListTile(
+          text: "False",
+          isSelected: selectedOption == false,
+          onTap: () => onOptionSelected(false),
+        ),
+      ],
+    );
   }
-
-  // Or get a structured quiz (alternating types for better UX)
-  static List<QuizQuestion> getStructuredQuiz() {
-    return [
-      _multiChoiceQuestions[0],
-      _matchQuestions[0],
-      _reorderQuestions[0],
-      _multiChoiceQuestions[1],
-      _matchQuestions[1],
-      _reorderQuestions[1],
-      _multiChoiceQuestions[2],
-    ];
-  }
-
-  static final List<QuizQuestion> _multiChoiceQuestions = [
-    QuizQuestion(
-      type: QuizType.multiChoice,
-      question: 'What is a smart way to keep your savings safe?',
-      options: [
-        'Hiding cash under your bed',
-        'Keeping it in a bank account',
-        'Giving it to friends',
-        'Spending it all immediately',
-      ],
-      correctAnswer: 1,
-    ),
-    QuizQuestion(
-      type: QuizType.multiChoice,
-      question: 'What should you do before making a big purchase?',
-      options: [
-        'Buy it immediately',
-        'Check your budget',
-        'Borrow money',
-        'Ignore the price',
-      ],
-      correctAnswer: 1,
-    ),
-    QuizQuestion(
-      type: QuizType.multiChoice,
-      question: 'What is the best way to track your spending?',
-      options: [
-        'Don\'t track it',
-        'Use a budgeting app',
-        'Guess how much you spent',
-        'Ask others to track for you',
-      ],
-      correctAnswer: 1,
-    ),
-  ];
-
-  static final List<QuizQuestion> _reorderQuestions = [
-    QuizQuestion(
-      type: QuizType.reorder,
-      question: 'Order these steps for creating a budget:',
-      options: [
-        'Track your spending',
-        'Calculate your income',
-        'Set financial goals',
-        'Review and adjust',
-      ]..shuffle(),
-      correctAnswer: [
-        'Calculate your income',
-        'Set financial goals',
-        'Track your spending',
-        'Review and adjust',
-      ],
-    ),
-    QuizQuestion(
-      type: QuizType.reorder,
-      question: 'Order these savings priorities:',
-      options: [
-        'Long-term investments',
-        'Emergency fund',
-        'Retirement savings',
-        'Short-term goals',
-      ]..shuffle(),
-      correctAnswer: [
-        'Emergency fund',
-        'Short-term goals',
-        'Retirement savings',
-        'Long-term investments',
-      ],
-    ),
-  ];
-
-  static final List<QuizQuestion> _matchQuestions = [
-    QuizQuestion(
-      type: QuizType.match,
-      question: 'Match the financial terms with their meanings:',
-      leftOptions: ['Income', 'Expense', 'Budget', 'Savings'],
-      rightOptions: [
-        'Money going out',
-        'Financial plan',
-        'Money coming in',
-        'Money set aside',
-      ]..shuffle(),
-      correctMatches: {
-        0: 2, // Income -> Money coming in
-        1: 0, // Expense -> Money going out
-        2: 1, // Budget -> Financial plan
-        3: 3, // Savings -> Money set aside
-      },
-    ),
-    QuizQuestion(
-      type: QuizType.match,
-      question: 'Match the account types with their purposes:',
-      leftOptions: [
-        'Savings Account',
-        'Checking Account',
-        'Investment Account',
-      ],
-      rightOptions: ['Daily transactions', 'Long-term growth', 'Emergency fund']
-        ..shuffle(),
-      correctMatches: {
-        0: 2, // Savings -> Emergency fund
-        1: 0, // Checking -> Daily transactions
-        2: 1, // Investment -> Long-term growth
-      },
-    ),
-  ];
 }
+
+// class DragAndDropOptions extends StatelessWidget {
+//   final DragAndDropQuestion question;
+//   final Map<String, List<int>> droppedItems;
+//   final Function(String group, int itemIndex) onItemDropped;
+//   final QuizPageState state;
+//   final bool? Function(int itemIndex) isItemCorrect;
+
+//   const DragAndDropOptions({
+//     super.key,
+//     required this.question,
+//     required this.droppedItems,
+//     required this.onItemDropped,
+//     required this.isItemCorrect,
+//     required this.state,
+//   });
+
+//   @override
+//   Widget build(BuildContext context) {
+//     // Calculate which items are still in the "pool" (not dropped anywhere yet)
+//     Set<int> allDroppedIndices = {};
+//     for (var list in droppedItems.values) {
+//       allDroppedIndices.addAll(list);
+//     }
+
+//     List<int> poolIndices = [];
+//     for (int i = 0; i < question.items.length; i++) {
+//       if (!allDroppedIndices.contains(i)) {
+//         poolIndices.add(i);
+//       }
+//     }
+
+//     return Column(
+//       crossAxisAlignment: CrossAxisAlignment.stretch,
+//       children: [
+//         Text(
+//           question.question,
+//           style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+//         ),
+//         const SizedBox(height: 16),
+
+//         // --- The Draggable Items Pool ---
+//         Text("Items:", style: Theme.of(context).textTheme.titleMedium),
+//         const SizedBox(height: 8),
+//         Wrap(
+//           spacing: 8.0,
+//           runSpacing: 8.0,
+//           children: poolIndices.map((index) {
+//             return _buildDraggableItem(context, index);
+//           }).toList(),
+//         ),
+
+//         const Divider(height: 32),
+
+//         // --- The Drop Zones (Groups) ---
+//         ...question.groups.keys.map((groupName) {
+//           final itemsInThisGroup = droppedItems[groupName] ?? [];
+
+//           return Padding(
+//             padding: const EdgeInsets.only(bottom: 16.0),
+//             child: DragTarget<int>(
+//               onWillAcceptWithDetails: (data) =>
+//                   !state.isChecked, // Disable drag if checked
+//               onAcceptWithDetails: (itemIndex) {
+//                 onItemDropped(groupName, itemIndex.data);
+//               },
+//               builder: (context, candidateData, rejectedData) {
+//                 final isHovering = candidateData.isNotEmpty;
+
+//                 return Container(
+//                   width: double.infinity,
+//                   padding: const EdgeInsets.all(12),
+//                   decoration: BoxDecoration(
+//                     color: isHovering
+//                         ? Colors.blue.shade50
+//                         : Colors.grey.shade100,
+//                     border: Border.all(
+//                       color: isHovering ? Colors.blue : Colors.grey.shade300,
+//                       width: 2,
+//                     ),
+//                     borderRadius: BorderRadius.circular(8),
+//                   ),
+//                   child: Column(
+//                     crossAxisAlignment: CrossAxisAlignment.start,
+//                     children: [
+//                       Text(
+//                         groupName,
+//                         style: const TextStyle(fontWeight: FontWeight.bold),
+//                       ),
+//                       const SizedBox(height: 8),
+//                       if (itemsInThisGroup.isEmpty)
+//                         const Padding(
+//                           padding: EdgeInsets.all(8.0),
+//                           child: Text(
+//                             "Drop items here",
+//                             style: TextStyle(color: Colors.grey),
+//                           ),
+//                         )
+//                       else
+//                         Wrap(
+//                           spacing: 8.0,
+//                           runSpacing: 8.0,
+//                           // Items inside the drop zone are also draggable (to move to another group)
+//                           children: itemsInThisGroup.map((index) {
+//                             return _buildDraggableItem(
+//                               context,
+//                               index,
+//                               isInDropZone: true,
+//                             );
+//                           }).toList(),
+//                         ),
+//                     ],
+//                   ),
+//                 );
+//               },
+//             ),
+//           );
+//         }),
+//       ],
+//     );
+//   }
+
+//   Widget _buildDraggableItem(
+//     BuildContext context,
+//     int index, {
+//     bool isInDropZone = false,
+//   }) {
+//     final itemText = question.items[index];
+
+//     // Basic visual for the item card
+//     Widget itemCard(bool isDragging) {
+//       Color bgColor = isDragging ? Colors.blue.withOpacity(0.5) : Colors.white;
+//       Color borderColor = Colors.grey.shade400;
+
+//       // Add correct/incorrect styling here based on state.isChecked if desired
+//       if (state.isChecked && isInDropZone) {
+//         final isCorrect = isItemCorrect(index);
+//         if (isCorrect == true) {
+//           borderColor = Colors.green;
+//           bgColor = Colors.green.shade50;
+//         } else if (isCorrect == false) {
+//           borderColor = Colors.red;
+//           bgColor = Colors.red.shade50;
+//         }
+//       } else {
+//         borderColor = Theme.of(context).primaryColor;
+//       }
+
+//       return Material(
+//         elevation: isDragging ? 4 : 1,
+//         borderRadius: BorderRadius.circular(20),
+//         child: Container(
+//           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+//           decoration: BoxDecoration(
+//             color: bgColor,
+//             border: Border.all(color: borderColor),
+//             borderRadius: BorderRadius.circular(20),
+//           ),
+//           child: Text(itemText),
+//         ),
+//       );
+//     }
+
+//     if (state.isChecked) {
+//       // If checked, just display the item, don't make it draggable
+//       return itemCard(false);
+//     }
+
+//     return Draggable<int>(
+//       data: index,
+//       feedback: itemCard(true), // What's shown under finger while dragging
+//       childWhenDragging: Opacity(
+//         opacity: 0.3,
+//         child: itemCard(false),
+//       ), // What's left behind
+//       child: itemCard(false), // Default view
+//     );
+//   }
+// }

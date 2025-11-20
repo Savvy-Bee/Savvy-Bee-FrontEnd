@@ -1,78 +1,59 @@
-// lib/features/hive/domain/helpers/quiz_helpers.dart
-
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/services.dart';
-import '../models/quiz_data_models.dart';
+import 'package:savvy_bee_mobile/features/hive/domain/models/course.dart';
+// import '../models/quiz_data_models.dart' hide QuizQuestion, Lesson;
 
-/// Quiz Loader - handles loading quiz data from assets
-class QuizLoader {
-  static const String _basePath = 'assets/data/quizzes';
+/// Course Loader - handles loading course data from assets
+class CourseLoader {
+  static const String _basePath = 'assets/data/courses';
 
-  /// Load a specific level
-  static Future<QuizLevel> loadLevel(int level) async {
+  /// Load a specific course
+  static Future<Course> loadCourse(String courseId) async {
     try {
-      final jsonString = await rootBundle.loadString('$_basePath/level$level.json');
+      final jsonString = await rootBundle.loadString(
+        '$_basePath/$courseId.json',
+      );
       final json = jsonDecode(jsonString) as Map<String, dynamic>;
-      return QuizLevel.fromJson(json);
+      return Course.fromJson(json);
     } catch (e) {
-      throw Exception('Failed to load level $level: $e');
+      throw Exception('Failed to load course $courseId: $e');
     }
   }
 
-  /// Load bonus level
-  static Future<QuizLevel> loadBonusLevel(String type) async {
-    try {
-      final jsonString = await rootBundle.loadString('$_basePath/bonus_$type.json');
-      final json = jsonDecode(jsonString) as Map<String, dynamic>;
-      return QuizLevel.fromJson(json);
-    } catch (e) {
-      throw Exception('Failed to load bonus level $type: $e');
-    }
-  }
+  /// Load all available courses
+  static Future<List<Course>> loadAllCourses(List<String> courseIds) async {
+    final courses = <Course>[];
 
-  /// Load all available levels
-  static Future<List<QuizLevel>> loadAllLevels() async {
-    final levels = <QuizLevel>[];
-
-    // Load levels 2-5
-    for (int i = 2; i <= 5; i++) {
+    for (final courseId in courseIds) {
       try {
-        levels.add(await loadLevel(i));
+        courses.add(await loadCourse(courseId));
       } catch (e) {
-        print('Error loading level $i: $e');
+        log('Error loading course $courseId: $e');
       }
     }
 
-    // Load bonus levels
-    for (final bonusType in ['student', 'professional']) {
-      try {
-        levels.add(await loadBonusLevel(bonusType));
-      } catch (e) {
-        print('Error loading $bonusType bonus level: $e');
-      }
-    }
-
-    return levels;
+    return courses;
   }
 
   /// Parse JSON string directly
-  static QuizLevel parseJsonString(String jsonString) {
+  static Course parseJsonString(String jsonString) {
     final json = jsonDecode(jsonString) as Map<String, dynamic>;
-    return QuizLevel.fromJson(json);
+    return Course.fromJson(json);
   }
 }
 
 /// Quiz Progress Tracker
 class QuizProgressTracker {
-  final Map<String, ModuleProgress> _progress = {};
+  final Map<String, LevelProgress> _progress = {};
 
-  /// Start a new module
-  void startModule(int level, int moduleNumber) {
-    final key = _getKey(level, moduleNumber);
+  /// Start a new level
+  void startLevel(String lessonNumber, int levelNumber) {
+    final key = _getKey(lessonNumber, levelNumber);
     if (!_progress.containsKey(key)) {
-      _progress[key] = ModuleProgress(
-        level: level,
-        moduleNumber: moduleNumber,
+      _progress[key] = LevelProgress(
+        lessonNumber: lessonNumber,
+        levelNumber: levelNumber,
         lessonCompleted: false,
         quizCompleted: false,
         score: 0,
@@ -82,20 +63,20 @@ class QuizProgressTracker {
   }
 
   /// Mark lesson as completed
-  void completeLesson(int level, int moduleNumber) {
-    final key = _getKey(level, moduleNumber);
+  void completeLesson(String lessonNumber, int levelNumber) {
+    final key = _getKey(lessonNumber, levelNumber);
     final current = _progress[key];
     if (current != null) {
       _progress[key] = current.copyWith(lessonCompleted: true);
     } else {
-      startModule(level, moduleNumber);
+      startLevel(lessonNumber, levelNumber);
       _progress[key] = _progress[key]!.copyWith(lessonCompleted: true);
     }
   }
 
   /// Mark quiz as completed with score
-  void completeQuiz(int level, int moduleNumber, int score) {
-    final key = _getKey(level, moduleNumber);
+  void completeQuiz(String lessonNumber, int levelNumber, int score) {
+    final key = _getKey(lessonNumber, levelNumber);
     final current = _progress[key];
     if (current != null) {
       _progress[key] = current.copyWith(
@@ -104,7 +85,7 @@ class QuizProgressTracker {
         attempts: current.attempts + 1,
       );
     } else {
-      startModule(level, moduleNumber);
+      startLevel(lessonNumber, levelNumber);
       _progress[key] = _progress[key]!.copyWith(
         quizCompleted: true,
         score: score,
@@ -113,42 +94,49 @@ class QuizProgressTracker {
     }
   }
 
-  /// Check if module is completed
-  bool isModuleCompleted(int level, int moduleNumber) {
-    final key = _getKey(level, moduleNumber);
+  /// Check if level is completed
+  bool isLevelCompleted(String lessonNumber, int levelNumber) {
+    final key = _getKey(lessonNumber, levelNumber);
     final progress = _progress[key];
     return progress?.quizCompleted ?? false;
   }
 
-  /// Check if lesson is completed
-  bool isLessonCompleted(int level, int moduleNumber) {
-    final key = _getKey(level, moduleNumber);
+  /// Check if lesson content is completed
+  bool isLessonCompleted(String lessonNumber, int levelNumber) {
+    final key = _getKey(lessonNumber, levelNumber);
     final progress = _progress[key];
     return progress?.lessonCompleted ?? false;
   }
 
-  /// Get module progress
-  ModuleProgress? getProgress(int level, int moduleNumber) {
-    return _progress[_getKey(level, moduleNumber)];
+  /// Get level progress
+  LevelProgress? getProgress(String lessonNumber, int levelNumber) {
+    return _progress[_getKey(lessonNumber, levelNumber)];
   }
 
-  /// Calculate total score for a level
-  int getLevelScore(int level) {
+  /// Calculate total score for a lesson
+  int getLessonScore(String lessonNumber) {
     return _progress.values
-        .where((p) => p.level == level && p.quizCompleted)
+        .where((p) => p.lessonNumber == lessonNumber && p.quizCompleted)
         .fold(0, (sum, p) => sum + p.score);
   }
 
-  /// Calculate total score across all levels
+  /// Calculate total score across all lessons
   int get totalScore {
     return _progress.values
         .where((p) => p.quizCompleted)
         .fold(0, (sum, p) => sum + p.score);
   }
 
-  /// Get number of completed modules
-  int get completedModules {
+  /// Get number of completed levels
+  int get completedLevels {
     return _progress.values.where((p) => p.quizCompleted).length;
+  }
+
+  /// Get number of completed levels for a specific lesson
+  int getCompletedLevelsForLesson(String lessonNumber) {
+    return _progress.values
+        .where((p) => p.lessonNumber == lessonNumber && p.quizCompleted)
+        .length;
   }
 
   /// Clear all progress
@@ -156,19 +144,18 @@ class QuizProgressTracker {
     _progress.clear();
   }
 
-  /// Reset specific module
-  void resetModule(int level, int moduleNumber) {
-    _progress.remove(_getKey(level, moduleNumber));
+  /// Reset specific level
+  void resetLevel(String lessonNumber, int levelNumber) {
+    _progress.remove(_getKey(lessonNumber, levelNumber));
   }
 
-  String _getKey(int level, int moduleNumber) => '$level-$moduleNumber';
+  String _getKey(String lessonNumber, int levelNumber) =>
+      '$lessonNumber-$levelNumber';
 
   /// Export progress as JSON
   Map<String, dynamic> toJson() {
     return {
-      'progress': _progress.map(
-        (key, value) => MapEntry(key, value.toJson()),
-      ),
+      'progress': _progress.map((key, value) => MapEntry(key, value.toJson())),
     };
   }
 
@@ -177,40 +164,40 @@ class QuizProgressTracker {
     _progress.clear();
     final progressMap = json['progress'] as Map<String, dynamic>;
     progressMap.forEach((key, value) {
-      _progress[key] = ModuleProgress.fromJson(value as Map<String, dynamic>);
+      _progress[key] = LevelProgress.fromJson(value as Map<String, dynamic>);
     });
   }
 }
 
-/// Module Progress Model
-class ModuleProgress {
-  final int level;
-  final int moduleNumber;
+/// Level Progress Model
+class LevelProgress {
+  final String lessonNumber;
+  final int levelNumber;
   final bool lessonCompleted;
   final bool quizCompleted;
   final int score;
   final int attempts;
 
-  ModuleProgress({
-    required this.level,
-    required this.moduleNumber,
+  LevelProgress({
+    required this.lessonNumber,
+    required this.levelNumber,
     required this.lessonCompleted,
     required this.quizCompleted,
     required this.score,
     required this.attempts,
   });
 
-  ModuleProgress copyWith({
-    int? level,
-    int? moduleNumber,
+  LevelProgress copyWith({
+    String? lessonNumber,
+    int? levelNumber,
     bool? lessonCompleted,
     bool? quizCompleted,
     int? score,
     int? attempts,
   }) {
-    return ModuleProgress(
-      level: level ?? this.level,
-      moduleNumber: moduleNumber ?? this.moduleNumber,
+    return LevelProgress(
+      lessonNumber: lessonNumber ?? this.lessonNumber,
+      levelNumber: levelNumber ?? this.levelNumber,
       lessonCompleted: lessonCompleted ?? this.lessonCompleted,
       quizCompleted: quizCompleted ?? this.quizCompleted,
       score: score ?? this.score,
@@ -220,8 +207,8 @@ class ModuleProgress {
 
   Map<String, dynamic> toJson() {
     return {
-      'level': level,
-      'moduleNumber': moduleNumber,
+      'lessonNumber': lessonNumber,
+      'levelNumber': levelNumber,
       'lessonCompleted': lessonCompleted,
       'quizCompleted': quizCompleted,
       'score': score,
@@ -229,10 +216,10 @@ class ModuleProgress {
     };
   }
 
-  factory ModuleProgress.fromJson(Map<String, dynamic> json) {
-    return ModuleProgress(
-      level: json['level'] as int,
-      moduleNumber: json['moduleNumber'] as int,
+  factory LevelProgress.fromJson(Map<String, dynamic> json) {
+    return LevelProgress(
+      lessonNumber: json['lessonNumber'] as String,
+      levelNumber: json['levelNumber'] as int,
       lessonCompleted: json['lessonCompleted'] as bool,
       quizCompleted: json['quizCompleted'] as bool,
       score: json['score'] as int,
@@ -244,47 +231,63 @@ class ModuleProgress {
 /// Quiz Validator - validates user answers
 class QuizValidator {
   /// Validate multiple choice answer
-  static bool validateMultiChoice(QuizQuestion question, int userAnswer) {
+  static bool validateMultiChoice(
+    MultiChoiceQuestion question,
+    int userAnswer,
+  ) {
     return question.correctAnswer == userAnswer;
   }
 
   /// Validate fill in the gap answer (case insensitive, trimmed)
-  static bool validateFillInTheGap(QuizQuestion question, String userAnswer) {
-    final answer = userAnswer.trim().toLowerCase();
-    final correct = question.correctAnswerText?.trim().toLowerCase();
+  static bool validateFillInTheGap(
+    FillInTheGapQuestion question,
+    List<String> userAnswers,
+  ) {
+    if (userAnswers.length != question.correctAnswer.length) return false;
 
-    // Check for alternative answers (comma separated)
-    if (correct?.contains(',') ?? false) {
-      final alternatives = correct!.split(',').map((s) => s.trim());
-      return alternatives.contains(answer);
+    for (int i = 0; i < userAnswers.length; i++) {
+      final userAnswer = userAnswers[i].trim().toLowerCase();
+      final correctAnswer = question.correctAnswer[i].trim().toLowerCase();
+
+      // Check for alternative answers (pipe separated)
+      if (correctAnswer.contains('|')) {
+        final alternatives = correctAnswer.split('|').map((s) => s.trim());
+        if (!alternatives.contains(userAnswer)) return false;
+      } else {
+        if (userAnswer != correctAnswer) return false;
+      }
     }
 
-    return answer == correct;
+    return true;
   }
 
   /// Validate true/false answer
-  static bool validateTrueFalse(QuizQuestion question, bool userAnswer) {
-    return question.correctBool == userAnswer;
+  static bool validateTrueFalse(TrueFalseQuestion question, bool userAnswer) {
+    return question.correctAnswer == userAnswer;
   }
 
   /// Validate match answer
-  static bool validateMatch(QuizQuestion question, Map<int, int> userMatches) {
-    if (userMatches.length != question.correctMatches?.length) return false;
+  static bool validateMatch(
+    MatchQuestion question,
+    Map<String, int> userMatches,
+  ) {
+    if (userMatches.length != question.correctMatches.length) return false;
 
-    return question.correctMatches!.entries.every(
+    return question.correctMatches.entries.every(
       (entry) => userMatches[entry.key] == entry.value,
     );
   }
 
   /// Validate reorder answer
-  static bool validateReorder(QuizQuestion question, List<String> userOrder) {
-    final correctOrder = question.correctOrder;
-    if (correctOrder == null || userOrder.length != correctOrder.length) {
-      return false;
-    }
+  static bool validateReorder(
+    ReorderQuestion question,
+    List<String> userOrder,
+  ) {
+    final correctOrder = question.correctAnswer;
+    if (userOrder.length != correctOrder.length) return false;
 
     for (int i = 0; i < userOrder.length; i++) {
-      if (userOrder[i] != correctOrder[i]) return false;
+      if (userOrder[i].trim() != correctOrder[i].trim()) return false;
     }
 
     return true;
@@ -292,26 +295,46 @@ class QuizValidator {
 
   /// Validate drag and drop answer
   static bool validateDragAndDrop(
-    QuizQuestion question,
-    Map<String, List<String>> userCategories,
+    DragAndDropQuestion question,
+    Map<String, List<int>> userGroups,
   ) {
-    final correctCategories = question.categories;
-    if (correctCategories == null) return false;
+    final correctGroups = question.groups;
 
-    return correctCategories.entries.every((entry) {
-      final userCategory = userCategories[entry.key];
-      if (userCategory == null) return false;
+    // Check if all groups are present
+    if (userGroups.length != correctGroups.length) return false;
+
+    return correctGroups.entries.every((entry) {
+      final userGroup = userGroups[entry.key];
+      if (userGroup == null) return false;
 
       // Check if all items match (order may not matter for drag and drop)
-      if (userCategory.length != entry.value.length) return false;
+      if (userGroup.length != entry.value.length) return false;
 
-      return entry.value.every((item) => userCategory.contains(item));
+      final userSet = userGroup.toSet();
+      final correctSet = entry.value.toSet();
+      return userSet.containsAll(correctSet) && correctSet.containsAll(userSet);
     });
   }
 
-  /// General validation method - uses the question's built-in method
+  /// General validation method
   static bool validate(QuizQuestion question, dynamic userAnswer) {
-    return question.isAnswerCorrect(userAnswer);
+    if (question is MultiChoiceQuestion) {
+      return validateMultiChoice(question, userAnswer as int);
+    } else if (question is FillInTheGapQuestion) {
+      return validateFillInTheGap(question, userAnswer as List<String>);
+    } else if (question is TrueFalseQuestion) {
+      return validateTrueFalse(question, userAnswer as bool);
+    } else if (question is MatchQuestion) {
+      return validateMatch(question, userAnswer as Map<String, int>);
+    } else if (question is ReorderQuestion) {
+      return validateReorder(question, userAnswer as List<String>);
+    } else if (question is DragAndDropQuestion) {
+      return validateDragAndDrop(
+        question,
+        userAnswer as Map<String, List<int>>,
+      );
+    }
+    return false;
   }
 }
 
@@ -336,7 +359,7 @@ class QuizScoreCalculator {
 
     int correctCount = 0;
     for (int i = 0; i < questions.length; i++) {
-      if (questions[i].isAnswerCorrect(userAnswers[i])) {
+      if (QuizValidator.validate(questions[i], userAnswers[i])) {
         correctCount++;
       }
     }
@@ -391,57 +414,74 @@ class QuizScoreCalculator {
   }
 }
 
-/// Extension on List<QuizLevel>
-extension QuizLevelListExtensions on List<QuizLevel> {
-  /// Get total number of modules across all levels
-  int get totalModules => fold(0, (sum, level) => sum + level.modules.length);
+/// Extension on Course
+extension CourseExtensions on Course {
+  /// Get total number of levels across all lessons
+  int get totalLevels =>
+      lessons.fold(0, (sum, lesson) => sum + lesson.levels.length);
 
-  /// Get a specific level
-  QuizLevel? getLevel(int levelNumber) {
+  /// Get a specific lesson
+  Lesson? getLesson(String lessonNumber) {
     try {
-      return firstWhere((l) => l.level == levelNumber);
+      return lessons.firstWhere((l) => l.lessonNumber == lessonNumber);
     } catch (e) {
       return null;
     }
   }
 
-  /// Get a specific module
-  QuizModule? getModule(int level, int moduleNumber) {
-    final quizLevel = getLevel(level);
-    return quizLevel?.getModule(moduleNumber);
+  /// Get a specific level
+  Level? getLevel(String lessonNumber, int levelNumber) {
+    final lesson = getLesson(lessonNumber);
+    return lesson?.levels.firstWhere((l) => l.levelNumber == levelNumber);
   }
 
-  /// Get all modules flattened
-  List<QuizModule> get allModules {
-    return expand((level) => level.modules).toList();
+  /// Get all levels flattened
+  List<Level> get allLevels {
+    return lessons.expand((lesson) => lesson.levels).toList();
   }
 
-  /// Get total questions across all levels
+  /// Get total questions across all lessons
   int get totalQuestions {
-    return fold(0, (sum, level) => sum + level.totalQuestions);
+    return allLevels.fold(0, (sum, level) => sum + level.quiz.questions.length);
   }
 
-  /// Get maximum possible score across all levels
+  /// Get maximum possible score across all lessons
+  int get maxScore => totalQuestions * QuizScoreCalculator.pointsPerQuestion;
+}
+
+/// Extension on List<Course>
+extension CourseListExtensions on List<Course> {
+  /// Get total number of lessons across all courses
+  int get totalLessons => fold(0, (sum, course) => sum + course.lessons.length);
+
+  /// Get total number of levels across all courses
+  int get totalLevels => fold(0, (sum, course) => sum + course.totalLevels);
+
+  /// Get total questions across all courses
+  int get totalQuestions =>
+      fold(0, (sum, course) => sum + course.totalQuestions);
+
+  /// Get maximum possible score across all courses
   int get maxScore => totalQuestions * QuizScoreCalculator.pointsPerQuestion;
 }
 
 /// Usage Example:
 ///
 /// ```dart
-/// // 1. Load quiz data
-/// final level2 = await QuizLoader.loadLevel(2);
-/// final allLevels = await QuizLoader.loadAllLevels();
+/// // 1. Load course data
+/// final course = await CourseLoader.loadCourse('introduction_to_beekeeping');
+/// final allCourses = await CourseLoader.loadAllCourses(['course1', 'course2']);
 ///
 /// // 2. Track progress
 /// final tracker = QuizProgressTracker();
-/// tracker.startModule(2, 1);
-/// tracker.completeLesson(2, 1);
+/// tracker.startLevel('1.1', 1);
+/// tracker.completeLesson('1.1', 1);
 ///
 /// // 3. Validate answer
-/// final question = level2.modules[0].quiz.questions[0];
-/// final isCorrect = question.isAnswerCorrect(userAnswer);
-/// // or
-/// final isCorrect2 = QuizValidator.validate(question, userAnswer);
+/// final lesson = course.lessons[0];
+/// final level = lesson.levels[0];
+/// final question = level.quiz.questions[0];
+/// final isCorrect = QuizValidator.validate(question, userAnswer);
 ///
 /// // 4. Calculate score
 /// final results = [true, false, true, true, false];
@@ -450,10 +490,10 @@ extension QuizLevelListExtensions on List<QuizLevel> {
 /// final grade = QuizScoreCalculator.getGrade(percentage);
 /// final message = QuizScoreCalculator.getPerformanceMessage(percentage);
 ///
-/// tracker.completeQuiz(2, 1, score);
+/// tracker.completeQuiz('1.1', 1, score);
 ///
-/// // 5. Get level score
-/// final levelScore = tracker.getLevelScore(2);
+/// // 5. Get lesson score
+/// final lessonScore = tracker.getLessonScore('1.1');
 /// final totalScore = tracker.totalScore;
 ///
 /// // 6. Save/Load progress

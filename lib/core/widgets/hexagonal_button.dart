@@ -7,33 +7,29 @@ import '../theme/app_colors.dart';
 class HexagonalButton extends StatelessWidget {
   final String number;
   final VoidCallback? onTap;
-  // final Color? backgroundColor;
-  // final Color? shadowColor;
-  // final Color? textColor;
   final double size;
+  final bool isCompleted;
 
   const HexagonalButton({
     super.key,
     required this.number,
     this.onTap,
-    // this.backgroundColor,
-    // this.shadowColor,
-    // this.textColor,
     this.size = 120.0,
+    this.isCompleted = false,
   });
 
   @override
   Widget build(BuildContext context) {
+    final bool isLocked = onTap == null;
+
     return GestureDetector(
       onTap: onTap,
       child: CustomPaint(
         size: Size(size, size),
         painter: HexagonPainter(
-          backgroundColor: onTap != null
-              ? AppColors.primary
-              : AppColors.greyMid,
-          shadowColor: onTap != null ? AppColors.primaryDark : AppColors.grey,
-          borderColor: onTap != null ? AppColors.primaryDark : null,
+          backgroundColor: _getBackgroundColor(isLocked),
+          shadowColor: _getShadowColor(isLocked),
+          borderColor: _getBorderColor(isLocked),
         ),
         child: SizedBox(
           width: size,
@@ -41,19 +37,73 @@ class HexagonalButton extends StatelessWidget {
           child: Center(
             child: Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
-              child: Text(
-                number,
-                style: TextStyle(
-                  fontSize: size * 0.4,
-                  fontWeight: FontWeight.bold,
-                  color: onTap != null ? AppColors.white : AppColors.grey,
-                ),
-              ),
+              child: _buildContent(isLocked),
             ),
           ),
         ),
       ),
     );
+  }
+
+  Widget _buildContent(bool isLocked) {
+    if (isLocked) {
+      return Icon(Icons.lock, color: AppColors.grey, size: size * 0.35);
+    } else if (isCompleted) {
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.check_circle, color: AppColors.white, size: size * 0.25),
+          SizedBox(height: size * 0.05),
+          Text(
+            number,
+            style: TextStyle(
+              fontSize: size * 0.3,
+              fontWeight: FontWeight.bold,
+              color: AppColors.white,
+            ),
+          ),
+        ],
+      );
+    } else {
+      return Text(
+        number,
+        style: TextStyle(
+          fontSize: size * 0.4,
+          fontWeight: FontWeight.bold,
+          color: AppColors.white,
+        ),
+      );
+    }
+  }
+
+  Color _getBackgroundColor(bool isLocked) {
+    if (isLocked) {
+      return AppColors.greyMid;
+    } else if (isCompleted) {
+      return AppColors.success; // Completed state color
+    } else {
+      return AppColors.primary;
+    }
+  }
+
+  Color _getShadowColor(bool isLocked) {
+    if (isLocked) {
+      return AppColors.grey;
+    } else if (isCompleted) {
+      return AppColors.success.withValues(alpha: 0.7);
+    } else {
+      return AppColors.primaryDark;
+    }
+  }
+
+  Color? _getBorderColor(bool isLocked) {
+    if (isLocked) {
+      return null;
+    } else if (isCompleted) {
+      return AppColors.white;
+    } else {
+      return AppColors.primaryDark;
+    }
   }
 }
 

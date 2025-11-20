@@ -7,6 +7,7 @@ import 'package:savvy_bee_mobile/features/auth/presentation/screens/post_signup/
 import 'package:savvy_bee_mobile/features/chat/presentation/screens/chat_screen.dart';
 import 'package:savvy_bee_mobile/features/chat/presentation/screens/choose_personality_screen.dart';
 import 'package:savvy_bee_mobile/features/dashboard/presentation/screens/dashboard_screen.dart';
+import 'package:savvy_bee_mobile/features/hive/domain/models/course.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/hive_screen.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/leaderboard/leaderboard_screen.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/leaderboard/league_promotion_screen.dart';
@@ -21,15 +22,22 @@ import 'package:savvy_bee_mobile/features/hive/presentation/screens/streak/new_s
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/streak/streak_dashboard_screen.dart';
 import 'package:savvy_bee_mobile/features/home/presentation/screens/home_screen.dart';
 import 'package:savvy_bee_mobile/features/premium/presentation/screens/premium_screen.dart';
+import 'package:savvy_bee_mobile/features/profile/presentation/screens/account_info_screen.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/screens/achievements_screen.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/screens/change_app_icon_screen.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/screens/choose_avatar_screen.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/screens/complete_profile_screen.dart';
+import 'package:savvy_bee_mobile/features/profile/presentation/screens/contact_us_screen.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/screens/financial_health_screen.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/screens/library_screen.dart';
+import 'package:savvy_bee_mobile/features/profile/presentation/screens/manage_subscription_screen.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/screens/next_of_kin_screen.dart';
-import 'package:savvy_bee_mobile/features/profile/presentation/screens/next_of_kin_updated_screen.dart';
+import 'package:savvy_bee_mobile/features/action_completed_screen.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/screens/profile_screen.dart';
+import 'package:savvy_bee_mobile/features/profile/presentation/screens/security/change_password_screen.dart';
+import 'package:savvy_bee_mobile/features/profile/presentation/screens/security/change_pin_screen.dart';
+import 'package:savvy_bee_mobile/features/profile/presentation/screens/security/security_screen.dart';
+import 'package:savvy_bee_mobile/features/profile/presentation/screens/settings_screen.dart';
 import 'package:savvy_bee_mobile/features/referral/presentation/screens/referral_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/bills/airtime_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/bills/bill_completion_screen.dart';
@@ -84,7 +92,7 @@ final GlobalKey<NavigatorState> _shellNavigatorKey = GlobalKey<NavigatorState>(
 
 final GoRouter appRouter = GoRouter(
   navigatorKey: _rootNavigatorKey,
-  initialLocation: ProfileScreen.path,
+  initialLocation: SplashScreen.path,
   routes: [
     GoRoute(
       path: SplashScreen.path,
@@ -259,13 +267,13 @@ final GoRouter appRouter = GoRouter(
         return LivePhotoScreen(data: state.extra as Map<String, dynamic>);
       },
     ),
-    GoRoute(
-      path: WalletCreationCompletionScreen.path,
-      name: WalletCreationCompletionScreen.path,
-      builder: (BuildContext context, GoRouterState state) {
-        return const WalletCreationCompletionScreen();
-      },
-    ),
+    // GoRoute(
+    //   path: WalletCreationCompletionScreen.path,
+    //   name: WalletCreationCompletionScreen.path,
+    //   builder: (BuildContext context, GoRouterState state) {
+    //     return const WalletCreationCompletionScreen();
+    //   },
+    // ),
 
     // Fund Wallet Routes
     GoRoute(
@@ -361,13 +369,13 @@ final GoRouter appRouter = GoRouter(
         return AccountStatementScreen();
       },
     ),
-    GoRoute(
-      path: StatementSentScreen.path,
-      name: StatementSentScreen.path,
-      builder: (BuildContext context, GoRouterState state) {
-        return StatementSentScreen();
-      },
-    ),
+    // GoRoute(
+    //   path: StatementSentScreen.path,
+    //   name: StatementSentScreen.path,
+    //   builder: (BuildContext context, GoRouterState state) {
+    //     return StatementSentScreen();
+    //   },
+    // ),
 
     // Tools Routes
     GoRoute(
@@ -430,7 +438,7 @@ final GoRouter appRouter = GoRouter(
       path: DebtRepaymentDetailsScreen.path,
       name: DebtRepaymentDetailsScreen.path,
       builder: (BuildContext context, GoRouterState state) {
-        return DebtRepaymentDetailsScreen();
+        return DebtRepaymentDetailsScreen(debtId: state.extra as String);
       },
     ),
 
@@ -439,23 +447,40 @@ final GoRouter appRouter = GoRouter(
       path: LessonHomeScreen.path,
       name: LessonHomeScreen.path,
       builder: (BuildContext context, GoRouterState state) {
-        return LessonHomeScreen();
+        return LessonHomeScreen(course: state.extra as Course);
       },
     ),
     GoRoute(
       path: LevelsScreen.path,
       name: LevelsScreen.path,
       builder: (BuildContext context, GoRouterState state) {
-        return LevelsScreen();
+        return LevelsScreen(lesson: state.extra as Lesson);
       },
     ),
     GoRoute(
       path: LessonRoomScreen.path,
       name: LessonRoomScreen.path,
-      builder: (BuildContext context, GoRouterState state) {
-        return LessonRoomScreen();
+      builder: (context, state) {
+        final args = state.extra as LessonRoomArgs;
+
+        return LessonRoomScreen(args: args);
       },
     ),
+    GoRoute(
+      path: QuizScreen.path,
+      name: QuizScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return QuizScreen(quizData: state.extra as List<QuizQuestion>);
+      },
+    ),
+    GoRoute(
+      path: LevelCompleteScreen.path,
+      name: LevelCompleteScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return LevelCompleteScreen(args: state.extra as LevelCompleteArgs,);
+      },
+    ),
+
     GoRoute(
       path: LessonUnlockedScreen.path,
       name: LessonUnlockedScreen.path,
@@ -584,10 +609,10 @@ final GoRouter appRouter = GoRouter(
       },
     ),
     GoRoute(
-      path: NextOfKinUpdatedScreen.path,
-      name: NextOfKinUpdatedScreen.path,
+      path: ActionCompletedScreen.path,
+      name: ActionCompletedScreen.path,
       builder: (BuildContext context, GoRouterState state) {
-        return NextOfKinUpdatedScreen();
+        return ActionCompletedScreen(actionInfo: state.extra as ActionInfo);
       },
     ),
     GoRoute(
@@ -602,6 +627,59 @@ final GoRouter appRouter = GoRouter(
       name: ChangeAppIconScreen.path,
       builder: (BuildContext context, GoRouterState state) {
         return ChangeAppIconScreen();
+      },
+    ),
+    GoRoute(
+      path: ContactUsScreen.path,
+      name: ContactUsScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return ContactUsScreen();
+      },
+    ),
+    GoRoute(
+      path: AccountInfoScreen.path,
+      name: AccountInfoScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return AccountInfoScreen();
+      },
+    ),
+    GoRoute(
+      path: ManageSubscriptionScreen.path,
+      name: ManageSubscriptionScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return ManageSubscriptionScreen();
+      },
+    ),
+
+    // Security Routes
+    GoRoute(
+      path: SecurityScreen.path,
+      name: SecurityScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return SecurityScreen();
+      },
+    ),
+    GoRoute(
+      path: ChangePinScreen.path,
+      name: ChangePinScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return ChangePinScreen();
+      },
+    ),
+    GoRoute(
+      path: ChangePasswordScreen.path,
+      name: ChangePasswordScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return ChangePasswordScreen();
+      },
+    ),
+
+    // Settings Routes
+    GoRoute(
+      path: SettingsScreen.path,
+      name: SettingsScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return SettingsScreen();
       },
     ),
   ],

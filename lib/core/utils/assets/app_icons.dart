@@ -33,44 +33,32 @@ class AppIcons {
   static const String progressIcon = '$_basePath/progress.svg';
   static const String openBookIcon = '$_basePath/open-book.svg';
   static const String chartIncreasingIcon = '$_basePath/chart-increasing.svg';
-
   static const String scanFaceIcon = '$_basePath/scan-face.svg';
-
   static const String gripIcon = '$_basePath/grip.svg';
-
   static const String scoreIcon = '$_basePath/score.svg';
-
   static const String checkIcon = '$_basePath/check.svg';
-
   static const String freezeIcon = '$_basePath/freeze.svg';
-
   static const String appIconIcon = '$_basePath/app-icon.svg';
-
   static const String bankNoteIcon = '$_basePath/bank-note.svg';
-
   static const String chatboxIcon = '$_basePath/chatbox.svg';
-
   static const String creditCardIcon = '$_basePath/credit-card.svg';
-
   static const String documentIcon = '$_basePath/document.svg';
-
   static const String healthIcon = '$_basePath/health.svg';
-
   static const String homeSecureIcon = '$_basePath/home-secure.svg';
-
   static const String libraryIcon = '$_basePath/library.svg';
-
   static const String logOutIcon = '$_basePath/log-out.svg';
-
   static const String moonIcon = '$_basePath/moon.svg';
-
   static const String personIcon = '$_basePath/person.svg';
-
   static const String verifiedUserIcon = '$_basePath/verified-user.svg';
-
   static const String questionIcon = '$_basePath/question.svg';
-
   static const String videoIcon = '$_basePath/video.svg';
+  static const String emailIcon = '$_basePath/email.svg';
+  static const String whatsAppIcon = '$_basePath/whatsapp.svg';
+  static const String twitterIcon = '$_basePath/twitter.svg';
+  static const String instagramIcon = '$_basePath/instagram.svg';
+  static const String tiktokIcon = '$_basePath/tiktok.svg';
+  static const String linkedinIcon = '$_basePath/linkedin.svg';
+  static const String telegramIcon = '$_basePath/telegram.svg';
 }
 
 class AppIcon extends StatelessWidget {

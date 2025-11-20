@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_dropdown_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';
-import 'package:savvy_bee_mobile/features/profile/presentation/screens/next_of_kin_updated_screen.dart';
+import 'package:savvy_bee_mobile/features/action_completed_screen.dart';
 
 import '../../../../core/widgets/custom_button.dart';
 
@@ -46,7 +46,7 @@ class _NextOfKinScreenState extends ConsumerState<NextOfKinScreen> {
                 Text(
                   '''Your next of kin is the closest living relative to you. The next-of-kin relationship is important in determining inheritance rights if a person dies without a will and has no spouse and/or children.
           
-          We will contact this person if we are unable to make contact with you after a long period of time.''',
+We will contact this person if we are unable to make contact with you after a long period of time.''',
                   style: TextStyle(fontSize: 12),
                 ),
                 const Gap(16),
@@ -90,7 +90,14 @@ class _NextOfKinScreenState extends ConsumerState<NextOfKinScreen> {
             padding: const EdgeInsets.all(16),
             child: CustomElevatedButton(
               text: 'Update Next of Kin',
-              onPressed: () => context.pushNamed(NextOfKinUpdatedScreen.path),
+              onPressed: () => context.pushNamed(
+                ActionCompletedScreen.path,
+                extra: ActionInfo(
+                  title: 'Updated!',
+                  message: 'Your next of kin information has been updated.',
+                  actionText: 'Okay',
+                ),
+              ),
             ),
           ),
         ],

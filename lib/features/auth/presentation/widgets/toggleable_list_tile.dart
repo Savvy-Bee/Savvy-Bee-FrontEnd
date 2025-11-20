@@ -9,6 +9,7 @@ class ToggleableListTile extends StatelessWidget {
   final String text;
   final bool isSelected;
   final VoidCallback? onTap;
+  final Widget? leading;
 
   const ToggleableListTile({
     super.key,
@@ -16,6 +17,7 @@ class ToggleableListTile extends StatelessWidget {
     required this.text,
     this.isSelected = false,
     this.onTap,
+    this.leading,
   });
 
   @override
@@ -26,10 +28,12 @@ class ToggleableListTile extends StatelessWidget {
       borderColor: isSelected ? AppColors.grey : AppColors.greyMid,
       bgColor: isSelected ? AppColors.primaryFaint : null,
       child: Row(
+        spacing: 8,
         mainAxisSize: MainAxisSize.min,
         children: [
+          if (leading != null) leading!,
           if (iconPath != null && iconPath!.isNotEmpty) AppIcon(iconPath!),
-          if (iconPath != null && iconPath!.isNotEmpty) const Gap(8),
+          // if (iconPath != null && iconPath!.isNotEmpty) const Gap(8),
           Expanded(child: Text(text)),
         ],
       ),

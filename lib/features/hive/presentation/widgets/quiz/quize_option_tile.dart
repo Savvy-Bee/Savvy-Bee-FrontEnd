@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/dot.dart';
-
-import '../../../../../core/theme/app_colors.dart';
-import '../../../../../core/utils/assets/app_icons.dart';
-import '../../../domain/models/quiz_question.dart';
+import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
+import 'package:savvy_bee_mobile/core/utils/assets/app_icons.dart';
 
 class QuizeOptionTile extends StatelessWidget {
-  final QuizType quizType;
+  final String quizType;
   final String text;
   final Color? color;
   final VoidCallback? onTap;
@@ -16,7 +14,7 @@ class QuizeOptionTile extends StatelessWidget {
 
   const QuizeOptionTile({
     super.key,
-    this.quizType = QuizType.multiChoice,
+    this.quizType = 'multiChoice',
     required this.text,
     this.color,
     this.onTap,
@@ -30,7 +28,7 @@ class QuizeOptionTile extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(
-          horizontal: quizType == QuizType.multiChoice ? 30 : 16,
+          horizontal: quizType == 'multiChoice' ? 30 : 16,
           vertical: 16,
         ),
         decoration: BoxDecoration(
@@ -41,22 +39,24 @@ class QuizeOptionTile extends StatelessWidget {
                 color ??
                 (isSelected
                     ? AppColors.primary
-                    : AppColors.grey.withValues(alpha: 0.6)),
+                    : AppColors.grey.withOpacity(0.6)),
           ),
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              offset: Offset(0, 4),
-              color: AppColors.grey.withValues(alpha: 0.6),
+              offset: const Offset(0, 4),
+              color: AppColors.grey.withOpacity(0.6),
             ),
           ],
         ),
         child: Row(
-          spacing: quizType == QuizType.match ? 0 : 16,
           children: [
-            switch (quizType) {
-              QuizType.reorder => AppIcon(AppIcons.gripIcon, size: 20),
-              QuizType.multiChoice => Dot(
+            if (quizType == 'reorder') ...[
+              AppIcon(AppIcons.gripIcon, size: 20),
+              const SizedBox(width: 16),
+            ],
+            if (quizType == 'multiChoice') ...[
+              Dot(
                 size: 20,
                 color: color ?? (isSelected ? null : AppColors.greyMid),
                 border: Border.all(
@@ -65,8 +65,8 @@ class QuizeOptionTile extends StatelessWidget {
                   strokeAlign: BorderSide.strokeAlignOutside,
                 ),
               ),
-              QuizType.match => SizedBox.shrink(),
-            },
+              const SizedBox(width: 16),
+            ],
             Expanded(
               child: Text(
                 text,

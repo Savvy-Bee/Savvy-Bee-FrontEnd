@@ -31,6 +31,7 @@ dependencies:
   scroll_indicator: ^0.0.3
   shared_preferences: ^2.2.2
   smooth_page_indicator: ^1.2.1
+  url_launcher: ^6.3.2
 
 dev_dependencies:
   flutter_lints: ^5.0.0
@@ -50,6 +51,7 @@ flutter:
     - assets/images/illustrations/avatars/
     - assets/images/other/
     - assets/icons/
+    - assets/data/courses/
 
   fonts:
     - family: Excon

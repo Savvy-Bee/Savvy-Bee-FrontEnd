@@ -1,0 +1,2577 @@
+{
+    "courseTitle": "Budgeting 101",
+    "courseDescription": "Learn the fundamentals of managing your money so you can budget like a pro",
+    "lessons": [
+        {
+            "lessonNumber": "2",
+            "lessonTitle": "Tracking Your Money",
+            "lessonDescription": "Understanding the importance of tracking income and expenses, different methods of tracking, and how it helps with budgeting.",
+            "levels": [
+                {
+                    "levelNumber": 1,
+                    "introduction": "Tracking your money helps you stay in control of your finances. It shows where your money comes from and where it goes, helping you make smarter decisions.",
+                    "sections": [
+                        {
+                            "heading": "Why is Tracking Important?",
+                            "bulletPoints": [
+                                "Keeps You in Control - Helps you avoid overspending.",
+                                "Reveals Spending Habits - Shows where you can cut back.",
+                                "Ensures Your Needs Are Covered - Prevents running out of money.",
+                                "Makes Budgeting Easier - Helps you create a plan that works.",
+                                "Supports Savings Goals - Helps you save for things you want."
+                            ]
+                        },
+                        {
+                            "heading": "How to Track Your Money:",
+                            "bulletPoints": [
+                                "Write it down in a notebook.",
+                                "Use an app or spreadsheet.",
+                                "Keep and review receipts.",
+                                "Check your spending weekly."
+                            ]
+                        }
+                    ],
+                    "funFact": "People who track their money are more likely to reach their financial goals!",
+                    "highlights": [
+                        "Know Where Your Money Goes - Track income and expenses.",
+                        "Avoid Overspending - Keep finances under control.",
+                        "Spot Spending Patterns - Identify areas to save.",
+                        "Make Budgeting Easier - Plan your finances effectively.",
+                        "Achieve Savings Goals - Set aside money for future needs.",
+                        "Simple Tracking Methods - Use a notebook, app, receipts, or a spreadsheet."
+                    ],
+                    "tip": "Regularly reviewing your spending leads to better financial habits!",
+                    "quiz": {
+                        "focus": "Understanding the importance of tracking income and expenses, different methods of tracking, and how it helps with budgeting.",
+                        "questions": [
+                            {
+                                "type": "multiChoice",
+                                "question": "Why is tracking your money important?",
+                                "options": [
+                                    "It helps you spend money faster.",
+                                    "It ensures you never receive money.",
+                                    "It helps you avoid overspending and reach savings goals.",
+                                    "It makes money disappear from your account."
+                                ],
+                                "correctAnswer": 2
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "One way to track your money is by keeping and reviewing your ______.",
+                                "correctAnswer": [
+                                    "receipts"
+                                ]
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match each tracking method with its correct description.",
+                                "leftOptions": [
+                                    "Spreadsheet",
+                                    "Notebook",
+                                    "App",
+                                    "Receipts"
+                                ],
+                                "rightOptions": [
+                                    "Writing down income and expenses manually.",
+                                    "Using technology to track money easily.",
+                                    "Keeping records of purchases for review.",
+                                    "Organizing finances in a structured format."
+                                ],
+                                "correctMatches": {
+                                    "0": 3,
+                                    "1": 0,
+                                    "2": 1,
+                                    "3": 2
+                                }
+                            },
+                            {
+                                "type": "trueFalse",
+                                "question": "Tracking both income and expenses helps you know exactly where your money comes from and where it goes.",
+                                "correctAnswer": true
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Arrange the steps in the correct order for tracking your money:",
+                                "options": [
+                                    "Check your spending weekly",
+                                    "Record income and expenses",
+                                    "Identify areas to save",
+                                    "Use a tracking method (notebook, app, receipts, or spreadsheet)"
+                                ],
+                                "correctAnswer": [
+                                    "Record income and expenses",
+                                    "Use a tracking method (notebook, app, receipts, or spreadsheet)",
+                                    "Check your spending weekly",
+                                    "Identify areas to save"
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "levelNumber": 2,
+                    "introduction": "Recording transactions accurately helps prevent errors, manage your budget, and avoid overspending. Recording transactions immediately ensures accuracy and keeps your finances organized.",
+                    "sections": [
+                        {
+                            "heading": "Why It's Important:",
+                            "bulletPoints": [
+                                "Prevents mistakes and forgotten expenses",
+                                "Helps track spending habits and adjust budgets",
+                                "Avoids overspending by showing real-time balances"
+                            ]
+                        },
+                        {
+                            "heading": "Ways to Record Transactions:",
+                            "bulletPoints": [
+                                "Notebook: Write transactions by hand",
+                                "Apps: Automatically track and categorize spending",
+                                "Spreadsheets: Organize and calculate expenses",
+                                "Envelope System: Allocate cash for specific needs"
+                            ]
+                        },
+                        {
+                            "heading": "Key Steps:",
+                            "bulletPoints": [
+                                "Record transactions as they happen",
+                                "Save receipts for verification",
+                                "Regularly review entries for accuracy"
+                            ]
+                        }
+                    ],
+                    "highlights": [
+                        "Prevents mistakes and tracks spending",
+                        "Avoids overspending with real-time updates",
+                        "Recording Methods: Notebook, Apps, Spreadsheets, Envelope System",
+                        "Best Practices: Record instantly, save receipts, review regularly"
+                    ],
+                    "quiz": {
+                        "focus": "Recording Transactions Accurately",
+                        "questions": [
+                            {
+                                "type": "multiChoice",
+                                "question": "Why is it important to record every transaction as it happens?",
+                                "options": [
+                                    "To make your budget look better than it is",
+                                    "To ensure you don't forget any details about your spending",
+                                    "To impress your friends with your record-keeping skills",
+                                    "To delay updating your budget later"
+                                ],
+                                "correctAnswer": 1
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "Recording transactions right away helps you avoid ______ in your budget.",
+                                "correctAnswer": [
+                                    "errors",
+                                    "mistakes"
+                                ]
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match each method of recording with its description.",
+                                "leftOptions": [
+                                    "Spreadsheet",
+                                    "Digital App",
+                                    "Manual Notebook",
+                                    "Envelope System"
+                                ],
+                                "rightOptions": [
+                                    "Writing down transactions by hand",
+                                    "Using a software tool to track income and expenses",
+                                    "Organizing data in rows and columns for calculations",
+                                    "Physically dividing cash for different spending categories"
+                                ],
+                                "correctMatches": {
+                                    "0": 2,
+                                    "1": 1,
+                                    "2": 0,
+                                    "3": 3
+                                }
+                            },
+                            {
+                                "type": "trueFalse",
+                                "question": "It is acceptable to record transactions at the end of the month as long as you remember everything.",
+                                "correctAnswer": false
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Arrange these steps for proper transaction recording:",
+                                "options": [
+                                    "File or save receipts",
+                                    "Make a purchase or receive income",
+                                    "Review your entries for accuracy",
+                                    "Immediately record the transaction"
+                                ],
+                                "correctAnswer": [
+                                    "Make a purchase or receive income",
+                                    "Immediately record the transaction",
+                                    "File or save receipts",
+                                    "Review your entries for accuracy"
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "levelNumber": 3,
+                    "introduction": "Keeping track of your money helps you stay in control of your spending and savings. There are two main ways to do this: traditional methods and digital tools.",
+                    "sections": [
+                        {
+                            "heading": "Traditional Tracking Methods:",
+                            "bulletPoints": [
+                                "Handwritten ledger: Writing transactions in a notebook",
+                                "Envelope system: Separating cash into labeled envelopes for different expenses"
+                            ]
+                        },
+                        {
+                            "heading": "Digital Tracking Tools:",
+                            "bulletPoints": [
+                                "Budgeting apps & online trackers: Automatically categorize expenses and generate reports",
+                                "Spreadsheets: Organize and calculate transactions easily"
+                            ]
+                        },
+                        {
+                            "heading": "Why Use Digital Tools?",
+                            "bulletPoints": [
+                                "Saves time - Automates calculations and categorization",
+                                "Increases accuracy - Reduces manual errors",
+                                "Provides reports - Shows spending patterns for better budgeting"
+                            ]
+                        },
+                        {
+                            "heading": "How to Set Up a Digital Tracker:",
+                            "bulletPoints": [
+                                "Choose a budgeting app or software",
+                                "Enter your income and expense categories",
+                                "Record transactions as they happen",
+                                "Review reports to track progress"
+                            ]
+                        }
+                    ],
+                    "highlights": [
+                        "Traditional Methods: Handwritten ledgers & envelope system for manual tracking.",
+                        "Digital Tools: Budgeting apps & spreadsheets for automated tracking.",
+                        "Benefits of Digital Tracking: Saves time, improves accuracy, and provides spending reports.",
+                        "Steps to Set Up a Digital Tracker: Choose a budgeting app, Set income & expense categories, Record transactions regularly, Review reports for insights"
+                    ],
+                    "quiz": {
+                        "focus": "Tools for Tracking Money",
+                        "questions": [
+                            {
+                                "type": "multiChoice",
+                                "question": "Which of the following is the most efficient tool for tracking daily transactions?",
+                                "options": [
+                                    "A budgeting app or online tracker",
+                                    "A basic calculator only",
+                                    "A handwritten list with no categories",
+                                    "A random notebook with no structure"
+                                ],
+                                "correctAnswer": 0
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "Digital tools can help ______ your financial records by automatically calculating totals and generating reports.",
+                                "correctAnswer": [
+                                    "organize",
+                                    "arrange",
+                                    "organise",
+                                    "sort"
+                                ]
+                            },
+                            {
+                                "type": "dragAndDrop",
+                                "question": "Drag each item into the correct group: Digital Tools vs. Traditional Methods.",
+                                "items": [
+                                    "Budgeting app",
+                                    "Handwritten ledger",
+                                    "Online expense tracker",
+                                    "Envelope system"
+                                ],
+                                "groups": {
+                                    "Digital Tools": [
+                                        0,
+                                        2
+                                    ],
+                                    "Traditional Methods": [
+                                        1,
+                                        3
+                                    ]
+                                }
+                            },
+                            {
+                                "type": "multiChoice",
+                                "question": "What is one key benefit of using a digital tracking tool?",
+                                "options": [
+                                    "It automatically categorizes and sums up your transactions",
+                                    "It makes your phone run slower",
+                                    "It hides your spending details",
+                                    "It is only useful for saving receipts"
+                                ],
+                                "correctAnswer": 0
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Arrange these steps to set up a digital tracking system:",
+                                "options": [
+                                    "Choose a budgeting app or software",
+                                    "Review the summary reports regularly",
+                                    "Record your transactions as they occur",
+                                    "Enter your income and expense categories"
+                                ],
+                                "correctAnswer": [
+                                    "Choose a budgeting app or software",
+                                    "Enter your income and expense categories",
+                                    "Record your transactions as they occur",
+                                    "Review the summary reports regularly"
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "levelNumber": 4,
+                    "introduction": "Tracking your money is just the first step - understanding your spending habits helps you make smarter financial choices. Reviewing your transactions regularly allows you to spot patterns, cut unnecessary expenses, and improve budgeting.",
+                    "sections": [
+                        {
+                            "heading": "Why Analyze Your Spending?",
+                            "bulletPoints": [
+                                "Helps identify where you're overspending.",
+                                "Ensures your spending aligns with your budget.",
+                                "Detects errors or unexpected charges.",
+                                "Guides you in making adjustments to save more."
+                            ]
+                        },
+                        {
+                            "heading": "How to Review Spending Effectively",
+                            "bulletPoints": [
+                                "Gather your transaction records & receipts.",
+                                "Compare actual spending with your budget.",
+                                "Categorize expenses to see where most of your money goes.",
+                                "Check for mistakes or unusual expenses.",
+                                "Make a plan to adjust spending and save more."
+                            ]
+                        }
+                    ],
+                    "highlights": [
+                        "Review spending regularly to track patterns and identify unnecessary expenses.",
+                        "Compare actual spending to your budget to stay on track.",
+                        "Categorize expenses to see where your money goes.",
+                        "Check for errors or unusual charges to avoid mistakes.",
+                        "Adjust spending habits to save more and improve financial health."
+                    ],
+                    "quiz": {
+                        "focus": "Learning how to review your recorded transactions to understand and improve your spending.",
+                        "questions": [
+                            {
+                                "type": "multiChoice",
+                                "question": "Why should you review your spending records regularly?",
+                                "options": [
+                                    "To celebrate spending as much as possible",
+                                    "To understand your spending patterns and make improvements",
+                                    "To confuse your friends",
+                                    "To justify spending without limits"
+                                ],
+                                "correctAnswer": 1
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "By analyzing your transactions, you can identify areas where you need to ______ your spending.",
+                                "correctAnswer": [
+                                    "cut",
+                                    "reduce"
+                                ]
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match each review activity with its benefit.",
+                                "leftOptions": [
+                                    "Comparing monthly spending to your budget",
+                                    "Categorizing expenses",
+                                    "Checking receipts against records",
+                                    "Noting unusual expenses"
+                                ],
+                                "rightOptions": [
+                                    "Ensures accuracy of your records",
+                                    "Highlights where spending is above or below expectations",
+                                    "Helps understand which areas cost the most",
+                                    "Identifies errors or unexpected charges"
+                                ],
+                                "correctMatches": {
+                                    "0": 1,
+                                    "1": 2,
+                                    "2": 0,
+                                    "3": 3
+                                }
+                            },
+                            {
+                                "type": "dragAndDrop",
+                                "question": "Drag each action into the correct group: Review Actions vs. Recording Actions.",
+                                "items": [
+                                    "Recording each transaction immediately",
+                                    "Comparing your monthly totals with your budget",
+                                    "Filing receipts for future reference",
+                                    "Checking for discrepancies in your records"
+                                ],
+                                "groups": {
+                                    "Review Actions": [
+                                        1,
+                                        3
+                                    ],
+                                    "Recording Actions": [
+                                        0,
+                                        2
+                                    ]
+                                }
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Arrange these steps for a monthly spending analysis:",
+                                "options": [
+                                    "Gather all your transaction records and receipts",
+                                    "Identify any areas where spending exceeded expectations",
+                                    "Compare recorded spending to your planned budget",
+                                    "Plan changes to reduce unnecessary expenses"
+                                ],
+                                "correctAnswer": [
+                                    "Gather all your transaction records and receipts",
+                                    "Compare recorded spending to your planned budget",
+                                    "Identify any areas where spending exceeded expectations",
+                                    "Plan changes to reduce unnecessary expenses"
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "levelNumber": 5,
+                    "introduction": "Managing money wisely starts with tracking your income and expenses. This helps you stay in control, avoid overspending, and save for future goals. Without proper tracking, it's easy to lose sight of where your money goes.",
+                    "sections": [
+                        {
+                            "heading": "Recording Transactions Accurately",
+                            "content": "Writing down every transaction, whether using a notebook, budgeting app, or spreadsheet, ensures accuracy. Recording transactions immediately prevents mistakes, forgotten expenses, and budget miscalculations."
+                        },
+                        {
+                            "heading": "Tools for Tracking Money",
+                            "bulletPoints": [
+                                "Digital tools (budgeting apps, online trackers) automatically organize spending.",
+                                "Traditional methods (handwritten records, envelope system) provide hands-on budgeting control.",
+                                "Choosing the right tool makes financial tracking easier and more effective."
+                            ]
+                        },
+                        {
+                            "heading": "Analyzing Spending Habits",
+                            "bulletPoints": [
+                                "Regularly reviewing your spending helps you identify areas to cut costs and improve savings.",
+                                "Compare your actual expenses to your budget, categorize spending, and look for unnecessary purchases.",
+                                "This allows you to adjust habits and make better financial decisions."
+                            ]
+                        }
+                    ],
+                    "highlights": [
+                        "Why Track Money? Stay in control, avoid overspending, and save effectively.",
+                        "Recording Transactions: Use a notebook, app, or spreadsheet—record immediately to prevent mistakes.",
+                        "Tracking Tools: Digital (Budgeting apps, online trackers) vs Traditional (Notebooks, envelope system).",
+                        "Reviewing Spending: Compare expenses to your budget, spot unnecessary costs, and adjust habits.",
+                        "Smart Money Choices: Tracking and analyzing spending leads to better financial decisions and savings growth."
+                    ],
+                    "quiz": {
+                        "focus": "Comprehensive review of tracking money concepts",
+                        "questions": [
+                            {
+                                "type": "multiChoice",
+                                "question": "What is the first step in tracking your money?",
+                                "options": [
+                                    "Recording your income",
+                                    "Ignoring small expenses",
+                                    "Estimating your spending at the end of the month",
+                                    "Setting a savings goal"
+                                ],
+                                "correctAnswer": 0
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "Net income is found by subtracting total ______ from total income.",
+                                "correctAnswer": [
+                                    "expenses"
+                                ]
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match each term with its correct meaning.",
+                                "leftOptions": [
+                                    "Income",
+                                    "Expense",
+                                    "Savings",
+                                    "Net Income"
+                                ],
+                                "rightOptions": [
+                                    "Money left after all expenses",
+                                    "Money received or earned",
+                                    "Money set aside for future use",
+                                    "Money spent on goods or services"
+                                ],
+                                "correctMatches": {
+                                    "0": 1,
+                                    "1": 3,
+                                    "2": 2,
+                                    "3": 0
+                                }
+                            },
+                            {
+                                "type": "multiChoice",
+                                "question": "Why is it important to record transactions as they occur?",
+                                "options": [
+                                    "To reduce errors and keep an accurate record",
+                                    "To make your budget look more complicated",
+                                    "To avoid having to review your spending later",
+                                    "To keep your income hidden"
+                                ],
+                                "correctAnswer": 0
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "Using a digital budgeting tool can help you ______ your transactions automatically.",
+                                "correctAnswer": [
+                                    "track",
+                                    "monitor"
+                                ]
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match the tracking tool with its key benefit.",
+                                "leftOptions": [
+                                    "Budgeting App",
+                                    "Envelope System",
+                                    "Spreadsheet",
+                                    "Handwritten Ledger"
+                                ],
+                                "rightOptions": [
+                                    "Automatically calculates totals and categorizes spending",
+                                    "Allows for creative, personal record keeping",
+                                    "Organizes data in a structured format",
+                                    "Physically limits spending with cash"
+                                ],
+                                "correctMatches": {
+                                    "0": 0,
+                                    "1": 3,
+                                    "2": 2,
+                                    "3": 1
+                                }
+                            },
+                            {
+                                "type": "dragAndDrop",
+                                "question": "Drag each activity into the correct group: Recording Actions vs. Review Actions.",
+                                "items": [
+                                    "Recording each expense immediately",
+                                    "Filing receipts",
+                                    "Comparing your monthly spending to your budget",
+                                    "Checking receipts for discrepancies"
+                                ],
+                                "groups": {
+                                    "Recording Actions": [
+                                        0,
+                                        1
+                                    ],
+                                    "Review Actions": [
+                                        2,
+                                        3
+                                    ]
+                                }
+                            },
+                            {
+                                "type": "multiChoice",
+                                "question": "Which of the following best describes why reviewing your spending is important?",
+                                "options": [
+                                    "It helps you understand where you might be overspending",
+                                    "It makes you feel bad about your purchases",
+                                    "It allows you to change your income",
+                                    "It is only necessary if you want to quit spending"
+                                ],
+                                "correctAnswer": 0
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Arrange these steps for recording a transaction:",
+                                "options": [
+                                    "File or save the receipt",
+                                    "Review your records for accuracy later",
+                                    "Make a purchase or receive money",
+                                    "Record the transaction immediately"
+                                ],
+                                "correctAnswer": [
+                                    "Make a purchase or receive money",
+                                    "Record the transaction immediately",
+                                    "File or save the receipt",
+                                    "Review your records for accuracy later"
+                                ]
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Arrange these steps for a monthly spending review:",
+                                "options": [
+                                    "Update your budget for the month",
+                                    "Identify areas where spending was higher than expected",
+                                    "Decide on changes to reduce unnecessary expenses",
+                                    "Gather receipts and transaction records",
+                                    "Compare actual spending to your planned budget"
+                                ],
+                                "correctAnswer": [
+                                    "Gather receipts and transaction records",
+                                    "Compare actual spending to your planned budget",
+                                    "Identify areas where spending was higher than expected",
+                                    "Decide on changes to reduce unnecessary expenses",
+                                    "Update your budget for the month"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "lessonNumber": "3",
+            "lessonTitle": "Budget Hack",
+            "lessonDescription": "Budget Hack is all about finding clever ways to save, cutting unnecessary spending, and making every naira count.",
+            "levels": [
+                {
+                    "levelNumber": 1,
+                    "introduction": "A budget hack is a smart way to save money by cutting unnecessary spending. The goal is to make the most of every naira spent.",
+                    "sections": [
+                        {
+                            "heading": "Key Concepts:",
+                            "bulletPoints": [
+                                "Budget Hack: A trick to reduce daily expenses.",
+                                "Optimization: Making your money work efficiently.",
+                                "Expense: Money spent on goods or services.",
+                                "Savings Goal: A target amount you aim to save."
+                            ]
+                        },
+                        {
+                            "heading": "How to Apply a Budget Hack:",
+                            "bulletPoints": [
+                                "Identify an expense that seems too high.",
+                                "Research cheaper alternatives.",
+                                "Set a small savings goal.",
+                                "Apply the hack and track your progress."
+                            ]
+                        }
+                    ],
+                    "highlights": [
+                        "Budget hacks help reduce unnecessary spending.",
+                        "Optimization means making the most of your money.",
+                        "Identify expenses, find cheaper alternatives, and set savings goals.",
+                        "Applying hacks can cut costs and improve financial habits."
+                    ],
+                    "quiz": {
+                        "focus": "Understanding budget hacks and optimization",
+                        "questions": [
+                            {
+                                "type": "multiChoice",
+                                "question": "What is a 'budget hack'?",
+                                "options": [
+                                    "A clever trick to save money by cutting down on unnecessary spending",
+                                    "A secret method to instantly earn extra money",
+                                    "A complicated plan only experts use",
+                                    "A way to avoid paying bills on time"
+                                ],
+                                "correctAnswer": 0
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "Budget optimisation means getting the most value out of every ______ you spend.",
+                                "correctAnswer": [
+                                    "naira",
+                                    "dollar",
+                                    "pound",
+                                    "currency"
+                                ]
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match each term with its meaning.",
+                                "leftOptions": [
+                                    "Budget Hack",
+                                    "Optimisation",
+                                    "Expense",
+                                    "Savings Goal"
+                                ],
+                                "rightOptions": [
+                                    "A target you want to reach by saving money",
+                                    "A trick to reduce daily spending",
+                                    "Making your money work as hard as possible",
+                                    "Money you spend on goods or services"
+                                ],
+                                "correctMatches": {
+                                    "0": 1,
+                                    "1": 2,
+                                    "2": 3,
+                                    "3": 0
+                                }
+                            },
+                            {
+                                "type": "trueFalse",
+                                "question": "Budget hacks can help you spot regular costs that might be reduced or switched for cheaper alternatives.",
+                                "correctAnswer": true
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Arrange these steps for using a budget hack in the correct order:",
+                                "options": [
+                                    "Identify a recurring expense that seems too high",
+                                    "Try the hack and monitor the results",
+                                    "Set a small savings target related to the expense",
+                                    "Research ways to lower that cost or find an alternative"
+                                ],
+                                "correctAnswer": [
+                                    "Identify a recurring expense that seems too high",
+                                    "Research ways to lower that cost or find an alternative",
+                                    "Set a small savings target related to the expense",
+                                    "Try the hack and monitor the results"
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "levelNumber": 2,
+                    "introduction": "Effective budgeting requires the right tools and strategies. Budgeting apps or spreadsheets help track income and expenses, making money management easier than using a simple calculator or unstructured notebook.",
+                    "sections": [
+                        {
+                            "heading": "Automation and Tracking Methods",
+                            "content": "Automation is a key trick—setting up automatic bill payments prevents late fees and improves financial discipline.",
+                            "bulletPoints": [
+                                "Digital tools (budgeting apps, online trackers) for automatic calculations.",
+                                "Traditional methods (handwritten journals, envelope system) for hands-on control."
+                            ]
+                        },
+                        {
+                            "heading": "Budget Hack - Envelope System",
+                            "content": "A useful budget hack is the envelope system, which limits spending by dividing cash into labeled envelopes for different categories."
+                        },
+                        {
+                            "heading": "Steps for Setting Up a Budget:",
+                            "bulletPoints": [
+                                "List income.",
+                                "Record expenses.",
+                                "Set a savings goal.",
+                                "Track daily transactions.",
+                                "Review and adjust regularly."
+                            ]
+                        }
+                    ],
+                    "highlights": [
+                        "Use Budgeting Tools: Apps or spreadsheets help track income and expenses efficiently.",
+                        "Automate Payments: Prevents late fees and improves budgeting discipline.",
+                        "Tracking Methods: Digital tools offer automation, while traditional methods provide hands-on control.",
+                        "Budget Hack - Envelope System: Allocate cash into labeled envelopes to limit spending per category.",
+                        "Budget Setup Steps: List income → Record expenses → Set savings goal → Track daily spending → Review & adjust regularly."
+                    ],
+                    "quiz": {
+                        "focus": "Budgeting tools and techniques",
+                        "questions": [
+                            {
+                                "type": "multiChoice",
+                                "question": "Which tool is most useful for tracking your spending accurately?",
+                                "options": [
+                                    "A basic budgeting app or spreadsheet",
+                                    "A simple calculator only",
+                                    "A notebook without categorising expenses",
+                                    "A photo album for receipts"
+                                ],
+                                "correctAnswer": 0
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "Setting up automatic bill payments can help ______ your budget by avoiding late fees.",
+                                "correctAnswer": [
+                                    "improve"
+                                ]
+                            },
+                            {
+                                "type": "dragAndDrop",
+                                "question": "Drag each item into the correct group: Digital Tools vs. Traditional Methods.",
+                                "items": [
+                                    "Budgeting app",
+                                    "Handwritten expense journal",
+                                    "Online expense tracker",
+                                    "Envelope system (using cash divided into envelopes)"
+                                ],
+                                "groups": {
+                                    "Digital Tools": [
+                                        0,
+                                        2
+                                    ],
+                                    "Traditional Methods": [
+                                        1,
+                                        3
+                                    ]
+                                }
+                            },
+                            {
+                                "type": "multiChoice",
+                                "question": "Which technique is a practical budget hack to help control spending?",
+                                "options": [
+                                    "Using the envelope system to limit cash for each category",
+                                    "Relying on credit cards so you don't notice spending",
+                                    "Buying items immediately when on sale, without comparison",
+                                    "Ignoring small daily expenses"
+                                ],
+                                "correctAnswer": 0
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Arrange these steps to set up your budgeting tool:",
+                                "options": [
+                                    "Set a realistic savings target",
+                                    "Review and update your records regularly",
+                                    "Write down your total income",
+                                    "Record your daily transactions",
+                                    "List all your total expenses"
+                                ],
+                                "correctAnswer": [
+                                    "Write down your total income",
+                                    "List all your total expenses",
+                                    "Set a realistic savings target",
+                                    "Record your daily transactions",
+                                    "Review and update your records regularly"
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "levelNumber": 3,
+                    "introduction": "Making smart spending choices helps you get the best value for your money. Instead of buying the cheapest option, compare prices and focus on quality to avoid unnecessary costs.",
+                    "sections": [
+                        {
+                            "heading": "Smart Spending Strategy",
+                            "content": "A key strategy is planning purchases wisely—checking prices, using discounts, and avoiding impulse buying."
+                        },
+                        {
+                            "heading": "Two Main Approaches:",
+                            "bulletPoints": [
+                                "Effective strategies (price comparisons, buying in bulk, using coupons).",
+                                "Risky habits (impulse purchases, buying without research, spending on unnecessary sales)."
+                            ]
+                        },
+                        {
+                            "heading": "Steps for Cost-Effective Shopping:",
+                            "bulletPoints": [
+                                "Make a detailed shopping list.",
+                                "Set a spending limit.",
+                                "Look for discounts and deals.",
+                                "Compare prices across stores.",
+                                "Review spending after shopping."
+                            ]
+                        }
+                    ],
+                    "highlights": [
+                        "Plan purchases and compare prices.",
+                        "Use discounts and avoid impulse buying.",
+                        "Make a shopping list and set a budget.",
+                        "Check for deals before purchasing.",
+                        "Review spending to improve habits."
+                    ],
+                    "quiz": {
+                        "focus": "Smart spending strategies",
+                        "questions": [
+                            {
+                                "type": "multiChoice",
+                                "question": "What does 'smart spending' mean?",
+                                "options": [
+                                    "Buying only the cheapest items even if quality is low",
+                                    "Carefully planning purchases by comparing prices and needs",
+                                    "Not spending any money at all",
+                                    "Spending money on every new gadget"
+                                ],
+                                "correctAnswer": 1
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "By checking prices and using discounts, you can ______ your overall spending.",
+                                "correctAnswer": [
+                                    "reduce",
+                                    "cut"
+                                ]
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match each smart spending tip with its benefit.",
+                                "leftOptions": [
+                                    "Using discount coupons",
+                                    "Buying in bulk (when appropriate)",
+                                    "Comparing Prices",
+                                    "Waiting before making unplanned purchases"
+                                ],
+                                "rightOptions": [
+                                    "Helps you find the best deal",
+                                    "Lowers the cost per unit for regular items",
+                                    "Prevents impulse buying",
+                                    "Saves money on each purchase"
+                                ],
+                                "correctMatches": {
+                                    "0": 3,
+                                    "1": 1,
+                                    "2": 0,
+                                    "3": 2
+                                }
+                            },
+                            {
+                                "type": "dragAndDrop",
+                                "question": "Drag each action into the correct group: Smart Spending vs. Risky Spending.",
+                                "items": [
+                                    "Checking for deals and reading product reviews before buying",
+                                    "Making an impulse purchase during a flash sale without comparing prices",
+                                    "Planning your shopping with a list",
+                                    "Buying something immediately just because it's marked down"
+                                ],
+                                "groups": {
+                                    "Smart Spending": [
+                                        0,
+                                        2
+                                    ],
+                                    "Risky Spending": [
+                                        1,
+                                        3
+                                    ]
+                                }
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Arrange these steps for planning a cost-effective shopping trip:",
+                                "options": [
+                                    "Create a detailed shopping list",
+                                    "Compare prices at a different store",
+                                    "Check for current deals and discounts",
+                                    "Set a strict spending limit",
+                                    "Review your spending after the trip"
+                                ],
+                                "correctAnswer": [
+                                    "Create a detailed shopping list",
+                                    "Set a strict spending limit",
+                                    "Check for current deals and discounts",
+                                    "Compare prices at a different store",
+                                    "Review your spending after the trip"
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "levelNumber": 4,
+                    "introduction": "Saving money requires smart planning and reducing unnecessary expenses. One effective way to lower costs is by negotiating with service providers for better rates instead of upgrading or ignoring bills.",
+                    "sections": [
+                        {
+                            "heading": "Budget and Cost-Cutting Strategies",
+                            "content": "A monthly budget is key to tracking spending and savings. Simple strategies like canceling unused subscriptions, planning home-cooked meals, using public transport, and reducing energy use can significantly cut costs."
+                        },
+                        {
+                            "heading": "Two Types of Savings:",
+                            "bulletPoints": [
+                                "Quick Savings: Using discount coupons, cutting daily expenses like snacks or coffee.",
+                                "Long-Term Savings: Investing in energy-efficient appliances, opening a high-yield savings account."
+                            ]
+                        },
+                        {
+                            "heading": "Steps for a Cost-Cutting Plan:",
+                            "bulletPoints": [
+                                "Review spending to find high-cost areas.",
+                                "Identify expenses to reduce or eliminate.",
+                                "Research cheaper alternatives or discounts.",
+                                "Adjust spending habits.",
+                                "Monitor savings over time."
+                            ]
+                        }
+                    ],
+                    "highlights": [
+                        "Negotiate bills to save money.",
+                        "Create a budget to track spending.",
+                        "Cut costs: Cancel unused subscriptions, cook at home, use public transport, reduce energy use.",
+                        "Save smart: Use discounts for quick savings, invest in efficiency for long-term benefits.",
+                        "Follow a plan: Review spending → Cut costs → Adjust habits → Monitor savings."
+                    ],
+                    "quiz": {
+                        "focus": "Cost-cutting strategies and savings planning",
+                        "questions": [
+                            {
+                                "type": "multiChoice",
+                                "question": "What is an effective way to lower your regular costs?",
+                                "options": [
+                                    "Ignoring your monthly bills",
+                                    "Negotiating with service providers for a better rate or plan",
+                                    "Upgrading to a more expensive plan for extra features",
+                                    "Delaying bill payments until a discount appears"
+                                ],
+                                "correctAnswer": 1
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "Creating a monthly ______ is important to know how much you can safely spend and save.",
+                                "correctAnswer": [
+                                    "budget"
+                                ]
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match each cost-cutting idea with its benefit.",
+                                "leftOptions": [
+                                    "Cancel unused subscriptions",
+                                    "Planning meals at home",
+                                    "Using public transport or carpooling",
+                                    "Reducing energy use at home"
+                                ],
+                                "rightOptions": [
+                                    "Cuts transport expenses",
+                                    "Decreases utility bills",
+                                    "Lowers food costs and reduces waste",
+                                    "Saves money on recurring costs"
+                                ],
+                                "correctMatches": {
+                                    "0": 3,
+                                    "1": 2,
+                                    "2": 0,
+                                    "3": 1
+                                }
+                            },
+                            {
+                                "type": "dragAndDrop",
+                                "question": "Drag these saving ideas into the correct groups: Quick Savings vs. Long-Term Savings.",
+                                "items": [
+                                    "Using discount coupons at checkout",
+                                    "Cutting out a daily snack or coffee run",
+                                    "Upgrading to energy-efficient appliances",
+                                    "Opening a high-yield savings account"
+                                ],
+                                "groups": {
+                                    "Quick Savings": [
+                                        0,
+                                        1
+                                    ],
+                                    "Long-Term Savings": [
+                                        2,
+                                        3
+                                    ]
+                                }
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Arrange these steps for a cost-cutting plan in order:",
+                                "options": [
+                                    "Review your monthly spending to spot high-cost areas",
+                                    "Identify expenses you can reduce or eliminate",
+                                    "Monitor your savings over time",
+                                    "Change your spending habits accordingly",
+                                    "Research cheaper alternatives or discount"
+                                ],
+                                "correctAnswer": [
+                                    "Review your monthly spending to spot high-cost areas",
+                                    "Identify expenses you can reduce or eliminate",
+                                    "Research cheaper alternatives or discount",
+                                    "Change your spending habits accordingly",
+                                    "Monitor your savings over time"
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "levelNumber": 5,
+                    "introduction": "Growing your savings goes beyond setting money aside—it requires smart spending, budgeting, and cost-cutting strategies. Budgeting tools like apps and spreadsheets help track income and expenses, while automation ensures bills are paid on time, avoiding unnecessary fees.",
+                    "sections": [
+                        {
+                            "heading": "Smart Spending",
+                            "content": "Smart spending means making thoughtful financial decisions. Comparing prices, using discounts, and planning purchases prevent impulse buying and maximize value."
+                        },
+                        {
+                            "heading": "Two Key Savings Strategies:",
+                            "bulletPoints": [
+                                "Quick Savings: Using discount coupons, reducing daily expenses, and tracking spending habits.",
+                                "Long-Term Savings: Investing in high-yield savings accounts and making cost-effective choices like energy-efficient appliances."
+                            ]
+                        },
+                        {
+                            "heading": "Steps to Strengthen Savings:",
+                            "bulletPoints": [
+                                "Identify unnecessary expenses and cut costs.",
+                                "Use budgeting tools to manage finances.",
+                                "Develop disciplined spending habits.",
+                                "Track and adjust financial goals regularly."
+                            ]
+                        }
+                    ],
+                    "highlights": [
+                        "Use budgeting tools like apps or spreadsheets to track income and expenses.",
+                        "Automate bill payments to avoid late fees.",
+                        "Spend wisely by comparing prices, using discounts, and avoiding impulse purchases.",
+                        "Quick Savings: Use discount coupons and cut small daily expenses.",
+                        "Long-Term Savings: Invest in high-yield savings accounts and energy-efficient choices.",
+                        "Steps to Save More: Identify unnecessary costs → Use budgeting tools → Control spending → Track and adjust goals.",
+                        "Smart financial habits lead to long-term stability."
+                    ],
+                    "quiz": {
+                        "focus": "Comprehensive budget hack strategies",
+                        "questions": [
+                            {
+                                "type": "multiChoice",
+                                "question": "What is a 'budget hack' and why is it useful?",
+                                "options": [
+                                    "A clever tip that helps you save money by reducing unnecessary spending",
+                                    "A secret plan to double your income overnight",
+                                    "A method used only by professional investors",
+                                    "A way to hide your spending from others"
+                                ],
+                                "correctAnswer": 0
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "Budget optimisation means getting the most value out of every ______ you spend.",
+                                "correctAnswer": [
+                                    "naira",
+                                    "dollar",
+                                    "currency"
+                                ]
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match each term with its meaning.",
+                                "leftOptions": [
+                                    "Expense",
+                                    "Savings Goal",
+                                    "Budget Hack",
+                                    "Goal Optimisation"
+                                ],
+                                "rightOptions": [
+                                    "A trick to reduce everyday spending",
+                                    "The process of making your money work harder",
+                                    "Money you spend on goods or services",
+                                    "A target you plan to reach by saving money"
+                                ],
+                                "correctMatches": {
+                                    "0": 2,
+                                    "1": 3,
+                                    "2": 0,
+                                    "3": 1
+                                }
+                            },
+                            {
+                                "type": "multiChoice",
+                                "question": "Which tool is most useful for keeping track of your spending?",
+                                "options": [
+                                    "A basic budgeting app or spreadsheet",
+                                    "A simple calculator without records",
+                                    "A diary that only writes down dates",
+                                    "A photo album for receipts"
+                                ],
+                                "correctAnswer": 0
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "Setting up automatic bill payments can help ______ your budget by preventing late fees.",
+                                "correctAnswer": [
+                                    "improve"
+                                ]
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match each smart spending tip with its benefit.",
+                                "leftOptions": [
+                                    "Buying in bulk (when it makes sense)",
+                                    "Comparing prices",
+                                    "Waiting before making unplanned purchases",
+                                    "Using discount coupons"
+                                ],
+                                "rightOptions": [
+                                    "Helps you find the best deal available",
+                                    "Lowers the cost per unit for items bought regularly",
+                                    "Saves money on individual purchases",
+                                    "Prevents impulse buying"
+                                ],
+                                "correctMatches": {
+                                    "0": 1,
+                                    "1": 0,
+                                    "2": 3,
+                                    "3": 2
+                                }
+                            },
+                            {
+                                "type": "dragAndDrop",
+                                "question": "Drag each action into the correct group: Smart Spending vs. Cost-Cutting/Saving Strategies.",
+                                "items": [
+                                    "Checking for deals before a purchase",
+                                    "Using discount coupons at checkout",
+                                    "Planning meals at home instead of dining out",
+                                    "Keeping a detailed record of monthly expenses",
+                                    "Using the envelope system for cash"
+                                ],
+                                "groups": {
+                                    "Smart Spending": [
+                                        0,
+                                        3
+                                    ],
+                                    "Cost-Cutting/Saving Strategies": [
+                                        1,
+                                        2,
+                                        4
+                                    ]
+                                }
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Arrange these steps in the correct order for setting up a budgeting tool:",
+                                "options": [
+                                    "Review and update your records regularly",
+                                    "List all your regular expenses",
+                                    "Set a realistic savings target",
+                                    "Record your daily transactions",
+                                    "Write down your total income"
+                                ],
+                                "correctAnswer": [
+                                    "Write down your total income",
+                                    "List all your regular expenses",
+                                    "Set a realistic savings target",
+                                    "Record your daily transactions",
+                                    "Review and update your records regularly"
+                                ]
+                            },
+                            {
+                                "type": "multiChoice",
+                                "question": "Which of the following is an effective way to lower your regular costs?",
+                                "options": [
+                                    "Ignoring your monthly bills",
+                                    "Negotiating with service providers for a better rate or switching plans",
+                                    "Upgrading to a more expensive plan for extra features",
+                                    "Delaying bill payments to wait for discounts"
+                                ],
+                                "correctAnswer": 1
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Arrange these steps for a complete monthly budget review and adjustment:",
+                                "options": [
+                                    "Update your budget for the next month",
+                                    "Collect all receipts and transaction records",
+                                    "Identify areas where spending was higher than expected",
+                                    "Decide on changes such as cutting back or reallocating funds",
+                                    "Compare your actual spending to your planned budget"
+                                ],
+                                "correctAnswer": [
+                                    "Collect all receipts and transaction records",
+                                    "Compare your actual spending to your planned budget",
+                                    "Identify areas where spending was higher than expected",
+                                    "Decide on changes such as cutting back or reallocating funds",
+                                    "Update your budget for the next month"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "lessonNumber": "4",
+            "lessonTitle": "Setting Financial Goals & Prioritizing Expenses",
+            "lessonDescription": "Setting financial goals and prioritizing expenses is like plotting a course on a map - you gotta know where you're headed and what's most important to get there!",
+            "levels": [
+                {
+                    "levelNumber": 1,
+                    "introduction": "Financial goals help you manage money wisely by setting clear targets for saving or spending. A goal gives your money a purpose and helps with better financial decisions.",
+                    "sections": [
+                        {
+                            "heading": "Types of Financial Goals:",
+                            "bulletPoints": [
+                                "Short-term Goals: Achieved in a few months.",
+                                "Long-term Goals: Take several years to accomplish.",
+                                "Emergency Fund: Savings for unexpected expenses.",
+                                "Purchase Goal: Saving for a specific item like a gadget or bike."
+                            ]
+                        },
+                        {
+                            "heading": "Steps to Set a Financial Goal:",
+                            "bulletPoints": [
+                                "Decide what you want to achieve.",
+                                "Determine the amount needed.",
+                                "Set a timeline.",
+                                "Adjust spending to meet your goal."
+                            ]
+                        }
+                    ],
+                    "highlights": [
+                        "Financial goals guide saving and spending.",
+                        "Types: Short-term, long-term, emergency fund, purchase goal.",
+                        "Steps: Decide, set amount, timeline, adjust spending.",
+                        "Clear goals = smarter money choices."
+                    ],
+                    "quiz": {
+                        "focus": "Understanding what financial goals are and why they are important.",
+                        "questions": [
+                            {
+                                "type": "multiChoice",
+                                "question": "What is a financial goal?",
+                                "options": [
+                                    "A wish that has no clear plan",
+                                    "A specific target for saving or spending money",
+                                    "A way to spend money quickly",
+                                    "An expense that you cannot control"
+                                ],
+                                "correctAnswer": 1
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "A financial goal gives you a ______ to work toward and helps you plan how to use your money wisely.",
+                                "correctAnswer": [
+                                    "target",
+                                    "goal",
+                                    "plan"
+                                ]
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match each type of financial goal with its description.",
+                                "leftOptions": [
+                                    "Short-term Goal",
+                                    "Long-term Goal",
+                                    "Emergency Fund",
+                                    "Purchase Goal"
+                                ],
+                                "rightOptions": [
+                                    "Saving money to cover unexpected expenses",
+                                    "A goal you want to achieve in a few months",
+                                    "A goal that takes several years to accomplish",
+                                    "Saving for something specific like a gadget or bike"
+                                ],
+                                "correctMatches": {
+                                    "0": 1,
+                                    "1": 2,
+                                    "2": 0,
+                                    "3": 3
+                                }
+                            },
+                            {
+                                "type": "trueFalse",
+                                "question": "Having clear financial goals helps you make better choices with your money.",
+                                "correctAnswer": true
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Arrange these steps for setting a basic financial goal in order:",
+                                "options": [
+                                    "Decide what you want to achieve with your money",
+                                    "Determine the amount you need",
+                                    "Set a timeline for reaching your goal",
+                                    "Plan how to adjust your spending to meet that goal"
+                                ],
+                                "correctAnswer": [
+                                    "Decide what you want to achieve with your money",
+                                    "Determine the amount you need",
+                                    "Set a timeline for reaching your goal",
+                                    "Plan how to adjust your spending to meet that goal"
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "levelNumber": 2,
+                    "introduction": "Setting financial goals using the SMART method helps you stay focused and achieve success.",
+                    "sections": [
+                        {
+                            "heading": "A SMART goal is:",
+                            "bulletPoints": [
+                                "Specific → Clearly defined with a clear objective. Example: 'Save ₦50,000 for a school trip' instead of 'Save money.'",
+                                "Measurable → You can track progress. Example: 'Save ₦10,000 per month for 5 months.'",
+                                "Achievable → Realistic based on your income and expenses. Example: 'Save ₦5,000 per week by cutting unnecessary spending.'",
+                                "Relevant → Important to your financial situation or future plans. Example: 'Save for a laptop needed for schoolwork.'",
+                                "Time-bound → Has a deadline. Example: 'Reach my savings goal in 6 months.'"
+                            ]
+                        },
+                        {
+                            "heading": "Steps to Create a SMART Financial Goal:",
+                            "bulletPoints": [
+                                "Define exactly what you want to achieve.",
+                                "Measure progress with a clear amount and timeline.",
+                                "Ensure the goal is realistic based on your resources.",
+                                "Confirm it aligns with your personal or financial needs.",
+                                "Set a deadline to stay motivated and track success."
+                            ]
+                        },
+                        {
+                            "heading": "Why Use SMART Goals?",
+                            "content": "SMART goals make it easier to plan, stay on track, and successfully reach your financial targets. By setting clear and actionable goals, you can develop better money habits and achieve financial stability."
+                        }
+                    ],
+                    "highlights": [
+                        "SMART goals are clear, trackable, and achievable.",
+                        "Key Elements: Specific, Measurable, Achievable, Relevant, Time-bound.",
+                        "Steps: Define → Measure → Assess → Align → Set Deadline.",
+                        "Benefit: Helps with better financial planning and goal achievement."
+                    ],
+                    "quiz": {
+                        "focus": "Understanding SMART financial goals",
+                        "questions": [
+                            {
+                                "type": "multiChoice",
+                                "question": "Which statement best defines a SMART goal?",
+                                "options": [
+                                    "A goal that is vague and changes often",
+                                    "A goal that is specific, measurable, achievable, relevant, and time-bound",
+                                    "A goal that focuses only on saving money",
+                                    "A goal with no deadline"
+                                ],
+                                "correctAnswer": 1
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "SMART goals are ______, ______, achievable, relevant, and time-bound.",
+                                "correctAnswer": [
+                                    "specific, measurable"
+                                ]
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match each SMART criterion with its meaning.",
+                                "leftOptions": [
+                                    "Specific",
+                                    "Relevant",
+                                    "Time bound",
+                                    "Measurable",
+                                    "Achievable"
+                                ],
+                                "rightOptions": [
+                                    "Has a set deadline",
+                                    "You can track your progress",
+                                    "Realistic and possible",
+                                    "Matters to your overall life or plans",
+                                    "Clearly defined and focused"
+                                ],
+                                "correctMatches": {
+                                    "0": 4,
+                                    "1": 3,
+                                    "2": 0,
+                                    "3": 1,
+                                    "4": 2
+                                }
+                            },
+                            {
+                                "type": "trueFalse",
+                                "question": "Using SMART criteria for your financial goals makes them easier to achieve.",
+                                "correctAnswer": true
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Arrange these steps for creating a SMART goal:",
+                                "options": [
+                                    "Set a deadline for achievement",
+                                    "Decide how you will measure progress",
+                                    "Determine if the goal is realistic",
+                                    "Check that the goal is important to you",
+                                    "Define exactly what you want to achieve"
+                                ],
+                                "correctAnswer": [
+                                    "Define exactly what you want to achieve",
+                                    "Decide how you will measure progress",
+                                    "Determine if the goal is realistic",
+                                    "Check that the goal is important to you",
+                                    "Set a deadline for achievement"
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "levelNumber": 3,
+                    "introduction": "Creating a savings plan helps you reach your financial goals through structured saving methods.",
+                    "sections": [
+                        {
+                            "heading": "Step 1: Identify Your Goal",
+                            "content": "Identify your financial goal and determine how much money you need to achieve it."
+                        },
+                        {
+                            "heading": "Effective Savings Methods:",
+                            "bulletPoints": [
+                                "Automatic Transfers - Set up scheduled deposits into a savings account.",
+                                "Envelope System - Physically separate cash for different savings goals.",
+                                "Save a Percentage of Income - Dedicate a fixed portion of earnings to savings.",
+                                "Cut Unnecessary Expenses - Reduce spending on non-essential items to free up more savings."
+                            ]
+                        },
+                        {
+                            "heading": "Savings vs. Spending Adjustments:",
+                            "bulletPoints": [
+                                "Savings Actions: Using automatic transfers, applying the envelope system.",
+                                "Spending Adjustments: Tracking discretionary spending, cutting back on impulse purchases."
+                            ]
+                        },
+                        {
+                            "heading": "Steps to Create a Savings Plan:",
+                            "bulletPoints": [
+                                "Identify your financial goal and its cost.",
+                                "Determine how much you can save each week or month.",
+                                "Select a savings method that works for you.",
+                                "Adjust your spending habits to free up extra money for savings.",
+                                "Monitor your progress and stay consistent."
+                            ]
+                        }
+                    ],
+                    "highlights": [
+                        "Set a Goal: Know what you're saving for.",
+                        "Pick a Method: Use automatic transfers or the envelope system.",
+                        "Cut Costs: Track spending, reduce extras.",
+                        "Follow a Plan: Set an amount, save regularly, adjust as needed.",
+                        "Stay on Track: Monitor progress to reach your goal."
+                    ],
+                    "quiz": {
+                        "focus": "Learning how to plan and save money to reach your financial goals.",
+                        "questions": [
+                            {
+                                "type": "multiChoice",
+                                "question": "What is the first step in planning a savings strategy for a financial goal?",
+                                "options": [
+                                    "Deciding what to spend your money on immediately",
+                                    "Identifying your financial goal and how much it will cost",
+                                    "Ignoring small expenses",
+                                    "Borrowing money from friends"
+                                ],
+                                "correctAnswer": 1
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "A savings strategy helps you set aside money regularly so you can ______ your financial goal.",
+                                "correctAnswer": [
+                                    "reach",
+                                    "achieve"
+                                ]
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match each savings method with its description.",
+                                "leftOptions": [
+                                    "Automatic Transfers",
+                                    "Envelope System",
+                                    "Saving a Percentage of Income",
+                                    "Cutting Unnecessary Expenses"
+                                ],
+                                "rightOptions": [
+                                    "Setting aside money by physically separating cash",
+                                    "Scheduling regular transfers to a savings account",
+                                    "Dedicating a fixed percentage of your income to savings",
+                                    "Reducing spending to increase available savings"
+                                ],
+                                "correctMatches": {
+                                    "0": 1,
+                                    "1": 0,
+                                    "2": 2,
+                                    "3": 3
+                                }
+                            },
+                            {
+                                "type": "dragAndDrop",
+                                "question": "Drag each action into the correct group: Savings Actions vs. Spending Adjustments.",
+                                "items": [
+                                    "Setting up automatic transfers",
+                                    "Using an envelope system",
+                                    "Tracking discretionary spending",
+                                    "Cutting back on impulse purchases"
+                                ],
+                                "groups": {
+                                    "Savings Actions": [
+                                        0,
+                                        1
+                                    ],
+                                    "Spending Adjustments": [
+                                        2,
+                                        3
+                                    ]
+                                }
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Arrange these steps for creating a savings plan:",
+                                "options": [
+                                    "Identify your financial goal and its cost",
+                                    "Determine how much you can save each week or month",
+                                    "Monitor your progress towards the goal",
+                                    "Adjust your spending to free up savings",
+                                    "Choose a savings method (e.g., automatic transfers)"
+                                ],
+                                "correctAnswer": [
+                                    "Identify your financial goal and its cost",
+                                    "Determine how much you can save each week or month",
+                                    "Choose a savings method (e.g., automatic transfers)",
+                                    "Adjust your spending to free up savings",
+                                    "Monitor your progress towards the goal"
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "levelNumber": 4,
+                    "introduction": "A well-structured budget helps you manage income, cover essential expenses, and save for your financial goals. By following a step-by-step approach, you can make smart financial decisions and stay on track.",
+                    "sections": [
+                        {
+                            "heading": "Steps to Create a Budget:",
+                            "bulletPoints": [
+                                "List All Sources of Income - Identify your monthly earnings, including salary, allowance, or side income. This helps you understand how much money you have available.",
+                                "Categorize Expenses - Separate essential expenses (e.g., rent, utilities, food, and transportation) from non-essential spending (e.g., entertainment, dining out).",
+                                "Prioritize Savings - Allocate a portion of your income toward your financial goals before spending on non-essentials. This ensures you are actively working toward important purchases or future needs.",
+                                "Allocate Funds Wisely - Use budgeting methods like the 50/30/20 rule, where 50% goes to necessities, 30% to wants, and 20% to savings and debt repayment.",
+                                "Track and Adjust - Regularly review your budget to ensure you are staying within limits. Adjust spending if needed to meet your financial goals."
+                            ]
+                        }
+                    ],
+                    "highlights": [
+                        "List Income: Identify all sources (salary, allowance, side income) to know your available funds.",
+                        "Categorize Expenses: Separate essentials (rent, food, transport) from non-essentials (entertainment, dining out).",
+                        "Prioritize Savings: Set aside money for financial goals before spending on wants.",
+                        "Use a Budgeting Method: Apply strategies like the 50/30/20 rule (50% needs, 30% wants, 20% savings).",
+                        "Track & Adjust: Review spending regularly and adjust to stay on target."
+                    ],
+                    "quiz": {
+                        "focus": "Creating a budget to support financial goals",
+                        "questions": [
+                            {
+                                "type": "multiChoice",
+                                "question": "When creating a budget to reach your financial goals, what should you do first?",
+                                "options": [
+                                    "List all sources of income",
+                                    "Buy what you want immediately",
+                                    "Skip tracking small expenses",
+                                    "Increase your spending on fun items"
+                                ],
+                                "correctAnswer": 0
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "A well-planned budget helps you cover ______ expenses and allocate money toward your goals.",
+                                "correctAnswer": [
+                                    "essential",
+                                    "important",
+                                    "key"
+                                ]
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match each budgeting step with its benefit.",
+                                "leftOptions": [
+                                    "Reviewing the budget regularly",
+                                    "Categorizing expenses",
+                                    "Allocating funds for savings",
+                                    "Listing all income"
+                                ],
+                                "rightOptions": [
+                                    "Ensures you know how much money you have",
+                                    "Helps you prioritize spending on essentials",
+                                    "Makes sure you're saving toward your goals",
+                                    "Keeps your budget up-to-date with your spending habits"
+                                ],
+                                "correctMatches": {
+                                    "0": 3,
+                                    "1": 1,
+                                    "2": 2,
+                                    "3": 0
+                                }
+                            },
+                            {
+                                "type": "dragAndDrop",
+                                "question": "Drag each item into the correct category: Income/Essential Expenses vs. Savings/Goals.",
+                                "items": [
+                                    "Monthly salary or allowance",
+                                    "Rent or housing costs",
+                                    "Savings for a new computer",
+                                    "Groceries"
+                                ],
+                                "groups": {
+                                    "Income/Essential Expenses": [
+                                        0,
+                                        1,
+                                        3
+                                    ],
+                                    "Savings/Goals": [
+                                        2
+                                    ]
+                                }
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Arrange these steps for creating a budget that supports your financial goals:",
+                                "options": [
+                                    "Prioritize covering essential expenses",
+                                    "Review and adjust your budget monthly",
+                                    "List all sources of income",
+                                    "Allocate a portion of income to savings for goals",
+                                    "Identify and categorize all expenses"
+                                ],
+                                "correctAnswer": [
+                                    "List all sources of income",
+                                    "Identify and categorize all expenses",
+                                    "Prioritize covering essential expenses",
+                                    "Allocate a portion of income to savings for goals",
+                                    "Review and adjust your budget monthly"
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "levelNumber": 5,
+                    "introduction": "This comprehensive review covers financial goals, SMART goal-setting, savings strategies, and budgeting for long-term success.",
+                    "sections": [
+                        {
+                            "heading": "Key Concepts:",
+                            "bulletPoints": [
+                                "The Power of Compound Savings: Learn how interest helps your savings grow faster over time.",
+                                "Financial Discipline & Smart Saving Habits: Understand the importance of consistency in saving.",
+                                "Budgeting for Long-Term Savings Success: Explore how tracking income, expenses, and setting financial goals contribute to saving more effectively.",
+                                "Saving vs. Investing: Recognize the difference between growing savings safely and taking calculated risks for higher returns."
+                            ]
+                        },
+                        {
+                            "heading": "Summary of Key Readings:",
+                            "bulletPoints": [
+                                "Financial Goals & Prioritization: Setting clear goals (short-term, long-term, emergency funds, and purchase goals) helps allocate savings effectively.",
+                                "SMART Financial Goals: Goals should be Specific, Measurable, Achievable, Relevant, and Time-bound for effective planning.",
+                                "Savings Strategies: Methods like automatic transfers, saving a percentage of income, and expense tracking help build consistent savings.",
+                                "Budgeting for Savings Growth: A structured budget ensures savings goals are met by prioritizing essential expenses and allocating money wisely."
+                            ]
+                        }
+                    ],
+                    "highlights": [
+                        "Financial goals guide saving & spending.",
+                        "SMART goals = Specific, Measurable, Achievable, Relevant, Time-bound.",
+                        "Savings methods: Automatic transfers, envelope system, percentage saving.",
+                        "Budgeting steps: List income, categorize expenses, prioritize savings, track & adjust.",
+                        "50/30/20 rule: 50% needs, 30% wants, 20% savings."
+                    ],
+                    "quiz": {
+                        "focus": "Comprehensive review of financial goals and budgeting",
+                        "questions": [
+                            {
+                                "type": "multiChoice",
+                                "question": "What is the main purpose of setting a financial goal?",
+                                "options": [
+                                    "To decide how to spend money without planning",
+                                    "To have a clear target to work toward and save for",
+                                    "To make impulse purchases easier",
+                                    "To avoid tracking your income"
+                                ],
+                                "correctAnswer": 1
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "SMART goals are ______, measurable, achievable, relevant, and time-bound.",
+                                "correctAnswer": [
+                                    "specific"
+                                ]
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match each type of financial goal with its example.",
+                                "leftOptions": [
+                                    "Purchase Goal",
+                                    "Emergency Fund",
+                                    "Long-term Goal",
+                                    "Short-term Goal"
+                                ],
+                                "rightOptions": [
+                                    "Saving for a new smartphone within a few months",
+                                    "Saving for college tuition over several years",
+                                    "Setting aside money for unexpected repairs",
+                                    "Saving for a bicycle"
+                                ],
+                                "correctMatches": {
+                                    "0": 3,
+                                    "1": 2,
+                                    "2": 1,
+                                    "3": 0
+                                }
+                            },
+                            {
+                                "type": "multiChoice",
+                                "question": "Why is it important to plan a savings strategy for your financial goal?",
+                                "options": [
+                                    "To spend money on non-essentials",
+                                    "To know exactly how much to save and when to reach your goal",
+                                    "To avoid adjusting your spending habits",
+                                    "To create a vague idea of saving"
+                                ],
+                                "correctAnswer": 1
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "A well-designed budget helps you cover essential expenses and ______ money toward your goals.",
+                                "correctAnswer": [
+                                    "allocate"
+                                ]
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match each budgeting step with its benefit.",
+                                "leftOptions": [
+                                    "Categorizing expenses",
+                                    "Regularly reviewing the budget",
+                                    "Allocating funds for savings",
+                                    "Listing all income"
+                                ],
+                                "rightOptions": [
+                                    "Helps you know your available money",
+                                    "Prioritizes spending on essentials",
+                                    "Ensures you are progressing toward your goals",
+                                    "Keeps your plan accurate and up-to-date"
+                                ],
+                                "correctMatches": {
+                                    "0": 1,
+                                    "1": 3,
+                                    "2": 2,
+                                    "3": 0
+                                }
+                            },
+                            {
+                                "type": "dragAndDrop",
+                                "question": "Drag each action into the correct group: Goal Setting Actions vs. Budgeting Actions.",
+                                "items": [
+                                    "Defining a clear financial target",
+                                    "Deciding how much money is needed for a goal",
+                                    "Recording daily transactions",
+                                    "Categorizing expenses"
+                                ],
+                                "groups": {
+                                    "Goal Setting Actions": [
+                                        0,
+                                        1
+                                    ],
+                                    "Budgeting Actions": [
+                                        2,
+                                        3
+                                    ]
+                                }
+                            },
+                            {
+                                "type": "multiChoice",
+                                "question": "What should you do first when creating a budget to support your financial goals?",
+                                "options": [
+                                    "List all your income sources",
+                                    "Immediately allocate money for savings",
+                                    "Buy the items you want",
+                                    "Skip tracking small expenses"
+                                ],
+                                "correctAnswer": 0
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Arrange these steps for planning a savings strategy:",
+                                "options": [
+                                    "Determine how much you can save each month",
+                                    "Monitor your progress regularly",
+                                    "Choose a savings method (like automatic transfers)",
+                                    "Adjust your spending to free up more savings",
+                                    "Identify your financial goal and its cost"
+                                ],
+                                "correctAnswer": [
+                                    "Identify your financial goal and its cost",
+                                    "Determine how much you can save each month",
+                                    "Choose a savings method (like automatic transfers)",
+                                    "Adjust your spending to free up more savings",
+                                    "Monitor your progress regularly"
+                                ]
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Arrange these steps to create a budget that prioritizes your financial goals:",
+                                "options": [
+                                    "Prioritize essential expenses",
+                                    "Identify and categorize all expenses",
+                                    "Review and adjust the budget monthly",
+                                    "List all income sources",
+                                    "Allocate funds for savings and goals"
+                                ],
+                                "correctAnswer": [
+                                    "List all income sources",
+                                    "Identify and categorize all expenses",
+                                    "Prioritize essential expenses",
+                                    "Allocate funds for savings and goals",
+                                    "Review and adjust the budget monthly"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "lessonNumber": "5",
+            "lessonTitle": "Budgeting in the Real World",
+            "lessonDescription": "Navigate how to practically manage or budget your 'Naira' in your day to day life.",
+            "levels": [
+                {
+                    "levelNumber": 1,
+                    "introduction": "Applying budgeting principles to real-life situations helps you stay in control of your money.",
+                    "sections": [
+                        {
+                            "heading": "1. Plan Before You Spend",
+                            "bulletPoints": [
+                                "List your income and planned expenses before making purchases.",
+                                "Prioritize essential expenses (food, transport) before wants."
+                            ]
+                        },
+                        {
+                            "heading": "2. Track Your Spending",
+                            "bulletPoints": [
+                                "Record daily expenses to spot spending patterns.",
+                                "Set spending limits to avoid overspending.",
+                                "Compare prices to get the best deal.",
+                                "Note unexpected costs to keep your budget accurate."
+                            ]
+                        },
+                        {
+                            "heading": "3. Shop Smart",
+                            "content": "Before buying: Make a shopping list, Compare prices, Check your budget. After buying: Keep receipts, Update your budget."
+                        },
+                        {
+                            "heading": "4. Follow the Right Spending Order",
+                            "bulletPoints": [
+                                "Make a shopping list",
+                                "Check your budget",
+                                "Compare prices",
+                                "Buy wisely",
+                                "Record expenses"
+                            ]
+                        }
+                    ],
+                    "highlights": [
+                        "Plan First: List income and expenses before spending.",
+                        "Track Spending: Record expenses, set limits, and compare prices.",
+                        "Shop Smart: Plan purchases, check budgets, and keep receipts.",
+                        "Follow Order: List → Budget → Compare → Buy → Record.",
+                        "Stay in Control: Smart budgeting prevents overspending!"
+                    ],
+                    "quiz": {
+                        "focus": "Applying budgeting techniques in real-life scenarios",
+                        "questions": [
+                            {
+                                "type": "multiChoice",
+                                "question": "When you create a budget for a week, what is the first step in planning your spending?",
+                                "options": [
+                                    "Guess how much you might spend",
+                                    "Record your income and list your planned expenses",
+                                    "Buy all your favorite items first",
+                                    "Wait until the end of the week to see what happens"
+                                ],
+                                "correctAnswer": 1
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "A realistic budget should cover both ______ expenses and discretionary spending.",
+                                "correctAnswer": [
+                                    "essential",
+                                    "fixed",
+                                    "necessary",
+                                    "non-discretionary"
+                                ]
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match each real-life budgeting action with its benefit.",
+                                "leftOptions": [
+                                    "Tracking daily expenses",
+                                    "Setting spending limits",
+                                    "Comparing prices before buying",
+                                    "Recording unexpected costs"
+                                ],
+                                "rightOptions": [
+                                    "Prevents overspending by establishing boundaries",
+                                    "Helps identify patterns in your spending",
+                                    "Saves money by ensuring you get the best deal",
+                                    "Keeps your budget accurate when surprises occur"
+                                ],
+                                "correctMatches": {
+                                    "0": 1,
+                                    "1": 0,
+                                    "2": 2,
+                                    "3": 3
+                                }
+                            },
+                            {
+                                "type": "dragAndDrop",
+                                "question": "Drag the following actions into the correct groups: Pre-Purchase Planning vs. Post-Purchase Review.",
+                                "items": [
+                                    "Creating a shopping list",
+                                    "Comparing prices across stores",
+                                    "Filing receipts",
+                                    "Checking if the purchase fits your budget"
+                                ],
+                                "groups": {
+                                    "Pre-Purchase Planning": [
+                                        0,
+                                        1,
+                                        3
+                                    ],
+                                    "Post-Purchase Review": [
+                                        2
+                                    ]
+                                }
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Arrange these steps in the correct order for applying budgeting techniques in a typical shopping trip:",
+                                "options": [
+                                    "Check your budget to see how much you can spend",
+                                    "Make a shopping list of needed items",
+                                    "Compare prices at different stores",
+                                    "Make the purchase",
+                                    "Record the transaction in your budget"
+                                ],
+                                "correctAnswer": [
+                                    "Make a shopping list of needed items",
+                                    "Check your budget to see how much you can spend",
+                                    "Compare prices at different stores",
+                                    "Make the purchase",
+                                    "Record the transaction in your budget"
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "levelNumber": 2,
+                    "introduction": "Unexpected expenses can disrupt your budget, but with the right approach, you can stay in control.",
+                    "sections": [
+                        {
+                            "heading": "Why Have an Emergency Fund?",
+                            "content": "An emergency fund is money set aside for sudden expenses, like medical bills or urgent repairs. It helps you avoid financial stress and prevents you from overspending."
+                        },
+                        {
+                            "heading": "Adjusting Your Budget for Emergencies",
+                            "content": "When faced with an unexpected cost, follow these steps:",
+                            "bulletPoints": [
+                                "Identify the Expense - Know what the cost is and how urgent it is.",
+                                "Check Your Savings - Use your emergency fund if available.",
+                                "Adjust Your Budget - Reduce non-essential spending if needed.",
+                                "Record the Expense - Keep track to avoid future surprises.",
+                                "Plan Ahead - Learn from the expense and prepare for similar costs."
+                            ]
+                        },
+                        {
+                            "heading": "Planned vs. Unexpected Expenses",
+                            "bulletPoints": [
+                                "Planned: Rent, utility bills, groceries",
+                                "Unexpected: Sudden car repairs, medical emergencies"
+                            ]
+                        },
+                        {
+                            "heading": "Smart Budgeting for Emergencies",
+                            "bulletPoints": [
+                                "Use Emergency Savings for major, urgent costs.",
+                                "Reallocate Funds from non-essential spending when needed.",
+                                "Modify Your Budget to fit new expenses and prevent financial strain."
+                            ]
+                        }
+                    ],
+                    "highlights": [
+                        "Emergency Fund: Covers surprise expenses.",
+                        "Budget Steps: Identify → Check savings → Adjust → Record → Plan.",
+                        "Expense Types: Planned (Rent, utilities) vs Unexpected (Repairs, medical bills).",
+                        "Handling: Use savings, cut non-essentials, adjust budget."
+                    ],
+                    "quiz": {
+                        "focus": "Managing unexpected expenses",
+                        "questions": [
+                            {
+                                "type": "multiChoice",
+                                "question": "What is the purpose of an emergency fund?",
+                                "options": [
+                                    "To cover planned vacations",
+                                    "To save for long-term investments",
+                                    "To have money available for unexpected expenses",
+                                    "To spend on luxuries when income increases"
+                                ],
+                                "correctAnswer": 2
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "Unexpected expenses, like a car repair or medical bill, require you to ______ your budget.",
+                                "correctAnswer": [
+                                    "adjust",
+                                    "modify",
+                                    "change"
+                                ]
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match each unexpected expense with an appropriate budgeting action.",
+                                "leftOptions": [
+                                    "Medical emergency",
+                                    "Car repair",
+                                    "Surprise school trip fee",
+                                    "Broken household item"
+                                ],
+                                "rightOptions": [
+                                    "Use funds from your emergency savings",
+                                    "Use funds from your emergency savings",
+                                    "Reallocate money from non-essential spending",
+                                    "Review and modify your spending plan immediately"
+                                ],
+                                "correctMatches": {
+                                    "0": 0,
+                                    "1": 1,
+                                    "2": 2,
+                                    "3": 3
+                                }
+                            },
+                            {
+                                "type": "dragAndDrop",
+                                "question": "Drag the following items into the correct groups: Planned Expenses vs. Unexpected Expenses.",
+                                "items": [
+                                    "Monthly rent",
+                                    "Utility bill",
+                                    "Sudden appliance repair",
+                                    "Regular grocery shopping"
+                                ],
+                                "groups": {
+                                    "Planned Expenses": [
+                                        0,
+                                        1,
+                                        3
+                                    ],
+                                    "Unexpected Expenses": [
+                                        2
+                                    ]
+                                }
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Arrange these steps for managing an unexpected expense:",
+                                "options": [
+                                    "Identify the unexpected cost",
+                                    "Check your emergency fund or available savings",
+                                    "Adjust your monthly budget to accommodate the expense",
+                                    "Record the expense in your tracking tool",
+                                    "Reflect on how to prevent or plan for similar expenses in the future"
+                                ],
+                                "correctAnswer": [
+                                    "Identify the unexpected cost",
+                                    "Check your emergency fund or available savings",
+                                    "Adjust your monthly budget to accommodate the expense",
+                                    "Record the expense in your tracking tool",
+                                    "Reflect on how to prevent or plan for similar expenses in the future"
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "levelNumber": 3,
+                    "introduction": "Budget forecasting is the process of predicting future income and expenses so you can plan ahead and avoid financial stress. It helps you set aside money for upcoming costs, such as school fees, holiday shopping, or unexpected repairs, ensuring that you stay financially prepared.",
+                    "sections": [
+                        {
+                            "heading": "Why is Forecasting Important?",
+                            "content": "Without planning for future expenses, you might find yourself short on cash when big payments arise. By tracking past spending habits and anticipating future needs, you can adjust your budget to accommodate upcoming financial responsibilities."
+                        },
+                        {
+                            "heading": "Steps to Effective Budget Forecasting",
+                            "bulletPoints": [
+                                "Review Past Spending - Look at previous months' expenses to identify patterns.",
+                                "Anticipate Future Costs - Plan for seasonal or recurring expenses like school fees or increased electricity bills.",
+                                "Estimate Future Income - Consider changes in your allowance, earnings, or financial support.",
+                                "Adjust Your Budget Accordingly - Allocate money in advance for expected expenses.",
+                                "Monitor and Update Regularly - Review and modify your budget as circumstances change."
+                            ]
+                        }
+                    ],
+                    "highlights": [
+                        "Budget Forecasting helps predict future income and expenses.",
+                        "Steps: Review past spending, anticipate costs, estimate income, adjust budget, and update regularly.",
+                        "Benefit: Prevents financial stress and ensures better planning."
+                    ],
+                    "quiz": {
+                        "focus": "Understanding budget forecasting",
+                        "questions": [
+                            {
+                                "type": "multiChoice",
+                                "question": "What does forecasting in budgeting involve?",
+                                "options": [
+                                    "Ignoring future expenses",
+                                    "Predicting upcoming expenses and income trends",
+                                    "Spending all your income quickly",
+                                    "Avoiding any adjustments to your budget"
+                                ],
+                                "correctAnswer": 1
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "Forecasting helps you plan for upcoming expenses by predicting future ______ and costs.",
+                                "correctAnswer": [
+                                    "income"
+                                ]
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match each forecasting activity with its purpose.",
+                                "leftOptions": [
+                                    "Reviewing past spending trends",
+                                    "Estimating future income",
+                                    "Anticipating seasonal expenses",
+                                    "Adjusting the budget based on predictions"
+                                ],
+                                "rightOptions": [
+                                    "Helps determine expected costs during certain times",
+                                    "Provides data for making informed predictions",
+                                    "Allows you to plan adjustments before expenses occur",
+                                    "Estimates how much money will be available"
+                                ],
+                                "correctMatches": {
+                                    "0": 1,
+                                    "1": 3,
+                                    "2": 0,
+                                    "3": 2
+                                }
+                            },
+                            {
+                                "type": "dragAndDrop",
+                                "question": "Drag the following activities into the correct groups: Data Collection vs. Budget Adjustment.",
+                                "items": [
+                                    "Tracking past monthly expenses",
+                                    "Calculating average income over several months",
+                                    "Updating expense categories for upcoming changes",
+                                    "Predicting higher costs for certain seasons"
+                                ],
+                                "groups": {
+                                    "Data Collection": [
+                                        0,
+                                        1
+                                    ],
+                                    "Budget Adjustment": [
+                                        2,
+                                        3
+                                    ]
+                                }
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Arrange these steps for forecasting your future budget:",
+                                "options": [
+                                    "Monitor and update the forecast regularly",
+                                    "Estimate future income and upcoming expenses",
+                                    "Identify trends and seasonal patterns",
+                                    "Adjust your current budget to reflect these forecasts",
+                                    "Gather data on past spending and income"
+                                ],
+                                "correctAnswer": [
+                                    "Gather data on past spending and income",
+                                    "Estimate future income and upcoming expenses",
+                                    "Identify trends and seasonal patterns",
+                                    "Adjust your current budget to reflect these forecasts",
+                                    "Monitor and update the forecast regularly"
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "levelNumber": 4,
+                    "introduction": "A budget should evolve based on real-life spending. Regular reviews help you track expenses, adjust for overspending, and stay financially stable.",
+                    "sections": [
+                        {
+                            "heading": "Key Steps:",
+                            "bulletPoints": [
+                                "Compare Spending to Budget - Identify differences between planned and actual spending.",
+                                "Spot Overspending & Underspending - Adjust funds to better match priorities.",
+                                "Reallocate Funds - Shift money from less important areas to essentials or savings.",
+                                "Modify for Future Needs - Update your budget based on spending trends and income changes.",
+                                "Review Regularly - Track progress weekly or monthly to stay on course."
+                            ]
+                        },
+                        {
+                            "heading": "Example:",
+                            "content": "If you overspend ₦2,000 on groceries but save ₦3,000 on transport, reallocate the savings to balance your budget."
+                        }
+                    ],
+                    "highlights": [
+                        "Compare spending vs. budget to identify differences.",
+                        "Spot overspending & underspending to adjust funds.",
+                        "Reallocate money to essentials or savings.",
+                        "Modify your budget based on spending trends.",
+                        "Review regularly to stay on track.",
+                        "Stay flexible to prevent financial stress."
+                    ],
+                    "quiz": {
+                        "focus": "Learning how to reflect on your budget's performance and make necessary changes.",
+                        "questions": [
+                            {
+                                "type": "multiChoice",
+                                "question": "What is the first step in adjusting your budget based on real-life spending?",
+                                "options": [
+                                    "Ignoring discrepancies",
+                                    "Comparing your actual spending with your planned budget",
+                                    "Immediately cutting all non-essential expenses",
+                                    "Increasing your income arbitrarily"
+                                ],
+                                "correctAnswer": 1
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "Regular budget reviews allow you to ______ your spending habits and make improvements.",
+                                "correctAnswer": [
+                                    "adjust",
+                                    "modify"
+                                ]
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match each feedback action with its benefit.",
+                                "leftOptions": [
+                                    "Setting new savings targets",
+                                    "Identifying areas of overspending",
+                                    "Reallocating funds to meet actual needs",
+                                    "Reviewing monthly spending reports"
+                                ],
+                                "rightOptions": [
+                                    "Helps you see where your money is going",
+                                    "Allows you to correct your budget based on actual expenses",
+                                    "Improves your ability to meet essential expenses",
+                                    "Motivates you to save even more"
+                                ],
+                                "correctMatches": {
+                                    "0": 3,
+                                    "1": 1,
+                                    "2": 2,
+                                    "3": 0
+                                }
+                            },
+                            {
+                                "type": "dragAndDrop",
+                                "question": "Drag each item into the correct category: Feedback Analysis vs. Action Steps.",
+                                "items": [
+                                    "Comparing actual spending to planned spending",
+                                    "Cutting non-essential expenses",
+                                    "Updating your budget plan",
+                                    "Noting discrepancies in spending"
+                                ],
+                                "groups": {
+                                    "Feedback Analysis": [
+                                        0,
+                                        3
+                                    ],
+                                    "Action Steps": [
+                                        1,
+                                        2
+                                    ]
+                                }
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Arrange these steps for adjusting your budget after a review:",
+                                "options": [
+                                    "Decide on changes (such as cutting back or reallocating funds)",
+                                    "Compare them with your original budget",
+                                    "Collect your spending records and receipts",
+                                    "Identify areas where spending was higher or lower than planned",
+                                    "Update your budget for the upcoming period"
+                                ],
+                                "correctAnswer": [
+                                    "Collect your spending records and receipts",
+                                    "Compare them with your original budget",
+                                    "Identify areas where spending was higher or lower than planned",
+                                    "Decide on changes (such as cutting back or reallocating funds)",
+                                    "Update your budget for the upcoming period"
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "levelNumber": 5,
+                    "introduction": "This comprehensive lesson brings together all aspects of real-world budgeting, from planning and forecasting to handling unexpected costs and making smart adjustments.",
+                    "sections": [
+                        {
+                            "heading": "Planning for Future Expenses",
+                            "content": "A good budget doesn't just focus on today—it also looks ahead. Forecasting helps predict upcoming expenses and income changes so you can prepare in advance. By analyzing past spending patterns and estimating future costs, you can set aside money for seasonal expenses, school fees, or special occasions."
+                        },
+                        {
+                            "heading": "Handling Unexpected Costs",
+                            "content": "No matter how well you plan, unexpected expenses can arise—like medical bills, repairs, or sudden school fees. That's why an emergency fund is crucial. When surprises happen, you may need to adjust your budget, cutting back on non-essentials or reallocating funds to cover urgent needs."
+                        },
+                        {
+                            "heading": "Using Budget Feedback",
+                            "content": "Budgets aren't fixed—they should change based on real-life spending. Regular reviews help you compare planned vs. actual spending so you can make necessary adjustments. If you overspend in one category, you might need to reduce spending elsewhere or set stricter limits. If you save more than expected, you can increase your savings goals."
+                        },
+                        {
+                            "heading": "Making Smart Adjustments",
+                            "content": "Effective budgeting requires flexibility. After reviewing your expenses, follow these steps:",
+                            "bulletPoints": [
+                                "Track and compare spending to your budget.",
+                                "Identify areas where spending is too high or low.",
+                                "Reallocate funds to better meet your needs.",
+                                "Update your budget based on new insights.",
+                                "Monitor regularly to improve financial habits."
+                            ]
+                        }
+                    ],
+                    "highlights": [
+                        "Forecasting: Predict future income and expenses to prepare for seasonal or planned costs.",
+                        "Handling Unexpected Costs: Use an emergency fund and adjust your budget when unplanned expenses arise.",
+                        "Using Budget Feedback: Compare planned vs. actual spending and make necessary changes.",
+                        "Making Smart Adjustments: Track spending, identify problem areas, reallocate funds, update your budget, and monitor regularly.",
+                        "Goal: Stay flexible, manage money wisely, and plan for a secure financial future."
+                    ],
+                    "quiz": {
+                        "focus": "Comprehensive real-world budgeting skills",
+                        "questions": [
+                            {
+                                "type": "multiChoice",
+                                "question": "What is the best first step when planning a shopping trip using your budget?",
+                                "options": [
+                                    "Buy items immediately if they are on sale",
+                                    "Create a shopping list and check your budget first",
+                                    "Shop without a plan",
+                                    "Increase your budget to cover all desires"
+                                ],
+                                "correctAnswer": 1
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "An emergency fund is used to cover ______ expenses that were not planned.",
+                                "correctAnswer": [
+                                    "unexpected",
+                                    "surprise"
+                                ]
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match each real-world budgeting tool or technique with its benefit.",
+                                "leftOptions": [
+                                    "Tracking daily expenses",
+                                    "Setting spending limits",
+                                    "Using a budgeting app",
+                                    "Forecasting future costs"
+                                ],
+                                "rightOptions": [
+                                    "Helps you stick to your plan by limiting overspending",
+                                    "Provides a clear record of your money usage",
+                                    "Automates calculations and categorizes spending",
+                                    "Prepares you for upcoming expenses"
+                                ],
+                                "correctMatches": {
+                                    "0": 1,
+                                    "1": 0,
+                                    "2": 2,
+                                    "3": 3
+                                }
+                            },
+                            {
+                                "type": "multiChoice",
+                                "question": "What should you do when an unexpected expense occurs?",
+                                "options": [
+                                    "Ignore it and hope it goes away",
+                                    "Adjust your budget and use funds from your emergency savings if needed",
+                                    "Immediately cancel all planned spending",
+                                    "Increase your income overnight"
+                                ],
+                                "correctAnswer": 1
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "Forecasting involves reviewing past spending and predicting future ______ to adjust your budget accordingly.",
+                                "correctAnswer": [
+                                    "income",
+                                    "expenses",
+                                    "income and expenses"
+                                ]
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match each feedback action with its purpose.",
+                                "leftOptions": [
+                                    "Reviewing spending reports",
+                                    "Identifying discrepancies",
+                                    "Reallocating funds",
+                                    "Updating savings targets"
+                                ],
+                                "rightOptions": [
+                                    "Adjust your plan based on actual spending",
+                                    "Ensure that your budget reflects your real needs",
+                                    "Recognize differences between planned and actual spending",
+                                    "Set more realistic saving goals"
+                                ],
+                                "correctMatches": {
+                                    "0": 2,
+                                    "1": 0,
+                                    "2": 1,
+                                    "3": 3
+                                }
+                            },
+                            {
+                                "type": "dragAndDrop",
+                                "question": "Drag each action into the correct group: Preparation Steps vs. Review and Adjustment Steps.",
+                                "items": [
+                                    "Creating a shopping list",
+                                    "Setting aside funds for emergencies",
+                                    "Recording daily transactions",
+                                    "Comparing actual spending with your budget",
+                                    "Adjusting your budget for future periods"
+                                ],
+                                "groups": {
+                                    "Preparation Steps": [
+                                        0,
+                                        1,
+                                        2
+                                    ],
+                                    "Review and Adjustment Steps": [
+                                        3,
+                                        4
+                                    ]
+                                }
+                            },
+                            {
+                                "type": "multiChoice",
+                                "question": "Which of the following best describes 'forecasting' in budgeting?",
+                                "options": [
+                                    "Ignoring past trends and guessing future expenses",
+                                    "Analyzing past spending to predict future income and costs",
+                                    "Increasing your budget without reason",
+                                    "Planning your budget only once a year"
+                                ],
+                                "correctAnswer": 1
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Arrange these steps for handling an unexpected expense in order:",
+                                "options": [
+                                    "Adjust your budget to accommodate the expense",
+                                    "Record the expense in your tracking tool",
+                                    "Reflect on how to plan for similar expenses in the future",
+                                    "Check your emergency fund",
+                                    "Identify the unexpected expense"
+                                ],
+                                "correctAnswer": [
+                                    "Identify the unexpected expense",
+                                    "Check your emergency fund",
+                                    "Adjust your budget to accommodate the expense",
+                                    "Record the expense in your tracking tool",
+                                    "Reflect on how to plan for similar expenses in the future"
+                                ]
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Arrange these steps for a complete monthly budget review:",
+                                "options": [
+                                    "Gather all receipts and transaction records",
+                                    "Update your budget for the next month",
+                                    "Decide on necessary adjustments",
+                                    "Identify any discrepancies or unexpected trends",
+                                    "Compare actual spending with your planned budget"
+                                ],
+                                "correctAnswer": [
+                                    "Gather all receipts and transaction records",
+                                    "Compare actual spending with your planned budget",
+                                    "Identify any discrepancies or unexpected trends",
+                                    "Decide on necessary adjustments",
+                                    "Update your budget for the next month"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    ]
+}

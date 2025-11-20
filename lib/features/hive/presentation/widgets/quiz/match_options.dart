@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:savvy_bee_mobile/features/hive/domain/models/course.dart';
 import 'package:savvy_bee_mobile/features/hive/domain/models/quiz_page_state.dart';
-import 'package:savvy_bee_mobile/features/hive/domain/models/quiz_question.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/widgets/quiz/quize_option_tile.dart';
 
 class MatchOptions extends StatelessWidget {
-  final QuizQuestion question;
+  final MatchQuestion question;
   final QuizPageState state;
   final Function(int leftIndex) onLeftSelected;
   final Function(int leftIndex, int rightIndex) onMatchPair;
@@ -21,69 +21,80 @@ class MatchOptions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final leftOptions = question.leftOptions!;
-    final rightOptions = question.rightOptions!;
-
     return Column(
-      children: List.generate(leftOptions.length, (leftIndex) {
-        final matchedRightIndex = state.matches![leftIndex];
+      children: List.generate(question.leftOptions.length, (index) {
+        final leftIndex = index;
+        final rightIndex = index;
 
-        // Determine border colors for immediate feedback
-        Color? leftBorderColor;
-        Color? rightBorderColor;
+        // Check if this left option has been matched
+        final matchedRightIndex = state.matches?[leftIndex];
+        final isLeftMatched = matchedRightIndex != null;
 
-        if (matchedRightIndex != null) {
+        // Check if this right option has been matched to any left option
+        final leftIndexMatchedToThisRight = state.matches?.entries
+            .firstWhere(
+              (entry) => entry.value == rightIndex,
+              orElse: () => const MapEntry(-1, -1),
+            )
+            .key;
+        final isRightMatched =
+            leftIndexMatchedToThisRight != null &&
+            leftIndexMatchedToThisRight != -1;
+
+        // Determine colors
+        Color? leftColor;
+        Color? rightColor;
+
+        if (isLeftMatched) {
+          // This left item is matched, check if it's correct
           final isCorrect = isMatchCorrect(leftIndex, matchedRightIndex);
-          leftBorderColor = isCorrect ? Colors.green : Colors.red;
-          rightBorderColor = isCorrect ? Colors.green : Colors.red;
+          leftColor = isCorrect ? Colors.green : Colors.red;
         }
+
+        if (isRightMatched) {
+          // This right item is matched, check if it's correct
+          final isCorrect = isMatchCorrect(
+            leftIndexMatchedToThisRight,
+            rightIndex,
+          );
+          rightColor = isCorrect ? Colors.green : Colors.red;
+        }
+
+        final isLeftSelected = state.selectedLeftIndex == leftIndex;
 
         return Padding(
           padding: const EdgeInsets.only(bottom: 12),
           child: Row(
-            spacing: 8,
             children: [
-              // Left option
+              // Left Option
               Expanded(
                 child: QuizeOptionTile(
-                  quizType: QuizType.match,
-                  text: leftOptions[leftIndex],
-                  onTap: state.isChecked && state.isCorrect
-                      ? null
-                      : () => onLeftSelected(leftIndex),
-                  isSelected:
-                      state.selectedLeftIndex == leftIndex ||
-                      matchedRightIndex != null,
+                  quizType: 'match',
+                  text: question.leftOptions[leftIndex],
+                  onTap: isLeftMatched ? null : () => onLeftSelected(leftIndex),
+                  isSelected: isLeftSelected || isLeftMatched,
                   textAlign: TextAlign.center,
-                  color: leftBorderColor,
+                  color: leftColor ?? (isLeftSelected ? Colors.blue : null),
                 ),
               ),
-
-              // Right option
+              const SizedBox(width: 8),
+              // Right Option
               Expanded(
                 child: QuizeOptionTile(
-                  quizType: QuizType.match,
-                  text: rightOptions[leftIndex],
-                  onTap: state.isChecked && state.isCorrect
+                  quizType: 'match',
+                  text: question.rightOptions[rightIndex],
+                  onTap: isRightMatched || state.selectedLeftIndex == null
                       ? null
-                      : () {
-                          if (state.selectedLeftIndex != null) {
-                            onMatchPair(state.selectedLeftIndex!, leftIndex);
-                          }
-                        },
-                  isSelected:
-                      matchedRightIndex != null &&
-                      state.matches!.entries.any(
-                        (e) => e.key != leftIndex && e.value == leftIndex,
-                      ),
+                      : () => onMatchPair(state.selectedLeftIndex!, rightIndex),
+                  isSelected: isRightMatched,
                   textAlign: TextAlign.center,
-                  color: rightBorderColor,
+                  color: rightColor,
                 ),
               ),
             ],
           ),
         );
-      }).toList(),
+      }),
     );
   }
 }

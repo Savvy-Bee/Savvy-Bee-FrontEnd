@@ -53,4 +53,7 @@ class Illustrations {
 
   // Leaderboard
   static const String leaderboardBee = '$_basePath/leaderboard.png';
+
+  // Leaderboard
+  static const String premiumBee = '$_basePath/premium-bee.png';
 }

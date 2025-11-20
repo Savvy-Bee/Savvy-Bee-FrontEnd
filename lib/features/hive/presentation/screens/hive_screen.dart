@@ -10,9 +10,11 @@ import 'package:savvy_bee_mobile/core/widgets/article_card.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/section_title_widget.dart';
 import 'package:savvy_bee_mobile/core/widgets/icon_text_row_widget.dart';
+import 'package:savvy_bee_mobile/features/hive/domain/models/course.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/leaderboard/leaderboard_screen.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/lesson/lesson_home_screen.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/streak/streak_dashboard_screen.dart';
+import 'package:savvy_bee_mobile/features/hive/presentation/providers/course_providers.dart';
 
 import '../../../../core/utils/assets/app_icons.dart';
 import '../../../../core/widgets/custom_card.dart';
@@ -60,67 +62,10 @@ class _HiveScreenState extends ConsumerState<HiveScreen> {
     },
   ];
 
-  final List<Map<String, String>> courses = [
-    {
-      'title': 'Savings 101',
-      'bodyText':
-          'Master the fundamentals of saving money, from setting goals to building emergency funds.',
-      'lessonCount': '5',
-      'difficultyLevel': 'Beginner-friendly',
-    },
-    {
-      'title': 'Budgeting Basics',
-      'bodyText':
-          'Learn how to create and stick to a budget that works for your lifestyle and goals.',
-      'lessonCount': '7',
-      'difficultyLevel': 'Beginner-friendly',
-    },
-    {
-      'title': 'Investing Intro',
-      'bodyText':
-          'Discover the basics of investing and how to make your money work for you.',
-      'lessonCount': '6',
-      'difficultyLevel': 'Intermediate',
-    },
-    {
-      'title': 'Debt Management',
-      'bodyText':
-          'Understand how to tackle debt strategically and avoid common pitfalls.',
-      'lessonCount': '4',
-      'difficultyLevel': 'Beginner-friendly',
-    },
-    {
-      'title': 'Credit Scores',
-      'bodyText':
-          'Learn what affects your credit score and how to improve it over time.',
-      'lessonCount': '5',
-      'difficultyLevel': 'Beginner-friendly',
-    },
-    {
-      'title': 'Emergency Funds',
-      'bodyText':
-          'Build a safety net that protects you from unexpected financial shocks.',
-      'lessonCount': '3',
-      'difficultyLevel': 'Beginner-friendly',
-    },
-    {
-      'title': 'Retirement Planning',
-      'bodyText':
-          'Start planning early for retirement with the right accounts and strategies.',
-      'lessonCount': '8',
-      'difficultyLevel': 'Intermediate',
-    },
-    {
-      'title': 'Tax Basics',
-      'bodyText':
-          'Navigate the essentials of income tax and maximize your deductions.',
-      'lessonCount': '6',
-      'difficultyLevel': 'Intermediate',
-    },
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final coursesAsync = ref.watch(allCoursesProvider);
+
     return Scaffold(
       appBar: _buildAppBar(),
       body: SafeArea(
@@ -131,25 +76,10 @@ class _HiveScreenState extends ConsumerState<HiveScreen> {
               child: SectionTitleWidget(title: 'Explore courses'),
             ),
             const Gap(16),
-            SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                spacing: 8,
-                children: courses
-                    .map(
-                      (course) => _buildCourseCard(
-                        title: course['title']!,
-                        bodyText: course['bodyText']!,
-                        lessonCount: int.parse(course['lessonCount']!),
-                        difficultyLevel: course['difficultyLevel']!,
-                        onStartLesson: () =>
-                            context.pushNamed(LessonHomeScreen.path),
-                      ),
-                    )
-                    .toList(),
-              ),
+            coursesAsync.when(
+              data: (courses) => _buildCoursesSection(courses),
+              loading: () => _buildLoadingSection(),
+              error: (error, stack) => _buildErrorSection(error),
             ),
             const Gap(24),
             Padding(
@@ -176,8 +106,73 @@ class _HiveScreenState extends ConsumerState<HiveScreen> {
               ),
             ),
             const Gap(24),
-            // SectionTitleWidget(title: 'Arcade'),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCoursesSection(List<Course> courses) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: 8,
+        children: courses
+            .map((course) => _buildCourseCard(course: course))
+            .toList(),
+      ),
+    );
+  }
+
+  Widget _buildLoadingSection() {
+    return Container(
+      height: 400,
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CircularProgressIndicator(color: AppColors.primary),
             const Gap(16),
+            Text(
+              'Loading courses...',
+              style: TextStyle(color: AppColors.greyDark),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildErrorSection(Object error) {
+    return Container(
+      height: 400,
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.error_outline, size: 48, color: AppColors.error),
+            const Gap(16),
+            Text(
+              'Failed to load courses',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const Gap(8),
+            Text(
+              error.toString(),
+              textAlign: TextAlign.center,
+              style: TextStyle(color: AppColors.greyDark),
+            ),
+            const Gap(16),
+            CustomElevatedButton(
+              text: 'Retry',
+              onPressed: () {
+                ref.invalidate(allCoursesProvider);
+              },
+            ),
           ],
         ),
       ),
@@ -239,21 +234,84 @@ class _HiveScreenState extends ConsumerState<HiveScreen> {
     );
   }
 
-  Widget _buildCourseCard({
-    required String title,
-    required String bodyText,
-    required int lessonCount,
-    required String difficultyLevel,
-    required VoidCallback onStartLesson,
-  }) {
+  Widget _buildCourseCard({required Course course}) {
+    final stats = ref.watch(courseStatsProvider(course));
+    final difficultyLevel = _extractDifficultyLevel(course);
+
     return CustomCard(
       width: MediaQuery.sizeOf(context).width / 1.3,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
+          // Progress indicator if course is started
+          if (stats.isStarted && !stats.isCompleted)
+            Column(
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: LinearProgressIndicator(
+                        value: stats.progressPercentage / 100,
+                        backgroundColor: AppColors.greyLight,
+                        color: AppColors.primary,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    ),
+                    const Gap(8),
+                    Text(
+                      '${stats.progressPercentage.toStringAsFixed(0)}%',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                  ],
+                ),
+                const Gap(12),
+              ],
+            ),
+
+          // Completed badge
+          if (stats.isCompleted)
+            Column(
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.success.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    spacing: 4,
+                    children: [
+                      Icon(
+                        Icons.check_circle,
+                        size: 16,
+                        color: AppColors.success,
+                      ),
+                      Text(
+                        'Completed',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.success,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Gap(12),
+              ],
+            ),
+
           Text(
-            title,
+            course.courseTitle,
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
@@ -261,13 +319,18 @@ class _HiveScreenState extends ConsumerState<HiveScreen> {
             ),
           ),
           const Gap(8),
-          Text(bodyText, style: TextStyle()),
+          Text(
+            course.courseDescription,
+            style: TextStyle(),
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
+          ),
           const Gap(24),
           Row(
             spacing: 8,
             children: [
               IconTextRowWidget(
-                '$lessonCount Lessons',
+                '${course.lessons.length} Lessons',
                 AppIcon(AppIcons.openBookIcon, size: 16.0),
               ),
               IconTextRowWidget(
@@ -276,17 +339,42 @@ class _HiveScreenState extends ConsumerState<HiveScreen> {
               ),
             ],
           ),
-          // const Gap(24),
-          Image.asset(Illustrations.savingsBeePose1),
-          // const Gap(24),
+          // Image.asset(Illustrations.savingsBeePose1),
           CustomElevatedButton(
-            text: 'Start lesson',
+            text: stats.isStarted ? 'Continue' : 'Start lesson',
             rounded: true,
-            icon: Icon(Icons.play_arrow_rounded, color: AppColors.black),
-            onPressed: onStartLesson,
+            icon: Icon(
+              stats.isStarted
+                  ? Icons.play_arrow_rounded
+                  : Icons.play_arrow_rounded,
+              color: AppColors.black,
+            ),
+            onPressed: () {
+              // Navigate to lesson home screen
+              // You can pass the course data or course ID as a parameter
+              context.pushNamed(
+                LessonHomeScreen.path,
+                extra: course, // Pass the course object
+              );
+            },
           ),
         ],
       ),
     );
+  }
+
+  String _extractDifficultyLevel(Course course) {
+    // You can determine difficulty based on course structure
+    // For now, using a simple heuristic based on total levels
+    // final totalLevels = course.totalLevels; // TODO: Add totalLevels to courses
+    final totalLevels = 3;
+
+    if (totalLevels <= 3) {
+      return 'Beginner-friendly';
+    } else if (totalLevels <= 6) {
+      return 'Intermediate';
+    } else {
+      return 'Advanced';
+    }
   }
 }

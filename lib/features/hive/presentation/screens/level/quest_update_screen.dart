@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/assets.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
+import 'package:savvy_bee_mobile/features/hive/presentation/screens/hive_screen.dart';
 
 class QuestUpdateScreen extends ConsumerStatefulWidget {
   static String path = '/quest-update';
@@ -53,7 +55,7 @@ class _QuestUpdateScreenState extends ConsumerState<QuestUpdateScreen> {
                 CustomElevatedButton(
                   text: 'Continue',
                   isGamePlay: true,
-                  onPressed: () {},
+                  onPressed: () => context.goNamed(HiveScreen.path),
                 ),
               ],
             ),

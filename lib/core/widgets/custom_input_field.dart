@@ -125,6 +125,7 @@ class CustomTextFormField extends StatelessWidget {
           onFieldSubmitted: onFieldSubmitted,
           textInputAction: textInputAction,
           style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14.0),
+          obscuringCharacter: '●',
           decoration: InputDecoration(
             label: label != null && labelType == LabelType.embedded
                 ? Text(label!)

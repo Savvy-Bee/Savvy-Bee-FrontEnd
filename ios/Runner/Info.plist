@@ -2,6 +2,13 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+<key>LSApplicationQueriesSchemes</key>
+	<array>
+	<string>mailto</string>
+	<string>tel</string>
+	<string>sms</string>
+	</array>
+
 	<key>NSCameraUsageDescription</key>
 	<string>This app needs camera access to let you take and upload photos.</string>
 	<key>NSMicrophoneUsageDescription</key>

@@ -11,13 +11,18 @@ import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/core/widgets/game_card.dart';
 import 'package:savvy_bee_mobile/core/widgets/icon_text_row_widget.dart';
 import 'package:savvy_bee_mobile/core/widgets/section_title_widget.dart';
+import 'package:savvy_bee_mobile/features/profile/presentation/screens/account_info_screen.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/screens/achievements_screen.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/screens/change_app_icon_screen.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/screens/choose_avatar_screen.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/screens/complete_profile_screen.dart';
+import 'package:savvy_bee_mobile/features/profile/presentation/screens/contact_us_screen.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/screens/financial_health_screen.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/screens/library_screen.dart';
+import 'package:savvy_bee_mobile/features/profile/presentation/screens/manage_subscription_screen.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/screens/next_of_kin_screen.dart';
+import 'package:savvy_bee_mobile/features/profile/presentation/screens/security/security_screen.dart';
+import 'package:savvy_bee_mobile/features/profile/presentation/screens/settings_screen.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/widgets/profile_list_tile.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/transactions/account_statement_screen.dart';
 
@@ -44,7 +49,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             icon: Icon(Icons.edit_outlined),
             style: Constants.collapsedButtonStyle,
           ),
-          IconButton(onPressed: () {}, icon: Icon(Icons.settings_outlined)),
+          IconButton(
+            onPressed: () => context.pushNamed(SettingsScreen.path),
+            icon: Icon(Icons.settings_outlined),
+          ),
         ],
       ),
       body: ListView(
@@ -218,13 +226,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       ProfileListTile(
                         title: 'Account info',
                         iconPath: AppIcons.documentIcon,
-                        onTap: () {},
+                        onTap: () => context.pushNamed(AccountInfoScreen.path),
                       ),
                       const Divider(),
                       ProfileListTile(
                         title: 'Manage Subscription',
                         iconPath: AppIcons.bankNoteIcon,
-                        onTap: () {},
+                        onTap: () =>
+                            context.pushNamed(ManageSubscriptionScreen.path),
                       ),
                     ],
                   ),
@@ -267,7 +276,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         onTap: () {},
                         useDefaultTrailing: false,
                         trailing: Transform.scale(
-                          scale: 0.7,
+                          scale: 0.5,
                           child: Switch(
                             value: false,
                             onChanged: (value) {},
@@ -281,7 +290,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       ProfileListTile(
                         title: 'Security',
                         iconPath: AppIcons.homeSecureIcon,
-                        onTap: () {},
+                        onTap: () => context.pushNamed(SecurityScreen.path),
                       ),
                     ],
                   ),
@@ -320,7 +329,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       ProfileListTile(
                         title: 'Contact Us',
                         iconPath: AppIcons.chatboxIcon,
-                        onTap: () {},
+                        onTap: () => context.pushNamed(ContactUsScreen.path),
                       ),
                       const Divider(),
                       ProfileListTile(

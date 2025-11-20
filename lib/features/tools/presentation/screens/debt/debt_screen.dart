@@ -41,7 +41,7 @@ class _DebtScreenState extends ConsumerState<DebtScreen>
 
   @override
   Widget build(BuildContext context) {
-    // 2. WATCH THE DEBT LIST STATE
+    // WATCH THE DEBT LIST STATE
     final debtState = ref.watch(debtListNotifierProvider);
 
     return Scaffold(

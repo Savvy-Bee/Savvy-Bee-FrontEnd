@@ -3,21 +3,34 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 
-import '../../../../core/utils/assets/assets.dart';
-import '../../../../core/widgets/custom_button.dart';
+import '../core/utils/assets/assets.dart';
+import '../core/widgets/custom_button.dart';
 
-class NextOfKinUpdatedScreen extends ConsumerStatefulWidget {
-  static String path = '/nok-updated';
+class ActionInfo {
+  final String title;
+  final String message;
+  final String actionText;
 
-  const NextOfKinUpdatedScreen({super.key});
+  ActionInfo({
+    required this.title,
+    required this.message,
+    required this.actionText,
+  });
+}
+
+class ActionCompletedScreen extends ConsumerStatefulWidget {
+  static String path = '/action-completed';
+
+  final ActionInfo actionInfo;
+
+  const ActionCompletedScreen({super.key, required this.actionInfo});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
-      _NextOfKinUpdatedScreenState();
+      _ActionCompletedScreenState();
 }
 
-class _NextOfKinUpdatedScreenState
-    extends ConsumerState<NextOfKinUpdatedScreen> {
+class _ActionCompletedScreenState extends ConsumerState<ActionCompletedScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

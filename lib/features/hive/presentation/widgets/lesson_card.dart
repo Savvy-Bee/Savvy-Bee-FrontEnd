@@ -108,7 +108,7 @@ class LessonCard extends StatelessWidget {
     return Row(
       spacing: 16,
       mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Container(
           padding: EdgeInsets.all(12),

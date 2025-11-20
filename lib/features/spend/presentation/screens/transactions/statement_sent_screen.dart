@@ -5,7 +5,7 @@ import 'package:gap/gap.dart';
 import '../../../../../core/utils/assets/assets.dart';
 import '../../../../../core/utils/constants.dart';
 import '../../../../../core/widgets/custom_button.dart';
-
+// TODO: DELETE FILE
 class StatementSentScreen extends StatelessWidget {
   static const String path = '/statement-sent';
 

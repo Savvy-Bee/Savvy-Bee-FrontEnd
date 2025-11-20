@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/illustrations.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
@@ -68,7 +67,7 @@ class QuizSuccessErrorBottomSheet extends StatelessWidget {
         // mainAxisSize: MainAxisSize.min,
         children: [
           Positioned(
-            bottom: 165,
+            bottom: isSuccess ? 140 : 165,
             child: Image.asset(
               isSuccess
                   ? Illustrations.quizBeeRight
@@ -125,10 +124,7 @@ class QuizSuccessErrorBottomSheet extends StatelessWidget {
                 const Gap(24),
                 CustomElevatedButton(
                   text: buttonText,
-                  onPressed: () {
-                    context.pop();
-                    onButtonPressed();
-                  },
+                  onPressed: onButtonPressed,
                   buttonColor: isSuccess
                       ? CustomButtonColor.green
                       : CustomButtonColor.red,

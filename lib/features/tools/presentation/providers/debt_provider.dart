@@ -3,6 +3,9 @@ import 'package:savvy_bee_mobile/core/network/api_client.dart';
 import 'package:savvy_bee_mobile/core/services/service_locator.dart';
 import 'package:savvy_bee_mobile/features/tools/data/repositories/debt_repository.dart';
 
+// Assuming you have a provider for the repository defined somewhere
+// final debtRepositoryProvider = Provider((ref) => DebtRepository(...));
+
 class DebtListNotifier extends AsyncNotifier<List<dynamic>> {
   DebtRepository get _repository => ref.read(debtRepositoryProvider);
 
@@ -11,17 +14,21 @@ class DebtListNotifier extends AsyncNotifier<List<dynamic>> {
     return _repository.getDebtHomeData();
   }
 
-  Future<void> createDebt(Map<String, dynamic> debtData) async {
+  // UPDATED: Returns dynamic (the response) so UI can get the ID
+  Future<dynamic> createDebt(Map<String, dynamic> debtData) async {
     state = const AsyncLoading();
 
     try {
-      await _repository.createDebtStep1(debtData);
-
-      ref.invalidateSelf();
+      final response = await _repository.createDebtStep1(debtData);
+      
+      // We don't invalidate yet if we want to keep the loading state 
+      // logic clean between steps, but usually, we invalidate to refresh the list 
+      // in the background.
+      ref.invalidateSelf(); 
+      
+      return response; 
     } catch (e, st) {
-      state =
-          AsyncError(e, st).copyWithPrevious(state)
-              as AsyncValue<List<dynamic>>;
+      state = AsyncError(e, st).copyWithPrevious(state) as AsyncValue<List<dynamic>>;
 
       if (e is ApiException) {
         rethrow;
@@ -35,6 +42,7 @@ class DebtListNotifier extends AsyncNotifier<List<dynamic>> {
     required String bankCode,
     required String accountNumber,
   }) async {
+    state = const AsyncLoading(); // Set loading state
     try {
       await _repository.createDebtStep2(
         debtId: debtId,
@@ -42,14 +50,14 @@ class DebtListNotifier extends AsyncNotifier<List<dynamic>> {
         accountNumber: accountNumber,
       );
       ref.invalidateSelf();
-    } catch (e) {
+    } catch (e, st) {
+      state = AsyncError(e, st).copyWithPrevious(state) as AsyncValue<List<dynamic>>;
       rethrow;
     }
   }
 
   Future<void> manualFundDebt(String debtId, String amount) async {
     try {
-      // Renamed to match repository and endpoint
       await _repository.manualFundDebt(debtId, amount);
       ref.invalidateSelf();
     } catch (e) {
@@ -57,7 +65,6 @@ class DebtListNotifier extends AsyncNotifier<List<dynamic>> {
     }
   }
 
-  /// Method to manually refresh the debt list
   Future<void> refresh() async {
     state = const AsyncLoading();
     try {
@@ -69,7 +76,6 @@ class DebtListNotifier extends AsyncNotifier<List<dynamic>> {
   }
 }
 
-/// The provider for the DebtListNotifier
 final debtListNotifierProvider =
     AsyncNotifierProvider<DebtListNotifier, List<dynamic>>(
       DebtListNotifier.new,

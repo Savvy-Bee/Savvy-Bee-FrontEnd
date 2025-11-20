@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:savvy_bee_mobile/core/utils/assets/app_icons.dart';
 import 'package:savvy_bee_mobile/features/auth/presentation/widgets/toggleable_list_tile.dart';
 
 class FinancialArchitypePageSix extends ConsumerStatefulWidget {

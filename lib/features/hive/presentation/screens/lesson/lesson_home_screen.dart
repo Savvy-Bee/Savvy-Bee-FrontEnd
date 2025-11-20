@@ -6,14 +6,17 @@ import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/assets.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/illustrations.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
+import 'package:savvy_bee_mobile/core/utils/text_utils.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
+import 'package:savvy_bee_mobile/features/hive/domain/models/course.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/levels_screen.dart';
 
 class LessonHomeScreen extends ConsumerStatefulWidget {
   static String path = '/lesson-home';
 
-  const LessonHomeScreen({super.key});
+  final Course course;
+  const LessonHomeScreen({super.key, required this.course});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -21,72 +24,53 @@ class LessonHomeScreen extends ConsumerStatefulWidget {
 }
 
 class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
-  final List<Map<String, dynamic>> lessons = [
-    {
-      'status': 'Completed',
-      'points': 50,
-      'lessonNumber': 1,
-      'illustrationAsset': Illustrations.lesson3,
-      'title': 'What is Saving',
-      'description':
-          'There are different ways to save money: bank accounts, apps, and piggy banks.',
-    },
-    {
-      'status': 'Current',
-      'points': 50,
-      'lessonNumber': 2,
-      'illustrationAsset': Illustrations.lesson2,
-      'title': 'Good vs. Not-so-Good',
-      'description': 'Learn which saving habits help and which ones hurt.',
-    },
-    {
-      'status': 'Not started',
-      'points': 50,
-      'lessonNumber': 3,
-      'illustrationAsset': Illustrations.lesson1,
-      'title': 'Needs vs. Wants',
-      'description':
-          'Understand the difference between what you need and what you want.',
-    },
-  ];
+  final int _selectedLessonIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _buildAppBar(),
-      body: ListView(
+      body: Column(
         children: [
-          SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16,
-            ).copyWith(top: 35),
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              spacing: 12,
-              children: List.generate(
-                lessons.length,
-                (index) => _buildLessonCard(
-                  status: lessons[index]['status'],
-                  points: lessons[index]['points'],
-                  lessonNumber: lessons[index]['lessonNumber'],
-                  illustrationAsset: lessons[index]['illustrationAsset'],
-                  title: lessons[index]['title'],
-                  description: lessons[index]['description'],
-                ),
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                spacing: 12,
+                children: List.generate(widget.course.lessons.length, (index) {
+                  final lesson = widget.course.lessons[index];
+
+                  return GestureDetector(
+                    onTap: () {
+                      // setState(() => _selectedLessonIndex = index);
+                      context.pushNamed(LevelsScreen.path, extra: lesson);
+                    },
+                    child: _buildLessonCard(
+                      status: lesson.lessonNumber,
+                      points: 0,
+                      lessonNumber: lesson.lessonNumber,
+                      illustrationAsset: Illustrations.lesson1,
+                      title: lesson.lessonTitle,
+                      description: lesson.lessonDescription,
+                    ),
+                  );
+                }),
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                const Gap(40),
-                CustomElevatedButton(
-                  text: 'Continue',
-                  onPressed: () => context.pushNamed(LevelsScreen.path),
-                ),
-              ],
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.all(16),
+          //   child: CustomElevatedButton(
+          //     text: 'Continue',
+          //     onPressed: () {
+          //       final selectedLesson =
+          //           widget.course.lessons[_selectedLessonIndex];
+
+          //       context.pushNamed(LevelsScreen.path, extra: selectedLesson);
+          //     },
+          //   ),
+          // ),
         ],
       ),
     );
@@ -107,7 +91,7 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'Savings 101',
+                TextUtils.truncate(widget.course.courseTitle, 10),
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -118,8 +102,11 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
                 spacing: 8,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text('5 lessons', style: TextStyle(fontSize: 8)),
-                  Text('5 quizzes', style: TextStyle(fontSize: 8)),
+                  Text(
+                    '${widget.course.lessons.length} lessons',
+                    style: TextStyle(fontSize: 8),
+                  ),
+                  // Text('5 quizzes', style: TextStyle(fontSize: 8)),
                 ],
               ),
             ],
@@ -166,15 +153,15 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
   Widget _buildLessonCard({
     required String status,
     required int points,
-    required int lessonNumber,
+    required String lessonNumber,
     required String illustrationAsset,
     required String title,
     required String description,
   }) {
     final size = MediaQuery.sizeOf(context);
 
-    final width = size.width / 1.2;
-    final height = size.height / 1.5;
+    final width = size.width * 0.8;
+    final height = size.height * 0.6;
 
     final locked = status == "Not started";
 
@@ -222,7 +209,7 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
           borderColor: locked ? AppColors.grey : AppColors.primary,
           borderWidth: 3,
           bgColor: locked ? AppColors.greyMid : AppColors.primaryFaded,
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 45),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 35),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -242,7 +229,7 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
                         ),
                       ),
                       Text(
-                        '$lessonNumber',
+                        lessonNumber,
                         style: TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.bold,

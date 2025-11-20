@@ -11,10 +11,19 @@ import 'package:savvy_bee_mobile/features/hive/presentation/screens/level/quest_
 
 import '../../../../../core/utils/assets/app_icons.dart';
 
+class LevelCompleteArgs {
+  final double score;
+  final int newFlowers;
+
+  const LevelCompleteArgs({required this.score, required this.newFlowers});
+}
+
 class LevelCompleteScreen extends ConsumerStatefulWidget {
   static String path = '/level-complete';
 
-  const LevelCompleteScreen({super.key});
+  final LevelCompleteArgs args;
+
+  const LevelCompleteScreen({super.key, required this.args});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -59,7 +68,7 @@ class _LevelCompleteScreenState extends ConsumerState<LevelCompleteScreen> {
                         Expanded(
                           child: _buildScoreCard(
                             title: 'Total Flowers',
-                            score: '50',
+                            score: '${widget.args.newFlowers}',
                             icon: Image.asset(
                               Illustrations.hiveFlower,
                               scale: 0.9,
@@ -70,7 +79,7 @@ class _LevelCompleteScreenState extends ConsumerState<LevelCompleteScreen> {
                         Expanded(
                           child: _buildScoreCard(
                             title: 'Score',
-                            score: '90%',
+                            score: '${widget.args.score.toInt()}%',
                             icon: AppIcon(
                               AppIcons.scoreIcon,
                               color: AppColors.success,

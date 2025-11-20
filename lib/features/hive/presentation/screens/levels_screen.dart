@@ -5,14 +5,17 @@ import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/assets.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
+import 'package:savvy_bee_mobile/core/utils/text_utils.dart';
 import 'package:savvy_bee_mobile/core/widgets/hexagonal_button.dart';
+import 'package:savvy_bee_mobile/features/hive/domain/models/course.dart';
 
 import 'lesson/lesson_room_screen.dart';
 
 class LevelsScreen extends ConsumerStatefulWidget {
   static String path = '/levels';
 
-  const LevelsScreen({super.key});
+  final Lesson lesson;
+  const LevelsScreen({super.key, required this.lesson});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _LevelsScreenState();
@@ -21,6 +24,8 @@ class LevelsScreen extends ConsumerStatefulWidget {
 class _LevelsScreenState extends ConsumerState<LevelsScreen> {
   @override
   Widget build(BuildContext context) {
+    final levels = widget.lesson.levels;
+
     return Scaffold(
       backgroundColor: AppColors.primaryFaint,
       extendBodyBehindAppBar: true,
@@ -36,28 +41,45 @@ class _LevelsScreenState extends ConsumerState<LevelsScreen> {
               ),
             ),
           ),
+
+          /// LEVEL GRID
           Align(
             alignment: Alignment.center,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                /// FIRST LEVEL - Alone at the top
                 HexagonalButton(
-                  number: '1',
-                  onTap: () => context.pushNamed(LessonRoomScreen.path),
+                  number: levels.first.levelNumber.toString(),
+                  onTap: () => context.pushNamed(
+                    LessonRoomScreen.path,
+                    extra: LessonRoomArgs(
+                      lessonNumber: widget.lesson.lessonNumber,
+                      level: levels.first,
+                    ),
+                  ),
                 ),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    HexagonalButton(number: '2'),
-                    HexagonalButton(number: '3'),
-                  ],
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    HexagonalButton(number: '4'),
-                    HexagonalButton(number: '5'),
-                  ],
+
+                const SizedBox(height: 20),
+
+                /// REMAINING LEVELS - Two side-by-side
+                Wrap(
+                  spacing: 12,
+                  runSpacing: 12,
+                  alignment: WrapAlignment.center,
+                  children: List.generate(levels.length - 1, (i) {
+                    final level = levels[i + 1];
+                    return HexagonalButton(
+                      number: level.levelNumber.toString(),
+                      onTap: () => context.pushNamed(
+                        LessonRoomScreen.path,
+                        extra: LessonRoomArgs(
+                          lessonNumber: widget.lesson.lessonNumber,
+                          level: level,
+                        ),
+                      ),
+                    );
+                  }),
                 ),
               ],
             ),
@@ -70,20 +92,17 @@ class _LevelsScreenState extends ConsumerState<LevelsScreen> {
   AppBar _buildAppBar() {
     return AppBar(
       backgroundColor: AppColors.primaryFaint,
-      centerTitle: false,
       automaticallyImplyLeading: false,
       title: Row(
-        mainAxisSize: MainAxisSize.min,
         children: [
           BackButton(),
           Image.asset(Assets.honeyJar4, height: 40, width: 40),
           const Gap(8),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                '5 lessons',
+                '${widget.lesson.levels.length} levels',
                 style: TextStyle(
                   fontSize: 12,
                   color: AppColors.greyDark,
@@ -91,7 +110,7 @@ class _LevelsScreenState extends ConsumerState<LevelsScreen> {
                 ),
               ),
               Text(
-                'What is Saving?',
+                TextUtils.truncate(widget.lesson.lessonTitle, 20),
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
