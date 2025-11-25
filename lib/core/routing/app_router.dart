@@ -92,7 +92,7 @@ final GlobalKey<NavigatorState> _shellNavigatorKey = GlobalKey<NavigatorState>(
 
 final GoRouter appRouter = GoRouter(
   navigatorKey: _rootNavigatorKey,
-  initialLocation: HiveScreen.path,
+  initialLocation: SplashScreen.path,
   routes: [
     GoRoute(
       path: SplashScreen.path,
@@ -477,7 +477,7 @@ final GoRouter appRouter = GoRouter(
       path: LevelCompleteScreen.path,
       name: LevelCompleteScreen.path,
       builder: (BuildContext context, GoRouterState state) {
-        return LevelCompleteScreen(args: state.extra as LevelCompleteArgs);
+        return LevelCompleteScreen(args: state.extra as LevelCompleteArgs,);
       },
     ),
 
