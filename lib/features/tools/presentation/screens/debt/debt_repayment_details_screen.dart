@@ -4,13 +4,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
-import 'package:savvy_bee_mobile/core/utils/assets/app_icons.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_dropdown_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_snackbar.dart';
+import 'package:savvy_bee_mobile/core/widgets/icon_text_row_widget.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/widgets/copy_text_icon_button.dart';
+import 'package:savvy_bee_mobile/features/tools/domain/models/debt.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/providers/debt_provider.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/widgets/insight_card.dart';
 
@@ -41,55 +43,47 @@ class _DebtRepaymentDetailsScreenState
 
   // TODO: You usually fetch this list from a BankProvider
   final List<Map<String, String>> _dummyBanks = [
-    {'name': 'First Bank', 'code': '011'},
-    {'name': 'GTBank', 'code': '058'},
-    {'name': 'Zenith Bank', 'code': '057'},
+    {'name': 'First Bank', 'code': '100033'},
+    {'name': 'GTBank', 'code': '100033'},
+    {'name': 'Zenith Bank', 'code': '100033'},
   ];
 
   Future<void> _submitStep2() async {
     if (_selectedBankCode == null &&
         _repaymentMethod == DebtRepaymentMethod.bankTransfer) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Please select a bank')));
+      CustomSnackbar.show(context, 'Please select a bank');
       return;
     }
     if (_accNumberController.text.length < 10) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Invalid Account Number')));
+      CustomSnackbar.show(context, 'Invalid Account Number');
       return;
     }
     if (!_hasAgreedToTerms) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please agree to the terms')),
-      );
+      CustomSnackbar.show(context, 'Please agree to the terms');
       return;
     }
 
     setState(() => _isLoading = true);
 
+    final reqBody = DebtCreationStep2Request(
+      debtId: widget.debtId,
+      bankCode: _selectedBankCode ?? '000',
+      accNumber: _accNumberController.text.trim(),
+    );
+
     try {
       await ref
           .read(debtListNotifierProvider.notifier)
-          .createDebtStep2(
-            debtId: widget.debtId,
-            bankCode:
-                _selectedBankCode ?? '000', // Handle logic if card is selected
-            accountNumber: _accNumberController.text,
-          );
+          .createDebtStep2(reqBody: reqBody);
 
       if (mounted) {
-        // Success - Go back to tools home or debt home
+        // Success - Go back to debt home
         context.pop(); // Pop this screen
         context.pop(); // Pop add screen (Simple approach)
-        // Or context.go('/tools/debt');
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Error: $e')));
+        CustomSnackbar.show(context, 'An unexpected error occurred. Please try again.');
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);
@@ -176,32 +170,26 @@ class _DebtRepaymentDetailsScreenState
                   const Gap(4),
                   // Account Name Resolution (Placeholder logic)
                   if (_accNumberController.text.length == 10)
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.check_circle,
-                          color: AppColors.primary,
-                          size: 16,
-                        ),
-                        const Gap(4),
-                        Text(
-                          'Aegon targaryen', // This should come from an API call ideally
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: Constants.neulisNeueFontFamily,
-                            color: AppColors.primary,
-                          ),
-                        ),
-                      ],
+                    IconTextRowWidget(
+                      'Aegon Targaryen',
+                      Icon(
+                        Icons.check_circle,
+                        color: AppColors.primary,
+                        size: 16,
+                      ),
+                      textStyle: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: Constants.neulisNeueFontFamily,
+                        color: AppColors.primary,
+                      ),
                     ),
                   const Gap(16),
                   CustomDropdownButton(
                     items: _dummyBanks.map((e) => e['name']!).toList(),
                     hint: 'Bank name',
                     label: 'Bank',
-                    leadingIcon: const AppIcon(AppIcons.bankIcon),
+                    leadingIcon: const Icon(Icons.account_balance_rounded),
                     onChanged: (val) {
                       final bank = _dummyBanks.firstWhere(
                         (element) => element['name'] == val,
@@ -261,13 +249,11 @@ class _DebtRepaymentDetailsScreenState
                 ],
               ),
             ),
-            _isLoading
-                ? const CircularProgressIndicator()
-                : CustomElevatedButton(
-                    text: 'Add repayment details',
-                    // Disable button if terms not agreed
-                    onPressed: _hasAgreedToTerms ? _submitStep2 : null,
-                  ),
+            CustomElevatedButton(
+              text: 'Add repayment details',
+              isLoading: _isLoading,
+              onPressed: _hasAgreedToTerms ? _submitStep2 : null,
+            ),
           ],
         ),
       ),

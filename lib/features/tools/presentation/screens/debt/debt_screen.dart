@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/utils/number_formatter.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
+import 'package:savvy_bee_mobile/features/tools/domain/models/debt.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/providers/debt_provider.dart';
 
 import '../../../../../core/theme/app_colors.dart';
@@ -58,13 +59,12 @@ class _DebtScreenState extends ConsumerState<DebtScreen>
               // 3. BUILD THE DEBT CARD BASED ON STATE
               debtState.when(
                 data: (data) {
-                  final activeDebts = data
-                      .where((item) => item['status'] == 'active')
+                  final activeDebts = data.data
+                      .where((item) => item.isActive)
                       .toList();
                   final totalRemaining = activeDebts.fold<double>(
                     0.0,
-                    (sum, debt) =>
-                        sum + (debt['amountRemaining'] as double? ?? 0.0),
+                    (sum, debt) => sum + (debt.owed),
                   );
                   return _buildDebtCard(totalRemaining);
                 },
@@ -99,11 +99,13 @@ class _DebtScreenState extends ConsumerState<DebtScreen>
                   child: Center(child: Text('Error: ${e.toString()}')),
                 ),
                 data: (data) {
-                  final activeDebts = data
-                      .where((item) => item['status'] == 'active')
+                  final activeDebts = data.data
+                      .where((item) => item.isActive)
                       .toList();
-                  final paidOffDebts = data
-                      .where((item) => item['status'] == 'paid_off')
+                  final paidOffDebts = data.data
+                      .where(
+                        (item) => item.isActive,
+                      ) // TODO: Change to isPaidOff or something like that when available
                       .toList();
 
                   return SizedBox(
@@ -140,7 +142,7 @@ class _DebtScreenState extends ConsumerState<DebtScreen>
   }
 
   // Helper method to build the list of debt items
-  Widget _buildDebtList(List<dynamic> debts, bool isActive) {
+  Widget _buildDebtList(List<Debt> debts, bool isActive) {
     if (debts.isEmpty) {
       return Padding(
         padding: const EdgeInsets.only(top: 24),
@@ -159,13 +161,11 @@ class _DebtScreenState extends ConsumerState<DebtScreen>
         final debt = debts[index];
         return GoalStatsCard(
           // Assuming the API returns these keys:
-          title: debt['title'] ?? 'N/A',
-          amountSaved: debt['amountPaid'] as double? ?? 0.0,
-          totalTarget: debt['totalAmount'] as double? ?? 0.0,
-          daysLeft: debt['daysLeft'] as int? ?? 0,
+          title: debt.name,
+          amountSaved: debt.balance,
+          totalTarget: debt.owed,
+          daysLeft: debt.expectedPayoffDate.difference(DateTime.now()).inDays,
           isDebt: true,
-          // You might need to pass the full debt object for navigation/manual funding later
-          // debtData: debt,
         );
       },
       separatorBuilder: (context, index) => const Gap(16),

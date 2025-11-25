@@ -6,10 +6,13 @@ import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/utils/date_time_utils.dart';
+import 'package:savvy_bee_mobile/core/utils/text_utils.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_dropdown_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_snackbar.dart';
+import 'package:savvy_bee_mobile/features/tools/domain/models/debt.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/providers/debt_provider.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/debt/debt_repayment_details_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/widgets/insight_card.dart';
@@ -30,13 +33,15 @@ class _AddDebtScreenState extends ConsumerState<AddDebtScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _amountOwedController = TextEditingController();
   final TextEditingController _interestRateController = TextEditingController();
-  final TextEditingController _minimumPaymentController = TextEditingController();
+  final TextEditingController _minimumPaymentController =
+      TextEditingController();
   final TextEditingController _dateController = TextEditingController();
 
-  LoanRepaymentFrequency _selectedPaymentFrequency = LoanRepaymentFrequency.monthly;
-  
+  LoanRepaymentFrequency _selectedPaymentFrequency =
+      LoanRepaymentFrequency.monthly;
+
   // Variable to hold selected day (e.g. "1", "15", "Monday")
-  String? _selectedRepaymentDay; 
+  String? _selectedRepaymentDay;
   DateTime? _selectedDate;
 
   bool _isLoading = false;
@@ -54,9 +59,7 @@ class _AddDebtScreenState extends ConsumerState<AddDebtScreen> {
   Future<void> _submitDebtStep1() async {
     if (!_formKey.currentState!.validate()) return;
     if (_selectedDate == null) {
-       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please select a target payoff date')),
-      );
+      CustomSnackbar.show(context, 'Please select a target payoff date');
       return;
     }
 
@@ -67,16 +70,17 @@ class _AddDebtScreenState extends ConsumerState<AddDebtScreen> {
     final minPayment = _minimumPaymentController.text.replaceAll(',', '');
     final interest = _interestRateController.text.replaceAll('%', '');
 
-    final Map<String, dynamic> reqData = {
-      "name": _nameController.text.trim(),
-      "amount_owed": num.tryParse(amount),
-      "interest_rate": num.tryParse(interest),
-      "repayment_frequency": _selectedPaymentFrequency.name,
-      "min_monthly_payment": num.tryParse(minPayment),
-      "target_payoff_date": _selectedDate!.toIso8601String(), 
-      // Add specific day if API requires it, e.g.:
-      if (_selectedRepaymentDay != null) "repayment_day": _selectedRepaymentDay,
-    };
+    final DebtRequestModel reqData = DebtRequestModel(
+      name: _nameController.text.trim(),
+      amountOwed: num.tryParse(amount)!,
+      interestRate: num.tryParse(interest)!,
+      paymentFrequency: TextUtils.capitalizeFirstLetter(
+        _selectedPaymentFrequency.name,
+      ),
+      minPayment: num.tryParse(minPayment)!,
+      expectedPayoffDate: _selectedDate!,
+      repaymentDay: _selectedRepaymentDay!,
+    );
 
     try {
       // Call Provider
@@ -87,46 +91,32 @@ class _AddDebtScreenState extends ConsumerState<AddDebtScreen> {
       if (mounted) {
         // Assuming response contains 'id' or 'data'['id']. Adjust based on actual API response.
         // Example: response is Map<String, dynamic>
-        final String? debtId = response is Map ? (response['id'] ?? response['data']?['id']) : null;
+        final String debtId = response.debtId;
 
-        if (debtId != null) {
-          context.pushNamed(
-            DebtRepaymentDetailsScreen.path,
-            extra: debtId, // Pass the ID to the next screen
-          );
-        } else {
-          // Fallback if ID isn't found, or handle purely via navigation if API doesn't return ID
-           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Debt created, but ID was missing.')),
-          );
-        }
+        context.pushNamed(
+          DebtRepaymentDetailsScreen.path,
+          extra: debtId, // Pass the ID to the next screen
+        );
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString())),
-        );
+        CustomSnackbar.show(context, e.toString());
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
   }
 
-  // Helper to generate days based on frequency
+  // Helper to generate days
   List<String> _getDropdownItems() {
-    if (_selectedPaymentFrequency == LoanRepaymentFrequency.monthly) {
-      return List.generate(31, (index) => (index + 1).toString());
-    } else if (_selectedPaymentFrequency == LoanRepaymentFrequency.weekly) {
-      return ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-    }
-    return [];
+    return List.generate(31, (index) => (index + 1).toString());
   }
 
   @override
   Widget build(BuildContext context) {
     // You can also watch the provider state for loading if you prefer
     // final providerState = ref.watch(debtListNotifierProvider);
-    
+
     return Scaffold(
       appBar: AppBar(title: const Text('Add a debt')),
       body: Padding(
@@ -143,7 +133,8 @@ class _AddDebtScreenState extends ConsumerState<AddDebtScreen> {
                       label: 'Debt name',
                       hint: 'Car loan',
                       controller: _nameController,
-                      validator: (v) => v == null || v.isEmpty ? 'Required' : null,
+                      validator: (v) =>
+                          v == null || v.isEmpty ? 'Required' : null,
                     ),
                     const Gap(16),
                     CustomTextFormField(
@@ -153,7 +144,8 @@ class _AddDebtScreenState extends ConsumerState<AddDebtScreen> {
                       controller: _amountOwedController,
                       keyboardType: TextInputType.number,
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      validator: (v) => v == null || v.isEmpty ? 'Required' : null,
+                      validator: (v) =>
+                          v == null || v.isEmpty ? 'Required' : null,
                     ),
                     const Gap(16),
                     CustomTextFormField(
@@ -161,9 +153,16 @@ class _AddDebtScreenState extends ConsumerState<AddDebtScreen> {
                       label: 'Interest rate',
                       hint: '5%',
                       controller: _interestRateController,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      validator: (v) => v == null || v.isEmpty ? 'Required' : null,
+                      keyboardType: const TextInputType.numberWithOptions(
+                        decimal: true,
+                      ),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(
+                          RegExp(r'^\d+\.?\d{0,2}'),
+                        ),
+                      ],
+                      validator: (v) =>
+                          v == null || v.isEmpty ? 'Required' : null,
                     ),
                     const Gap(16),
                     Text(
@@ -182,12 +181,11 @@ class _AddDebtScreenState extends ConsumerState<AddDebtScreen> {
                             frequency.name[0].toUpperCase() +
                                 frequency.name.substring(1),
                             isSelected: _selectedPaymentFrequency == frequency,
-                            onTap: () => setState(
-                              () {
-                                _selectedPaymentFrequency = frequency;
-                                _selectedRepaymentDay = null; // Reset dropdown selection
-                              },
-                            ),
+                            onTap: () => setState(() {
+                              _selectedPaymentFrequency = frequency;
+                              _selectedRepaymentDay =
+                                  null; // Reset dropdown selection
+                            }),
                           ),
                         );
                       }).toList(),
@@ -195,15 +193,17 @@ class _AddDebtScreenState extends ConsumerState<AddDebtScreen> {
                     const Gap(8),
                     const InsightCard(
                       insightType: InsightType.nextBestAction,
-                      text: 'Pay ₦125,000/month to clear ₦1,000,000 loan in 8 months.',
+                      text:
+                          'Pay ₦125,000/month to clear ₦1,000,000 loan in 8 months.',
                     ),
                     const Gap(16),
                     // Only show dropdown if relevant
-                    if (_selectedPaymentFrequency != LoanRepaymentFrequency.manually)
+                    if (_selectedPaymentFrequency !=
+                        LoanRepaymentFrequency.manually)
                       CustomDropdownButton(
                         items: _getDropdownItems(),
-                        label: 'Day of the ${_selectedPaymentFrequency.name}',
-                        // value: _selectedRepaymentDay,
+                        label:
+                            'Day of the ${_selectedPaymentFrequency.name.replaceFirst('ly', '')}',
                         onChanged: (val) {
                           setState(() => _selectedRepaymentDay = val);
                         },
@@ -215,18 +215,25 @@ class _AddDebtScreenState extends ConsumerState<AddDebtScreen> {
                       hint: '100,000',
                       controller: _minimumPaymentController,
                       keyboardType: TextInputType.number,
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      validator: (v) => v == null || v.isEmpty ? 'Required' : null,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(
+                          RegExp(r'^\d+\.?\d{0,2}'),
+                        ),
+                      ],
+                      validator: (v) =>
+                          v == null || v.isEmpty ? 'Required' : null,
                     ),
                     const Gap(8),
                     const InsightCard(
                       insightType: InsightType.nahlInsight,
-                      text: 'At ₦100,000/month and 5% interest, your loan will be be paid off in 9 months.',
+                      text:
+                          'At ₦100,000/month and 5% interest, your loan will be be paid off in 9 months.',
                     ),
                     const Gap(8),
                     const InsightCard(
                       insightType: InsightType.nextBestAction,
-                      text: 'We will send you a reminder when each repayment is due',
+                      text:
+                          'We will send you a reminder when each repayment is due',
                     ),
                     const Gap(16),
                     CustomTextFormField(
@@ -236,7 +243,8 @@ class _AddDebtScreenState extends ConsumerState<AddDebtScreen> {
                       label: 'Target payoff date',
                       suffix: const Icon(Icons.calendar_month),
                       readOnly: true, // Prevent manual typing to ensure format
-                      validator: (v) => v == null || v.isEmpty ? 'Required' : null,
+                      validator: (v) =>
+                          v == null || v.isEmpty ? 'Required' : null,
                       onTap: () async {
                         final date = await DateTimeUtils.pickDate(
                           context,
@@ -257,12 +265,11 @@ class _AddDebtScreenState extends ConsumerState<AddDebtScreen> {
                   ],
                 ),
               ),
-              _isLoading 
-                ? const CircularProgressIndicator()
-                : CustomElevatedButton(
-                    text: 'Add repayment details',
-                    onPressed: _submitDebtStep1,
-                  ),
+              CustomElevatedButton(
+                text: 'Add repayment details',
+                isLoading: _isLoading,
+                onPressed: _submitDebtStep1,
+              ),
             ],
           ),
         ),

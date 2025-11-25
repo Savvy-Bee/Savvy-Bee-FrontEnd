@@ -42,6 +42,7 @@ class CustomDropdownButton extends StatelessWidget {
           selectedTrailingIcon: Icon(Icons.keyboard_arrow_up),
           hintText: hint,
           expandedInsets: EdgeInsets.zero,
+          menuHeight: MediaQuery.sizeOf(context).height / 2,
           inputDecorationTheme: InputDecorationTheme(
             filled: true,
             fillColor: AppColors.background,

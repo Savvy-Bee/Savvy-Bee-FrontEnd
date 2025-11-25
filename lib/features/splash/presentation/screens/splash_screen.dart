@@ -58,6 +58,6 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
       _navigateAfterAuth();
     });
 
-    return Scaffold(body: Center(child: Image.asset(Logos.logo, scale: 0.7)));
+    return Scaffold(body: Center(child: Image.asset(Logos.logo, scale: 1.5)));
   }
 }

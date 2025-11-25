@@ -1,18 +1,21 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:savvy_bee_mobile/core/network/api_client.dart';
 import 'package:savvy_bee_mobile/core/network/api_endpoints.dart';
+import 'package:savvy_bee_mobile/features/tools/domain/models/debt.dart';
 
 class DebtRepository {
   final ApiClient _apiClient;
 
   DebtRepository({required ApiClient apiClient}) : _apiClient = apiClient;
 
-  Future<List<dynamic>> getDebtHomeData() async {
+  Future<DebtListResponse> getDebtHomeData() async {
     try {
       final response = await _apiClient.get(ApiEndpoints.debtHome);
 
       if (response.data['success'] == true && response.data['data'] is List) {
-        return response.data['data'] as List<dynamic>;
+        return DebtListResponse.fromJson(response.data);
       } else {
         throw ApiException(
           message: response.data['message'] ?? 'Failed to load debt data',
@@ -26,11 +29,11 @@ class DebtRepository {
     }
   }
 
-  Future<Map<String, dynamic>> createDebtStep1(
-    Map<String, dynamic> debtData,
+  Future<DebtCreationResponse> createDebtStep1(
+    DebtRequestModel debtData,
   ) async {
     try {
-      final formData = FormData.fromMap(debtData);
+      final formData = FormData.fromMap(debtData.toJson());
 
       final response = await _apiClient.post(
         ApiEndpoints.createDebtStep('1'),
@@ -38,7 +41,8 @@ class DebtRepository {
       );
 
       if (response.data['success'] == true && response.data['data'] != null) {
-        return response.data['data'] as Map<String, dynamic>;
+        log(response.toString());
+        return DebtCreationResponse.fromJson(response.data);
       } else {
         throw ApiException(
           message: response.data['message'] ?? 'Failed to create debt',
@@ -53,16 +57,10 @@ class DebtRepository {
   }
 
   Future<Map<String, dynamic>> createDebtStep2({
-    required String debtId,
-    required String bankCode,
-    required String accountNumber,
+    required DebtCreationStep2Request reqBody,
   }) async {
     try {
-      final formData = FormData.fromMap({
-        'debtid': debtId,
-        'code': bankCode,
-        'acctNumber': accountNumber,
-      });
+      final formData = FormData.fromMap(reqBody.toJson());
 
       final response = await _apiClient.post(
         ApiEndpoints.createDebtStep('2'),

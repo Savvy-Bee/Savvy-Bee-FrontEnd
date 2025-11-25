@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:savvy_bee_mobile/features/hive/data/repositories/hive_repository.dart';
 import 'package:savvy_bee_mobile/features/home/data/repositories/home_repository.dart';
 import 'package:savvy_bee_mobile/features/spend/data/repositories/kyc_repository.dart';
 import 'package:savvy_bee_mobile/features/spend/data/repositories/transfer_repository.dart.dart';
@@ -61,4 +62,9 @@ final homeRepositoryProvider = Provider<HomeRepository>((ref) {
 final debtRepositoryProvider = Provider<DebtRepository>((ref) {
   final apiClient = ref.watch(apiClientProvider);
   return DebtRepository(apiClient: apiClient);
+});
+
+final hiveRepositoryProvider = Provider<HiveRepository>((ref) {
+  final apiClient = ref.watch(apiClientProvider);
+  return HiveRepository(apiClient: apiClient);
 });

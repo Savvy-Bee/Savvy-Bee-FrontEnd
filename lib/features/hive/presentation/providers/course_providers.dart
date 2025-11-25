@@ -5,15 +5,9 @@ import '../../domain/helpers/quiz_helpers.dart';
 /// Provider for course IDs to load
 final courseIdsProvider = Provider<List<String>>((ref) {
   return [
+    'savings_101',
+    'numeracy',
     'budget_101',
-    // 'savings_101',
-    // 'budgeting_basics',
-    // 'investing_intro',
-    // 'debt_management',
-    // 'credit_scores',
-    // 'emergency_funds',
-    // 'retirement_planning',
-    // 'tax_basics',
   ];
 });
 

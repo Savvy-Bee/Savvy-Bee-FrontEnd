@@ -1,0 +1,2534 @@
+{
+    "courseTitle": "Numeracy!!!",
+    "courseDescription": "Master essential money calculations, fractions, decimals, percentages, multiplication, division, interest calculations, and budgeting skills for real-world financial success.",
+    "lessons": [
+        {
+            "lessonNumber": "1",
+            "lessonTitle": "Enhanced Money Calculations",
+            "lessonDescription": "Learn multi-step addition and subtraction with money, compare monetary values, and handle real-life transaction scenarios.",
+            "levels": [
+                {
+                    "levelNumber": 1,
+                    "introduction": "Multi-step addition with money is a fundamental skill that helps you accurately calculate the total cost of multiple items. In everyday situations like shopping or budgeting, you often need to add different monetary amounts to determine how much you are spending or how much change you should receive.",
+                    "sections": [
+                        {
+                            "heading": "Addition Basics",
+                            "content": "For example, when you purchase an item for ₦150 and another for ₦200, adding these amounts gives you a total of ₦350. Mastering this process requires you to align numbers correctly according to their place values—units, tens, and hundreds—so that every naira is properly accounted for."
+                        }
+                    ],
+                    "highlights": [
+                        "Addition Basics: Learn to add different amounts of money to get a total.",
+                        "Place Value Matters: Align numbers by units, tens, and hundreds.",
+                        "Everyday Application: Use multi-step addition for shopping, budgeting, and more.",
+                        "Accuracy: Practice ensures you count every naira correctly."
+                    ],
+                    "quiz": {
+                        "focus": "Multi-step addition with money",
+                        "questions": [
+                            {
+                                "type": "multiChoice",
+                                "question": "What is the sum of ₦120 and ₦230?",
+                                "options": [
+                                    "₦360",
+                                    "₦350",
+                                    "₦340",
+                                    "₦370"
+                                ],
+                                "correctAnswer": 1
+                            },
+                            {
+                                "type": "multiChoice",
+                                "question": "If you buy items costing ₦45, ₦55, and ₦100, what is the total cost?",
+                                "options": [
+                                    "₦190",
+                                    "₦200",
+                                    "₦210",
+                                    "₦205"
+                                ],
+                                "correctAnswer": 1
+                            },
+                            {
+                                "type": "multiChoice",
+                                "question": "You have ₦500 and you spend ₦150 on a snack. How much money do you have left?",
+                                "options": [
+                                    "₦400",
+                                    "₦360",
+                                    "₦340",
+                                    "₦350"
+                                ],
+                                "correctAnswer": 3
+                            },
+                            {
+                                "type": "multiChoice",
+                                "question": "Add these amounts: ₦350, ₦200, and ₦150. What is the total?",
+                                "options": [
+                                    "₦700",
+                                    "₦750",
+                                    "₦800",
+                                    "₦650"
+                                ],
+                                "correctAnswer": 0
+                            },
+                            {
+                                "type": "multiChoice",
+                                "question": "If you save ₦100 each day for 5 days and then receive a bonus of ₦250, what is your total savings?",
+                                "options": [
+                                    "₦650",
+                                    "₦850",
+                                    "₦750",
+                                    "₦600"
+                                ],
+                                "correctAnswer": 2
+                            }
+                        ]
+                    }
+                },
+                {
+                    "levelNumber": 2,
+                    "introduction": "Multi-step subtraction and making change is a vital arithmetic skill that helps you manage your money accurately in everyday transactions. This topic focuses on subtracting the cost of items from the money you have and calculating the change you should receive.",
+                    "sections": [
+                        {
+                            "heading": "Accurate Subtraction",
+                            "content": "For example, if you have ₦500 and spend ₦275, you subtract 275 from 500 to find that your change is ₦225. By mastering these techniques, you ensure that every naira is accounted for, whether you're shopping or budgeting."
+                        }
+                    ],
+                    "highlights": [
+                        "Accurate Subtraction: Learn to subtract item costs from your total money.",
+                        "Making Change: Understand how to calculate the difference between what you pay and the cost.",
+                        "Everyday Application: Use these skills in daily transactions, whether shopping or budgeting.",
+                        "Attention to Detail: Focus on careful calculation to ensure every naira is accounted for."
+                    ],
+                    "quiz": {
+                        "focus": "Multi-step subtraction and making change",
+                        "questions": [
+                            {
+                                "type": "multiChoice",
+                                "question": "What is the result of subtracting ₦275 from ₦500?",
+                                "options": [
+                                    "₦250",
+                                    "₦235",
+                                    "₦225",
+                                    "₦245"
+                                ],
+                                "correctAnswer": 2
+                            },
+                            {
+                                "type": "multiChoice",
+                                "question": "If you have ₦1000 and spend ₦450, how much money remains?",
+                                "options": [
+                                    "₦580",
+                                    "₦560",
+                                    "₦540",
+                                    "₦550"
+                                ],
+                                "correctAnswer": 3
+                            },
+                            {
+                                "type": "multiChoice",
+                                "question": "You purchase an item for ₦320 with a ₦500 note. What is your change?",
+                                "options": [
+                                    "₦180",
+                                    "₦190",
+                                    "₦170",
+                                    "₦200"
+                                ],
+                                "correctAnswer": 0
+                            },
+                            {
+                                "type": "multiChoice",
+                                "question": "What is 750 minus 425?",
+                                "options": [
+                                    "₦325",
+                                    "₦315",
+                                    "₦335",
+                                    "₦345"
+                                ],
+                                "correctAnswer": 0
+                            },
+                            {
+                                "type": "multiChoice",
+                                "question": "If you have ₦1200 and you buy three items costing ₦300 each, what is your change?",
+                                "options": [
+                                    "₦250",
+                                    "₦200",
+                                    "₦300",
+                                    "₦400"
+                                ],
+                                "correctAnswer": 2
+                            }
+                        ]
+                    }
+                },
+                {
+                    "levelNumber": 3,
+                    "introduction": "Comparing monetary values involves evaluating the prices of different items to determine which offers the best value for your money. This skill is essential when shopping or budgeting, as it helps you make informed decisions about where to spend your money.",
+                    "sections": [
+                        {
+                            "heading": "Price Comparison",
+                            "content": "For example, if one pen costs ₦80 and another costs ₦100, the ₦80 option is more economical—especially when you're trying to stick to a budget. By learning to compare prices accurately, you not only save money but also develop an understanding of how even small differences in cost can impact your overall spending."
+                        }
+                    ],
+                    "highlights": [
+                        "Price Comparison: Identify which items are cheaper to maximize value.",
+                        "Smart Shopping: Use comparisons to choose the best deals.",
+                        "Real-Life Application: Apply these skills while shopping or planning a budget.",
+                        "Informed Decisions: Understand how small price differences can affect your spending."
+                    ],
+                    "quiz": {
+                        "focus": "Comparing monetary values",
+                        "questions": [
+                            {
+                                "type": "multiChoice",
+                                "question": "If a notebook costs ₦150 and a pen costs ₦80, which item is less expensive?",
+                                "options": [
+                                    "Notebook",
+                                    "Pen",
+                                    "They cost the same",
+                                    "Not enough information"
+                                ],
+                                "correctAnswer": 1
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Arrange the following items in order of price from lowest to highest: Chocolate (₦20), Candy (₦15), Gum (₦10)",
+                                "options": [
+                                    "Chocolate (₦20)",
+                                    "Candy (₦15)",
+                                    "Gum (₦10)"
+                                ],
+                                "correctAnswer": [
+                                    "Gum (₦10)",
+                                    "Candy (₦15)",
+                                    "Chocolate (₦20)"
+                                ]
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "If you have ₦300 and you buy a magazine for ₦250, you will have ______ left.",
+                                "correctAnswer": [
+                                    "₦50",
+                                    "50"
+                                ]
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Rearrange these steps for comparing prices when shopping:",
+                                "options": [
+                                    "Compare the prices to find the best deal",
+                                    "Decide which items you need",
+                                    "Check the prices of the items"
+                                ],
+                                "correctAnswer": [
+                                    "Decide which items you need",
+                                    "Check the prices of the items",
+                                    "Compare the prices to find the best deal"
+                                ]
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match each item with its correct price. Notebook costs ₦150. Pen is ₦70 cheaper than the notebook. Candy is the cheapest item at ₦15. Chocolate costs ₦5 more than the candy.",
+                                "leftOptions": [
+                                    "Notebook",
+                                    "Pen",
+                                    "Candy",
+                                    "Chocolate"
+                                ],
+                                "rightOptions": [
+                                    "₦150",
+                                    "₦80",
+                                    "₦15",
+                                    "₦20"
+                                ],
+                                "correctMatches": {
+                                    "0": 0,
+                                    "1": 1,
+                                    "2": 2,
+                                    "3": 3
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "levelNumber": 4,
+                    "introduction": "Real-life transaction scenarios involve using your math skills to manage everyday purchases. In these situations, you combine addition and subtraction to calculate the total cost of multiple items and determine how much change you should receive.",
+                    "sections": [
+                        {
+                            "heading": "Combine Skills",
+                            "content": "For instance, if you have ₦500, then purchase an item for ₦275 and another for ₦100, you'll need to add the costs to find your total spending and then subtract that from ₦500 to know how much money is left. Mastering these skills ensures that you always have an accurate understanding of your available funds during shopping."
+                        }
+                    ],
+                    "highlights": [
+                        "Combine Skills: Use addition and subtraction together in real-world shopping situations.",
+                        "Calculate Change: Determine how much money remains after purchases.",
+                        "Real-Life Application: Practice handling everyday transactions with confidence.",
+                        "Accuracy Matters: Ensure every naira is accounted for when making purchases."
+                    ],
+                    "quiz": {
+                        "focus": "Real-life transaction scenarios",
+                        "questions": [
+                            {
+                                "type": "multiChoice",
+                                "question": "You have ₦500. If you buy an item for ₦275, how much change do you get?",
+                                "options": [
+                                    "₦225",
+                                    "₦235",
+                                    "₦215",
+                                    "₦245"
+                                ],
+                                "correctAnswer": 0
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Arrange the steps in the correct order when making a purchase at a store:",
+                                "options": [
+                                    "Calculate total cost of items",
+                                    "Pay with cash",
+                                    "Receive change",
+                                    "Subtract cost from cash provided"
+                                ],
+                                "correctAnswer": [
+                                    "Calculate total cost of items",
+                                    "Subtract cost from cash provided",
+                                    "Pay with cash",
+                                    "Receive change"
+                                ]
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "If you have ₦600 and you spend ₦150 on a snack and ₦200 on a drink, you will have ______ left.",
+                                "correctAnswer": [
+                                    "₦250",
+                                    "250"
+                                ]
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match each scenario with the correct calculation method.",
+                                "leftOptions": [
+                                    "Scenario 1: Adding the prices of items",
+                                    "Scenario 2: Subtracting the total cost from the money given",
+                                    "Scenario 3: Determining change when you pay more than the total cost"
+                                ],
+                                "rightOptions": [
+                                    "Change Calculation",
+                                    "Addition",
+                                    "Subtraction"
+                                ],
+                                "correctMatches": {
+                                    "0": 1,
+                                    "1": 2,
+                                    "2": 0
+                                }
+                            },
+                            {
+                                "type": "multiChoice",
+                                "question": "You have ₦800. You buy two books priced at ₦220 each and a pencil for ₦60. What is your remaining amount?",
+                                "options": [
+                                    "₦300",
+                                    "₦280",
+                                    "₦320",
+                                    "₦260"
+                                ],
+                                "correctAnswer": 0
+                            }
+                        ]
+                    }
+                },
+                {
+                    "levelNumber": 5,
+                    "introduction": "This summary quiz reviews everything you've learned in Level 1. You've practiced multi-step addition, subtraction, making change, and comparing monetary values in everyday transactions. Now, test your overall understanding and ensure you can confidently add prices, subtract costs, and determine the best deals in real-life scenarios.",
+                    "sections": [
+                        {
+                            "heading": "Key Concepts Review",
+                            "content": "Mastery of these skills is essential for managing money accurately and making smart financial decisions.",
+                            "bulletPoints": [
+                                "Addition & Subtraction: Combine amounts and calculate remaining money accurately.",
+                                "Change-Making: Determine the correct change from transactions.",
+                                "Price Comparison: Identify best deals by comparing monetary values.",
+                                "Real-World Application: Apply these skills in realistic shopping and budgeting scenarios."
+                            ]
+                        }
+                    ],
+                    "highlights": [
+                        "Addition & Subtraction: Combine amounts and calculate remaining money accurately.",
+                        "Change-Making: Determine the correct change from transactions.",
+                        "Price Comparison: Identify best deals by comparing monetary values.",
+                        "Real-World Application: Apply these skills in realistic shopping and budgeting scenarios."
+                    ],
+                    "quiz": {
+                        "focus": "Summary quiz covering all Level 1 concepts",
+                        "questions": [
+                            {
+                                "type": "multiChoice",
+                                "question": "What is the sum of ₦250 and ₦375?",
+                                "options": [
+                                    "₦615",
+                                    "₦625",
+                                    "₦635",
+                                    "₦645"
+                                ],
+                                "correctAnswer": 1
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "If you subtract ₦100 from ₦450, you get ______.",
+                                "correctAnswer": [
+                                    "₦350",
+                                    "350"
+                                ]
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Arrange the steps for calculating change when you pay with cash.",
+                                "options": [
+                                    "Receive the remaining money as change",
+                                    "Subtract the total cost from the amount paid",
+                                    "Determine the total cost of the items"
+                                ],
+                                "correctAnswer": [
+                                    "Determine the total cost of the items",
+                                    "Subtract the total cost from the amount paid",
+                                    "Receive the remaining money as change"
+                                ]
+                            },
+                            {
+                                "type": "multiChoice",
+                                "question": "Which method helps ensure you add money accurately?",
+                                "options": [
+                                    "Rushing through the calculation",
+                                    "Lining up the digits by place value",
+                                    "Ignoring the hundreds place",
+                                    "Relying only on mental math"
+                                ],
+                                "correctAnswer": 1
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match each transaction with the appropriate operation.",
+                                "leftOptions": [
+                                    "Transaction A: Adding the cost of a notebook and a pen",
+                                    "Transaction B: Finding out how much money is left after spending ₦200 from ₦500",
+                                    "Transaction C: Calculating change when you pay ₦1000 for a ₦750 purchase"
+                                ],
+                                "rightOptions": [
+                                    "Addition",
+                                    "Subtraction"
+                                ],
+                                "correctMatches": {
+                                    "0": 0,
+                                    "1": 1,
+                                    "2": 1
+                                }
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Rearrange these steps for solving a multi-step addition problem.",
+                                "options": [
+                                    "Combine the totals to get the final sum",
+                                    "Align the numbers by place value",
+                                    "Add the units, tens, and hundreds separately",
+                                    "Write down each amount"
+                                ],
+                                "correctAnswer": [
+                                    "Align the numbers by place value",
+                                    "Add the units, tens, and hundreds separately",
+                                    "Write down each amount",
+                                    "Combine the totals to get the final sum"
+                                ]
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "If you have ₦800 and spend ₦150 on a snack, the remaining amount is ______.",
+                                "correctAnswer": [
+                                    "₦650",
+                                    "650"
+                                ]
+                            },
+                            {
+                                "type": "multiChoice",
+                                "question": "You have ₦1,000. You purchase items costing ₦275, ₦125, and ₦200. What is the total cost of your purchases?",
+                                "options": [
+                                    "₦600",
+                                    "₦625",
+                                    "₦650",
+                                    "₦675"
+                                ],
+                                "correctAnswer": 0
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Order these items by price from lowest to highest: Item A (₦85), Item B (₦120), Item C (₦65)",
+                                "options": [
+                                    "Item A (₦85)",
+                                    "Item B (₦120)",
+                                    "Item C (₦65)"
+                                ],
+                                "correctAnswer": [
+                                    "Item C (₦65)",
+                                    "Item A (₦85)",
+                                    "Item B (₦120)"
+                                ]
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match each operation with its function in money calculations.",
+                                "leftOptions": [
+                                    "Subtraction",
+                                    "Comparison",
+                                    "Addition"
+                                ],
+                                "rightOptions": [
+                                    "Combines amounts to find a total",
+                                    "Finds the remaining money after a cost is deducted",
+                                    "Evaluates which price is lower or higher"
+                                ],
+                                "correctMatches": {
+                                    "0": 1,
+                                    "1": 2,
+                                    "2": 0
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "lessonNumber": "2",
+            "lessonTitle": "Fractions, Decimals, and Percentages in Daily Finance",
+            "lessonDescription": "Learn to convert between fractions and decimals, understand percentages, calculate discounts, and evaluate sales offers.",
+            "levels": [
+                {
+                    "levelNumber": 1,
+                    "introduction": "Fractions and decimals are two ways of expressing parts of a whole. A fraction like 1/2 shows that one part is taken from two equal parts, while its decimal equivalent, 0.5, is obtained by dividing the numerator (1) by the denominator (2). This conversion is essential for understanding discounts, taxes, and other financial calculations in everyday life.",
+                    "sections": [
+                        {
+                            "heading": "Converting Fractions to Decimals",
+                            "content": "To convert a fraction to a decimal: Step 1: Write the fraction as a division problem (e.g., 1 ÷ 2). Step 2: Perform the division using long division or a calculator. Step 3: Record the resulting decimal number. For example, converting 1/4 into a decimal involves dividing 1 by 4, which equals 0.25.",
+                            "bulletPoints": [
+                                "1/2 = 0.5",
+                                "1/4 = 0.25",
+                                "1/5 = 0.20",
+                                "3/4 = 0.75"
+                            ]
+                        },
+                        {
+                            "heading": "Link to Percentages",
+                            "content": "Percentages are closely related, as they express a fraction out of 100. For instance, 0.5 as a percentage is 50%, and 0.25 is 25%. Understanding these concepts is vital for calculating discounts and interpreting sales offers."
+                        }
+                    ],
+                    "highlights": [
+                        "Conversion Process: Write the fraction as division, perform division, record the decimal.",
+                        "Real-World Use: Converting fractions helps in understanding discounts, taxes, and prices.",
+                        "Key Equivalents: 1/2 = 0.5, 1/4 = 0.25, and so on.",
+                        "Link to Percentages: Decimals can be converted to percentages by multiplying by 100."
+                    ],
+                    "quiz": {
+                        "focus": "Converting fractions and decimals",
+                        "questions": [
+                            {
+                                "type": "multiChoice",
+                                "question": "What is the decimal equivalent of the fraction 1/2?",
+                                "options": [
+                                    "0.25",
+                                    "0.5",
+                                    "0.75",
+                                    "1.0"
+                                ],
+                                "correctAnswer": 1
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "The fraction 1/4 is equal to ______ in decimal form.",
+                                "correctAnswer": [
+                                    "0.25"
+                                ]
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Arrange the steps to convert a fraction to a decimal in the correct order.",
+                                "options": [
+                                    "Write the fraction as a division problem (numerator ÷ denominator)",
+                                    "Perform the division",
+                                    "Record the resulting decimal"
+                                ],
+                                "correctAnswer": [
+                                    "Write the fraction as a division problem (numerator ÷ denominator)",
+                                    "Perform the division",
+                                    "Record the resulting decimal"
+                                ]
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match each fraction with its correct decimal equivalent.",
+                                "leftOptions": [
+                                    "3/4",
+                                    "1/2",
+                                    "1/5"
+                                ],
+                                "rightOptions": [
+                                    "0.20",
+                                    "0.50",
+                                    "0.75"
+                                ],
+                                "correctMatches": {
+                                    "0": 2,
+                                    "1": 1,
+                                    "2": 0
+                                }
+                            },
+                            {
+                                "type": "multiChoice",
+                                "question": "Which fraction is equivalent to the decimal 0.75?",
+                                "options": [
+                                    "1/4",
+                                    "1/2",
+                                    "3/4",
+                                    "2/3"
+                                ],
+                                "correctAnswer": 2
+                            }
+                        ]
+                    }
+                },
+                {
+                    "levelNumber": 2,
+                    "introduction": "Percentages represent parts of a whole and are commonly used in everyday finance, such as calculating discounts, taxes, and interest. A percentage is essentially a fraction out of 100.",
+                    "sections": [
+                        {
+                            "heading": "Understanding Percentages",
+                            "content": "For example, 25% means 25 out of 100, or 0.25 in decimal form. When you see a sale with a 30% discount, it means you only pay 70% of the original price.",
+                            "bulletPoints": [
+                                "Percentage Basics: Expresses a part out of 100.",
+                                "Conversion: Divide the percentage by 100 to get the decimal equivalent.",
+                                "Calculation: Multiply the decimal by the total amount to find the percentage value."
+                            ]
+                        },
+                        {
+                            "heading": "Calculating Percentages",
+                            "content": "To calculate a percentage of an amount, convert the percentage to a decimal (by dividing by 100) and then multiply by the total amount. For instance, to find 20% of ₦500, convert 20% to 0.20 and multiply: 0.20 × 500 = ₦100."
+                        }
+                    ],
+                    "highlights": [
+                        "Percentage Basics: Expresses a part out of 100.",
+                        "Conversion: Divide the percentage by 100 to get the decimal equivalent.",
+                        "Calculation: Multiply the decimal by the total amount to find the percentage value.",
+                        "Real-World Use: Helps calculate discounts, taxes, and interest."
+                    ],
+                    "quiz": {
+                        "focus": "Working with percentages",
+                        "questions": [
+                            {
+                                "type": "multiChoice",
+                                "question": "What is 25% expressed as a decimal?",
+                                "options": [
+                                    "0.25",
+                                    "0.20",
+                                    "0.75",
+                                    "0.50"
+                                ],
+                                "correctAnswer": 0
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "If an item is on sale for 30% off, you pay ______% of the original price.",
+                                "correctAnswer": [
+                                    "70"
+                                ]
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Arrange the steps to calculate a percentage of a given amount in the correct order.",
+                                "options": [
+                                    "Multiply the decimal by the total amount",
+                                    "Convert the percentage to a decimal",
+                                    "Interpret the result as the part of the whole"
+                                ],
+                                "correctAnswer": [
+                                    "Convert the percentage to a decimal",
+                                    "Multiply the decimal by the total amount",
+                                    "Interpret the result as the part of the whole"
+                                ]
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match each discount scenario with the amount you pay relative to the original price.",
+                                "leftOptions": [
+                                    "30% off",
+                                    "10% off",
+                                    "50% off",
+                                    "20% off"
+                                ],
+                                "rightOptions": [
+                                    "Pay 90% of the price",
+                                    "Pay 80% of the price",
+                                    "Pay 70% of the price",
+                                    "Pay 50% of the price"
+                                ],
+                                "correctMatches": {
+                                    "0": 2,
+                                    "1": 0,
+                                    "2": 3,
+                                    "3": 1
+                                }
+                            },
+                            {
+                                "type": "multiChoice",
+                                "question": "What is 20% of ₦500?",
+                                "options": [
+                                    "₦100",
+                                    "₦120",
+                                    "₦80",
+                                    "₦150"
+                                ],
+                                "correctAnswer": 0
+                            }
+                        ]
+                    }
+                },
+                {
+                    "levelNumber": 3,
+                    "introduction": "When shopping, discounts help you save money by reducing the original price of an item. To calculate the sale price, follow a three-step process.",
+                    "sections": [
+                        {
+                            "heading": "Calculating Discounts",
+                            "content": "1. Convert the Discount Percentage: Divide the discount percentage by 100 to get its decimal form. For example, 25% becomes 0.25. 2. Find the Discount Amount: Multiply the original price by the decimal. If an item costs ₦1,000 and the discount is 25%, the discount amount is 1,000 × 0.25 = ₦250. 3. Calculate the Sale Price: Subtract the discount amount from the original price. In our example, the sale price is ₦1,000 – ₦250 = ₦750."
+                        }
+                    ],
+                    "highlights": [
+                        "Discount Calculation: Convert percentage to decimal, multiply by the original price, then subtract.",
+                        "Real-World Application: Helps you understand sale prices and savings.",
+                        "Simple Process: Three clear steps to find the final price.",
+                        "Smart Shopping: Use these skills to decide if a deal is really good."
+                    ],
+                    "quiz": {
+                        "focus": "Markups and sales price calculation",
+                        "questions": [
+                            {
+                                "type": "multiChoice",
+                                "question": "An item costs ₦1,000 and is discounted by 25%. What is the sale price?",
+                                "options": [
+                                    "₦700",
+                                    "₦750",
+                                    "₦800",
+                                    "₦850"
+                                ],
+                                "correctAnswer": 1
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "If an item originally costs ₦800 and has a 10% discount, the discount amount is ₦______ and the sale price is ₦_______.",
+                                "correctAnswer": [
+                                    "80",
+                                    "720"
+                                ]
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Arrange the steps to calculate the sale price from a discount in the correct order.",
+                                "options": [
+                                    "Subtract the discount amount from the original price",
+                                    "Convert the discount percentage to a decimal",
+                                    "Multiply the original price by the decimal to get the discount amount"
+                                ],
+                                "correctAnswer": [
+                                    "Convert the discount percentage to a decimal",
+                                    "Multiply the original price by the decimal to get the discount amount",
+                                    "Subtract the discount amount from the original price"
+                                ]
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match each scenario with its correct sale price for an item originally priced at ₦1,000.",
+                                "leftOptions": [
+                                    "50% discount",
+                                    "20% discount",
+                                    "30% discount"
+                                ],
+                                "rightOptions": [
+                                    "Sale Price: ₦800",
+                                    "Sale Price: ₦700",
+                                    "Sale Price: ₦600"
+                                ],
+                                "correctMatches": {
+                                    "0": 2,
+                                    "1": 0,
+                                    "2": 1
+                                }
+                            },
+                            {
+                                "type": "multiChoice",
+                                "question": "What is the discount amount on an item that costs ₦600 with a 15% discount?",
+                                "options": [
+                                    "₦70",
+                                    "₦80",
+                                    "₦90",
+                                    "₦100"
+                                ],
+                                "correctAnswer": 2
+                            }
+                        ]
+                    }
+                },
+                {
+                    "levelNumber": 4,
+                    "introduction": "In everyday shopping, it's important not only to calculate discounts but also to evaluate different sales offers to determine the best value for your money. When comparing deals, consider both the percentage discount and the final sale price.",
+                    "sections": [
+                        {
+                            "heading": "Evaluating Sales Offers",
+                            "content": "For example, an item originally priced at ₦1,000 may be offered at a 20% discount in one store and a 25% discount in another. Although the higher percentage seems better, you must calculate the sale price for each to decide which offer saves you more money. Learning to compare these figures using fractions, decimals, and percentages will help you spot the best deals and make informed choices when shopping."
+                        }
+                    ],
+                    "highlights": [
+                        "Compare Deals: Evaluate both the percentage discount and the final sale price.",
+                        "Calculation Skills: Use fractions, decimals, and percentages to determine savings.",
+                        "Smart Shopping: Decide which offer provides the best value.",
+                        "Real-World Application: Apply these skills to everyday purchases and sales."
+                    ],
+                    "quiz": {
+                        "focus": "Evaluating sales offers",
+                        "questions": [
+                            {
+                                "type": "multiChoice",
+                                "question": "Two stores offer the same item originally priced at ₦1,000. Store A gives a 20% discount, and Store B gives a 25% discount. Which store offers the better deal?",
+                                "options": [
+                                    "Store A",
+                                    "Store B",
+                                    "They offer the same deal",
+                                    "Cannot be determined"
+                                ],
+                                "correctAnswer": 1
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "An item with an original price of ₦800 is discounted by 30%. The discount amount is ₦______ and the sale price is ₦_______.",
+                                "correctAnswer": [
+                                    "240",
+                                    "560"
+                                ]
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Arrange the steps to evaluate a sales offer from start to finish.",
+                                "options": [
+                                    "Subtract the discount amount from the original price",
+                                    "Convert the discount percentage to a decimal",
+                                    "Multiply the original price by the decimal",
+                                    "Compare the sale price with other offers to determine the best value"
+                                ],
+                                "correctAnswer": [
+                                    "Convert the discount percentage to a decimal",
+                                    "Multiply the original price by the decimal",
+                                    "Subtract the discount amount from the original price",
+                                    "Compare the sale price with other offers to determine the best value"
+                                ]
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match each sales offer with its corresponding sale price for an item originally priced at ₦1,200.",
+                                "leftOptions": [
+                                    "35% discount",
+                                    "15% discount",
+                                    "25% discount"
+                                ],
+                                "rightOptions": [
+                                    "Sale price ₦780",
+                                    "Sale Price: ₦900",
+                                    "Sale Price: ₦1,020"
+                                ],
+                                "correctMatches": {
+                                    "0": 0,
+                                    "1": 2,
+                                    "2": 1
+                                }
+                            },
+                            {
+                                "type": "multiChoice",
+                                "question": "You are comparing two deals for a shirt originally priced at ₦2,000. Deal 1 offers a 10% discount, and Deal 2 offers a flat discount of ₦300. Which deal is better?",
+                                "options": [
+                                    "Deal 1 (10% discount)",
+                                    "Deal 2 (₦300 discount)",
+                                    "Both are equal",
+                                    "Not enough information"
+                                ],
+                                "correctAnswer": 1
+                            }
+                        ]
+                    }
+                },
+                {
+                    "levelNumber": 5,
+                    "introduction": "In this level, you've learned that fractions, decimals, and percentages are different ways to represent parts of a whole. Mastering these conversions and calculations helps you evaluate sales offers effectively.",
+                    "sections": [
+                        {
+                            "heading": "Summary of Conversions",
+                            "content": "A fraction like 1/2 means one out of two equal parts, and when you convert it to a decimal by dividing 1 by 2, you get 0.5. Similarly, 1/4 becomes 0.25, and 1/5 becomes 0.20. These conversions are essential because they form the basis for many financial calculations.",
+                            "bulletPoints": [
+                                "Conversions: Fractions are converted to decimals by division (e.g., 1/2 = 0.5).",
+                                "Percentages: Represent parts of 100; convert to decimals by dividing by 100.",
+                                "Discount Calculations: Multiply the original price by the discount (in decimal form) to find the discount amount, then subtract.",
+                                "Smart Shopping: Use these skills to compare deals and determine the best value."
+                            ]
+                        }
+                    ],
+                    "highlights": [
+                        "Conversions: Fractions are converted to decimals by division (e.g., 1/2 = 0.5).",
+                        "Percentages: Represent parts of 100; convert to decimals by dividing by 100.",
+                        "Discount Calculations: Multiply the original price by the discount (in decimal form) to find the discount amount, then subtract.",
+                        "Smart Shopping: Use these skills to compare deals and determine the best value."
+                    ],
+                    "quiz": {
+                        "focus": "Summary quiz covering all concepts in Level 2",
+                        "questions": [
+                            {
+                                "type": "multiChoice",
+                                "question": "What is the decimal equivalent of the fraction 3/4?",
+                                "options": [
+                                    "0.25",
+                                    "0.50",
+                                    "0.75",
+                                    "1.00"
+                                ],
+                                "correctAnswer": 2
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "The fraction 1/5 is equal to ______ in decimal form.",
+                                "correctAnswer": [
+                                    "0.20"
+                                ]
+                            },
+                            {
+                                "type": "multiChoice",
+                                "question": "If an item costs ₦1,200 and you receive a 20% discount, what is the discount amount?",
+                                "options": [
+                                    "₦240",
+                                    "₦300",
+                                    "₦180",
+                                    "₦200"
+                                ],
+                                "correctAnswer": 0
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Arrange the steps for calculating a sale price from a discount in the correct order.",
+                                "options": [
+                                    "Subtract the discount amount from the original price to find the sale price",
+                                    "Multiply the original price by the decimal to get the discount amount",
+                                    "Convert the discount percentage to a decimal"
+                                ],
+                                "correctAnswer": [
+                                    "Convert the discount percentage to a decimal",
+                                    "Multiply the original price by the decimal to get the discount amount",
+                                    "Subtract the discount amount from the original price to find the sale price"
+                                ]
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match each percentage discount with the corresponding percentage of the original price you pay.",
+                                "leftOptions": [
+                                    "25% discount",
+                                    "50% discount",
+                                    "10% discount"
+                                ],
+                                "rightOptions": [
+                                    "Pay 50% of original price",
+                                    "Pay 90% of original price",
+                                    "Pay 75% of original price"
+                                ],
+                                "correctMatches": {
+                                    "0": 2,
+                                    "1": 0,
+                                    "2": 1
+                                }
+                            },
+                            {
+                                "type": "multiChoice",
+                                "question": "What is 30% of ₦800?",
+                                "options": [
+                                    "₦240",
+                                    "₦200",
+                                    "₦280",
+                                    "₦300"
+                                ],
+                                "correctAnswer": 0
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "An item originally priced at ₦1,000 is discounted by 15%. The sale price is ₦_______.",
+                                "correctAnswer": [
+                                    "850"
+                                ]
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Rearrange these steps for evaluating a sales offer from different stores:",
+                                "options": [
+                                    "Convert the discount percentage to a decimal",
+                                    "Compare the final sale prices to determine the best deal",
+                                    "Subtract the discount amount from the original price",
+                                    "Calculate the discount amount"
+                                ],
+                                "correctAnswer": [
+                                    "Convert the discount percentage to a decimal",
+                                    "Calculate the discount amount",
+                                    "Subtract the discount amount from the original price",
+                                    "Compare the final sale prices to determine the best deal"
+                                ]
+                            },
+                            {
+                                "type": "multiChoice",
+                                "question": "Two stores sell the same gadget originally priced at ₦2,000. Store X offers a 10% discount, and Store Y offers a 25% discount. Which store gives the lower sale price?",
+                                "options": [
+                                    "Store X",
+                                    "Store Y",
+                                    "Both are the same",
+                                    "Cannot be determined"
+                                ],
+                                "correctAnswer": 1
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match each concept with its correct description.",
+                                "leftOptions": [
+                                    "Discount Evaluation",
+                                    "Percentage Calculation",
+                                    "Fraction-to-Decimal Conversion"
+                                ],
+                                "rightOptions": [
+                                    "Converting a fraction to a decimal by dividing the numerator by the denominator",
+                                    "Expressing a value as a part of 100 and using it in calculations",
+                                    "Determining the final price by reducing the original price by a percentage"
+                                ],
+                                "correctMatches": {
+                                    "0": 2,
+                                    "1": 1,
+                                    "2": 0
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "lessonNumber": "3",
+            "lessonTitle": "Multiplication, Division, and Unit Pricing",
+            "lessonDescription": "Learn to multiply for total costs, divide for unit pricing, analyze deals, and calculate multi-item purchases.",
+            "levels": [
+                {
+                    "levelNumber": 1,
+                    "introduction": "When you buy more than one item, you need to calculate the total cost by multiplying the price of a single item by the quantity you purchase. For example, if one notebook costs ₦150 and you buy 4 notebooks, you multiply 150 by 4 to get ₦600.",
+                    "sections": [
+                        {
+                            "heading": "Multiplication Basics",
+                            "content": "This process helps you quickly determine how much you'll spend overall. Multiplication is essential for budgeting, comparing deals on bulk items, and ensuring you have enough money for your purchases. Practice these multiplication skills to become confident in handling everyday shopping scenarios."
+                        }
+                    ],
+                    "highlights": [
+                        "Multiplication Basics: Multiply the unit price by the number of items.",
+                        "Real-World Application: Calculate the total cost when buying multiple items.",
+                        "Budgeting Skills: Use multiplication to plan how much money you need.",
+                        "Quick Calculations: Faster decision-making during shopping."
+                    ],
+                    "quiz": {
+                        "focus": "Multiplying for total cost",
+                        "questions": [
+                            {
+                                "type": "multiChoice",
+                                "question": "If one pencil costs ₦20 and you buy 5 pencils, what is the total cost?",
+                                "options": [
+                                    "₦80",
+                                    "₦90",
+                                    "₦100",
+                                    "₦110"
+                                ],
+                                "correctAnswer": 2
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "A book costs ₦250. If you buy 3 books, the total cost is ₦______.",
+                                "correctAnswer": [
+                                    "750"
+                                ]
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Arrange the steps to calculate the total cost of items using multiplication.",
+                                "options": [
+                                    "Record the total cost",
+                                    "Determine the number of items you are buying",
+                                    "Multiply the unit price by the quantity",
+                                    "Identify the price of one item"
+                                ],
+                                "correctAnswer": [
+                                    "Identify the price of one item",
+                                    "Determine the number of items you are buying",
+                                    "Multiply the unit price by the quantity",
+                                    "Record the total cost"
+                                ]
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match each scenario with its correct total cost calculation.",
+                                "leftOptions": [
+                                    "Scenario 1: 7 notebooks at ₦120 each",
+                                    "Scenario 2: 4 erasers at ₦35 each",
+                                    "Scenario 3: 6 markers at ₦50 each"
+                                ],
+                                "rightOptions": [
+                                    "Total Cost: ₦300",
+                                    "Total Cost: ₦840",
+                                    "Total Cost: ₦140"
+                                ],
+                                "correctMatches": {
+                                    "0": 1,
+                                    "1": 2,
+                                    "2": 0
+                                }
+                            },
+                            {
+                                "type": "multiChoice",
+                                "question": "A shop sells bags for ₦350 each. If you buy 8 bags, what is your total expense?",
+                                "options": [
+                                    "₦2,800",
+                                    "₦2,750",
+                                    "₦3,000",
+                                    "₦3,200"
+                                ],
+                                "correctAnswer": 0
+                            }
+                        ]
+                    }
+                },
+                {
+                    "levelNumber": 2,
+                    "introduction": "Division is a key tool for understanding how much each item costs when purchased in bulk or when splitting a total cost among several items. By dividing the total cost by the number of items, you can determine the unit price.",
+                    "sections": [
+                        {
+                            "heading": "Division for Unit Cost",
+                            "content": "This is particularly useful when comparing different packages or deals to see which offers the best value. For example, if a pack of 12 pencils costs ₦360, dividing ₦360 by 12 shows that each pencil costs ₦30. Learning to use division in this way helps you make smarter purchasing decisions and manage your budget more effectively."
+                        }
+                    ],
+                    "highlights": [
+                        "Division for Unit Cost: Divide the total cost by the number of items.",
+                        "Cost Allocation: Determine the price per item to compare deals.",
+                        "Budgeting: Use division to split expenses and manage money wisely.",
+                        "Practical Application: Essential for evaluating bulk deals and sales offers."
+                    ],
+                    "quiz": {
+                        "focus": "Division and unit pricing",
+                        "questions": [
+                            {
+                                "type": "multiChoice",
+                                "question": "A box of 24 chocolates costs ₦480. What is the cost per chocolate?",
+                                "options": [
+                                    "₦15",
+                                    "₦20",
+                                    "₦25",
+                                    "₦30"
+                                ],
+                                "correctAnswer": 1
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "If you buy 8 notebooks for a total of ₦1,600, each notebook costs ______.",
+                                "correctAnswer": [
+                                    "₦200",
+                                    "200"
+                                ]
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Arrange the steps for calculating the unit price of an item from a total cost.",
+                                "options": [
+                                    "Record the resulting unit price",
+                                    "Determine the number of items in the package",
+                                    "Divide the total cost by the number of items",
+                                    "Identify the total cost of the package"
+                                ],
+                                "correctAnswer": [
+                                    "Identify the total cost of the package",
+                                    "Determine the number of items in the package",
+                                    "Divide the total cost by the number of items",
+                                    "Record the resulting unit price"
+                                ]
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match each scenario with its correct unit price calculation.",
+                                "leftOptions": [
+                                    "Scenario 1: A bundle of 10 pencils for ₦500",
+                                    "Scenario 2: A pack of 5 erasers for ₦250",
+                                    "Scenario 3: A set of 20 stickers for ₦400"
+                                ],
+                                "rightOptions": [
+                                    "Unit Price: ₦50",
+                                    "Unit Price: ₦20",
+                                    "Unit Price: ₦50"
+                                ],
+                                "correctMatches": {
+                                    "0": 0,
+                                    "1": 2,
+                                    "2": 1
+                                }
+                            },
+                            {
+                                "type": "multiChoice",
+                                "question": "You have ₦1,200 to spend on a pack of markers. Two packs are available: Pack A has 6 markers, and Pack B has 8 markers. Which pack gives a lower cost per marker?",
+                                "options": [
+                                    "Pack A",
+                                    "Pack B",
+                                    "Both cost the same",
+                                    "Cannot be determined"
+                                ],
+                                "correctAnswer": 1
+                            }
+                        ]
+                    }
+                },
+                {
+                    "levelNumber": 3,
+                    "introduction": "Unit price analysis is a useful method for comparing the value of different packages or deals. Instead of looking at the total cost, you divide the total price by the number of items to determine the cost per individual unit.",
+                    "sections": [
+                        {
+                            "heading": "Unit Price Analysis",
+                            "content": "For example, if a pack of 12 pencils costs ₦600, the unit price is ₦600 ÷ 12 = ₦50 per pencil. This calculation helps you decide which option is the best value, especially when different packs have varying quantities or prices. By comparing the unit prices, you can make smarter purchasing decisions and ensure that you get the most for your money."
+                        }
+                    ],
+                    "highlights": [
+                        "Calculate Unit Price: Divide total cost by the number of items.",
+                        "Compare Deals: Lower unit price usually means a better deal.",
+                        "Smarter Purchases: Use unit pricing to choose the most cost-effective option.",
+                        "Real-World Application: Essential for comparing bulk or multi-item deals."
+                    ],
+                    "quiz": {
+                        "focus": "Unit price analysis",
+                        "questions": [
+                            {
+                                "type": "multiChoice",
+                                "question": "A pack of 6 markers costs ₦180. What is the unit price per marker?",
+                                "options": [
+                                    "₦20",
+                                    "₦25",
+                                    "₦30",
+                                    "₦35"
+                                ],
+                                "correctAnswer": 2
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "If a pack of 10 stickers costs ₦350, then each sticker costs ₦______.",
+                                "correctAnswer": [
+                                    "35"
+                                ]
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Arrange the steps to determine the best value based on unit price.",
+                                "options": [
+                                    "Choose the option with the lowest unit price",
+                                    "Calculate the unit price by dividing total cost by quantity",
+                                    "Determine the total cost and quantity of items",
+                                    "Compare the unit price of different options"
+                                ],
+                                "correctAnswer": [
+                                    "Determine the total cost and quantity of items",
+                                    "Calculate the unit price by dividing total cost by quantity",
+                                    "Compare the unit price of different options",
+                                    "Choose the option with the lowest unit price"
+                                ]
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match each pack with its correct unit price.",
+                                "leftOptions": [
+                                    "Pack A: 8 items for ₦240",
+                                    "Pack B: 12 items for ₦432",
+                                    "Pack C: 5 items for ₦175"
+                                ],
+                                "rightOptions": [
+                                    "₦36 per item",
+                                    "₦30 per item",
+                                    "₦35 per item"
+                                ],
+                                "correctMatches": {
+                                    "0": 1,
+                                    "1": 0,
+                                    "2": 2
+                                }
+                            },
+                            {
+                                "type": "multiChoice",
+                                "question": "Two packs of notebooks are available. Pack X offers 10 notebooks for ₦500, and Pack Y offers 15 notebooks for ₦720. Which pack offers the better value based on unit price?",
+                                "options": [
+                                    "Pack X",
+                                    "Pack Y",
+                                    "Both offer the same value",
+                                    "Not enough information"
+                                ],
+                                "correctAnswer": 0
+                            }
+                        ]
+                    }
+                },
+                {
+                    "levelNumber": 4,
+                    "introduction": "In real-life shopping, you often buy multiple types of items at once. Calculating the total cost in these scenarios involves a combination of multiplication (to find the cost for each type of item) and addition (to combine the costs).",
+                    "sections": [
+                        {
+                            "heading": "Multi-Item Purchase Calculations",
+                            "content": "For example, if you want to buy 3 notebooks at ₦150 each and 2 pens at ₦80 each, you first multiply to find each total—3 × ₦150 = ₦450 for notebooks and 2 × ₦80 = ₦160 for pens—and then add them together (₦450 + ₦160 = ₦610). Mastering these multi-step calculations helps you budget effectively and ensures you have enough money for your purchases."
+                        }
+                    ],
+                    "highlights": [
+                        "Combine Operations: Use multiplication for individual totals and addition to combine them.",
+                        "Budgeting: Calculate the total cost of varied items to manage your spending.",
+                        "Real-World Skills: Apply these techniques to shopping scenarios involving different products.",
+                        "Accuracy: Practice careful calculation to avoid overspending."
+                    ],
+                    "quiz": {
+                        "focus": "Multi-item purchase scenarios",
+                        "questions": [
+                            {
+                                "type": "multiChoice",
+                                "question": "You want to buy 3 notebooks at ₦150 each and 2 pens at ₦80 each. What is the total cost?",
+                                "options": [
+                                    "₦600",
+                                    "₦610",
+                                    "₦620",
+                                    "₦630"
+                                ],
+                                "correctAnswer": 1
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "A store sells 4 packs of erasers, each costing ₦50. The total cost for the erasers is ₦______.",
+                                "correctAnswer": [
+                                    "200"
+                                ]
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Arrange the steps for calculating the total cost of a mixed purchase.",
+                                "options": [
+                                    "Multiply the quantity of each item by its unit price",
+                                    "Add the total costs of all items together",
+                                    "Record the final total cost",
+                                    "Identify the quantities and unit prices for each item"
+                                ],
+                                "correctAnswer": [
+                                    "Identify the quantities and unit prices for each item",
+                                    "Multiply the quantity of each item by its unit price",
+                                    "Add the total costs of all items together",
+                                    "Record the final total cost"
+                                ]
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match each scenario with its correct total cost.",
+                                "leftOptions": [
+                                    "Scenario A: 5 markers at ₦30 each",
+                                    "Scenario B: 7 pencils at ₦25 each",
+                                    "Scenario C: 3 notebooks at ₦200 each"
+                                ],
+                                "rightOptions": [
+                                    "Total: ₦600",
+                                    "Total: ₦175",
+                                    "Total: ₦150"
+                                ],
+                                "correctMatches": {
+                                    "0": 2,
+                                    "1": 1,
+                                    "2": 0
+                                }
+                            },
+                            {
+                                "type": "multiChoice",
+                                "question": "You have ₦2,000 to spend. You plan to buy 2 items: one item costs ₦750 and the other costs ₦850. How much money will you have left after these purchases?",
+                                "options": [
+                                    "₦300",
+                                    "₦400",
+                                    "₦450",
+                                    "₦500"
+                                ],
+                                "correctAnswer": 1
+                            }
+                        ]
+                    }
+                },
+                {
+                    "levelNumber": 5,
+                    "introduction": "In Level 3, you have learned how to use multiplication and division to solve real-world financial problems. You practiced finding total costs by multiplying unit prices by quantities and determining the cost per item by dividing the total price by the number of items.",
+                    "sections": [
+                        {
+                            "heading": "Mastering Key Concepts",
+                            "content": "You also explored unit price analysis—comparing the price per item in different deals to determine which one is the best value. Additionally, you combined these skills to calculate the total cost in multi-item purchase scenarios, ensuring you can budget effectively. Mastery of these concepts allows you to confidently compare deals, calculate expenses, and make smart financial decisions every day.",
+                            "bulletPoints": [
+                                "Multiplication: Find total cost by multiplying the unit price by quantity.",
+                                "Division: Determine the unit price by dividing the total cost by the number of items.",
+                                "Unit Price Analysis: Compare cost per item to choose the best deal.",
+                                "Multi-Item Calculations: Combine multiplication and addition for complex purchases.",
+                                "Real-World Application: Use these skills to plan spending and budget effectively."
+                            ]
+                        }
+                    ],
+                    "highlights": [
+                        "Multiplication: Find total cost by multiplying the unit price by quantity.",
+                        "Division: Determine the unit price by dividing the total cost by the number of items.",
+                        "Unit Price Analysis: Compare cost per item to choose the best deal.",
+                        "Multi-Item Calculations: Combine multiplication and addition for complex purchases.",
+                        "Real-World Application: Use these skills to plan spending and budget effectively."
+                    ],
+                    "quiz": {
+                        "focus": "Summary quiz covering all Level 3 concepts",
+                        "questions": [
+                            {
+                                "type": "multiChoice",
+                                "question": "A pack of 12 pencils costs ₦600. What is the unit price per pencil?",
+                                "options": [
+                                    "₦40",
+                                    "₦45",
+                                    "₦50",
+                                    "₦55"
+                                ],
+                                "correctAnswer": 2
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "If 5 notebooks cost ₦1,000 in total, then each notebook costs ₦______.",
+                                "correctAnswer": [
+                                    "200"
+                                ]
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Arrange the steps to calculate the unit price of an item.",
+                                "options": [
+                                    "Divide the total cost by the number of items",
+                                    "Record the resulting unit price",
+                                    "Determine the total cost of the package",
+                                    "Count the number of items in the package"
+                                ],
+                                "correctAnswer": [
+                                    "Determine the total cost of the package",
+                                    "Count the number of items in the package",
+                                    "Divide the total cost by the number of items",
+                                    "Record the resulting unit price"
+                                ]
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match each pack with its correct unit price.",
+                                "leftOptions": [
+                                    "Pack A: 10 items for ₦500",
+                                    "Pack B: 8 items for ₦384",
+                                    "Pack C: 15 items for ₦750"
+                                ],
+                                "rightOptions": [
+                                    "₦50 per item",
+                                    "₦50 per item",
+                                    "₦48 per item"
+                                ],
+                                "correctMatches": {
+                                    "0": 0,
+                                    "1": 2,
+                                    "2": 1
+                                }
+                            },
+                            {
+                                "type": "multiChoice",
+                                "question": "You have ₦1,200 to buy a pack of markers. Pack X offers 6 markers, while Pack Y offers 8 markers for the same total price. Which pack offers the better value?",
+                                "options": [
+                                    "Pack X",
+                                    "Pack Y",
+                                    "Both offer the same value",
+                                    "Not enough information"
+                                ],
+                                "correctAnswer": 1
+                            },
+                            {
+                                "type": "multiChoice",
+                                "question": "A store sells 7 erasers for ₦245. What is the cost per eraser?",
+                                "options": [
+                                    "₦35",
+                                    "₦30",
+                                    "₦40",
+                                    "₦45"
+                                ],
+                                "correctAnswer": 0
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "If you buy 3 packs of stickers and each pack costs ₦180, the total cost is ₦______.",
+                                "correctAnswer": [
+                                    "540"
+                                ]
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Rearrange these steps to calculate the total cost of a mixed purchase (e.g., buying notebooks and pens).",
+                                "options": [
+                                    "Multiply the quantity of each item by its unit price",
+                                    "Identify the quantities and unit prices of all items",
+                                    "Add the total costs of each type of item together",
+                                    "Record the final combined total"
+                                ],
+                                "correctAnswer": [
+                                    "Identify the quantities and unit prices of all items",
+                                    "Multiply the quantity of each item by its unit price",
+                                    "Add the total costs of each type of item together",
+                                    "Record the final combined total"
+                                ]
+                            },
+                            {
+                                "type": "multiChoice",
+                                "question": "A package of 4 books costs ₦1,200. What is the price per book?",
+                                "options": [
+                                    "₦250",
+                                    "₦300",
+                                    "₦350",
+                                    "₦400"
+                                ],
+                                "correctAnswer": 1
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match each calculation type with its description.",
+                                "leftOptions": [
+                                    "Division for Unit Price",
+                                    "Multiplication for Total Cost",
+                                    "Addition for Combined Purchases"
+                                ],
+                                "rightOptions": [
+                                    "Finding the cost for multiple identical items",
+                                    "Determining how much one item costs when given a total price",
+                                    "Adding together the costs of different items to find a grand total"
+                                ],
+                                "correctMatches": {
+                                    "0": 1,
+                                    "1": 0,
+                                    "2": 2
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "lessonNumber": "4",
+            "lessonTitle": "Understanding Interest",
+            "lessonDescription": "Learn about simple and compound interest, how to calculate them, and how they affect your savings over time.",
+            "levels": [
+                {
+                    "levelNumber": 1,
+                    "introduction": "Interest is the extra money that banks pay you for keeping your money in a savings account. With simple interest, the calculation is straightforward: you earn a fixed percentage of the principal (the original amount you deposited) over a set period.",
+                    "sections": [
+                        {
+                            "heading": "Simple Interest Formula",
+                            "content": "To calculate simple interest, you use the formula: Simple Interest = Principal × Rate × Time. For example, if you deposit ₦1,000 at an annual interest rate of 5% (expressed as 0.05) for 1 year, your interest would be calculated as: ₦1,000 × 0.05 × 1 = ₦50. This means after one year, your total amount would be the original ₦1,000 plus ₦50 in interest, totaling ₦1,050."
+                        },
+                        {
+                            "heading": "Understanding the Concept",
+                            "content": "Understanding simple interest is crucial for managing savings because it shows you how your money grows over time without the complexity of earning interest on previously earned interest."
+                        }
+                    ],
+                    "highlights": [
+                        "Simple Interest Formula: Interest = Principal × Rate × Time.",
+                        "Fixed Earnings: You earn the same percentage of the original amount each period.",
+                        "Real-World Application: Helps you understand how savings grow with a bank account.",
+                        "Foundation for More: Mastering simple interest is a stepping stone to understanding compound interest."
+                    ],
+                    "quiz": {
+                        "focus": "Simple interest calculation",
+                        "questions": [
+                            {
+                                "type": "multiChoice",
+                                "question": "If you deposit ₦1,000 at an annual simple interest rate of 5% for 1 year, how much interest will you earn?",
+                                "options": [
+                                    "₦25",
+                                    "₦50",
+                                    "₦75",
+                                    "₦100"
+                                ],
+                                "correctAnswer": 1
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "Using the formula Simple Interest = Principal × Rate × Time, if you deposit ₦500 at a rate of 8% per year for 2 years, the interest earned is ₦______.",
+                                "correctAnswer": [
+                                    "80"
+                                ]
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Arrange the steps to calculate simple interest in the correct order.",
+                                "options": [
+                                    "Multiply the principal by the rate and by the time period",
+                                    "Convert the interest rate into decimal form",
+                                    "Identify the principal amount",
+                                    "Record the resulting interest earned"
+                                ],
+                                "correctAnswer": [
+                                    "Identify the principal amount",
+                                    "Convert the interest rate into decimal form",
+                                    "Multiply the principal by the rate and by the time period",
+                                    "Record the resulting interest earned"
+                                ]
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match each scenario with its correct interest earned.",
+                                "leftOptions": [
+                                    "Scenario A: ₦2,000 at 4% per year for 1 year",
+                                    "Scenario B: ₦1,500 at 6% per year for 1 year",
+                                    "Scenario C: ₦1,000 at 10% per year for 2 years"
+                                ],
+                                "rightOptions": [
+                                    "Interest: ₦90",
+                                    "Interest: ₦80",
+                                    "Interest: ₦200"
+                                ],
+                                "correctMatches": {
+                                    "0": 1,
+                                    "1": 0,
+                                    "2": 2
+                                }
+                            },
+                            {
+                                "type": "multiChoice",
+                                "question": "You invest ₦3,000 at a simple interest rate of 3% per year for 3 years. What is the total amount of money you will have at the end of the period?",
+                                "options": [
+                                    "₦3,270",
+                                    "₦3,300",
+                                    "₦3,270",
+                                    "₦3,270"
+                                ],
+                                "correctAnswer": 0
+                            }
+                        ]
+                    }
+                },
+                {
+                    "levelNumber": 2,
+                    "introduction": "Compound interest is the process where interest is earned on both the original principal and the accumulated interest from previous periods. Unlike simple interest, which is calculated solely on the principal, compound interest 'compounds' over time—each period's interest is added to the principal, so the base for the next calculation increases.",
+                    "sections": [
+                        {
+                            "heading": "How Compound Interest Works",
+                            "content": "For example, if you deposit ₦1,000 at a 5% annual compound interest rate, after the first year you earn ₦50, making your new total ₦1,050. In the second year, interest is calculated on ₦1,050 rather than ₦1,000."
+                        },
+                        {
+                            "heading": "Compound Interest Formula",
+                            "content": "The formula for annual compound interest is: Total Amount = Principal × (1 + Rate)^Time. This method accelerates the growth of your savings, especially when interest is compounded more frequently (like monthly or quarterly) or when you start saving early."
+                        }
+                    ],
+                    "highlights": [
+                        "Interest on Interest: Compound interest adds earned interest to the principal for future calculations.",
+                        "Accelerated Growth: Your savings grow faster over time as interest compounds.",
+                        "Formula Use: Total Amount = Principal × (1 + Rate)^Time.",
+                        "Real-World Impact: The earlier you start saving, the more effective compound interest becomes."
+                    ],
+                    "quiz": {
+                        "focus": "Compound interest basics",
+                        "questions": [
+                            {
+                                "type": "multiChoice",
+                                "question": "If you deposit ₦1,000 at an annual compound interest rate of 5% for 2 years, what is the approximate total amount?",
+                                "options": [
+                                    "₦1,050",
+                                    "₦1,100",
+                                    "₦1,103",
+                                    "₦1,150"
+                                ],
+                                "correctAnswer": 2
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "Compound interest is calculated on both the original principal and the ______ earned in previous periods.",
+                                "correctAnswer": [
+                                    "interest"
+                                ]
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Arrange the steps for calculating compound interest for one period.",
+                                "options": [
+                                    "Add the interest earned to the principal",
+                                    "Calculate the interest for the period",
+                                    "Multiply the current principal by the interest rate",
+                                    "Use the formula: Total Amount = Principal × (1 + Rate)"
+                                ],
+                                "correctAnswer": [
+                                    "Use the formula: Total Amount = Principal × (1 + Rate)",
+                                    "Multiply the current principal by the interest rate",
+                                    "Calculate the interest for the period",
+                                    "Add the interest earned to the principal"
+                                ]
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match each term with its correct description.",
+                                "leftOptions": [
+                                    "Compounding Frequency",
+                                    "Principal",
+                                    "Compound Interest"
+                                ],
+                                "rightOptions": [
+                                    "The original amount of money deposited or invested",
+                                    "The process of earning interest on both the initial amount and previously earned interest",
+                                    "How often the earned interest is added to the principal (e.g., annually, monthly)"
+                                ],
+                                "correctMatches": {
+                                    "0": 2,
+                                    "1": 0,
+                                    "2": 1
+                                }
+                            },
+                            {
+                                "type": "multiChoice",
+                                "question": "A deposit of ₦2,000 is made at an annual compound interest rate of 10% for 3 years. What is the approximate total amount at the end of 3 years?",
+                                "options": [
+                                    "₦2,600",
+                                    "₦2,662",
+                                    "₦2,800",
+                                    "₦3,000"
+                                ],
+                                "correctAnswer": 1
+                            }
+                        ]
+                    }
+                },
+                {
+                    "levelNumber": 3,
+                    "introduction": "Interest calculations are not just formulas on paper—they help you understand how your money grows over time in practical scenarios. In everyday life, you might compare different savings options to see which one benefits you more.",
+                    "sections": [
+                        {
+                            "heading": "Applying Interest Formulas",
+                            "content": "For instance, you can compare a simple interest account with a compound interest account, or see how varying time periods affect the total amount of interest earned. By applying the formulas, you can determine which account offers better returns or how much money you can accumulate after several years. Practice by calculating interest for different principal amounts, rates, and time periods to see the real impact of saving early and letting your money work for you."
+                        }
+                    ],
+                    "highlights": [
+                        "Real-Life Application: Use interest formulas to compare savings options.",
+                        "Scenario Analysis: Evaluate how changes in time and rate affect earnings.",
+                        "Simple vs. Compound: Understand the difference in growth between the two methods.",
+                        "Practical Savings: Make informed decisions on where and how long to save."
+                    ],
+                    "quiz": {
+                        "focus": "Applying interest calculations",
+                        "questions": [
+                            {
+                                "type": "multiChoice",
+                                "question": "You deposit ₦1,000 in a simple interest account at 6% per year for 3 years. What is the total amount after 3 years?",
+                                "options": [
+                                    "₦1,180",
+                                    "₦1,190",
+                                    "₦1,200",
+                                    "₦1,250"
+                                ],
+                                "correctAnswer": 0
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "In a compound interest scenario, if you deposit ₦500 at an annual rate of 8% for 2 years, the approximate total amount is ₦______.",
+                                "correctAnswer": [
+                                    "583"
+                                ]
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Arrange the steps to compare a simple interest account with a compound interest account for the same principal, rate, and time period.",
+                                "options": [
+                                    "Calculate the total amount using the simple interest formula",
+                                    "Calculate the total amount using the compound interest formula",
+                                    "Compare the two totals to see which account grows more",
+                                    "Identify the principal, rate, and time period"
+                                ],
+                                "correctAnswer": [
+                                    "Identify the principal, rate, and time period",
+                                    "Calculate the total amount using the simple interest formula",
+                                    "Calculate the total amount using the compound interest formula",
+                                    "Compare the two totals to see which account grows more"
+                                ]
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match each interest type with its description in a real-life context.",
+                                "leftOptions": [
+                                    "Compound Interest",
+                                    "Simple Interest"
+                                ],
+                                "rightOptions": [
+                                    "Interest is calculated only on the original principal",
+                                    "Interest is calculated on both the principal and the accumulated interest"
+                                ],
+                                "correctMatches": {
+                                    "0": 1,
+                                    "1": 0
+                                }
+                            },
+                            {
+                                "type": "multiChoice",
+                                "question": "Suppose you have two savings options: Option A offers simple interest at 7% per year and Option B offers compound interest at 7% per year. If you invest ₦2,000 for 4 years, which option will yield a higher total amount?",
+                                "options": [
+                                    "Option A (Simple Interest)",
+                                    "Option B (Compound Interest)",
+                                    "Both yield the same amount",
+                                    "Cannot be determined"
+                                ],
+                                "correctAnswer": 1
+                            }
+                        ]
+                    }
+                },
+                {
+                    "levelNumber": 4,
+                    "introduction": "When it comes to saving money, time plays a powerful role. With both simple and compound interest, the length of time you leave your money invested affects how much you earn.",
+                    "sections": [
+                        {
+                            "heading": "The Power of Time",
+                            "content": "For example, with compound interest, the longer your money stays in an account, the more interest it earns—not only on your original deposit but also on the interest that accumulates over time. This means that even small amounts can grow significantly if given enough time. By comparing scenarios with different time periods, interest rates, or compounding frequencies, you can see how crucial it is to start saving early and be patient with your investments."
+                        }
+                    ],
+                    "highlights": [
+                        "Time Factor: Longer investment periods yield higher interest earnings.",
+                        "Growth Comparison: Compound interest grows faster over time than simple interest.",
+                        "Early Savings: Starting early can have a major impact on your total savings.",
+                        "Scenario Evaluation: Comparing different timeframes shows the importance of patience in investing."
+                    ],
+                    "quiz": {
+                        "focus": "Comparing savings over time",
+                        "questions": [
+                            {
+                                "type": "multiChoice",
+                                "question": "Which of the following best explains why starting to save early is beneficial with compound interest?",
+                                "options": [
+                                    "Interest is only earned on the principal amount",
+                                    "Interest accumulates on both the principal and the interest earned over time",
+                                    "Interest rates increase automatically with time",
+                                    "The total savings amount is fixed regardless of time"
+                                ],
+                                "correctAnswer": 1
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "The formula for annual compound interest is: Total Amount = Principal × (1 + Rate)^_______.",
+                                "correctAnswer": [
+                                    "Time"
+                                ]
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Arrange the factors that affect compound interest in order of how they directly influence the calculation (from the basic input to the outcome).",
+                                "options": [
+                                    "Principal",
+                                    "Total Amount (Result)",
+                                    "Interest Rate",
+                                    "Time Period"
+                                ],
+                                "correctAnswer": [
+                                    "Principal",
+                                    "Interest Rate",
+                                    "Time Period",
+                                    "Total Amount (Result)"
+                                ]
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match each scenario with the type of interest calculation that applies.",
+                                "leftOptions": [
+                                    "Scenario 1: You earn interest only on your original deposit",
+                                    "Scenario 2: You earn interest on your deposit and on previously earned interest"
+                                ],
+                                "rightOptions": [
+                                    "Compound Interest",
+                                    "Simple Interest"
+                                ],
+                                "correctMatches": {
+                                    "0": 1,
+                                    "1": 0
+                                }
+                            },
+                            {
+                                "type": "multiChoice",
+                                "question": "If you invest ₦1,000 at a 5% annual compound interest rate for 10 years, compared to investing the same amount at 5% for 5 years, which statement is true?",
+                                "options": [
+                                    "The total amount after 10 years is only slightly more than after 5 years",
+                                    "The total amount after 10 years is roughly double the amount after 5 years",
+                                    "The longer period significantly increases the total amount due to compound growth",
+                                    "The interest earned remains the same regardless of the time period"
+                                ],
+                                "correctAnswer": 2
+                            }
+                        ]
+                    }
+                },
+                {
+                    "levelNumber": 5,
+                    "introduction": "In Level 4, you explored the fundamentals of interest and its role in growing your savings. You learned that simple interest is calculated only on the original principal using the formula: Simple Interest = Principal × Rate × Time. In contrast, compound interest calculates interest on both the original principal and the accumulated interest over time.",
+                    "sections": [
+                        {
+                            "heading": "Key Formulas Review",
+                            "content": "The compound interest formula is: Total Amount = Principal × (1 + Rate)^Time. These concepts illustrate how your money can grow over time—especially when interest is compounded, meaning you earn interest on interest. By comparing different scenarios, you've seen that longer time periods and higher compounding frequencies significantly boost your savings.",
+                            "bulletPoints": [
+                                "Simple vs. Compound Interest: Know the difference in how interest is calculated.",
+                                "Formulas: Simple Interest = Principal × Rate × Time; Compound Interest = Principal × (1 + Rate)^Time.",
+                                "Time Matters: The longer your money is invested, the more it grows.",
+                                "Compound Growth: Earning interest on interest accelerates savings."
+                            ]
+                        }
+                    ],
+                    "highlights": [
+                        "Simple vs. Compound Interest: Know the difference in how interest is calculated.",
+                        "Formulas: Simple Interest = Principal × Rate × Time; Compound Interest = Principal × (1 + Rate)^Time.",
+                        "Time Matters: The longer your money is invested, the more it grows.",
+                        "Compound Growth: Earning interest on interest accelerates savings."
+                    ],
+                    "quiz": {
+                        "focus": "Summary quiz covering all Level 4 concepts",
+                        "questions": [
+                            {
+                                "type": "multiChoice",
+                                "question": "Which formula is used to calculate simple interest?",
+                                "options": [
+                                    "Principal + (Principal × Rate × Time)",
+                                    "Principal × Rate × Time",
+                                    "Principal × (1 + Rate × Time)",
+                                    "Principal × (1 + Rate)^Time"
+                                ],
+                                "correctAnswer": 1
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "In compound interest, interest is earned on both the principal and the __________ earned in previous periods.",
+                                "correctAnswer": [
+                                    "interest"
+                                ]
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Arrange the steps to calculate compound interest for one period.",
+                                "options": [
+                                    "Record the total amount",
+                                    "Add 1 to the interest rate (in decimal form)",
+                                    "Multiply the principal by the result raised to the power of time",
+                                    "Convert the interest rate to a decimal if necessary"
+                                ],
+                                "correctAnswer": [
+                                    "Convert the interest rate to a decimal if necessary",
+                                    "Add 1 to the interest rate (in decimal form)",
+                                    "Multiply the principal by the result raised to the power of time",
+                                    "Record the total amount"
+                                ]
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match each type of interest with its description.",
+                                "leftOptions": [
+                                    "Compound Interest",
+                                    "Simple Interest"
+                                ],
+                                "rightOptions": [
+                                    "Interest calculated only on the original principal",
+                                    "Interest calculated on the principal and on previously earned interest"
+                                ],
+                                "correctMatches": {
+                                    "0": 1,
+                                    "1": 0
+                                }
+                            },
+                            {
+                                "type": "multiChoice",
+                                "question": "You deposit ₦1,000 at a 5% annual compound interest rate for 5 years. Which of the following statements is most accurate?",
+                                "options": [
+                                    "You will earn exactly ₦250 in interest",
+                                    "The total amount will be less than ₦1,300",
+                                    "The total amount will be more than what you'd earn with simple interest over 5 years",
+                                    "Compound interest does not affect the total amount over time"
+                                ],
+                                "correctAnswer": 2
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "The compound interest formula is: Total Amount = Principal × (1 + Rate)^________.",
+                                "correctAnswer": [
+                                    "Time"
+                                ]
+                            },
+                            {
+                                "type": "multiChoice",
+                                "question": "Which of the following is true about compound interest?",
+                                "options": [
+                                    "It always yields the same amount as simple interest",
+                                    "It grows faster because interest is earned on both the principal and previously earned interest",
+                                    "It is calculated only once at the end of the investment period",
+                                    "It decreases the total savings over time"
+                                ],
+                                "correctAnswer": 1
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Rearrange the factors in the compound interest formula to reflect the calculation process.",
+                                "options": [
+                                    "Total Amount (Result)",
+                                    "(1 + Rate)",
+                                    "Exponent: Time",
+                                    "Principal"
+                                ],
+                                "correctAnswer": [
+                                    "Principal",
+                                    "(1 + Rate)",
+                                    "Exponent: Time",
+                                    "Total Amount (Result)"
+                                ]
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match each scenario with the correct outcome.",
+                                "leftOptions": [
+                                    "Scenario 1: Investing ₦1,000 at 5% simple interest for 3 years",
+                                    "Scenario 2: Investing ₦1,000 at 5% compound interest for 3 years"
+                                ],
+                                "rightOptions": [
+                                    "Total Amount = ₦1,157.63",
+                                    "Total Amount ≈ ₦1,150"
+                                ],
+                                "correctMatches": {
+                                    "0": 1,
+                                    "1": 0
+                                }
+                            },
+                            {
+                                "type": "multiChoice",
+                                "question": "Why is starting to save early especially beneficial when using compound interest?",
+                                "options": [
+                                    "Because the interest rate decreases over time",
+                                    "Because compound interest has a larger impact over longer time periods",
+                                    "Because simple interest will eventually overtake compound interest",
+                                    "Because saving early means you earn interest only on the principal"
+                                ],
+                                "correctAnswer": 1
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "lessonNumber": "5",
+            "lessonTitle": "Budgeting with Math",
+            "lessonDescription": "Learn to create and manage a budget, allocate income, forecast expenses, and adjust your budget for changing circumstances.",
+            "levels": [
+                {
+                    "levelNumber": 1,
+                    "introduction": "Budgeting is a powerful tool that uses math to help you plan how to spend and save your money. By creating a budget, you can break down your income into categories such as needs, wants, and savings.",
+                    "sections": [
+                        {
+                            "heading": "The 50/30/20 Rule",
+                            "content": "For example, a common method is the 50/30/20 rule: 50% of your income goes toward essentials (needs), 30% toward non-essentials (wants), and 20% toward savings. To create a budget, you start by calculating your total income, listing your fixed and variable expenses, and then determining how much money remains for savings or extra spending. This process helps you understand where every Naira goes and ensures you have enough for your financial goals."
+                        }
+                    ],
+                    "highlights": [
+                        "Income Allocation: Divide your income among needs, wants, and savings.",
+                        "The 50/30/20 Rule: A popular method for budgeting.",
+                        "Expense Forecasting: List fixed and variable expenses.",
+                        "Financial Planning: Use math to ensure spending aligns with income and goals."
+                    ],
+                    "quiz": {
+                        "focus": "Income allocation and budgeting basics",
+                        "questions": [
+                            {
+                                "type": "multiChoice",
+                                "question": "What is the primary purpose of creating a budget?",
+                                "options": [
+                                    "To track how much money you have in your bank account",
+                                    "To plan how to allocate your income for needs, wants, and savings",
+                                    "To record every expense in detail",
+                                    "To avoid spending money entirely"
+                                ],
+                                "correctAnswer": 1
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "In the 50/30/20 budgeting rule, 50% of your income should ideally be allocated to __________ expenses.",
+                                "correctAnswer": [
+                                    "needs"
+                                ]
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Arrange the steps for creating a basic budget in the correct order.",
+                                "options": [
+                                    "Subtract total expenses from your income",
+                                    "Allocate remaining funds to savings or extra spending",
+                                    "Identify your total monthly income",
+                                    "List all your fixed and variable expenses"
+                                ],
+                                "correctAnswer": [
+                                    "Identify your total monthly income",
+                                    "List all your fixed and variable expenses",
+                                    "Subtract total expenses from your income",
+                                    "Allocate remaining funds to savings or extra spending"
+                                ]
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match each budget category with its examples.",
+                                "leftOptions": [
+                                    "Savings",
+                                    "Needs",
+                                    "Wants"
+                                ],
+                                "rightOptions": [
+                                    "Items that are essential for daily living, such as rent, groceries, and utilities",
+                                    "Money set aside for future goals, emergencies, or investments",
+                                    "Non-essential expenses like dining out, entertainment, and luxury items"
+                                ],
+                                "correctMatches": {
+                                    "0": 1,
+                                    "1": 0,
+                                    "2": 2
+                                }
+                            },
+                            {
+                                "type": "multiChoice",
+                                "question": "If your monthly income is ₦100,000 and you follow the 50/30/20 rule, how much money should you allocate for savings?",
+                                "options": [
+                                    "₦20,000",
+                                    "₦30,000",
+                                    "₦50,000",
+                                    "₦60,000"
+                                ],
+                                "correctAnswer": 0
+                            }
+                        ]
+                    }
+                },
+                {
+                    "levelNumber": 2,
+                    "introduction": "Forecasting expenses is a critical step in budgeting. It involves estimating both your fixed expenses (like rent, utilities, or school fees) and variable expenses (such as groceries, transportation, or entertainment).",
+                    "sections": [
+                        {
+                            "heading": "Fixed vs Variable Expenses",
+                            "content": "To forecast your expenses, start by reviewing your past spending patterns, then adjust for any anticipated changes. This process helps you plan realistically, ensuring you have enough funds for essential needs while setting aside money for savings and discretionary spending. By accurately forecasting expenses, you can avoid overspending and make informed decisions about where to allocate your income."
+                        }
+                    ],
+                    "highlights": [
+                        "Expense Forecasting: Estimate fixed and variable expenses based on past spending.",
+                        "Realistic Planning: Adjust your estimates for anticipated changes.",
+                        "Budget Balance: Ensure you have funds for essential needs, savings, and discretionary spending.",
+                        "Financial Control: Accurate forecasting helps avoid overspending and supports informed decision-making."
+                    ],
+                    "quiz": {
+                        "focus": "Forecasting expenses",
+                        "questions": [
+                            {
+                                "type": "multiChoice",
+                                "question": "Which of the following best describes fixed expenses?",
+                                "options": [
+                                    "Costs that change every month",
+                                    "Costs that remain the same each month",
+                                    "Expenses that you can easily reduce",
+                                    "Non-essential expenses"
+                                ],
+                                "correctAnswer": 1
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "Variable expenses are costs that __________ from month to month.",
+                                "correctAnswer": [
+                                    "vary",
+                                    "change"
+                                ]
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Arrange the steps to forecast your monthly expenses in the correct order.",
+                                "options": [
+                                    "Adjust estimates for anticipated changes",
+                                    "Identify fixed and variable expense categories",
+                                    "Review past spending records",
+                                    "Summarize the total forecasted expenses"
+                                ],
+                                "correctAnswer": [
+                                    "Review past spending records",
+                                    "Identify fixed and variable expense categories",
+                                    "Adjust estimates for anticipated changes",
+                                    "Summarize the total forecasted expenses"
+                                ]
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match each expense category with its example.",
+                                "leftOptions": [
+                                    "Fixed Expenses",
+                                    "Variable Expenses"
+                                ],
+                                "rightOptions": [
+                                    "Monthly rent, Internet subscription",
+                                    "Grocery bills, Dining out"
+                                ],
+                                "correctMatches": {
+                                    "0": 0,
+                                    "1": 1
+                                }
+                            },
+                            {
+                                "type": "multiChoice",
+                                "question": "If your monthly income is ₦120,000 and your forecasted fixed expenses are ₦60,000 while your estimated variable expenses are ₦30,000, how much do you have left for savings or discretionary spending?",
+                                "options": [
+                                    "₦20,000",
+                                    "₦30,000",
+                                    "₦40,000",
+                                    "₦50,000"
+                                ],
+                                "correctAnswer": 1
+                            }
+                        ]
+                    }
+                },
+                {
+                    "levelNumber": 3,
+                    "introduction": "Creating a budget involves a systematic approach to organizing your money. First, determine your total monthly income. Next, list your fixed expenses such as rent, utilities, and subscriptions—costs that remain constant every month.",
+                    "sections": [
+                        {
+                            "heading": "Step-by-Step Budget Creation",
+                            "content": "Then, estimate your variable expenses, which can change from month to month, such as groceries, transportation, and entertainment. Once you have the totals for both fixed and variable expenses, add them together to find your overall expenses. Subtract your total expenses from your income to discover your remaining funds. Finally, decide how to allocate this remaining balance among savings and discretionary spending. This step-by-step process helps ensure that every naira is accounted for and that you are better prepared to meet your financial goals."
+                        }
+                    ],
+                    "highlights": [
+                        "Total Income: Start by determining your monthly income.",
+                        "Fixed vs. Variable Expenses: Identify and list expenses that are constant and those that vary.",
+                        "Expense Summation: Add fixed and variable expenses to get the overall expense.",
+                        "Calculate Remaining Funds: Subtract total expenses from income to see what's left.",
+                        "Allocation: Use the remaining funds for savings and extra spending."
+                    ],
+                    "quiz": {
+                        "focus": "Creating a budget",
+                        "questions": [
+                            {
+                                "type": "multiChoice",
+                                "question": "What is the very first step in creating a budget?",
+                                "options": [
+                                    "Listing all your expenses",
+                                    "Determining your total monthly income",
+                                    "Allocating funds for savings",
+                                    "Estimating variable expenses"
+                                ],
+                                "correctAnswer": 1
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "After calculating your total expenses, subtracting them from your income gives you the ______, which can be used for savings or discretionary spending.",
+                                "correctAnswer": [
+                                    "remaining funds",
+                                    "balance"
+                                ]
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Arrange the steps for creating a budget in the correct order.",
+                                "options": [
+                                    "List all fixed expenses",
+                                    "Determine your total monthly income",
+                                    "Estimate your variable expenses",
+                                    "Add fixed and variable expenses to get total expenses",
+                                    "Subtract total expenses from income to find remaining funds"
+                                ],
+                                "correctAnswer": [
+                                    "Determine your total monthly income",
+                                    "List all fixed expenses",
+                                    "Estimate your variable expenses",
+                                    "Add fixed and variable expenses to get total expenses",
+                                    "Subtract total expenses from income to find remaining funds"
+                                ]
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match each budget component with its example.",
+                                "leftOptions": [
+                                    "Variable Expenses",
+                                    "Fixed Expenses",
+                                    "Remaining Funds"
+                                ],
+                                "rightOptions": [
+                                    "Rent, internet subscription",
+                                    "Groceries, dining out",
+                                    "Money left after all expenses are deducted"
+                                ],
+                                "correctMatches": {
+                                    "0": 1,
+                                    "1": 0,
+                                    "2": 2
+                                }
+                            },
+                            {
+                                "type": "multiChoice",
+                                "question": "Suppose your monthly income is ₦100,000. Your fixed expenses total ₦45,000, and your variable expenses are estimated at ₦30,000. How much do you have remaining for savings or extra spending?",
+                                "options": [
+                                    "₦15,000",
+                                    "₦25,000",
+                                    "₦35,000",
+                                    "₦40,000"
+                                ],
+                                "correctAnswer": 1
+                            }
+                        ]
+                    }
+                },
+                {
+                    "levelNumber": 4,
+                    "introduction": "A budget isn't set in stone—it should be flexible and adapt to changes in your income or expenses. Over time, you might experience fluctuations in your monthly earnings, or your expenses may increase due to unforeseen costs.",
+                    "sections": [
+                        {
+                            "heading": "Budget Flexibility",
+                            "content": "When this happens, adjusting your budget is essential to maintain financial balance. Start by reviewing your current income and expense estimates, then update the figures for any changes. Reassess your priorities and reallocate funds to ensure your needs are met while still setting aside money for savings. These adjustments help you remain in control of your finances even when circumstances change."
+                        }
+                    ],
+                    "highlights": [
+                        "Flexibility: A good budget adapts to changes in income and expenses.",
+                        "Review & Update: Regularly check your income and expense estimates.",
+                        "Reallocation: Shift funds among categories as needed.",
+                        "Financial Stability: Adjustments ensure your budget remains balanced over time.",
+                        "Practical Application: Learn to respond to real-life financial changes."
+                    ],
+                    "quiz": {
+                        "focus": "Scenario-based budget adjustments",
+                        "questions": [
+                            {
+                                "type": "multiChoice",
+                                "question": "If your monthly income decreases by 20%, what is the most appropriate first step in adjusting your budget?",
+                                "options": [
+                                    "Increase your spending in all categories",
+                                    "Review and update your expense estimates",
+                                    "Ignore the change and maintain your original budget",
+                                    "Cut out all discretionary spending immediately"
+                                ],
+                                "correctAnswer": 1
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "Adjusting your budget when expenses increase helps maintain __________ over time.",
+                                "correctAnswer": [
+                                    "balance",
+                                    "stability"
+                                ]
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Arrange the steps for adjusting your budget in the correct order.",
+                                "options": [
+                                    "Update your expense estimates",
+                                    "Reallocate funds among needs, wants, and savings",
+                                    "Identify changes in your income and expenses",
+                                    "Recalculate your total income"
+                                ],
+                                "correctAnswer": [
+                                    "Identify changes in your income and expenses",
+                                    "Recalculate your total income",
+                                    "Update your expense estimates",
+                                    "Reallocate funds among needs, wants, and savings"
+                                ]
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match each scenario with the best adjustment strategy.",
+                                "leftOptions": [
+                                    "Scenario A: Your utility bills have increased significantly",
+                                    "Scenario B: You received a bonus, increasing your monthly income",
+                                    "Scenario C: Unexpected medical expenses have arisen"
+                                ],
+                                "rightOptions": [
+                                    "Reallocate funds by reducing discretionary spending",
+                                    "Increase your savings allocation",
+                                    "Update your fixed expense estimates and adjust remaining funds"
+                                ],
+                                "correctMatches": {
+                                    "0": 2,
+                                    "1": 1,
+                                    "2": 0
+                                }
+                            },
+                            {
+                                "type": "multiChoice",
+                                "question": "Suppose your monthly income is ₦100,000, and initially your fixed and variable expenses total ₦80,000, leaving you ₦20,000 for savings and extras. If your fixed expenses unexpectedly rise by ₦10,000, what is your new remaining amount for savings and discretionary spending, assuming no other changes?",
+                                "options": [
+                                    "₦5,000",
+                                    "₦10,000",
+                                    "₦15,000",
+                                    "₦20,000"
+                                ],
+                                "correctAnswer": 1
+                            }
+                        ]
+                    }
+                },
+                {
+                    "levelNumber": 5,
+                    "introduction": "In Level 5, you learned how to use math to create and manage a budget. A well-designed budget starts with knowing your total monthly income. Then, you identify your fixed expenses (such as rent and utilities) and variable expenses (like groceries and entertainment).",
+                    "sections": [
+                        {
+                            "heading": "Budget Mastery Summary",
+                            "content": "By adding these together, you determine your overall expenses. Subtracting your total expenses from your income reveals your remaining funds, which you can allocate to savings or discretionary spending. You also learned how to forecast future expenses based on past spending patterns and how to adjust your budget when your income or expenses change. Mastering these techniques helps you plan effectively and make informed financial decisions.",
+                            "bulletPoints": [
+                                "Income Calculation: Begin with your total monthly income.",
+                                "Expense Identification: Separate expenses into fixed and variable.",
+                                "Expense Summation: Add fixed and variable expenses to determine total spending.",
+                                "Remaining Funds: Subtract expenses from income to find funds available for savings or extras.",
+                                "Budget Adjustments: Revise your budget based on changes in income or expenses."
+                            ]
+                        }
+                    ],
+                    "highlights": [
+                        "Income Calculation: Begin with your total monthly income.",
+                        "Expense Identification: Separate expenses into fixed and variable.",
+                        "Expense Summation: Add fixed and variable expenses to determine total spending.",
+                        "Remaining Funds: Subtract expenses from income to find funds available for savings or extras.",
+                        "Budget Adjustments: Revise your budget based on changes in income or expenses."
+                    ],
+                    "quiz": {
+                        "focus": "Summary quiz covering all Level 5 concepts",
+                        "questions": [
+                            {
+                                "type": "multiChoice",
+                                "question": "What is the first step in creating a budget?",
+                                "options": [
+                                    "Listing all expenses",
+                                    "Determining your total monthly income",
+                                    "Allocating funds for savings",
+                                    "Estimating variable expenses"
+                                ],
+                                "correctAnswer": 1
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "The money left after subtracting total expenses from your income is called the __________.",
+                                "correctAnswer": [
+                                    "remaining funds",
+                                    "balance"
+                                ]
+                            },
+                            {
+                                "type": "multiChoice",
+                                "question": "Which of the following best describes fixed expenses?",
+                                "options": [
+                                    "Expenses that change each month",
+                                    "Expenses that remain constant each month",
+                                    "Non-essential expenses",
+                                    "Expenses that you can easily adjust"
+                                ],
+                                "correctAnswer": 1
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Arrange the steps for creating a basic budget in order.",
+                                "options": [
+                                    "List all fixed expenses",
+                                    "Determine your total monthly income",
+                                    "Estimate your variable expenses",
+                                    "Add fixed and variable expenses to get total expenses",
+                                    "Subtract total expenses from income to determine remaining funds"
+                                ],
+                                "correctAnswer": [
+                                    "Determine your total monthly income",
+                                    "List all fixed expenses",
+                                    "Estimate your variable expenses",
+                                    "Add fixed and variable expenses to get total expenses",
+                                    "Subtract total expenses from income to determine remaining funds"
+                                ]
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match each budget component with its example.",
+                                "leftOptions": [
+                                    "Fixed Expenses",
+                                    "Remaining Funds",
+                                    "Variable Expenses"
+                                ],
+                                "rightOptions": [
+                                    "Rent, internet subscription",
+                                    "Groceries, dining out",
+                                    "Money left after expenses are paid"
+                                ],
+                                "correctMatches": {
+                                    "0": 0,
+                                    "1": 2,
+                                    "2": 1
+                                }
+                            },
+                            {
+                                "type": "multiChoice",
+                                "question": "If your monthly income is ₦100,000, fixed expenses are ₦45,000, and variable expenses are ₦30,000, what are your remaining funds?",
+                                "options": [
+                                    "₦15,000",
+                                    "₦25,000",
+                                    "₦35,000",
+                                    "₦40,000"
+                                ],
+                                "correctAnswer": 1
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "The 50/30/20 rule divides income into 50% for needs, 30% for wants, and __________ for savings.",
+                                "correctAnswer": [
+                                    "20%",
+                                    "20"
+                                ]
+                            },
+                            {
+                                "type": "reorder",
+                                "question": "Rearrange the steps for adjusting your budget when expenses change.",
+                                "options": [
+                                    "Update your expense estimates",
+                                    "Recalculate total income and expenses",
+                                    "Identify changes in income or expenses",
+                                    "Reallocate funds among needs, wants, and savings"
+                                ],
+                                "correctAnswer": [
+                                    "Identify changes in income or expenses",
+                                    "Recalculate total income and expenses",
+                                    "Update your expense estimates",
+                                    "Reallocate funds among needs, wants, and savings"
+                                ]
+                            },
+                            {
+                                "type": "multiChoice",
+                                "question": "Why is it important to forecast your expenses?",
+                                "options": [
+                                    "To predict future spending and avoid overspending",
+                                    "To increase your fixed expenses",
+                                    "To ensure you spend all your income",
+                                    "To eliminate variable expenses"
+                                ],
+                                "correctAnswer": 0
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match each step of the budgeting process with its purpose.",
+                                "leftOptions": [
+                                    "Determining total monthly income",
+                                    "Allocating remaining funds",
+                                    "Subtracting expenses from income",
+                                    "Listing fixed and variable expenses"
+                                ],
+                                "rightOptions": [
+                                    "Knowing how much money you earn each month",
+                                    "Identifying your essential and non-essential costs",
+                                    "Finding out how much money is left after all expenses",
+                                    "Deciding how to use the leftover money for savings and discretionary spending"
+                                ],
+                                "correctMatches": {
+                                    "0": 0,
+                                    "1": 3,
+                                    "2": 2,
+                                    "3": 1
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    ]
+}

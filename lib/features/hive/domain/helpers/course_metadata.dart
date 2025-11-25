@@ -1,5 +1,3 @@
-// lib/features/hive/domain/helpers/course_metadata.dart
-
 import 'package:savvy_bee_mobile/features/hive/domain/models/course.dart';
 
 /// Course metadata helper - provides additional display information for courses
