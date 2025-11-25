@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 
 import '../../../../core/network/api_client.dart';
 import '../../../../core/network/api_endpoints.dart';
+import '../../../auth/domain/models/user.dart';
 import '../../domain/models/chat_models.dart';
 import '../../domain/models/personality.dart';
 

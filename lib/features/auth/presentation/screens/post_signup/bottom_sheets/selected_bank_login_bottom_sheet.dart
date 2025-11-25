@@ -6,7 +6,6 @@ import 'package:savvy_bee_mobile/core/utils/assets/app_icons.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/features/auth/presentation/screens/post_signup/bottom_sheets/bank_connection_status_bottom_sheet.dart';
-import 'package:savvy_bee_mobile/features/auth/presentation/screens/post_signup/bottom_sheets/processing_connection_bottom_sheet.dart';
 
 import '../../../../../../core/utils/constants.dart';
 

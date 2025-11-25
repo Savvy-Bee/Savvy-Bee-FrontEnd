@@ -1,41 +1,6 @@
-// User model
-class User {
-  final String id;
-  final String firstName;
-  final String lastName;
-  final String email;
-  final bool verified;
-
-  User({
-    required this.id,
-    required this.firstName,
-    required this.lastName,
-    required this.email,
-    required this.verified,
-  });
-
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
-      id: json['id'] ?? '',
-      firstName: json['FirstName'] ?? '',
-      lastName: json['LastName'] ?? '',
-      email: json['Email'] ?? '',
-      verified: json['Verified'] ?? false,
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'FirstName': firstName,
-      'LastName': lastName,
-      'Email': email,
-      'Verified': verified,
-    };
-  }
-}
-
 // Register request model
+import 'user.dart';
+
 class RegisterRequest {
   final String firstName;
   final String lastName;
@@ -168,6 +133,38 @@ class Verification {
     return {
       'EmailVerification': emailVerification,
       'OtherDetails': otherDetails,
+    };
+  }
+}
+
+class PostOnboardRequest {
+  final String whatMatters;
+  final String userArchetype;
+  final String financePriorities;
+  final String howFinanceManaged;
+  final String confusingTopics;
+  final String challengesWithYou;
+  final String motivatesyou;
+
+  PostOnboardRequest({
+    required this.whatMatters,
+    required this.userArchetype,
+    required this.financePriorities,
+    required this.howFinanceManaged,
+    required this.confusingTopics,
+    required this.challengesWithYou,
+    required this.motivatesyou,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'WhatMatters': whatMatters,
+      'UserArchetype': userArchetype,
+      'FinancePriorities': financePriorities,
+      'HowFinanceManaged': howFinanceManaged,
+      'ConfusingTopics': confusingTopics,
+      'ChallengesWithYou': challengesWithYou,
+      'Motivatesyou': motivatesyou,
     };
   }
 }

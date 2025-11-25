@@ -7,6 +7,8 @@ import 'package:savvy_bee_mobile/core/network/models/api_response_model.dart';
 import 'package:savvy_bee_mobile/core/services/storage_service.dart';
 import 'package:savvy_bee_mobile/features/auth/domain/models/auth_models.dart';
 
+import '../../domain/models/user.dart';
+
 class AuthRepository {
   final ApiClient _apiClient;
   final StorageService _storageService;
@@ -256,6 +258,43 @@ class AuthRepository {
       return ApiResponse.fromJson(response.data, null);
     } catch (e) {
       return _handleError(e, 'Reset password');
+    }
+  }
+
+  /// Set user onboarding data (WhatMatters, Archetype, etc.)
+  Future<ApiResponse<void>> postOnboardData(PostOnboardRequest request) async {
+    try {
+      final formData = FormData.fromMap(request.toJson());
+
+      final response = await _apiClient.post(
+        ApiEndpoints
+            .postOnboard, // Assuming you define this endpoint: /auth/register/postonboard
+        data: formData,
+      );
+
+      return ApiResponse.fromJson(response.data, null);
+    } catch (e) {
+      return _handleError(e, 'Post Onboard Data');
+    }
+  }
+
+  /// Update user data (AI Settings, Language, Country)
+  /// This endpoint typically requires a Bearer Token for authorization.
+  Future<ApiResponse<void>> updateUserData(
+    UpdateUserDataRequest request,
+  ) async {
+    try {
+      final formData = FormData.fromMap(request.toJson());
+
+      final response = await _apiClient.post(
+        ApiEndpoints
+            .updateUserData, // Assuming you define this endpoint: /auth/update/userdata
+        data: formData,
+      );
+
+      return ApiResponse.fromJson(response.data, null);
+    } catch (e) {
+      return _handleError(e, 'Update User Data');
     }
   }
 

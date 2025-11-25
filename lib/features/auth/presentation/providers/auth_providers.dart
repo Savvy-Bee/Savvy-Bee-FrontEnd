@@ -7,6 +7,8 @@ import 'package:savvy_bee_mobile/core/services/storage_service.dart';
 import 'package:savvy_bee_mobile/features/auth/data/repositories/auth_repository.dart';
 import 'package:savvy_bee_mobile/features/auth/domain/models/auth_models.dart';
 
+import '../../domain/models/user.dart';
+
 // Auth repository provider
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
   final apiClient = ref.watch(apiClientProvider);
@@ -357,6 +359,66 @@ class AuthNotifier extends StateNotifier<AuthState> {
       state = state.copyWith(
         isLoading: false,
         errorMessage: 'Failed to reset password',
+      );
+      return false;
+    }
+  }
+
+  /// Set user onboarding data (WhatMatters, Archetype, etc.)
+  Future<bool> postOnboardData(PostOnboardRequest request) async {
+    state = state.copyWith(isLoading: true, clearError: true);
+
+    try {
+      final response = await _authRepository.postOnboardData(request);
+
+      if (response.success) {
+        state = state.copyWith(isLoading: false);
+        log('Post-onboard data saved successfully');
+        return true;
+      } else {
+        state = state.copyWith(
+          isLoading: false,
+          errorMessage: response.message,
+        );
+        return false;
+      }
+    } catch (e) {
+      log('Post-onboard data error: $e');
+      state = state.copyWith(
+        isLoading: false,
+        errorMessage: 'Failed to save post-onboard data',
+      );
+      return false;
+    }
+  }
+
+  /// Update user data (AI Settings, Language, Country)
+  Future<bool> updateUserData(UpdateUserDataRequest request) async {
+    state = state.copyWith(isLoading: true, clearError: true);
+
+    try {
+      final response = await _authRepository.updateUserData(request);
+
+      if (response.success) {
+        // If the update is successful, we should theoretically
+        // refresh the user profile to reflect the changes locally.
+        // Since you don't have a dedicated 'getUserProfile' endpoint
+        // implemented yet, we'll just stop loading for now.
+        state = state.copyWith(isLoading: false);
+        log('User data updated successfully');
+        return true;
+      } else {
+        state = state.copyWith(
+          isLoading: false,
+          errorMessage: response.message,
+        );
+        return false;
+      }
+    } catch (e) {
+      log('Update user data error: $e');
+      state = state.copyWith(
+        isLoading: false,
+        errorMessage: 'Failed to update user data',
       );
       return false;
     }

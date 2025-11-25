@@ -268,32 +268,6 @@ class ChatResponse {
   }
 }
 
-/// Update user data request
-class UpdateUserDataRequest {
-  final String? aiPersonality;
-  final String? aiStrictness; // "Strict", "Moderate", "Lenient"
-  final String? language;
-  final String? country;
-
-  UpdateUserDataRequest({
-    this.aiPersonality,
-    this.aiStrictness,
-    this.language,
-    this.country,
-  });
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = {};
-
-    if (aiPersonality != null) data['AIPersonality'] = aiPersonality;
-    if (aiStrictness != null) data['AIStrictness'] = aiStrictness;
-    if (language != null) data['Language'] = language;
-    if (country != null) data['Country'] = country;
-
-    return data;
-  }
-}
-
 /// Chat history response model
 class ChatHistoryResponse {
   final bool success;

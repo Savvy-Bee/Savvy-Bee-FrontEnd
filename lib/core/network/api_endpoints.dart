@@ -10,6 +10,7 @@ class ApiEndpoints {
   static const String setOtherDetails = "/auth/register/setotherDetails";
   static const String login = '/auth/login';
   static const String updateUserData = '/auth/update/userdata';
+  static const String postOnboard = '/auth/register/postonboard';
 
   static const String allPersona = '/auth/update/allpersona';
 

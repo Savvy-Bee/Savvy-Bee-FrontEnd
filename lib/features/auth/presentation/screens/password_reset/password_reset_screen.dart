@@ -11,7 +11,6 @@ import 'package:savvy_bee_mobile/features/auth/presentation/screens/password_res
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../../../../core/theme/app_colors.dart';
-import '../../../../../core/utils/breakpoints.dart';
 import '../../../../../core/utils/constants.dart';
 import '../../../../../core/utils/custom_page_indicator.dart';
 import '../../../../../core/widgets/custom_button.dart';
