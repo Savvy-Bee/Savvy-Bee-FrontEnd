@@ -7,9 +7,12 @@ import 'package:savvy_bee_mobile/core/utils/assets/illustrations.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
-import 'package:savvy_bee_mobile/features/hive/presentation/screens/level/quest_reward_screen.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_snackbar.dart';
+import 'package:savvy_bee_mobile/features/hive/presentation/screens/hive_screen.dart';
+import 'package:savvy_bee_mobile/features/hive/presentation/screens/streak/new_streak_screen.dart';
 
 import '../../../../../core/utils/assets/app_icons.dart';
+import '../../providers/hive_provider.dart';
 
 class LevelCompleteArgs {
   final double score;
@@ -31,6 +34,89 @@ class LevelCompleteScreen extends ConsumerStatefulWidget {
 }
 
 class _LevelCompleteScreenState extends ConsumerState<LevelCompleteScreen> {
+  bool _isProcessing = false;
+  bool _isClaimed = false;
+
+  Future<void> _claimRewards() async {
+    if (_isProcessing || _isClaimed) return;
+
+    setState(() {
+      _isProcessing = true;
+    });
+
+    try {
+      final notifier = ref.read(hiveNotifierProvider.notifier);
+
+      // First, fetch current streak details to check if today's streak exists
+      await notifier.fetchStreakDetails();
+
+      // Top up streak (will automatically check if already done today)
+      final streakResult = await notifier.topUpStreakWithCheck();
+      final streakUpdated = streakResult['updated'] ?? false;
+      final streakSuccess = streakResult['success'] ?? false;
+
+      // Top up flowers with the earned amount
+      final flowersSuccess = await notifier.topUpFlowers(
+        widget.args.newFlowers,
+      );
+
+      if (streakSuccess && flowersSuccess) {
+        setState(() {
+          _isClaimed = true;
+          _isProcessing = false;
+        });
+
+        // Show success message
+        if (mounted) {
+          final message = streakUpdated
+              ? '🎉 Claimed ${widget.args.newFlowers} flowers and updated streak!'
+              : '🎉 Claimed ${widget.args.newFlowers} flowers!';
+
+          CustomSnackbar.show(context, message, type: SnackbarType.success);
+        }
+
+        // Navigate to streak screen only if streak was updated
+        if (streakUpdated) {
+          await Future.delayed(const Duration(milliseconds: 500));
+          if (mounted) {
+            context.pushNamed(NewStreakScreen.path);
+          }
+        } else {
+          // Just pop back after a delay if no streak update
+          await Future.delayed(const Duration(milliseconds: 1500));
+          if (mounted) {
+            context.goNamed(HiveScreen.path);
+          }
+        }
+      } else {
+        // Handle failure
+        setState(() {
+          _isProcessing = false;
+        });
+
+        if (mounted) {
+          CustomSnackbar.show(
+            context,
+            'Failed to claim rewards. Please try again.',
+            type: SnackbarType.error,
+          );
+        }
+      }
+    } catch (e) {
+      setState(() {
+        _isProcessing = false;
+      });
+
+      if (mounted) {
+        CustomSnackbar.show(
+          context,
+          'Error: ${e.toString()}',
+          type: SnackbarType.error,
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,9 +179,14 @@ class _LevelCompleteScreenState extends ConsumerState<LevelCompleteScreen> {
                   ],
                 ),
                 CustomElevatedButton(
-                  text: 'Claim your flowers',
+                  text: _isClaimed
+                      ? 'Claimed! ✓'
+                      : _isProcessing
+                      ? 'Claiming...'
+                      : 'Claim your flowers',
                   isGamePlay: true,
-                  onPressed: () => context.pushNamed(QuestRewardScreen.path),
+                  onPressed: _isClaimed ? null : _claimRewards,
+                  isLoading: _isProcessing,
                 ),
               ],
             ),

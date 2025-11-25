@@ -39,6 +39,19 @@ class HiveState {
       error: error ?? this.error,
     );
   }
+
+  /// Check if streak has already been updated today
+  bool get hasStreakForToday {
+    if (streakHistory == null || streakHistory!.isEmpty) return false;
+
+    final today = DateTime.now();
+
+    return streakHistory!.any((streak) {
+      return streak.createdAt.year == today.year &&
+          streak.createdAt.month == today.month &&
+          streak.createdAt.day == today.day;
+    });
+  }
 }
 
 class HiveNotifier extends AutoDisposeAsyncNotifier<HiveState> {
@@ -95,9 +108,18 @@ class HiveNotifier extends AutoDisposeAsyncNotifier<HiveState> {
     });
   }
 
-  /// Top up streak
+  /// Top up streak (only if not already done today)
+  /// Returns true if streak was topped up or already exists for today
+  /// Returns false only if there was an error
   Future<bool> topUpStreak() async {
     try {
+      // Check if streak already exists for today
+      final currentState = state.valueOrNull;
+      if (currentState?.hasStreakForToday == true) {
+        // Streak already exists for today, no need to top up
+        return true;
+      }
+
       final response = await _repository.topUpStreak();
 
       if (response == true) {
@@ -109,6 +131,31 @@ class HiveNotifier extends AutoDisposeAsyncNotifier<HiveState> {
     } catch (e) {
       state = AsyncValue.error(e, StackTrace.current);
       return false;
+    }
+  }
+
+  /// Top up streak with explicit check (returns whether streak was actually updated)
+  /// Returns: {updated: bool, success: bool}
+  Future<Map<String, bool>> topUpStreakWithCheck() async {
+    try {
+      // Check if streak already exists for today
+      final currentState = state.valueOrNull;
+      if (currentState?.hasStreakForToday == true) {
+        // Streak already exists for today
+        return {'updated': false, 'success': true};
+      }
+
+      final response = await _repository.topUpStreak();
+
+      if (response == true) {
+        // Refresh data after successful top up
+        await fetchStreakDetails();
+        return {'updated': true, 'success': true};
+      }
+      return {'updated': false, 'success': false};
+    } catch (e) {
+      state = AsyncValue.error(e, StackTrace.current);
+      return {'updated': false, 'success': false};
     }
   }
 

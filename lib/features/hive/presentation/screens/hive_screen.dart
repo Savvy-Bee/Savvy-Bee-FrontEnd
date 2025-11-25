@@ -18,6 +18,7 @@ import 'package:savvy_bee_mobile/features/hive/presentation/providers/course_pro
 
 import '../../../../core/utils/assets/app_icons.dart';
 import '../../../../core/widgets/custom_card.dart';
+import '../providers/hive_provider.dart';
 
 class HiveScreen extends ConsumerStatefulWidget {
   static String path = '/hive';
@@ -63,50 +64,66 @@ class _HiveScreenState extends ConsumerState<HiveScreen> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    // Fetch hive data when screen loads
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(hiveNotifierProvider.notifier).fetchHiveDetails();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final coursesAsync = ref.watch(allCoursesProvider);
+    final hiveAsync = ref.watch(hiveNotifierProvider);
 
     return Scaffold(
-      appBar: _buildAppBar(),
+      appBar: _buildAppBar(hiveAsync),
       body: SafeArea(
-        child: ListView(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 16),
-              child: SectionTitleWidget(title: 'Explore courses'),
-            ),
-            const Gap(16),
-            coursesAsync.when(
-              data: (courses) => _buildCoursesSection(courses),
-              loading: () => _buildLoadingSection(),
-              error: (error, stack) => _buildErrorSection(error),
-            ),
-            const Gap(24),
-            Padding(
-              padding: const EdgeInsets.only(left: 16),
-              child: SectionTitleWidget(title: 'Recent insights'),
-            ),
-            const Gap(16),
-            SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                spacing: 8,
-                children: insights
-                    .map(
-                      (insight) => ArticleCard(
-                        title: insight['title']!,
-                        backgroundColor: insight['color'],
-                        imagePath: insight['imagePath']!,
-                        subtitle: insight['subtitle']!,
-                        onTap: () {},
-                      ),
-                    )
-                    .toList(),
+        child: RefreshIndicator(
+          onRefresh: () async {
+            await ref.read(hiveNotifierProvider.notifier).refreshAll();
+            ref.invalidate(allCoursesProvider);
+          },
+          child: ListView(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 16),
+                child: SectionTitleWidget(title: 'Explore courses'),
               ),
-            ),
-            const Gap(24),
-          ],
+              const Gap(16),
+              coursesAsync.when(
+                data: (courses) => _buildCoursesSection(courses),
+                loading: () => _buildLoadingSection(),
+                error: (error, stack) => _buildErrorSection(error),
+              ),
+              const Gap(24),
+              Padding(
+                padding: const EdgeInsets.only(left: 16),
+                child: SectionTitleWidget(title: 'Recent insights'),
+              ),
+              const Gap(16),
+              SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  spacing: 8,
+                  children: insights
+                      .map(
+                        (insight) => ArticleCard(
+                          title: insight['title']!,
+                          backgroundColor: insight['color'],
+                          imagePath: insight['imagePath']!,
+                          subtitle: insight['subtitle']!,
+                          onTap: () {},
+                        ),
+                      )
+                      .toList(),
+                ),
+              ),
+              const Gap(24),
+            ],
+          ),
         ),
       ),
     );
@@ -179,7 +196,7 @@ class _HiveScreenState extends ConsumerState<HiveScreen> {
     );
   }
 
-  AppBar _buildAppBar() {
+  AppBar _buildAppBar(AsyncValue<HiveState> hiveAsync) {
     return AppBar(
       title: Text(
         'Hi Danny!',
@@ -187,17 +204,42 @@ class _HiveScreenState extends ConsumerState<HiveScreen> {
       ),
       centerTitle: false,
       actions: [
-        _buildActionButton(
-          icon: Image.asset(Illustrations.hiveFlower),
-          text: '200',
+        // Flowers count
+        hiveAsync.when(
+          data: (hiveState) => _buildActionButton(
+            icon: Image.asset(Illustrations.hiveFlower),
+            text: '${hiveState.hiveData?.flowers ?? 0}',
+          ),
+          loading: () => _buildActionButton(
+            icon: Image.asset(Illustrations.hiveFlower),
+            text: '...',
+          ),
+          error: (_, __) => _buildActionButton(
+            icon: Image.asset(Illustrations.hiveFlower),
+            text: '0',
+          ),
         ),
         const Gap(4),
-        _buildActionButton(
-          icon: Icon(Icons.hive, size: 20, color: AppColors.primary),
-          text: '4',
-          onTap: () => context.pushNamed(StreakDashboardScreen.path),
+        // Streak count
+        hiveAsync.when(
+          data: (hiveState) => _buildActionButton(
+            icon: Icon(Icons.hive, size: 20, color: AppColors.primary),
+            text: '${hiveState.hiveData?.streak ?? 0}',
+            onTap: () => context.pushNamed(StreakDashboardScreen.path),
+          ),
+          loading: () => _buildActionButton(
+            icon: Icon(Icons.hive, size: 20, color: AppColors.primary),
+            text: '...',
+            onTap: () => context.pushNamed(StreakDashboardScreen.path),
+          ),
+          error: (_, __) => _buildActionButton(
+            icon: Icon(Icons.hive, size: 20, color: AppColors.primary),
+            text: '0',
+            onTap: () => context.pushNamed(StreakDashboardScreen.path),
+          ),
         ),
         const Gap(4),
+        // Trophy/Leaderboard
         _buildActionButton(
           icon: Image.asset(Assets.trophy, height: 20, width: 20),
           onTap: () => context.pushNamed(LeaderboardScreen.path),
@@ -339,7 +381,6 @@ class _HiveScreenState extends ConsumerState<HiveScreen> {
               ),
             ],
           ),
-          // Image.asset(Illustrations.savingsBeePose1),
           CustomElevatedButton(
             text: stats.isStarted ? 'Continue' : 'Start lesson',
             rounded: true,
@@ -350,12 +391,7 @@ class _HiveScreenState extends ConsumerState<HiveScreen> {
               color: AppColors.black,
             ),
             onPressed: () {
-              // Navigate to lesson home screen
-              // You can pass the course data or course ID as a parameter
-              context.pushNamed(
-                LessonHomeScreen.path,
-                extra: course, // Pass the course object
-              );
+              context.pushNamed(LessonHomeScreen.path, extra: course);
             },
           ),
         ],
@@ -364,9 +400,6 @@ class _HiveScreenState extends ConsumerState<HiveScreen> {
   }
 
   String _extractDifficultyLevel(Course course) {
-    // You can determine difficulty based on course structure
-    // For now, using a simple heuristic based on total levels
-    // final totalLevels = course.totalLevels; // TODO: Add totalLevels to courses
     final totalLevels = 3;
 
     if (totalLevels <= 3) {

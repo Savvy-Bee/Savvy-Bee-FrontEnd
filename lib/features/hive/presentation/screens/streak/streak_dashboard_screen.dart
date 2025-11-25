@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/app_icons.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/assets.dart';
@@ -11,8 +10,8 @@ import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/core/widgets/game_card.dart';
 import 'package:savvy_bee_mobile/core/widgets/section_title_widget.dart';
-import 'package:savvy_bee_mobile/features/hive/presentation/screens/streak/new_streak_screen.dart';
 
+import '../../providers/hive_provider.dart';
 import '../../widgets/streak_slider.dart';
 
 class StreakDashboardScreen extends ConsumerStatefulWidget {
@@ -27,7 +26,18 @@ class StreakDashboardScreen extends ConsumerStatefulWidget {
 
 class _StreakDashboardScreenState extends ConsumerState<StreakDashboardScreen> {
   @override
+  void initState() {
+    super.initState();
+    // Fetch streak details when screen loads
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(hiveNotifierProvider.notifier).fetchStreakDetails();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final hiveAsync = ref.watch(hiveNotifierProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Streak'),
@@ -35,12 +45,39 @@ class _StreakDashboardScreenState extends ConsumerState<StreakDashboardScreen> {
         surfaceTintColor: AppColors.primary,
         actions: [
           IconButton(
-            onPressed: () => context.pushNamed(NewStreakScreen.path),
+            onPressed: () {},
             icon: AppIcon(AppIcons.shareIcon, size: 20),
           ),
         ],
       ),
-      body: ListView(
+      body: hiveAsync.when(
+        data: (hiveState) => _buildContent(hiveState),
+        loading: () =>
+            Center(child: CircularProgressIndicator(color: AppColors.primary)),
+        error: (error, stack) => _buildErrorState(error),
+      ),
+    );
+  }
+
+  Widget _buildContent(HiveState hiveState) {
+    final currentStreak = hiveState.currentStreak ?? 0;
+    final streakHistory = hiveState.streakHistory ?? [];
+
+    // Calculate days practiced in current month
+    final now = DateTime.now();
+    final daysInCurrentMonth = streakHistory.where((streak) {
+      return streak.createdAt.year == now.year &&
+          streak.createdAt.month == now.month;
+    }).length;
+
+    // Get highlighted dates for calendar
+    final highlightedDates = _getHighlightedDates(streakHistory, now);
+
+    return RefreshIndicator(
+      onRefresh: () async {
+        await ref.read(hiveNotifierProvider.notifier).fetchStreakDetails();
+      },
+      child: ListView(
         children: [
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
@@ -54,7 +91,7 @@ class _StreakDashboardScreenState extends ConsumerState<StreakDashboardScreen> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildStreakNumber('23'),
+                        _buildStreakNumber('$currentStreak'),
                         Text(
                           'day streak!',
                           style: TextStyle(
@@ -72,7 +109,9 @@ class _StreakDashboardScreenState extends ConsumerState<StreakDashboardScreen> {
                 ),
                 const Gap(24),
                 _buildMessageCard(
-                  'Congrats on reaching your latest streak milestone!',
+                  currentStreak >= 7
+                      ? 'Congrats on reaching your latest streak milestone!'
+                      : 'Keep going! Build your streak by practicing daily.',
                 ),
               ],
             ),
@@ -83,9 +122,11 @@ class _StreakDashboardScreenState extends ConsumerState<StreakDashboardScreen> {
               children: [
                 SectionTitleWidget(title: 'Streak challenge'),
                 const Gap(16),
-                _buildStreakCard(),
+                _buildStreakCard(currentStreak),
                 const Gap(24),
-                SectionTitleWidget(title: 'November 2025'),
+                SectionTitleWidget(
+                  title: '${_getMonthName(now.month)} ${now.year}',
+                ),
                 const Gap(16),
                 Row(
                   spacing: 8,
@@ -93,7 +134,7 @@ class _StreakDashboardScreenState extends ConsumerState<StreakDashboardScreen> {
                     Expanded(
                       child: _buildStatItem(
                         'Days practiced',
-                        '4',
+                        '$daysInCurrentMonth',
                         AppIcons.checkIcon,
                       ),
                     ),
@@ -108,14 +149,10 @@ class _StreakDashboardScreenState extends ConsumerState<StreakDashboardScreen> {
                 ),
                 const Gap(24),
                 CustomCalendar(
-                  year: 2025,
-                  month: 11, // 1-12 (12 = December)
-                  highlightedDates: [
-                    [1, 7], // Highlight dates 1-7
-                    [15, 21], // Highlight dates 15-21
-                    25, // Single date
-                  ],
-                  specialDate: 24, // Gray circle indicator
+                  year: now.year,
+                  month: now.month,
+                  highlightedDates: highlightedDates,
+                  specialDate: now.day,
                   onDateTap: (date) {
                     print('Tapped: $date');
                   },
@@ -126,6 +163,104 @@ class _StreakDashboardScreenState extends ConsumerState<StreakDashboardScreen> {
         ],
       ),
     );
+  }
+
+  Widget _buildErrorState(Object error) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.error_outline, size: 64, color: AppColors.error),
+            const Gap(16),
+            Text(
+              'Failed to load streak data',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ),
+            const Gap(8),
+            Text(
+              error.toString(),
+              style: TextStyle(color: AppColors.greyDark),
+              textAlign: TextAlign.center,
+            ),
+            const Gap(24),
+            ElevatedButton(
+              onPressed: () {
+                ref.invalidate(hiveNotifierProvider);
+              },
+              child: const Text('Retry'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  List<dynamic> _getHighlightedDates(
+    List<dynamic> streakHistory,
+    DateTime currentMonth,
+  ) {
+    final List<int> datesInMonth = [];
+
+    for (var streak in streakHistory) {
+      if (streak.createdAt.year == currentMonth.year &&
+          streak.createdAt.month == currentMonth.month) {
+        datesInMonth.add(streak.createdAt.day);
+      }
+    }
+
+    // Sort dates
+    datesInMonth.sort();
+
+    // Group consecutive dates into ranges
+    List<dynamic> ranges = [];
+    if (datesInMonth.isEmpty) return ranges;
+
+    int rangeStart = datesInMonth[0];
+    int rangeEnd = datesInMonth[0];
+
+    for (int i = 1; i < datesInMonth.length; i++) {
+      if (datesInMonth[i] == rangeEnd + 1) {
+        rangeEnd = datesInMonth[i];
+      } else {
+        if (rangeStart == rangeEnd) {
+          ranges.add(rangeStart);
+        } else {
+          ranges.add([rangeStart, rangeEnd]);
+        }
+        rangeStart = datesInMonth[i];
+        rangeEnd = datesInMonth[i];
+      }
+    }
+
+    // Add last range
+    if (rangeStart == rangeEnd) {
+      ranges.add(rangeStart);
+    } else {
+      ranges.add([rangeStart, rangeEnd]);
+    }
+
+    return ranges;
+  }
+
+  String _getMonthName(int month) {
+    const months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
+    return months[month - 1];
   }
 
   Widget _buildStatItem(String title, String value, String iconPath) {
@@ -163,7 +298,12 @@ class _StreakDashboardScreenState extends ConsumerState<StreakDashboardScreen> {
     );
   }
 
-  Widget _buildStreakCard() {
+  Widget _buildStreakCard(int currentStreak) {
+    final challengeDays = 7;
+    final currentDay = (currentStreak % challengeDays) == 0
+        ? challengeDays
+        : (currentStreak % challengeDays);
+
     return GameCard(
       padding: const EdgeInsets.all(16).copyWith(bottom: 4),
       child: Column(
@@ -172,7 +312,7 @@ class _StreakDashboardScreenState extends ConsumerState<StreakDashboardScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '7 Day Challenge',
+                '$challengeDays Day Challenge',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -180,7 +320,7 @@ class _StreakDashboardScreenState extends ConsumerState<StreakDashboardScreen> {
                 ),
               ),
               Text(
-                'Day 4 of 7',
+                'Day $currentDay of $challengeDays',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -191,7 +331,7 @@ class _StreakDashboardScreenState extends ConsumerState<StreakDashboardScreen> {
             ],
           ),
           const Gap(8),
-          StreakSlider(totalDays: 7, currentDay: 4),
+          StreakSlider(totalDays: challengeDays, currentDay: currentDay),
         ],
       ),
     );
@@ -246,7 +386,7 @@ class _StreakDashboardScreenState extends ConsumerState<StreakDashboardScreen> {
             fontSize: 120,
             fontWeight: FontWeight.w500,
             fontFamily: Constants.neulisNeueFontFamily,
-            color: Colors.white, // Fill color
+            color: Colors.white,
             height: 1.0,
           ),
         ),
@@ -310,7 +450,7 @@ class CustomCalendar extends StatelessWidget {
 
   Widget _buildCalendarGrid() {
     final firstDayOfMonth = DateTime(year, month, 1);
-    final firstWeekday = firstDayOfMonth.weekday % 7; // Sunday = 0
+    final firstWeekday = firstDayOfMonth.weekday % 7;
     final daysInMonth = DateTime(year, month + 1, 0).day;
 
     List<Widget> dayWidgets = [];
@@ -379,7 +519,7 @@ class CustomCalendar extends StatelessWidget {
                     color: isSpecial
                         ? Colors.grey.shade700
                         : highlighted
-                        ? const Color(0xFFD97706) // Yellow-600
+                        ? const Color(0xFFD97706)
                         : Colors.grey.shade600,
                   ),
                 ),
