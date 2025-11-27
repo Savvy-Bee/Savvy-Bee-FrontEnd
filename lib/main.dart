@@ -40,13 +40,18 @@ class SavvyBeeApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'Savvy Bee',
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.light,
-      routerConfig: appRouter,
-      debugShowCheckedModeBanner: false,
+    double width = MediaQuery.sizeOf(context).width;
+
+    return SizedBox(
+      width: width > 480 ? 480 : width,
+      child: MaterialApp.router(
+        title: 'Savvy Bee',
+        theme: AppTheme.lightTheme,
+        darkTheme: AppTheme.darkTheme,
+        themeMode: ThemeMode.light,
+        routerConfig: appRouter,
+        debugShowCheckedModeBanner: false,
+      ),
     );
   }
 }
