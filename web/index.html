@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <!--
     If you are serving your web app in a path other than the root, change the
@@ -27,12 +28,34 @@
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png"/>
+  <link rel="icon" type="image/png" href="favicon.png" />
 
   <title>savvy_bee_mobile</title>
   <link rel="manifest" href="manifest.json">
+
+  <!-- Add this style block here -->
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      background-color: #f0f0f0;
+      /* Optional: background color for sides */
+    }
+
+    /* Center and limit width of Flutter app */
+    body>* {
+      max-width: 480px;
+      /* Adjust this value as needed */
+      margin: 0 auto;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      /* Optional: adds side shadows */
+    }
+  </style>
 </head>
+
 <body>
   <script src="flutter_bootstrap.js" async></script>
 </body>
+
 </html>
