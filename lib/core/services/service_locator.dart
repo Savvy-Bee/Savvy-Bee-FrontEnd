@@ -7,6 +7,7 @@ import 'package:savvy_bee_mobile/features/tools/data/repositories/budget_reposit
 import 'package:savvy_bee_mobile/features/tools/data/repositories/goals_repository.dart';
 
 import '../../features/auth/data/repositories/auth_repository.dart';
+import '../../features/spend/data/repositories/bills_repository.dart';
 import '../../features/spend/data/repositories/wallet_repository.dart';
 import '../../features/tools/data/repositories/debt_repository.dart';
 import '../network/api_client.dart';
@@ -67,4 +68,9 @@ final debtRepositoryProvider = Provider<DebtRepository>((ref) {
 final hiveRepositoryProvider = Provider<HiveRepository>((ref) {
   final apiClient = ref.watch(apiClientProvider);
   return HiveRepository(apiClient: apiClient);
+});
+
+final billsRepositoryProvider = Provider<BillsRepository>((ref) {
+  final apiClient = ref.watch(apiClientProvider);
+  return BillsRepository(apiClient: apiClient);
 });
