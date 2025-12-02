@@ -9,6 +9,7 @@ import 'package:savvy_bee_mobile/core/utils/string_extensions.dart';
 import 'package:savvy_bee_mobile/core/widgets/hexagonal_button.dart';
 import 'package:savvy_bee_mobile/features/hive/domain/models/course.dart';
 
+import '../providers/course_providers.dart';
 import 'lesson/lesson_room_screen.dart';
 
 class LevelsScreen extends ConsumerStatefulWidget {
@@ -49,36 +50,45 @@ class _LevelsScreenState extends ConsumerState<LevelsScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 /// FIRST LEVEL - Alone at the top
-                HexagonalButton(
-                  number: levels.first.levelNumber.toString(),
-                  onTap: () => context.pushNamed(
-                    LessonRoomScreen.path,
-                    extra: LessonRoomArgs(
-                      lessonNumber: widget.lesson.lessonNumber,
-                      level: levels.first,
-                    ),
-                  ),
-                ),
+                // HexagonalButton(
+                //   number: levels.first.levelNumber.toString(),
+                //   onTap: () => context.pushNamed(
+                //     LessonRoomScreen.path,
+                //     extra: LessonRoomArgs(
+                //       lessonNumber: widget.lesson.lessonNumber,
+                //       level: levels.first,
+                //     ),
+                //   ),
+                // ),
+                _buildLevelButton(levels.first, 0),
 
-                const SizedBox(height: 20),
+                const Gap(20),
 
                 /// REMAINING LEVELS - Two side-by-side
+                // Wrap(
+                //   spacing: 12,
+                //   runSpacing: 12,
+                //   alignment: WrapAlignment.center,
+                //   children: List.generate(levels.length - 1, (i) {
+                //     final level = levels[i + 1];
+                //     return HexagonalButton(
+                //       number: level.levelNumber.toString(),
+                //       onTap: () => context.pushNamed(
+                //         LessonRoomScreen.path,
+                //         extra: LessonRoomArgs(
+                //           lessonNumber: widget.lesson.lessonNumber,
+                //           level: level,
+                //         ),
+                //       ),
+                //     );
+                //   }),
+                // ),
                 Wrap(
                   spacing: 12,
                   runSpacing: 12,
                   alignment: WrapAlignment.center,
                   children: List.generate(levels.length - 1, (i) {
-                    final level = levels[i + 1];
-                    return HexagonalButton(
-                      number: level.levelNumber.toString(),
-                      onTap: () => context.pushNamed(
-                        LessonRoomScreen.path,
-                        extra: LessonRoomArgs(
-                          lessonNumber: widget.lesson.lessonNumber,
-                          level: level,
-                        ),
-                      ),
-                    );
+                    return _buildLevelButton(levels[i + 1], i + 1);
                   }),
                 ),
               ],
@@ -86,6 +96,41 @@ class _LevelsScreenState extends ConsumerState<LevelsScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildLevelButton(Level level, int index) {
+    // Check if this level is completed
+    final isCompleted = ref.watch(
+      isLevelCompletedProvider((
+        lessonNumber: widget.lesson.lessonNumber,
+        levelNumber: level.levelNumber,
+      )),
+    );
+
+    // Check if previous level is completed (for locking logic)
+    final isPreviousCompleted =
+        index == 0 ||
+        ref.watch(
+          isLevelCompletedProvider((
+            lessonNumber: widget.lesson.lessonNumber,
+            levelNumber: widget.lesson.levels[index - 1].levelNumber,
+          )),
+        );
+
+    return HexagonalButton(
+      number: level.levelNumber.toString(),
+      isCompleted: isCompleted,
+      // isLocked: !isPreviousCompleted, // Lock if previous not completed
+      onTap: isPreviousCompleted
+          ? () => context.pushNamed(
+              LessonRoomScreen.path,
+              extra: LessonRoomArgs(
+                lessonNumber: widget.lesson.lessonNumber,
+                level: level,
+              ),
+            )
+          : null,
     );
   }
 

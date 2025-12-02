@@ -1,14 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:savvy_bee_mobile/features/hive/domain/models/course.dart';
+import '../../data/repositories/progress_repository.dart';
 import '../../domain/helpers/quiz_helpers.dart';
 
 /// Provider for course IDs to load
 final courseIdsProvider = Provider<List<String>>((ref) {
-  return [
-    'savings_101',
-    'numeracy',
-    'budget_101',
-  ];
+  return ['savings_101', 'numeracy', 'budget_101'];
 });
 
 /// Provider to load a single course
@@ -25,51 +22,84 @@ final allCoursesProvider = FutureProvider<List<Course>>((ref) async {
   return await CourseLoader.loadAllCourses(courseIds);
 });
 
+/// Repository provider
+final progressRepositoryProvider = Provider<ProgressRepository>((ref) {
+  return ProgressRepository();
+});
+
 /// State notifier for quiz progress tracking
 class QuizProgressNotifier extends StateNotifier<QuizProgressTracker> {
-  QuizProgressNotifier() : super(QuizProgressTracker());
+  final ProgressRepository _repository;
+
+  QuizProgressNotifier(this._repository) : super(QuizProgressTracker());
+
+  /// Initialize and load progress (call this after provider is created)
+  Future<void> initialize() async {
+    final json = await _repository.loadProgress();
+    if (json != null) {
+      state.fromJson(json);
+      // Trigger a rebuild by creating a new instance
+      state = _cloneState();
+    }
+  }
+
+  /// Helper method to clone the current state
+  QuizProgressTracker _cloneState() {
+    final tracker = QuizProgressTracker();
+    tracker.fromJson(state.toJson());
+    return tracker;
+  }
+
+  /// Save progress to storage
+  Future<void> _saveProgress() async {
+    await _repository.saveProgress(state.toJson());
+  }
 
   /// Start a new level
-  void startLevel(String lessonNumber, int levelNumber) {
+  Future<void> startLevel(String lessonNumber, int levelNumber) async {
     state.startLevel(lessonNumber, levelNumber);
-    state = QuizProgressTracker()..fromJson(state.toJson());
+    state = _cloneState();
+    await _saveProgress();
   }
 
   /// Complete a lesson
-  void completeLesson(String lessonNumber, int levelNumber) {
+  Future<void> completeLesson(String lessonNumber, int levelNumber) async {
     state.completeLesson(lessonNumber, levelNumber);
-    state = QuizProgressTracker()..fromJson(state.toJson());
+    state = _cloneState();
+    await _saveProgress();
   }
 
   /// Complete a quiz with score
-  void completeQuiz(String lessonNumber, int levelNumber, int score) {
+  Future<void> completeQuiz(
+    String lessonNumber,
+    int levelNumber,
+    int score,
+  ) async {
     state.completeQuiz(lessonNumber, levelNumber, score);
-    state = QuizProgressTracker()..fromJson(state.toJson());
+    state = _cloneState();
+    await _saveProgress();
   }
 
   /// Reset a specific level
-  void resetLevel(String lessonNumber, int levelNumber) {
+  Future<void> resetLevel(String lessonNumber, int levelNumber) async {
     state.resetLevel(lessonNumber, levelNumber);
-    state = QuizProgressTracker()..fromJson(state.toJson());
+    state = _cloneState();
+    await _saveProgress();
   }
 
   /// Clear all progress
-  void clearProgress() {
+  Future<void> clearProgress() async {
     state.clearProgress();
     state = QuizProgressTracker();
-  }
-
-  /// Load progress from JSON
-  void loadProgress(Map<String, dynamic> json) {
-    state.fromJson(json);
-    state = QuizProgressTracker()..fromJson(state.toJson());
+    await _saveProgress();
   }
 }
 
 /// Provider for quiz progress tracking
 final quizProgressProvider =
     StateNotifierProvider<QuizProgressNotifier, QuizProgressTracker>((ref) {
-      return QuizProgressNotifier();
+      final repository = ref.watch(progressRepositoryProvider);
+      return QuizProgressNotifier(repository);
     });
 
 /// Provider to check if a level is completed
@@ -119,60 +149,6 @@ final lessonScoreProvider = Provider.family<int, String>((ref, lessonNumber) {
   final tracker = ref.watch(quizProgressProvider);
   return tracker.getLessonScore(lessonNumber);
 });
-
-// /// Provider for quiz progress tracker
-// final quizProgressTrackerProvider =
-//     StateNotifierProvider<QuizProgressTrackerNotifier, QuizProgressTracker>((
-//       ref,
-//     ) {
-//       return QuizProgressTrackerNotifier();
-//     });
-
-// /// State notifier for quiz progress tracker
-// class QuizProgressTrackerNotifier extends StateNotifier<QuizProgressTracker> {
-//   QuizProgressTrackerNotifier() : super(QuizProgressTracker());
-
-//   void startLevel(String lessonNumber, int levelNumber) {
-//     state.startLevel(lessonNumber, levelNumber);
-//     state = QuizProgressTracker()..fromJson(state.toJson());
-//   }
-
-//   void completeLesson(String lessonNumber, int levelNumber) {
-//     state.completeLesson(lessonNumber, levelNumber);
-//     state = QuizProgressTracker()..fromJson(state.toJson());
-//   }
-
-//   void completeQuiz(String lessonNumber, int levelNumber, int score) {
-//     state.completeQuiz(lessonNumber, levelNumber, score);
-//     state = QuizProgressTracker()..fromJson(state.toJson());
-//   }
-
-//   void resetLevel(String lessonNumber, int levelNumber) {
-//     state.resetLevel(lessonNumber, levelNumber);
-//     state = QuizProgressTracker()..fromJson(state.toJson());
-//   }
-
-//   void clearProgress() {
-//     state.clearProgress();
-//     state = QuizProgressTracker();
-//   }
-
-//   bool isLevelCompleted(String lessonNumber, int levelNumber) {
-//     return state.isLevelCompleted(lessonNumber, levelNumber);
-//   }
-
-//   bool isLessonCompleted(String lessonNumber, int levelNumber) {
-//     return state.isLessonCompleted(lessonNumber, levelNumber);
-//   }
-
-//   int getLessonScore(String lessonNumber) {
-//     return state.getLessonScore(lessonNumber);
-//   }
-
-//   int get totalScore => state.totalScore;
-
-//   int get completedLevels => state.completedLevels;
-// }
 
 /// Provider to get course statistics
 final courseStatsProvider = Provider.family<CourseStats, Course>((ref, course) {

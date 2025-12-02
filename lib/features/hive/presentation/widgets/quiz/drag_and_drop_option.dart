@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
 import '../../../domain/models/course.dart';
 import '../../../domain/models/quiz_page_state.dart';
@@ -37,15 +38,6 @@ class DragAndDropOptions extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(
-          question.question,
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 16),
-
-        // --- The Draggable Items Pool ---
-        Text("Items:", style: Theme.of(context).textTheme.titleMedium),
-        const SizedBox(height: 8),
         Wrap(
           spacing: 8.0,
           runSpacing: 8.0,
@@ -91,7 +83,7 @@ class DragAndDropOptions extends StatelessWidget {
                         groupName,
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      const SizedBox(height: 8),
+                      const Gap(8),
                       if (itemsInThisGroup.isEmpty)
                         const Padding(
                           padding: EdgeInsets.all(8.0),

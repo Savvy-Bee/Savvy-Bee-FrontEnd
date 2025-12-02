@@ -169,7 +169,7 @@ class _LessonRoomScreenState extends ConsumerState<LessonRoomScreen> {
                   onPressed: () {
                     context.pushReplacementNamed(
                       QuizScreen.path,
-                      extra: level.quiz.questions,
+                      extra: QuizData(lessonNumber: widget.args.lessonNumber, levelNumber: level.levelNumber, quizQuestions: level.quiz.questions),
                     );
                   },
                 ),

@@ -52,8 +52,8 @@ class HexagonalButton extends StatelessWidget {
       return Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.check_circle, color: AppColors.white, size: size * 0.25),
-          SizedBox(height: size * 0.05),
+          // Icon(Icons.check_circle, color: AppColors.white, size: size * 0.25),
+          // SizedBox(height: size * 0.05),
           Text(
             number,
             style: TextStyle(

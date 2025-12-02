@@ -21,46 +21,53 @@ class MatchOptions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Determine the number of rows based on the longer list
+    final rowCount = question.leftOptions.length > question.rightOptions.length
+        ? question.leftOptions.length
+        : question.rightOptions.length;
+
     return Column(
-      children: List.generate(question.leftOptions.length, (index) {
-        final leftIndex = index;
-        final rightIndex = index;
+      children: List.generate(rowCount, (index) {
+        // Check if we have items at this index
+        final hasLeftOption = index < question.leftOptions.length;
+        final hasRightOption = index < question.rightOptions.length;
 
-        // Check if this left option has been matched
-        final matchedRightIndex = state.matches?[leftIndex];
+        // Left side logic
+        int? leftIndex = hasLeftOption ? index : null;
+        final matchedRightIndex = leftIndex != null
+            ? (state.matches?[leftIndex])
+            : null;
         final isLeftMatched = matchedRightIndex != null;
+        final isLeftSelected =
+            leftIndex != null && state.selectedLeftIndex == leftIndex;
 
-        // Check if this right option has been matched to any left option
-        final leftIndexMatchedToThisRight = state.matches?.entries
-            .firstWhere(
-              (entry) => entry.value == rightIndex,
-              orElse: () => const MapEntry(-1, -1),
-            )
-            .key;
-        final isRightMatched =
-            leftIndexMatchedToThisRight != null &&
-            leftIndexMatchedToThisRight != -1;
-
-        // Determine colors
         Color? leftColor;
-        Color? rightColor;
-
         if (isLeftMatched) {
-          // This left item is matched, check if it's correct
-          final isCorrect = isMatchCorrect(leftIndex, matchedRightIndex);
+          final isCorrect = isMatchCorrect(leftIndex!, matchedRightIndex);
           leftColor = isCorrect ? Colors.green : Colors.red;
+        } else if (isLeftSelected) {
+          leftColor = Colors.blue;
         }
 
-        if (isRightMatched) {
-          // This right item is matched, check if it's correct
-          final isCorrect = isMatchCorrect(
-            leftIndexMatchedToThisRight,
-            rightIndex,
-          );
+        // Right side logic
+        int? rightIndex = hasRightOption ? index : null;
+        // Check if ANY left option is matched to this right option
+        final leftIndicesMatchedToThisRight = <int>[];
+        state.matches?.forEach((leftIdx, rightIdx) {
+          if (rightIdx == rightIndex) {
+            leftIndicesMatchedToThisRight.add(leftIdx);
+          }
+        });
+        final isRightMatched = leftIndicesMatchedToThisRight.isNotEmpty;
+
+        // For color, check if the LAST match to this right option is correct
+        Color? rightColor;
+        if (isRightMatched && rightIndex != null) {
+          // Get the most recent left index matched to this right
+          final lastLeftIndex = leftIndicesMatchedToThisRight.last;
+          final isCorrect = isMatchCorrect(lastLeftIndex, rightIndex);
           rightColor = isCorrect ? Colors.green : Colors.red;
         }
-
-        final isLeftSelected = state.selectedLeftIndex == leftIndex;
 
         return Padding(
           padding: const EdgeInsets.only(bottom: 12),
@@ -68,28 +75,37 @@ class MatchOptions extends StatelessWidget {
             children: [
               // Left Option
               Expanded(
-                child: QuizeOptionTile(
-                  quizType: 'match',
-                  text: question.leftOptions[leftIndex],
-                  onTap: isLeftMatched ? null : () => onLeftSelected(leftIndex),
-                  isSelected: isLeftSelected || isLeftMatched,
-                  textAlign: TextAlign.center,
-                  color: leftColor ?? (isLeftSelected ? Colors.blue : null),
-                ),
+                child: hasLeftOption
+                    ? QuizeOptionTile(
+                        quizType: 'match',
+                        text: question.leftOptions[leftIndex!],
+                        onTap: isLeftMatched
+                            ? null
+                            : () => onLeftSelected(leftIndex),
+                        isSelected: isLeftSelected || isLeftMatched,
+                        textAlign: TextAlign.center,
+                        color: leftColor,
+                      )
+                    : const SizedBox.shrink(),
               ),
               const SizedBox(width: 8),
               // Right Option
               Expanded(
-                child: QuizeOptionTile(
-                  quizType: 'match',
-                  text: question.rightOptions[rightIndex],
-                  onTap: isRightMatched || state.selectedLeftIndex == null
-                      ? null
-                      : () => onMatchPair(state.selectedLeftIndex!, rightIndex),
-                  isSelected: isRightMatched,
-                  textAlign: TextAlign.center,
-                  color: rightColor,
-                ),
+                child: hasRightOption
+                    ? QuizeOptionTile(
+                        quizType: 'match',
+                        text: question.rightOptions[rightIndex!],
+                        onTap: state.selectedLeftIndex == null
+                            ? null
+                            : () => onMatchPair(
+                                state.selectedLeftIndex!,
+                                rightIndex,
+                              ),
+                        isSelected: isRightMatched,
+                        textAlign: TextAlign.center,
+                        color: rightColor,
+                      )
+                    : const SizedBox.shrink(),
               ),
             ],
           ),

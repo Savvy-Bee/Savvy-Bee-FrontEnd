@@ -472,7 +472,7 @@ final GoRouter appRouter = GoRouter(
       path: QuizScreen.path,
       name: QuizScreen.path,
       builder: (BuildContext context, GoRouterState state) {
-        return QuizScreen(quizData: state.extra as List<QuizQuestion>);
+        return QuizScreen(quizData: state.extra as QuizData);
       },
     ),
     GoRoute(

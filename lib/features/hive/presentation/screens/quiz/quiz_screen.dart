@@ -7,7 +7,6 @@ import 'package:savvy_bee_mobile/core/utils/assets/assets.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';
-import 'package:savvy_bee_mobile/features/auth/presentation/widgets/toggleable_list_tile.dart';
 import 'package:savvy_bee_mobile/features/hive/domain/models/course.dart';
 import 'package:savvy_bee_mobile/features/hive/domain/models/quiz_page_state.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/level/level_complete_screen.dart';
@@ -18,10 +17,25 @@ import 'package:savvy_bee_mobile/features/hive/presentation/widgets/quiz/quiz_he
 import 'package:savvy_bee_mobile/features/hive/presentation/widgets/quiz/quiz_success_error_bottom_sheet.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/widgets/quiz/reorder_options.dart';
 
+import '../../providers/course_providers.dart';
+import '../../widgets/quiz/true_false_option.dart';
+
+class QuizData {
+  final String lessonNumber;
+  final int levelNumber;
+  final List<QuizQuestion> quizQuestions;
+
+  QuizData({
+    required this.lessonNumber,
+    required this.levelNumber,
+    required this.quizQuestions,
+  });
+}
+
 class QuizScreen extends ConsumerStatefulWidget {
   static String path = '/quiz';
 
-  final List<QuizQuestion> quizData;
+  final QuizData quizData;
   const QuizScreen({super.key, required this.quizData});
 
   @override
@@ -38,17 +52,17 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
 
   final Map<int, QuizPageState> _pageStates = {};
 
-  late final List<QuizQuestion> _quizData;
+  late final List<QuizQuestion> _quizQuestions;
 
   @override
   void initState() {
     super.initState();
 
     _pageController = PageController();
-    _quizData = widget.quizData;
+    _quizQuestions = widget.quizData.quizQuestions;
 
-    for (int i = 0; i < _quizData.length; i++) {
-      final q = _quizData[i];
+    for (int i = 0; i < _quizQuestions.length; i++) {
+      final q = _quizQuestions[i];
       List<String>? initialReorderOptions;
 
       if (q is ReorderQuestion) {
@@ -76,16 +90,16 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
   }
 
   bool _isMatchCorrect(int leftIndex, int rightIndex) {
-    final question = _quizData[_currentPage];
+    final question = _quizQuestions[_currentPage];
     if (question is! MatchQuestion) return false;
 
-    final leftOption = question.leftOptions[leftIndex];
-    final correctRightIndex = question.correctMatches[leftOption];
+    // Convert leftIndex to string to match the JSON structure
+    final correctRightIndex = question.correctMatches[leftIndex.toString()];
     return correctRightIndex == rightIndex;
   }
 
   void _checkMatchPair(int leftIndex, int rightIndex) {
-    final question = _quizData[_currentPage];
+    final question = _quizQuestions[_currentPage];
     if (question is! MatchQuestion) return;
 
     final state = _pageStates[_currentPage]!;
@@ -93,13 +107,8 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
     setState(() {
       final newMatches = Map<int, int>.from(state.matches ?? {});
 
-      // Remove any previous match where this right option was used
-      newMatches.removeWhere((key, value) => value == rightIndex);
-
-      // Remove any previous match for this left option
-      newMatches.remove(leftIndex);
-
-      // Add the new match
+      // Just add or update the match for this left option
+      // (Don't remove right option from other matches since they can be reused)
       newMatches[leftIndex] = rightIndex;
 
       _pageStates[_currentPage] = state.copyWith(
@@ -212,7 +221,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
     FocusScope.of(context).unfocus();
 
     final state = _pageStates[_currentPage]!;
-    final question = _quizData[_currentPage];
+    final question = _quizQuestions[_currentPage];
 
     if (question.type == 'match') return;
 
@@ -228,6 +237,8 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
     }
 
     setState(() {
+      _fillInGapTextController.clear();
+
       _pageStates[_currentPage] = state.copyWith(
         isChecked: true,
         isCorrect: isCorrect,
@@ -265,7 +276,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
   void _goToNextPage() {
     context.pop();
 
-    if (_currentPage < _quizData.length - 1) {
+    if (_currentPage < _quizQuestions.length - 1) {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
@@ -276,7 +287,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
   }
 
   bool _canCheckAnswer(QuizPageState state) {
-    final question = _quizData[_currentPage];
+    final question = _quizQuestions[_currentPage];
 
     if (state.isChecked) return false;
 
@@ -338,7 +349,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
                 padding: const EdgeInsets.all(16),
                 child: QuizHeader(
                   pageController: _pageController,
-                  quizCount: _quizData.length,
+                  quizCount: _quizQuestions.length,
                   score: _score,
                 ),
               ),
@@ -346,7 +357,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
                 child: PageView.builder(
                   controller: _pageController,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: _quizData.length,
+                  itemCount: _quizQuestions.length,
                   itemBuilder: (context, pageIndex) {
                     return _buildQuizPage(pageIndex);
                   },
@@ -369,7 +380,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
   }
 
   Widget _buildQuizPage(int pageIndex) {
-    final question = _quizData[pageIndex];
+    final question = _quizQuestions[pageIndex];
     final state = _pageStates[pageIndex]!;
 
     return ListView(
@@ -385,7 +396,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
-                '${pageIndex + 1}/${_quizData.length}',
+                '${pageIndex + 1}/${_quizQuestions.length}',
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
@@ -563,48 +574,21 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
   }
 
   void _showResults() {
+    // Calculate final score and mark quiz as completed
+    final lessonNumber = widget.quizData.lessonNumber;
+    final levelNumber = widget.quizData.levelNumber;
+
+    // Mark quiz as completed
+    ref
+        .read(quizProgressProvider.notifier)
+        .completeQuiz(lessonNumber, levelNumber, _score);
+
     context.pushReplacementNamed(
       LevelCompleteScreen.path,
       extra: LevelCompleteArgs(
         score: _score.toDouble(),
         newFlowers: _currentPage + 1,
       ),
-    );
-  }
-}
-
-class TrueFalseOptions extends StatelessWidget {
-  final TrueFalseQuestion question;
-  final bool? selectedOption;
-  final ValueChanged<bool> onOptionSelected;
-  // Pass the whole state if you want to show correct/incorrect styling
-  final QuizPageState state;
-
-  const TrueFalseOptions({
-    super.key,
-    required this.question,
-    required this.selectedOption,
-    required this.onOptionSelected,
-    required this.state,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        ToggleableListTile(
-          text: "True",
-          isSelected: selectedOption == true,
-          onTap: () => onOptionSelected(true),
-        ),
-        const SizedBox(height: 12),
-        ToggleableListTile(
-          text: "False",
-          isSelected: selectedOption == false,
-          onTap: () => onOptionSelected(false),
-        ),
-      ],
     );
   }
 }

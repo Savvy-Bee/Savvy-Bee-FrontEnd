@@ -190,6 +190,8 @@
                                 ],
                                 "rightOptions": [
                                     "Helps",
+                                    "Hurts",
+                                    "Helps",
                                     "Hurts"
                                 ],
                                 "correctMatches": {
