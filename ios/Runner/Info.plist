@@ -10,6 +10,9 @@
 	</array>
 
 	<key>NSCameraUsageDescription</key>
+	<string>your usage description here</string>
+
+	<key>NSCameraUsageDescription</key>
 	<string>This app needs camera access to let you take and upload photos.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>This app needs microphone access to let you record and upload audio.</string>

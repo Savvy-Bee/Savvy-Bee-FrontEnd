@@ -28,14 +28,12 @@ class ApiEndpoints {
   static const String fetchMonoInputData =
       '/wallet/mono/linkaccount/fetch_mono_inputdata';
   static const String linkAccount = '/wallet/mono/linkaccount/link_account';
-  static const String allLinkedAccounts = '/wallet/mono/details/alluserbanks';
+  static const unlinkAccount = '/wallet/mono/linkaccount/unlink';
+  static const dashboardData = '/wallet/mono/details/dashboard';
+  static const String linkedAccounts = '/wallet/mono/details/alluserbanks';
 
   /// Account Creation endpoints
   static const String createNairaAccount = '/wallet/accountcreation/ng';
-
-  /// Dashboard Data endpoint
-  static const String dashboardData = '/wallet/mono/details/dashboard';
-  static const String linkedAccounts = '/wallet/mono/details/alluserbanks';
 
   /// KYC Endpoints
   static const String verifyNin = '/auth/kyc/identity-number/nin/ng';
@@ -52,23 +50,30 @@ class ApiEndpoints {
 
   /// Bills Endpoints
   // Airtime
-  static String initializeAirtime = '/wallet/transactions/bills/airtime/initialize';
-  static String verifyAirtimeTransaction = '/wallet/transactions/bills/airtime/verify';
-  
+  static String initializeAirtime =
+      '/wallet/transactions/bills/airtime/initialize';
+  static String verifyAirtimeTransaction =
+      '/wallet/transactions/bills/airtime/verify';
+
   // Data
   static String fetchDataPlans = '/wallet/transactions/bills/data/plans';
-  static String initializeDataPurchase = '/wallet/transactions/bills/data/initialize';
-  static String verifyDataTransaction = '/wallet/transactions/bills/data/verify';
-  
+  static String initializeDataPurchase =
+      '/wallet/transactions/bills/data/initialize';
+  static String verifyDataTransaction =
+      '/wallet/transactions/bills/data/verify';
+
   // TV
   static String fetchTVProviders = '/wallet/transactions/bills/tv/providers';
   static String fetchTVPlans = '/wallet/transactions/bills/tv/plans';
-  static String initializeTVSubscription = '/wallet/transactions/bills/tv/initialize';
+  static String initializeTVSubscription =
+      '/wallet/transactions/bills/tv/initialize';
   static String verifyTVSubscription = '/wallet/transactions/bills/tv/verify';
-  
-  // Electricity
-  static String fetchEletricityProviders = '/wallet/transactions/bills/electricity/providers';
-  static String initializeElectricity = '/wallet/transactions/bills/electricity/initialize';
-  static String verifyElectricity = '/wallet/transactions/bills/electricity/verify';
 
+  // Electricity
+  static String fetchEletricityProviders =
+      '/wallet/transactions/bills/electricity/providers';
+  static String initializeElectricity =
+      '/wallet/transactions/bills/electricity/initialize';
+  static String verifyElectricity =
+      '/wallet/transactions/bills/electricity/verify';
 }

@@ -33,7 +33,7 @@ class PasswordResetItems {
     ),
     PasswordResetItems(
       title: 'RESET PASSWORD',
-      staticDescription: 'Create new password',
+      staticDescription: "Make sure it's safe and secure",
     ),
   ];
 }

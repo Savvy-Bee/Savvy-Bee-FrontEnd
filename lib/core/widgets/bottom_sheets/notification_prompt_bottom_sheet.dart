@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/assets.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
+import 'package:savvy_bee_mobile/features/chat/presentation/screens/choose_personality_screen.dart';
 
 import '../../utils/constants.dart';
 
@@ -14,7 +16,7 @@ class NotificationPromptBottomSheet extends StatelessWidget {
       isScrollControlled: true,
       useSafeArea: true,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadiusGeometry.vertical(top: Radius.circular(16)),
+        borderRadius: BorderRadiusGeometry.vertical(top: Radius.circular(32)),
       ),
       builder: (context) => NotificationPromptBottomSheet(),
     );
@@ -55,7 +57,12 @@ class NotificationPromptBottomSheet extends StatelessWidget {
             onPressed: () {},
           ),
           const Gap(8),
-          CustomOutlinedButton(text: 'Maybe later', onPressed: () {}),
+          CustomOutlinedButton(
+            text: 'Maybe later',
+            onPressed: () {
+              context.pushNamed(ChoosePersonalityScreen.path, extra: true);
+            },
+          ),
         ],
       ),
     );

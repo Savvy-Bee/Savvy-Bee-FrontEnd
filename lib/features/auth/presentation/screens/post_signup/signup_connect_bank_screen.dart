@@ -24,7 +24,7 @@ class _SignupConnectBankScreenState extends State<SignupConnectBankScreen> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Image.asset(Logos.logo),
+        title: Image.asset(Logos.logo, scale: 4),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),

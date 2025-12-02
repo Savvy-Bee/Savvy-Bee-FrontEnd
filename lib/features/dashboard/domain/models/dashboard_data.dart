@@ -1,8 +1,8 @@
 class DashboardData {
-  final Details details;
+  final AccountDetails details;
   final List<String> availabledata;
   final dynamic history12Months;
-  final Widgets widgets;
+  final DashboardWidgets widgets;
   final List<dynamic> savings;
   final List<dynamic> debt;
 
@@ -16,10 +16,10 @@ class DashboardData {
   });
 
   factory DashboardData.fromJson(Map<String, dynamic> json) => DashboardData(
-    details: Details.fromJson(json['details']),
+    details: AccountDetails.fromJson(json['details']),
     availabledata: List<String>.from(json['availabledata']),
     history12Months: json['history12Months'],
-    widgets: Widgets.fromJson(json['Widgets']),
+    widgets: DashboardWidgets.fromJson(json['Widgets']),
     savings: List<dynamic>.from(json['savings']),
     debt: List<dynamic>.from(json['Debt']),
   );
@@ -34,7 +34,7 @@ class DashboardData {
   };
 }
 
-class Details {
+class AccountDetails {
   final String id;
   final String name;
   final String accountNumber;
@@ -42,9 +42,9 @@ class Details {
   final int balance;
   final String type;
   final String bvn;
-  final Institution institution;
+  final InstitutionInfo institution;
 
-  Details({
+  AccountDetails({
     required this.id,
     required this.name,
     required this.accountNumber,
@@ -55,7 +55,7 @@ class Details {
     required this.institution,
   });
 
-  factory Details.fromJson(Map<String, dynamic> json) => Details(
+  factory AccountDetails.fromJson(Map<String, dynamic> json) => AccountDetails(
     id: json['id'],
     name: json['name'],
     accountNumber: json['account_number'],
@@ -63,7 +63,7 @@ class Details {
     balance: json['balance'],
     type: json['type'],
     bvn: json['bvn'],
-    institution: Institution.fromJson(json['institution']),
+    institution: InstitutionInfo.fromJson(json['institution']),
   );
 
   Map<String, dynamic> toJson() => {
@@ -78,14 +78,14 @@ class Details {
   };
 }
 
-class Institution {
+class InstitutionInfo {
   final String? name;
   final String? type;
   final String? bankCode;
 
-  Institution({this.name, this.type, this.bankCode});
+  InstitutionInfo({this.name, this.type, this.bankCode});
 
-  factory Institution.fromJson(Map<String, dynamic> json) => Institution(
+  factory InstitutionInfo.fromJson(Map<String, dynamic> json) => InstitutionInfo(
     name: json['name'],
     type: json['type'],
     bankCode: json['code'] ?? json['bank_code'],
@@ -98,18 +98,18 @@ class Institution {
   };
 }
 
-class Widgets {
+class DashboardWidgets {
   final SpendCategoryBreakdown spendCategoryBreakdown;
   final FinancialHealth financialHealth;
   final String savingTargetInsight;
 
-  Widgets({
+  DashboardWidgets({
     required this.spendCategoryBreakdown,
     required this.financialHealth,
     required this.savingTargetInsight,
   });
 
-  factory Widgets.fromJson(Map<String, dynamic> json) => Widgets(
+  factory DashboardWidgets.fromJson(Map<String, dynamic> json) => DashboardWidgets(
     spendCategoryBreakdown: SpendCategoryBreakdown.fromJson(
       json['SpendCategoryBreakdown'],
     ),

@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/assets.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
-import 'package:savvy_bee_mobile/core/utils/text_utils.dart';
+import 'package:savvy_bee_mobile/core/utils/string_extensions.dart';
 import 'package:savvy_bee_mobile/core/widgets/hexagonal_button.dart';
 import 'package:savvy_bee_mobile/features/hive/domain/models/course.dart';
 
@@ -110,7 +110,7 @@ class _LevelsScreenState extends ConsumerState<LevelsScreen> {
                 ),
               ),
               Text(
-                TextUtils.truncate(widget.lesson.lessonTitle, 20),
+                widget.lesson.lessonTitle.truncate(20),
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,

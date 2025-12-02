@@ -6,8 +6,7 @@ import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/assets.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/illustrations.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
-import 'package:savvy_bee_mobile/core/utils/text_utils.dart';
-import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
+import 'package:savvy_bee_mobile/core/utils/string_extensions.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/features/hive/domain/models/course.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/levels_screen.dart';
@@ -24,7 +23,7 @@ class LessonHomeScreen extends ConsumerStatefulWidget {
 }
 
 class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
-  final int _selectedLessonIndex = 0;
+  // final int _selectedLessonIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +58,19 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
               ),
             ),
           ),
+          // This doesn't work at the moment
+          // Padding(
+          //   padding: const EdgeInsets.all(16).copyWith(bottom: 32),
+          //   child: CustomElevatedButton(
+          //     text: 'Continue',
+          //     onPressed: () {
+          //       // Undefined name '_selectedLessonIndex'.
+          //       final selectedLesson =
+          //           widget.course.lessons[_selectedLessonIndex];
+          //           context.pushNamed(LevelsScreen.path, extra: selectedLesson);
+          //     },
+          //   ),
+          // ),
           // Padding(
           //   padding: const EdgeInsets.all(16),
           //   child: CustomElevatedButton(
@@ -91,7 +103,7 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                TextUtils.truncate(widget.course.courseTitle, 10),
+                widget.course.courseTitle.truncate(10),
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,

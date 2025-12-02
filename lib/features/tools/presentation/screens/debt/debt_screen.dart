@@ -7,7 +7,6 @@ import 'package:savvy_bee_mobile/core/utils/number_formatter.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/features/tools/domain/models/debt.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/providers/debt_provider.dart';
-
 import '../../../../../core/theme/app_colors.dart';
 import '../../widgets/goal_stats_card.dart';
 import 'add_debt_screen.dart';
@@ -28,10 +27,15 @@ class _DebtScreenState extends ConsumerState<DebtScreen>
   @override
   void initState() {
     super.initState();
-    // Start fetching data immediately
-    ref.read(debtListNotifierProvider.notifier).refresh();
-
+    ref.read(debtListNotifierProvider.notifier).build();
     _tabController = TabController(length: 2, vsync: this);
+
+    // Listen to tab changes to rebuild when switching tabs
+    _tabController.addListener(() {
+      if (_tabController.indexIsChanging) {
+        setState(() {});
+      }
+    });
   }
 
   @override
@@ -42,93 +46,81 @@ class _DebtScreenState extends ConsumerState<DebtScreen>
 
   @override
   Widget build(BuildContext context) {
-    // WATCH THE DEBT LIST STATE
     final debtState = ref.watch(debtListNotifierProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Debt')),
       body: RefreshIndicator(
         onRefresh: () => ref.read(debtListNotifierProvider.notifier).refresh(),
-        child: SingleChildScrollView(
-          physics:
-              const AlwaysScrollableScrollPhysics(), // Allows pull-to-refresh
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // 3. BUILD THE DEBT CARD BASED ON STATE
-              debtState.when(
-                data: (data) {
-                  final activeDebts = data.data
-                      .where((item) => item.isActive)
-                      .toList();
-                  final totalRemaining = activeDebts.fold<double>(
-                    0.0,
-                    (sum, debt) => sum + (debt.owed),
-                  );
-                  return _buildDebtCard(totalRemaining);
-                },
-                loading: () => _buildDebtCard(0.0, isLoading: true),
-                error: (e, st) => _buildDebtCard(
-                  0.0,
-                  isError: true,
-                  errorMessage: 'Failed to load debts',
-                ),
-              ),
-              const Gap(16),
+        child: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    // Debt Summary Card
+                    debtState.when(
+                      data: (data) {
+                        final activeDebts = data.data
+                            .where((item) => item.isActive)
+                            .toList();
+                        final totalRemaining = activeDebts.fold<double>(
+                          0.0,
+                          (sum, debt) => sum + debt.owed,
+                        );
+                        return _buildDebtCard(totalRemaining);
+                      },
+                      loading: () => _buildDebtCard(0.0, isLoading: true),
+                      error: (e, st) => _buildDebtCard(
+                        0.0,
+                        isError: true,
+                        errorMessage: 'Failed to load debts',
+                      ),
+                    ),
+                    const Gap(16),
 
-              // TAB BAR
-              TabBar(
-                controller: _tabController,
-                dividerColor: Colors.transparent,
-                indicatorSize: TabBarIndicatorSize.tab,
-                tabs: const [
-                  Tab(text: 'Active'),
-                  Tab(text: 'Paid off'),
-                ],
-              ),
-
-              // 4. DISPLAY LISTS IN TABBARVIEW BASED ON STATE
-              debtState.when(
-                loading: () => SizedBox(
-                  height: 300,
-                  child: const Center(child: CircularProgressIndicator()),
-                ),
-                error: (e, st) => SizedBox(
-                  height: 300,
-                  child: Center(child: Text('Error: ${e.toString()}')),
-                ),
-                data: (data) {
-                  final activeDebts = data.data
-                      .where((item) => item.isActive)
-                      .toList();
-                  final paidOffDebts = data.data
-                      .where(
-                        (item) => item.isActive,
-                      ) // TODO: Change to isPaidOff or something like that when available
-                      .toList();
-
-                  return SizedBox(
-                    // Dynamically set height based on the active tab content
-                    height: _tabController.index == 0
-                        ? activeDebts.length * 106.0 + 24.0
-                        : 300,
-                    child: TabBarView(
+                    // Tab Bar
+                    TabBar(
                       controller: _tabController,
-                      // We can allow scrolling within the ListView, but not the TabBarView itself
-                      physics: const NeverScrollableScrollPhysics(),
-                      children: [
-                        // Active Debts List
-                        _buildDebtList(activeDebts, true),
-                        // Paid Off Debts List
-                        _buildDebtList(paidOffDebts, false),
+                      dividerColor: Colors.transparent,
+                      indicatorSize: TabBarIndicatorSize.tab,
+                      tabs: const [
+                        Tab(text: 'Active'),
+                        Tab(text: 'Paid off'),
                       ],
                     ),
-                  );
-                },
+                  ],
+                ),
               ),
-            ],
-          ),
+            ),
+
+            // Tab Content
+            debtState.when(
+              loading: () => const SliverFillRemaining(
+                child: Center(child: CircularProgressIndicator()),
+              ),
+              error: (e, st) => SliverFillRemaining(
+                child: Center(child: Text('Error: ${e.toString()}')),
+              ),
+              data: (data) {
+                final activeDebts = data.data
+                    .where((item) => item.isActive)
+                    .toList();
+                final paidOffDebts = data.data
+                    .where((item) => !item.isActive)
+                    .toList();
+
+                final currentList = _tabController.index == 0
+                    ? activeDebts
+                    : paidOffDebts;
+                final isActive = _tabController.index == 0;
+
+                return _buildDebtListSliver(currentList, isActive);
+              },
+            ),
+          ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -141,35 +133,35 @@ class _DebtScreenState extends ConsumerState<DebtScreen>
     );
   }
 
-  // Helper method to build the list of debt items
-  Widget _buildDebtList(List<Debt> debts, bool isActive) {
+  Widget _buildDebtListSliver(List<Debt> debts, bool isActive) {
     if (debts.isEmpty) {
-      return Padding(
-        padding: const EdgeInsets.only(top: 24),
+      return SliverFillRemaining(
+        hasScrollBody: false,
         child: Center(
-          child: Text('No ${isActive ? 'active' : 'paid off'} debts yet.'),
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Text('No ${isActive ? 'active' : 'paid off'} debts yet.'),
+          ),
         ),
       );
     }
 
-    return ListView.separated(
-      padding: const EdgeInsets.only(top: 24),
-      shrinkWrap: true,
-      physics:
-          const NeverScrollableScrollPhysics(), // Handled by SingleChildScrollView
-      itemBuilder: (context, index) {
-        final debt = debts[index];
-        return GoalStatsCard(
-          // Assuming the API returns these keys:
-          title: debt.name,
-          amountSaved: debt.balance,
-          totalTarget: debt.owed,
-          daysLeft: debt.expectedPayoffDate.difference(DateTime.now()).inDays,
-          isDebt: true,
-        );
-      },
-      separatorBuilder: (context, index) => const Gap(16),
-      itemCount: debts.length,
+    return SliverPadding(
+      padding: const EdgeInsets.fromLTRB(16, 24, 16, 100),
+      sliver: SliverList.separated(
+        itemCount: debts.length,
+        itemBuilder: (context, index) {
+          final debt = debts[index];
+          return GoalStatsCard(
+            title: debt.name,
+            amountSaved: debt.balance,
+            totalTarget: debt.owed,
+            daysLeft: debt.expectedPayoffDate.difference(DateTime.now()).inDays,
+            isDebt: true,
+          );
+        },
+        separatorBuilder: (context, index) => const Gap(16),
+      ),
     );
   }
 

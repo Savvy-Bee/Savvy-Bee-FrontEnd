@@ -9,7 +9,11 @@ import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_snackbar.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
+import 'package:savvy_bee_mobile/features/auth/presentation/screens/post_signup/signup_connect_bank_screen.dart';
 
+import '../../../../core/utils/assets/app_icons.dart';
+import '../../../../core/utils/assets/logos.dart';
+import '../../../../core/widgets/icon_text_row_widget.dart';
 import '../../domain/models/personality.dart';
 import '../providers/chat_providers.dart';
 
@@ -72,13 +76,17 @@ class _ChoosePersonalityScreenState
       if (success) {
         // Show success message
         if (mounted) {
-          CustomSnackbar.show(
-            context,
-            'Personality set to ${selectedPersonality.name}',
-            type: SnackbarType.success,
-          );
-          // Navigate to chat screen
-          context.pop();
+          if (widget.isFromSignup) {
+            context.pushNamed(SignupConnectBankScreen.path);
+          } else {
+            CustomSnackbar.show(
+              context,
+              'Personality set to ${selectedPersonality.name}',
+              type: SnackbarType.success,
+            );
+            // Navigate to chat screen
+            context.pop();
+          }
         }
       } else if (mounted) {
         // Show error message
@@ -125,17 +133,26 @@ class _ChoosePersonalityScreenState
         ref.read(chatProvider.notifier).refresh();
       },
       child: Scaffold(
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(35),
-          child: SafeArea(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const BackButton(),
-                IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert)),
-              ],
+        appBar: AppBar(
+          title: Image.asset(Logos.logo, scale: 4),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(left: 5),
+              child: IconTextRowWidget(
+                'Skip',
+                AppIcon(AppIcons.arrowRightIcon),
+                textDirection: TextDirection.rtl,
+                textStyle: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: Constants.neulisNeueFontFamily,
+                ),
+                onTap: () {
+                  context.pushNamed(SignupConnectBankScreen.path);
+                },
+              ),
             ),
-          ),
+          ],
         ),
         extendBodyBehindAppBar: true,
         body: personalities.when(
@@ -161,6 +178,7 @@ class _ChoosePersonalityScreenState
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  const Gap(24),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24.0),
                     child: Column(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 
 class AppIcons {
   // Base Path
@@ -83,10 +84,7 @@ class AppIcon extends StatelessWidget {
       width: useOriginal ? null : (size ?? 16),
       colorFilter: useOriginal
           ? null
-          : ColorFilter.mode(
-              color ?? Theme.of(context).iconTheme.color!,
-              BlendMode.srcIn,
-            ),
+          : ColorFilter.mode(color ?? AppColors.black, BlendMode.srcIn),
     );
   }
 }

@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:savvy_bee_mobile/core/utils/text_utils.dart';
+import 'package:savvy_bee_mobile/core/utils/string_extensions.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 
 import '../../../../core/theme/app_colors.dart';
@@ -77,11 +77,8 @@ class PickedFilePreview extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          TextUtils.truncate(
-                            file?.path.split('/').last ?? 'No file selected',
-                            15,
-                            addEllipsis: true,
-                          ),
+                          (file?.path.split('/').last ?? 'No file selected')
+                              .truncate(15, addEllipsis: true),
                           style: TextStyle(
                             fontSize: 14.0,
                             fontWeight: FontWeight.w500,

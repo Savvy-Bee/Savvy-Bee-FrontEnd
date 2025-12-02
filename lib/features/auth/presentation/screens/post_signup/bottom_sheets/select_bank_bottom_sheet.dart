@@ -7,6 +7,10 @@ import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/core/widgets/section_title_widget.dart';
 import 'package:savvy_bee_mobile/features/auth/presentation/screens/post_signup/bottom_sheets/selected_bank_login_bottom_sheet.dart';
+import 'package:savvy_bee_mobile/features/dashboard/presentation/providers/dashboard_data_provider.dart';
+
+import '../../../../../../core/widgets/custom_error_widget.dart';
+import '../../../../../spend/domain/models/institution.dart';
 
 class SelectBankBottomSheet extends ConsumerStatefulWidget {
   const SelectBankBottomSheet({super.key});
@@ -33,6 +37,8 @@ class _SelectBankBottomSheetState extends ConsumerState<SelectBankBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final banksAsync = ref.watch(institutionsProvider);
+
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -64,14 +70,31 @@ class _SelectBankBottomSheetState extends ConsumerState<SelectBankBottomSheet> {
           ),
           const Gap(16),
           Expanded(
-            child: ListView(
-              children: [
-                Wrap(
-                  spacing: 16,
-                  runSpacing: 16,
-                  children: List.generate(8, (index) => _buildBankCard()),
-                ),
-              ],
+            child: banksAsync.when(
+              skipLoadingOnRefresh: false,
+              data: (institutions) {
+                return ListView(
+                  children: [
+                    GridView.count(
+                      crossAxisCount: 4,
+                      mainAxisSpacing: 16,
+                      crossAxisSpacing: 16,
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      children: List.generate(
+                        institutions.length,
+                        (index) => _buildBankCard(institutions[index]),
+                      ),
+                    ),
+                  ],
+                );
+              },
+              error: (error, stackTrace) => CustomErrorWidget.error(
+                onRetry: () {
+                  ref.invalidate(institutionsProvider);
+                },
+              ),
+              loading: () => Center(child: const CircularProgressIndicator()),
             ),
           ),
         ],
@@ -79,13 +102,17 @@ class _SelectBankBottomSheetState extends ConsumerState<SelectBankBottomSheet> {
     );
   }
 
-  Widget _buildBankCard() {
+  Widget _buildBankCard(Institution institution) {
     return CustomCard(
-      onTap: () => SelectedBankLoginBottomSheet.show(context),
+      onTap: () =>
+          SelectedBankLoginBottomSheet.show(context, institution: institution),
       borderRadius: 8,
-      child: Text(
-        'Bank',
-        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+      child: Center(
+        child: Text(
+          institution.institution,
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
       ),
     );
   }

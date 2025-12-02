@@ -65,15 +65,25 @@ class RegisterOtherDetailsRequest {
   final String email;
   final String dob; // Date of Birth (e.g., '1988-04-04')
   final String country;
+  final String currency;
+  final String language;
 
   RegisterOtherDetailsRequest({
     required this.email,
     required this.dob,
     required this.country,
+    required this.currency,
+    required this.language,
   });
 
   Map<String, dynamic> toJson() {
-    return {'Email': email, 'DOB': dob, 'Country': country};
+    return {
+      'Email': email,
+      'DOB': dob,
+      'Country': country,
+      'currency': currency,
+      'language': language,
+    };
   }
 }
 

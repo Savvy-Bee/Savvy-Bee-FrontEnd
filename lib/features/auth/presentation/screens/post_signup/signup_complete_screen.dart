@@ -11,7 +11,9 @@ import '../../../../../core/utils/assets/illustrations.dart';
 class SignupCompleteScreen extends StatefulWidget {
   static String path = '/signup-complete';
 
-  const SignupCompleteScreen({super.key});
+  final bool isPasswordReset;
+
+  const SignupCompleteScreen({super.key, required this.isPasswordReset});
 
   @override
   State<SignupCompleteScreen> createState() => _SignupCompleteScreenState();
@@ -30,9 +32,16 @@ class _SignupCompleteScreenState extends State<SignupCompleteScreen> {
               Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Image.asset(Logos.logo, scale: 1.5),
+                  Image.asset(Logos.logo, scale: 4),
                   const Gap(24),
-                  IntroText(title: "You're all set", subtitle: 'Welcome back'),
+                  IntroText(
+                    title: widget.isPasswordReset
+                        ? "You're all set!"
+                        : "You're all\nsigned up!",
+                    subtitle: widget.isPasswordReset
+                        ? 'Welcome back'
+                        : "Welcome to Savvy Bee!",
+                  ),
                 ],
               ),
               Image.asset(Illustrations.happyBee, scale: 1.2),
@@ -41,7 +50,11 @@ class _SignupCompleteScreenState extends State<SignupCompleteScreen> {
                 buttonColor: CustomButtonColor.black,
                 showArrow: true,
                 onPressed: () {
-                  context.goNamed(PremiumScreen.path, extra: true);
+                  if (widget.isPasswordReset) {
+                    context.pop();
+                  } else {
+                    context.goNamed(PremiumScreen.path, extra: true);
+                  }
                 },
               ),
             ],

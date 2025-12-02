@@ -2,7 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-import '../../../features/dashboard/presentation/screens/dashboard_screen.dart';
+import '../../../features/dashboard/presentation/widgets/spending_category_widget.dart';
 
 class CustomDonutChart extends StatelessWidget {
   final List<ExpenseCategory> categories;

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
-
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/constants.dart';
 import '../../../../core/utils/number_formatter.dart';
@@ -9,14 +7,24 @@ import '../../../../core/widgets/charts/custom_donut_chart.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_card.dart';
 import '../../../tools/presentation/widgets/insight_card.dart';
-import '../screens/dashboard_screen.dart';
+import '../../domain/models/dashboard_data.dart';
 
-class SpendingCategoryWidget extends ConsumerWidget {
-  const SpendingCategoryWidget({super.key});
+class SpendingCategoryWidget extends StatelessWidget {
+  final SpendCategoryBreakdown spendingData;
+
+  const SpendingCategoryWidget({super.key, required this.spendingData});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final categories = ref.watch(expenseCategoriesProvider);
+  Widget build(BuildContext context) {
+    final categories = spendingData.categories.map((cat) {
+      return ExpenseCategory(
+        name: cat.name,
+        amount: cat.amount,
+        color: _getCategoryColor(cat.name),
+        icon: _getCategoryIcon(cat.name),
+      );
+    }).toList();
+
     final total = categories.fold<double>(0, (sum, cat) => sum + cat.amount);
 
     return SizedBox(
@@ -45,45 +53,49 @@ class SpendingCategoryWidget extends ConsumerWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const Gap(10),
-                  CustomDonutChart(categories: categories, total: total),
+                  if (categories.isNotEmpty)
+                    CustomDonutChart(categories: categories, total: total)
+                  else
+                    Text('No spending data available'),
                   const Gap(20),
                   ...categories
                       .take(2)
                       .map((cat) => _buildExpenseCategoryTile(cat)),
                   const Gap(12),
-                  SizedBox(
-                    width: double.infinity,
-                    child: CustomOutlinedButton(
-                      text: 'See all',
-                      icon: Icon(
-                        Icons.arrow_forward,
-                        size: 16,
-                        color: Colors.black,
+                  if (categories.length > 2)
+                    SizedBox(
+                      width: double.infinity,
+                      child: CustomOutlinedButton(
+                        text: 'See all',
+                        icon: Icon(
+                          Icons.arrow_forward,
+                          size: 16,
+                          color: Colors.black,
+                        ),
+                        onPressed: () {},
                       ),
-                      onPressed: () {},
                     ),
-                  ),
                   const Gap(8),
-                  InsightCard(
-                    text:
-                        "I'm having trouble analyzing your spending patterns right now",
-                    insightType: InsightType.nahlInsight,
-                    isExpandable: true,
-                  ),
+                  if (spendingData.insight.isNotEmpty)
+                    InsightCard(
+                      text: spendingData.insight,
+                      insightType: InsightType.nahlInsight,
+                      isExpandable: true,
+                    ),
                   const Gap(8),
-                  InsightCard(
-                    text:
-                        "I'm having trouble analyzing your spending patterns right now",
-                    insightType: InsightType.nextBestAction,
-                    isExpandable: true,
-                  ),
+                  if (spendingData.nextAction.isNotEmpty)
+                    InsightCard(
+                      text: spendingData.nextAction,
+                      insightType: InsightType.nextBestAction,
+                      isExpandable: true,
+                    ),
                   const Gap(8),
-                  InsightCard(
-                    text:
-                        "I'm having trouble analyzing your spending patterns right now",
-                    insightType: InsightType.alert,
-                    isExpandable: true,
-                  ),
+                  if (spendingData.alerts.isNotEmpty)
+                    InsightCard(
+                      text: spendingData.alerts,
+                      insightType: InsightType.alert,
+                      isExpandable: true,
+                    ),
                 ],
               ),
             ),
@@ -137,4 +149,47 @@ class SpendingCategoryWidget extends ConsumerWidget {
       ),
     );
   }
+
+  Color _getCategoryColor(String categoryName) {
+    final colors = {
+      'Auto & transport': const Color(0xFFFF3B30),
+      'Shopping': const Color(0xFFFFCC00),
+      'Entertainment': const Color(0xFF8BC34A),
+      'Food & Dining': const Color(0xFFE4B5FF),
+      'Bills & Utilities': const Color(0xFF2196F3),
+      'Travel': const Color(0xFFFF9800),
+      'Health': const Color(0xFF4CAF50),
+      'Education': const Color(0xFF9C27B0),
+    };
+    return colors[categoryName] ?? Colors.grey;
+  }
+
+  IconData _getCategoryIcon(String categoryName) {
+    final icons = {
+      'Auto & transport': Icons.directions_car,
+      'Shopping': Icons.shopping_bag,
+      'Entertainment': Icons.movie,
+      'Food & Dining': Icons.restaurant,
+      'Bills & Utilities': Icons.receipt,
+      'Travel': Icons.flight,
+      'Health': Icons.medical_services,
+      'Education': Icons.school,
+    };
+    return icons[categoryName] ?? Icons.category;
+  }
+}
+
+// Helper class for chart compatibility
+class ExpenseCategory {
+  final String name;
+  final double amount;
+  final Color color;
+  final IconData icon;
+
+  ExpenseCategory({
+    required this.name,
+    required this.amount,
+    required this.color,
+    required this.icon,
+  });
 }

@@ -18,6 +18,7 @@ import 'package:savvy_bee_mobile/features/auth/presentation/providers/auth_provi
 import 'package:savvy_bee_mobile/features/auth/domain/models/signup_items.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
+import '../../../../core/utils/assets/logos.dart';
 import '../../../../core/utils/custom_page_indicator.dart';
 import '../../../../core/widgets/custom_snackbar.dart';
 import 'post_signup/signup_complete_screen.dart';
@@ -37,10 +38,13 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   // Form keys for step-specific validation
   final _nameFormKey = GlobalKey<FormState>();
   final _emailFormKey = GlobalKey<FormState>();
+  final _usernameFormKey = GlobalKey<FormState>();
   final _passwordFormKey = GlobalKey<FormState>();
   // Note: OTP uses its own field logic, so no FormKey needed for that view.
   final _dobFormKey = GlobalKey<FormState>();
   final _countryFormKey = GlobalKey<FormState>();
+  final _languageFormKey = GlobalKey<FormState>();
+  final _currencyFormKey = GlobalKey<FormState>();
 
   // Form controllers
   final _firstNameController = TextEditingController();
@@ -51,10 +55,13 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   final _otpController = TextEditingController();
   final _dobController = TextEditingController();
   final _countryController = TextEditingController();
+  final _languageController = TextEditingController();
+  final _currencyController = TextEditingController();
 
   int _currentPage = 0;
+  final int _dotCount = 9;
+
   bool showPassword = false;
-  String? _errorMessage;
 
   // Total number of steps in the signup flow
   // final int _dotCount = 6;
@@ -68,7 +75,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
       if (newPage != _currentPage) {
         setState(() {
           _currentPage = newPage;
-          _errorMessage = null; // Clear error on page change
         });
       }
     });
@@ -111,9 +117,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   }
 
   void _handleContinue() async {
-    // Clear previous error message first
-    _errorMessage = null;
-
     final authNotifier = ref.read(authProvider.notifier);
     final authState = ref.read(authProvider);
 
@@ -131,90 +134,115 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
 
         case 1:
           // Page 1: Email Input
-          if (_emailFormKey.currentState!.validate()) {
-            _goToNextPage();
-          }
+          // if (_emailFormKey.currentState!.validate()) {
+          //   _goToNextPage();
+          // }
           _goToNextPage();
           break;
 
         case 2:
-          // Page 2: Password Input & API Registration
-          if (!_passwordFormKey.currentState!.validate()) return;
-
-          final request = RegisterRequest(
-            firstName: _firstNameController.text.trim(),
-            lastName: _lastNameController.text.trim(),
-            email: _emailController.text.trim(),
-            password: _passwordController.text.trim(),
-            username: _usernameController.text.trim(),
-          );
-
-          final success = await authNotifier.register(request);
-
-          // _goToNextPage();
-          if (success) {
-            _goToNextPage();
-          } else {
-            _showError(authState.errorMessage ?? 'Registration failed');
-          }
+          // Page 2: Username Input
+          // if (_usernameFormKey.currentState!.validate()) {
+          //   _goToNextPage();
+          // }
+          _goToNextPage();
           break;
 
         case 3:
-          // Page 3: OTP Verification
-          if (_otpController.text.length < 4) {
-            _showError('Please enter a valid OTP (at least 4 digits)');
-            return;
-          }
+          // Page 3: Password Input & API Registration
+          // if (!_passwordFormKey.currentState!.validate()) return;
 
-          final verifyRequest = VerifyEmailRequest(
-            email: _emailController.text,
-            otp: _otpController.text,
-          );
+          // final request = RegisterRequest(
+          //   firstName: _firstNameController.text.trim(),
+          //   lastName: _lastNameController.text.trim(),
+          //   email: _emailController.text.trim(),
+          //   password: _passwordController.text.trim(),
+          //   username: _usernameController.text.trim(),
+          // );
 
-          final success = await authNotifier.verifyEmail(verifyRequest);
+          // final success = await authNotifier.register(request);
 
-          // _goToNextPage();
-          if (success) {
-            _goToNextPage();
-          } else {
-            _showError(authState.errorMessage ?? 'Verification failed');
-          }
+          // // _goToNextPage();
+          // if (success) {
+          //   _goToNextPage();
+          // } else {
+          //   _showError(authState.errorMessage ?? 'Registration failed');
+          // }
+          _goToNextPage();
           break;
 
         case 4:
-          // Page 4: Date of Birth Input
-          if (_dobFormKey.currentState!.validate()) {
-            _goToNextPage();
-          }
+          // Page 4: OTP Verification
+          // if (_otpController.text.length < 4) {
+          //   _showError('Please enter a valid OTP (at least 4 digits)');
+          //   return;
+          // }
+
+          // final verifyRequest = VerifyEmailRequest(
+          //   email: _emailController.text,
+          //   otp: _otpController.text,
+          // );
+
+          // final success = await authNotifier.verifyEmail(verifyRequest);
+
+          // // _goToNextPage();
+          // if (success) {
+          //   _goToNextPage();
+          // } else {
+          //   _showError(authState.errorMessage ?? 'Verification failed');
+          // }
           _goToNextPage();
           break;
 
         case 5:
-          // Page 5: Country Input & Final Profile Update
-          if (!_countryFormKey.currentState!.validate()) return;
+          // Page 5: Date of Birth Input
+          // if (_dobFormKey.currentState!.validate()) {
+          //   _goToNextPage();
+          // }
+          _goToNextPage();
+          break;
+        case 6:
+          // Page 6: Date of Birth Input
+          // if (_countryFormKey.currentState!.validate()) {
+          //   _goToNextPage();
+          // }
+          _goToNextPage();
+          break;
+        case 7:
+          // Page 7: Date of Birth Input
+          // if (_languageFormKey.currentState!.validate()) {
+          //   _goToNextPage();
+          // }
+          _goToNextPage();
+          break;
 
-          // Register Other Details with DOB and Country
-          final registerOtherDetailsRequest = RegisterOtherDetailsRequest(
-            email: _emailController.text,
-            dob: _dobController.text,
-            country: _countryController.text,
-          );
+        case 8:
+          // Page 8: Country Input & Final Profile Update
+          // if (!_currencyFormKey.currentState!.validate()) return;
 
-          final success = await authNotifier.registerOtherDetails(
-            registerOtherDetailsRequest,
-          );
+          // // Register Other Details with DOB and Country
+          // final registerOtherDetailsRequest = RegisterOtherDetailsRequest(
+          //   email: _emailController.text,
+          //   dob: _dobController.text,
+          //   country: _countryController.text,
+          // );
 
-          // context.pushNamed(SignupCompleteScreen.path);
-          if (success) {
-            // Final success, navigate to completion screen
-            if (mounted) {
-              context.pushNamed(SignupCompleteScreen.path);
-            }
-          } else {
-            _showError(
-              authState.errorMessage ?? 'Failed to register other details',
-            );
-          }
+          // final success = await authNotifier.registerOtherDetails(
+          //   registerOtherDetailsRequest,
+          // );
+
+          // // context.pushNamed(SignupCompleteScreen.path);
+          // if (success) {
+          //   // Final success, navigate to completion screen
+          //   if (mounted) {
+          //     context.pushNamed(SignupCompleteScreen.path);
+          //   }
+          // } else {
+          //   _showError(
+          //     authState.errorMessage ?? 'Failed to register other details',
+          //   );
+          // }
+          context.pushNamed(SignupCompleteScreen.path);
           break;
 
         default:
@@ -258,11 +286,13 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      BackButton(onPressed: _goToPreviousPage),
+                      BackButton(
+                        onPressed: _currentPage == 0 ? null : _goToPreviousPage,
+                      ),
                       Expanded(
                         child: SmoothPageIndicator(
                           controller: _pageController,
-                          count: 6,
+                          count: _dotCount,
                           effect: PreviousColoredSlideEffect(
                             dotHeight: 4.0,
                             spacing: 5,
@@ -278,12 +308,16 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                     ],
                   ),
                   const Gap(10.0),
+
                   // Content Area (Intro Text + PageView)
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Column(
                         children: [
+                          const Gap(24.0),
+                          Image.asset(Logos.logo, scale: 3),
+                          const Gap(24.0),
                           IntroText(
                             title: SignupItems.items[_currentPage].title,
                             subtitle: _getPageSubtitle(),
@@ -296,10 +330,13 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                               children: [
                                 _nameView(),
                                 _emailView(),
+                                _usernameView(),
                                 _passwordView(),
                                 _otpView(),
                                 _dobView(),
                                 _countryView(),
+                                _languageView(),
+                                _currencyView(),
                               ],
                             ),
                           ),
@@ -312,7 +349,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
             ),
 
             Padding(
-              padding: const EdgeInsets.all(16).copyWith(bottom: 24, top: 0),
+              padding: const EdgeInsets.all(16),
               child: CustomElevatedButton(
                 text: 'Continue',
                 isLoading: authState.isLoading,
@@ -358,28 +395,26 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   Widget _emailView() {
     return Form(
       key: _emailFormKey,
-      child: ListView(
-        children: [
-          CustomTextFormField(
-            label: 'Email address',
-            hint: 'Email address',
-            controller: _emailController,
-            keyboardType: TextInputType.emailAddress,
-            validator: (value) => InputValidator.validateEmail(value),
-          ),
-          const Gap(16),
-          CustomTextFormField(
-            label: 'Username',
-            hint: 'Username',
-            controller: _usernameController,
-            textInputAction: TextInputAction.done,
-            validator: (value) => InputValidator.validateRequired(
-              value,
-              'Username',
-              minLength: 6,
-            ),
-          ),
-        ],
+      child: CustomTextFormField(
+        label: 'Email address',
+        hint: 'Email address',
+        controller: _emailController,
+        keyboardType: TextInputType.emailAddress,
+        validator: (value) => InputValidator.validateEmail(value),
+      ),
+    );
+  }
+
+  Widget _usernameView() {
+    return Form(
+      key: _usernameFormKey,
+      child: CustomTextFormField(
+        label: 'Username',
+        hint: 'Username',
+        controller: _usernameController,
+        textInputAction: TextInputAction.done,
+        validator: (value) =>
+            InputValidator.validateRequired(value, 'Username', minLength: 6),
       ),
     );
   }
@@ -421,7 +456,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   }
 
   Widget _otpView() {
-    final authNotifier = ref.read(authProvider.notifier);
     final isResending = ref.watch(authProvider).isLoading;
 
     return Column(
@@ -448,42 +482,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                 ),
               ),
             ),
-            // InkWell(
-            //   onTap: isResending
-            //       ? null
-            //       : () async {
-            //           setState(() {
-            //             _errorMessage = null;
-            //           });
-            //           final success = await authNotifier.resendOtp(
-            //             _emailController.text,
-            //           );
-            //           if (!success) {
-            //             _showError(
-            //               ref.read(authProvider).errorMessage ??
-            //                   'Failed to resend OTP',
-            //             );
-            //           } else {
-            //             if (mounted) {
-            //               CustomSnackbar.show(
-            //                 context,
-            //                 'OTP sent successfully',
-            //                 type: SnackbarType.success,
-            //               );
-            //             }
-            //           }
-            //         },
-            //   child: Text(
-            //     'Resend OTP',
-            //     style: TextStyle(
-            //       decoration: isResending ? null : TextDecoration.underline,
-            //       color: isResending ? AppColors.grey : AppColors.primary,
-            //       decorationColor: AppColors.primary,
-            //       fontSize: 16,
-            //       fontWeight: FontWeight.w500,
-            //     ),
-            //   ),
-            // ),
           ],
         ),
         const Gap(16),
@@ -545,66 +543,47 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
             _countryController.text = value ?? '';
           });
         },
-        // controller: _countryController,
-        // readOnly: true,
-        // onTap: () async {
-        //   // TODO: For now, we simulate selection to validate the form.
-        //   final selectedCountry = await showModalBottomSheet<String>(
-        //     context: context,
-        //     builder: (_) => _CountryPicker(
-        //       onCountrySelected: (country) => Navigator.pop(context, country),
-        //     ),
-        //   );
-
-        //   if (selectedCountry != null) {
-        //     setState(() {
-        //       _countryController.text = selectedCountry;
-        //     });
-        //   }
-        // },
-        // validator: (value) =>
-        //     InputValidator.validateRequired(value, 'Country of residence'),
-        // suffix: const Icon(Icons.keyboard_arrow_down),
       ),
     );
   }
-}
 
-// Dummy Widget for Country Picker Simulation
-class _CountryPicker extends StatelessWidget {
-  final Function(String) onCountrySelected;
+  Widget _languageView() {
+    return Form(
+      key: _languageFormKey,
+      child: CustomDropdownButton(
+        hint: 'Preferred language',
+        items: ['English', 'Español', 'Français', 'Deutsch', 'Português'],
+        onChanged: (value) {
+          setState(() {
+            _languageController.text = value ?? '';
+          });
+        },
+      ),
+    );
+  }
 
-  const _CountryPicker({required this.onCountrySelected});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Text(
-            'Select Your Country',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-          const Gap(10),
-          ListTile(
-            title: const Text('Nigeria'),
-            onTap: () => onCountrySelected('Nigeria'),
-          ),
-          ListTile(
-            title: const Text('United States'),
-            onTap: () => onCountrySelected('United States'),
-          ),
-          ListTile(
-            title: const Text('Canada'),
-            onTap: () => onCountrySelected('Canada'),
-          ),
-          ListTile(
-            title: const Text('United Kingdom'),
-            onTap: () => onCountrySelected('United Kingdom'),
-          ),
+  Widget _currencyView() {
+    return Form(
+      key: _currencyFormKey,
+      child: CustomDropdownButton(
+        hint: 'Preferred currency',
+        items: [
+          'Nigerian Naira (NGN)',
+          'US Dollar (USD)',
+          'Euro (EUR)',
+          'British Pound (GBP)',
+          'Japanese Yen (JPY)',
+          'Canadian Dollar (CAD)',
+          'Australian Dollar (AUD)',
+          'Swiss Franc (CHF)',
+          'Chinese Yuan (CNY)',
+          'Indian Rupee (INR)',
         ],
+        onChanged: (value) {
+          setState(() {
+            _currencyController.text = value ?? '';
+          });
+        },
       ),
     );
   }

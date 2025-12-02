@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/utils/date_time_utils.dart';
-import 'package:savvy_bee_mobile/core/utils/text_utils.dart';
+import 'package:savvy_bee_mobile/core/utils/string_extensions.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_dropdown_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';
@@ -74,9 +74,7 @@ class _AddDebtScreenState extends ConsumerState<AddDebtScreen> {
       name: _nameController.text.trim(),
       amountOwed: num.tryParse(amount)!,
       interestRate: num.tryParse(interest)!,
-      paymentFrequency: TextUtils.capitalizeFirstLetter(
-        _selectedPaymentFrequency.name,
-      ),
+      paymentFrequency: _selectedPaymentFrequency.name.capitalizeFirstLetter(),
       minPayment: num.tryParse(minPayment)!,
       expectedPayoffDate: _selectedDate!,
       repaymentDay: _selectedRepaymentDay!,

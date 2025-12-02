@@ -3,15 +3,23 @@ import 'package:gap/gap.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/charts/arc_progress_indicator.dart';
+import 'package:savvy_bee_mobile/features/dashboard/domain/models/dashboard_data.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/widgets/insight_card.dart';
 
 import '../../../../core/widgets/custom_card.dart';
-
 class FinancialHealthWidget extends StatelessWidget {
-  const FinancialHealthWidget({super.key});
+  final FinancialHealth healthData;
+
+  const FinancialHealthWidget({
+    super.key,
+    required this.healthData,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final progress = healthData.rate / 100.0;
+    final healthStatus = _getHealthStatus(healthData.rate);
+
     return SizedBox(
       width: MediaQuery.of(context).size.width / 1.25,
       child: CustomCard(
@@ -36,9 +44,12 @@ class FinancialHealthWidget extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
-                  ArcProgressIndicator(progress: 0.7, color: AppColors.primary),
+                  ArcProgressIndicator(
+                    progress: progress,
+                    color: _getHealthColor(healthData.rate),
+                  ),
                   Text(
-                    'Your financial health is Thriving!',
+                    'Your financial health is ${healthStatus}!',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 24,
@@ -48,7 +59,7 @@ class FinancialHealthWidget extends StatelessWidget {
                   ),
                   const Gap(16.0),
                   Text(
-                    "You've hit a strong balance between saving and spending and you're actively growing wealth",
+                    healthData.insight,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 12,
@@ -57,8 +68,7 @@ class FinancialHealthWidget extends StatelessWidget {
                   ),
                   const Gap(24.0),
                   InsightCard(
-                    text:
-                        "I'm having trouble analyzing your spending patterns right now",
+                    text: healthData.insight,
                     insightType: InsightType.nahlInsight,
                     isExpandable: true,
                   ),
@@ -69,5 +79,19 @@ class FinancialHealthWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String _getHealthStatus(int rate) {
+    if (rate >= 80) return 'Thriving';
+    if (rate >= 60) return 'Good';
+    if (rate >= 40) return 'Fair';
+    return 'Needs Attention';
+  }
+
+  Color _getHealthColor(int rate) {
+    if (rate >= 80) return AppColors.primary;
+    if (rate >= 60) return AppColors.success;
+    if (rate >= 40) return Colors.orange;
+    return Colors.red;
   }
 }

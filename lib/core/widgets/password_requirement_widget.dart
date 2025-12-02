@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 
-import '../utils/text_utils.dart';
+import '../utils/string_extensions.dart';
 
 class PasswordRequirementItem extends StatelessWidget {
   final String label;
@@ -62,31 +62,31 @@ class PasswordRequirementWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
-      spacing: 12,
+      spacing: 10,
       children: [
         PasswordRequirementItem(
           label: '1 Uppercase letter',
-          isValid: TextUtils.hasUppercase(password),
+          isValid: password.hasUppercase,
           password: password,
         ),
         PasswordRequirementItem(
           label: '1 Lowercase letter',
-          isValid: TextUtils.hasLowercase(password),
+          isValid: password.hasLowercase,
           password: password,
         ),
         PasswordRequirementItem(
           label: '1 Number',
-          isValid: TextUtils.hasNumber(password),
+          isValid: password.hasNumber,
           password: password,
         ),
         PasswordRequirementItem(
           label: '1 Special character',
-          isValid: TextUtils.hasSpecialCharacter(password),
+          isValid: password.hasSpecialCharacter,
           password: password,
         ),
         PasswordRequirementItem(
           label: '8 to 64 characters',
-          isValid: TextUtils.isAtLeastEightChars(password),
+          isValid: password.isAtLeastEightChars,
           password: password,
         ),
       ],

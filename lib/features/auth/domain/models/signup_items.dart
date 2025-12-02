@@ -30,6 +30,10 @@ class SignupItems {
       staticDescription: "Enter the email you'd like to link to your account",
     ),
     const SignupItems(
+      title: "Create username",
+      staticDescription: "Choose a unique username.",
+    ),
+    const SignupItems(
       title: 'Create a\npassword',
       staticDescription: "Make sure it's safe and secure",
     ),
@@ -46,6 +50,15 @@ class SignupItems {
     const SignupItems(
       title: 'What country do\nyou live in?',
       staticDescription: 'Regulations may vary depending on where you live',
+    ),
+    const SignupItems(
+      title: 'What language do\nyou prefer?',
+      staticDescription: "Choose the language you're most comfortable with.",
+    ),
+    const SignupItems(
+      title: "What's your\npreferred currency?",
+      staticDescription:
+          "Choose the currency you'd like to see your balances and transactions in.",
     ),
   ];
 }

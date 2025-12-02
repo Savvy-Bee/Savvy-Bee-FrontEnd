@@ -140,7 +140,9 @@ final GoRouter appRouter = GoRouter(
       path: SignupCompleteScreen.path,
       name: SignupCompleteScreen.path,
       builder: (BuildContext context, GoRouterState state) {
-        return const SignupCompleteScreen();
+        return SignupCompleteScreen(
+          isPasswordReset: state.extra as bool? ?? false,
+        );
       },
     ),
     GoRoute(
@@ -175,7 +177,7 @@ final GoRouter appRouter = GoRouter(
       path: FinancialArchitypeScreen.path,
       name: FinancialArchitypeScreen.path,
       builder: (BuildContext context, GoRouterState state) {
-        return const FinancialArchitypeScreen();
+        return FinancialArchitypeScreen(priority: state.extra as String?);
       },
     ),
     GoRoute(
@@ -477,7 +479,7 @@ final GoRouter appRouter = GoRouter(
       path: LevelCompleteScreen.path,
       name: LevelCompleteScreen.path,
       builder: (BuildContext context, GoRouterState state) {
-        return LevelCompleteScreen(args: state.extra as LevelCompleteArgs,);
+        return LevelCompleteScreen(args: state.extra as LevelCompleteArgs);
       },
     ),
 

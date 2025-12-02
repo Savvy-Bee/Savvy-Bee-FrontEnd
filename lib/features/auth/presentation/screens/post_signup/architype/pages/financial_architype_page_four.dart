@@ -1,31 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:savvy_bee_mobile/features/auth/domain/enums/financial_archetype_enums.dart';
+import 'package:savvy_bee_mobile/features/auth/presentation/providers/architype_providers.dart';
 import 'package:savvy_bee_mobile/features/auth/presentation/widgets/toggleable_list_tile.dart';
 
-class FinancialArchitypePageFour extends ConsumerStatefulWidget {
+class FinancialArchitypePageFour extends ConsumerWidget {
   const FinancialArchitypePageFour({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      _FinancialArchitypePageFourState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final selected = ref.watch(confusingTopicProvider);
 
-class _FinancialArchitypePageFourState
-    extends ConsumerState<FinancialArchitypePageFour> {
-  @override
-  Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       spacing: 8,
-      children: [
-        ToggleableListTile(text: 'Budgeting and Savings'),
-        ToggleableListTile(text: "Debt Management"),
-        ToggleableListTile(text: 'Investing'),
-        ToggleableListTile(text: 'Early-Stage Investments'),
-        ToggleableListTile(text: "Homeownership"),
-        ToggleableListTile(text: "Other"),
-      ],
+      children: ConfusingTopic.values.map((topic) {
+        return ToggleableListTile(
+          text: topic.text,
+          isSelected: selected == topic,
+          onTap: () {
+            ref.read(confusingTopicProvider.notifier).state = topic;
+          },
+        );
+      }).toList(),
     );
   }
 }

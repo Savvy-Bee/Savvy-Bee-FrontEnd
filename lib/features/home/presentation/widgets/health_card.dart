@@ -3,23 +3,17 @@ import 'package:gap/gap.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/assets.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/illustrations.dart';
 
-// --- Widget Component ---
-
 /// A financial health status card featuring a custom-painted background
 /// with a dedicated notch for the avatar icon.
 class HealthCardWidget extends StatelessWidget {
   final String statusText;
   final String descriptionText;
-  // final Widget honeyJarWidget;
-  // final Widget avatarWidget;
   final double rating;
 
   const HealthCardWidget({
     super.key,
     required this.statusText,
     required this.descriptionText,
-    // required this.honeyJarWidget,
-    // required this.avatarWidget,
     required this.rating,
   });
 
@@ -89,7 +83,7 @@ class HealthCardWidget extends StatelessWidget {
 
         // Avatar
         Positioned(
-          left: 25,
+          left: 35,
           bottom: -10,
           child: Image.asset(
             _getAvatarImage(rating),

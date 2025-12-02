@@ -1,8 +1,14 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
-import 'package:savvy_bee_mobile/features/dashboard/presentation/screens/dashboard_screen.dart';
+import '../../theme/app_colors.dart';
+
+class ChartDataPoint {
+  final String month;
+  final double value;
+
+  ChartDataPoint(this.month, this.value);
+}
 
 class CustomLineChart extends StatelessWidget {
   final List<ChartDataPoint> data;

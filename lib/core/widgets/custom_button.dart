@@ -151,6 +151,7 @@ class CustomOutlinedButton extends StatelessWidget {
             vertical: isSmall ? 10 : 14,
             horizontal: 44,
           ),
+          backgroundColor: AppColors.white,
         ),
         icon: isLoading
             ? SizedBox.square(

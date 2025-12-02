@@ -24,7 +24,7 @@ class ReferralScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Image.asset(Logos.logo, scale: 1.5),
+        title: Image.asset(Logos.logo, scale: 4.5),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 10),

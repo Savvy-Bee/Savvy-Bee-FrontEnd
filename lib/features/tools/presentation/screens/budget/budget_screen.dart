@@ -10,6 +10,8 @@ import 'package:savvy_bee_mobile/features/tools/presentation/providers/budget_pr
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/edit_budget_screen.dart';
 
 import '../../../../../core/widgets/category_progress_widget.dart';
+import '../../../../../core/widgets/custom_error_widget.dart';
+import '../../../../../core/widgets/custom_loading_widget.dart';
 import '../../widgets/insight_card.dart';
 
 class BudgetScreen extends ConsumerStatefulWidget {
@@ -31,27 +33,17 @@ class _BudgetScreenState extends ConsumerState<BudgetScreen> {
       appBar: AppBar(title: const Text('Budgets')),
       // 3. Use .when to handle loading, error, and data states
       body: budgetState.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => Center(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('Error: $error', textAlign: TextAlign.center),
-                const Gap(20),
-                CustomElevatedButton(
-                  text: 'Retry',
-                  onPressed: () {
-                    // 4. Add retry logic
-                    ref
-                        .read(budgetHomeNotifierProvider.notifier)
-                        .fetchBudgetHomeData();
-                  },
-                ),
-              ],
-            ),
-          ),
+        loading: () =>
+            const CustomLoadingWidget(text: 'Loading your budgets...'),
+        error: (error, stack) => CustomErrorWidget(
+          icon: Icons.savings_outlined,
+          title: 'Unable to Load Budgets',
+          subtitle:
+              'We couldn\'t fetch your budgets. Please check your connection and try again.',
+          actionButtonText: 'Retry',
+          onActionPressed: () {
+            ref.invalidate(budgetHomeNotifierProvider);
+          },
         ),
         data: (data) {
           // 5. Calculate derived values from the data

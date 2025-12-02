@@ -13,23 +13,27 @@ class OnboardingItem {
 
   static List<OnboardingItem> items = [
     const OnboardingItem(
-      title: 'LEARN TO\nSPEND BETTER',
-      description: 'With spending limits & budget tips',
+      title: 'Spend Smarter,\nNot Harder',
+      description:
+          'With spending limits & budget tips from Nahl, hit your goals without the guilt.',
       imagePath: Illustrations.savingsBeePose2,
     ),
     const OnboardingItem(
-      title: 'SIMPLIFY\nYOUR SAVINGS',
-      description: 'With automatic transfers to savings wallet',
+      title: 'Your Savings,\non Autopilot',
+      description:
+          'Automate your transactions and savings then watch your wealth grow.',
       imagePath: Illustrations.savingsBeePose1,
     ),
     const OnboardingItem(
-      title: 'YOUR\nAI COACH',
-      description: 'Personal guide for tips, insights, and daily wins.',
+      title: 'Your 24/7\nMoney Coach',
+      description:
+          'Meet Nahl, your AI for pro tips, insights, and virtual high-fives for every win, powered by 7 animated bees.',
       imagePath: Illustrations.loanBee,
     ),
     const OnboardingItem(
-      title: 'JOIN\nTHE HIVE',
-      description: 'Connect with other bees & climb the leaderboard.',
+      title: 'Your Money\nSquad Awaits',
+      description:
+          'Bees are already connecting! Compete for real rewards and climb the leaderboard with your hive.',
       imagePath: Illustrations.familyBee,
     ),
   ];

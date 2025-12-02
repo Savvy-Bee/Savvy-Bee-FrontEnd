@@ -50,7 +50,7 @@ class ConnectBankSecurityBottomSheet extends StatelessWidget {
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
                   fontFamily: Constants.neulisNeueFontFamily,
-                  height: 1.1,
+                  height: 1.0,
                 ),
               ),
 
@@ -94,9 +94,10 @@ class ConnectBankSecurityBottomSheet extends StatelessWidget {
   Widget _buildInfoItem(String title, String subtitle) {
     return Row(
       mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AppIcon(AppIcons.chartSquareIcon),
-        const Gap(22),
+        AppIcon(AppIcons.chartSquareIcon, size: 24),
+        const Gap(16),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,6 +119,7 @@ class ConnectBankSecurityBottomSheet extends StatelessWidget {
 
   Widget _buildInfoCard() {
     return CustomCard(
+      borderRadius: 32,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

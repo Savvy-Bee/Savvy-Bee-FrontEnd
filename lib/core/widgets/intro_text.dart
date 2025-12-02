@@ -37,7 +37,15 @@ class IntroText extends StatelessWidget {
       children: [
         if (showLogo) ...[
           const Gap(8.0),
-          Image.asset(Logos.logoText),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            spacing: 8,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Image.asset(Logos.logo, scale: 5),
+              Image.asset(Logos.logoText),
+            ],
+          ),
           const Gap(16.0),
         ],
 
@@ -50,7 +58,7 @@ class IntroText extends StatelessWidget {
               : TextAlign.right,
           style: TextStyle(
             fontSize: isLarge ? 32 : 24,
-            fontWeight: FontWeight.w900,
+            fontWeight: FontWeight.bold,
             fontFamily: Constants.neulisNeueFontFamily,
             height: 0.9,
             color: mainTextColor,

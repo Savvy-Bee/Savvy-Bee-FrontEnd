@@ -424,68 +424,6 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
   }
 
-  // /// Get current user profile from API
-  // Future<bool> refreshUserProfile() async {
-  //   if (!state.isAuthenticated) return false;
-
-  //   state = state.copyWith(isLoading: true, clearError: true);
-
-  //   try {
-  //     final response = await _authRepository.getUserProfile();
-
-  //     if (response.success && response.data != null) {
-  //       final user = response.data!;
-  //       state = state.copyWith(user: user, isLoading: false);
-  //       await _saveUserToStorage(user);
-  //       log('User profile refreshed: ${user.email}');
-  //       return true;
-  //     } else {
-  //       state = state.copyWith(
-  //         isLoading: false,
-  //         errorMessage: response.message,
-  //       );
-  //       return false;
-  //     }
-  //   } catch (e) {
-  //     log('Refresh profile error: $e');
-  //     state = state.copyWith(
-  //       isLoading: false,
-  //       errorMessage: 'Failed to refresh profile',
-  //     );
-  //     return false;
-  //   }
-  // }
-
-  // /// Update user profile
-  // Future<bool> updateProfile(Map<String, dynamic> profileData) async {
-  //   state = state.copyWith(isLoading: true, clearError: true);
-
-  //   try {
-  //     final response = await _authRepository.updateUserProfile(profileData);
-
-  //     if (response.success && response.data != null) {
-  //       final user = response.data!;
-  //       state = state.copyWith(user: user, isLoading: false);
-  //       await _saveUserToStorage(user);
-  //       log('Profile updated successfully: ${user.email}');
-  //       return true;
-  //     } else {
-  //       state = state.copyWith(
-  //         isLoading: false,
-  //         errorMessage: response.message,
-  //       );
-  //       return false;
-  //     }
-  //   } catch (e) {
-  //     log('Update profile error: $e');
-  //     state = state.copyWith(
-  //       isLoading: false,
-  //       errorMessage: 'Failed to update profile',
-  //     );
-  //     return false;
-  //   }
-  // }
-
   /// Logout and clear all user data
   Future<void> logout() async {
     try {
@@ -498,34 +436,6 @@ class AuthNotifier extends StateNotifier<AuthState> {
       state = AuthState.initial();
     }
   }
-
-  // /// Delete user account
-  // Future<bool> deleteAccount() async {
-  //   state = state.copyWith(isLoading: true, clearError: true);
-
-  //   try {
-  //     final response = await _authRepository.deleteAccount();
-
-  //     if (response.success) {
-  //       await logout();
-  //       log('Account deleted successfully');
-  //       return true;
-  //     } else {
-  //       state = state.copyWith(
-  //         isLoading: false,
-  //         errorMessage: response.message,
-  //       );
-  //       return false;
-  //     }
-  //   } catch (e) {
-  //     log('Delete account error: $e');
-  //     state = state.copyWith(
-  //       isLoading: false,
-  //       errorMessage: 'Failed to delete account',
-  //     );
-  //     return false;
-  //   }
-  // }
 
   /// Clear error message
   void clearError() {

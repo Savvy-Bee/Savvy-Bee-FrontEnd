@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/app_icons.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/illustrations.dart';
@@ -10,9 +11,14 @@ import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/core/widgets/dot.dart';
 import 'package:savvy_bee_mobile/core/widgets/icon_text_row_widget.dart';
 import 'package:savvy_bee_mobile/core/widgets/section_title_widget.dart';
+import 'package:savvy_bee_mobile/features/hive/domain/models/course.dart';
 import 'package:savvy_bee_mobile/features/home/presentation/providers/home_data_provider.dart';
 
+import '../../../../core/widgets/custom_error_widget.dart';
+import '../../../../core/widgets/custom_loading_widget.dart';
 import '../../../dashboard/presentation/widgets/info_card.dart';
+import '../../../hive/presentation/providers/course_providers.dart';
+import '../../../hive/presentation/screens/lesson/lesson_home_screen.dart';
 import '../widgets/health_card.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -28,11 +34,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final homeData = ref.watch(homeDataProvider);
+    final coursesAsync = ref.watch(allCoursesProvider);
 
     return homeData.when(
       data: (value) {
         final data = value.data;
 
+        // The choice of using a Scaffold for each state is for the purpose of
+        // hiding the AppBar while loading
         return Scaffold(
           appBar: _buildAppBar(data.firstName),
           body: ListView(
@@ -44,14 +53,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   statusText: data.aiData.status,
                   descriptionText: data.aiData.message,
                   rating: data.aiData.ratings.toDouble(),
-                  // honeyJarWidget: Image.asset(
-                  //   Assets.honeyJar,
-                  //   fit: BoxFit.cover,
-                  // ),
-                  // avatarWidget: Image.asset(
-                  //   Illustrations.susuAvatar,
-                  //   fit: BoxFit.cover,
-                  // ),
                 ),
               ),
               const Gap(24),
@@ -117,37 +118,43 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ),
               ),
               const Gap(24),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: SectionTitleWidget(title: 'Explore courses'),
-              ),
-              const Gap(16),
-              SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  spacing: 12,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _buildCourseCard(
-                      title: 'Saving 101',
-                      subtitle:
-                          'Create smart budgets, track spending, and get personalized insights.',
-                      color: AppColors.primary,
-                    ),
-                    _buildCourseCard(
-                      title: 'Budgeting Basics',
-                      subtitle:
-                          'Create smart budgets, track spending, and get personalized insights.',
-                      color: AppColors.blue,
-                    ),
-                  ],
-                ),
+
+              coursesAsync.when(
+                data: (courses) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: SectionTitleWidget(title: 'Explore courses'),
+                      ),
+                      const Gap(16),
+                      SingleChildScrollView(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          spacing: 12,
+                          mainAxisSize: MainAxisSize.min,
+                          children: courses
+                              .map(
+                                (course) => _buildCourseCard(
+                                  course: course,
+                                  color: AppColors.primary,
+                                ),
+                              )
+                              .toList(),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+                error: (error, stackTrace) => const SizedBox.shrink(),
+                loading: () => const SizedBox.shrink(),
               ),
               const Gap(24),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: SectionTitleWidget(title: 'Explore courses'),
+                child: SectionTitleWidget(title: 'Recent insights'),
               ),
               const Gap(16),
               SingleChildScrollView(
@@ -158,17 +165,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     ArticleCard(
-                      title: 'Saving 101',
-                      subtitle:
-                          'Create smart budgets, track spending, and get personalized insights.',
+                      title: 'Should you save financially with your partner?',
+                      subtitle: "Let's get financially intimate",
                       backgroundColor: AppColors.primary,
                       imagePath: Illustrations.matchingAndQuizBee,
                       onTap: () {},
                     ),
                     ArticleCard(
-                      title: 'Saving 101',
+                      title: 'Money lessons from afrobeats',
                       subtitle:
-                          'Create smart budgets, track spending, and get personalized insights.',
+                          "Are you really listening to what they're saying?",
                       backgroundColor: AppColors.success,
                       imagePath: Illustrations.matchingAndQuizBee,
                       onTap: () {},
@@ -192,22 +198,28 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         );
       },
       error: (error, stackTrace) => Scaffold(
-        body: const Center(
-          child: Text('Unable to load data. Please try again'),
+        body: CustomErrorWidget(
+          icon: Icons.person_outline,
+          title: 'Unable to Load User Info',
+          subtitle:
+              'We couldn\'t fetch your account data. Please check your connection and try again.',
+          actionButtonText: 'Retry',
+          onActionPressed: () {
+            ref.invalidate(homeDataProvider);
+          },
         ),
       ),
-      loading: () => Scaffold(body: Center(child: CircularProgressIndicator())),
+      loading: () => Scaffold(
+        body: CustomLoadingWidget(text: 'Loading your account info...'),
+      ),
     );
   }
 
-  Widget _buildCourseCard({
-    required String title,
-    required String subtitle,
-    required Color color,
-  }) {
+  Widget _buildCourseCard({required Course course, required Color color}) {
     final width = MediaQuery.sizeOf(context).width / 1.9;
 
     return CustomCard(
+      onTap: () => context.pushNamed(LessonHomeScreen.path, extra: course),
       bgColor: color.withValues(alpha: 0.25),
       borderColor: color,
       width: width,
@@ -227,7 +239,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
           // const Gap(16),
           Text(
-            title,
+            course.courseTitle,
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w500,
@@ -235,7 +247,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
           ),
           const Gap(4),
-          Text(subtitle, style: TextStyle(fontSize: 10)),
+          Text(
+            course.courseDescription,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(fontSize: 10),
+          ),
           const Gap(8),
         ],
       ),

@@ -9,7 +9,9 @@ import '../../../../core/widgets/charts/arc_progress_indicator.dart';
 import '../../../../core/widgets/custom_card.dart';
 
 class SavingsTargetWidget extends StatelessWidget {
-  const SavingsTargetWidget({super.key});
+  final String savingsInsight;
+
+  const SavingsTargetWidget({super.key, required this.savingsInsight});
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +40,7 @@ class SavingsTargetWidget extends StatelessWidget {
               child: Column(
                 children: [
                   ArcProgressIndicator(
-                    progress: 0.7,
+                    progress: 0.7, // This should come from actual savings data
                     color: AppColors.success,
                     content: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -60,7 +62,7 @@ class SavingsTargetWidget extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          '80%',
+                          'of ₦200,000',
                           style: TextStyle(
                             fontSize: 10,
                             fontWeight: FontWeight.w500,
@@ -69,7 +71,6 @@ class SavingsTargetWidget extends StatelessWidget {
                       ],
                     ),
                   ),
-
                   const Gap(24.0),
                   CustomElevatedButton(
                     text: 'Get more insights',
@@ -77,12 +78,12 @@ class SavingsTargetWidget extends StatelessWidget {
                     buttonColor: CustomButtonColor.black,
                   ),
                   const Gap(24.0),
-                  InsightCard(
-                    text:
-                        "I'm having trouble analyzing your spending patterns right now",
-                    insightType: InsightType.nextBestAction,
-                    isExpandable: true,
-                  ),
+                  if (savingsInsight.isNotEmpty)
+                    InsightCard(
+                      text: savingsInsight,
+                      insightType: InsightType.nextBestAction,
+                      isExpandable: true,
+                    ),
                 ],
               ),
             ),

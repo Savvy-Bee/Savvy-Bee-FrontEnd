@@ -72,7 +72,7 @@ class _SelectPriorityScreenState extends ConsumerState<SelectPriorityScreen> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Image.asset(Logos.logo, scale: 1.5),
+        title: Image.asset(Logos.logo, scale: 4.5),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 10),
@@ -134,29 +134,18 @@ class _SelectPriorityScreenState extends ConsumerState<SelectPriorityScreen> {
               text: 'Next',
               showArrow: true,
               buttonColor: CustomButtonColor.black,
-              onPressed: _priority == null ? null : () {},
+              onPressed: _priority == null
+                  ? null
+                  : () {
+                      context.pushNamed(
+                        FinancialArchitypeScreen.path,
+                        extra: Priority.getText(_priority!),
+                      );
+                    },
             ),
           ],
         ),
       ),
     );
   }
-
-  // Widget _buildPriorityCard(
-  //   String iconPath,
-  //   String text, {
-  //   bool isSelected = false,
-  //   VoidCallback? onTap,
-  // }) {
-  //   return CustomCard(
-  //     onTap: onTap,
-  //     borderRadius: 8,
-  //     borderColor: isSelected ? AppColors.grey : AppColors.greyMid,
-  //     bgColor: isSelected ? AppColors.primaryFaint : null,
-  //     child: Row(
-  //       mainAxisSize: MainAxisSize.min,
-  //       children: [AppIcon(iconPath), const Gap(8), Text(text)],
-  //     ),
-  //   );
-  // }
 }

@@ -80,7 +80,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 children: [
                   Column(
                     children: [
-                      Image.asset(Logos.logo, scale: 1.5),
+                      Image.asset(Logos.logo, scale: 3),
                       const Gap(24.0),
                       IntroText(
                         title: 'Welcome\nback!',
