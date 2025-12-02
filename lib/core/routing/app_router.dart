@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/features/auth/presentation/screens/post_signup/architype/financial_architype_screen.dart';
+import 'package:savvy_bee_mobile/features/auth/presentation/screens/post_signup/bottom_sheets/referrer_screen.dart';
 import 'package:savvy_bee_mobile/features/auth/presentation/screens/post_signup/select_priority_screen.dart';
 import 'package:savvy_bee_mobile/features/auth/presentation/screens/post_signup/signup_connect_bank_screen.dart';
 import 'package:savvy_bee_mobile/features/auth/presentation/screens/post_signup/signup_notifications_screen.dart';
@@ -143,6 +144,13 @@ final GoRouter appRouter = GoRouter(
         return SignupCompleteScreen(
           isPasswordReset: state.extra as bool? ?? false,
         );
+      },
+    ),
+    GoRoute(
+      path: ReferrerScreen.path,
+      name: ReferrerScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return const ReferrerScreen();
       },
     ),
     GoRoute(
