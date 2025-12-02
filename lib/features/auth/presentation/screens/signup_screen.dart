@@ -408,13 +408,13 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   Widget _usernameView() {
     return Form(
       key: _usernameFormKey,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       child: CustomTextFormField(
         label: 'Username',
         hint: 'Username',
         controller: _usernameController,
         textInputAction: TextInputAction.done,
-        validator: (value) =>
-            InputValidator.validateRequired(value, 'Username', minLength: 6),
+        validator: (value) => InputValidator.validateUsername(value),
       ),
     );
   }

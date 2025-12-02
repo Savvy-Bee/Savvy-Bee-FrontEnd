@@ -27,6 +27,8 @@ class Assets {
   static const String trophySvg = '$_basePath/trophy.svg';
   static const String trophy = '$_basePath/trophy.png';
 
+  static const String freeze = '$_basePath/freeze.png';
+
   // Honey Jars
   static const String honeyJar1 = '$_basePath/honey-jar-1.png';
   static const String honeyJar2 = '$_basePath/honey-jar-2.png';

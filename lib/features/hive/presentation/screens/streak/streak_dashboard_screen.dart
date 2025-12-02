@@ -8,6 +8,8 @@ import 'package:savvy_bee_mobile/core/utils/assets/assets.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/illustrations.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_error_widget.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_loading_widget.dart';
 import 'package:savvy_bee_mobile/core/widgets/game_card.dart';
 import 'package:savvy_bee_mobile/core/widgets/section_title_widget.dart';
 
@@ -39,22 +41,31 @@ class _StreakDashboardScreenState extends ConsumerState<StreakDashboardScreen> {
     final hiveAsync = ref.watch(hiveNotifierProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Streak'),
-        backgroundColor: AppColors.primary,
-        surfaceTintColor: AppColors.primary,
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: AppIcon(AppIcons.shareIcon, size: 20),
-          ),
-        ],
-      ),
+      appBar:
+          !hiveAsync.hasError &&
+              !hiveAsync.isLoading &&
+              !hiveAsync.isRefreshing &&
+              !hiveAsync.isReloading
+          ? AppBar(
+              title: const Text('Streak'),
+              backgroundColor: AppColors.primary,
+              surfaceTintColor: AppColors.primary,
+              actions: [
+                IconButton(
+                  onPressed: () {},
+                  icon: AppIcon(AppIcons.shareIcon, size: 20),
+                ),
+              ],
+            )
+          : null,
       body: hiveAsync.when(
         data: (hiveState) => _buildContent(hiveState),
-        loading: () =>
-            Center(child: CircularProgressIndicator(color: AppColors.primary)),
-        error: (error, stack) => _buildErrorState(error),
+        loading: () => CustomLoadingWidget(),
+        error: (error, stack) => CustomErrorWidget.error(
+          onRetry: () {
+            ref.invalidate(hiveNotifierProvider);
+          },
+        ),
       ),
     );
   }
@@ -139,11 +150,7 @@ class _StreakDashboardScreenState extends ConsumerState<StreakDashboardScreen> {
                       ),
                     ),
                     Expanded(
-                      child: _buildStatItem(
-                        'Freezes used',
-                        '0',
-                        AppIcons.freezeIcon,
-                      ),
+                      child: _buildStatItem('Freezes used', '0', Assets.freeze),
                     ),
                   ],
                 ),
@@ -161,39 +168,6 @@ class _StreakDashboardScreenState extends ConsumerState<StreakDashboardScreen> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildErrorState(Object error) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.error_outline, size: 64, color: AppColors.error),
-            const Gap(16),
-            Text(
-              'Failed to load streak data',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
-            const Gap(8),
-            Text(
-              error.toString(),
-              style: TextStyle(color: AppColors.greyDark),
-              textAlign: TextAlign.center,
-            ),
-            const Gap(24),
-            ElevatedButton(
-              onPressed: () {
-                ref.invalidate(hiveNotifierProvider);
-              },
-              child: const Text('Retry'),
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -270,7 +244,9 @@ class _StreakDashboardScreenState extends ConsumerState<StreakDashboardScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          AppIcon(iconPath, color: AppColors.primary, useOriginal: true),
+          iconPath.endsWith('.png')
+              ? Image.asset(iconPath)
+              : AppIcon(iconPath, color: AppColors.primary, useOriginal: true),
           Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,

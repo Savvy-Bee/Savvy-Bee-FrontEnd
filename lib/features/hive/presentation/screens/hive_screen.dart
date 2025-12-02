@@ -15,6 +15,7 @@ import 'package:savvy_bee_mobile/features/hive/presentation/screens/leaderboard/
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/lesson/lesson_home_screen.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/streak/streak_dashboard_screen.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/providers/course_providers.dart';
+import 'package:savvy_bee_mobile/features/profile/presentation/screens/profile_screen.dart';
 
 import '../../../../core/utils/assets/app_icons.dart';
 import '../../../../core/widgets/custom_card.dart';
@@ -209,6 +210,7 @@ class _HiveScreenState extends ConsumerState<HiveScreen> {
           data: (hiveState) => _buildActionButton(
             icon: Image.asset(Illustrations.hiveFlower),
             text: '${hiveState.hiveData?.flowers ?? 0}',
+            onTap: () => context.pushNamed(ProfileScreen.path),
           ),
           loading: () => _buildActionButton(
             icon: Image.asset(Illustrations.hiveFlower),

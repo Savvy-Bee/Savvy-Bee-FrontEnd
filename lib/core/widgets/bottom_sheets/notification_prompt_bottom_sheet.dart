@@ -43,7 +43,7 @@ class NotificationPromptBottomSheet extends StatelessWidget {
           ),
           const Gap(16),
           Text(
-            'Get notifications Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+            'Get timely nudges to stay on track, celebrate your savings wins, and unlock smart money insights before everyone else.',
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 12,

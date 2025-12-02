@@ -14,6 +14,32 @@ class InputValidator {
     return null; // Valid
   }
 
+  // Checks if a string is not empty or just whitespace.
+  static String? validateUsername(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Username cannot be empty.';
+    }
+    if (value.length < 6) {
+      return 'Username must be at least 6 characters long.';
+    }
+    if (value.length > 20) {
+      return 'Username must not exceed 20 characters.';
+    }
+    if (value.contains(' ')) {
+      return 'Username cannot contain whitespaces.';
+    }
+    if (value.contains(RegExp(r'[A-Z]'))) {
+      return 'Username cannot contain uppercase characters.';
+    }
+    if (!RegExp(r'^[a-z0-9_-]+$').hasMatch(value)) {
+      return 'Username can only contain lowercase letters, numbers, underscores, and hyphens.';
+    }
+    if (RegExp(r'^[_-]|[_-]$').hasMatch(value)) {
+      return 'Username cannot start or end with underscore or hyphen.';
+    }
+    return null;
+  }
+
   // Validates if a string is a valid name (only letters and spaces).
   static String? validateName(String? value, String fieldName) {
     if (value == null || value.trim().isEmpty) {
