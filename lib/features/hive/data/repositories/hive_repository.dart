@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:savvy_bee_mobile/core/network/api_client.dart';
+import 'package:savvy_bee_mobile/core/network/api_endpoints.dart';
 import 'package:savvy_bee_mobile/features/hive/domain/models/hive.dart';
 import 'package:savvy_bee_mobile/features/hive/domain/models/streak.dart';
 
@@ -12,7 +13,7 @@ class HiveRepository {
   /// GET /hive/streak/details
   Future<StreakResponse> getStreakDetails() async {
     try {
-      final response = await apiClient.get('/hive/streak/details');
+      final response = await apiClient.get(ApiEndpoints.streakDetails);
       return StreakResponse.fromJson(response.data);
     } catch (e) {
       rethrow;
@@ -23,7 +24,7 @@ class HiveRepository {
   /// PUT /hive/streak/topup
   Future<bool> topUpStreak() async {
     try {
-      final response = await apiClient.put('/hive/streak/topup');
+      final response = await apiClient.put(ApiEndpoints.streaktopUp);
       return response.statusCode == 200;
     } catch (e) {
       rethrow;
@@ -34,7 +35,7 @@ class HiveRepository {
   /// GET /hive/details
   Future<HiveHomeResponse> getHiveDetails() async {
     try {
-      final response = await apiClient.get('/hive/details');
+      final response = await apiClient.get(ApiEndpoints.hiveDetails);
       return HiveHomeResponse.fromJson(response.data);
     } catch (e) {
       rethrow;
@@ -53,7 +54,7 @@ class HiveRepository {
       final formData = FormData.fromMap({'Amount': amount.toString()});
 
       final response = await apiClient.put(
-        '/hive/operations/$type',
+        ApiEndpoints.resourceTopUp(type),
         data: formData,
       );
       return response.statusCode == 200;
@@ -70,7 +71,7 @@ class HiveRepository {
       final formData = FormData.fromMap({'Name': name});
 
       final response = await apiClient.put(
-        '/hive/operations/add/achievement',
+        ApiEndpoints.addAchievement,
         data: formData,
       );
       return response.data;

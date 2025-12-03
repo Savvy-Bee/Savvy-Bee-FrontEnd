@@ -3,10 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
+import 'package:savvy_bee_mobile/core/utils/assets/app_icons.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/utils/date_formatter.dart';
 import 'package:savvy_bee_mobile/core/utils/number_formatter.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_error_widget.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_loading_widget.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/providers/wallet_provider.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/bills/pay_bills_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/transactions/transaction_history_screen.dart';
@@ -45,7 +48,16 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
             final hasWallet = dashboard.accounts.ngnAccount != null;
 
             if (!hasWallet) {
-              return _buildEmptyStateWidget();
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                spacing: 24,
+                children: [
+                  _buildEmptyStateWidget(),
+                  _buildActionButtonsRow(context, enabled: false),
+                  _buildRecentTransactionsCard(hasWallet),
+                  // _buildEmptyTransactionsCard(),
+                ],
+              );
             }
 
             return RefreshIndicator(
@@ -62,24 +74,24 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
                     spacing: 24,
                     children: [
                       _buildQuickActionButton(
-                        Icons.account_balance_wallet_outlined,
+                        AppIcons.walletIcon,
                         'Pay bills',
                         () => context.pushNamed(PayBillsScreen.path),
                       ),
                       _buildQuickActionButton(
-                        Icons.send_outlined,
+                        AppIcons.sendIcon,
                         'Transfer',
                         () => context.pushNamed(TransferScreen.path),
                       ),
                       _buildQuickActionButton(
-                        Icons.receipt_outlined,
+                        AppIcons.documentIcon,
                         'Details',
                         () => context.pushNamed(TransactionHistoryScreen.path),
                       ),
                     ],
                   ),
                   const Gap(24.0),
-                  _buildRecentTransactionsCard(),
+                  _buildRecentTransactionsCard(hasWallet),
                   const Gap(24.0),
                   InfoCard(
                     title: 'Ask Nahl',
@@ -93,40 +105,45 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
               ),
             );
           },
-          loading: () => Center(child: CircularProgressIndicator()),
-          error: (error, stack) => Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.error_outline, size: 48, color: AppColors.error),
-                const Gap(16),
-                Text(
-                  'Failed to load dashboard',
-                  style: TextStyle(fontSize: 16),
-                ),
-                const Gap(8),
-                Text(
-                  error.toString(),
-                  style: TextStyle(fontSize: 12, color: AppColors.textLight),
-                  textAlign: TextAlign.center,
-                ),
-                const Gap(16),
-                ElevatedButton(
-                  onPressed: () => ref.invalidate(dashboardDataProvider),
-                  child: Text('Retry'),
-                ),
-              ],
-            ),
+          loading: () => CustomLoadingWidget(),
+          error: (error, stack) => CustomErrorWidget.error(
+            onRetry: () => ref.invalidate(dashboardDataProvider),
           ),
         ),
       ),
     );
   }
 
+  Widget _buildActionButtonsRow(BuildContext context, {bool enabled = true}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      spacing: 24,
+      children: [
+        _buildQuickActionButton(
+          AppIcons.walletIcon,
+          'Pay bills',
+          enabled ? () => context.pushNamed(PayBillsScreen.path) : null,
+        ),
+        _buildQuickActionButton(
+          AppIcons.sendIcon,
+          'Transfer',
+          enabled ? () => context.pushNamed(TransferScreen.path) : null,
+        ),
+        _buildQuickActionButton(
+          AppIcons.documentIcon,
+          'Details',
+          enabled
+              ? () => context.pushNamed(TransactionHistoryScreen.path)
+              : null,
+        ),
+      ],
+    );
+  }
+
   Widget _buildQuickActionButton(
-    IconData icon,
+    String icon,
     String label,
-    VoidCallback onPressed,
+    VoidCallback? onPressed,
   ) {
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -134,16 +151,27 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
       children: [
         IconButton.outlined(
           onPressed: onPressed,
-          icon: Icon(icon),
+          icon: AppIcon(
+            icon,
+            size: 24,
+            color: onPressed == null ? AppColors.grey : null,
+          ),
           padding: EdgeInsets.all(16),
         ),
-        Text(label, style: TextStyle(fontSize: 12)),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 12,
+            color: onPressed == null ? AppColors.grey : null,
+          ),
+        ),
       ],
     );
   }
 
   Widget _buildEmptyStateWidget() {
     return CustomCard(
+      height: 150,
       child: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -159,28 +187,8 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
             const Gap(24.0),
             Text(
               'Create your Savvy Wallet Account to start spending',
-              style: TextStyle(fontSize: 12),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildEmptyTransactionsCard() {
-    return CustomCard(
-      padding: EdgeInsets.symmetric(vertical: 24.0),
-      child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.info_outline_rounded, size: 24),
-            const Gap(8),
-            Text(
-              'No recent transactions',
-              style: TextStyle(
-                fontSize: 12,
-                fontFamily: Constants.neulisNeueFontFamily,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Theme.of(context).textTheme.bodySmall?.color,
               ),
             ),
           ],
@@ -189,52 +197,68 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
     );
   }
 
-  Widget _buildRecentTransactionsCard() {
+  Widget _buildRecentTransactionsCard(bool hasWallet) {
     final transactionsAsync = ref.watch(transactionListProvider);
 
-    return transactionsAsync.when(
-      data: (response) {
-        final transactions = response.data?.transactions ?? [];
-
-        if (transactions.isEmpty) {
-          return _buildEmptyTransactionsCard();
-        }
-
-        return CustomCard(
-          padding: EdgeInsets.zero,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0).copyWith(bottom: 8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'RECENT TRANSACTIONS',
-                      style: TextStyle(
-                        fontSize: 10,
-                        fontFamily: Constants.neulisNeueFontFamily,
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () =>
-                          context.pushNamed(TransactionHistoryScreen.path),
-                      child: Text(
-                        'VIEW ALL',
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontFamily: Constants.neulisNeueFontFamily,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
+    return CustomCard(
+      padding: EdgeInsets.zero,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0).copyWith(bottom: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'RECENT TRANSACTIONS',
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontFamily: Constants.neulisNeueFontFamily,
+                  ),
                 ),
-              ),
-              const Divider(),
-              const Gap(16),
-              ...transactions
+                InkWell(
+                  onTap: hasWallet
+                      ? () => context.pushNamed(TransactionHistoryScreen.path)
+                      : null,
+                  child: Text(
+                    'VIEW ALL',
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontFamily: Constants.neulisNeueFontFamily,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const Divider(),
+          const Gap(16),
+
+          ...transactionsAsync.when(
+            data: (response) {
+              final transactions = response.data?.transactions ?? [];
+
+              if (!hasWallet) {
+                return [
+                  CustomErrorWidget(
+                    subtitle:
+                        'Create your Savvy Wallet Account to start spending and view transactions',
+                    isActionButtonFilled: true,
+                    actionButtonText: 'Create account',
+                    onActionPressed: () {
+                      context.pushNamed(CreateWalletScreen.path);
+                    },
+                  ),
+                  const Gap(16),
+                ];
+              }
+              if (transactions.isEmpty) {
+                return [CustomErrorWidget(subtitle: 'No recent transaction')];
+              }
+
+              return transactions
                   .take(4)
                   .map(
                     (transaction) => Padding(
@@ -249,10 +273,10 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Icon(
-                                transaction.type == 'credit'
+                                transaction.type.name == 'credit'
                                     ? Icons.arrow_upward
                                     : Icons.arrow_downward,
-                                color: transaction.type == 'credit'
+                                color: transaction.type.name == 'credit'
                                     ? AppColors.success
                                     : AppColors.error,
                               ),
@@ -285,7 +309,7 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
                           ),
                           Text(
                             NumberFormatter.formatCurrency(
-                              transaction.type == 'credit'
+                              transaction.type.name == 'credit'
                                   ? transaction.amount
                                   : -transaction.amount,
                             ),
@@ -293,7 +317,7 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
                               fontFamily: Constants.neulisNeueFontFamily,
-                              color: transaction.type == 'credit'
+                              color: transaction.type.name == 'credit'
                                   ? AppColors.success
                                   : null,
                             ),
@@ -301,33 +325,12 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
                         ],
                       ),
                     ),
-                  ),
-            ],
+                  );
+            },
+            error: (error, stackTrace) => [CustomErrorWidget.error()],
+            loading: () => [CustomLoadingWidget()],
           ),
-        );
-      },
-      loading: () => CustomCard(
-        padding: EdgeInsets.symmetric(vertical: 48.0),
-        child: Center(child: CircularProgressIndicator()),
-      ),
-      error: (error, stack) => CustomCard(
-        padding: EdgeInsets.symmetric(vertical: 24.0),
-        child: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(Icons.error_outline, size: 24, color: AppColors.error),
-              const Gap(8),
-              Text(
-                'Failed to load transactions',
-                style: TextStyle(
-                  fontSize: 12,
-                  fontFamily: Constants.neulisNeueFontFamily,
-                ),
-              ),
-            ],
-          ),
-        ),
+        ],
       ),
     );
   }

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/illustrations.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/logos.dart';
-import 'package:savvy_bee_mobile/features/chat/presentation/screens/chat_screen.dart';
+
+import '../../features/profile/presentation/screens/profile_screen.dart';
 
 PreferredSize buildAppBar(BuildContext context) {
   return PreferredSize(
@@ -14,7 +15,7 @@ PreferredSize buildAppBar(BuildContext context) {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             GestureDetector(
-              onTap: () => context.pushNamed(ChatScreen.path),
+              onTap: () => context.pushNamed(ProfileScreen.path),
               child: Container(
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.amber, width: 1),

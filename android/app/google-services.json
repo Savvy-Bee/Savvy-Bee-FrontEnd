@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "581876547334",
+    "project_id": "the-app-stopper",
+    "storage_bucket": "the-app-stopper.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:581876547334:android:cbff29eb43c669b5dea887",
+        "android_client_info": {
+          "package_name": "com.example.savvy_bee_mobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqgpmrEqPxqh9FkhaiGjpyX9bhw9WYces"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

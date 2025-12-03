@@ -1,27 +1,23 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:savvy_bee_mobile/core/services/service_locator.dart';
-import 'package:savvy_bee_mobile/features/dashboard/data/repositories/dashboard_repository.dart';
 import 'package:savvy_bee_mobile/features/dashboard/domain/models/dashboard_data.dart';
 import 'package:savvy_bee_mobile/features/spend/domain/models/institution.dart';
 
-// Dashboard Repository Provider
-final dashboardRepositoryProvider = Provider<DashboardRepository>(
-  (ref) => DashboardRepository(ref.read(apiClientProvider)),
-);
+
 
 // Dashboard Data Notifier
 class DashboardDataNotifier
-    extends AutoDisposeFamilyAsyncNotifier<DashboardData, String> {
+    extends AutoDisposeFamilyAsyncNotifier<DashboardData?, String> {
   @override
-  Future<DashboardData> build(String bankId) async {
+  Future<DashboardData?> build(String bankId) async {
     final repository = ref.read(dashboardRepositoryProvider);
     final response = await repository.fetchDashboardData(bankId);
 
-    if (response.data == null) {
-      throw Exception(response.message);
-    }
+    // if (response.data == null) {
+    //   throw Exception(response.message);
+    // }
 
-    return response.data!;
+    return response.data;
   }
 
   Future<void> refresh() async {
@@ -42,7 +38,7 @@ class DashboardDataNotifier
 final dashboardDataProvider =
     AutoDisposeAsyncNotifierProvider.family<
       DashboardDataNotifier,
-      DashboardData,
+      DashboardData?,
       String
     >(DashboardDataNotifier.new);
 

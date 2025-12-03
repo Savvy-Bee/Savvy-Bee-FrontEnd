@@ -76,4 +76,14 @@ class ApiEndpoints {
       '/wallet/transactions/bills/electricity/initialize';
   static String verifyElectricity =
       '/wallet/transactions/bills/electricity/verify';
+
+  /// Streak Endpoints
+  static String streakDetails = '/hive/streak/details';
+  static String streaktopUp = '/hive/streak/details';
+  static String hiveDetails = '/hive/details';
+  static String resourceTopUp(String type) => '/hive/operations/$type';
+  static String addAchievement = '/hive/operations/add/achievement';
+
+  /// Leaderboard Endpoint
+  static String leaderboard = '/hive/details/leaderboard';
 }

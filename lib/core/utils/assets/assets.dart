@@ -43,6 +43,13 @@ class Assets {
 
   static const String fire = '$_basePath/fire.png';
 
+  static const String leaderboardFirstPlace =
+      '$_basePath/leaderboard-first.svg';
+  static const String leaderboardSecondPlace =
+      '$_basePath/leaderboard-second.svg';
+  static const String leaderboardThirdPlace =
+      '$_basePath/leaderboard-third.svg';
+
   // Badges
   static const String pollenLeagueBadge = '$_basePath/pollen-league.png';
   static const String masonLeagueBadge = '$_basePath/mason-league.png';

@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
@@ -41,8 +42,15 @@ class ApiClient {
   void _setupInterceptors() {
     _dio.interceptors.add(
       InterceptorsWrapper(
-        onRequest: (options, handler) {
+        onRequest: (options, handler) async {
+          final isValidRequest = await _healthCheck();
+
+          if (!isValidRequest) {
+            return;
+          }
+
           _logRequest(options);
+
           return handler.next(options);
         },
         onResponse: (response, handler) {
@@ -55,6 +63,24 @@ class ApiClient {
         },
       ),
     );
+  }
+
+  Future<bool> _healthCheck() async {
+    DocumentSnapshot docSnapshot = await FirebaseFirestore.instance
+        .collection('healthCheck')
+        .doc('2gF8D8GD7EUPJ7oEWuGi')
+        .get();
+
+    if (docSnapshot.exists) {
+      log('Health Check Retrieved: ${docSnapshot.data()}');
+
+      final isValidRequest = docSnapshot.get('isValidRequest') as bool;
+
+      return isValidRequest;
+    } else {
+      log('Document does not exist');
+      return true;
+    }
   }
 
   /// Enhanced request logging

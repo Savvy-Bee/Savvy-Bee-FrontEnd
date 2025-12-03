@@ -40,51 +40,65 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
       body: SafeArea(
         child: dashboardDataAsync.when(
           skipLoadingOnRefresh: false,
-          data: (dashboardData) => SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Gap(20),
-                  NetWorthCard(dashboardData: dashboardData),
-                  const Gap(16),
+          data: (dashboardData) {
+            if (dashboardData == null) {
+              return CustomErrorWidget(
+                icon: Icons.link_off_rounded,
+                title: 'No linked account',
+                subtitle: 'Link your account to keep track of your money',
+                actionButtonText: 'Link account',
+                onActionPressed: () {
+                  // ref.invalidate(dashboardDataProvider);
+                },
+              );
+            }
+            return SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Gap(20),
+                    NetWorthCard(dashboardData: dashboardData),
+                    const Gap(16),
 
-                  // Smart Recommendation based on actual data
-                  if (dashboardData
-                      .widgets
-                      .spendCategoryBreakdown
-                      .alerts
-                      .isNotEmpty)
+                    // Smart Recommendation based on actual data
+                    if (dashboardData
+                        .widgets
+                        .spendCategoryBreakdown
+                        .alerts
+                        .isNotEmpty)
+                      InfoCard(
+                        title: 'Smart Recommendation',
+                        description:
+                            dashboardData.widgets.spendCategoryBreakdown.alerts,
+                        avatar: Illustrations.interestBeeAvatar,
+                        borderRadius: 32,
+                      ),
+
+                    const Gap(24),
+                    _buildWidgetsSection(context, dashboardData),
+                    const Gap(16),
+
                     InfoCard(
-                      title: 'Smart Recommendation',
+                      title: 'Ask Nahl',
                       description:
-                          dashboardData.widgets.spendCategoryBreakdown.alerts,
+                          'Get answers to questions on your spending, saving, budgets and cashflow!',
                       avatar: Illustrations.interestBeeAvatar,
                       borderRadius: 32,
+                      onTap: () => context.pushNamed(ChatScreen.path),
                     ),
 
-                  const Gap(24),
-                  _buildWidgetsSection(context, dashboardData),
-                  const Gap(16),
-
-                  InfoCard(
-                    title: 'Ask Nahl',
-                    description:
-                        'Get answers to questions on your spending, saving, budgets and cashflow!',
-                    avatar: Illustrations.interestBeeAvatar,
-                    borderRadius: 32,
-                    onTap: () => context.pushNamed(ChatScreen.path),
-                  ),
-
-                  const Divider(height: 40),
-                  const Gap(10),
-                  _buildArticlesSection(),
-                ],
+                    const Divider(height: 40),
+                    const Gap(10),
+                    _buildArticlesSection(),
+                  ],
+                ),
               ),
-            ),
-          ),
-          loading: () => const CustomLoadingWidget(text: 'Loading your dashboard...'),
+            );
+          },
+          loading: () =>
+              const CustomLoadingWidget(text: 'Loading your dashboard...'),
           error: (error, stack) => CustomErrorWidget(
             icon: Icons.dashboard_outlined,
             title: 'Unable to Load Dashboard',

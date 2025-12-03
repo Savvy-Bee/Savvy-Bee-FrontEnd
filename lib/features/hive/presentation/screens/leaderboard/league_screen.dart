@@ -1,10 +1,17 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
+import 'package:savvy_bee_mobile/core/utils/assets/assets.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/illustrations.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_error_widget.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_loading_widget.dart';
 import 'package:savvy_bee_mobile/core/widgets/icon_text_row_widget.dart';
+import 'package:savvy_bee_mobile/features/hive/domain/models/leaderboard.dart';
+import 'package:savvy_bee_mobile/features/hive/presentation/providers/leaderboard_provider.dart';
 
 class LeagueScreen extends ConsumerStatefulWidget {
   static String path = '/league';
@@ -18,6 +25,8 @@ class LeagueScreen extends ConsumerStatefulWidget {
 class _LeagueScreenState extends ConsumerState<LeagueScreen> {
   @override
   Widget build(BuildContext context) {
+    final leaderboardAsync = ref.watch(leaderboardProvider);
+
     return Scaffold(
       appBar: AppBar(title: const Text('Leaderboard')),
       body: Column(
@@ -60,25 +69,47 @@ class _LeagueScreenState extends ConsumerState<LeagueScreen> {
             ),
           ),
           const Gap(32),
+
           Expanded(
-            child: ListView(
-              children: [
-                _buildListTile(isLeader: true),
-                _buildListTile(),
-                _buildListTile(),
-                _buildListTile(),
-                _buildListTile(),
-                _buildListTile(),
-                _buildListTile(),
-                _buildListTile(),
-                _buildListTile(),
-                _buildListTile(),
-                _buildListTile(),
-                const Divider(height: 20),
-                _buildPromotionZoneIndicator(),
-                _buildListTile(),
-                _buildListTile(),
-              ],
+            child: leaderboardAsync.when(
+              data: (entries) => RefreshIndicator(
+                onRefresh: () =>
+                    ref.read(leaderboardProvider.notifier).refresh(),
+                child: ListView.builder(
+                  itemCount:
+                      entries.length + 1, // +1 for promotion zone indicator
+                  itemBuilder: (context, index) {
+                    // Show promotion zone indicator after 10th position
+                    if (index == 10 && entries.length > 10) {
+                      return Column(
+                        children: [
+                          const Divider(height: 20),
+                          _buildPromotionZoneIndicator(),
+                        ],
+                      );
+                    }
+
+                    // Adjust index if we're past the promotion zone indicator
+                    final entryIndex = index > 10 ? index - 1 : index;
+
+                    if (entryIndex >= entries.length) {
+                      return const SizedBox.shrink();
+                    }
+
+                    final entry = entries[entryIndex];
+                    return _buildListTile(
+                      entry: entry,
+                      rank: entryIndex + 1,
+                      isLeader: entryIndex == 0,
+                    );
+                  },
+                ),
+              ),
+              loading: () =>
+                  const CustomLoadingWidget(text: 'Fetching leaderboard...'),
+              error: (error, stack) => CustomErrorWidget.error(
+                onRetry: () => ref.invalidate(leaderboardProvider),
+              ),
             ),
           ),
         ],
@@ -106,7 +137,46 @@ class _LeagueScreenState extends ConsumerState<LeagueScreen> {
     );
   }
 
-  Widget _buildListTile({bool isLeader = false}) {
+  Widget _buildListTile({
+    required LeaderboardEntry entry,
+    required int rank,
+    bool isLeader = false,
+  }) {
+    final user = entry.userID;
+    final displayName = '${user.firstName} ${user.lastName}'.trim();
+
+    // Determine rank display widget
+    Widget rankWidget;
+    if (rank == 1) {
+      rankWidget = SvgPicture.asset(
+        Assets.leaderboardFirstPlace,
+        width: 24,
+        height: 24,
+      );
+    } else if (rank == 2) {
+      rankWidget = SvgPicture.asset(
+        Assets.leaderboardSecondPlace,
+        width: 24,
+        height: 24,
+      );
+    } else if (rank == 3) {
+      rankWidget = SvgPicture.asset(
+        Assets.leaderboardThirdPlace,
+        width: 24,
+        height: 24,
+      );
+    } else {
+      // Positions 4-10 are success color, 11+ are primary color
+      rankWidget = Text(
+        '$rank',
+        style: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+          color: rank <= 10 ? AppColors.success : AppColors.primary,
+        ),
+      );
+    }
+
     return Container(
       padding: const EdgeInsets.all(16),
       color: isLeader ? AppColors.primaryFaint : null,
@@ -117,10 +187,23 @@ class _LeagueScreenState extends ConsumerState<LeagueScreen> {
             spacing: 8,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.onetwothree_sharp),
-              CircleAvatar(),
+              rankWidget,
+              CircleAvatar(
+                backgroundImage:
+                    user.profilePhoto.isNotEmpty &&
+                        !user.profilePhoto.startsWith('Dash') &&
+                        !user.profilePhoto.startsWith('Luna')
+                    ? CachedNetworkImageProvider(user.profilePhoto)
+                    : null,
+                child:
+                    user.profilePhoto.isEmpty ||
+                        user.profilePhoto.startsWith('Dash') ||
+                        user.profilePhoto.startsWith('Luna')
+                    ? Text(user.firstName[0].toUpperCase())
+                    : null,
+              ),
               Text(
-                'Joshua',
+                displayName.isNotEmpty ? displayName : user.username,
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -132,8 +215,9 @@ class _LeagueScreenState extends ConsumerState<LeagueScreen> {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('1000', style: TextStyle(fontSize: 16)),
-              Image.asset(Illustrations.hiveFlower),
+              Text(entry.flowers.toString(), style: TextStyle(fontSize: 16)),
+              const Gap(4),
+              Image.asset(Illustrations.hiveFlower, width: 24, height: 24),
             ],
           ),
         ],

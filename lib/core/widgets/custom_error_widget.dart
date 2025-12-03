@@ -10,6 +10,7 @@ class CustomErrorWidget extends StatelessWidget {
   final VoidCallback? onActionPressed;
   final Color? iconColor;
   final double? iconSize;
+  final bool isActionButtonFilled;
 
   const CustomErrorWidget({
     super.key,
@@ -20,6 +21,7 @@ class CustomErrorWidget extends StatelessWidget {
     this.onActionPressed,
     this.iconColor,
     this.iconSize,
+    this.isActionButtonFilled = false,
   });
 
   @override
@@ -71,7 +73,12 @@ class CustomErrorWidget extends StatelessWidget {
             if (actionButtonText != null && onActionPressed != null)
               TextButton(
                 onPressed: onActionPressed,
-                style: TextButton.styleFrom(foregroundColor: AppColors.black),
+                style: TextButton.styleFrom(
+                  foregroundColor: AppColors.black,
+                  backgroundColor: isActionButtonFilled
+                      ? AppColors.primary
+                      : null,
+                ),
                 child: Text(actionButtonText!),
               ),
           ],

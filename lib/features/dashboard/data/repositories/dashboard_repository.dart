@@ -116,7 +116,7 @@ class DashboardRepository {
 
   /// Fetch Dashboard Data
   /// Pass empty string or 'all' for all banks, or specific bankId for single bank
-  Future<ApiResponse<DashboardData>> fetchDashboardData(String bankId) async {
+  Future<ApiResponse<DashboardData?>> fetchDashboardData(String bankId) async {
     try {
       final endpoint = bankId.isEmpty || bankId == 'all'
           ? '${ApiEndpoints.dashboardData}/id'
