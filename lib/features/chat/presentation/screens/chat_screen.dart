@@ -10,6 +10,8 @@ import 'package:savvy_bee_mobile/core/utils/assets/assets.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/illustrations.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/utils/file_picker_util.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_error_widget.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_loading_widget.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_snackbar.dart';
 import 'package:savvy_bee_mobile/features/chat/presentation/screens/chat_bubble_widget.dart';
 import 'package:savvy_bee_mobile/features/chat/presentation/widgets/picked_file_preview.dart';
@@ -136,9 +138,13 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           child: _buildChatView(chatState),
         ),
       ),
-      error: (error, stackTrace) =>
-          Scaffold(body: Center(child: Text('Error loading chat'))),
-      loading: () => Scaffold(body: Center(child: CircularProgressIndicator())),
+      error: (error, stackTrace) => Scaffold(
+        body: CustomErrorWidget.error(
+          onRetry: () => ref.read(chatProvider.notifier).refresh(),
+        ),
+      ),
+      loading: () =>
+          Scaffold(body: const CustomLoadingWidget(text: 'Loading chat...')),
     );
 
     // return Scaffold(
@@ -465,8 +471,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               BackButton(),
-              const SizedBox(),
-              const SizedBox(),
               InkWell(
                 onTap: () => context.pushNamed(ChoosePersonalityScreen.path),
                 child: Column(
@@ -490,41 +494,29 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                   ],
                 ),
               ),
-              const SizedBox(),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                    onPressed: () =>
-                        context.pushNamed(ChoosePersonalityScreen.path),
-                    // style: Constants.collapsedButtonStyle,
-                    icon: Icon(Icons.swap_horiz),
-                  ),
-                  PopupMenuButton<String>(
-                    style: Constants.collapsedButtonStyle,
-                    icon: const Icon(Icons.more_vert),
-                    onSelected: (value) {
-                      switch (value) {
-                        case 'refresh':
-                          ref.read(chatProvider.notifier).refresh();
-                          break;
-                        case 'clear':
-                          _showClearConfirmation();
-                          break;
-                      }
-                    },
-                    itemBuilder: (context) => [
-                      const PopupMenuItem(
-                        value: 'refresh',
-                        child: Row(
-                          children: [
-                            Icon(Icons.refresh, size: 20),
-                            Gap(12.0),
-                            Text('Refresh Chat'),
-                          ],
-                        ),
-                      ),
-                    ],
+              PopupMenuButton<String>(
+                style: Constants.collapsedButtonStyle,
+                icon: const Icon(Icons.more_vert),
+                onSelected: (value) {
+                  switch (value) {
+                    case 'refresh':
+                      ref.read(chatProvider.notifier).refresh();
+                      break;
+                    case 'clear':
+                      _showClearConfirmation();
+                      break;
+                  }
+                },
+                itemBuilder: (context) => [
+                  const PopupMenuItem(
+                    value: 'refresh',
+                    child: Row(
+                      children: [
+                        Icon(Icons.refresh, size: 20),
+                        Gap(12.0),
+                        Text('Refresh Chat'),
+                      ],
+                    ),
                   ),
                 ],
               ),
