@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
@@ -22,9 +21,15 @@ class _PayBillsScreenState extends ConsumerState<PayBillsScreen> {
   final _searchController = TextEditingController();
 
   @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Pay bills')),
+      appBar: AppBar(title: const Text('Pay bills')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -34,28 +39,48 @@ class _PayBillsScreenState extends ConsumerState<PayBillsScreen> {
               hint: 'Search bills',
               controller: _searchController,
               isRounded: true,
-              prefix: Icon(Icons.search),
+              prefix: const Padding(
+                padding: EdgeInsets.only(left: 12.0),
+                child: Icon(Icons.search, size: 20),
+              ),
             ),
             const Gap(16),
             Expanded(
               child: ListView(
                 children: [
-                  Text(
+                  const Text(
                     'Essentials',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   const Gap(16),
-                  Wrap(
-                    spacing: 12,
-                    runSpacing: 12,
-                    children: List.generate(
-                      4,
-                      (index) => _buildBillItem(
+                  GridView.count(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    crossAxisCount: 4,
+                    mainAxisSpacing: 16,
+                    crossAxisSpacing: 14,
+                    children: [
+                      _buildBillItem(
                         'Airtime',
-                        Icon(Icons.phone, size: 24),
+                        const Icon(Icons.phone, size: 20),
                         () => context.pushNamed(AirtimeScreen.path),
                       ),
-                    ),
+                      _buildBillItem(
+                        'Data',
+                        const Icon(Icons.wifi, size: 20),
+                        () {},
+                      ),
+                      _buildBillItem(
+                        'Cable TV',
+                        const Icon(Icons.tv, size: 20),
+                        () {},
+                      ),
+                      _buildBillItem(
+                        'Electricity',
+                        const Icon(Icons.bolt, size: 20),
+                        () {},
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -70,23 +95,25 @@ class _PayBillsScreenState extends ConsumerState<PayBillsScreen> {
     return CustomCard(
       onTap: onTap,
       borderRadius: 8,
-      width: 90.dg,
-      child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            icon,
-            const Gap(8),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 10,
-                fontWeight: FontWeight.w500,
-                fontFamily: Constants.neulisNeueFontFamily,
-              ),
+      padding: const EdgeInsets.all(5),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          icon,
+          const Gap(4),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 10,
+              fontWeight: FontWeight.w500,
+              fontFamily: Constants.neulisNeueFontFamily,
             ),
-          ],
-        ),
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
       ),
     );
   }

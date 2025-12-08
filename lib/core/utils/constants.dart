@@ -18,4 +18,10 @@ class Constants {
   static String exconFontFamily = 'Excon';
   static String generalSansFontFamily = 'GeneralSans';
   static String neulisNeueFontFamily = 'Nuelis Neue';
+
+  // Environment Variables
+  static String encryptionKey = 'ENCRYPTION_KEY';
+
+  static String monoSecret = 'MONO_SECRET';
+  static String monoPublic = 'MONO_PUBLIC';
 }

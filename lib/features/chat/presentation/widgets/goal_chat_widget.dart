@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
-import 'package:savvy_bee_mobile/core/utils/number_formatter.dart';
+import 'package:savvy_bee_mobile/core/utils/num_extensions.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/features/chat/domain/models/chat_models.dart';
 
@@ -133,7 +133,7 @@ Every small step counts toward your financial goals 🌱''',
                               ),
                               const Gap(8),
                               Text(
-                                'Target: ${NumberFormatter.formatCurrency(widget.goalData!.goalAmount, decimalDigits: 0)}',
+                                'Target: ${widget.goalData!.goalAmount.formatCurrency(decimalDigits: 0)}',
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,

@@ -15,6 +15,7 @@ class ConnectBankSecurityBottomSheet extends StatelessWidget {
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
+      useRootNavigator: true,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadiusGeometry.vertical(top: Radius.circular(16)),
       ),
@@ -82,7 +83,10 @@ class ConnectBankSecurityBottomSheet extends StatelessWidget {
                 text: 'Continue',
                 showArrow: true,
                 buttonColor: CustomButtonColor.black,
-                onPressed: () => SelectBankBottomSheet.show(context),
+                onPressed: () {
+                  context.pop();
+                  SelectBankBottomSheet.show(context);
+                },
               ),
             ],
           ),

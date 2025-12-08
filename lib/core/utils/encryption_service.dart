@@ -4,11 +4,12 @@ import 'dart:typed_data';
 import 'package:crypto/crypto.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:savvy_bee_mobile/core/utils/constants.dart';
 
 /// A custom encryption service using AES-256-CBC with PKCS7 padding
 class EncryptionService {
   // Get encryption key from environment
-  static String? get _encryptionKey => dotenv.env['Encryption_Key'];
+  static String? get _encryptionKey => dotenv.env[Constants.encryptionKey];
 
   /// Encrypts plain text and returns base64 encoded string with IV prepended
   /// Format: [IV:16bytes][CipherText]

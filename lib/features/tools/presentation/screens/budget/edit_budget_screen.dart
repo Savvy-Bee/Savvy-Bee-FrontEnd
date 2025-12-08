@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/app_icons.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
-import 'package:savvy_bee_mobile/core/utils/number_formatter.dart';
+import 'package:savvy_bee_mobile/core/utils/num_extensions.dart';
 import 'package:savvy_bee_mobile/core/widgets/bottom_sheets/edit_budget_bottom_sheet.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
@@ -156,7 +156,7 @@ class _EditBudgetScreenState extends ConsumerState<EditBudgetScreen> {
                   ),
                   Text(
                     // Using amountSpent here, was 'last month' before
-                    '${NumberFormatter.formatCurrency(amountSpent.toDouble(), decimalDigits: 0)} spent',
+                    '${amountSpent.toDouble().formatCurrency(decimalDigits: 0)} spent',
                     style: TextStyle(
                       fontFamily: Constants.neulisNeueFontFamily,
                       fontSize: 8,
@@ -172,10 +172,7 @@ class _EditBudgetScreenState extends ConsumerState<EditBudgetScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                NumberFormatter.formatCurrency(
-                  amount.toDouble(),
-                  decimalDigits: 0,
-                ),
+                amount.toDouble().formatCurrency(decimalDigits: 0),
                 style: TextStyle(
                   fontFamily: Constants.neulisNeueFontFamily,
                   fontSize: 16,
@@ -248,7 +245,7 @@ class _EditBudgetScreenState extends ConsumerState<EditBudgetScreen> {
       children: [
         Text(title, style: const TextStyle(fontSize: 16)),
         Text(
-          NumberFormatter.formatCurrency(amount.toDouble(), decimalDigits: 0),
+          amount.toDouble().formatCurrency(decimalDigits: 0),
           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
         ),
         InkWell(onTap: onPressed, child: AppIcon(iconPath)),

@@ -134,120 +134,122 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
 
         case 1:
           // Page 1: Email Input
-          // if (_emailFormKey.currentState!.validate()) {
-          //   _goToNextPage();
-          // }
-          _goToNextPage();
+          if (_emailFormKey.currentState!.validate()) {
+            _goToNextPage();
+          }
+          // _goToNextPage();
           break;
 
         case 2:
           // Page 2: Username Input
-          // if (_usernameFormKey.currentState!.validate()) {
-          //   _goToNextPage();
-          // }
-          _goToNextPage();
+          if (_usernameFormKey.currentState!.validate()) {
+            _goToNextPage();
+          }
+          // _goToNextPage();
           break;
 
         case 3:
           // Page 3: Password Input & API Registration
-          // if (!_passwordFormKey.currentState!.validate()) return;
+          if (!_passwordFormKey.currentState!.validate()) return;
 
-          // final request = RegisterRequest(
-          //   firstName: _firstNameController.text.trim(),
-          //   lastName: _lastNameController.text.trim(),
-          //   email: _emailController.text.trim(),
-          //   password: _passwordController.text.trim(),
-          //   username: _usernameController.text.trim(),
-          // );
+          final request = RegisterRequest(
+            firstName: _firstNameController.text.trim(),
+            lastName: _lastNameController.text.trim(),
+            email: _emailController.text.trim(),
+            password: _passwordController.text.trim(),
+            username: _usernameController.text.trim(),
+          );
 
-          // final success = await authNotifier.register(request);
+          final success = await authNotifier.register(request);
 
-          // // _goToNextPage();
-          // if (success) {
-          //   _goToNextPage();
-          // } else {
-          //   _showError(authState.errorMessage ?? 'Registration failed');
-          // }
-          _goToNextPage();
+          // _goToNextPage();
+          if (success) {
+            _goToNextPage();
+          } else {
+            _showError(authState.errorMessage ?? 'Registration failed');
+          }
+          // _goToNextPage();
           break;
 
         case 4:
           // Page 4: OTP Verification
-          // if (_otpController.text.length < 4) {
-          //   _showError('Please enter a valid OTP (at least 4 digits)');
-          //   return;
-          // }
+          if (_otpController.text.length < 4) {
+            _showError('Please enter a valid OTP (at least 4 digits)');
+            return;
+          }
 
-          // final verifyRequest = VerifyEmailRequest(
-          //   email: _emailController.text,
-          //   otp: _otpController.text,
-          // );
+          final verifyRequest = VerifyEmailRequest(
+            email: _emailController.text,
+            otp: _otpController.text,
+          );
 
-          // final success = await authNotifier.verifyEmail(verifyRequest);
+          final success = await authNotifier.verifyEmail(verifyRequest);
 
-          // // _goToNextPage();
-          // if (success) {
-          //   _goToNextPage();
-          // } else {
-          //   _showError(authState.errorMessage ?? 'Verification failed');
-          // }
-          _goToNextPage();
+          // _goToNextPage();
+          if (success) {
+            _goToNextPage();
+          } else {
+            _showError(authState.errorMessage ?? 'Verification failed');
+          }
+          // _goToNextPage();
           break;
 
         case 5:
           // Page 5: Date of Birth Input
-          // if (_dobFormKey.currentState!.validate()) {
-          //   _goToNextPage();
-          // }
-          _goToNextPage();
+          if (_dobFormKey.currentState!.validate()) {
+            _goToNextPage();
+          }
+          // _goToNextPage();
           break;
         case 6:
           // Page 6: Date of Birth Input
-          // if (_countryFormKey.currentState!.validate()) {
-          //   _goToNextPage();
-          // }
-          _goToNextPage();
+          if (_countryFormKey.currentState!.validate()) {
+            _goToNextPage();
+          }
+          // _goToNextPage();
           break;
         case 7:
           // Page 7: Date of Birth Input
-          // if (_languageFormKey.currentState!.validate()) {
-          //   _goToNextPage();
-          // }
-          _goToNextPage();
+          if (_languageFormKey.currentState!.validate()) {
+            _goToNextPage();
+          }
+          // _goToNextPage();
           break;
 
         case 8:
           // Page 8: Country Input & Final Profile Update
-          // if (!_currencyFormKey.currentState!.validate()) return;
+          if (!_currencyFormKey.currentState!.validate()) return;
 
-          // // Register Other Details with DOB and Country
-          // final registerOtherDetailsRequest = RegisterOtherDetailsRequest(
-          //   email: _emailController.text,
-          //   dob: _dobController.text,
-          //   country: _countryController.text,
-          // );
+          // Register Other Details with DOB and Country
+          final registerOtherDetailsRequest = RegisterOtherDetailsRequest(
+            email: _emailController.text,
+            dob: _dobController.text,
+            country: _countryController.text,
+            currency: _currencyController.text,
+            language: _languageController.text,
+          );
 
-          // final success = await authNotifier.registerOtherDetails(
-          //   registerOtherDetailsRequest,
-          // );
+          final success = await authNotifier.registerOtherDetails(
+            registerOtherDetailsRequest,
+          );
 
-          // // context.pushNamed(SignupCompleteScreen.path);
-          // if (success) {
-          //   // Final success, navigate to completion screen
-          //   if (mounted) {
-          //     context.pushNamed(SignupCompleteScreen.path);
-          //   }
-          // } else {
-          //   _showError(
-          //     authState.errorMessage ?? 'Failed to register other details',
-          //   );
-          // }
-          context.pushNamed(SignupCompleteScreen.path);
+          // context.pushNamed(SignupCompleteScreen.path);
+          if (success) {
+            // Final success, navigate to completion screen
+            if (mounted) {
+              context.pushNamed(SignupCompleteScreen.path);
+            }
+          } else {
+            _showError(
+              authState.errorMessage ?? 'Failed to register other details',
+            );
+          }
+          // context.pushNamed(SignupCompleteScreen.path);
           break;
 
         default:
           // Should not happen, but safe fallback
-          _goToNextPage();
+          // _goToNextPage();
           break;
       }
     } catch (e) {

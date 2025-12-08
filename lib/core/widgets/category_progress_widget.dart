@@ -3,7 +3,7 @@ import 'package:gap/gap.dart';
 
 import '../theme/app_colors.dart';
 import '../utils/constants.dart';
-import '../utils/number_formatter.dart';
+import '../utils/num_extensions.dart';
 import 'custom_card.dart';
 
 class CategoryProgressWidget extends StatelessWidget {
@@ -67,14 +67,11 @@ class CategoryProgressWidget extends StatelessWidget {
               ),
               Text.rich(
                 TextSpan(
-                  text: NumberFormatter.formatCurrency(
-                    totalSpent,
-                    decimalDigits: 0,
-                  ),
+                  text: totalSpent.formatCurrency(decimalDigits: 0),
                   children: [
                     TextSpan(
                       text:
-                          ' of ${NumberFormatter.formatCurrency(totalAmount, decimalDigits: 0)}',
+                          ' of ${totalAmount.formatCurrency(decimalDigits: 0)}',
                       style: TextStyle(fontWeight: FontWeight.w500),
                     ),
                   ],

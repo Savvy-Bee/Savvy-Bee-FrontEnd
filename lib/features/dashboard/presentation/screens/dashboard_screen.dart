@@ -7,6 +7,7 @@ import 'package:savvy_bee_mobile/core/utils/assets/illustrations.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_loading_widget.dart';
 import 'package:savvy_bee_mobile/core/widgets/section_title_widget.dart';
+import 'package:savvy_bee_mobile/features/auth/presentation/screens/post_signup/bottom_sheets/connect_bank_security_bottom_sheet.dart';
 import 'package:savvy_bee_mobile/features/chat/presentation/screens/chat_screen.dart';
 import 'package:savvy_bee_mobile/features/dashboard/domain/models/dashboard_data.dart';
 import 'package:savvy_bee_mobile/features/dashboard/presentation/widgets/savings_target_widget.dart';
@@ -48,7 +49,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 subtitle: 'Link your account to keep track of your money',
                 actionButtonText: 'Link account',
                 onActionPressed: () {
-                  // ref.invalidate(dashboardDataProvider);
+                  ConnectBankSecurityBottomSheet.show(context);
                 },
               );
             }

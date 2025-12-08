@@ -3,7 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/assets.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
-import 'package:savvy_bee_mobile/core/utils/number_formatter.dart';
+import 'package:savvy_bee_mobile/core/utils/num_extensions.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 
 class GoalStatsCard extends StatelessWidget {
@@ -56,11 +56,11 @@ class GoalStatsCard extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     buildStatItem(
-                      NumberFormatter.compactCurrency(amountSaved),
+                      amountSaved.compactCurrency(),
                       isDebt ? 'Paid' : 'Saved',
                     ),
                     buildStatItem(
-                      NumberFormatter.compactCurrency(totalTarget),
+                      totalTarget.compactCurrency(),
                       'Total Target',
                     ),
                     buildStatItem(daysLeft.toString(), 'Days Left'),

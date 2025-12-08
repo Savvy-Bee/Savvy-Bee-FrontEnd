@@ -6,10 +6,11 @@ import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/app_icons.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/utils/date_formatter.dart';
-import 'package:savvy_bee_mobile/core/utils/number_formatter.dart';
+import 'package:savvy_bee_mobile/core/utils/num_extensions.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_error_widget.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_loading_widget.dart';
+import 'package:savvy_bee_mobile/features/spend/domain/models/wallet.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/providers/wallet_provider.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/bills/pay_bills_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/transactions/transaction_history_screen.dart';
@@ -177,7 +178,7 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             IconButton.filled(
-              onPressed: () => context.pushNamed(CreateWalletScreen.path),
+              onPressed: () => context.pushNamed(TransactionHistoryScreen.path),
               icon: Icon(Icons.add),
               style: IconButton.styleFrom(
                 backgroundColor: AppColors.black,
@@ -308,11 +309,9 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
                             ],
                           ),
                           Text(
-                            NumberFormatter.formatCurrency(
-                              transaction.type.name == 'credit'
-                                  ? transaction.amount
-                                  : -transaction.amount,
-                            ),
+                            transaction.type.name == 'credit'
+                                ? transaction.amount.formatCurrency()
+                                : transaction.amount.formatCurrency(),
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
@@ -337,16 +336,13 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
 }
 
 class WalletBalanceCard extends ConsumerWidget {
-  final dynamic dashboard;
+  final WalletDashboardData dashboard;
 
   const WalletBalanceCard({super.key, required this.dashboard});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final primaryAccount = dashboard.accounts.firstWhere(
-      (account) => account.isPrimary,
-      orElse: () => dashboard.accounts.first,
-    );
+    final primaryAccount = dashboard.accounts;
 
     return CustomCard(
       child: Column(
@@ -358,7 +354,7 @@ class WalletBalanceCard extends ConsumerWidget {
               Row(
                 children: [
                   Text(
-                    'SAVVY WALLET - ${primaryAccount.accountNumber}',
+                    'SAVVY WALLET - ${primaryAccount.ngnAccount?.accountNumber}',
                     style: TextStyle(
                       fontSize: 10,
                       color: AppColors.textLight,
@@ -390,7 +386,7 @@ class WalletBalanceCard extends ConsumerWidget {
           Row(
             children: [
               Text(
-                NumberFormatter.formatCurrency(primaryAccount.balance),
+                primaryAccount.balance.toString(),
                 style: TextStyle(
                   fontSize: 36,
                   fontWeight: FontWeight.bold,
@@ -404,7 +400,7 @@ class WalletBalanceCard extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                'Last updated ${DateFormatter.formatRelative(dashboard.lastUpdated ?? DateTime.now())}',
+                'Last updated ${DateFormatter.formatRelative(DateTime.now())}',
                 style: TextStyle(
                   fontSize: 10,
                   color: AppColors.textSecondary,

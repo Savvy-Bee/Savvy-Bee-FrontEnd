@@ -13,6 +13,9 @@ class Bank {
     this.nibssBankCode,
   });
 
+  bool get isNigerianBank =>
+      country.toLowerCase() == 'nigeria' || country.toLowerCase() == 'ng';
+
   factory Bank.fromJson(Map<String, dynamic> json) {
     return Bank(
       name: json['name'] as String,

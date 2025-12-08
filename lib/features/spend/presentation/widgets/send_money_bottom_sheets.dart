@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/assets.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
-import 'package:savvy_bee_mobile/core/utils/number_formatter.dart';
+import 'package:savvy_bee_mobile/core/utils/num_extensions.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
@@ -108,7 +108,7 @@ class _EnterAmountBottomSheetState
           CustomTextFormField(
             controller: _amountController,
             showOutline: false,
-            hint: NumberFormatter.formatCurrency(0),
+            hint: 0.formatCurrency(decimalDigits: 0),
             readOnly: true,
             keyboardType: TextInputType.none,
             // prefix: Text(
@@ -300,10 +300,9 @@ class _EnterPinBottomSheetState extends ConsumerState<EnterPinBottomSheet> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    NumberFormatter.formatCurrency(
-                      double.parse(widget.amount.split(',').join()),
-                      decimalDigits: 0,
-                    ),
+                    double.parse(
+                      widget.amount.split(',').join(),
+                    ).formatCurrency(decimalDigits: 0),
                     style: TextStyle(fontSize: 16),
                   ),
                   Row(
@@ -348,7 +347,7 @@ class _EnterPinBottomSheetState extends ConsumerState<EnterPinBottomSheet> {
                           style: TextStyle(fontSize: 10),
                         ),
                         Text(
-                          NumberFormatter.formatCurrency(10),
+                          10.formatCurrency(decimalDigits: 0),
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.bold,

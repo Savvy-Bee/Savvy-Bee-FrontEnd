@@ -5,6 +5,7 @@ import 'package:savvy_bee_mobile/core/utils/assets/logos.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/intro_text.dart';
 import 'package:savvy_bee_mobile/features/auth/presentation/screens/post_signup/bottom_sheets/referrer_screen.dart';
+import 'package:savvy_bee_mobile/features/home/presentation/screens/home_screen.dart';
 import 'package:savvy_bee_mobile/features/premium/presentation/screens/premium_screen.dart';
 
 import '../../../../../core/utils/assets/illustrations.dart';
@@ -54,7 +55,8 @@ class _SignupCompleteScreenState extends State<SignupCompleteScreen> {
                   if (widget.isPasswordReset) {
                     context.pop();
                   } else {
-                    context.goNamed(ReferrerScreen.path);
+                    // context.goNamed(ReferrerScreen.path);
+                    context.pushNamed(HomeScreen.path);
                   }
                 },
               ),

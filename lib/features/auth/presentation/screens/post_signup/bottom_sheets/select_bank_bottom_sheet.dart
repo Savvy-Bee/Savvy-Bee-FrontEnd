@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_loading_widget.dart';
 import 'package:savvy_bee_mobile/core/widgets/section_title_widget.dart';
 import 'package:savvy_bee_mobile/features/auth/presentation/screens/post_signup/bottom_sheets/selected_bank_login_bottom_sheet.dart';
 import 'package:savvy_bee_mobile/features/dashboard/presentation/providers/dashboard_data_provider.dart';
@@ -94,7 +95,8 @@ class _SelectBankBottomSheetState extends ConsumerState<SelectBankBottomSheet> {
                   ref.invalidate(institutionsProvider);
                 },
               ),
-              loading: () => Center(child: const CircularProgressIndicator()),
+              loading: () =>
+                  const CustomLoadingWidget(text: 'Fetching banks...'),
             ),
           ),
         ],
@@ -104,8 +106,10 @@ class _SelectBankBottomSheetState extends ConsumerState<SelectBankBottomSheet> {
 
   Widget _buildBankCard(Institution institution) {
     return CustomCard(
-      onTap: () =>
-          SelectedBankLoginBottomSheet.show(context, institution: institution),
+      onTap: () {
+        context.pop();
+        SelectedBankLoginBottomSheet.show(context, institution: institution);
+      },
       borderRadius: 8,
       child: Center(
         child: Text(

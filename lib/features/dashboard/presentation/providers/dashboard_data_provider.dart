@@ -43,7 +43,7 @@ final dashboardDataProvider =
     >(DashboardDataNotifier.new);
 
 // Institutions Notifier
-class InstitutionsNotifier extends AutoDisposeAsyncNotifier<List<Institution>> {
+class InstitutionsNotifier extends AsyncNotifier<List<Institution>> {
   @override
   Future<List<Institution>> build() async {
     final repository = ref.read(dashboardRepositoryProvider);
@@ -72,7 +72,7 @@ class InstitutionsNotifier extends AutoDisposeAsyncNotifier<List<Institution>> {
 }
 
 final institutionsProvider =
-    AutoDisposeAsyncNotifierProvider<InstitutionsNotifier, List<Institution>>(
+    AsyncNotifierProvider<InstitutionsNotifier, List<Institution>>(
       InstitutionsNotifier.new,
     );
 

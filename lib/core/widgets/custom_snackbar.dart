@@ -5,6 +5,8 @@ import 'package:savvy_bee_mobile/core/utils/constants.dart';
 
 enum SnackbarType { error, success, neutral }
 
+enum SnackbarPosition { top, bottom }
+
 class CustomSnackbar extends StatelessWidget {
   final String text;
   final SnackbarType type;
@@ -52,7 +54,11 @@ class CustomSnackbar extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  text,
+                  switch (type) {
+                    SnackbarType.error => 'An error occurred',
+                    SnackbarType.success => 'Operation success',
+                    SnackbarType.neutral => text,
+                  },
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
@@ -85,8 +91,16 @@ class CustomSnackbar extends StatelessWidget {
     BuildContext context,
     String text, {
     SnackbarType type = SnackbarType.neutral,
+    SnackbarPosition position = SnackbarPosition.top,
   }) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
+
+    // Get the total screen height
+    final double screenHeight = MediaQuery.sizeOf(context).height;
+    // Get the status bar height (top padding)
+    final double statusBarHeight = MediaQuery.paddingOf(context).top;
+    // Estimate the height of your CustomSnackbar (You might need to tweak this)
+    const double snackBarHeight = 80.0;
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -94,9 +108,18 @@ class CustomSnackbar extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         duration: const Duration(seconds: 4),
-        dismissDirection: DismissDirection.up,
+        dismissDirection: switch (position) {
+          SnackbarPosition.top => DismissDirection.up,
+          SnackbarPosition.bottom => DismissDirection.down,
+        },
         margin: EdgeInsets.only(
-          bottom: MediaQuery.sizeOf(context).height / 1.3,
+          bottom: switch (position) {
+            SnackbarPosition.top =>
+              (screenHeight / 1.1) - (statusBarHeight + snackBarHeight),
+            SnackbarPosition.bottom => 0,
+          },
+          left: 10,
+          right: 10,
         ),
         behavior: SnackBarBehavior.floating,
       ),

@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:savvy_bee_mobile/core/network/api_client.dart';
+import 'package:savvy_bee_mobile/core/network/api_endpoints.dart';
 import 'package:savvy_bee_mobile/features/spend/domain/models/account_verification.dart';
 import 'package:savvy_bee_mobile/features/spend/domain/models/bank.dart';
 import 'package:savvy_bee_mobile/features/spend/domain/models/internal_transfer.dart';
@@ -13,9 +14,7 @@ class TransferRepository {
   /// Get all banks
   Future<BanksResponse> getBanks() async {
     try {
-      final response = await _apiClient.get(
-        '/wallet/transactions/sendmoney/getbanks',
-      );
+      final response = await _apiClient.get(ApiEndpoints.banks);
 
       return BanksResponse.fromJson(response.data as Map<String, dynamic>);
     } on ApiException {
@@ -37,7 +36,7 @@ class TransferRepository {
       });
 
       final response = await _apiClient.post(
-        '/wallet/transactions/sendmoney/verifyaccount',
+        ApiEndpoints.verifyAccounts,
         data: formData,
       );
 
@@ -65,7 +64,7 @@ class TransferRepository {
       });
 
       final response = await _apiClient.post(
-        '/wallet/transactions/sendmoney/initialize',
+        ApiEndpoints.initializeTransaction,
         data: formData,
       );
 
@@ -91,7 +90,7 @@ class TransferRepository {
       });
 
       final response = await _apiClient.post(
-        '/wallet/transactions/sendmoney/verify',
+        ApiEndpoints.verifyTransaction,
         data: formData,
       );
 
@@ -123,7 +122,7 @@ class TransferRepository {
       });
 
       final response = await _apiClient.post(
-        '/wallet/transactions/sendmoney/send-internally',
+        ApiEndpoints.sendMoneyInternally,
         data: formData,
       );
 

@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 
-import '../../../../core/utils/number_formatter.dart';
+import '../../../../core/utils/num_extensions.dart';
 import '../../domain/models/dashboard_data.dart';
 
 class NetWorthCard extends StatelessWidget {
@@ -27,7 +27,7 @@ class NetWorthCard extends StatelessWidget {
           ),
           const Gap(8),
           Text(
-            NumberFormatter.formatCurrency(balance.toDouble()),
+            balance.toDouble().formatCurrency(),
             style: TextStyle(
               fontSize: 32,
               fontWeight: FontWeight.bold,

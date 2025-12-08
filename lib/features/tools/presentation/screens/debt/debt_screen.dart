@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
-import 'package:savvy_bee_mobile/core/utils/number_formatter.dart';
+import 'package:savvy_bee_mobile/core/utils/num_extensions.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/features/tools/domain/models/debt.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/providers/debt_provider.dart';
@@ -195,7 +195,7 @@ class _DebtScreenState extends ConsumerState<DebtScreen>
             Text(errorMessage, style: const TextStyle(color: AppColors.error))
           else
             Text(
-              NumberFormatter.formatCurrency(amountRemaining),
+              amountRemaining.formatCurrency(),
               style: TextStyle(
                 fontWeight: FontWeight.w500,
                 fontSize: 36,

@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -9,8 +10,11 @@ import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/app_icons.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/logos.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
+import 'package:savvy_bee_mobile/core/utils/encryption_service.dart';
 import 'package:savvy_bee_mobile/core/utils/string_extensions.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
+import 'package:savvy_bee_mobile/features/auth/presentation/screens/post_signup/bottom_sheets/bank_connection_status_bottom_sheet.dart';
+import 'package:savvy_bee_mobile/features/dashboard/presentation/providers/dashboard_data_provider.dart';
 
 import '../../../../../spend/domain/models/institution.dart';
 
@@ -37,6 +41,8 @@ class ProcessingConnectionBottomSheet extends ConsumerStatefulWidget {
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
+      isDismissible: false,
+      enableDrag: false,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadiusGeometry.vertical(top: Radius.circular(16)),
       ),
@@ -50,26 +56,46 @@ class ProcessingConnectionBottomSheet extends ConsumerStatefulWidget {
 
 class _ProcessingConnectionBottomSheetState
     extends ConsumerState<ProcessingConnectionBottomSheet> {
-  ConnectConfiguration _connectionConfig() {
+  Future<ConnectConfiguration> _connectionConfig() async {
+    final customer = widget.inputData;
+
+    // Decrypt BVN
+    final decryptedBvn = await EncryptionService.decryptText(customer.identity);
+
     return ConnectConfiguration(
-      publicKey: 'test_pk_...',
+      publicKey: dotenv.env[Constants.monoPublic]!,
       onSuccess: (code) {
         log('Success with code: $code');
+        context.pop();
+        BankConnectionStatusBottomSheet.show(
+          context,
+          bankName: widget.institution.displayName,
+        );
       },
       customer: MonoCustomer(
-        newCustomer: MonoNewCustomer(
-          name: widget.inputData.name,
-          email: 'samuel@neem.com',
-          identity: MonoCustomerIdentity(type: 'bvn', number: '2323233239'),
-        ),
-        // or
-        // existingCustomer: MonoExistingCustomer(id: '6759f68cb587236111eac1d4'),
+        // If the user doesn't have a mono id, they're a new customer
+        newCustomer:
+            customer.monoCustomerId == null || customer.monoCustomerId!.isEmpty
+            ? null
+            : MonoNewCustomer(
+                name: customer.name,
+                email: customer.email,
+                identity: MonoCustomerIdentity(
+                  type: 'bvn',
+                  number: decryptedBvn ?? '2323233239',
+                ),
+              ),
+
+        // If the user has a mono id, they're an existing customer
+        existingCustomer:
+            customer.monoCustomerId == null || customer.monoCustomerId!.isEmpty
+            ? null
+            : MonoExistingCustomer(id: customer.monoCustomerId!),
       ),
-      selectedInstitution: const ConnectInstitution(
-        id: '5f2d08be60b92e2888287702',
+      selectedInstitution: ConnectInstitution(
+        id: widget.institution.id,
         authMethod: ConnectAuthMethod.mobileBanking,
       ),
-      reference: 'testref',
       onEvent: (event) {
         log(event.toString());
       },
@@ -82,8 +108,21 @@ class _ProcessingConnectionBottomSheetState
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      ConnectConfiguration configuration = await _connectionConfig();
 
-    MonoConnect.launch(context, config: _connectionConfig(), showLogs: true);
+      if (mounted) {
+        MonoConnect.launch(context, config: configuration, showLogs: true);
+      }
+    });
+  }
+
+  void _handleLinkAccount(String code) async {
+    try {
+      final response = await ref
+          .read(linkedAccountsProvider.notifier)
+          .linkAccount(code);
+    } catch (e) {}
   }
 
   @override
@@ -137,10 +176,16 @@ class _ProcessingConnectionBottomSheetState
             ),
           ),
           const Gap(32),
-          AppIcon(AppIcons.progressIcon, color: AppColors.primary),
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              SizedBox(width: 55, child: LinearProgressIndicator()),
+              AppIcon(AppIcons.progressIcon, color: AppColors.primary),
+            ],
+          ),
           const Gap(32),
           Text(
-            'Syncing your information.',
+            'Syncing your information. Please wait...',
             style: TextStyle(fontFamily: Constants.neulisNeueFontFamily),
           ),
           const Gap(32),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
-import 'package:savvy_bee_mobile/core/utils/number_formatter.dart';
+import 'package:savvy_bee_mobile/core/utils/num_extensions.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/features/chat/domain/models/chat_models.dart';
 
@@ -101,7 +101,7 @@ class _BudgetChatWidgetState extends ConsumerState<BudgetChatWidget> {
                       const Gap(4),
                       Text(
                         hasData
-                            ? "You've spent ${NumberFormatter.formatCurrency(totalSpent, decimalDigits: 0)} this month"
+                            ? "You've spent ${totalSpent.formatCurrency(decimalDigits: 0)} this month"
                             : "No budget data available",
                         style: TextStyle(
                           fontSize: 12,
@@ -126,7 +126,7 @@ class _BudgetChatWidgetState extends ConsumerState<BudgetChatWidget> {
                         ),
                       ),
                       Text(
-                        '${NumberFormatter.formatCurrency(totalSpent, decimalDigits: 0)}/${NumberFormatter.formatCurrency(totalBudget, decimalDigits: 0)}',
+                        '${totalSpent.formatCurrency(decimalDigits: 0)}/${totalBudget.formatCurrency(decimalDigits: 0)}',
                         style: TextStyle(fontSize: 10),
                       ),
                     ],
@@ -321,7 +321,7 @@ class _BudgetChatWidgetState extends ConsumerState<BudgetChatWidget> {
                   ),
                   const Gap(8),
                   Text(
-                    '${NumberFormatter.formatCurrency(amountSpent, decimalDigits: 0)} of ${NumberFormatter.formatCurrency(totalAmount, decimalDigits: 0)}',
+                    '${amountSpent.formatCurrency(decimalDigits: 0)} of ${totalAmount.formatCurrency(decimalDigits: 0)}',
                     style: TextStyle(fontSize: 9),
                   ),
                 ],
@@ -341,7 +341,7 @@ class _BudgetChatWidgetState extends ConsumerState<BudgetChatWidget> {
                   const Gap(4),
                   Text(
                     isOverBudget
-                        ? '+${NumberFormatter.formatCurrency(difference, decimalDigits: 0)}'
+                        ? '+${difference.formatCurrency(decimalDigits: 0)}'
                         : '${percentage.toStringAsFixed(0)}%',
                     style: TextStyle(
                       fontSize: 10,

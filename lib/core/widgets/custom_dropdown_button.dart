@@ -7,16 +7,22 @@ import '../utils/constants.dart';
 class CustomDropdownButton extends StatelessWidget {
   final String? label, hint;
   final List<String> items;
+  final String? value; // Add this parameter
   final void Function(String?)? onChanged;
   final Widget? leadingIcon;
+  final bool enabled;
+  final TextEditingController? controller; // Optional controller
 
   const CustomDropdownButton({
     super.key,
     this.label,
     this.hint,
     required this.items,
+    this.value, // Add this
     this.onChanged,
     this.leadingIcon,
+    this.enabled = true,
+    this.controller,
   });
 
   @override
@@ -43,6 +49,13 @@ class CustomDropdownButton extends StatelessWidget {
           hintText: hint,
           expandedInsets: EdgeInsets.zero,
           menuHeight: MediaQuery.sizeOf(context).height / 2,
+          enabled: enabled,
+          initialSelection: value,
+          controller: controller,
+          menuStyle: MenuStyle(
+            surfaceTintColor: WidgetStatePropertyAll(AppColors.background),
+            backgroundColor: WidgetStatePropertyAll(AppColors.background),
+          ),
           inputDecorationTheme: InputDecorationTheme(
             filled: true,
             fillColor: AppColors.background,

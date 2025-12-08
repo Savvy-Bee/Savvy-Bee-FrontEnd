@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:savvy_bee_mobile/core/utils/encrypt_decrypt.dart';
+import 'package:savvy_bee_mobile/core/utils/encryption_service.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';
 
 import '../../../../../core/widgets/custom_button.dart';

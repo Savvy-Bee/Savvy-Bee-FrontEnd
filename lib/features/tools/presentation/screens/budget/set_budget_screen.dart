@@ -6,7 +6,7 @@ import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/utils/constants.dart';
-import '../../../../../core/utils/number_formatter.dart';
+import '../../../../../core/utils/num_extensions.dart';
 import '../../widgets/insight_card.dart';
 
 class SetBudgetScreen extends ConsumerStatefulWidget {
@@ -65,10 +65,7 @@ class _SetBudgetScreenState extends ConsumerState<SetBudgetScreen> {
                           ),
                           const Gap(4),
                           Text(
-                            NumberFormatter.formatCurrency(
-                              800000,
-                              decimalDigits: 0,
-                            ),
+                            800000.formatCurrency(decimalDigits: 0),
                             style: TextStyle(
                               fontSize: 28,
                               fontWeight: FontWeight.bold,
@@ -92,10 +89,7 @@ class _SetBudgetScreenState extends ConsumerState<SetBudgetScreen> {
                           ),
                           const Gap(4),
                           Text(
-                            NumberFormatter.formatCurrency(
-                              400000,
-                              decimalDigits: 0,
-                            ),
+                            400000.formatCurrency(decimalDigits: 0),
                             style: TextStyle(
                               fontSize: 28,
                               fontWeight: FontWeight.bold,

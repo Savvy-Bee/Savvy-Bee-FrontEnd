@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
-import 'package:savvy_bee_mobile/core/utils/number_formatter.dart';
+import 'package:savvy_bee_mobile/core/utils/num_extensions.dart';
 import 'package:savvy_bee_mobile/core/widgets/category_progress_widget.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 
@@ -77,10 +77,7 @@ class BudgetAnalysisWidget extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              NumberFormatter.formatCurrency(
-                                192000,
-                                decimalDigits: 0,
-                              ),
+                              192000.formatCurrency(decimalDigits: 0),
                               style: TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.w500,
@@ -88,7 +85,7 @@ class BudgetAnalysisWidget extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              '${NumberFormatter.formatCurrency(600000, decimalDigits: 0)} budget',
+                              '${6000.formatCurrency(decimalDigits: 0)} budget',
                               style: TextStyle(
                                 fontSize: 10,
                                 fontWeight: FontWeight.w500,

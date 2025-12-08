@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
-import 'package:savvy_bee_mobile/core/utils/number_formatter.dart';
+import 'package:savvy_bee_mobile/core/utils/num_extensions.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 
 import '../../utils/constants.dart';
@@ -109,7 +109,7 @@ class _BudgetCategoryBottomSheetState
                   ),
                 ),
                 Text(
-                  '${NumberFormatter.formatCurrency(40000, decimalDigits: 0)} last month',
+                  '${40000.formatCurrency(decimalDigits: 0)} last month',
                   style: TextStyle(
                     fontSize: 8.0,
                     fontWeight: FontWeight.w500,
@@ -128,7 +128,7 @@ class _BudgetCategoryBottomSheetState
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    NumberFormatter.formatCurrency(40000, decimalDigits: 0),
+                    40000.formatCurrency(decimalDigits: 0),
                     style: TextStyle(
                       fontSize: 16.0,
                       fontWeight: FontWeight.w500,

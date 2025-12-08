@@ -86,4 +86,11 @@ class ApiEndpoints {
 
   /// Leaderboard Endpoint
   static String leaderboard = '/hive/details/leaderboard';
+
+  /// Transfer Endpoint
+  static String banks = '/wallet/transactions/sendmoney/getbanks';
+  static String verifyAccounts = '/wallet/transactions/sendmoney/verifyaccount';
+  static String initializeTransaction = '/wallet/transactions/sendmoney/initialize';
+  static String verifyTransaction = '/wallet/transactions/sendmoney/verify';
+  static String sendMoneyInternally = '/wallet/transactions/sendmoney/send-internally';
 }

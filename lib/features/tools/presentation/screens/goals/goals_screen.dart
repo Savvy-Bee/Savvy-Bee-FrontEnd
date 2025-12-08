@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_error_widget.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_loading_widget.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/providers/goals_provider.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/goals/create_goal_screen.dart';
 
@@ -79,35 +81,9 @@ class _GoalsScreenState extends ConsumerState<GoalsScreen>
             ),
           );
         },
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => Center(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.error_outline, size: 48, color: Colors.red[300]),
-                const Gap(16),
-                Text(
-                  'Failed to load goals',
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                const Gap(8),
-                Text(
-                  error.toString(),
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-                const Gap(24),
-                CustomElevatedButton(
-                  text: 'Try Again',
-                  isSmall: true,
-                  isFullWidth: false,
-                  onPressed: () => ref.invalidate(savingsGoalsProvider),
-                ),
-              ],
-            ),
-          ),
+        loading: () => const CustomLoadingWidget(text: 'Fetching goals...'),
+        error: (error, stack) => CustomErrorWidget.empty(
+          onAction: () => ref.invalidate(savingsGoalsProvider),
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -124,25 +100,12 @@ class _GoalsScreenState extends ConsumerState<GoalsScreen>
     final activeGoals = ref.watch(activeGoalsProvider);
 
     if (activeGoals.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.flag_outlined, size: 64, color: Colors.grey[400]),
-            const Gap(16),
-            Text(
-              'No active goals yet',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            const Gap(8),
-            Text(
-              'Create your first goal to get started',
-              style: Theme.of(
-                context,
-              ).textTheme.bodySmall?.copyWith(color: Colors.grey[600]),
-            ),
-          ],
-        ),
+      return CustomErrorWidget(
+        icon: Icons.emoji_events_outlined,
+        iconSize: 64,
+        iconColor: Colors.grey[400],
+        title: 'No active goals yet',
+        subtitle: 'Create your first goal to get started',
       );
     }
 
@@ -170,29 +133,12 @@ class _GoalsScreenState extends ConsumerState<GoalsScreen>
     final completedGoals = ref.watch(completedGoalsProvider);
 
     if (completedGoals.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.emoji_events_outlined,
-              size: 64,
-              color: Colors.grey[400],
-            ),
-            const Gap(16),
-            Text(
-              'No completed goals yet',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            const Gap(8),
-            Text(
-              'Keep saving to reach your goals!',
-              style: Theme.of(
-                context,
-              ).textTheme.bodySmall?.copyWith(color: Colors.grey[600]),
-            ),
-          ],
-        ),
+      return CustomErrorWidget(
+        icon: Icons.emoji_events_outlined,
+        iconSize: 64,
+        iconColor: Colors.grey[400],
+        title: 'No completed goals yet',
+        subtitle: 'Keep saving to reach your goals!',
       );
     }
 

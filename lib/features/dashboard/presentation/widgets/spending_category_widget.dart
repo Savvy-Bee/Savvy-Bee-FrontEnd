@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/constants.dart';
-import '../../../../core/utils/number_formatter.dart';
+import '../../../../core/utils/num_extensions.dart';
 import '../../../../core/widgets/charts/custom_donut_chart.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_card.dart';
@@ -142,7 +142,7 @@ class SpendingCategoryWidget extends StatelessWidget {
             ),
           ),
           Text(
-            NumberFormatter.formatCurrency(category.amount, decimalDigits: 0),
+            category.amount.formatCurrency(decimalDigits: 0),
             style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
           ),
         ],

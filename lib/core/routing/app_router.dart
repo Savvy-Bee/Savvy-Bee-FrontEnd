@@ -339,7 +339,9 @@ final GoRouter appRouter = GoRouter(
       path: BillConfirmationScreen.path,
       name: BillConfirmationScreen.path,
       builder: (BuildContext context, GoRouterState state) {
-        return const BillConfirmationScreen();
+        return BillConfirmationScreen(
+          confirmationData: state.extra as BillConfirmationData,
+        );
       },
     ),
     GoRoute(

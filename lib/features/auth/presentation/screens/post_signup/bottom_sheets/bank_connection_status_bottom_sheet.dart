@@ -8,9 +8,11 @@ import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import '../../../../../../core/utils/constants.dart';
 
 class BankConnectionStatusBottomSheet extends StatelessWidget {
-  const BankConnectionStatusBottomSheet({super.key});
+  final String bankName;
 
-  static void show(BuildContext context) {
+  const BankConnectionStatusBottomSheet({super.key, required this.bankName});
+
+  static void show(BuildContext context, {required String bankName}) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -18,7 +20,7 @@ class BankConnectionStatusBottomSheet extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadiusGeometry.vertical(top: Radius.circular(16)),
       ),
-      builder: (context) => BankConnectionStatusBottomSheet(),
+      builder: (context) => BankConnectionStatusBottomSheet(bankName: bankName),
     );
   }
 
@@ -53,7 +55,7 @@ class BankConnectionStatusBottomSheet extends StatelessWidget {
             ),
           ),
           Text(
-            'You have successfully connected Kuda Bank to Savvy Bee',
+            'You have successfully connected $bankName to Savvy Bee',
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 16,

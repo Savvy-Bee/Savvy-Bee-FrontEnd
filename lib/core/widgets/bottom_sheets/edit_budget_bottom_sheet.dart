@@ -5,7 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
-import 'package:savvy_bee_mobile/core/utils/number_formatter.dart';
+import 'package:savvy_bee_mobile/core/utils/num_extensions.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
@@ -187,7 +187,7 @@ class _EditBudgetBottomSheetState extends ConsumerState<EditBudgetBottomSheet> {
                     const Gap(3),
                     Text(
                       // 11. Show available funds
-                      '${NumberFormatter.formatCurrency(unbudgeted.toDouble(), decimalDigits: 0)} available',
+                      '${unbudgeted.toDouble().formatCurrency( decimalDigits: 0)} available',
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
@@ -219,8 +219,8 @@ class _EditBudgetBottomSheetState extends ConsumerState<EditBudgetBottomSheet> {
                           const Gap(4),
                           Text(
                             // 12. Use widget.budget data (balance)
-                            NumberFormatter.formatCurrency(
-                              widget.budget.balance.toDouble(),
+                            widget.budget.balance.toDouble().formatCurrency(
+                              
                             ),
                             style: const TextStyle(
                               fontWeight: FontWeight.w500,
@@ -244,7 +244,7 @@ class _EditBudgetBottomSheetState extends ConsumerState<EditBudgetBottomSheet> {
                           const Gap(4),
                           Text(
                             // TODO: Need real data for this
-                            NumberFormatter.formatCurrency(0),
+                            0.formatCurrency(),
                             style: const TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: 12,
