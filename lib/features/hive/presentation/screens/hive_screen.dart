@@ -41,13 +41,13 @@ class _HiveScreenState extends ConsumerState<HiveScreen> {
     {
       'title': 'How to build an emergency fund on a tight budget',
       'subtitle': 'Small steps, big safety net',
-      'imagePath': Illustrations.savingsBeePose2,
+      'imagePath': Illustrations.luna,
       'color': AppColors.success,
     },
     {
       'title': 'Investing vs. saving: which is right for you?',
       'subtitle': 'Understanding your financial goals',
-      'imagePath': Illustrations.interestBee,
+      'imagePath': Illustrations.bloom,
       'color': AppColors.blue,
     },
     {

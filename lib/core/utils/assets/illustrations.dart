@@ -3,14 +3,14 @@ class Illustrations {
 
   static const String _basePath = 'assets/images/illustrations';
 
-  static const String savingsBeePose2 = '$_basePath/savings_bee_pose_2.png';
-  static const String savingsBeePose1 = '$_basePath/savings_bee_pose_1.png';
-  static const String loanBee = '$_basePath/loan_bee_pose.png';
+  static const String luna = '$_basePath/luna.png';
+  static const String susu = '$_basePath/susu.png';
+  static const String dash = '$_basePath/dash.png';
+  static const String bloom = '$_basePath/bloom.png';
+  static const String loki = '$_basePath/loki.png';
   static const String familyBee = '$_basePath/family_bee.png';
-  static const String interestBee = '$_basePath/interest_bee_pose.png';
-  static const String scammerBee = '$_basePath/scammer-bee.png';
+  static const String penny = '$_basePath/penny.png';
 
-  static const String happyBee = '$_basePath/happy-bee.png';
 
   static const String coinJar = '$_basePath/jar.png';
   static const String savvyCoin = '$_basePath/savvy_coin.png';
@@ -20,12 +20,12 @@ class Illustrations {
 
   // Avatars
   static const String dashAvatar = '$_basePath/dash_head.png';
+  static const String pennyAvatar = '$_basePath/penny_head.png';
   static const String susuAvatar = '$_basePath/susu_head.png';
-  static const String budgetBeeAvatar = '$_basePath/budget_bee_head.png';
-  static const String savingsBeeAvatar = '$_basePath/savings_bee_head.png';
-  static const String quizBeeAvatar = '$_basePath/quiz_bee_head.png';
-  static const String interestBeeAvatar = '$_basePath/interest_bee_head.png';
-  static const String scammerBeeAvatar = '$_basePath/scammer_bee_head.png';
+  static const String bloomAvatar = '$_basePath/bloom_head.png';
+  static const String booAvatar = '$_basePath/boo_head.png';
+  static const String lunaAvatar = '$_basePath/luna_head.png';
+  static const String lokiAvatar = '$_basePath/scammer_bee_head.png';
 
   // Lessons Illustrations
   static const String lesson1 = '$_basePath/lesson-1.png';

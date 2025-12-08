@@ -78,6 +78,11 @@ flutter:
         - asset: assets/fonts/neulis/Neulis-Neue-Bold.otf
         - asset: assets/fonts/neulis/Neulis-Neue-Medium.otf
         - asset: assets/fonts/neulis/Neulis-Neue-Regular.otf
+
+    - family: Fredoka
+      fonts:
+        - asset: assets/fonts/fredoka/Fredoka-SemiBold.ttf
+        - asset: assets/fonts/fredoka/Fredoka-Bold.ttf
   # fonts:
   #   - family: Inter
   #     fonts:

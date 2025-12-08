@@ -50,7 +50,7 @@ class _SignupNotificationsScreenState extends State<SignupNotificationsScreen> {
             Positioned(
               bottom: 0,
               right: 0,
-              child: imageShadowEffect(Illustrations.interestBee, scale: 1.1),
+              child: imageShadowEffect(Illustrations.bloom, scale: 1.1),
             ),
             Align(
               alignment: Alignment.bottomCenter,

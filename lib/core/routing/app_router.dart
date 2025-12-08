@@ -206,36 +206,76 @@ final GoRouter appRouter = GoRouter(
         GoRoute(
           path: HomeScreen.path,
           name: HomeScreen.path,
-          builder: (BuildContext context, GoRouterState state) {
-            return const HomeScreen();
+          pageBuilder: (BuildContext context, GoRouterState state) {
+            return CustomTransitionPage<void>(
+              key: state.pageKey,
+              transitionDuration: Duration(milliseconds: 100),
+              child: const HomeScreen(),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                    return FadeTransition(opacity: animation, child: child);
+                  },
+            );
           },
         ),
         GoRoute(
           path: DashboardScreen.path,
           name: DashboardScreen.path,
-          builder: (BuildContext context, GoRouterState state) {
-            return const DashboardScreen();
+          pageBuilder: (BuildContext context, GoRouterState state) {
+            return CustomTransitionPage<void>(
+              key: state.pageKey,
+              transitionDuration: Duration(milliseconds: 100),
+              child: const DashboardScreen(),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                    return FadeTransition(opacity: animation, child: child);
+                  },
+            );
           },
         ),
         GoRoute(
           path: SpendScreen.path,
           name: SpendScreen.path,
-          builder: (BuildContext context, GoRouterState state) {
-            return const SpendScreen();
+          pageBuilder: (BuildContext context, GoRouterState state) {
+            return CustomTransitionPage<void>(
+              key: state.pageKey,
+              transitionDuration: Duration(milliseconds: 100),
+              child: const SpendScreen(),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                    return FadeTransition(opacity: animation, child: child);
+                  },
+            );
           },
         ),
         GoRoute(
           path: ToolsScreen.path,
           name: ToolsScreen.path,
-          builder: (BuildContext context, GoRouterState state) {
-            return ToolsScreen();
+          pageBuilder: (BuildContext context, GoRouterState state) {
+            return CustomTransitionPage<void>(
+              key: state.pageKey,
+              transitionDuration: Duration(milliseconds: 100),
+              child: ToolsScreen(),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                    return FadeTransition(opacity: animation, child: child);
+                  },
+            );
           },
         ),
         GoRoute(
           path: HiveScreen.path,
           name: HiveScreen.path,
-          builder: (BuildContext context, GoRouterState state) {
-            return HiveScreen();
+          pageBuilder: (BuildContext context, GoRouterState state) {
+            return CustomTransitionPage<void>(
+              key: state.pageKey,
+              transitionDuration: Duration(milliseconds: 100),
+              child: HiveScreen(),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                    return FadeTransition(opacity: animation, child: child);
+                  },
+            );
           },
         ),
       ],

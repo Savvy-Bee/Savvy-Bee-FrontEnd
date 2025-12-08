@@ -41,7 +41,7 @@ class _LessonUnlockedScreenState extends ConsumerState<LessonUnlockedScreen> {
                   mainAxisSize: MainAxisSize.min,
                   spacing: 24,
                   children: [
-                    Image.asset(Illustrations.savingsBeePose1, scale: 1.3),
+                    Image.asset(Illustrations.susu, scale: 1.3),
                     _buildLevelIndicator(),
                     Text(
                       "You've unlocked a new lesson!",

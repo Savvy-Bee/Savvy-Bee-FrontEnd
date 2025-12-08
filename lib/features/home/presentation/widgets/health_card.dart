@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/assets.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/illustrations.dart';
+
+import '../../../../core/utils/constants.dart';
 
 /// A financial health status card featuring a custom-painted background
 /// with a dedicated notch for the avatar icon.
@@ -34,13 +37,14 @@ class HealthCardWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 // Constant Text
-                const Text(
+                Text(
                   "Your financial health is",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
+                    fontFamily: Constants.fredokaFontFamily,
                   ),
                 ),
                 const Gap(10),
@@ -58,10 +62,11 @@ class HealthCardWidget extends StatelessWidget {
                 Text(
                   statusText,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: Colors.white,
+                  style: TextStyle(
+                    color: AppColors.primaryFaint,
                     fontSize: 40,
                     fontWeight: FontWeight.w900,
+                    fontFamily: Constants.fredokaFontFamily,
                   ),
                 ),
                 const Gap(8),
@@ -71,7 +76,7 @@ class HealthCardWidget extends StatelessWidget {
                   descriptionText,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.85),
+                    color: AppColors.primaryFaint.withValues(alpha: 0.85),
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                   ),

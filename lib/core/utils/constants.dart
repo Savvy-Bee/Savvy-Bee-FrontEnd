@@ -18,6 +18,7 @@ class Constants {
   static String exconFontFamily = 'Excon';
   static String generalSansFontFamily = 'GeneralSans';
   static String neulisNeueFontFamily = 'Nuelis Neue';
+  static String fredokaFontFamily = 'Fredoka';
 
   // Environment Variables
   static String encryptionKey = 'ENCRYPTION_KEY';

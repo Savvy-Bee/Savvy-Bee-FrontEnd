@@ -46,7 +46,7 @@ class _SignupCompleteScreenState extends State<SignupCompleteScreen> {
                   ),
                 ],
               ),
-              Image.asset(Illustrations.happyBee, scale: 1.2),
+              Image.asset(Illustrations.susu, scale: 1.2),
               CustomElevatedButton(
                 text: 'Continue',
                 buttonColor: CustomButtonColor.black,

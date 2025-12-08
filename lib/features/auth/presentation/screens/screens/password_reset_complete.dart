@@ -47,7 +47,7 @@ class _PasswordResetCompleteState extends State<PasswordResetComplete> {
             Positioned(
               bottom: 0,
               right: 0,
-              child: imageShadowEffect(Illustrations.loanBee, scale: 1.1),
+              child: imageShadowEffect(Illustrations.dash, scale: 1.1),
             ),
             Align(
               alignment: Alignment.bottomCenter,

@@ -42,7 +42,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     final authNotifier = ref.read(authProvider.notifier);
     final success = await authNotifier.login(
-      emailController.text.trim(),
+      emailController.text.toLowerCase().trim(),
       passwordController.text.trim(),
     );
 

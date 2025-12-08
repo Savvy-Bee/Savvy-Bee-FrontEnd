@@ -189,7 +189,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   title: 'Smart Recommendation',
                   description:
                       'Your expenses are high, consider a budget review this week.',
-                  avatar: Illustrations.interestBeeAvatar,
+                  avatar: Illustrations.lunaAvatar,
                   borderRadius: 32,
                 ),
               ),
@@ -230,11 +230,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(
-                Illustrations.savingsBeePose1,
-                height: 140,
-                width: 140,
-              ),
+              Image.asset(Illustrations.susu, height: 140, width: 140),
             ],
           ),
           // const Gap(16),

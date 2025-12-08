@@ -73,7 +73,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                         title: 'Smart Recommendation',
                         description:
                             dashboardData.widgets.spendCategoryBreakdown.alerts,
-                        avatar: Illustrations.interestBeeAvatar,
+                        avatar: Illustrations.lunaAvatar,
                         borderRadius: 32,
                       ),
 
@@ -85,7 +85,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                       title: 'Ask Nahl',
                       description:
                           'Get answers to questions on your spending, saving, budgets and cashflow!',
-                      avatar: Illustrations.interestBeeAvatar,
+                      avatar: Illustrations.lunaAvatar,
                       borderRadius: 32,
                       onTap: () => context.pushNamed(ChatScreen.path),
                     ),
@@ -175,7 +175,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               ArticleCard(
                 title: 'Money lessons from afrobeats',
                 backgroundColor: const Color(0xFFB8E986),
-                imagePath: Illustrations.loanBee,
+                imagePath: Illustrations.dash,
                 subtitle: 'Are you really listening to what they\'re saying?',
                 onTap: () => ArticleBottomSheet.show(context),
               ),

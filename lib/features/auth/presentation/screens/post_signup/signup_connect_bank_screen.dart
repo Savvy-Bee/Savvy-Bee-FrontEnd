@@ -55,7 +55,7 @@ class _SignupConnectBankScreenState extends State<SignupConnectBankScreen> {
                 ),
               ],
             ),
-            Image.asset(Illustrations.scammerBee),
+            Image.asset(Illustrations.loki),
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [

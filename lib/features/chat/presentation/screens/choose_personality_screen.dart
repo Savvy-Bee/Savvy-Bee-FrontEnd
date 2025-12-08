@@ -36,13 +36,23 @@ class _ChoosePersonalityScreenState
   late PageController _pageController;
 
   final List<String> _characters = [
+    Illustrations.booAvatar,
+    Illustrations.bloom,
+    Illustrations.dash,
+    Illustrations.loki,
+    Illustrations.penny,
+    Illustrations.luna,
+    Illustrations.susu,
+  ];
+
+  final List<String> _avatars = [
+    Illustrations.booAvatar,
+    Illustrations.bloomAvatar,
     Illustrations.dashAvatar,
-    Illustrations.savingsBeePose2,
-    Illustrations.interestBee,
-    Illustrations.savingsBeePose1,
-    Illustrations.savingsBeePose2,
-    Illustrations.familyBee,
-    Illustrations.familyBee,
+    Illustrations.lokiAvatar,
+    Illustrations.pennyAvatar,
+    Illustrations.lunaAvatar,
+    Illustrations.susuAvatar,
   ];
 
   @override
@@ -136,22 +146,23 @@ class _ChoosePersonalityScreenState
         appBar: AppBar(
           title: Image.asset(Logos.logo, scale: 4),
           actions: [
-            Padding(
-              padding: const EdgeInsets.only(left: 5),
-              child: IconTextRowWidget(
-                'Skip',
-                AppIcon(AppIcons.arrowRightIcon),
-                textDirection: TextDirection.rtl,
-                textStyle: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: Constants.neulisNeueFontFamily,
+            if (widget.isFromSignup)
+              Padding(
+                padding: const EdgeInsets.only(left: 5),
+                child: IconTextRowWidget(
+                  'Skip',
+                  AppIcon(AppIcons.arrowRightIcon),
+                  textDirection: TextDirection.rtl,
+                  textStyle: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: Constants.neulisNeueFontFamily,
+                  ),
+                  onTap: () {
+                    context.pushNamed(SignupConnectBankScreen.path);
+                  },
                 ),
-                onTap: () {
-                  context.pushNamed(SignupConnectBankScreen.path);
-                },
               ),
-            ),
           ],
         ),
         extendBodyBehindAppBar: true,
@@ -209,8 +220,8 @@ class _ChoosePersonalityScreenState
                         (_selectedPersonality < _characters.length
                             ? _characters[_selectedPersonality]
                             : _characters[0]),
-                    height: 150,
-                    width: 150,
+                    height: 200,
+                    width: 200,
                   ),
 
                   // PageView with personality details
@@ -266,6 +277,7 @@ class _ChoosePersonalityScreenState
                                   style: const TextStyle(
                                     fontSize: 14,
                                     height: 1.1,
+                                    color: AppColors.black,
                                   ),
                                 ),
                               ),
@@ -332,9 +344,7 @@ class _ChoosePersonalityScreenState
               child: personality.image != null
                   ? Image.asset(personality.image!, scale: 1.15)
                   : Image.asset(
-                      index < _characters.length
-                          ? _characters[index]
-                          : _characters[0],
+                      index < _avatars.length ? _avatars[index] : _avatars[0],
                       height: 40,
                       width: 40,
                     ),

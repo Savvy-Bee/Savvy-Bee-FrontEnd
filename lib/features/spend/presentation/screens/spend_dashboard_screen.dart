@@ -98,7 +98,7 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
                     title: 'Ask Nahl',
                     description:
                         'Get answers to questions on your spending, saving, budgets and cashflow!',
-                    avatar: Illustrations.interestBeeAvatar,
+                    avatar: Illustrations.lunaAvatar,
                     borderRadius: 32,
                     onTap: () => context.pushNamed(ChatScreen.path),
                   ),
