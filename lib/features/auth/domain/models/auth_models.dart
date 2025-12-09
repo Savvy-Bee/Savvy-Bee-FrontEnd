@@ -81,8 +81,8 @@ class RegisterOtherDetailsRequest {
       'Email': email,
       'DOB': dob,
       'Country': country,
-      'currency': currency,
-      'language': language,
+      'Currency': currency,
+      'Language': language,
     };
   }
 }
