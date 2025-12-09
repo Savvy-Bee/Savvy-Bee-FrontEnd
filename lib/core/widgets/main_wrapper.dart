@@ -64,23 +64,42 @@ class MainWrapper extends ConsumerWidget {
             context.goNamed(HomeScreen.path);
             break;
           case 1:
-            context.goNamed(DashboardScreen.path);
-            break;
-          case 2:
             context.goNamed(SpendScreen.path);
             break;
-          case 3:
+          case 2:
             context.goNamed(ToolsScreen.path);
             break;
-          case 4:
+          case 3:
             context.goNamed(HiveScreen.path);
             break;
-          case 5:
+          case 4:
             context.pushNamed(PremiumScreen.path);
             break;
           default:
             break;
         }
+        // switch (index) {
+        //   case 0:
+        //     context.goNamed(HomeScreen.path);
+        //     break;
+        //   case 1:
+        //     context.goNamed(DashboardScreen.path);
+        //     break;
+        //   case 2:
+        //     context.goNamed(SpendScreen.path);
+        //     break;
+        //   case 3:
+        //     context.goNamed(ToolsScreen.path);
+        //     break;
+        //   case 4:
+        //     context.goNamed(HiveScreen.path);
+        //     break;
+        //   case 5:
+        //     context.pushNamed(PremiumScreen.path);
+        //     break;
+        //   default:
+        //     break;
+        // }
       },
       type: BottomNavigationBarType.fixed,
       unselectedLabelStyle: TextStyle(
@@ -102,11 +121,11 @@ class MainWrapper extends ConsumerWidget {
           icon: AppIcon(AppIcons.homeIcon, size: 20, color: AppColors.grey),
           label: 'Home',
         ),
-        BottomNavigationBarItem(
-          activeIcon: AppIcon(AppIcons.budgetIcon, size: 20),
-          icon: AppIcon(AppIcons.budgetIcon, size: 20, color: AppColors.grey),
-          label: 'Dashboard',
-        ),
+        // BottomNavigationBarItem(
+        //   activeIcon: AppIcon(AppIcons.budgetIcon, size: 20),
+        //   icon: AppIcon(AppIcons.budgetIcon, size: 20, color: AppColors.grey),
+        //   label: 'Dashboard',
+        // ),
         BottomNavigationBarItem(
           activeIcon: AppIcon(AppIcons.spendIcon, size: 20),
           icon: AppIcon(AppIcons.spendIcon, size: 20, color: AppColors.grey),
