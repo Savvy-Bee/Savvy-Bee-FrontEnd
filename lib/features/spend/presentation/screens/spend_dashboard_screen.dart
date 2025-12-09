@@ -40,6 +40,7 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
         child: dashboardAsync.when(
+          skipLoadingOnRefresh: false,
           data: (response) {
             if (response.data == null) {
               return _buildEmptyStateWidget();
@@ -123,7 +124,7 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
         _buildQuickActionButton(
           AppIcons.walletIcon,
           'Pay bills',
-          enabled ? () => context.pushNamed(PayBillsScreen.path) : null,
+          !enabled ? () => context.pushNamed(PayBillsScreen.path) : null,
         ),
         _buildQuickActionButton(
           AppIcons.sendIcon,

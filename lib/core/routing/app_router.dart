@@ -9,6 +9,7 @@ import 'package:savvy_bee_mobile/features/chat/presentation/screens/chat_screen.
 import 'package:savvy_bee_mobile/features/chat/presentation/screens/choose_personality_screen.dart';
 import 'package:savvy_bee_mobile/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:savvy_bee_mobile/features/hive/domain/models/course.dart';
+import 'package:savvy_bee_mobile/features/hive/presentation/screens/games/game_screen.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/hive_screen.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/leaderboard/leaderboard_screen.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/leaderboard/league_promotion_screen.dart';
@@ -43,6 +44,7 @@ import 'package:savvy_bee_mobile/features/referral/presentation/screens/referral
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/bills/airtime_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/bills/bill_completion_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/bills/bill_confirmation_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/bills/internet_bill_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/bills/pay_bills_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/fund/fund_with_card_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/fund/new_card_screen.dart';
@@ -69,6 +71,8 @@ import 'package:savvy_bee_mobile/features/tools/presentation/screens/tools_scree
 import '../../features/hive/presentation/screens/lesson/lesson_room_screen.dart';
 import '../../features/hive/presentation/screens/level/level_complete_screen.dart';
 import '../../features/hive/presentation/screens/levels_screen.dart';
+import '../../features/spend/presentation/screens/bills/cable_bill_screen.dart';
+import '../../features/spend/presentation/screens/bills/electricity_bill_screen.dart';
 import '../../features/spend/presentation/screens/fund/username_screen.dart';
 import '../../features/spend/presentation/screens/transactions/statement_sent_screen.dart';
 import '../../features/spend/presentation/screens/transfer/transfer_screen.dart';
@@ -373,6 +377,27 @@ final GoRouter appRouter = GoRouter(
       name: AirtimeScreen.path,
       builder: (BuildContext context, GoRouterState state) {
         return const AirtimeScreen();
+      },
+    ),
+    GoRoute(
+      path: InternetBillScreen.path,
+      name: InternetBillScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return const InternetBillScreen();
+      },
+    ),
+    GoRoute(
+      path: CableBillScreen.path,
+      name: CableBillScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return const CableBillScreen();
+      },
+    ),
+    GoRoute(
+      path: ElectricityBillScreen.path,
+      name: ElectricityBillScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return const ElectricityBillScreen();
       },
     ),
     GoRoute(
@@ -732,6 +757,15 @@ final GoRouter appRouter = GoRouter(
       name: SettingsScreen.path,
       builder: (BuildContext context, GoRouterState state) {
         return SettingsScreen();
+      },
+    ),
+
+    // Game Routes
+    GoRoute(
+      path: GameScreen.path,
+      name: GameScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return GameScreen();
       },
     ),
   ],

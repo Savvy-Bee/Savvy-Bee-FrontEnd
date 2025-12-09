@@ -5,8 +5,11 @@ import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/bills/airtime_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/bills/cable_bill_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/bills/internet_bill_screen.dart';
 
 import '../../../../../core/widgets/custom_input_field.dart';
+import 'electricity_bill_screen.dart';
 
 class PayBillsScreen extends ConsumerStatefulWidget {
   static String path = '/pay-bills';
@@ -68,17 +71,17 @@ class _PayBillsScreenState extends ConsumerState<PayBillsScreen> {
                       _buildBillItem(
                         'Data',
                         const Icon(Icons.wifi, size: 20),
-                        () {},
+                        () => context.pushNamed(InternetBillScreen.path),
                       ),
                       _buildBillItem(
                         'Cable TV',
                         const Icon(Icons.tv, size: 20),
-                        () {},
+                        () => context.pushNamed(CableBillScreen.path),
                       ),
                       _buildBillItem(
                         'Electricity',
                         const Icon(Icons.bolt, size: 20),
-                        () {},
+                        () => context.pushNamed(ElectricityBillScreen.path),
                       ),
                     ],
                   ),
