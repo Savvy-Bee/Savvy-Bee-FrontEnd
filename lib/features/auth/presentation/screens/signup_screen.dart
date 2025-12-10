@@ -343,7 +343,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                           ],
                         ),
                       ),
-                      Gap(MediaQuery.viewInsetsOf(context).bottom),
+                      // Gap(MediaQuery.viewInsetsOf(context).bottom),
                     ],
                   ),
                 ),
