@@ -304,7 +304,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            // --- TOP BAR ---
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -331,9 +330,9 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
             ),
             const Gap(10.0),
 
-            // --- SCROLLABLE CONTENT ---
             Expanded(
               child: SingleChildScrollView(
+                controller: _scrollController,
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   children: [
@@ -368,7 +367,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
               ),
             ),
 
-            // --- BOTTOM BUTTON ---
             Padding(
               padding: const EdgeInsets.all(16.0).copyWith(bottom: 16),
               child: CustomElevatedButton(
@@ -382,6 +380,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
       ),
     );
   }
+
   // --- Page Views ---
 
   Widget _nameView() {
