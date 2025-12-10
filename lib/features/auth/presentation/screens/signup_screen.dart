@@ -277,11 +277,12 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
     final authState = ref.watch(authProvider);
 
     return Scaffold(
+      // 1. Keep this true so the body shrinks when keyboard opens
       resizeToAvoidBottomInset: true,
       body: SafeArea(
         child: Column(
           children: [
-            // Top Bar (Back and Close buttons)
+            // --- TOP BAR ---
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -308,7 +309,9 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
             ),
             const Gap(10.0),
 
-            // Content Area - Make it scrollable and flexible
+            // --- SCROLLABLE CONTENT ---
+            // This Expanded widget will take up all space NOT used by the top bar or bottom button.
+            // When keyboard opens, this area shrinks, making the ScrollView active.
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(16.0),
@@ -323,6 +326,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                     ),
                     const Gap(20.0),
                     SizedBox(
+                      // Note: 0.4 height is fine, but if the keyboard is very tall,
+                      // the user will simply scroll to see this content.
                       height: MediaQuery.of(context).size.height * 0.4,
                       child: PageView(
                         controller: _pageController,
@@ -340,27 +345,29 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         ],
                       ),
                     ),
-                    const Gap(80), // Space for bottom button
+                    // Removed the Gap(80) here because the button is no longer floating over the content
                   ],
                 ),
+              ),
+            ),
+
+            // --- BOTTOM BUTTON ---
+            // Moved from bottomSheet to here.
+            // It will stick to the bottom of the screen, and ride up with the keyboard.
+            Padding(
+              padding: const EdgeInsets.all(16.0).copyWith(bottom: 16),
+              child: CustomElevatedButton(
+                text: 'Continue',
+                isLoading: authState.isLoading,
+                onPressed: _handleContinue,
               ),
             ),
           ],
         ),
       ),
-      bottomSheet: Padding(
-        padding: const EdgeInsets.all(
-          16,
-        ).copyWith(bottom: 32), // Keep original padding
-        child: CustomElevatedButton(
-          text: 'Continue',
-          isLoading: authState.isLoading,
-          onPressed: _handleContinue,
-        ),
-      ),
+      // Remove the bottomSheet property entirely
     );
   }
-
   // --- Page Views ---
 
   Widget _nameView() {
