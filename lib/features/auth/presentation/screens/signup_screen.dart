@@ -277,92 +277,81 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
     final authState = ref.watch(authProvider);
 
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       body: SafeArea(
-        child: ListView(
-          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Column(
           children: [
-            Column(
+            // Top Bar (Back and Close buttons)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // Top Bar (Back and Close buttons)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    BackButton(
-                      onPressed: _currentPage == 0 ? null : _goToPreviousPage,
-                    ),
-                    Expanded(
-                      child: SmoothPageIndicator(
-                        controller: _pageController,
-                        count: _dotCount,
-                        effect: PreviousColoredSlideEffect(
-                          dotHeight: 4.0,
-                          spacing: 5,
-                          activeDotColor: AppColors.primary,
-                          dotColor: AppColors.grey,
-                        ),
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () => context.pop(),
-                      icon: const Icon(Icons.close),
-                    ),
-                  ],
+                BackButton(
+                  onPressed: _currentPage == 0 ? null : _goToPreviousPage,
                 ),
-                const Gap(10.0),
-
-                // Content Area (Intro Text + PageView)
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: [
-                      const Gap(24.0),
-                      Image.asset(Logos.logo, scale: 3),
-                      const Gap(24.0),
-                      IntroText(
-                        title: SignupItems.items[_currentPage].title,
-                        subtitle: _getPageSubtitle(),
-                      ),
-                      const Gap(20.0),
-                      ConstrainedBox(
-                        constraints: BoxConstraints(
-                          maxHeight: MediaQuery.heightOf(context) / 2,
-                        ),
-                        child: PageView(
-                          controller: _pageController,
-                          physics: const NeverScrollableScrollPhysics(),
-                          children: [
-                            _nameView(),
-                            _emailView(),
-                            _usernameView(),
-                            _passwordView(),
-                            _otpView(),
-                            _dobView(),
-                            _countryView(),
-                            _languageView(),
-                            _currencyView(),
-                          ],
-                        ),
-                      ),
-                      // Gap(MediaQuery.viewInsetsOf(context).bottom),
-                    ],
+                Expanded(
+                  child: SmoothPageIndicator(
+                    controller: _pageController,
+                    count: _dotCount,
+                    effect: PreviousColoredSlideEffect(
+                      dotHeight: 4.0,
+                      spacing: 5,
+                      activeDotColor: AppColors.primary,
+                      dotColor: AppColors.grey,
+                    ),
                   ),
+                ),
+                IconButton(
+                  onPressed: () => context.pop(),
+                  icon: const Icon(Icons.close),
                 ),
               ],
             ),
+            const Gap(10.0),
 
-            // Padding(
-            //   padding: const EdgeInsets.all(16),
-            //   child: CustomElevatedButton(
-            //     text: 'Continue',
-            //     isLoading: authState.isLoading,
-            //     onPressed: _handleContinue,
-            //   ),
-            // ),
+            // Content Area - Make it scrollable and flexible
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    const Gap(24.0),
+                    Image.asset(Logos.logo, scale: 3),
+                    const Gap(24.0),
+                    IntroText(
+                      title: SignupItems.items[_currentPage].title,
+                      subtitle: _getPageSubtitle(),
+                    ),
+                    const Gap(20.0),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.4,
+                      child: PageView(
+                        controller: _pageController,
+                        physics: const NeverScrollableScrollPhysics(),
+                        children: [
+                          _nameView(),
+                          _emailView(),
+                          _usernameView(),
+                          _passwordView(),
+                          _otpView(),
+                          _dobView(),
+                          _countryView(),
+                          _languageView(),
+                          _currencyView(),
+                        ],
+                      ),
+                    ),
+                    const Gap(80), // Space for bottom button
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),
       bottomSheet: Padding(
-        padding: const EdgeInsets.all(16).copyWith(bottom: 32),
+        padding: const EdgeInsets.all(
+          16,
+        ).copyWith(bottom: 32), // Keep original padding
         child: CustomElevatedButton(
           text: 'Continue',
           isLoading: authState.isLoading,
