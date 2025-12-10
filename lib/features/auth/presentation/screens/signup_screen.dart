@@ -63,8 +63,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
 
   bool showPassword = false;
 
-  // Total number of steps in the signup flow
-  // final int _dotCount = 6;
+  final ScrollController _scrollController = ScrollController();
+  final FocusNode _focusNode = FocusNode();
 
   @override
   void initState() {
@@ -75,6 +75,25 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
       if (newPage != _currentPage) {
         setState(() {
           _currentPage = newPage;
+        });
+      }
+    });
+
+    // This listener triggers whenever the focus changes
+    _focusNode.addListener(() {
+      if (_focusNode.hasFocus) {
+        // We add a small delay to allow the keyboard animation to complete or start
+        Future.delayed(const Duration(milliseconds: 300), () {
+          if (mounted && _focusNode.context != null) {
+            Scrollable.ensureVisible(
+              _focusNode.context!,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+              // alignmentPolicy allows us to position the field nicely in the view
+              alignmentPolicy: ScrollPositionAlignmentPolicy.explicit,
+              alignment: 0.5, // 0.5 attempts to center the field on screen
+            );
+          }
         });
       }
     });
@@ -90,6 +109,10 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
     _dobController.dispose();
     _countryController.dispose();
     _pageController.dispose();
+
+    _scrollController.dispose();
+    _focusNode.dispose();
+
     super.dispose();
   }
 
@@ -277,7 +300,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
     final authState = ref.watch(authProvider);
 
     return Scaffold(
-      // 1. Keep this true so the body shrinks when keyboard opens
       resizeToAvoidBottomInset: true,
       body: SafeArea(
         child: Column(
@@ -310,8 +332,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
             const Gap(10.0),
 
             // --- SCROLLABLE CONTENT ---
-            // This Expanded widget will take up all space NOT used by the top bar or bottom button.
-            // When keyboard opens, this area shrinks, making the ScrollView active.
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(16.0),
@@ -326,8 +346,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                     ),
                     const Gap(20.0),
                     SizedBox(
-                      // Note: 0.4 height is fine, but if the keyboard is very tall,
-                      // the user will simply scroll to see this content.
                       height: MediaQuery.of(context).size.height * 0.4,
                       child: PageView(
                         controller: _pageController,
@@ -345,15 +363,12 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         ],
                       ),
                     ),
-                    // Removed the Gap(80) here because the button is no longer floating over the content
                   ],
                 ),
               ),
             ),
 
             // --- BOTTOM BUTTON ---
-            // Moved from bottomSheet to here.
-            // It will stick to the bottom of the screen, and ride up with the keyboard.
             Padding(
               padding: const EdgeInsets.all(16.0).copyWith(bottom: 16),
               child: CustomElevatedButton(
@@ -365,7 +380,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
           ],
         ),
       ),
-      // Remove the bottomSheet property entirely
     );
   }
   // --- Page Views ---
