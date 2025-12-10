@@ -48,7 +48,6 @@ class IntroText extends StatelessWidget {
           ),
           const Gap(16.0),
         ],
-
         Text(
           title,
           textAlign: alignment == TextAlignment.center

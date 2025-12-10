@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/utils/assets/logos.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../auth/presentation/screens/signup_screen.dart';
 import '../../domain/models/onboarding_item.dart';
@@ -39,14 +40,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           duration: const Duration(milliseconds: 500),
           curve: Curves.easeIn,
         );
-      } else {
-        // If it is the last page, loop back to the first page
-        _pageController.animateToPage(
-          0,
-          duration: const Duration(milliseconds: 500),
-          curve: Curves.easeIn,
-        );
       }
+      // else {
+      //   // If it is the last page, loop back to the first page
+      //   _pageController.animateToPage(
+      //     0,
+      //     duration: const Duration(milliseconds: 500),
+      //     curve: Curves.easeIn,
+      //   );
+      // }
     });
   }
 
@@ -64,14 +66,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Padding(
-              padding: Breakpoints.screenPadding(context),
-              child: IntroText(
-                title: OnboardingItem.items[_currentIndex].title,
-                subtitle: OnboardingItem.items[_currentIndex].description,
-                showLogo: true,
-              ),
+            const Gap(16.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              spacing: 8,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Image.asset(Logos.logo, scale: 5),
+                Image.asset(Logos.logoText),
+              ],
             ),
+            const Gap(16.0),
             Expanded(
               child: PageView(
                 controller: _pageController,
@@ -82,19 +87,35 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 },
                 children: OnboardingItem.items
                     .map(
-                      (e) => Stack(
-                        alignment: Alignment.center,
+                      (e) => Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        // mainAxisSize: MainAxisSize.min,
                         children: [
-                          Image.asset(
-                            e.imagePath,
-                            scale: switch (_currentIndex) {
-                              0 => 1.1,
-                              1 => 1.1,
-                              2 => 1.3,
-                              3 => 1.3,
-                              _ => 0.5,
-                            },
+                          Padding(
+                            padding: Breakpoints.screenPadding(context),
+                            child: IntroText(
+                              title: OnboardingItem.items[_currentIndex].title,
+                              subtitle: OnboardingItem
+                                  .items[_currentIndex]
+                                  .description,
+                            ),
                           ),
+                          Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Image.asset(
+                                e.imagePath,
+                                scale: switch (_currentIndex) {
+                                  0 => 1.1,
+                                  1 => 1.1,
+                                  2 => 1.3,
+                                  3 => 1.3,
+                                  _ => 0.5,
+                                },
+                              ),
+                            ],
+                          ),
+                          const Gap(16),
                         ],
                       ),
                     )
