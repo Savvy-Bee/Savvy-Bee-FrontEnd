@@ -1,12 +1,12 @@
 class LeaderboardEntry {
   final String id;
-  final LeaderboardUser userID;
+  final LeaderboardUser? userID;
   final int flowers;
   final int honeyDrop;
 
   LeaderboardEntry({
     required this.id,
-    required this.userID,
+    this.userID,
     required this.flowers,
     required this.honeyDrop,
   });
@@ -14,7 +14,9 @@ class LeaderboardEntry {
   factory LeaderboardEntry.fromJson(Map<String, dynamic> json) {
     return LeaderboardEntry(
       id: json['_id'] as String,
-      userID: LeaderboardUser.fromJson(json['UserID'] as Map<String, dynamic>),
+      userID: json['UserID'] != null
+          ? LeaderboardUser.fromJson(json['UserID'] as Map<String, dynamic>)
+          : null,
       flowers: json['Flowers'] as int,
       honeyDrop: json['HoneyDrop'] as int,
     );
@@ -23,7 +25,7 @@ class LeaderboardEntry {
   Map<String, dynamic> toJson() {
     return {
       '_id': id,
-      'UserID': userID.toJson(),
+      'UserID': userID?.toJson(),
       'Flowers': flowers,
       'HoneyDrop': honeyDrop,
     };

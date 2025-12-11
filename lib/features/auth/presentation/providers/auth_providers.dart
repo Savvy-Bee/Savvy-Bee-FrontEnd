@@ -7,6 +7,7 @@ import 'package:savvy_bee_mobile/core/services/storage_service.dart';
 import 'package:savvy_bee_mobile/features/auth/data/repositories/auth_repository.dart';
 import 'package:savvy_bee_mobile/features/auth/domain/models/auth_models.dart';
 
+import '../../../../core/network/models/api_response_model.dart';
 import '../../domain/models/user.dart';
 
 // Auth repository provider
@@ -264,33 +265,22 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   /// Login with email and password
-  Future<bool> login(String email, String password) async {
+  Future<ApiResponse<LoginData>?> login(String email, String password) async {
     state = state.copyWith(isLoading: true, clearError: true);
 
     try {
       final response = await _authRepository.login(email, password);
 
-      if (response.success) {
-        // final user = response.data!;
+      if (response != null && response.success && response.data != null) {
         state = state.copyWith(isLoading: false);
 
-        // Save user data and token
-        // await _saveUserToStorage(user);
-
-        // TODO: Replace with actual token from API response
-        // For now using placeholder - update when backend provides token
-        // if (response.data?.id != null) {
-        //   await _saveAuthToken('user_token_${response.data!.id}');
-        // }
-
-        // log('User logged in successfully: ${user.email}');
-        return true;
+        return response;
       } else {
         state = state.copyWith(
           isLoading: false,
-          errorMessage: response.message,
+          errorMessage: response?.message,
         );
-        return false;
+        return response;
       }
     } catch (e) {
       log('Login error: $e');
@@ -298,7 +288,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
         isLoading: false,
         errorMessage: 'Login failed. Please try again.',
       );
-      return false;
+      return null;
     }
   }
 

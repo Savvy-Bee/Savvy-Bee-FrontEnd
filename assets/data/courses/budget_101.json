@@ -3,6 +3,92 @@
     "courseDescription": "Learn the fundamentals of managing your money so you can budget like a pro",
     "lessons": [
         {
+            "lessonNumber": "1",
+            "lessonTitle": "What is a Budget?",
+            "lessonDescription": "Introduction to budgeting and its importance in managing money",
+            "levels": [
+                {
+                    "levelNumber": 1,
+                    "introduction": "A budget is a plan that helps you manage your money. It shows how much money you earn, how much you spend, and how much you want to save. Budgets help you make sure you're not spending more than you have.",
+                    "sections": [
+                        {
+                            "heading": "What is a Budget?",
+                            "content": "With a good budget, you can reach your goals—like buying something special, paying bills, or saving for the future. When you make a budget, you list your income (money coming in) and your expenses (money going out). Expenses include things like food, transport, clothes, and fun activities. By writing these down, you can see where your money is going."
+                        },
+                        {
+                            "heading": "Why Budgeting Matters",
+                            "content": "Budgeting also helps you make better decisions. Instead of spending on things you don't need, you can focus on what's important. Even if you don't earn a lot, having a budget can help you use your money wisely."
+                        }
+                    ],
+                    "highlights": [
+                        "A budget is a money plan that tracks income, spending, and saving.",
+                        "It helps you avoid overspending and stay in control of your finances.",
+                        "Your budget shows how much money is coming in (income) and going out (expenses).",
+                        "Budgeting helps you reach financial goals.",
+                        "Anyone can use a budget—even if they don't earn much."
+                    ],
+                    "quiz": {
+                        "focus": "Understanding what a budget is and why it's important",
+                        "questions": [
+                            {
+                                "type": "multiChoice",
+                                "question": "What is the main purpose of a budget?",
+                                "options": [
+                                    "To help you spend money faster",
+                                    "To keep track of your money and plan how to use it",
+                                    "To get free items from the store",
+                                    "To avoid writing things down"
+                                ],
+                                "correctAnswer": 1
+                            },
+                            {
+                                "type": "fillInTheGap",
+                                "question": "A budget helps you manage your income and __________.",
+                                "correctAnswer": [
+                                    "expenses"
+                                ]
+                            },
+                            {
+                                "type": "trueFalse",
+                                "question": "You only need a budget if you have a lot of money.",
+                                "correctAnswer": false
+                            },
+                            {
+                                "type": "match",
+                                "question": "Match the terms to their correct meanings:",
+                                "leftOptions": [
+                                    "Income",
+                                    "Expenses",
+                                    "Budget"
+                                ],
+                                "rightOptions": [
+                                    "Money coming in",
+                                    "Money going out (spent)",
+                                    "A plan for managing money"
+                                ],
+                                "correctMatches": {
+                                    "0": 0,
+                                    "1": 1,
+                                    "2": 2
+                                }
+                            },
+                            {
+                                "type": "multiChoice",
+                                "question": "Why is budgeting important?",
+                                "options": [
+                                    "It helps you spend without limits",
+                                    "It helps you forget your financial goals",
+                                    "It helps you save money and avoid overspending",
+                                    "It makes sure you never enjoy your money"
+                                ],
+                                "correctAnswer": 2
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
             "lessonNumber": "2",
             "lessonTitle": "Tracking Your Money",
             "lessonDescription": "Understanding the importance of tracking income and expenses, different methods of tracking, and how it helps with budgeting.",

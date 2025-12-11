@@ -138,7 +138,9 @@ final GoRouter appRouter = GoRouter(
       path: SignupScreen.path,
       name: SignupScreen.path,
       builder: (BuildContext context, GoRouterState state) {
-        return const SignupScreen();
+        return SignupScreen(
+          incompleteSignUpData: state.extra as IncompleteSignUpData?,
+        );
       },
     ),
     GoRoute(
@@ -146,7 +148,9 @@ final GoRouter appRouter = GoRouter(
       name: SignupCompleteScreen.path,
       builder: (BuildContext context, GoRouterState state) {
         return SignupCompleteScreen(
-          isPasswordReset: state.extra as bool? ?? false,
+          type:
+              state.extra as SignupCompleteScreenType? ??
+              SignupCompleteScreenType.signup,
         );
       },
     ),

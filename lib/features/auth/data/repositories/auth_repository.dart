@@ -145,61 +145,56 @@ class AuthRepository {
   }
 
   /// Login with email and password
-  Future<ApiResponse<bool>> login(String email, String password) async {
+  Future<ApiResponse<LoginData>?> login(String email, String password) async {
     try {
-      if (kDebugMode) {
-        log('Attempting login for: $email');
-      }
-
       final response = await _apiClient.post(
         ApiEndpoints.login,
         data: {'email': email, 'password': password},
       );
 
-      if (kDebugMode) {
-        log('Login response received');
+      // Parse the login response with nested token structure
+      final loginResponse = ApiResponse<LoginData>.fromJson(
+        response.data,
+        (json) => LoginData.fromJson(json),
+      );
+
+      if (loginResponse.success && loginResponse.data != null) {
+        // Save token
+        await setAuthToken(loginResponse.data!.token);
       }
 
-      // Parse the login response with nested token structure
-      final loginResponse = LoginResponse.fromJson(response.data);
-
-      if (loginResponse.success) {
-        // Save and set token
-        await setAuthToken(loginResponse.data!.token);
-
-        if (kDebugMode) {
-          log(
-            'Login successful - Token: ${loginResponse.data!.token.substring(0, 20)}...',
+      return loginResponse;
+    } on ApiException catch (e) {
+      // Check if the error response contains structured data
+      if (e.data != null && e.data is Map<String, dynamic>) {
+        try {
+          // Try to parse the error response as an ApiResponse
+          final errorResponse = ApiResponse<LoginData>.fromJson(
+            e.data,
+            (json) => LoginData.fromJson(json),
           );
 
-          // Verify token was set in API client
-          final apiToken = _apiClient.getAuthToken();
-          if (apiToken != null) {
-            log('✓ Token verified in API client');
-          } else {
-            log('✗ WARNING: Token NOT in API client!');
-          }
+          // Return the parsed error response so we can access verification details
+          return errorResponse;
+        } catch (parseError) {
+          // If parsing fails, return a generic error response
+          return ApiResponse<LoginData>(
+            success: false,
+            message: e.message,
+            data: null,
+          );
         }
-
-        return ApiResponse<bool>(success: true, message: loginResponse.message);
-      } else if (loginResponse.success) {
-        if (kDebugMode) {
-          log('✗ WARNING: Login successful but NO TOKEN in response!');
-        }
-
-        return ApiResponse<bool>(
-          success: false,
-          message: 'Login failed: No authentication token received',
-        );
-      } else {
-        return ApiResponse<bool>(
-          success: false,
-          message: loginResponse.message,
-        );
       }
+
+      // If no structured data, return a generic error response
+      return ApiResponse<LoginData>(
+        success: false,
+        message: e.message,
+        data: null,
+      );
     } catch (e) {
       if (kDebugMode) {
-        log('Login exception: $e');
+        log('Login unexpected exception: $e');
       }
       return _handleError(e, 'Login');
     }

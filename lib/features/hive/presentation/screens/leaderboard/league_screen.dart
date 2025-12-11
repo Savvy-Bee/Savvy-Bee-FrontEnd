@@ -72,42 +72,50 @@ class _LeagueScreenState extends ConsumerState<LeagueScreen> {
 
           Expanded(
             child: leaderboardAsync.when(
-              data: (entries) => RefreshIndicator(
-                onRefresh: () =>
-                    ref.read(leaderboardProvider.notifier).refresh(),
-                child: ListView.builder(
-                  itemCount:
-                      entries.length + 1, // +1 for promotion zone indicator
-                  itemBuilder: (context, index) {
-                    // Show promotion zone indicator after 10th position
-                    if (index == 10 && entries.length > 10) {
-                      return Column(
-                        children: [
-                          const Divider(height: 20),
-                          _buildPromotionZoneIndicator(),
-                        ],
+              skipLoadingOnRefresh: false,
+              data: (entries) {
+                final validEntries = entries
+                    .where((e) => e.userID != null)
+                    .toList();
+                return RefreshIndicator(
+                  onRefresh: () =>
+                      ref.read(leaderboardProvider.notifier).refresh(),
+                  child: ListView.builder(
+                    itemCount:
+                        validEntries.length +
+                        1, // +1 for promotion zone indicator
+                    itemBuilder: (context, index) {
+                      // Show promotion zone indicator after 10th position
+                      if (index == 10 && validEntries.length > 10) {
+                        return Column(
+                          children: [
+                            const Divider(height: 20),
+                            _buildPromotionZoneIndicator(),
+                          ],
+                        );
+                      }
+
+                      // Adjust index if we're past the promotion zone indicator
+                      final entryIndex = index > 10 ? index - 1 : index;
+
+                      if (entryIndex >= validEntries.length) {
+                        return const SizedBox.shrink();
+                      }
+
+                      final entry = validEntries[entryIndex];
+                      return _buildListTile(
+                        entry: entry,
+                        rank: entryIndex + 1,
+                        isLeader: entryIndex == 0,
                       );
-                    }
-
-                    // Adjust index if we're past the promotion zone indicator
-                    final entryIndex = index > 10 ? index - 1 : index;
-
-                    if (entryIndex >= entries.length) {
-                      return const SizedBox.shrink();
-                    }
-
-                    final entry = entries[entryIndex];
-                    return _buildListTile(
-                      entry: entry,
-                      rank: entryIndex + 1,
-                      isLeader: entryIndex == 0,
-                    );
-                  },
-                ),
-              ),
+                    },
+                  ),
+                );
+              },
               loading: () =>
                   const CustomLoadingWidget(text: 'Fetching leaderboard...'),
               error: (error, stack) => CustomErrorWidget.error(
+                subtitle: error.toString(),
                 onRetry: () => ref.invalidate(leaderboardProvider),
               ),
             ),
@@ -143,6 +151,8 @@ class _LeagueScreenState extends ConsumerState<LeagueScreen> {
     bool isLeader = false,
   }) {
     final user = entry.userID;
+    if (user == null) return const SizedBox.shrink();
+
     final displayName = '${user.firstName} ${user.lastName}'.trim();
 
     // Determine rank display widget

@@ -23,10 +23,19 @@ import '../../../../core/utils/custom_page_indicator.dart';
 import '../../../../core/widgets/custom_snackbar.dart';
 import 'post_signup/signup_complete_screen.dart';
 
+class IncompleteSignUpData {
+  final String email;
+  final int pageIndex;
+
+  IncompleteSignUpData({required this.email, required this.pageIndex});
+}
+
 class SignupScreen extends ConsumerStatefulWidget {
   static String path = '/signup-name';
 
-  const SignupScreen({super.key});
+  final IncompleteSignUpData? incompleteSignUpData;
+
+  const SignupScreen({super.key, this.incompleteSignUpData});
 
   @override
   ConsumerState<SignupScreen> createState() => _SignupScreenState();
@@ -69,6 +78,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   @override
   void initState() {
     super.initState();
+
     // Listen to page changes to clear error messages
     _pageController.addListener(() {
       final newPage = _pageController.page?.round() ?? 0;
@@ -97,6 +107,28 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
         });
       }
     });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final data = widget.incompleteSignUpData;
+      if (data == null) return;
+
+      // Jump to the saved page without animation on first load
+      if (data.pageIndex < _dotCount) {
+        _pageController.jumpToPage(data.pageIndex);
+        _currentPage = data.pageIndex;
+      }
+
+      // Pre-fill email only if non-empty
+      if (data.email.isNotEmpty) {
+        _emailController.text = data.email;
+      }
+
+      // Send OTP if on the OTP verification page
+      if (widget.incompleteSignUpData != null &&
+          widget.incompleteSignUpData?.pageIndex == 4) {
+        _sendOtp();
+      }
+    });
   }
 
   @override
@@ -119,10 +151,35 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   // --- Core Navigation and Submission Logic ---
 
   void _goToPreviousPage() {
+    if (widget.incompleteSignUpData != null) return;
+
     _pageController.previousPage(
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
     );
+  }
+
+  void _sendOtp() async {
+    final authNotifier = ref.read(authProvider.notifier);
+    final authState = ref.read(authProvider);
+
+    if (_emailFormKey.currentState!.validate()) {
+      final success = await authNotifier.resendOtp(
+        _emailController.text.trim(),
+      );
+
+      if (success) {
+        if (mounted) {
+          CustomSnackbar.show(
+            context,
+            'OTP sent successfully',
+            type: SnackbarType.success,
+          );
+        }
+      } else {
+        _showError(authState.errorMessage ?? 'Failed to send OTP');
+      }
+    }
   }
 
   void _goToNextPage() {
@@ -134,9 +191,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
 
   void _showError(String message) {
     CustomSnackbar.show(context, message, type: SnackbarType.error);
-    // setState(() {
-    //   _errorMessage = message;
-    // });
   }
 
   void _handleContinue() async {
@@ -260,7 +314,10 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
           if (success) {
             // Final success, navigate to completion screen
             if (mounted) {
-              context.pushNamed(SignupCompleteScreen.path);
+              context.pushReplacementNamed(
+                SignupCompleteScreen.path,
+                extra: SignupCompleteScreenType.signup,
+              );
             }
           } else {
             _showError(

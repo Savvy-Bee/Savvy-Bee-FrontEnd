@@ -86,7 +86,7 @@ class _LessonRoomScreenState extends ConsumerState<LessonRoomScreen> {
               ? section.bulletPoints!
               :[
           ],
-          // if (section.content != null) section.content!,
+          bodyText: section.content,
         ),
       );
     }
@@ -169,7 +169,11 @@ class _LessonRoomScreenState extends ConsumerState<LessonRoomScreen> {
                   onPressed: () {
                     context.pushReplacementNamed(
                       QuizScreen.path,
-                      extra: QuizData(lessonNumber: widget.args.lessonNumber, levelNumber: level.levelNumber, quizQuestions: level.quiz.questions),
+                      extra: QuizData(
+                        lessonNumber: widget.args.lessonNumber,
+                        levelNumber: level.levelNumber,
+                        quizQuestions: level.quiz.questions,
+                      ),
                     );
                   },
                 ),

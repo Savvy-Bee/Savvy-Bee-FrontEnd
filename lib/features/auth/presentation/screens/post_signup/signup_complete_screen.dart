@@ -4,18 +4,18 @@ import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/logos.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/intro_text.dart';
-import 'package:savvy_bee_mobile/features/auth/presentation/screens/post_signup/bottom_sheets/referrer_screen.dart';
-import 'package:savvy_bee_mobile/features/home/presentation/screens/home_screen.dart';
-import 'package:savvy_bee_mobile/features/premium/presentation/screens/premium_screen.dart';
+import 'package:savvy_bee_mobile/features/auth/presentation/screens/login_screen.dart';
 
 import '../../../../../core/utils/assets/illustrations.dart';
+
+enum SignupCompleteScreenType { passwordReset, signup }
 
 class SignupCompleteScreen extends StatefulWidget {
   static String path = '/signup-complete';
 
-  final bool isPasswordReset;
+  final SignupCompleteScreenType type;
 
-  const SignupCompleteScreen({super.key, required this.isPasswordReset});
+  const SignupCompleteScreen({super.key, required this.type});
 
   @override
   State<SignupCompleteScreen> createState() => _SignupCompleteScreenState();
@@ -37,10 +37,11 @@ class _SignupCompleteScreenState extends State<SignupCompleteScreen> {
                   Image.asset(Logos.logo, scale: 4),
                   const Gap(24),
                   IntroText(
-                    title: widget.isPasswordReset
+                    title: widget.type == SignupCompleteScreenType.passwordReset
                         ? "You're all set!"
                         : "You're all\nsigned up!",
-                    subtitle: widget.isPasswordReset
+                    subtitle:
+                        widget.type == SignupCompleteScreenType.passwordReset
                         ? 'Welcome back'
                         : "Welcome to Savvy Bee!",
                   ),
@@ -52,11 +53,12 @@ class _SignupCompleteScreenState extends State<SignupCompleteScreen> {
                 buttonColor: CustomButtonColor.black,
                 showArrow: true,
                 onPressed: () {
-                  if (widget.isPasswordReset) {
+                  if (widget.type == SignupCompleteScreenType.passwordReset) {
                     context.pop();
                   } else {
                     // context.goNamed(ReferrerScreen.path);
-                    context.pushNamed(HomeScreen.path);
+                    // context.pushNamed(HomeScreen.path);
+                    context.pushReplacementNamed(LoginScreen.path);
                   }
                 },
               ),

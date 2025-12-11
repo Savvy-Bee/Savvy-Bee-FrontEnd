@@ -198,6 +198,7 @@ class ApiClient {
   ApiException _handleError(DioException error) {
     String message;
     int? statusCode = error.response?.statusCode;
+    dynamic responseData = error.response?.data;
 
     switch (error.type) {
       case DioExceptionType.connectionTimeout:
@@ -235,7 +236,7 @@ class ApiClient {
     return ApiException(
       message: message,
       statusCode: statusCode,
-      data: error.response?.data,
+      data: responseData, // Preserve the full response data
     );
   }
 

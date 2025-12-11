@@ -175,7 +175,10 @@ class _PasswordResetScreenState extends ConsumerState<PasswordResetScreen> {
           // } else {
           //   _showError(authState.errorMessage ?? 'Failed to reset password');
           // }
-          context.pushReplacementNamed(SignupCompleteScreen.path, extra: true);
+          context.pushReplacementNamed(
+            SignupCompleteScreen.path,
+            extra: SignupCompleteScreenType.passwordReset,
+          );
           break;
 
         default:

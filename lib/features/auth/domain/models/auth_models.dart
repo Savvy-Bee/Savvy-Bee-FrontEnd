@@ -129,13 +129,19 @@ class LoginData {
 class Verification {
   final bool emailVerification;
   final bool otherDetails;
+  final bool postOnboarding;
 
-  Verification({required this.emailVerification, required this.otherDetails});
+  Verification({
+    required this.emailVerification,
+    required this.otherDetails,
+    required this.postOnboarding,
+  });
 
   factory Verification.fromJson(Map<String, dynamic> json) {
     return Verification(
       emailVerification: json['EmailVerification'] ?? false,
       otherDetails: json['OtherDetails'] ?? false,
+      postOnboarding: json['Postonboarding'] ?? false,
     );
   }
 
@@ -143,6 +149,7 @@ class Verification {
     return {
       'EmailVerification': emailVerification,
       'OtherDetails': otherDetails,
+      'Postonboarding': postOnboarding,
     };
   }
 }

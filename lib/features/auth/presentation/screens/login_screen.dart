@@ -9,6 +9,7 @@ import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';
 import 'package:savvy_bee_mobile/core/widgets/intro_text.dart';
 import 'package:savvy_bee_mobile/features/auth/presentation/providers/auth_providers.dart';
 import 'package:savvy_bee_mobile/features/auth/presentation/screens/password_reset/password_reset_screen.dart';
+import 'package:savvy_bee_mobile/features/auth/presentation/screens/signup_screen.dart';
 import 'package:savvy_bee_mobile/features/home/presentation/screens/home_screen.dart';
 
 import '../../../../core/widgets/custom_snackbar.dart';
@@ -41,21 +42,103 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     if (!_formKey.currentState!.validate()) return;
 
     final authNotifier = ref.read(authProvider.notifier);
-    final success = await authNotifier.login(
+    final response = await authNotifier.login(
       emailController.text.toLowerCase().trim(),
       passwordController.text.trim(),
     );
 
-    if (!success) {
-      if (mounted) {
+    if (!mounted) return;
+
+    // Check if response is null
+    if (response == null) {
+      CustomSnackbar.show(
+        context,
+        ref.read(authProvider).errorMessage ?? 'Login failed',
+        type: SnackbarType.error,
+      );
+      return;
+    }
+
+    // Check if login was successful
+    if (!response.success) {
+      // Check verification status even on failure
+      final verification = response.data?.verification;
+
+      if (verification != null) {
+        // Handle incomplete email verification
+        if (verification.emailVerification == false) {
+          CustomSnackbar.show(
+            context,
+            response.message,
+            type: SnackbarType.error,
+          );
+          
+          context.pushNamed(
+            SignupScreen.path,
+            extra: IncompleteSignUpData(
+              email: emailController.text.trim(),
+              pageIndex: 4,
+            ),
+          );
+          return;
+        }
+
+        // Handle incomplete profile
+        if (verification.otherDetails == false) {
+          CustomSnackbar.show(
+            context,
+            response.message,
+            type: SnackbarType.error,
+          );
+          context.pushNamed(
+            SignupScreen.path,
+            extra: IncompleteSignUpData(
+              email: emailController.text.trim(),
+              pageIndex: 5,
+            ),
+          );
+          return;
+        }
+      }
+
+      // Generic error message if no specific verification issue
+      CustomSnackbar.show(context, response.message, type: SnackbarType.error);
+      return;
+    }
+
+    // Success case - both response.success is true and data exists
+    if (response.data != null) {
+      final verification = response.data?.verification;
+
+      // Double-check verification status even on success
+      if (verification?.emailVerification == false) {
         CustomSnackbar.show(
           context,
-          ref.read(authProvider).errorMessage ?? 'Login failed',
+          'Please verify your email first',
           type: SnackbarType.error,
         );
+        context.pushNamed(SignupScreen.path, extra: 4);
+        return;
       }
+
+      if (verification?.otherDetails == false) {
+        CustomSnackbar.show(
+          context,
+          'Please complete your profile',
+          type: SnackbarType.error,
+        );
+        context.pushNamed(SignupScreen.path, extra: 5);
+        return;
+      }
+
+      // All checks passed, proceed to home
+      context.goNamed(HomeScreen.path);
     } else {
-      if (mounted) context.goNamed(HomeScreen.path);
+      CustomSnackbar.show(
+        context,
+        'Login failed - no data received',
+        type: SnackbarType.error,
+      );
     }
   }
 
