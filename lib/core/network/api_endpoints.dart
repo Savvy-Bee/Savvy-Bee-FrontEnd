@@ -79,7 +79,7 @@ class ApiEndpoints {
 
   /// Streak Endpoints
   static String streakDetails = '/hive/streak/details';
-  static String streaktopUp = '/hive/streak/details';
+  static String streaktopUp = '/hive/streak/topup';
   static String hiveDetails = '/hive/details';
   static String resourceTopUp(String type) => '/hive/operations/$type';
   static String addAchievement = '/hive/operations/add/achievement';

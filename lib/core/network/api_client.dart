@@ -72,13 +72,10 @@ class ApiClient {
         .get();
 
     if (docSnapshot.exists) {
-      log('Health Check Retrieved: ${docSnapshot.data()}');
-
       final isValidRequest = docSnapshot.get('isValidRequest') as bool;
 
       return isValidRequest;
     } else {
-      log('Document does not exist');
       return true;
     }
   }
