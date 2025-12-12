@@ -37,6 +37,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final coursesAsync = ref.watch(allCoursesProvider);
 
     return homeData.when(
+      skipLoadingOnRefresh: false,
       data: (value) {
         final data = value.data;
 

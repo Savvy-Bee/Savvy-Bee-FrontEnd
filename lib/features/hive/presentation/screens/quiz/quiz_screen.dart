@@ -86,6 +86,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
   @override
   void dispose() {
     _pageController.dispose();
+    _fillInGapTextController.dispose();
     super.dispose();
   }
 
@@ -107,8 +108,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
     setState(() {
       final newMatches = Map<int, int>.from(state.matches ?? {});
 
-      // Just add or update the match for this left option
-      // (Don't remove right option from other matches since they can be reused)
+      // Add or update the match for this left option
       newMatches[leftIndex] = rightIndex;
 
       _pageStates[_currentPage] = state.copyWith(
@@ -137,9 +137,31 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
         QuizSuccessErrorBottomSheet.show(
           context: context,
           isSuccess: allCorrect,
-          onButtonPressed: _goToNextPage,
+          onButtonPressed: () {
+            context.pop(); // Close the bottom sheet
+
+            if (allCorrect) {
+              _goToNextPage();
+            } else {
+              // Reset the match question state to allow retry
+              _resetMatchQuestion();
+            }
+          },
         );
       }
+    });
+  }
+
+  // Reset match question state for retry
+  void _resetMatchQuestion() {
+    setState(() {
+      _pageStates[_currentPage] = _pageStates[_currentPage]!.copyWith(
+        matches: {},
+        selectedLeftIndex: null,
+        isChecked: false,
+        isCorrect: false,
+        errorMessage: null,
+      );
     });
   }
 
@@ -154,9 +176,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
         return false;
       }
       return state.matches!.entries.every((entry) {
-        final leftOption = question.leftOptions[entry.key];
-        final correctRightIndex = question.correctMatches[leftOption];
-        return correctRightIndex == entry.value;
+        return _isMatchCorrect(entry.key, entry.value);
       });
     } else if (question is DragAndDropQuestion) {
       return _isDragAndDropCorrect(question, state);
@@ -172,6 +192,8 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
     FillInTheGapQuestion question,
     QuizPageState state,
   ) {
+    if (state.filledGap == null || state.filledGap!.isEmpty) return false;
+
     final answer = state.filledGap!.trim().toLowerCase();
 
     final lowercasedCorrect = question.correctAnswer
@@ -186,6 +208,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
   ) {
     final droppedItems = state.droppedItems;
     if (droppedItems == null) return false;
+
     // 1. Check if all items have been dropped.
     int totalDroppedCount = 0;
     for (var list in droppedItems.values) {
@@ -194,6 +217,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
     if (totalDroppedCount != question.items.length) {
       return false; // Not all items are placed.
     }
+
     // 2. Check if each item is in the correct group.
     for (var groupEntry in droppedItems.entries) {
       final String groupName = groupEntry.key;
@@ -203,7 +227,6 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
       final correctIndicesForGroup = question.groups[groupName] ?? [];
 
       // Check if the dropped items match the correct items for this group.
-      // We can convert to sets to ignore order.
       if (Set<int>.from(itemIndices).length !=
               Set<int>.from(correctIndicesForGroup).length ||
           !Set<int>.from(itemIndices).containsAll(correctIndicesForGroup)) {
@@ -213,32 +236,18 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
     return true;
   }
 
-  bool _isTrueFalseCorrect(TrueFalseQuestion question, QuizPageState state) {
-    return state.selectedBool == question.correctAnswer;
-  }
-
   void _checkAnswer() {
     FocusScope.of(context).unfocus();
 
     final state = _pageStates[_currentPage]!;
     final question = _quizQuestions[_currentPage];
 
+    // Match questions handle checking differently
     if (question.type == 'match') return;
 
-    bool isCorrect;
-    if (question is FillInTheGapQuestion) {
-      isCorrect = _isFillInTheGapCorrect(question, state);
-    } else if (question is TrueFalseQuestion) {
-      isCorrect = _isTrueFalseCorrect(question, state);
-    } else if (question is DragAndDropQuestion) {
-      isCorrect = _isDragAndDropCorrect(question, state);
-    } else {
-      isCorrect = _isAnswerCorrect(question, state);
-    }
+    bool isCorrect = _isAnswerCorrect(question, state);
 
     setState(() {
-      _fillInGapTextController.clear();
-
       _pageStates[_currentPage] = state.copyWith(
         isChecked: true,
         isCorrect: isCorrect,
@@ -253,15 +262,58 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
         context: context,
         isSuccess: isCorrect,
         onButtonPressed: () {
-          // _goToNextPage();
+          context.pop(); // Close the bottom sheet
 
           if (isCorrect) {
             _goToNextPage();
           } else {
-            context.pop();
+            // Reset the question state for retry (except match questions)
+            _resetQuestionState();
           }
         },
       );
+    });
+  }
+
+  // Reset question state for retry
+  void _resetQuestionState() {
+    final question = _quizQuestions[_currentPage];
+    final state = _pageStates[_currentPage]!;
+
+    setState(() {
+      if (question is ReorderQuestion) {
+        // Reset to original order
+        _pageStates[_currentPage] = state.copyWith(
+          reorderedOptions: List.from(question.options),
+          isChecked: false,
+          isCorrect: false,
+          errorMessage: null,
+        );
+      } else if (question is FillInTheGapQuestion) {
+        _fillInGapTextController.clear();
+        _pageStates[_currentPage] = state.copyWith(
+          filledGap: null,
+          isChecked: false,
+          isCorrect: false,
+          errorMessage: null,
+        );
+      } else if (question is DragAndDropQuestion) {
+        _pageStates[_currentPage] = state.copyWith(
+          droppedItems: {},
+          isChecked: false,
+          isCorrect: false,
+          errorMessage: null,
+        );
+      } else {
+        // For multi-choice and true/false, just reset the checked state
+        _pageStates[_currentPage] = state.copyWith(
+          selectedOption: null,
+          selectedBool: null,
+          isChecked: false,
+          isCorrect: false,
+          errorMessage: null,
+        );
+      }
     });
   }
 
@@ -274,8 +326,6 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
   }
 
   void _goToNextPage() {
-    context.pop();
-
     if (_currentPage < _quizQuestions.length - 1) {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
@@ -309,7 +359,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
           0;
       return totalDropped == question.items.length;
     } else if (question is MatchQuestion) {
-      return false;
+      return false; // Match questions auto-check when complete
     }
     return false;
   }
@@ -324,6 +374,10 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
         return 'MATCH THE PAIRS';
       case 'dragAndDrop':
         return 'GROUP THE ITEMS';
+      case 'fillInTheGap':
+        return 'FILL IN THE GAP';
+      case 'trueFalse':
+        return 'TRUE OR FALSE';
       default:
         return 'ANSWER';
     }
@@ -492,7 +546,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
         onChanged: (value) {
           setState(() {
             _pageStates[pageIndex] = state.copyWith(
-              filledGap: value.toLowerCase().trim(),
+              filledGap: value.trim(),
               errorMessage: null,
               isChecked: false,
             );
@@ -536,6 +590,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
             newDroppedItems[group] = [];
           }
           newDroppedItems[group]!.add(itemIndex);
+
           setState(() {
             _pageStates[pageIndex] = state.copyWith(
               droppedItems: newDroppedItems,
@@ -544,10 +599,10 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
             );
           });
         },
-
         isItemCorrect: (itemIndex) {
-          if (!state.isChecked)
+          if (!state.isChecked) {
             return null; // Don't show correctness before check
+          }
 
           // Find which group the user dropped this item into.
           String? userGroup;
@@ -561,11 +616,10 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
           // Find the correct group for this item from the question data.
           for (var entry in question.groups.entries) {
             if (entry.value.contains(itemIndex)) {
-              return entry.key ==
-                  userGroup; // Compare user's group with correct group.
+              return entry.key == userGroup;
             }
           }
-          return false; // Item was not found in any correct group definition.
+          return false;
         },
         state: state,
       );
@@ -574,7 +628,6 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
   }
 
   void _showResults() {
-    // Calculate final score and mark quiz as completed
     final lessonNumber = widget.quizData.lessonNumber;
     final levelNumber = widget.quizData.levelNumber;
 
@@ -587,7 +640,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
       LevelCompleteScreen.path,
       extra: LevelCompleteArgs(
         score: _score.toDouble(),
-        newFlowers: _currentPage + 1,
+        newFlowers: _quizQuestions.length,
       ),
     );
   }

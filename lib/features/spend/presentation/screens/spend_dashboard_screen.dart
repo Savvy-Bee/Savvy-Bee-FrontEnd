@@ -179,7 +179,7 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             IconButton.filled(
-              onPressed: () => context.pushNamed(TransactionHistoryScreen.path),
+              onPressed: () => context.pushNamed(CreateWalletScreen.path),
               icon: Icon(Icons.add),
               style: IconButton.styleFrom(
                 backgroundColor: AppColors.black,

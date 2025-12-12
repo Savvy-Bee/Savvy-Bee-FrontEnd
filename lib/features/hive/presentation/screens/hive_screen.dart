@@ -8,6 +8,7 @@ import 'package:savvy_bee_mobile/core/utils/assets/illustrations.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/article_card.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_loading_widget.dart';
 import 'package:savvy_bee_mobile/core/widgets/section_title_widget.dart';
 import 'package:savvy_bee_mobile/core/widgets/icon_text_row_widget.dart';
 import 'package:savvy_bee_mobile/features/hive/domain/models/course.dart';
@@ -19,6 +20,9 @@ import 'package:savvy_bee_mobile/features/profile/presentation/screens/profile_s
 
 import '../../../../core/utils/assets/app_icons.dart';
 import '../../../../core/widgets/custom_card.dart';
+import '../../../../core/widgets/custom_error_widget.dart';
+import '../../../home/domain/models/home_data.dart';
+import '../../../home/presentation/providers/home_data_provider.dart';
 import '../providers/hive_provider.dart';
 
 class HiveScreen extends ConsumerStatefulWidget {
@@ -78,13 +82,16 @@ class _HiveScreenState extends ConsumerState<HiveScreen> {
     final coursesAsync = ref.watch(allCoursesProvider);
     final hiveAsync = ref.watch(hiveNotifierProvider);
 
+    final homeDataAsync = ref.watch(homeDataProvider);
+
     return Scaffold(
-      appBar: _buildAppBar(hiveAsync),
+      appBar: _buildAppBar(hiveAsync, homeDataAsync),
       body: SafeArea(
         child: RefreshIndicator(
           onRefresh: () async {
-            await ref.read(hiveNotifierProvider.notifier).refreshAll();
+            ref.read(hiveNotifierProvider.notifier).refreshAll();
             ref.invalidate(allCoursesProvider);
+            ref.invalidate(homeDataProvider);
           },
           child: ListView(
             children: [
@@ -95,8 +102,11 @@ class _HiveScreenState extends ConsumerState<HiveScreen> {
               const Gap(16),
               coursesAsync.when(
                 data: (courses) => _buildCoursesSection(courses),
-                loading: () => _buildLoadingSection(),
-                error: (error, stack) => _buildErrorSection(error),
+                loading: () => CustomLoadingWidget(text: 'Loading courses...'),
+                error: (error, stack) => CustomErrorWidget.error(
+                  subtitle: 'Failed to load courses',
+                  onRetry: () => ref.invalidate(allCoursesProvider),
+                ),
               ),
               const Gap(24),
               Padding(
@@ -197,11 +207,24 @@ class _HiveScreenState extends ConsumerState<HiveScreen> {
     );
   }
 
-  AppBar _buildAppBar(AsyncValue<HiveState> hiveAsync) {
+  AppBar _buildAppBar(
+    AsyncValue<HiveState> hiveAsync,
+    AsyncValue<HomeDataResponse> homeDataAsync,
+  ) {
     return AppBar(
-      title: Text(
-        'Hi Danny!',
-        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+      title: homeDataAsync.when(
+        data: (homeData) => Text(
+          'Hi ${homeData.data.firstName}!',
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+        loading: () => Text(
+          'Hi User!',
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+        error: (_, __) => Text(
+          'Hi User!',
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
       ),
       centerTitle: false,
       actions: [
