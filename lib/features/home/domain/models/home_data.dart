@@ -1,22 +1,18 @@
-/// Represents the Kyc status data structure.
 class Kyc {
   final bool nin;
   final bool bvn;
 
   Kyc({required this.nin, required this.bvn});
 
-  /// Factory constructor to create a Kyc instance from a JSON map.
   factory Kyc.fromJson(Map<String, dynamic> json) {
     return Kyc(nin: json['NIN'] as bool, bvn: json['BVN'] as bool);
   }
 
-  /// Converts the Kyc instance to a JSON map.
   Map<String, dynamic> toJson() {
     return {'NIN': nin, 'BVN': bvn};
   }
 }
 
-/// Represents the AIData structure.
 class AIData {
   final String message;
   final num ratings;
@@ -24,7 +20,6 @@ class AIData {
 
   AIData({required this.message, required this.ratings, required this.status});
 
-  /// Factory constructor to create an AIData instance from a JSON map.
   factory AIData.fromJson(Map<String, dynamic> json) {
     return AIData(
       message: json['message'] as String,
@@ -33,13 +28,117 @@ class AIData {
     );
   }
 
-  /// Converts the AIData instance to a JSON map.
   Map<String, dynamic> toJson() {
     return {'message': message, 'Ratings': ratings, 'Status': status};
   }
 }
 
-/// Represents the main 'data' structure containing user and AI information.
+class HiveStats {
+  final String id;
+  final int streak;
+  final int flowers;
+  final int honeyDrop;
+  final String createdAt;
+  final String updatedAt;
+  final int totalFlower;
+
+  HiveStats({
+    required this.id,
+    required this.streak,
+    required this.flowers,
+    required this.honeyDrop,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.totalFlower,
+  });
+
+  factory HiveStats.fromJson(Map<String, dynamic> json) {
+    return HiveStats(
+      id: json['_id'] as String,
+      streak: json['Streak'] as int,
+      flowers: json['Flowers'] as int,
+      honeyDrop: json['HoneyDrop'] as int,
+      createdAt: json['createdAt'] as String,
+      updatedAt: json['updatedAt'] as String,
+      totalFlower: json['TotalFlower'] as int,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      '_id': id,
+      'Streak': streak,
+      'Flowers': flowers,
+      'HoneyDrop': honeyDrop,
+      'createdAt': createdAt,
+      'updatedAt': updatedAt,
+      'TotalFlower': totalFlower,
+    };
+  }
+}
+
+class Achievement {
+  final String id;
+  final String name;
+  final String createdAt;
+  final String updatedAt;
+
+  Achievement({
+    required this.id,
+    required this.name,
+    required this.createdAt,
+    required this.updatedAt,
+  });
+
+  factory Achievement.fromJson(Map<String, dynamic> json) {
+    return Achievement(
+      id: json['_id'] as String,
+      name: json['Name'] as String,
+      createdAt: json['createdAt'] as String,
+      updatedAt: json['updatedAt'] as String,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      '_id': id,
+      'Name': name,
+      'createdAt': createdAt,
+      'updatedAt': updatedAt,
+    };
+  }
+}
+
+class HiveData {
+  final HiveStats stats;
+  final List<Achievement> achievement;
+  final String league;
+
+  HiveData({
+    required this.stats,
+    required this.achievement,
+    required this.league,
+  });
+
+  factory HiveData.fromJson(Map<String, dynamic> json) {
+    return HiveData(
+      stats: HiveStats.fromJson(json['hive'] as Map<String, dynamic>),
+      achievement: (json['Achievement'] as List<dynamic>)
+          .map((e) => Achievement.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      league: json['League'] as String,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'hive': stats.toJson(),
+      'Achievement': achievement.map((e) => e.toJson()).toList(),
+      'League': league,
+    };
+  }
+}
+
 class HomeData {
   final String firstName;
   final String lastName;
@@ -47,6 +146,7 @@ class HomeData {
   final Kyc kyc;
   final String profilePhoto;
   final AIData aiData;
+  final HiveData hive;
 
   HomeData({
     required this.firstName,
@@ -55,22 +155,21 @@ class HomeData {
     required this.kyc,
     required this.profilePhoto,
     required this.aiData,
+    required this.hive,
   });
 
-  /// Factory constructor to create a HomeData instance from a JSON map.
   factory HomeData.fromJson(Map<String, dynamic> json) {
     return HomeData(
       firstName: json['FirstName'] as String,
       lastName: json['LastName'] as String,
       username: json['Username'] as String,
-      // Nested objects require calling their respective fromJson methods
       kyc: Kyc.fromJson(json['Kyc'] as Map<String, dynamic>),
       profilePhoto: json['ProfilePhoto'] as String,
       aiData: AIData.fromJson(json['AIData'] as Map<String, dynamic>),
+      hive: HiveData.fromJson(json['Hive'] as Map<String, dynamic>),
     );
   }
 
-  /// Converts the HomeData instance to a JSON map.
   Map<String, dynamic> toJson() {
     return {
       'FirstName': firstName,
@@ -79,11 +178,11 @@ class HomeData {
       'Kyc': kyc.toJson(),
       'ProfilePhoto': profilePhoto,
       'AIData': aiData.toJson(),
+      'Hive': hive.toJson(),
     };
   }
 }
 
-/// Represents the overall API response structure.
 class HomeDataResponse {
   final bool success;
   final String message;

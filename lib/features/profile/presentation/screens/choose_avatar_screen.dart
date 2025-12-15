@@ -22,37 +22,43 @@ class _ChooseAvatarScreenState extends ConsumerState<ChooseAvatarScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Choose avatar')),
-      body: ListView(
+      body: Column(
         children: [
-          _buildSectionTitle('Luna'),
-          _buildAvatarPicker(Avatars.lunaAvatars),
-          const Gap(8),
+          Expanded(
+            child: ListView(
+              children: [
+                _buildSectionTitle('Luna'),
+                _buildAvatarPicker(Avatars.lunaAvatars),
+                const Gap(8),
 
-          _buildSectionTitle('Dash'),
-          _buildAvatarPicker(Avatars.dashAvatars),
-          const Gap(8),
+                _buildSectionTitle('Dash'),
+                _buildAvatarPicker(Avatars.dashAvatars),
+                const Gap(8),
 
-          _buildSectionTitle('Susu'),
-          _buildAvatarPicker(Avatars.susuAvatars),
-          const Gap(8),
+                _buildSectionTitle('Susu'),
+                _buildAvatarPicker(Avatars.susuAvatars),
+                const Gap(8),
 
-          _buildSectionTitle('Penny'),
-          _buildAvatarPicker(Avatars.pennyAvatars),
-          const Gap(8),
+                _buildSectionTitle('Penny'),
+                _buildAvatarPicker(Avatars.pennyAvatars),
+                const Gap(8),
 
-          _buildSectionTitle('Boo'),
-          _buildAvatarPicker(Avatars.booAvatars),
-          const Gap(8),
+                _buildSectionTitle('Boo'),
+                _buildAvatarPicker(Avatars.booAvatars),
+                const Gap(8),
 
-          _buildSectionTitle('Bloom'),
-          _buildAvatarPicker(Avatars.bloomAvatars),
-          const Gap(8),
+                _buildSectionTitle('Bloom'),
+                _buildAvatarPicker(Avatars.bloomAvatars),
+                const Gap(8),
 
-          _buildSectionTitle('Loki'),
-          _buildAvatarPicker(Avatars.lokiAvatars),
-          const Gap(25),
+                _buildSectionTitle('Loki'),
+                _buildAvatarPicker(Avatars.lokiAvatars),
+                const Gap(25),
+              ],
+            ),
+          ),
           Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16).copyWith(bottom: 32),
             child: CustomElevatedButton(
               text: 'Select Avatar',
               onPressed: _selectedAvatar == null

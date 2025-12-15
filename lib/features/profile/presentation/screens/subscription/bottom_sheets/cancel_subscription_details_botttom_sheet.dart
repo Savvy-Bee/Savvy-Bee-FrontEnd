@@ -56,7 +56,7 @@ class _CancelSubscriptionDetailsBottomSheetState
                       fontWeight: FontWeight.bold,
                     ),
                     AppIcon(AppIcons.arrowRightIcon, color: AppColors.error),
-                    textDirection: TextDirection.rtl,
+                    reverse: true,
                     onTap: () => context.pop(),
                   ),
                 ],

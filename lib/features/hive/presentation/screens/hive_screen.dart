@@ -232,7 +232,7 @@ class _HiveScreenState extends ConsumerState<HiveScreen> {
         hiveAsync.when(
           data: (hiveState) => _buildActionButton(
             icon: Image.asset(Illustrations.hiveFlower),
-            text: '${hiveState.hiveData?.flowers ?? 0}',
+            text: '${hiveState.hiveData?.flowers}',
             onTap: () => context.pushNamed(ProfileScreen.path),
           ),
           loading: () => _buildActionButton(

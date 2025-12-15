@@ -12,28 +12,14 @@ class LeaderboardRepository {
 
   /// Get leaderboard
   /// GET /hive/details/leaderboard
-  Future<ApiResponse<List<LeaderboardEntry>>> getLeaderboard() async {
+  Future<ApiResponse<LeaderboardData>> getLeaderboard() async {
     try {
       final response = await _apiClient.get(ApiEndpoints.leaderboard);
 
-      final data = ApiResponse.fromJson(response.data, (data) {
-        // Handle case where data might be the whole response object
-        if (data is Map<String, dynamic> && data.containsKey('data')) {
-          final list = data['data'] as List;
-          return list
-              .map((e) => LeaderboardEntry.fromJson(e as Map<String, dynamic>))
-              .toList();
-        }
-
-        // Handle case where data is already the list
-        if (data is List) {
-          return data
-              .map((e) => LeaderboardEntry.fromJson(e as Map<String, dynamic>))
-              .toList();
-        }
-
-        return <LeaderboardEntry>[];
-      });
+      final data = ApiResponse.fromJson(
+        response.data,
+        (data) => LeaderboardData.fromJson(data),
+      );
 
       return data;
     } catch (e) {

@@ -1,3 +1,23 @@
+class LeaderboardData {
+  final String league;
+  final List<LeaderboardEntry> hive;
+
+  LeaderboardData({required this.league, required this.hive});
+
+  factory LeaderboardData.fromJson(Map<String, dynamic> json) {
+    return LeaderboardData(
+      league: json['league'] as String,
+      hive: (json['hive'] as List<dynamic>)
+          .map((e) => LeaderboardEntry.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {'league': league, 'hive': hive.map((e) => e.toJson()).toList()};
+  }
+}
+
 class LeaderboardEntry {
   final String id;
   final LeaderboardUser? userID;

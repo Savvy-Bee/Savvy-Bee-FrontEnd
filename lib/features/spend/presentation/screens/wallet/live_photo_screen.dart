@@ -12,7 +12,6 @@ import 'package:savvy_bee_mobile/features/spend/presentation/providers/kyc_provi
 
 import '../../../../../core/widgets/custom_button.dart';
 import 'nin_verification_screen.dart';
-import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/wallet_creation_complete_screen.dart';
 
 class LivePhotoScreen extends ConsumerStatefulWidget {
   static String path = '/live-photo';
@@ -72,6 +71,7 @@ class _LivePhotoScreenState extends ConsumerState<LivePhotoScreen>
             context,
             'No cameras available on this device',
             type: SnackbarType.error,
+            position: SnackbarPosition.bottom,
           );
         }
         return;
@@ -90,6 +90,7 @@ class _LivePhotoScreenState extends ConsumerState<LivePhotoScreen>
           context,
           'Failed to initialize camera: $e',
           type: SnackbarType.error,
+          position: SnackbarPosition.bottom,
         );
       }
     }
@@ -118,6 +119,7 @@ class _LivePhotoScreenState extends ConsumerState<LivePhotoScreen>
           context,
           'Camera initialization failed: $e',
           type: SnackbarType.error,
+          position: SnackbarPosition.bottom,
         );
       }
     }
@@ -149,6 +151,7 @@ class _LivePhotoScreenState extends ConsumerState<LivePhotoScreen>
           context,
           'Failed to capture photo: $e',
           type: SnackbarType.error,
+          position: SnackbarPosition.bottom,
         );
       }
     }
@@ -169,6 +172,7 @@ class _LivePhotoScreenState extends ConsumerState<LivePhotoScreen>
         context,
         'Missing verification data (NIN, BVN, or Photo). Please restart the flow.',
         type: SnackbarType.error,
+        position: SnackbarPosition.bottom,
       );
       return;
     }
@@ -239,6 +243,7 @@ class _LivePhotoScreenState extends ConsumerState<LivePhotoScreen>
                 ? error.substring(10)
                 : 'Identity verification failed. Please try again.',
             type: SnackbarType.error,
+            position: SnackbarPosition.bottom,
           );
           ref.read(kycNotifierProvider.notifier).resetState();
         } else if (next.hasValue && next.value != null) {

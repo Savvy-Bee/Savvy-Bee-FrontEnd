@@ -373,7 +373,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             color: actionColor,
             size: 20,
           ),
-          textDirection: TextDirection.rtl,
+          reverse: true,
           padding: EdgeInsets.zero,
           onTap: onactionTap,
         ),

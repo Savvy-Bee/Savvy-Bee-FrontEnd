@@ -2,30 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
-import 'package:savvy_bee_mobile/core/utils/assets/assets.dart';
-import 'package:savvy_bee_mobile/core/utils/assets/illustrations.dart';
-import 'package:savvy_bee_mobile/core/utils/constants.dart';
-import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
-import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
-import 'package:savvy_bee_mobile/core/widgets/game_card.dart';
-import 'package:savvy_bee_mobile/core/widgets/icon_text_row_widget.dart';
-import 'package:savvy_bee_mobile/core/widgets/section_title_widget.dart';
-import 'package:savvy_bee_mobile/features/profile/presentation/screens/account_info_screen.dart';
-import 'package:savvy_bee_mobile/features/profile/presentation/screens/achievements_screen.dart';
-import 'package:savvy_bee_mobile/features/profile/presentation/screens/change_app_icon_screen.dart';
-import 'package:savvy_bee_mobile/features/profile/presentation/screens/choose_avatar_screen.dart';
-import 'package:savvy_bee_mobile/features/profile/presentation/screens/complete_profile_screen.dart';
-import 'package:savvy_bee_mobile/features/profile/presentation/screens/contact_us_screen.dart';
-import 'package:savvy_bee_mobile/features/profile/presentation/screens/financial_health_screen.dart';
-import 'package:savvy_bee_mobile/features/profile/presentation/screens/library_screen.dart';
-import 'package:savvy_bee_mobile/features/profile/presentation/screens/manage_subscription_screen.dart';
-import 'package:savvy_bee_mobile/features/profile/presentation/screens/next_of_kin_screen.dart';
-import 'package:savvy_bee_mobile/features/profile/presentation/screens/security/security_screen.dart';
-import 'package:savvy_bee_mobile/features/profile/presentation/screens/settings_screen.dart';
-import 'package:savvy_bee_mobile/features/profile/presentation/widgets/profile_list_tile.dart';
-import 'package:savvy_bee_mobile/features/spend/presentation/screens/transactions/account_statement_screen.dart';
-
+import 'package:intl/intl.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/utils/assets/assets.dart';
+import '../../../../core/utils/assets/illustrations.dart';
+import '../../../../core/utils/constants.dart';
+import '../../../../core/widgets/custom_button.dart';
+import '../../../../core/widgets/custom_card.dart';
+import '../../../../core/widgets/custom_error_widget.dart';
+import '../../../../core/widgets/custom_loading_widget.dart';
+import '../../../../core/widgets/game_card.dart';
+import '../../../../core/widgets/icon_text_row_widget.dart';
+import '../../../../core/widgets/section_title_widget.dart';
+import '../../../home/presentation/providers/home_data_provider.dart';
+import 'account_info_screen.dart';
+import 'achievements_screen.dart';
+import 'change_app_icon_screen.dart';
+import 'choose_avatar_screen.dart';
+import 'complete_profile_screen.dart';
+import 'contact_us_screen.dart';
+import 'financial_health_screen.dart';
+import 'library_screen.dart';
+import 'manage_subscription_screen.dart';
+import 'next_of_kin_screen.dart';
+import 'security/security_screen.dart';
+import 'settings_screen.dart';
+import '../widgets/profile_list_tile.dart';
+import '../../../spend/presentation/screens/transactions/account_statement_screen.dart';
 import '../../../../core/utils/assets/app_icons.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
@@ -38,8 +41,19 @@ class ProfileScreen extends ConsumerStatefulWidget {
 }
 
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
+  String _formatJoinedDate(String dateString) {
+    try {
+      final date = DateTime.parse(dateString);
+      return 'Joined ${DateFormat('MMMM yyyy').format(date)}';
+    } catch (e) {
+      return 'Joined recently';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final homeDataAsync = ref.watch(homeDataProvider);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.blue,
@@ -55,297 +69,366 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           ),
         ],
       ),
-      body: ListView(
-        children: [
-          Container(
-            alignment: Alignment.bottomCenter,
-            height: 130,
-            decoration: BoxDecoration(color: AppColors.blue),
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                GestureDetector(
-                  onTap: () => context.pushNamed(ChooseAvatarScreen.path),
-                  child: Image.asset(Assets.profileBlank),
+      body: homeDataAsync.when(
+        loading: () => const CustomLoadingWidget(),
+        error: (error, stack) => CustomErrorWidget.error(
+          subtitle: error.toString(),
+          onRetry: () => ref.refresh(homeDataProvider),
+        ),
+        data: (response) {
+          final data = response.data;
+          final hiveStats = data.hive.stats;
+
+          return ListView(
+            children: [
+              Container(
+                alignment: Alignment.bottomCenter,
+                height: 130,
+                decoration: BoxDecoration(color: AppColors.blue),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () => context.pushNamed(ChooseAvatarScreen.path),
+                      child: Image.asset(Assets.profileBlank),
+                    ),
+                    Icon(Icons.add, color: AppColors.white),
+                  ],
                 ),
-                Icon(Icons.add, color: AppColors.white),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Dany Targaryen',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    height: 1.0,
-                  ),
-                ),
-                const Gap(8),
-                Row(
-                  spacing: 8,
+              ),
+              // Container(
+              //   alignment: Alignment.bottomCenter,
+              //   height: 130,
+              //   decoration: BoxDecoration(color: AppColors.blue),
+              //   child: Stack(
+              //     alignment: Alignment.center,
+              //     children: [
+              //       GestureDetector(
+              //         onTap: () => context.pushNamed(ChooseAvatarScreen.path),
+              //         child: CircleAvatar(
+              //           radius: 50,
+              //           backgroundColor: Colors.transparent,
+              //           backgroundImage:
+              //               data.profilePhoto.isNotEmpty &&
+              //                   !data.profilePhoto.startsWith('Dash') &&
+              //                   !data.profilePhoto.startsWith('Luna')
+              //               ? CachedNetworkImageProvider(data.profilePhoto)
+              //               : null,
+              //           child:
+              //               data.profilePhoto.isEmpty ||
+              //                   data.profilePhoto.startsWith('Dash') ||
+              //                   data.profilePhoto.startsWith('Luna')
+              //               ? Image.asset(Assets.profileBlank)
+              //               : null,
+              //         ),
+              //       ),
+              //       Positioned(
+              //         bottom: 0,
+              //         right: 0,
+              //         child: Icon(Icons.add, color: AppColors.white),
+              //       ),
+              //     ],
+              //   ),
+              // ),
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '@dracarys.babe',
+                      '${data.firstName} ${data.lastName}',
                       style: TextStyle(
+                        fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        fontFamily: Constants.neulisNeueFontFamily,
-                        color: AppColors.greyDark,
+                        height: 1.0,
                       ),
                     ),
-                    Icon(Icons.circle, color: AppColors.grey, size: 8),
-                    Text(
-                      'Joined November 2024',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        color: AppColors.greyDark,
-                      ),
-                    ),
-                  ],
-                ),
-                const Gap(24),
-                CustomCard(
-                  bgColor: AppColors.primaryFaded,
-                  borderColor: Colors.transparent,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Finish setting up!',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        '2 steps left',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.greyDark,
-                        ),
-                      ),
-                      const Gap(28),
-                      CustomElevatedButton(
-                        text: 'Complete Profile',
-                        isGamePlay: true,
-                        onPressed: () =>
-                            context.pushNamed(CompleteProfileScreen.path),
-                      ),
-                    ],
-                  ),
-                ),
-                const Gap(24),
-                SectionTitleWidget(title: 'Overview'),
-                Row(
-                  spacing: 8,
-                  children: [
-                    _buildStatItem(
-                      'Day streak',
-                      '4',
-                      AppIcon(
-                        AppIcons.checkIcon,
-                        color: AppColors.primary,
-                        useOriginal: true,
-                      ),
-                    ),
-                    _buildStatItem(
-                      'Day streak',
-                      '120',
-                      Image.asset(Illustrations.hiveFlower),
-                    ),
-                  ],
-                ),
-                const Gap(8),
-                Row(
-                  spacing: 8,
-                  children: [
-                    _buildStatItem(
-                      'League',
-                      'Pollen',
-                      Image.asset(
-                        Assets.pollenLeagueBadge,
-                        width: 24,
-                        height: 24,
-                      ),
-                    ),
-                    _buildStatItem(
-                      'Honey drops',
-                      '100',
-                      Image.asset(Assets.honeyJar4, width: 24, height: 24),
-                    ),
-                  ],
-                ),
-                const Gap(24),
-                SectionTitleWidget(
-                  title: 'Achievements',
-                  actionWidget: IconTextRowWidget(
-                    'VIEW ALL',
-                    Icon(Icons.keyboard_arrow_right, color: AppColors.primary),
-                    onTap: () => context.pushNamed(AchievementsScreen.path),
-                    textStyle: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontFamily: Constants.neulisNeueFontFamily,
-                      color: AppColors.primary,
-                    ),
-                    textDirection: TextDirection.rtl,
-                    padding: EdgeInsets.zero,
-                  ),
-                ),
-                const Gap(24),
-                Row(
-                  spacing: 8,
-                  children: [
-                    Expanded(
-                      child: GameCard(
-                        child: Image.asset(Assets.bumblebeeLeagueBadge),
-                      ),
-                    ),
-                    Expanded(
-                      child: GameCard(
-                        child: Image.asset(Assets.honeyLeagueBadge),
-                      ),
-                    ),
-                    Expanded(
-                      child: GameCard(
-                        child: Image.asset(Assets.masonLeagueBadge),
-                      ),
-                    ),
-                  ],
-                ),
-                const Gap(24),
-                GameCard(
-                  padding: EdgeInsets.zero,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ProfileListTile(
-                        title: 'Account info',
-                        iconPath: AppIcons.documentIcon,
-                        onTap: () => context.pushNamed(AccountInfoScreen.path),
-                      ),
-                      const Divider(),
-                      ProfileListTile(
-                        title: 'Manage Subscription',
-                        iconPath: AppIcons.bankNoteIcon,
-                        onTap: () =>
-                            context.pushNamed(ManageSubscriptionScreen.path),
-                      ),
-                    ],
-                  ),
-                ),
-                const Gap(24),
-                GameCard(
-                  padding: EdgeInsets.zero,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ProfileListTile(
-                        title: 'Verify NIN',
-                        iconPath: AppIcons.verifiedUserIcon,
-                        onTap: () {},
-                      ),
-                      const Divider(),
-                      ProfileListTile(
-                        title: 'Verify BVN',
-                        iconPath: AppIcons.verifiedUserIcon,
-                        onTap: () {},
-                      ),
-                      const Divider(),
-                      ProfileListTile(
-                        title: 'My Financial Health Status',
-                        iconPath: AppIcons.healthIcon,
-                        onTap: () =>
-                            context.pushNamed(FinancialHealthScreen.path),
-                      ),
-                      const Divider(),
-                      ProfileListTile(
-                        title: 'Generate Account Statement',
-                        iconPath: AppIcons.documentIcon,
-                        onTap: () =>
-                            context.pushNamed(AccountStatementScreen.path),
-                      ),
-                      const Divider(),
-                      ProfileListTile(
-                        title: 'Enable Dark Mode',
-                        iconPath: AppIcons.moonIcon,
-                        onTap: () {},
-                        useDefaultTrailing: false,
-                        trailing: Transform.scale(
-                          scale: 0.5,
-                          child: Switch(
-                            value: false,
-                            onChanged: (value) {},
-                            materialTapTargetSize:
-                                MaterialTapTargetSize.shrinkWrap,
-                            padding: EdgeInsets.zero,
+                    const Gap(8),
+                    Row(
+                      spacing: 8,
+                      children: [
+                        Text(
+                          '@${data.username}',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontFamily: Constants.neulisNeueFontFamily,
+                            color: AppColors.greyDark,
                           ),
                         ),
+                        Icon(Icons.circle, color: AppColors.grey, size: 8),
+                        Text(
+                          _formatJoinedDate(hiveStats.createdAt),
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.greyDark,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const Gap(24),
+                    CustomCard(
+                      bgColor: AppColors.primaryFaded,
+                      borderColor: Colors.transparent,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Finish setting up!',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            '2 steps left',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.greyDark,
+                            ),
+                          ),
+                          const Gap(28),
+                          CustomElevatedButton(
+                            text: 'Complete Profile',
+                            isGamePlay: true,
+                            onPressed: () =>
+                                context.pushNamed(CompleteProfileScreen.path),
+                          ),
+                        ],
                       ),
-                      const Divider(),
-                      ProfileListTile(
-                        title: 'Security',
-                        iconPath: AppIcons.homeSecureIcon,
-                        onTap: () => context.pushNamed(SecurityScreen.path),
+                    ),
+                    const Gap(24),
+                    SectionTitleWidget(title: 'Overview'),
+                    Row(
+                      spacing: 8,
+                      children: [
+                        _buildStatItem(
+                          'Day streak',
+                          hiveStats.streak.toString(),
+                          AppIcon(
+                            AppIcons.checkIcon,
+                            color: AppColors.primary,
+                            useOriginal: true,
+                          ),
+                        ),
+                        _buildStatItem(
+                          'Flowers',
+                          hiveStats.flowers.toString(),
+                          Image.asset(Illustrations.hiveFlower),
+                        ),
+                      ],
+                    ),
+                    const Gap(8),
+                    Row(
+                      spacing: 8,
+                      children: [
+                        _buildStatItem(
+                          'League',
+                          data.hive.league
+                              .replaceAll(' League', '')
+                              .replaceAll('💧', '')
+                              .trim(),
+                          Image.asset(
+                            Assets
+                                .pollenLeagueBadge, // Logic to swap badge based on league name could go here
+                            width: 24,
+                            height: 24,
+                          ),
+                        ),
+                        _buildStatItem(
+                          'Honey drops',
+                          hiveStats.honeyDrop.toString(),
+                          Image.asset(Assets.honeyJar4, width: 24, height: 24),
+                        ),
+                      ],
+                    ),
+                    const Gap(24),
+                    SectionTitleWidget(
+                      title: 'Achievements',
+                      actionWidget: IconTextRowWidget(
+                        'VIEW ALL',
+                        Icon(
+                          Icons.keyboard_arrow_right,
+                          color: AppColors.primary,
+                        ),
+                        onTap: () => context.pushNamed(AchievementsScreen.path),
+                        textStyle: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontFamily: Constants.neulisNeueFontFamily,
+                          color: AppColors.primary,
+                        ),
+                        reverse: true,
+                        padding: EdgeInsets.zero,
                       ),
-                    ],
-                  ),
+                    ),
+                    const Gap(24),
+                    Row(
+                      spacing: 8,
+                      children: [
+                        Expanded(
+                          child: GameCard(
+                            child: Image.asset(Assets.bumblebeeLeagueBadge),
+                          ),
+                        ),
+                        Expanded(
+                          child: GameCard(
+                            child: Image.asset(Assets.honeyLeagueBadge),
+                          ),
+                        ),
+                        Expanded(
+                          child: GameCard(
+                            child: Image.asset(Assets.masonLeagueBadge),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const Gap(24),
+                    GameCard(
+                      padding: EdgeInsets.zero,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ProfileListTile(
+                            title: 'Account info',
+                            iconPath: AppIcons.documentIcon,
+                            onTap: () =>
+                                context.pushNamed(AccountInfoScreen.path),
+                          ),
+                          const Divider(),
+                          ProfileListTile(
+                            title: 'Manage Subscription',
+                            iconPath: AppIcons.bankNoteIcon,
+                            onTap: () => context.pushNamed(
+                              ManageSubscriptionScreen.path,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Gap(24),
+                    GameCard(
+                      padding: EdgeInsets.zero,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ProfileListTile(
+                            title: 'Verify NIN',
+                            iconPath: AppIcons.verifiedUserIcon,
+                            trailing: data.kyc.nin
+                                ? Icon(
+                                    Icons.check_circle,
+                                    color: AppColors.success,
+                                  )
+                                : null,
+                            onTap: () {},
+                          ),
+                          const Divider(),
+                          ProfileListTile(
+                            title: 'Verify BVN',
+                            iconPath: AppIcons.verifiedUserIcon,
+                            trailing: data.kyc.bvn
+                                ? Icon(
+                                    Icons.check_circle,
+                                    color: AppColors.success,
+                                  )
+                                : null,
+                            onTap: () {},
+                          ),
+                          const Divider(),
+                          ProfileListTile(
+                            title: 'My Financial Health Status',
+                            iconPath: AppIcons.healthIcon,
+                            onTap: () =>
+                                context.pushNamed(FinancialHealthScreen.path),
+                          ),
+                          const Divider(),
+                          ProfileListTile(
+                            title: 'Generate Account Statement',
+                            iconPath: AppIcons.documentIcon,
+                            onTap: () =>
+                                context.pushNamed(AccountStatementScreen.path),
+                          ),
+                          const Divider(),
+                          ProfileListTile(
+                            title: 'Enable Dark Mode',
+                            iconPath: AppIcons.moonIcon,
+                            onTap: () {},
+                            useDefaultTrailing: false,
+                            trailing: Transform.scale(
+                              scale: 0.5,
+                              child: Switch(
+                                value: false,
+                                onChanged: (value) {},
+                                materialTapTargetSize:
+                                    MaterialTapTargetSize.shrinkWrap,
+                                padding: EdgeInsets.zero,
+                              ),
+                            ),
+                          ),
+                          const Divider(),
+                          ProfileListTile(
+                            title: 'Security',
+                            iconPath: AppIcons.homeSecureIcon,
+                            onTap: () => context.pushNamed(SecurityScreen.path),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Gap(24),
+                    GameCard(
+                      padding: EdgeInsets.zero,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ProfileListTile(
+                            title: 'Next of Kin',
+                            iconPath: AppIcons.personIcon,
+                            onTap: () =>
+                                context.pushNamed(NextOfKinScreen.path),
+                          ),
+                          const Divider(),
+                          ProfileListTile(
+                            title: 'My Debit Cards & Linked Banks',
+                            iconPath: AppIcons.creditCardIcon,
+                            onTap: () {},
+                          ),
+                          const Divider(),
+                          ProfileListTile(
+                            title: 'Savvy Bee Library',
+                            iconPath: AppIcons.libraryIcon,
+                            onTap: () => context.pushNamed(LibraryScreen.path),
+                          ),
+                          const Divider(),
+                          ProfileListTile(
+                            title: 'Change App Icon',
+                            iconPath: AppIcons.appIconIcon,
+                            onTap: () =>
+                                context.pushNamed(ChangeAppIconScreen.path),
+                          ),
+                          const Divider(),
+                          ProfileListTile(
+                            title: 'Contact Us',
+                            iconPath: AppIcons.chatboxIcon,
+                            onTap: () =>
+                                context.pushNamed(ContactUsScreen.path),
+                          ),
+                          const Divider(),
+                          ProfileListTile(
+                            title: 'Log Out',
+                            iconPath: AppIcons.logOutIcon,
+                            onTap: () {},
+                            textColor: AppColors.error,
+                            useDefaultTrailing: false,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-                const Gap(24),
-                GameCard(
-                  padding: EdgeInsets.zero,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ProfileListTile(
-                        title: 'Next of Kin',
-                        iconPath: AppIcons.personIcon,
-                        onTap: () => context.pushNamed(NextOfKinScreen.path),
-                      ),
-                      const Divider(),
-                      ProfileListTile(
-                        title: 'My Debit Cards & Linked Banks',
-                        iconPath: AppIcons.creditCardIcon,
-                        onTap: () {},
-                      ),
-                      const Divider(),
-                      ProfileListTile(
-                        title: 'Savvy Bee Library',
-                        iconPath: AppIcons.libraryIcon,
-                        onTap: () => context.pushNamed(LibraryScreen.path),
-                      ),
-                      const Divider(),
-                      ProfileListTile(
-                        title: 'Change App Icon',
-                        iconPath: AppIcons.appIconIcon,
-                        onTap: () =>
-                            context.pushNamed(ChangeAppIconScreen.path),
-                      ),
-                      const Divider(),
-                      ProfileListTile(
-                        title: 'Contact Us',
-                        iconPath: AppIcons.chatboxIcon,
-                        onTap: () => context.pushNamed(ContactUsScreen.path),
-                      ),
-                      const Divider(),
-                      ProfileListTile(
-                        title: 'Log Out',
-                        iconPath: AppIcons.logOutIcon,
-                        onTap: () {},
-                        textColor: AppColors.error,
-                        useDefaultTrailing: false,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
+              ),
+            ],
+          );
+        },
       ),
     );
   }
@@ -359,27 +442,31 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             icon,
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  value,
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: Constants.neulisNeueFontFamily,
-                    height: 1.0,
+            Expanded(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    value,
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: Constants.neulisNeueFontFamily,
+                      height: 1.0,
+                    ),
+                    overflow: TextOverflow.ellipsis,
                   ),
-                ),
-                Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontFamily: Constants.neulisNeueFontFamily,
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontFamily: Constants.neulisNeueFontFamily,
+                    ),
+                    overflow: TextOverflow.ellipsis,
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ],
         ),

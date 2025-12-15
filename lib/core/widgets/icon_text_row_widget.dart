@@ -5,7 +5,7 @@ import '../utils/constants.dart';
 class IconTextRowWidget extends StatelessWidget {
   final String text;
   final Widget icon;
-  final TextDirection? textDirection;
+  final bool reverse;
   final VoidCallback? onTap;
   final TextStyle? textStyle;
   final double? spacing;
@@ -15,7 +15,7 @@ class IconTextRowWidget extends StatelessWidget {
     this.text,
     this.icon, {
     super.key,
-    this.textDirection,
+    this.reverse = false,
     this.onTap,
     this.textStyle,
     this.spacing,
@@ -30,7 +30,7 @@ class IconTextRowWidget extends StatelessWidget {
         padding: padding ?? const EdgeInsets.all(5),
         child: Row(
           spacing: spacing ?? 5,
-          textDirection: textDirection,
+          textDirection: reverse ? TextDirection.rtl : TextDirection.ltr,
           mainAxisSize: MainAxisSize.min,
           children: [
             icon,

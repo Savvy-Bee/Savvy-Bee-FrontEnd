@@ -49,7 +49,7 @@ class HiveHomeData {
 
 class HiveData {
   final String id;
-  final String userId;
+  final int totalFlowers;
   final int streak;
   final int flowers;
   final int honeyDrop;
@@ -58,7 +58,7 @@ class HiveData {
 
   const HiveData({
     required this.id,
-    required this.userId,
+    required this.totalFlowers,
     required this.streak,
     required this.flowers,
     required this.honeyDrop,
@@ -69,7 +69,7 @@ class HiveData {
   factory HiveData.fromJson(Map<String, dynamic> json) {
     return HiveData(
       id: json['_id'] as String,
-      userId: json['UserID'] as String,
+      totalFlowers: json['TotalFlowers'] as int,
       streak: json['Streak'] as int,
       flowers: json['Flowers'] as int,
       honeyDrop: json['HoneyDrop'] as int,
@@ -81,7 +81,7 @@ class HiveData {
   Map<String, dynamic> toJson() {
     return {
       '_id': id,
-      'UserID': userId,
+      'TotalFlowers': totalFlowers,
       'Streak': streak,
       'Flowers': flowers,
       'HoneyDrop': honeyDrop,

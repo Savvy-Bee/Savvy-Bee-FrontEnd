@@ -33,7 +33,7 @@ class _ReferrerScreenState extends ConsumerState<ReferrerScreen> {
             child: IconTextRowWidget(
               'Skip',
               AppIcon(AppIcons.arrowRightIcon),
-              textDirection: TextDirection.rtl,
+              reverse: true,
               textStyle: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.bold,

@@ -152,7 +152,7 @@ class _ChoosePersonalityScreenState
                 child: IconTextRowWidget(
                   'Skip',
                   AppIcon(AppIcons.arrowRightIcon),
-                  textDirection: TextDirection.rtl,
+                  reverse: true,
                   textStyle: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.bold,

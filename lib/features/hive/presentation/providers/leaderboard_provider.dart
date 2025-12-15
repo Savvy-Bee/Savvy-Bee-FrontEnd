@@ -3,9 +3,9 @@ import 'package:savvy_bee_mobile/core/services/service_locator.dart';
 import 'package:savvy_bee_mobile/features/hive/domain/models/leaderboard.dart';
 
 class LeaderboardNotifier
-    extends AutoDisposeAsyncNotifier<List<LeaderboardEntry>> {
+    extends AutoDisposeAsyncNotifier<LeaderboardData> {
   @override
-  Future<List<LeaderboardEntry>> build() async {
+  Future<LeaderboardData> build() async {
     final repo = ref.read(leaderboardRepositoryProvider);
     final response = await repo.getLeaderboard();
 
@@ -34,5 +34,5 @@ class LeaderboardNotifier
 final leaderboardProvider =
     AutoDisposeAsyncNotifierProvider<
       LeaderboardNotifier,
-      List<LeaderboardEntry>
+      LeaderboardData
     >(LeaderboardNotifier.new);

@@ -29,61 +29,66 @@ class _LeagueScreenState extends ConsumerState<LeagueScreen> {
 
     return Scaffold(
       appBar: AppBar(title: const Text('Leaderboard')),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: leaderboardAsync.when(
+        skipLoadingOnRefresh: false,
+        loading: () =>
+            const CustomLoadingWidget(text: 'Fetching leaderboard...'),
+        error: (error, stack) => CustomErrorWidget.error(
+          subtitle: error.toString(),
+          onRetry: () => ref.invalidate(leaderboardProvider),
+        ),
+        data: (data) {
+          final validEntries = data.hive
+              .where((e) => e.userID != null)
+              .toList();
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Orchid League',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: Constants.neulisNeueFontFamily,
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          data.league,
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: Constants.neulisNeueFontFamily,
+                          ),
+                        ),
+                        IconTextRowWidget(
+                          '6Days',
+                          textStyle: TextStyle(
+                            color: AppColors.primary,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          Icon(Icons.access_time, color: AppColors.primary),
+                        ),
+                      ],
                     ),
-                    IconTextRowWidget(
-                      '6Days',
-                      textStyle: TextStyle(
-                        color: AppColors.primary,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      Icon(Icons.access_time, color: AppColors.primary),
+                    const Gap(8),
+                    const Text(
+                      'Top 10 advance to the next league',
+                      style: TextStyle(fontSize: 16, height: 1.0),
                     ),
                   ],
                 ),
-                const Gap(8),
-                Text(
-                  'Top 10 advance to the next league',
-                  style: TextStyle(fontSize: 16, height: 1.0),
-                ),
-              ],
-            ),
-          ),
-          const Gap(32),
+              ),
+              const Gap(32),
 
-          Expanded(
-            child: leaderboardAsync.when(
-              skipLoadingOnRefresh: false,
-              data: (entries) {
-                final validEntries = entries
-                    .where((e) => e.userID != null)
-                    .toList();
-                return RefreshIndicator(
+              Expanded(
+                child: RefreshIndicator(
                   onRefresh: () =>
                       ref.read(leaderboardProvider.notifier).refresh(),
                   child: ListView.builder(
-                    itemCount:
-                        validEntries.length +
-                        1, // +1 for promotion zone indicator
+                    itemCount: validEntries.length + 1,
                     itemBuilder: (context, index) {
                       // Show promotion zone indicator after 10th position
                       if (index == 10 && validEntries.length > 10) {
@@ -110,17 +115,11 @@ class _LeagueScreenState extends ConsumerState<LeagueScreen> {
                       );
                     },
                   ),
-                );
-              },
-              loading: () =>
-                  const CustomLoadingWidget(text: 'Fetching leaderboard...'),
-              error: (error, stack) => CustomErrorWidget.error(
-                subtitle: error.toString(),
-                onRetry: () => ref.invalidate(leaderboardProvider),
+                ),
               ),
-            ),
-          ),
-        ],
+            ],
+          );
+        },
       ),
     );
   }
