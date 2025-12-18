@@ -89,8 +89,8 @@ class _InternetBillScreenState extends ConsumerState<InternetBillScreen> {
               label: 'Service Provider',
               hint: 'Choose a Provider',
               controller: _serviceProviderController,
-              prefix: Icon(Icons.circle_outlined, color: AppColors.primary),
-              suffix: Icon(Icons.keyboard_arrow_down),
+              prefixIcon: Icon(Icons.circle_outlined, color: AppColors.primary),
+              suffixIcon: Icon(Icons.keyboard_arrow_down),
               readOnly: true,
               onTap: () => ServiceProviderBottomSheet.show(
                 context,
@@ -116,7 +116,7 @@ class _InternetBillScreenState extends ConsumerState<InternetBillScreen> {
               label: 'Package',
               hint: 'Choose a Package',
               controller: _packageController,
-              suffix: Icon(Icons.keyboard_arrow_down),
+              suffixIcon: Icon(Icons.keyboard_arrow_down),
               readOnly: true,
               onTap: _selectedProvider == null
                   ? () {

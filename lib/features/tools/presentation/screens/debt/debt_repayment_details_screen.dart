@@ -83,7 +83,10 @@ class _DebtRepaymentDetailsScreenState
       }
     } catch (e) {
       if (mounted) {
-        CustomSnackbar.show(context, 'An unexpected error occurred. Please try again.');
+        CustomSnackbar.show(
+          context,
+          'An unexpected error occurred. Please try again.',
+        );
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);
@@ -145,7 +148,7 @@ class _DebtRepaymentDetailsScreenState
                     label: 'Account Number',
                     isRounded: true,
                     controller: _accNumberController,
-                    suffix: Padding(
+                    suffixIcon: Padding(
                       padding: const EdgeInsets.only(right: 16),
                       child: CopyTextIconButton(
                         label: 'Paste',

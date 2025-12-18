@@ -240,7 +240,7 @@ class _CreateGoalScreenState extends ConsumerState<CreateGoalScreen> {
                         hint: 'DD/MM/YYYY',
                         label: 'Target date',
                         readOnly: true,
-                        suffix: const Icon(Icons.calendar_month),
+                        suffixIcon: const Icon(Icons.calendar_month),
                         onTap: _selectDate,
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {

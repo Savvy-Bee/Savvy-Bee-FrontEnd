@@ -21,8 +21,8 @@ class CustomTextFormField extends StatelessWidget {
   final void Function(String)? onFieldSubmitted;
   final String? Function(String?)? validator;
   final VoidCallback? onEndLabelPressed;
-  final Widget? prefix;
-  final Widget? suffix;
+  final Widget? prefix, prefixIcon;
+  final Widget? suffixIcon;
   final bool enabled;
   final int? maxLines;
   final int? minLines;
@@ -56,7 +56,8 @@ class CustomTextFormField extends StatelessWidget {
     this.validator,
     this.onEndLabelPressed,
     this.prefix,
-    this.suffix,
+    this.prefixIcon,
+    this.suffixIcon,
     this.enabled = true,
     this.maxLines = 1,
     this.minLines,
@@ -140,8 +141,9 @@ class CustomTextFormField extends StatelessWidget {
             ),
             errorMaxLines: 2,
             errorText: errorText,
-            prefixIcon: prefix,
-            suffixIcon: suffix,
+            prefix: prefix,
+            prefixIcon: prefixIcon,
+            suffixIcon: suffixIcon,
             contentPadding:
                 contentPadding ??
                 const EdgeInsets.symmetric(horizontal: 16, vertical: 10),

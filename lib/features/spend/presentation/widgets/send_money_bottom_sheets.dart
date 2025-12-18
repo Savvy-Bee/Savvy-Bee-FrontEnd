@@ -148,7 +148,7 @@ class _EnterAmountBottomSheetState
                   controller: _narrationController,
                   showOutline: false,
                   hint: 'Narration',
-                  prefix: IconButton(
+                  prefixIcon: IconButton(
                     onPressed: () async {
                       await BudgetCategoryBottomSheet.show(context).then((
                         value,

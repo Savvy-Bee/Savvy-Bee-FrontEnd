@@ -239,7 +239,7 @@ class _AddDebtScreenState extends ConsumerState<AddDebtScreen> {
                       controller: _dateController,
                       hint: '01/03/26',
                       label: 'Target payoff date',
-                      suffix: const Icon(Icons.calendar_month),
+                      suffixIcon: const Icon(Icons.calendar_month),
                       readOnly: true, // Prevent manual typing to ensure format
                       validator: (v) =>
                           v == null || v.isEmpty ? 'Required' : null,

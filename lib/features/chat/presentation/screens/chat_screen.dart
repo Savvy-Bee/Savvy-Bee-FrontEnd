@@ -368,7 +368,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
             showOutline: _pickedFile == null,
             textInputAction: TextInputAction.send,
             onFieldSubmitted: (_) => _sendMessage(),
-            prefix: IconButton(
+            prefixIcon: IconButton(
               icon: const Icon(Icons.add),
               constraints: BoxConstraints(),
               // onPressed: () => CreateGoalBottomSheet.show(context),
@@ -391,7 +391,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                 backgroundColor: AppColors.primary.withValues(alpha: 0.1),
               ),
             ),
-            suffix: IconButton(
+            suffixIcon: IconButton(
               icon: _messageController.text.isNotEmpty || _pickedFile != null
                   ? const Icon(Icons.send_rounded, color: AppColors.primary)
                   : const Icon(

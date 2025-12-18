@@ -354,7 +354,7 @@ class _PasswordResetScreenState extends ConsumerState<PasswordResetScreen> {
             },
             obscureText: !_showPassword,
             textInputAction: TextInputAction.next,
-            suffix: IconButton(
+            suffixIcon: IconButton(
               onPressed: () {
                 setState(() {
                   _showPassword = !_showPassword;

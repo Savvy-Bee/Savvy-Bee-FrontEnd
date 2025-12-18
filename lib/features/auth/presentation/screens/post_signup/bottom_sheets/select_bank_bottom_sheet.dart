@@ -55,7 +55,7 @@ class _SelectBankBottomSheetState extends ConsumerState<SelectBankBottomSheet> {
           ),
           const Gap(16),
           CustomTextFormField(
-            prefix: Icon(Icons.search),
+            prefixIcon: Icon(Icons.search),
             isRounded: true,
             controller: _searchController,
             hint: 'Search 1,000+ institutions',

@@ -6,7 +6,7 @@ import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';
 
 class ChangePasswordScreen extends ConsumerStatefulWidget {
   static String path = '/change-password';
-  
+
   const ChangePasswordScreen({super.key});
 
   @override
@@ -43,7 +43,7 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
                     hint: '●●●●●●●●',
                     controller: _oldPasswordController,
                     obscureText: !_showOldPassword,
-                    suffix: IconButton(
+                    suffixIcon: IconButton(
                       onPressed: () {
                         setState(() {
                           _showOldPassword = !_showOldPassword;
@@ -62,7 +62,7 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
                     hint: '●●●●●●●●',
                     controller: _newPasswordController,
                     obscureText: !_showNewPassword,
-                    suffix: IconButton(
+                    suffixIcon: IconButton(
                       onPressed: () {
                         setState(() {
                           _showNewPassword = !_showNewPassword;

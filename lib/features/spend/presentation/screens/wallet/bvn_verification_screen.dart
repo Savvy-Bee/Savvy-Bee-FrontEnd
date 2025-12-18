@@ -73,7 +73,10 @@ class _BvnVerificationScreenState extends ConsumerState<BvnVerificationScreen> {
     return Scaffold(
       appBar: AppBar(title: const Text('BVN Verification')),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16.0,
+          vertical: 24.0,
+        ).copyWith(bottom: 32),
         child: Form(
           key: _formKey,
           child: Column(

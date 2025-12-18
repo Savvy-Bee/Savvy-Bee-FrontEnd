@@ -153,7 +153,7 @@ class TvNotifier extends AsyncNotifier<BillsResponse?> {
   }
 
   /// Initialize TV subscription
-  Future<void> initializeTv({
+  Future<bool> initializeTv({
     required String phoneNo,
     required String provider,
     required String code,
@@ -169,6 +169,8 @@ class TvNotifier extends AsyncNotifier<BillsResponse?> {
         code: code,
       );
     });
+
+    return state.value?.success ?? false;
   }
 
   /// Verify TV transaction
@@ -211,7 +213,7 @@ final tvPlansProvider = FutureProvider.family<List<TvPlan>, String>((
 
 //* ==================== ELECTRICITY NOTIFIER ====================
 
-class ElectricityNotifier extends AutoDisposeAsyncNotifier<BillsResponse?> {
+class ElectricityNotifier extends AsyncNotifier<BillsResponse?> {
   @override
   Future<BillsResponse?> build() async {
     return null;
@@ -260,16 +262,17 @@ class ElectricityNotifier extends AutoDisposeAsyncNotifier<BillsResponse?> {
 }
 
 final electricityProvider =
-    AutoDisposeAsyncNotifierProvider<ElectricityNotifier, BillsResponse?>(
+    AsyncNotifierProvider<ElectricityNotifier, BillsResponse?>(
       ElectricityNotifier.new,
     );
 
 /// Electricity providers provider
-final electricityProvidersProvider =
-    FutureProvider.autoDispose<List<ElectricityProvider>>((ref) async {
-      final repository = ref.watch(billsRepositoryProvider);
-      return await repository.fetchElectricityProviders();
-    });
+final electricityProvidersProvider = FutureProvider<List<ElectricityProvider>>((
+  ref,
+) async {
+  final repository = ref.watch(billsRepositoryProvider);
+  return await repository.fetchElectricityProviders();
+});
 
 // ==================== COMBINED BILLS NOTIFIER (OPTIONAL) ====================
 

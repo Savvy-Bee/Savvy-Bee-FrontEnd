@@ -54,7 +54,7 @@ class _FundByTransferScreenState extends ConsumerState<FundByTransferScreen> {
             label: 'Account Number',
             isRounded: true,
             controller: _accNumberController,
-            suffix: Padding(
+            suffixIcon: Padding(
               padding: const EdgeInsets.only(right: 16),
               child: CopyTextIconButton(label: 'Copy', onPressed: () {}),
             ),

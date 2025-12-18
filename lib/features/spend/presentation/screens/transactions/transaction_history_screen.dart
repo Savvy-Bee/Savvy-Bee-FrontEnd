@@ -52,7 +52,7 @@ class _TransactionHistoryScreenState
                         _searchQuery = value.toLowerCase();
                       });
                     },
-                    prefix: const Padding(
+                    prefixIcon: const Padding(
                       padding: EdgeInsets.only(left: 8.0),
                       child: Icon(Icons.search, size: 20),
                     ),

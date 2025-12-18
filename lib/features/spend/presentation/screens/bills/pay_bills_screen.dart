@@ -42,7 +42,7 @@ class _PayBillsScreenState extends ConsumerState<PayBillsScreen> {
               hint: 'Search bills',
               controller: _searchController,
               isRounded: true,
-              prefix: const Padding(
+              prefixIcon: const Padding(
                 padding: EdgeInsets.only(left: 12.0),
                 child: Icon(Icons.search, size: 20),
               ),

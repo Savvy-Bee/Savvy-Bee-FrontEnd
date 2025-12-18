@@ -10,10 +10,7 @@ import 'package:savvy_bee_mobile/features/chat/domain/models/chat_models.dart';
 class CreateGoalBottomSheet extends ConsumerStatefulWidget {
   final GoalData? suggestedGoal;
 
-  const CreateGoalBottomSheet({
-    super.key,
-    this.suggestedGoal,
-  });
+  const CreateGoalBottomSheet({super.key, this.suggestedGoal});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -24,9 +21,7 @@ class CreateGoalBottomSheet extends ConsumerStatefulWidget {
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
-      builder: (context) => CreateGoalBottomSheet(
-        suggestedGoal: suggestedGoal,
-      ),
+      builder: (context) => CreateGoalBottomSheet(suggestedGoal: suggestedGoal),
     );
   }
 }
@@ -66,7 +61,7 @@ class _CreateGoalBottomSheetState extends ConsumerState<CreateGoalBottomSheet> {
       if (goalTarget != null) {
         // Create the goal
         print('Creating goal: $goalName with target: $goalTarget');
-        
+
         // Close the bottom sheet
         context.pop();
 
@@ -100,7 +95,9 @@ class _CreateGoalBottomSheetState extends ConsumerState<CreateGoalBottomSheet> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      hasSuggestedGoal ? 'Create Suggested Goal' : 'Create Goal',
+                      hasSuggestedGoal
+                          ? 'Create Suggested Goal'
+                          : 'Create Goal',
                       style: TextStyle(
                         fontFamily: Constants.neulisNeueFontFamily,
                         fontSize: 18,
@@ -170,7 +167,7 @@ class _CreateGoalBottomSheetState extends ConsumerState<CreateGoalBottomSheet> {
                   borderRadius: 16,
                   labelType: LabelType.embedded,
                   keyboardType: TextInputType.number,
-                  prefix: Padding(
+                  prefixIcon: Padding(
                     padding: const EdgeInsets.only(left: 12, right: 8),
                     child: Text(
                       '₦',
@@ -184,9 +181,7 @@ class _CreateGoalBottomSheetState extends ConsumerState<CreateGoalBottomSheet> {
                     if (value == null || value.trim().isEmpty) {
                       return 'Please enter a target amount';
                     }
-                    final amount = double.tryParse(
-                      value.replaceAll(',', ''),
-                    );
+                    final amount = double.tryParse(value.replaceAll(',', ''));
                     if (amount == null || amount <= 0) {
                       return 'Please enter a valid amount';
                     }
@@ -206,11 +201,7 @@ class _CreateGoalBottomSheetState extends ConsumerState<CreateGoalBottomSheet> {
                     ),
                     child: Row(
                       children: [
-                        Icon(
-                          Icons.info_outline,
-                          color: Colors.blue,
-                          size: 20,
-                        ),
+                        Icon(Icons.info_outline, color: Colors.blue, size: 20),
                         const SizedBox(width: 12),
                         Expanded(
                           child: Text(

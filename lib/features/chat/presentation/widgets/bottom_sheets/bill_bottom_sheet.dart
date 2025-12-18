@@ -108,7 +108,7 @@ class _BillBottomSheetState extends ConsumerState<BillBottomSheet> {
                   labelType: LabelType.embedded,
                   label: 'Name',
                   hint: 'Name of bill',
-                  suffix: Dot(size: 20, color: _billColor),
+                  suffixIcon: Dot(size: 20, color: _billColor),
                 ),
                 const Gap(16),
                 CustomTextFormField(
@@ -116,7 +116,7 @@ class _BillBottomSheetState extends ConsumerState<BillBottomSheet> {
                   labelType: LabelType.embedded,
                   label: 'Amount',
                   hint: 'Amount of bill',
-                  suffix: Dot(size: 20),
+                  suffixIcon: Dot(size: 20),
                 ),
                 const Gap(16),
                 CustomTextFormField(
@@ -125,7 +125,7 @@ class _BillBottomSheetState extends ConsumerState<BillBottomSheet> {
                   label: 'Due date',
                   hint: 'Due date of bill',
                   readOnly: true,
-                  suffix: Dot(size: 20),
+                  suffixIcon: Dot(size: 20),
                   onTap: () {
                     DateTimeUtils.pickDate(
                       context,

@@ -507,7 +507,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
             controller: _passwordController,
             obscureText: !showPassword,
             textInputAction: TextInputAction.done,
-            suffix: IconButton(
+            suffixIcon: IconButton(
               onPressed: () {
                 setState(() {
                   showPassword = !showPassword;
@@ -598,7 +598,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
         },
         validator: (value) =>
             InputValidator.validateRequired(value, 'Date of birth'),
-        suffix: const Icon(Icons.calendar_today_outlined),
+        suffixIcon: const Icon(Icons.calendar_today_outlined),
       ),
     );
   }

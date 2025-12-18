@@ -129,7 +129,7 @@ class AccountStatementBottomSheet extends StatelessWidget {
             label: 'Account Number',
             controller: _accNumberController,
             isRounded: true,
-            suffix: Padding(
+            suffixIcon: Padding(
               padding: const EdgeInsets.only(right: 16),
               child: CopyTextIconButton(label: 'Copy', onPressed: () {}),
             ),

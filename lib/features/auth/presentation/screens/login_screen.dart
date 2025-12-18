@@ -189,7 +189,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     controller: passwordController,
                     textInputAction: TextInputAction.done,
                     obscureText: !_showPassword,
-                    suffix: IconButton(
+                    suffixIcon: IconButton(
                       onPressed: () {
                         setState(() {
                           _showPassword = !_showPassword;

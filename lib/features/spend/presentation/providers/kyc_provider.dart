@@ -2,13 +2,11 @@ import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-// Assuming these imports are available from your previous context
 import 'package:savvy_bee_mobile/core/network/api_client.dart';
 import 'package:savvy_bee_mobile/core/services/service_locator.dart';
 import 'package:savvy_bee_mobile/features/spend/data/repositories/kyc_repository.dart';
 import 'package:savvy_bee_mobile/features/spend/domain/models/kyc.dart';
 
-// 1. Define the AsyncNotifier
 class KycNotifier extends AsyncNotifier<KycData?> {
   // Initial state is null, as we don't fetch anything at startup
   @override
@@ -23,10 +21,10 @@ class KycNotifier extends AsyncNotifier<KycData?> {
     required File profileImageFile,
     required KycIdentityType type, // Use a clear enum for identity type
   }) async {
-    // 1. Set state to loading
+    // Set state to loading
     state = const AsyncLoading<KycData?>().copyWithPrevious(state);
 
-    // 2. Get the repository from the service locator (ref)
+    // Get the repository from the service locator (ref)
     final KycRepository kycRepository = ref.read(kycRepositoryProvider);
 
     try {
@@ -55,8 +53,7 @@ class KycNotifier extends AsyncNotifier<KycData?> {
       // throw Exception('Unsupported KYC identity type.');
       // }
 
-      // 3. Set state to data with the successful KYC result
-      // Assuming 'data' will be non-null on successful verification (code 200)
+      // Set state to data with the successful KYC result
       if (response.data != null) {
         state = AsyncData(response.data);
       } else {
@@ -64,10 +61,10 @@ class KycNotifier extends AsyncNotifier<KycData?> {
         state = AsyncError(response.message, StackTrace.current);
       }
     } on ApiException catch (e, st) {
-      // 4. Set state to error on API exception
+      // Set state to error on API exception
       state = AsyncError(e, st);
     } catch (e, st) {
-      // 5. Set state to error on any other exception
+      // Set state to error on any other exception
       state = AsyncError(e, st);
     }
   }
@@ -78,10 +75,10 @@ class KycNotifier extends AsyncNotifier<KycData?> {
   }
 }
 
-// 2. Define the Identity Type Enum
+// Define the Identity Type Enum
 enum KycIdentityType { nin, bvn }
 
-// 3. Define the AsyncNotifierProvider
+// Define the AsyncNotifierProvider
 final kycNotifierProvider = AsyncNotifierProvider<KycNotifier, KycData?>(
   KycNotifier.new,
 );

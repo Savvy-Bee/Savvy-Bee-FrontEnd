@@ -17,7 +17,10 @@ class CreateWalletScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: Text('Create Wallet')),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16.0,
+          vertical: 24.0,
+        ).copyWith(bottom: 32),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -80,8 +81,18 @@ class _CableBillScreenState extends ConsumerState<CableBillScreen> {
             label: 'Service Provider',
             hint: 'Choose a Provider',
             controller: _serviceProviderController,
-            prefix: Icon(Icons.circle_outlined, color: AppColors.primary),
-            suffix: Icon(Icons.keyboard_arrow_down),
+            prefixIcon: _selectedProvider != null
+                ? Padding(
+                    padding: const EdgeInsets.all(8.0).copyWith(left: 16),
+                    child: SizedBox.square(
+                      dimension: 32,
+                      child: CachedNetworkImage(
+                        imageUrl: _selectedProvider?.logo ?? '',
+                      ),
+                    ),
+                  )
+                : Icon(Icons.circle_outlined, color: AppColors.primary),
+            suffixIcon: Icon(Icons.keyboard_arrow_down),
             readOnly: true,
             onTap: () {
               ServiceProviderBottomSheet.show(
@@ -96,7 +107,7 @@ class _CableBillScreenState extends ConsumerState<CableBillScreen> {
             label: 'Package',
             hint: 'Choose a Package',
             controller: _packageController,
-            suffix: Icon(Icons.keyboard_arrow_down),
+            suffixIcon: Icon(Icons.keyboard_arrow_down),
             readOnly: true,
             onTap: () {
               // Only allow package selection if provider is selected
@@ -139,13 +150,15 @@ class _CableBillScreenState extends ConsumerState<CableBillScreen> {
 
   void _handleProceed() async {
     try {
-      final tvNotifier = ref
+      final success = await ref
           .read(tvProvider.notifier)
           .initializeTv(
             phoneNo: _cardNumberController.text.trim(),
             provider: _selectedProvider?.name ?? '',
             code: '',
           );
+
+      if (success) {}
     } catch (e) {}
   }
 }

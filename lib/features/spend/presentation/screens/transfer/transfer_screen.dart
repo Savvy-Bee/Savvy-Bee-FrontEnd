@@ -160,7 +160,7 @@ class _TransferScreenState extends ConsumerState<TransferScreen> {
                     _checkAccountVerification();
                   }
                 },
-                suffix: Padding(
+                suffixIcon: Padding(
                   padding: const EdgeInsets.only(right: 16),
                   child: CopyTextIconButton(
                     label: 'Paste',
@@ -432,7 +432,6 @@ class _AccountConfirmationBottomSheet extends ConsumerWidget {
         ],
       ),
     );
-  
   }
 
   static void show(

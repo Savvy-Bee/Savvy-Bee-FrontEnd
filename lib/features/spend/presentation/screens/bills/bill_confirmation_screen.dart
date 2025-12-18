@@ -97,25 +97,14 @@ class _BillConfirmationScreenState
               );
           break;
         case BillType.tv:
-          success = await ref
-              .read(billsProvider.notifier)
-              .subscribeTv(
-                pin: pin,
-                phoneNo: phoneNumber,
-                provider: widget.confirmationData.provider,
-                code: widget.confirmationData.planCode ?? '',
-              );
+          // This would already have been initialized in the previous screen
+          // thus there is no need to initialize here as well
+          () {};
           break;
         case BillType.electricity:
-          success = await ref
-              .read(billsProvider.notifier)
-              .payElectricity(
-                pin: pin,
-                phoneNo: phoneNumber,
-                provider: widget.confirmationData.provider,
-                amount: widget.confirmationData.amount.toString(),
-                code: widget.confirmationData.planCode ?? '',
-              );
+          // This would already have been initialized in the previous screen
+          // thus there is no need to initialize here as well
+          () {};
           break;
       }
 
