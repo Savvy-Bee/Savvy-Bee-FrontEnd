@@ -1,10 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/utils/assets/assets.dart';
+import '../../../../../core/utils/constants.dart';
+import '../../../../../core/widgets/custom_button.dart';
 import '../../../../../core/widgets/custom_card.dart';
 import '../../../../../core/widgets/custom_error_widget.dart';
 import '../../../../../core/widgets/custom_loading_widget.dart';
@@ -59,6 +63,10 @@ class _PackageBottomSheetState extends ConsumerState<PackageBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
+    bool isTvOrElectricity =
+        widget.billType == BillType.tv ||
+        widget.billType == BillType.electricity;
+
     // Fetch plans based on bill type
     final plansAsync = widget.billType == BillType.data
         ? ref.watch(dataPlansProvider(widget.provider))
@@ -81,25 +89,31 @@ class _PackageBottomSheetState extends ConsumerState<PackageBottomSheet> {
             ],
           ),
           const Gap(16),
-          Text('Categories', style: TextStyle(fontSize: 12)),
-          const Gap(16),
-          Row(
-            spacing: 8,
-            children: [
-              _buildCategoryTile('Daily', _selectedCategory == 'Daily', () {
-                setState(() => _selectedCategory = 'Daily');
-              }),
-              _buildCategoryTile('Weekly', _selectedCategory == 'Weekly', () {
-                setState(() => _selectedCategory = 'Weekly');
-              }),
-              _buildCategoryTile('Monthly', _selectedCategory == 'Monthly', () {
-                setState(() => _selectedCategory = 'Monthly');
-              }),
-              _buildCategoryTile('Yearly', _selectedCategory == 'Yearly', () {
-                setState(() => _selectedCategory = 'Yearly');
-              }),
-            ],
-          ),
+          if (!isTvOrElectricity)
+            Text('Categories', style: TextStyle(fontSize: 12)),
+          if (!isTvOrElectricity) const Gap(16),
+          if (!isTvOrElectricity)
+            Row(
+              spacing: 8,
+              children: [
+                _buildCategoryTile('Daily', _selectedCategory == 'Daily', () {
+                  setState(() => _selectedCategory = 'Daily');
+                }),
+                _buildCategoryTile('Weekly', _selectedCategory == 'Weekly', () {
+                  setState(() => _selectedCategory = 'Weekly');
+                }),
+                _buildCategoryTile(
+                  'Monthly',
+                  _selectedCategory == 'Monthly',
+                  () {
+                    setState(() => _selectedCategory = 'Monthly');
+                  },
+                ),
+                _buildCategoryTile('Yearly', _selectedCategory == 'Yearly', () {
+                  setState(() => _selectedCategory = 'Yearly');
+                }),
+              ],
+            ),
           const Gap(16),
           Text('Packages', style: TextStyle(fontSize: 12)),
           const Gap(16),
@@ -410,6 +424,91 @@ class ServiceProviderBottomSheet extends ConsumerWidget {
         onDataSelect: onDataSelect,
         onTvSelect: onTvSelect,
         onElectricitySelect: onElectricitySelect,
+      ),
+    );
+  }
+}
+
+class CustomerDetailsConfirmationBottomSheet extends ConsumerWidget {
+  final String customerName;
+  final String cardNumber;
+  final String providerName;
+  final String packageName;
+
+  const CustomerDetailsConfirmationBottomSheet({
+    super.key,
+    required this.customerName,
+    required this.cardNumber,
+    required this.providerName,
+    required this.packageName,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(bottom: 48),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Gap(8),
+          Container(
+            width: 40,
+            padding: const EdgeInsets.all(2.5),
+            decoration: BoxDecoration(
+              color: AppColors.black,
+              borderRadius: BorderRadius.circular(20),
+            ),
+          ),
+          const Gap(24),
+          SvgPicture.asset(Assets.bankSvg),
+          const Gap(24),
+          Text(
+            customerName,
+            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          ),
+          const Gap(16),
+          Text.rich(
+            textAlign: TextAlign.center,
+            TextSpan(
+              text: 'You are sending to ',
+              children: [
+                TextSpan(
+                  text: '$customerName ($providerName)',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                const TextSpan(text: '. Is this correct?'),
+              ],
+              style: TextStyle(
+                fontSize: 12,
+                fontFamily: Constants.neulisNeueFontFamily,
+              ),
+            ),
+          ),
+          const Gap(24),
+          Row(
+            spacing: 8,
+            children: [
+              Expanded(
+                child: CustomOutlinedButton(
+                  text: 'Cancel',
+                  onPressed: () {
+                    context.pop();
+                  },
+                ),
+              ),
+              Expanded(
+                child: CustomElevatedButton(
+                  text: 'Confirm',
+                  buttonColor: CustomButtonColor.black,
+                  onPressed: () {
+                    context.pop();
+                  },
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

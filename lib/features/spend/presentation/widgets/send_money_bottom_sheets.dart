@@ -236,41 +236,40 @@ class EnterPinBottomSheet extends ConsumerStatefulWidget {
 class _EnterPinBottomSheetState extends ConsumerState<EnterPinBottomSheet> {
   String pin = '';
   bool _isProcessing = false;
-  bool _isInitializing = true;
+  // bool _isInitializing = true;
 
   @override
   void initState() {
     super.initState();
-    _initializeTransaction();
+
+    // _initializeTransaction();
   }
 
-  Future<void> _initializeTransaction() async {
-    try {
-      final amount = double.parse(widget.amount.replaceAll(',', ''));
-
-      // Initialize the transaction
-      await ref.read(
-        initializeTransferProvider((
-          accountNumber: widget.recipientAccountInfo.accountNumber,
-          bankCode: widget.recipientAccountInfo.bankCode,
-          amount: amount,
-        )).future,
-      );
-
-      if (mounted) {
-        setState(() => _isInitializing = false);
-      }
-    } catch (e) {
-      if (!mounted) return;
-      CustomSnackbar.show(
-        context,
-        'Initialization error: ${e.toString()}',
-        type: SnackbarType.error,
-        position: SnackbarPosition.bottom,
-      );
-      context.pop();
-    }
-  }
+  // Future<void> _initializeTransaction() async {
+  //   try {
+  //     final amount = double.parse(widget.amount.replaceAll(',', ''));
+  //     // Initialize the transaction
+  //     await ref.read(
+  //       initializeTransferProvider((
+  //         accountNumber: widget.recipientAccountInfo.accountNumber,
+  //         bankCode: widget.recipientAccountInfo.bankCode,
+  //         amount: amount,
+  //       )).future,
+  //     );
+  //     if (mounted) {
+  //       setState(() => _isInitializing = false);
+  //     }
+  //   } catch (e) {
+  //     if (!mounted) return;
+  //     CustomSnackbar.show(
+  //       context,
+  //       'Initialization error: ${e.toString()}',
+  //       type: SnackbarType.error,
+  //       position: SnackbarPosition.bottom,
+  //     );
+  //     context.pop();
+  //   }
+  // }
 
   void _updatePin(String newText) {
     if (newText.length <= 4) {
@@ -327,13 +326,13 @@ class _EnterPinBottomSheetState extends ConsumerState<EnterPinBottomSheet> {
   }
 
   void _onNumberPressed(String number) {
-    if (pin.length < 4 && !_isProcessing && !_isInitializing) {
+    if (pin.length < 4 && !_isProcessing) {
       _updatePin(pin + number);
     }
   }
 
   void _onDeletePressed() {
-    if (pin.isNotEmpty && !_isProcessing && !_isInitializing) {
+    if (pin.isNotEmpty && !_isProcessing) {
       _updatePin(pin.substring(0, pin.length - 1));
     }
   }
@@ -362,9 +361,7 @@ class _EnterPinBottomSheetState extends ConsumerState<EnterPinBottomSheet> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   IconButton(
-                    onPressed: _isProcessing || _isInitializing
-                        ? null
-                        : () => context.pop(),
+                    onPressed: _isProcessing ? null : () => context.pop(),
                     style: Constants.collapsedButtonStyle,
                     icon: Icon(Icons.close),
                   ),
@@ -484,7 +481,7 @@ class _EnterPinBottomSheetState extends ConsumerState<EnterPinBottomSheet> {
               const Gap(16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: _isProcessing || _isInitializing
+                children: _isProcessing
                     ? [
                         SizedBox(
                           width: 20,
@@ -506,13 +503,11 @@ class _EnterPinBottomSheetState extends ConsumerState<EnterPinBottomSheet> {
               ),
               const Gap(24),
               DialPad(
-                onNumberPressed: _isProcessing || _isInitializing
+                onNumberPressed: _isProcessing
                     ? (_) {}
                     : (number) => _onNumberPressed(number),
                 onDecimalPressed: () {},
-                onDeletePressed: _isProcessing || _isInitializing
-                    ? () {}
-                    : _onDeletePressed,
+                onDeletePressed: _isProcessing ? () {} : _onDeletePressed,
               ),
             ],
           ),

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/providers/bill_provider.dart';
 
 import '../../../domain/models/bills.dart';
 import '../../widgets/bottom_sheets/bills_bottom_sheet.dart';
@@ -135,5 +136,16 @@ class _CableBillScreenState extends ConsumerState<CableBillScreen> {
       ),
     );
   }
-}
 
+  void _handleProceed() async {
+    try {
+      final tvNotifier = ref
+          .read(tvProvider.notifier)
+          .initializeTv(
+            phoneNo: _cardNumberController.text.trim(),
+            provider: _selectedProvider?.name ?? '',
+            code: '',
+          );
+    } catch (e) {}
+  }
+}
