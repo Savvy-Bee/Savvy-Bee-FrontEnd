@@ -9,6 +9,7 @@ import 'package:savvy_bee_mobile/features/tools/data/repositories/goals_reposito
 import '../../features/auth/data/repositories/auth_repository.dart';
 import '../../features/dashboard/data/repositories/dashboard_repository.dart';
 import '../../features/hive/data/repositories/leaderboard_repository.dart';
+import '../../features/profile/data/repositories/profile_repository.dart';
 import '../../features/spend/data/repositories/bills_repository.dart';
 import '../../features/spend/data/repositories/wallet_repository.dart';
 import '../../features/tools/data/repositories/debt_repository.dart';
@@ -79,9 +80,16 @@ final billsRepositoryProvider = Provider<BillsRepository>((ref) {
 
 final dashboardRepositoryProvider = Provider<DashboardRepository>((ref) {
   var apiClient = ref.read(apiClientProvider);
+
   return DashboardRepository(apiClient);
 });
 
-final leaderboardRepositoryProvider = Provider<LeaderboardRepository>(
-  (ref) => LeaderboardRepository(apiClient: ref.read(apiClientProvider)),
-);
+final leaderboardRepositoryProvider = Provider<LeaderboardRepository>((ref) {
+  var apiClient = ref.read(apiClientProvider);
+  return LeaderboardRepository(apiClient: apiClient);
+});
+
+final profileRepositoryProvider = Provider<ProfileRepository>((ref) {
+  var apiClient = ref.read(apiClientProvider);
+  return ProfileRepository(apiClient: apiClient);
+});

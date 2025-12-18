@@ -120,7 +120,7 @@ class _CreateGoalScreenState extends ConsumerState<CreateGoalScreen> {
     return Scaffold(
       appBar: AppBar(title: const Text('Create a goal')),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16).copyWith(bottom: 32),
         child: Form(
           key: _formKey,
           child: Column(

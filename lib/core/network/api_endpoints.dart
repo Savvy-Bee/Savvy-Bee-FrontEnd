@@ -42,6 +42,9 @@ class ApiEndpoints {
   /// Home Endpoints
   static const String homeDashboard = '/auth/profile/user/dashboard';
 
+  /// Home Endpoints
+  static const String updateProfileAvatar = '/auth/update/avatar';
+
   /// Debt Endpoints
   static const String debtHome = '/tools/debt/home';
   static String createDebtStep(String stepNumber) =>
@@ -90,7 +93,9 @@ class ApiEndpoints {
   /// Transfer Endpoint
   static String banks = '/wallet/transactions/sendmoney/getbanks';
   static String verifyAccounts = '/wallet/transactions/sendmoney/verifyaccount';
-  static String initializeTransaction = '/wallet/transactions/sendmoney/initialize';
+  static String initializeTransaction =
+      '/wallet/transactions/sendmoney/initialize';
   static String verifyTransaction = '/wallet/transactions/sendmoney/verify';
-  static String sendMoneyInternally = '/wallet/transactions/sendmoney/send-internally';
+  static String sendMoneyInternally =
+      '/wallet/transactions/sendmoney/send-internally';
 }

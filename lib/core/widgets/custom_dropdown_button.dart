@@ -11,7 +11,8 @@ class CustomDropdownButton extends StatelessWidget {
   final void Function(String?)? onChanged;
   final Widget? leadingIcon;
   final bool enabled;
-  final TextEditingController? controller; // Optional controller
+  final TextEditingController? controller;
+  final bool enableSearch, enableFilter, requestFocusOnTap;
 
   const CustomDropdownButton({
     super.key,
@@ -23,6 +24,9 @@ class CustomDropdownButton extends StatelessWidget {
     this.leadingIcon,
     this.enabled = true,
     this.controller,
+    this.enableSearch = false,
+    this.enableFilter = false,
+    this.requestFocusOnTap = false,
   });
 
   @override
@@ -50,6 +54,22 @@ class CustomDropdownButton extends StatelessWidget {
           expandedInsets: EdgeInsets.zero,
           menuHeight: MediaQuery.sizeOf(context).height / 2,
           enabled: enabled,
+          enableSearch: enableSearch,
+          enableFilter: enableFilter,
+          requestFocusOnTap: requestFocusOnTap,
+          searchCallback: (entries, query) {
+            if (query.isEmpty) {
+              return null;
+            }
+
+            // Find the index of the first matching entry
+            final index = entries.indexWhere(
+              (entry) =>
+                  entry.label.toLowerCase().contains(query.toLowerCase()),
+            );
+
+            return index != -1 ? index : null;
+          },
           initialSelection: value,
           controller: controller,
           menuStyle: MenuStyle(
@@ -74,7 +94,10 @@ class CustomDropdownButton extends StatelessWidget {
               borderRadius: borderRadius,
               borderSide: borderSide,
             ),
-            focusedBorder: OutlineInputBorder(borderRadius: borderRadius),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: borderRadius,
+              borderSide: BorderSide(color: AppColors.primary, width: 2),
+            ),
             errorBorder: OutlineInputBorder(borderRadius: borderRadius),
             focusedErrorBorder: OutlineInputBorder(borderRadius: borderRadius),
           ),

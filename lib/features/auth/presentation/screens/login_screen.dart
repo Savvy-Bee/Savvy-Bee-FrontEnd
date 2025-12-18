@@ -72,7 +72,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             response.message,
             type: SnackbarType.error,
           );
-          
+
           context.pushNamed(
             SignupScreen.path,
             extra: IncompleteSignUpData(
@@ -221,14 +221,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ),
                 ],
               ),
-              CustomElevatedButton(
-                text: 'Continue',
-                isLoading: authState.isLoading,
-                onPressed:
-                    emailController.text.trim().isEmpty &&
-                        passwordController.text.trim().isEmpty
-                    ? null
-                    : _handleLogin,
+              Padding(
+                padding: const EdgeInsets.only(bottom: 32.0),
+                child: CustomElevatedButton(
+                  text: 'Continue',
+                  isLoading: authState.isLoading,
+                  onPressed:
+                      emailController.text.trim().isEmpty &&
+                          passwordController.text.trim().isEmpty
+                      ? null
+                      : _handleLogin,
+                ),
               ),
             ],
           ),

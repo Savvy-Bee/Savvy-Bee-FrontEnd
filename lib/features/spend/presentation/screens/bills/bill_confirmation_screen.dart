@@ -8,12 +8,14 @@ import 'package:savvy_bee_mobile/core/utils/num_extensions.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_snackbar.dart';
+import 'package:savvy_bee_mobile/core/widgets/dial_pad_widget.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/bills/bill_completion_screen.dart';
 
 import '../../providers/bill_provider.dart';
+import '../../widgets/bottom_sheets/bills_bottom_sheet.dart';
 
 class BillConfirmationData {
-  final String type; // 'Airtime', 'Data', 'TV', 'Electricity'
+  final BillType type;
   final String network;
   final String phoneNumber;
   final double amount;
@@ -54,70 +56,66 @@ class _BillConfirmationScreenState
     extends ConsumerState<BillConfirmationScreen> {
   bool _isProcessing = false;
 
-  Future<void> _showPinDialog() async {
-    final pinController = TextEditingController();
+  @override
+  void dispose() {
+    super.dispose();
 
-    final result = await showDialog<String>(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => AlertDialog(
-        title: const Text('Enter PIN'),
-        content: TextField(
-          controller: pinController,
-          keyboardType: TextInputType.number,
-          maxLength: 4,
-          obscureText: true,
-          decoration: const InputDecoration(
-            hintText: 'Enter 4-digit PIN',
-            counterText: '',
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () {
-              if (pinController.text.length == 4) {
-                Navigator.pop(context, pinController.text);
-              } else {
-                CustomSnackbar.show(
-                  context,
-                  'Please enter a 4-digit PIN',
-                  type: SnackbarType.error,
-                );
-              }
-            },
-            child: const Text('Confirm'),
-          ),
-        ],
-      ),
-    );
-
-    if (result != null) {
-      await _verifyTransaction(result);
-    }
+    // TODO: Cancel the request if the screen is disposed
   }
 
   Future<void> _verifyTransaction(String pin) async {
     setState(() => _isProcessing = true);
 
+    final rawPhone = widget.confirmationData.phoneNumber;
+    // Add country code if not present
+    final phoneNumber = rawPhone.startsWith('0')
+        ? '+234${rawPhone.substring(1)}'
+        : '+234$rawPhone';
+
+    bool success = false;
+
     try {
-      switch (widget.confirmationData.type.toLowerCase()) {
-        case 'airtime':
-          await ref.read(airtimeProvider.notifier).verifyAirtime(pin: pin);
+      switch (widget.confirmationData.type) {
+        case BillType.airtime:
+          success = await ref
+              .read(billsProvider.notifier)
+              .purchaseAirtime(
+                pin: pin,
+                phoneNo: phoneNumber,
+                provider: widget.confirmationData.provider,
+                amount: widget.confirmationData.amount.toString(),
+              );
           break;
-        case 'data':
-          await ref.read(dataProvider.notifier).verifyData(pin: pin);
+        case BillType.data:
+          success = await ref
+              .read(billsProvider.notifier)
+              .purchaseData(
+                pin: pin,
+                phoneNo: phoneNumber,
+                provider: widget.confirmationData.provider,
+                code: widget.confirmationData.planCode ?? '',
+              );
           break;
-        case 'tv':
-          await ref.read(tvProvider.notifier).verifyTv(pin: pin);
+        case BillType.tv:
+          success = await ref
+              .read(billsProvider.notifier)
+              .subscribeTv(
+                pin: pin,
+                phoneNo: phoneNumber,
+                provider: widget.confirmationData.provider,
+                code: widget.confirmationData.planCode ?? '',
+              );
           break;
-        case 'electricity':
-          await ref
-              .read(electricityProvider.notifier)
-              .verifyElectricity(pin: pin);
+        case BillType.electricity:
+          success = await ref
+              .read(billsProvider.notifier)
+              .payElectricity(
+                pin: pin,
+                phoneNo: phoneNumber,
+                provider: widget.confirmationData.provider,
+                amount: widget.confirmationData.amount.toString(),
+                code: widget.confirmationData.planCode ?? '',
+              );
           break;
       }
 
@@ -125,15 +123,24 @@ class _BillConfirmationScreenState
         setState(() => _isProcessing = false);
 
         // Navigate to completion screen
-        context.pushReplacementNamed(
-          BillCompletionScreen.path,
-          extra: {
-            'type': widget.confirmationData.type,
-            'amount': widget.confirmationData.amount,
-            'recipient': widget.confirmationData.phoneNumber,
-            'network': widget.confirmationData.network,
-          },
-        );
+        if (success) {
+          context.pushReplacementNamed(
+            BillCompletionScreen.path,
+            extra: {
+              'type': widget.confirmationData.type,
+              'amount': widget.confirmationData.amount,
+              'recipient': widget.confirmationData.phoneNumber,
+              'network': widget.confirmationData.network,
+            },
+          );
+        } else {
+          CustomSnackbar.show(
+            context,
+            'Transaction failed. Please check your pin and try again.',
+            type: SnackbarType.error,
+            position: SnackbarPosition.bottom,
+          );
+        }
       }
     } catch (e) {
       if (mounted) {
@@ -142,6 +149,7 @@ class _BillConfirmationScreenState
           context,
           'Transaction failed: ${e.toString()}',
           type: SnackbarType.error,
+          position: SnackbarPosition.bottom,
         );
       }
     }
@@ -205,7 +213,7 @@ class _BillConfirmationScreenState
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      _buildInfoRow('Type:', data.type),
+                      _buildInfoRow('Type:', data.type.name),
                       const Gap(12),
                       _buildInfoRow('Network:', data.network),
                       if (data.planName != null) ...[
@@ -270,23 +278,19 @@ class _BillConfirmationScreenState
               ],
             ),
           ),
-          Container(
+          Padding(
             padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: AppColors.background,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.05),
-                  blurRadius: 10,
-                  offset: const Offset(0, -5),
-                ),
-              ],
-            ),
             child: SafeArea(
               child: CustomElevatedButton(
-                onPressed: _isProcessing ? null : _showPinDialog,
-                text: _isProcessing ? 'Processing...' : 'Confirm Payment',
+                onPressed: _isProcessing
+                    ? null
+                    : () => EnterPinBottomSheet.show(context, (pin) {
+                        context.pop();
+                        _verifyTransaction(pin);
+                      }),
+                // onPressed: _isProcessing ? null : _showPinDialog,
                 isLoading: _isProcessing,
+                text: 'Enter PIN to confirm',
               ),
             ),
           ),

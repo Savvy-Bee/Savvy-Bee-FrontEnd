@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 
 import '../utils/constants.dart';
 
@@ -87,6 +89,88 @@ class _DialPadButton extends StatelessWidget {
             height: 0.5,
           ),
         ),
+      ),
+    );
+  }
+}
+
+class EnterPinBottomSheet extends StatefulWidget {
+  final void Function(String) callback;
+  const EnterPinBottomSheet({super.key, required this.callback});
+
+  @override
+  State<EnterPinBottomSheet> createState() => _EnterPinBottomSheetState();
+
+  static void show(BuildContext context, void Function(String) callback) {
+    showModalBottomSheet(
+      context: context,
+      isDismissible: false,
+      enableDrag: false,
+      builder: (context) => EnterPinBottomSheet(callback: callback),
+    );
+  }
+}
+
+class _EnterPinBottomSheetState extends State<EnterPinBottomSheet> {
+  String _pin = '';
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+      child: Column(
+        spacing: 24,
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              IconButton(
+                onPressed: () => context.pop(),
+                icon: Icon(Icons.close),
+                style: Constants.collapsedButtonStyle,
+              ),
+            ],
+          ),
+          Row(
+            spacing: 6,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.lock_outline, color: AppColors.primary, size: 16),
+              const Text('Transaction PIN', style: TextStyle(fontSize: 12)),
+            ],
+          ),
+          Row(
+            spacing: 16,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(
+              4,
+              (index) => Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: _pin.length > index
+                      ? AppColors.primary
+                      : AppColors.greyMid,
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ),
+          ),
+          DialPad(
+            onNumberPressed: (number) {
+              setState(() => _pin += number);
+
+              if (_pin.length == 4) {
+                widget.callback.call(_pin);
+                return;
+              }
+            },
+            onDecimalPressed: () {},
+            onDeletePressed: () =>
+                setState(() => _pin = _pin.substring(0, _pin.length - 1)),
+          ),
+        ],
       ),
     );
   }

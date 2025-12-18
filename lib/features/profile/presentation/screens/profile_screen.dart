@@ -69,6 +69,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           ),
         ],
       ),
+      backgroundColor: AppColors.blue,
       body: homeDataAsync.when(
         loading: () => const CustomLoadingWidget(),
         error: (error, stack) => CustomErrorWidget.error(
@@ -81,21 +82,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
           return ListView(
             children: [
-              Container(
-                alignment: Alignment.bottomCenter,
-                height: 130,
-                decoration: BoxDecoration(color: AppColors.blue),
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    GestureDetector(
-                      onTap: () => context.pushNamed(ChooseAvatarScreen.path),
-                      child: Image.asset(Assets.profileBlank),
-                    ),
-                    Icon(Icons.add, color: AppColors.white),
-                  ],
-                ),
-              ),
+              _buildAvatarSection(context),
               // Container(
               //   alignment: Alignment.bottomCenter,
               //   height: 130,
@@ -130,7 +117,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               //     ],
               //   ),
               // ),
-              Padding(
+              Container(
+                color: AppColors.white,
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -429,6 +417,24 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             ],
           );
         },
+      ),
+    );
+  }
+
+  Container _buildAvatarSection(BuildContext context) {
+    return Container(
+      alignment: Alignment.bottomCenter,
+      height: 130,
+      decoration: BoxDecoration(color: AppColors.blue),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          GestureDetector(
+            onTap: () => context.pushNamed(ChooseAvatarScreen.path),
+            child: Image.asset(Assets.profileBlank),
+          ),
+          Icon(Icons.add, color: AppColors.white),
+        ],
       ),
     );
   }

@@ -3,9 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
-import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';
 
+import '../../../domain/models/bills.dart';
+import '../../widgets/bottom_sheets/bills_bottom_sheet.dart';
 import '../../widgets/mini_button.dart';
 
 class CableBillScreen extends ConsumerStatefulWidget {
@@ -23,6 +24,41 @@ class _CableBillScreenState extends ConsumerState<CableBillScreen> {
   final _packageController = TextEditingController();
   final _cardNumberController = TextEditingController();
   final _amountController = TextEditingController();
+
+  // Selected provider and plan
+  TvProvider? _selectedProvider;
+  TvPlan? _selectedPlan;
+
+  @override
+  void dispose() {
+    _serviceProviderController.dispose();
+    _packageController.dispose();
+    _cardNumberController.dispose();
+    _amountController.dispose();
+    super.dispose();
+  }
+
+  /// Handle provider selection
+  void _onProviderSelected(TvProvider provider) {
+    setState(() {
+      _selectedProvider = provider;
+      _serviceProviderController.text = provider.name;
+
+      // Reset package selection when provider changes
+      _selectedPlan = null;
+      _packageController.clear();
+      _amountController.clear();
+    });
+  }
+
+  /// Handle plan selection
+  void _onPlanSelected(TvPlan plan) {
+    setState(() {
+      _selectedPlan = plan;
+      _packageController.text = plan.name;
+      _amountController.text = plan.amount;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +82,13 @@ class _CableBillScreenState extends ConsumerState<CableBillScreen> {
             prefix: Icon(Icons.circle_outlined, color: AppColors.primary),
             suffix: Icon(Icons.keyboard_arrow_down),
             readOnly: true,
-            onTap: () => ServiceProviderBottomSheet.show(context),
+            onTap: () {
+              ServiceProviderBottomSheet.show(
+                context,
+                billType: BillType.tv,
+                onTvSelect: _onProviderSelected,
+              );
+            },
           ),
           const Gap(16),
           CustomTextFormField(
@@ -55,7 +97,24 @@ class _CableBillScreenState extends ConsumerState<CableBillScreen> {
             controller: _packageController,
             suffix: Icon(Icons.keyboard_arrow_down),
             readOnly: true,
-            onTap: () => DataPackageBottomSheet.show(context),
+            onTap: () {
+              // Only allow package selection if provider is selected
+              if (_selectedProvider == null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Please select a service provider first'),
+                  ),
+                );
+                return;
+              }
+
+              PackageBottomSheet.show(
+                context,
+                billType: BillType.tv,
+                provider: _selectedProvider!.shortName,
+                onTvSelect: _onPlanSelected,
+              );
+            },
           ),
           const Gap(16),
           CustomTextFormField(
@@ -78,143 +137,3 @@ class _CableBillScreenState extends ConsumerState<CableBillScreen> {
   }
 }
 
-class DataPackageBottomSheet extends StatefulWidget {
-  const DataPackageBottomSheet({super.key});
-
-  @override
-  State<DataPackageBottomSheet> createState() => _DataPackageBottomSheetState();
-
-  static void show(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      useSafeArea: true,
-      showDragHandle: true,
-      builder: (context) => DataPackageBottomSheet(),
-    );
-  }
-}
-
-class _DataPackageBottomSheetState extends State<DataPackageBottomSheet> {
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.all(16),
-      shrinkWrap: true,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Choose a Package',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-          ],
-        ),
-        const Gap(16),
-        Text('Categories', style: TextStyle(fontSize: 12)),
-        const Gap(16),
-        Row(
-          spacing: 8,
-          children: [
-            _buildCategoryTile('Daily', true, () {}),
-            _buildCategoryTile('Weekly', false, () {}),
-            _buildCategoryTile('Monthly', false, () {}),
-            _buildCategoryTile('Yearly', false, () {}),
-          ],
-        ),
-        const Gap(16),
-        Text('Packages', style: TextStyle(fontSize: 12)),
-        const Gap(16),
-        _buildPackageTile('45MB for 1 Day - ₦50'),
-        const Divider(height: 20),
-        _buildPackageTile('15MB Social Bundle for 3 Nights - ₦150'),
-        const Divider(height: 20),
-        _buildPackageTile('15MB Social Bundle for 3 Nights - ₦50'),
-        const Divider(height: 20),
-        _buildPackageTile('15MB Social Bundle for 3 Nights - ₦50'),
-        const Divider(height: 20),
-        _buildPackageTile('15MB Social Bundle for 3 Nights - ₦50'),
-        const Divider(height: 20),
-        _buildPackageTile('15MB Social Bundle for 3 Nights - ₦50'),
-        const Divider(height: 20),
-        _buildPackageTile('15MB Social Bundle for 3 Nights - ₦50'),
-        const Gap(24),
-      ],
-    );
-  }
-
-  Widget _buildCategoryTile(String title, bool isSelected, VoidCallback onTap) {
-    return Expanded(
-      child: CustomCard(
-        onTap: onTap,
-        borderRadius: 8,
-        borderColor: isSelected ? AppColors.primary : null,
-        child: Text(
-          title,
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildPackageTile(String name) {
-    return Row(
-      spacing: 16,
-      children: [
-        CircleAvatar(),
-        Text(name, style: TextStyle(fontSize: 12)),
-      ],
-    );
-  }
-}
-
-class ServiceProviderBottomSheet extends StatelessWidget {
-  const ServiceProviderBottomSheet({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            'Choose a Provider',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-          const Gap(16),
-          _buildServiceProviderTile('MTN-NG DATA'),
-          const Divider(height: 20),
-          _buildServiceProviderTile('AIRTEL NG DATA'),
-          const Divider(height: 20),
-          _buildServiceProviderTile('GLO NG DATA'),
-          const Divider(height: 20),
-          _buildServiceProviderTile('9MOBILE NG DATA'),
-          const Gap(24),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildServiceProviderTile(String name) {
-    return Row(
-      spacing: 16,
-      children: [
-        CircleAvatar(),
-        Text(name, style: TextStyle(fontSize: 12)),
-      ],
-    );
-  }
-
-  static void show(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      useSafeArea: true,
-      showDragHandle: true,
-      builder: (context) => ServiceProviderBottomSheet(),
-    );
-  }
-}

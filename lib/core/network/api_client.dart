@@ -14,7 +14,7 @@ class ApiException implements Exception {
   ApiException({required this.message, this.statusCode, this.data});
 
   @override
-  String toString() => 'ApiException: $message (Status: $statusCode)';
+  String toString() => message;
 }
 
 /// Enhanced API Client with better error handling, logging, and interceptors
@@ -43,11 +43,11 @@ class ApiClient {
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
-          final isValidRequest = await _healthCheck();
+          // final isValidRequest = await _healthCheck();
 
-          if (!isValidRequest) {
-            return;
-          }
+          // if (!isValidRequest) {
+          //   return;
+          // }
 
           _logRequest(options);
 

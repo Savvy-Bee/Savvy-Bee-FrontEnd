@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/avatars.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_snackbar.dart';
+import 'package:savvy_bee_mobile/features/profile/presentation/providers/profile_provider.dart';
 
 class ChooseAvatarScreen extends ConsumerStatefulWidget {
   static String path = '/choose-avatar';
-
   const ChooseAvatarScreen({super.key});
 
   @override
@@ -17,6 +19,9 @@ class ChooseAvatarScreen extends ConsumerStatefulWidget {
 
 class _ChooseAvatarScreenState extends ConsumerState<ChooseAvatarScreen> {
   String? _selectedAvatar;
+  String? _selectedCharacter;
+
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -28,31 +33,25 @@ class _ChooseAvatarScreenState extends ConsumerState<ChooseAvatarScreen> {
             child: ListView(
               children: [
                 _buildSectionTitle('Luna'),
-                _buildAvatarPicker(Avatars.lunaAvatars),
+                _buildAvatarPicker(Avatars.lunaAvatars, 'Luna'),
                 const Gap(8),
-
                 _buildSectionTitle('Dash'),
-                _buildAvatarPicker(Avatars.dashAvatars),
+                _buildAvatarPicker(Avatars.dashAvatars, 'Dash'),
                 const Gap(8),
-
                 _buildSectionTitle('Susu'),
-                _buildAvatarPicker(Avatars.susuAvatars),
+                _buildAvatarPicker(Avatars.susuAvatars, 'Susu'),
                 const Gap(8),
-
                 _buildSectionTitle('Penny'),
-                _buildAvatarPicker(Avatars.pennyAvatars),
+                _buildAvatarPicker(Avatars.pennyAvatars, 'Penny'),
                 const Gap(8),
-
                 _buildSectionTitle('Boo'),
-                _buildAvatarPicker(Avatars.booAvatars),
+                _buildAvatarPicker(Avatars.booAvatars, 'Boo'),
                 const Gap(8),
-
                 _buildSectionTitle('Bloom'),
-                _buildAvatarPicker(Avatars.bloomAvatars),
+                _buildAvatarPicker(Avatars.bloomAvatars, 'Bloom'),
                 const Gap(8),
-
                 _buildSectionTitle('Loki'),
-                _buildAvatarPicker(Avatars.lokiAvatars),
+                _buildAvatarPicker(Avatars.lokiAvatars, 'Loki'),
                 const Gap(25),
               ],
             ),
@@ -61,13 +60,10 @@ class _ChooseAvatarScreenState extends ConsumerState<ChooseAvatarScreen> {
             padding: const EdgeInsets.all(16).copyWith(bottom: 32),
             child: CustomElevatedButton(
               text: 'Select Avatar',
-              onPressed: _selectedAvatar == null
+              isLoading: isLoading,
+              onPressed: _selectedCharacter == null
                   ? null
-                  : () {
-                      if (_selectedAvatar != null) {
-                        Navigator.pop(context, _selectedAvatar);
-                      }
-                    },
+                  : _handleSelectAvatar,
             ),
           ),
         ],
@@ -75,7 +71,40 @@ class _ChooseAvatarScreenState extends ConsumerState<ChooseAvatarScreen> {
     );
   }
 
-  Widget _buildAvatarPicker(List<String> avatars) {
+  void _handleSelectAvatar() async {
+    if (isLoading) return;
+
+    setState(() => isLoading = true);
+
+    if (_selectedCharacter != null) {
+      final success = await ref
+          .read(updateProfileAvatarProvider.notifier)
+          .updateAvatar(_selectedCharacter!);
+      if (success) {
+        if (mounted) {
+          context.pop(_selectedCharacter);
+
+          CustomSnackbar.show(
+            context,
+            'Avatar updated successfully!',
+            type: SnackbarType.success,
+          );
+        }
+      } else {
+        if (mounted) {
+          CustomSnackbar.show(
+            context,
+            'Failed to update avatar. Please try again',
+            type: SnackbarType.error,
+          );
+        }
+      }
+    }
+
+    setState(() => isLoading = false);
+  }
+
+  Widget _buildAvatarPicker(List<String> avatars, String characterName) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
@@ -86,6 +115,7 @@ class _ChooseAvatarScreenState extends ConsumerState<ChooseAvatarScreen> {
             onTap: () {
               setState(() {
                 _selectedAvatar = avatars[index];
+                _selectedCharacter = '$characterName${index + 1}';
               });
             },
             borderRadius: BorderRadius.circular(50),

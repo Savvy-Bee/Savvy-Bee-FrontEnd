@@ -8,6 +8,7 @@ class Assets {
   static const String verifyFilledSvg = '$_basePath/verify_filled.svg';
   static const String cardSvg = '$_basePath/card.svg';
   static const String successSvg = '$_basePath/success.svg';
+  static const String errorSvg = '$_basePath/error.svg';
   static const String successGreenSvg = '$_basePath/success-green.svg';
   static const String bankSvg = '$_basePath/bank.svg';
   static const String coinStackSvg = '$_basePath/coin-stack.svg';

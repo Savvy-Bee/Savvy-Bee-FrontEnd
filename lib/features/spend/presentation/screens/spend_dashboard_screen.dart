@@ -124,7 +124,7 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
         _buildQuickActionButton(
           AppIcons.walletIcon,
           'Pay bills',
-          enabled ? () => context.pushNamed(PayBillsScreen.path) : null,
+          !enabled ? () => context.pushNamed(PayBillsScreen.path) : null,
         ),
         _buildQuickActionButton(
           AppIcons.sendIcon,
@@ -387,7 +387,7 @@ class WalletBalanceCard extends ConsumerWidget {
           Row(
             children: [
               Text(
-                primaryAccount.balance.toString(),
+                primaryAccount.balance.formatCurrency(),
                 style: TextStyle(
                   fontSize: 36,
                   fontWeight: FontWeight.bold,

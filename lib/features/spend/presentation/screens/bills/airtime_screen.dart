@@ -13,6 +13,7 @@ import 'package:savvy_bee_mobile/features/spend/presentation/screens/bills/bill_
 import 'package:savvy_bee_mobile/features/spend/presentation/widgets/mini_button.dart';
 
 import '../../providers/bill_provider.dart';
+import '../../widgets/bottom_sheets/bills_bottom_sheet.dart';
 
 // State model for recent airtime purchase
 class RecentAirtimePurchase {
@@ -35,7 +36,7 @@ class _AirtimeScreenState extends ConsumerState<AirtimeScreen> {
   final _amountController = TextEditingController();
   final _phoneController = TextEditingController();
   String? _selectedNetwork;
-  bool _isProcessing = false;
+  final bool _isProcessing = false;
 
   // Available networks - map display names to provider codes
   final Map<String, String> _networks = {
@@ -84,7 +85,11 @@ class _AirtimeScreenState extends ConsumerState<AirtimeScreen> {
 
   Future<void> _selectContact() async {
     // TODO: Implement contact picker
-    CustomSnackbar.show(context, 'Contact picker not yet implemented');
+    CustomSnackbar.show(
+      context,
+      'Contact picker not yet implemented',
+      position: SnackbarPosition.bottom,
+    );
   }
 
   bool _canProceed() {
@@ -100,85 +105,44 @@ class _AirtimeScreenState extends ConsumerState<AirtimeScreen> {
         context,
         'Please fill all required fields',
         type: SnackbarType.error,
+        position: SnackbarPosition.bottom,
       );
       return;
     }
 
     final amount = double.tryParse(_amountController.text);
+
     if (amount == null || amount <= 0) {
       CustomSnackbar.show(
         context,
         'Please enter a valid amount',
         type: SnackbarType.error,
+        position: SnackbarPosition.bottom,
       );
       return;
     }
 
-    if (amount < 50) {
+    if (amount < 100) {
       CustomSnackbar.show(
         context,
-        'Minimum airtime amount is ₦50',
+        'Minimum airtime amount is ₦100',
         type: SnackbarType.error,
+        position: SnackbarPosition.bottom,
       );
       return;
     }
 
-    setState(() => _isProcessing = true);
-
-    try {
-      // Initialize airtime purchase
-      await ref
-          .read(airtimeProvider.notifier)
-          .initializeAirtime(
-            phoneNo: _phoneController.text,
-            provider: _networks[_selectedNetwork]!,
-            amount: _amountController.text,
-          );
-
-      final airtimeState = ref.read(airtimeProvider);
-
-      if (mounted) {
-        setState(() => _isProcessing = false);
-
-        airtimeState.when(
-          data: (response) {
-            if (response != null) {
-              // Navigate to confirmation screen with data
-              context.pushNamed(
-                BillConfirmationScreen.path,
-                extra: BillConfirmationData(
-                  type: 'Airtime',
-                  network: _selectedNetwork ?? '',
-                  phoneNumber: _phoneController.text,
-                  amount: amount,
-                  provider: _networks[_selectedNetwork]!,
-                  transactionRef: 'response.reference',
-                ),
-              );
-            }
-          },
-          loading: () {
-            // Still loading
-          },
-          error: (error, stack) {
-            CustomSnackbar.show(
-              context,
-              'Failed to initialize airtime purchase: ${error.toString()}',
-              type: SnackbarType.error,
-            );
-          },
-        );
-      }
-    } catch (e) {
-      if (mounted) {
-        setState(() => _isProcessing = false);
-        CustomSnackbar.show(
-          context,
-          'An error occurred: ${e.toString()}',
-          type: SnackbarType.error,
-        );
-      }
-    }
+    context.pushNamed(
+      BillConfirmationScreen.path,
+      extra: BillConfirmationData(
+        type: BillType.airtime,
+        network: _selectedNetwork ?? '',
+        phoneNumber: _phoneController.text,
+        amount: amount,
+        provider: _networks[_selectedNetwork]!,
+        transactionRef: 'response.reference',
+      ),
+    );
   }
 
   @override
@@ -192,6 +156,7 @@ class _AirtimeScreenState extends ConsumerState<AirtimeScreen> {
               context,
               error.toString(),
               type: SnackbarType.error,
+              position: SnackbarPosition.bottom,
             );
           }
         },

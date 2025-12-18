@@ -74,15 +74,16 @@ class TransactionListNotifier
   int get currentPage => _currentPage;
 
   Future<void> loadTransactions() async {
-    state = const AsyncValue.loading();
-
-    state = await AsyncValue.guard(() async {
-      final repository = _ref.read(walletRepositoryProvider);
-      return await repository.fetchTransactions(
-        page: _currentPage,
-        limit: _limit,
-      );
-    });
+    if (mounted) {
+      state = const AsyncValue.loading();
+      state = await AsyncValue.guard(() async {
+        final repository = _ref.read(walletRepositoryProvider);
+        return await repository.fetchTransactions(
+          page: _currentPage,
+          limit: _limit,
+        );
+      });
+    }
   }
 
   Future<void> nextPage() async {

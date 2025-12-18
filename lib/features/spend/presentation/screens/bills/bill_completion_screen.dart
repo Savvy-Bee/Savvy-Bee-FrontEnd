@@ -51,7 +51,13 @@ class _BillCompletionScreenState extends ConsumerState<BillCompletionScreen> {
                 ),
               ],
             ),
-            CustomElevatedButton(text: 'Okay', onPressed: () => context.pop()),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 32),
+              child: CustomElevatedButton(
+                text: 'Okay',
+                onPressed: () => context.pop(),
+              ),
+            ),
           ],
         ),
       ),

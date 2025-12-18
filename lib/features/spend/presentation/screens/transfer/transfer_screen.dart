@@ -42,8 +42,11 @@ class _TransferScreenState extends ConsumerState<TransferScreen> {
 
   @override
   void dispose() {
+    // ref.read(transferNotifierProvider.notifier).reset();
+
     _bankController.dispose();
     _accNumberController.dispose();
+
     super.dispose();
   }
 
@@ -236,8 +239,11 @@ class _TransferScreenState extends ConsumerState<TransferScreen> {
 
                   return CustomDropdownButton(
                     items: nigerianBanks.map((bank) => bank.name).toList(),
-                    value:
-                        _selectedBank?.name, // Pass the current selected value
+                    value: _selectedBank?.name,
+                    enabled: true,
+                    enableSearch: true,
+                    enableFilter: true,
+                    requestFocusOnTap: true,
                     onChanged: (bank) {
                       setState(() {
                         _selectedBank = nigerianBanks.firstWhere(
@@ -277,7 +283,6 @@ class _TransferScreenState extends ConsumerState<TransferScreen> {
                       items: const [],
                       hint: 'Failed to load banks',
                       label: 'Bank',
-                      enabled: false,
                       leadingIcon: Icon(
                         Icons.account_balance_rounded,
                         color: AppColors.error,
@@ -353,7 +358,7 @@ class _AccountConfirmationBottomSheet extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(bottom: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(bottom: 48),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -374,25 +379,6 @@ class _AccountConfirmationBottomSheet extends ConsumerWidget {
             style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
-          const Gap(8),
-          Text(
-            accountNumber,
-            style: TextStyle(
-              fontSize: 14,
-              fontFamily: Constants.neulisNeueFontFamily,
-              color: AppColors.textSecondary,
-            ),
-          ),
-          const Gap(4),
-          Text(
-            bankName,
-            style: TextStyle(
-              fontSize: 12,
-              fontFamily: Constants.neulisNeueFontFamily,
-              color: AppColors.textSecondary,
-            ),
-            textAlign: TextAlign.center,
-          ),
           const Gap(16),
           Text.rich(
             textAlign: TextAlign.center,
@@ -400,7 +386,7 @@ class _AccountConfirmationBottomSheet extends ConsumerWidget {
               text: 'You are sending to ',
               children: [
                 TextSpan(
-                  text: accountName,
+                  text: '$accountName ($bankName)',
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 const TextSpan(text: '. Is this correct?'),
@@ -419,7 +405,7 @@ class _AccountConfirmationBottomSheet extends ConsumerWidget {
                 child: CustomOutlinedButton(
                   text: 'Cancel',
                   onPressed: () {
-                    Navigator.of(context).pop();
+                    context.pop();
                   },
                 ),
               ),
@@ -428,15 +414,15 @@ class _AccountConfirmationBottomSheet extends ConsumerWidget {
                   text: 'Confirm',
                   buttonColor: CustomButtonColor.black,
                   onPressed: () {
-                    Navigator.of(context).pop();
+                    context.pop();
                     context.pushNamed(
                       SendMoneyScreen.path,
-                      extra: {
-                        'accountName': accountName,
-                        'accountNumber': accountNumber,
-                        'bankName': bankName,
-                        'bankCode': bankCode,
-                      },
+                      extra: RecipientAccountInfo(
+                        accountName: accountName,
+                        accountNumber: accountNumber,
+                        bankName: bankName,
+                        bankCode: bankCode,
+                      ),
                     );
                   },
                 ),

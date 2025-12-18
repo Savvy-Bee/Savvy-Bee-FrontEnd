@@ -17,7 +17,7 @@ class BillsResponse {
 class DataPlan {
   final String package;
   final String provider;
-  final String amount;
+  final int amount;
   final String code;
 
   DataPlan({
@@ -31,7 +31,7 @@ class DataPlan {
     return DataPlan(
       package: json['package'] ?? '',
       provider: json['provider'] ?? '',
-      amount: json['amount'] ?? '',
+      amount: json['amount'] ?? 0,
       code: json['code'] ?? '',
     );
   }

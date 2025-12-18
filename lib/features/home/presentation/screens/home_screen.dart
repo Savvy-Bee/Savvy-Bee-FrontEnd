@@ -13,6 +13,9 @@ import 'package:savvy_bee_mobile/core/widgets/icon_text_row_widget.dart';
 import 'package:savvy_bee_mobile/core/widgets/section_title_widget.dart';
 import 'package:savvy_bee_mobile/features/hive/domain/models/course.dart';
 import 'package:savvy_bee_mobile/features/home/presentation/providers/home_data_provider.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/nin_verification_screen.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/budget_screen.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/goals/goals_screen.dart';
 
 import '../../../../core/widgets/custom_error_widget.dart';
 import '../../../../core/widgets/custom_loading_widget.dart';
@@ -76,6 +79,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         title: 'Verify your identity',
                         iconPath: AppIcons.scanFaceIcon,
                         ctaText: 'VERIFY',
+                        onTap: () =>
+                            context.pushNamed(NinVerificationScreen.path),
                       ),
                     _buildTodoItem(
                       title: 'Enable FaceID/fingerprint',
@@ -107,13 +112,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           'Create smart budgets, track spending, and get personalized insights.',
                       superscript: 'EDIT BUDGET',
                       color: AppColors.primary,
+                      onTap: () => context.pushNamed(BudgetScreen.path),
                     ),
                     _buildToolCard(
-                      title: 'My budgets',
+                      title: 'My goals',
                       subtitle:
-                          'Create smart budgets, track spending, and get personalized insights.',
-                      superscript: 'EDIT BUDGET',
+                          'Set goals, get AI-powered suggestions, and track your progress.',
+                      superscript: 'EDIT GOAL',
                       color: AppColors.success,
+                      onTap: () => context.pushNamed(GoalsScreen.path),
                     ),
                   ],
                 ),
@@ -261,10 +268,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     required String subtitle,
     required String superscript, // The little text at the top-right
     required Color color,
+    VoidCallback? onTap,
   }) {
     final width = MediaQuery.sizeOf(context).width / 1.9;
 
     return CustomCard(
+      onTap: onTap,
       bgColor: color.withValues(alpha: 0.25),
       borderColor: color,
       width: width,

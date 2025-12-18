@@ -433,7 +433,9 @@ final GoRouter appRouter = GoRouter(
       path: SendMoneyScreen.path,
       name: SendMoneyScreen.path,
       builder: (BuildContext context, GoRouterState state) {
-        return SendMoneyScreen(recipientName: state.extra as String);
+        return SendMoneyScreen(
+          recipientAccountInfo: state.extra as RecipientAccountInfo,
+        );
       },
     ),
     GoRoute(

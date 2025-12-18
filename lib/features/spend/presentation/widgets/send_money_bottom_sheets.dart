@@ -10,28 +10,35 @@ import 'package:savvy_bee_mobile/core/utils/num_extensions.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_snackbar.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/transfer/send_money_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/widgets/mini_button.dart';
 
 import '../../../../core/utils/currency_input_formatter.dart';
 import '../../../../core/widgets/dial_pad_widget.dart';
 import '../../../../core/widgets/dot.dart';
+import '../providers/wallet_provider.dart';
+import '../providers/transfer_provider.dart';
 
 class EnterAmountBottomSheet extends ConsumerStatefulWidget {
-  final String recipientName;
-  const EnterAmountBottomSheet({super.key, required this.recipientName});
+  final RecipientAccountInfo recipientAccountInfo;
+
+  const EnterAmountBottomSheet({super.key, required this.recipientAccountInfo});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
       _EnterAmountBottomSheetState();
 
-  static void show(BuildContext context, {required String recipientName}) {
+  static void show(
+    BuildContext context, {
+    required RecipientAccountInfo recipientAccountInfo,
+  }) {
     showModalBottomSheet(
       isScrollControlled: true,
       useSafeArea: true,
       context: context,
       builder: (context) =>
-          EnterAmountBottomSheet(recipientName: recipientName),
+          EnterAmountBottomSheet(recipientAccountInfo: recipientAccountInfo),
     );
   }
 }
@@ -40,42 +47,27 @@ class _EnterAmountBottomSheetState
     extends ConsumerState<EnterAmountBottomSheet> {
   final _narrationController = TextEditingController();
   final _amountController = TextEditingController();
-
-  // Create an instance of the formatter to use manually
   final _formatter = CurrencyInputFormatter();
 
-  // Helper to update and format text
   void _updateAmount(String newText) {
     final oldValue = _amountController.value;
-
-    // Create a new TextEditingValue
     final newValue = oldValue.copyWith(
       text: newText,
-      // We can't know the exact cursor position, so let's default to the end.
-      // This is acceptable for a number pad.
       selection: TextSelection.collapsed(offset: newText.length),
     );
-
-    // Manually run the formatter
     final formattedValue = _formatter.formatEditUpdate(oldValue, newValue);
-
-    // Set the controller's value to the formatted value
-    // This will display the formatted text and move the cursor to the end.
-
     setState(() {
       _amountController.value = formattedValue;
     });
   }
 
   void _onNumberPressed(String number) {
-    // Get the raw text, add the new number, and let _updateAmount format it
     final currentText = _amountController.text;
     _updateAmount(currentText + number);
   }
 
   void _onDecimalPressed() {
     final currentText = _amountController.text;
-    // The formatter will handle preventing multiple decimals
     _updateAmount('$currentText.');
   }
 
@@ -87,23 +79,55 @@ class _EnterAmountBottomSheetState
     }
   }
 
+  Future<void> _handleProceed() async {
+    try {
+      // Parse amount (remove commas and convert to double)
+      // final amount = double.parse(_amountController.text.replaceAll(',', ''));
+
+      if (!mounted) return;
+
+      // Navigate to PIN entry
+      EnterPinBottomSheet.show(
+        context,
+        amount: _amountController.text,
+        category: _narrationController.text,
+        recipientAccountInfo: widget.recipientAccountInfo,
+      );
+    } catch (e) {
+      if (!mounted) return;
+      CustomSnackbar.show(
+        context,
+        'Error: ${e.toString()}',
+        type: SnackbarType.error,
+        position: SnackbarPosition.bottom,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final dashboardAsync = ref.watch(dashboardDataProvider);
+
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           const Gap(24),
-          CustomCard(
-            borderColor: AppColors.primary,
-            bgColor: AppColors.primaryFaint,
-            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 16),
-            child: Text(
-              'Savvy Wallet Balance: ₦64,606.16',
-              style: TextStyle(fontSize: 12),
+          if (dashboardAsync.isLoading)
+            const SizedBox()
+          else if (dashboardAsync.hasError)
+            Text('Error: ${dashboardAsync.error}')
+          else
+            CustomCard(
+              borderColor: AppColors.primary,
+              bgColor: AppColors.primaryFaint,
+              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 16),
+              child: Text(
+                'Savvy Wallet Balance: ${dashboardAsync.value?.data?.accounts.balance.formatCurrency(decimalDigits: 0)}',
+                style: TextStyle(fontSize: 12),
+              ),
             ),
-          ),
           const Gap(32),
           CustomTextFormField(
             controller: _amountController,
@@ -111,15 +135,6 @@ class _EnterAmountBottomSheetState
             hint: 0.formatCurrency(decimalDigits: 0),
             readOnly: true,
             keyboardType: TextInputType.none,
-            // prefix: Text(
-            //   '€',
-            //   style: TextStyle(
-            //     fontSize: 24.0,
-            //     fontWeight: FontWeight.bold,
-            //     color: AppColors.black,
-            //     height: 2,
-            //   ),
-            // ),
             onChanged: (_) {
               setState(() {});
             },
@@ -135,8 +150,13 @@ class _EnterAmountBottomSheetState
                   hint: 'Narration',
                   prefix: IconButton(
                     onPressed: () async {
-                      _narrationController.text =
-                          await BudgetCategoryBottomSheet.show(context);
+                      await BudgetCategoryBottomSheet.show(context).then((
+                        value,
+                      ) {
+                        if (value != null) {
+                          _narrationController.text = value;
+                        }
+                      });
                       setState(() {});
                     },
                     icon: Icon(Icons.pie_chart, color: AppColors.primary),
@@ -151,14 +171,7 @@ class _EnterAmountBottomSheetState
                     _amountController.text.trim().isEmpty ||
                         _narrationController.text.trim().isEmpty
                     ? null
-                    : () {
-                        EnterPinBottomSheet.show(
-                          context,
-                          amount: _amountController.text,
-                          category: _narrationController.text,
-                          recipientName: widget.recipientName,
-                        );
-                      },
+                    : _handleProceed,
                 child: Icon(
                   Icons.send_outlined,
                   size: 16,
@@ -186,12 +199,13 @@ class _EnterAmountBottomSheetState
 class EnterPinBottomSheet extends ConsumerStatefulWidget {
   final String amount;
   final String category;
-  final String recipientName;
+  final RecipientAccountInfo recipientAccountInfo;
+
   const EnterPinBottomSheet({
     super.key,
     required this.amount,
     required this.category,
-    required this.recipientName,
+    required this.recipientAccountInfo,
   });
 
   @override
@@ -202,7 +216,7 @@ class EnterPinBottomSheet extends ConsumerStatefulWidget {
     BuildContext context, {
     required String amount,
     required String category,
-    required String recipientName,
+    required RecipientAccountInfo recipientAccountInfo,
   }) {
     showModalBottomSheet(
       isScrollControlled: true,
@@ -213,7 +227,7 @@ class EnterPinBottomSheet extends ConsumerStatefulWidget {
       builder: (context) => EnterPinBottomSheet(
         amount: amount,
         category: category,
-        recipientName: recipientName,
+        recipientAccountInfo: recipientAccountInfo,
       ),
     );
   }
@@ -221,42 +235,123 @@ class EnterPinBottomSheet extends ConsumerStatefulWidget {
 
 class _EnterPinBottomSheetState extends ConsumerState<EnterPinBottomSheet> {
   String pin = '';
+  bool _isProcessing = false;
+  bool _isInitializing = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeTransaction();
+  }
+
+  Future<void> _initializeTransaction() async {
+    try {
+      final amount = double.parse(widget.amount.replaceAll(',', ''));
+
+      // Initialize the transaction
+      await ref.read(
+        initializeTransferProvider((
+          accountNumber: widget.recipientAccountInfo.accountNumber,
+          bankCode: widget.recipientAccountInfo.bankCode,
+          amount: amount,
+        )).future,
+      );
+
+      if (mounted) {
+        setState(() => _isInitializing = false);
+      }
+    } catch (e) {
+      if (!mounted) return;
+      CustomSnackbar.show(
+        context,
+        'Initialization error: ${e.toString()}',
+        type: SnackbarType.error,
+        position: SnackbarPosition.bottom,
+      );
+      context.pop();
+    }
+  }
 
   void _updatePin(String newText) {
     if (newText.length <= 4) {
       setState(() => pin = newText);
     }
-    if (pin.length == 4) {
-      context.pop();
-      context.pop();
+    if (pin.length == 4 && !_isProcessing) {
+      _processTransaction();
+    }
+  }
 
-      TransactionCompletionBottomSheet.show(context);
+  Future<void> _processTransaction() async {
+    setState(() => _isProcessing = true);
+
+    try {
+      final amount = double.parse(widget.amount.replaceAll(',', ''));
+
+      await ref
+          .read(transferNotifierProvider.notifier)
+          .initiateExternalTransfer(
+            accountNumber: widget.recipientAccountInfo.accountNumber,
+            bankCode: widget.recipientAccountInfo.bankCode,
+            amount: amount,
+            pin: pin,
+            transferFor: widget.category,
+            narration: widget.category,
+          );
+
+      if (!mounted) return;
+
+      final transferState = ref.read(transferNotifierProvider);
+
+      if (transferState.transaction != null) {
+        context.pop();
+        context.pop();
+        TransactionCompletionBottomSheet.show(
+          context,
+          transaction: transferState.transaction!,
+          recipientName: widget.recipientAccountInfo.accountName,
+        );
+      }
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        pin = '';
+        _isProcessing = false;
+      });
+      CustomSnackbar.show(
+        context,
+        'Transaction failed: ${e.toString()}',
+        type: SnackbarType.error,
+        position: SnackbarPosition.bottom,
+      );
     }
   }
 
   void _onNumberPressed(String number) {
-    if (pin.length < 4) _updatePin(pin + number);
+    if (pin.length < 4 && !_isProcessing && !_isInitializing) {
+      _updatePin(pin + number);
+    }
   }
 
   void _onDeletePressed() {
-    if (pin.isNotEmpty) _updatePin(pin.substring(0, pin.length - 1));
+    if (pin.isNotEmpty && !_isProcessing && !_isInitializing) {
+      _updatePin(pin.substring(0, pin.length - 1));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final dashboardAsync = ref.watch(dashboardDataProvider);
+    final initAsync = ref.watch(
+      initializeTransferProvider((
+        accountNumber: widget.recipientAccountInfo.accountNumber,
+        bankCode: widget.recipientAccountInfo.bankCode,
+        amount: double.parse(widget.amount.replaceAll(',', '')),
+      )),
+    );
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const Gap(6),
-        Container(
-          width: 40,
-          padding: EdgeInsets.all(2.5),
-          decoration: BoxDecoration(
-            color: AppColors.black,
-            borderRadius: BorderRadius.circular(20),
-          ),
-        ),
-        const Gap(16),
         Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -267,7 +362,9 @@ class _EnterPinBottomSheetState extends ConsumerState<EnterPinBottomSheet> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   IconButton(
-                    onPressed: () => context.pop(),
+                    onPressed: _isProcessing || _isInitializing
+                        ? null
+                        : () => context.pop(),
                     style: Constants.collapsedButtonStyle,
                     icon: Icon(Icons.close),
                   ),
@@ -277,17 +374,8 @@ class _EnterPinBottomSheetState extends ConsumerState<EnterPinBottomSheet> {
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Container(
-                    padding: EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryFaint,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Text('Logo'),
-                  ),
-                  const Gap(8),
                   Text(
-                    widget.recipientName,
+                    '${widget.recipientAccountInfo.accountName} (${widget.recipientAccountInfo.bankName})',
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
                       fontFamily: Constants.neulisNeueFontFamily,
@@ -330,7 +418,13 @@ class _EnterPinBottomSheetState extends ConsumerState<EnterPinBottomSheet> {
                       children: [
                         Text('From:', style: TextStyle(fontSize: 10)),
                         Text(
-                          '1234567890',
+                          dashboardAsync.when(
+                            data: (data) =>
+                                data.data?.accounts.ngnAccount?.accountNumber ??
+                                '',
+                            loading: () => 'Loading...',
+                            error: (error, stackTrace) => 'Error: $error',
+                          ),
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
@@ -346,12 +440,31 @@ class _EnterPinBottomSheetState extends ConsumerState<EnterPinBottomSheet> {
                           'Transaction Fee:',
                           style: TextStyle(fontSize: 10),
                         ),
-                        Text(
-                          10.formatCurrency(decimalDigits: 0),
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: Constants.neulisNeueFontFamily,
+                        initAsync.when(
+                          data: (data) {
+                            final fee = data['fee'] ?? '10';
+                            return Text(
+                              double.parse(
+                                fee.toString(),
+                              ).formatCurrency(decimalDigits: 0),
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: Constants.neulisNeueFontFamily,
+                              ),
+                            );
+                          },
+                          loading: () => Text(
+                            'Loading...',
+                            style: TextStyle(fontSize: 10),
+                          ),
+                          error: (error, _) => Text(
+                            10.formatCurrency(decimalDigits: 0),
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: Constants.neulisNeueFontFamily,
+                            ),
                           ),
                         ),
                       ],
@@ -371,23 +484,35 @@ class _EnterPinBottomSheetState extends ConsumerState<EnterPinBottomSheet> {
               const Gap(16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(4, (index) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: Dot(
-                      size: 16,
-                      color: index < pin.length
-                          ? AppColors.primary
-                          : AppColors.grey,
-                    ),
-                  );
-                }),
+                children: _isProcessing || _isInitializing
+                    ? [
+                        SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        ),
+                      ]
+                    : List.generate(4, (index) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: Dot(
+                            size: 16,
+                            color: index < pin.length
+                                ? AppColors.primary
+                                : AppColors.grey,
+                          ),
+                        );
+                      }),
               ),
               const Gap(24),
               DialPad(
-                onNumberPressed: (number) => _onNumberPressed(number),
+                onNumberPressed: _isProcessing || _isInitializing
+                    ? (_) {}
+                    : (number) => _onNumberPressed(number),
                 onDecimalPressed: () {},
-                onDeletePressed: _onDeletePressed,
+                onDeletePressed: _isProcessing || _isInitializing
+                    ? () {}
+                    : _onDeletePressed,
               ),
             ],
           ),
@@ -398,17 +523,36 @@ class _EnterPinBottomSheetState extends ConsumerState<EnterPinBottomSheet> {
 }
 
 class TransactionCompletionBottomSheet extends StatelessWidget {
-  const TransactionCompletionBottomSheet({super.key});
+  final dynamic transaction;
+  final String recipientName;
 
-  static void show(BuildContext context) {
+  const TransactionCompletionBottomSheet({
+    super.key,
+    required this.transaction,
+    required this.recipientName,
+  });
+
+  static void show(
+    BuildContext context, {
+    required dynamic transaction,
+    required String recipientName,
+  }) {
     showModalBottomSheet(
       context: context,
-      builder: (context) => TransactionCompletionBottomSheet(),
+      builder: (context) => TransactionCompletionBottomSheet(
+        transaction: transaction,
+        recipientName: recipientName,
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final amount = transaction.amount;
+    final fee = transaction.fee;
+    final status = transaction.status;
+    final reference = transaction.reference;
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -427,10 +571,14 @@ class TransactionCompletionBottomSheet extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              SvgPicture.asset(Assets.successSvg),
+              SvgPicture.asset(
+                status.toLowerCase() == 'success'
+                    ? Assets.successSvg
+                    : Assets.errorSvg,
+              ),
               const Gap(16),
               Text(
-                'Sent',
+                status.toLowerCase() == 'success' ? 'Sent' : 'Failed',
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -441,16 +589,29 @@ class TransactionCompletionBottomSheet extends StatelessWidget {
               Text.rich(
                 textAlign: TextAlign.center,
                 TextSpan(
-                  text: '₦60,000',
+                  text:
+                      '₦${double.parse(amount).formatCurrency(decimalDigits: 0)}',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   children: [
                     TextSpan(
-                      text: ' is on its way to\n',
+                      text: status.toLowerCase() == 'success'
+                          ? ' is on its way to\n'
+                          : ' transfer failed\n',
                       style: TextStyle(fontWeight: FontWeight.w400),
                     ),
-                    TextSpan(text: 'Aegon Targaryen'),
+                    if (status.toLowerCase() == 'success')
+                      TextSpan(text: recipientName),
                   ],
                 ),
+              ),
+              const Gap(8),
+              Text(
+                'Reference: $reference',
+                style: TextStyle(fontSize: 10, color: AppColors.grey),
+              ),
+              Text(
+                'Fee: ₦${double.parse(fee).formatCurrency(decimalDigits: 0)}',
+                style: TextStyle(fontSize: 10, color: AppColors.grey),
               ),
               const Gap(24),
               CustomElevatedButton(

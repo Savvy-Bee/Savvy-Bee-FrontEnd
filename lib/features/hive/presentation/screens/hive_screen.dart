@@ -12,6 +12,7 @@ import 'package:savvy_bee_mobile/core/widgets/custom_loading_widget.dart';
 import 'package:savvy_bee_mobile/core/widgets/section_title_widget.dart';
 import 'package:savvy_bee_mobile/core/widgets/icon_text_row_widget.dart';
 import 'package:savvy_bee_mobile/features/hive/domain/models/course.dart';
+import 'package:savvy_bee_mobile/features/hive/presentation/screens/games/game_screen.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/leaderboard/leaderboard_screen.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/lesson/lesson_home_screen.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/streak/streak_dashboard_screen.dart';
@@ -133,6 +134,10 @@ class _HiveScreenState extends ConsumerState<HiveScreen> {
                 ),
               ),
               const Gap(24),
+              TextButton(
+                onPressed: () => context.pushNamed(GameScreen.path),
+                child: const Text('Game'),
+              ),
             ],
           ),
         ),
@@ -232,7 +237,7 @@ class _HiveScreenState extends ConsumerState<HiveScreen> {
         hiveAsync.when(
           data: (hiveState) => _buildActionButton(
             icon: Image.asset(Illustrations.hiveFlower),
-            text: '${hiveState.hiveData?.flowers}',
+            text: '${hiveState.hiveData?.flowers ?? 0}',
             onTap: () => context.pushNamed(ProfileScreen.path),
           ),
           loading: () => _buildActionButton(

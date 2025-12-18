@@ -9,12 +9,26 @@ import 'package:savvy_bee_mobile/features/spend/presentation/widgets/send_money_
 
 import '../../../../../core/theme/app_colors.dart';
 
+class RecipientAccountInfo {
+  final String accountName;
+  final String accountNumber;
+  final String bankName;
+  final String bankCode;
+
+  const RecipientAccountInfo({
+    required this.accountName,
+    required this.accountNumber,
+    required this.bankName,
+    required this.bankCode,
+  });
+}
+
 class SendMoneyScreen extends ConsumerStatefulWidget {
   static String path = '/send-money';
 
-  final String recipientName;
+  final RecipientAccountInfo recipientAccountInfo;
 
-  const SendMoneyScreen({super.key, required this.recipientName});
+  const SendMoneyScreen({super.key, required this.recipientAccountInfo});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -26,7 +40,7 @@ class _SendMoneyScreenState extends ConsumerState<SendMoneyScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.recipientName),
+        title: Text(widget.recipientAccountInfo.accountName),
         actions: [
           IconButton(
             onPressed: () {},
@@ -35,7 +49,7 @@ class _SendMoneyScreenState extends ConsumerState<SendMoneyScreen> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16).copyWith(bottom: 32),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -44,7 +58,7 @@ class _SendMoneyScreenState extends ConsumerState<SendMoneyScreen> {
               text: 'Send money',
               onPressed: () => EnterAmountBottomSheet.show(
                 context,
-                recipientName: widget.recipientName,
+                recipientAccountInfo: widget.recipientAccountInfo,
               ),
             ),
           ],
@@ -76,16 +90,8 @@ class BudgetCategoryBottomSheet extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
       child: Column(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Container(
-            width: 40,
-            padding: EdgeInsets.all(2.5),
-            decoration: BoxDecoration(
-              color: AppColors.black,
-              borderRadius: BorderRadius.circular(20),
-            ),
-          ),
-          const Gap(32),
           Wrap(
             spacing: 10,
             runSpacing: 10,
@@ -104,9 +110,10 @@ class BudgetCategoryBottomSheet extends StatelessWidget {
     );
   }
 
-  static Future<String> show(BuildContext context) async {
+  static Future<String?> show(BuildContext context) async {
     return await showModalBottomSheet(
       context: context,
+      showDragHandle: true,
       builder: (context) => BudgetCategoryBottomSheet(),
     );
   }

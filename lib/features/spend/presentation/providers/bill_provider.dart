@@ -3,7 +3,6 @@ import 'package:savvy_bee_mobile/core/services/service_locator.dart';
 
 import '../../domain/models/bills.dart';
 
-
 // ==================== STATE CLASSES ====================
 
 /// Base state for bill operations
@@ -35,7 +34,7 @@ class BillState<T> {
   }
 }
 
-// ==================== AIRTIME NOTIFIER ====================
+//* ==================== AIRTIME NOTIFIER ====================
 
 class AirtimeNotifier extends AutoDisposeAsyncNotifier<BillsResponse?> {
   @override
@@ -50,9 +49,9 @@ class AirtimeNotifier extends AutoDisposeAsyncNotifier<BillsResponse?> {
     required String amount,
   }) async {
     state = const AsyncValue.loading();
-    
+
     final repository = ref.read(billsRepositoryProvider);
-    
+
     state = await AsyncValue.guard(() async {
       return await repository.initializeAirtime(
         phoneNo: phoneNo,
@@ -63,14 +62,16 @@ class AirtimeNotifier extends AutoDisposeAsyncNotifier<BillsResponse?> {
   }
 
   /// Verify airtime transaction
-  Future<void> verifyAirtime({required String pin}) async {
+  Future<bool> verifyAirtime({required String pin}) async {
     state = const AsyncValue.loading();
-    
+
     final repository = ref.read(billsRepositoryProvider);
-    
+
     state = await AsyncValue.guard(() async {
       return await repository.verifyAirtime(pin: pin);
     });
+
+    return state.value?.success ?? false;
   }
 
   /// Reset state
@@ -79,14 +80,14 @@ class AirtimeNotifier extends AutoDisposeAsyncNotifier<BillsResponse?> {
   }
 }
 
-final airtimeProvider = 
+final airtimeProvider =
     AutoDisposeAsyncNotifierProvider<AirtimeNotifier, BillsResponse?>(
-  AirtimeNotifier.new,
-);
+      AirtimeNotifier.new,
+    );
 
 //* ==================== DATA NOTIFIER ====================
 
-class DataNotifier extends AutoDisposeAsyncNotifier<BillsResponse?> {
+class DataNotifier extends AsyncNotifier<BillsResponse?> {
   @override
   Future<BillsResponse?> build() async {
     return null;
@@ -99,9 +100,9 @@ class DataNotifier extends AutoDisposeAsyncNotifier<BillsResponse?> {
     required String code,
   }) async {
     state = const AsyncValue.loading();
-    
+
     final repository = ref.read(billsRepositoryProvider);
-    
+
     state = await AsyncValue.guard(() async {
       return await repository.initializeData(
         phoneNo: phoneNo,
@@ -112,14 +113,16 @@ class DataNotifier extends AutoDisposeAsyncNotifier<BillsResponse?> {
   }
 
   /// Verify data transaction
-  Future<void> verifyData({required String pin}) async {
+  Future<bool> verifyData({required String pin}) async {
     state = const AsyncValue.loading();
-    
+
     final repository = ref.read(billsRepositoryProvider);
-    
+
     state = await AsyncValue.guard(() async {
       return await repository.verifyData(pin: pin);
     });
+
+    return state.value?.success ?? false;
   }
 
   /// Reset state
@@ -128,21 +131,22 @@ class DataNotifier extends AutoDisposeAsyncNotifier<BillsResponse?> {
   }
 }
 
-final dataProvider = 
-    AutoDisposeAsyncNotifierProvider<DataNotifier, BillsResponse?>(
+final dataProvider = AsyncNotifierProvider<DataNotifier, BillsResponse?>(
   DataNotifier.new,
 );
 
 /// Data plans provider
-final dataPlansProvider = FutureProvider.autoDispose
-    .family<List<DataPlan>, String>((ref, provider) async {
+final dataPlansProvider = FutureProvider.family<List<DataPlan>, String>((
+  ref,
+  provider,
+) async {
   final repository = ref.watch(billsRepositoryProvider);
   return await repository.fetchDataPlans(provider: provider);
 });
 
 //* ==================== TV NOTIFIER ====================
 
-class TvNotifier extends AutoDisposeAsyncNotifier<BillsResponse?> {
+class TvNotifier extends AsyncNotifier<BillsResponse?> {
   @override
   Future<BillsResponse?> build() async {
     return null;
@@ -155,9 +159,9 @@ class TvNotifier extends AutoDisposeAsyncNotifier<BillsResponse?> {
     required String code,
   }) async {
     state = const AsyncValue.loading();
-    
+
     final repository = ref.read(billsRepositoryProvider);
-    
+
     state = await AsyncValue.guard(() async {
       return await repository.initializeTv(
         phoneNo: phoneNo,
@@ -168,14 +172,16 @@ class TvNotifier extends AutoDisposeAsyncNotifier<BillsResponse?> {
   }
 
   /// Verify TV transaction
-  Future<void> verifyTv({required String pin}) async {
+  Future<bool> verifyTv({required String pin}) async {
     state = const AsyncValue.loading();
-    
+
     final repository = ref.read(billsRepositoryProvider);
-    
+
     state = await AsyncValue.guard(() async {
       return await repository.verifyTv(pin: pin);
     });
+
+    return state.value?.success ?? false;
   }
 
   /// Reset state
@@ -184,23 +190,23 @@ class TvNotifier extends AutoDisposeAsyncNotifier<BillsResponse?> {
   }
 }
 
-final tvProvider = 
-    AutoDisposeAsyncNotifierProvider<TvNotifier, BillsResponse?>(
+final tvProvider = AsyncNotifierProvider<TvNotifier, BillsResponse?>(
   TvNotifier.new,
 );
 
 /// TV providers provider
-final tvProvidersProvider = 
-    FutureProvider.autoDispose<List<TvProvider>>((ref) async {
+final tvProvidersProvider = FutureProvider<List<TvProvider>>((ref) async {
   final repository = ref.watch(billsRepositoryProvider);
   return await repository.fetchTvProviders();
 });
 
 /// TV plans provider
-final tvPlansProvider = FutureProvider.autoDispose
-    .family<List<TvPlan>, String>((ref, provider) async {
+final tvPlansProvider = FutureProvider.family<List<TvPlan>, String>((
+  ref,
+  provider,
+) async {
   final repository = ref.watch(billsRepositoryProvider);
-  return await repository.fetchTvPlans(provider: provider);
+  return await repository.fetchTvPlans(provider: provider.toUpperCase());
 });
 
 //* ==================== ELECTRICITY NOTIFIER ====================
@@ -220,9 +226,9 @@ class ElectricityNotifier extends AutoDisposeAsyncNotifier<BillsResponse?> {
     String meterType = 'prepaid',
   }) async {
     state = const AsyncValue.loading();
-    
+
     final repository = ref.read(billsRepositoryProvider);
-    
+
     state = await AsyncValue.guard(() async {
       return await repository.initializeElectricity(
         phoneNo: phoneNo,
@@ -235,14 +241,16 @@ class ElectricityNotifier extends AutoDisposeAsyncNotifier<BillsResponse?> {
   }
 
   /// Verify electricity transaction
-  Future<void> verifyElectricity({required String pin}) async {
+  Future<bool> verifyElectricity({required String pin}) async {
     state = const AsyncValue.loading();
-    
+
     final repository = ref.read(billsRepositoryProvider);
-    
+
     state = await AsyncValue.guard(() async {
       return await repository.verifyElectricity(pin: pin);
     });
+
+    return state.value?.success ?? false;
   }
 
   /// Reset state
@@ -251,127 +259,163 @@ class ElectricityNotifier extends AutoDisposeAsyncNotifier<BillsResponse?> {
   }
 }
 
-final electricityProvider = 
+final electricityProvider =
     AutoDisposeAsyncNotifierProvider<ElectricityNotifier, BillsResponse?>(
-  ElectricityNotifier.new,
-);
+      ElectricityNotifier.new,
+    );
 
 /// Electricity providers provider
-final electricityProvidersProvider = 
+final electricityProvidersProvider =
     FutureProvider.autoDispose<List<ElectricityProvider>>((ref) async {
-  final repository = ref.watch(billsRepositoryProvider);
-  return await repository.fetchElectricityProviders();
-});
+      final repository = ref.watch(billsRepositoryProvider);
+      return await repository.fetchElectricityProviders();
+    });
 
 // ==================== COMBINED BILLS NOTIFIER (OPTIONAL) ====================
 
 /// A unified notifier for managing all bill types in one place
-class BillsNotifier extends AutoDisposeAsyncNotifier<Map<String, BillsResponse?>> {
+class BillsNotifier
+    extends AutoDisposeAsyncNotifier<Map<String, BillsResponse?>> {
   @override
   Future<Map<String, BillsResponse?>> build() async {
-    return {
-      'airtime': null,
-      'data': null,
-      'tv': null,
-      'electricity': null,
-    };
+    return {'airtime': null, 'data': null, 'tv': null, 'electricity': null};
   }
 
   /// Purchase airtime
-  Future<void> purchaseAirtime({
+  ///
+  /// Returns a boolean indicating whether the purchase was successful.
+  /// The response is stored locally to avoid race conditions when reading
+  /// from the state immediately after setting it (state updates are async).
+  Future<bool> purchaseAirtime({
     required String phoneNo,
     required String provider,
     required String amount,
     required String pin,
   }) async {
     state = const AsyncValue.loading();
-    
     final repository = ref.read(billsRepositoryProvider);
-    
+
+    // Store response locally instead of reading from state later
+    // This prevents race conditions since state updates are asynchronous
+    BillsResponse? airtimeResponse;
+
     state = await AsyncValue.guard(() async {
-      // Initialize
+      // Initialize the airtime purchase
       await repository.initializeAirtime(
         phoneNo: phoneNo,
         provider: provider,
         amount: amount,
       );
-      
-      // Verify
-      final response = await repository.verifyAirtime(pin: pin);
-      
+
+      // Verify with PIN and store response locally
+      airtimeResponse = await repository.verifyAirtime(pin: pin);
+
+      // Update state with the response
       return {
-        'airtime': response,
+        'airtime': airtimeResponse,
         'data': null,
         'tv': null,
         'electricity': null,
       };
     });
+
+    // Return success status from local variable, not from state
+    // Reading from state here would be unreliable due to async updates
+    return airtimeResponse?.success ?? false;
   }
 
   /// Purchase data
-  Future<void> purchaseData({
+  ///
+  /// Returns a boolean indicating whether the purchase was successful.
+  /// The response is stored locally to avoid race conditions when reading
+  /// from the state immediately after setting it (state updates are async).
+  Future<bool> purchaseData({
     required String phoneNo,
     required String provider,
     required String code,
     required String pin,
   }) async {
     state = const AsyncValue.loading();
-    
     final repository = ref.read(billsRepositoryProvider);
-    
+
+    // Store response locally instead of reading from state later
+    // This prevents race conditions since state updates are asynchronous
+    BillsResponse? dataResponse;
+
     state = await AsyncValue.guard(() async {
-      // Initialize
+      // Initialize the data purchase
       await repository.initializeData(
         phoneNo: phoneNo,
         provider: provider,
         code: code,
       );
-      
-      // Verify
-      final response = await repository.verifyData(pin: pin);
-      
+
+      // Verify with PIN and store response locally
+      dataResponse = await repository.verifyData(pin: pin);
+
+      // Update state with the response
       return {
         'airtime': null,
-        'data': response,
+        'data': dataResponse,
         'tv': null,
         'electricity': null,
       };
     });
+
+    // Return success status from local variable, not from state
+    // Reading from state here would be unreliable due to async updates
+    return dataResponse?.success ?? false;
   }
 
   /// Subscribe to TV
-  Future<void> subscribeTv({
+  ///
+  /// Returns a boolean indicating whether the subscription was successful.
+  /// The response is stored locally to avoid race conditions when reading
+  /// from the state immediately after setting it (state updates are async).
+  Future<bool> subscribeTv({
     required String phoneNo,
     required String provider,
     required String code,
     required String pin,
   }) async {
     state = const AsyncValue.loading();
-    
     final repository = ref.read(billsRepositoryProvider);
-    
+
+    // Store response locally instead of reading from state later
+    // This prevents race conditions since state updates are asynchronous
+    BillsResponse? tvResponse;
+
     state = await AsyncValue.guard(() async {
-      // Initialize
+      // Initialize the TV subscription
       await repository.initializeTv(
         phoneNo: phoneNo,
         provider: provider,
         code: code,
       );
-      
-      // Verify
-      final response = await repository.verifyTv(pin: pin);
-      
+
+      // Verify with PIN and store response locally
+      tvResponse = await repository.verifyTv(pin: pin);
+
+      // Update state with the response
       return {
         'airtime': null,
         'data': null,
-        'tv': response,
+        'tv': tvResponse,
         'electricity': null,
       };
     });
+
+    // Return success status from local variable, not from state
+    // Reading from state here would be unreliable due to async updates
+    return tvResponse?.success ?? false;
   }
 
   /// Pay electricity bill
-  Future<void> payElectricity({
+  ///
+  /// Returns a boolean indicating whether the payment was successful.
+  /// The response is stored locally to avoid race conditions when reading
+  /// from the state immediately after setting it (state updates are async).
+  Future<bool> payElectricity({
     required String phoneNo,
     required String provider,
     required String code,
@@ -380,11 +424,14 @@ class BillsNotifier extends AutoDisposeAsyncNotifier<Map<String, BillsResponse?>
     String meterType = 'prepaid',
   }) async {
     state = const AsyncValue.loading();
-    
     final repository = ref.read(billsRepositoryProvider);
-    
+
+    // Store response locally instead of reading from state later
+    // This prevents race conditions since state updates are asynchronous
+    BillsResponse? electricityResponse;
+
     state = await AsyncValue.guard(() async {
-      // Initialize
+      // Initialize the electricity payment
       await repository.initializeElectricity(
         phoneNo: phoneNo,
         provider: provider,
@@ -392,20 +439,25 @@ class BillsNotifier extends AutoDisposeAsyncNotifier<Map<String, BillsResponse?>
         amount: amount,
         meterType: meterType,
       );
-      
-      // Verify
-      final response = await repository.verifyElectricity(pin: pin);
-      
+
+      // Verify with PIN and store response locally
+      electricityResponse = await repository.verifyElectricity(pin: pin);
+
+      // Update state with the response
       return {
         'airtime': null,
         'data': null,
         'tv': null,
-        'electricity': response,
+        'electricity': electricityResponse,
       };
     });
+
+    // Return success status from local variable, not from state
+    // Reading from state here would be unreliable due to async updates
+    return electricityResponse?.success ?? false;
   }
 
-  /// Reset all states
+  /// Reset all states to initial null values
   void reset() {
     state = AsyncValue.data({
       'airtime': null,
@@ -416,7 +468,8 @@ class BillsNotifier extends AutoDisposeAsyncNotifier<Map<String, BillsResponse?>
   }
 }
 
-final billsProvider = 
-    AutoDisposeAsyncNotifierProvider<BillsNotifier, Map<String, BillsResponse?>>(
-  BillsNotifier.new,
-);
+final billsProvider =
+    AutoDisposeAsyncNotifierProvider<
+      BillsNotifier,
+      Map<String, BillsResponse?>
+    >(BillsNotifier.new);
