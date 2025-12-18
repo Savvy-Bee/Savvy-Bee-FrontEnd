@@ -55,6 +55,8 @@ class PackageBottomSheet extends ConsumerStatefulWidget {
 class _PackageBottomSheetState extends ConsumerState<PackageBottomSheet> {
   String _selectedCategory = 'Daily';
 
+  bool showCategories = true;
+
   @override
   Widget build(BuildContext context) {
     // Fetch plans based on bill type
@@ -171,9 +173,9 @@ class _PackageBottomSheetState extends ConsumerState<PackageBottomSheet> {
 
   Widget _buildTvPlansList(List<TvPlan> plans) {
     // Filter plans by category
-    final filteredPlans = plans
-        .where((plan) => plan.package.contains(_selectedCategory))
-        .toList();
+    final filteredPlans = plans;
+    // .where((plan) => plan.package.contains(_selectedCategory))
+    // .toList();
 
     if (filteredPlans.isEmpty) {
       return CustomErrorWidget.empty(
