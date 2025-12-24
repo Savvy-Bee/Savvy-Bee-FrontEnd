@@ -388,6 +388,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                     IntroText(
                       title: SignupItems.items[_currentPage].title,
                       subtitle: _getPageSubtitle(),
+                      alignment: TextAlignment.center,
                     ),
                     const Gap(20.0),
                     SizedBox(
