@@ -3,16 +3,16 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/utils/assets/logos.dart';
-import '../../../../core/widgets/custom_button.dart';
-import '../../../auth/presentation/screens/signup_screen.dart';
-import '../../domain/models/onboarding_item.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-import '../../../../core/utils/breakpoints.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/utils/assets/assets.dart';
+import '../../../../core/utils/assets/logos.dart';
+import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/intro_text.dart';
 import '../../../auth/presentation/screens/login_screen.dart';
+import '../../../auth/presentation/screens/signup_screen.dart';
+import '../../domain/models/onboarding_item.dart';
 
 class OnboardingScreen extends StatefulWidget {
   static String path = '/onboarding';
@@ -25,138 +25,156 @@ class OnboardingScreen extends StatefulWidget {
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
   final _pageController = PageController();
-
   int _currentIndex = 0;
-
-  Timer? _timer;
-
-  @override
-  void initState() {
-    super.initState();
-    _timer = Timer.periodic(const Duration(seconds: 4), (timer) {
-      if (_currentIndex < OnboardingItem.items.length - 1) {
-        // If not the last page, go to the next page
-        _pageController.nextPage(
-          duration: const Duration(milliseconds: 500),
-          curve: Curves.easeIn,
-        );
-      }
-      // else {
-      //   // If it is the last page, loop back to the first page
-      //   _pageController.animateToPage(
-      //     0,
-      //     duration: const Duration(milliseconds: 500),
-      //     curve: Curves.easeIn,
-      //   );
-      // }
-    });
-  }
 
   @override
   void dispose() {
-    _timer?.cancel(); // VERY IMPORTANT: Cancel the timer
     _pageController.dispose();
     super.dispose();
   }
 
+  Color get _backgroundColor {
+    return switch (_currentIndex) {
+      0 => AppColors.primaryFaint,
+      1 => AppColors.primaryFaded,
+      2 => AppColors.blue,
+      3 => AppColors.primary,
+      _ => AppColors.primaryFaint,
+    };
+  }
+
+  bool get _isFirstPage => _currentIndex == 0;
+
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+
     return Scaffold(
-      body: SafeArea(
+      body: Container(
+        decoration: BoxDecoration(
+          color: _backgroundColor,
+          image: _isFirstPage
+              ? DecorationImage(
+                  image: AssetImage(Assets.onboardBg01),
+                  fit: BoxFit.contain,
+                  alignment: Alignment.bottomCenter,
+                )
+              : null,
+        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Gap(16.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              spacing: 8,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Image.asset(Logos.logo, scale: 5),
-                Image.asset(Logos.logoText),
-              ],
-            ),
-            const Gap(16.0),
             Expanded(
-              child: PageView(
-                controller: _pageController,
-                onPageChanged: (value) {
-                  setState(() {
-                    _currentIndex = value;
-                  });
-                },
-                children: OnboardingItem.items
-                    .map(
-                      (e) => Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        // mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Padding(
-                            padding: Breakpoints.screenPadding(context),
-                            child: IntroText(
-                              title: OnboardingItem.items[_currentIndex].title,
-                              subtitle: OnboardingItem
-                                  .items[_currentIndex]
-                                  .description,
-                            ),
-                          ),
-                          Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              Image.asset(
-                                e.imagePath,
-                                scale: switch (_currentIndex) {
-                                  0 => 1.1,
-                                  1 => 1.1,
-                                  2 => 1.3,
-                                  3 => 1.3,
-                                  _ => 0.5,
-                                },
-                              ),
-                            ],
-                          ),
-                          const Gap(16),
-                        ],
-                      ),
-                    )
-                    .toList(),
+              child: SafeArea(
+                child: PageView(
+                  controller: _pageController,
+                  onPageChanged: (value) {
+                    setState(() {
+                      _currentIndex = value;
+                    });
+                  },
+                  children: OnboardingItem.items
+                      .map((item) => _buildPageContent(item, height))
+                      .toList(),
+                ),
               ),
             ),
-            // const Gap(24),
-            SmoothPageIndicator(
-              controller: _pageController,
-              count: OnboardingItem.items.length,
-              effect: ColorTransitionEffect(
-                dotWidth: 6,
-                dotHeight: 6,
-                activeDotColor: AppColors.primary,
-                dotColor: AppColors.greyDark.withValues(alpha: 0.5),
-              ),
-            ),
-            const Gap(24),
-            Padding(
-              padding: Breakpoints.screenPadding(context),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  CustomOutlinedButton(
-                    text: 'I already have an account',
-                    onPressed: () {
-                      context.pushNamed(LoginScreen.path);
-                    },
-                  ),
-                  const Gap(10),
-                  CustomElevatedButton(
-                    text: 'Get started',
-                    onPressed: () {
-                      context.pushNamed(SignupScreen.path);
-                    },
-                  ),
-                ],
-              ),
-            ),
+            _buildAuthButtonsAndPageIndicator(context),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildPageContent(OnboardingItem item, double height) {
+    return Container(
+      decoration: BoxDecoration(
+        color: _isFirstPage ? Colors.transparent : _backgroundColor,
+      ),
+      child: Column(
+        children: [
+          if (_isFirstPage) ...[
+            const Gap(16.0),
+            _buildLogo(),
+            const Gap(16.0),
+            _buildIntroTexts(alignment: TextAlignment.center),
+          ] else ...[
+            Image.asset(
+              item.imagePath,
+              height: height / 1.7,
+              fit: BoxFit.contain,
+              alignment: Alignment.bottomCenter,
+            ),
+            Expanded(child: _buildIntroTexts()),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLogo() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      spacing: 8,
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Image.asset(Logos.logo, scale: 5),
+        Image.asset(Logos.logoText),
+      ],
+    );
+  }
+
+  Widget _buildIntroTexts({TextAlignment? alignment}) {
+    return Container(
+      padding: const EdgeInsets.all(16.0).copyWith(bottom: 0),
+      decoration: BoxDecoration(
+        color: _isFirstPage ? null : AppColors.background,
+        border: _isFirstPage ? null : const Border(top: BorderSide()),
+      ),
+      child: IntroText(
+        title: OnboardingItem.items[_currentIndex].title,
+        subtitle: OnboardingItem.items[_currentIndex].description,
+        alignment: alignment ?? TextAlignment.left,
+      ),
+    );
+  }
+
+  Widget _buildAuthButtonsAndPageIndicator(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16.0).copyWith(bottom: 32.0),
+      color: _isFirstPage ? Colors.transparent : AppColors.background,
+      child: Column(
+        children: [
+          SmoothPageIndicator(
+            controller: _pageController,
+            count: OnboardingItem.items.length,
+            effect: ExpandingDotsEffect(
+              dotWidth: 6,
+              dotHeight: 6,
+              activeDotColor: AppColors.primary,
+              dotColor: AppColors.greyDark.withValues(alpha: 0.5),
+            ),
+          ),
+          const Gap(32.0),
+          Row(
+            spacing: 8,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Expanded(
+                child: CustomOutlinedButton(
+                  text: 'Log in',
+                  onPressed: () => context.pushNamed(LoginScreen.path),
+                ),
+              ),
+              Expanded(
+                child: CustomElevatedButton(
+                  text: 'Get started',
+                  onPressed: () => context.pushNamed(SignupScreen.path),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

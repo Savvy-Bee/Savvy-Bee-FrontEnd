@@ -11,6 +11,7 @@ import 'package:savvy_bee_mobile/core/widgets/custom_snackbar.dart';
 import 'package:savvy_bee_mobile/core/widgets/dial_pad_widget.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/bills/bill_completion_screen.dart';
 
+import '../../../../../core/utils/string_extensions.dart';
 import '../../providers/bill_provider.dart';
 import '../../widgets/bottom_sheets/bills_bottom_sheet.dart';
 
@@ -204,7 +205,12 @@ class _BillConfirmationScreenState
                     children: [
                       _buildInfoRow('Type:', data.type.name),
                       const Gap(12),
-                      _buildInfoRow('Network:', data.network),
+                      _buildInfoRow(
+                        widget.confirmationData.type == BillType.electricity
+                            ? 'Provider'
+                            : 'Network:',
+                        data.network.truncate(30),
+                      ),
                       if (data.planName != null) ...[
                         const Gap(12),
                         _buildInfoRow('Plan:', data.planName!),
@@ -240,7 +246,7 @@ class _BillConfirmationScreenState
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: AppColors.primary.withOpacity(0.1),
+                    color: AppColors.primary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Row(

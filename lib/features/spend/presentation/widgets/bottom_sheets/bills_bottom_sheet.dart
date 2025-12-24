@@ -302,7 +302,7 @@ class ServiceProviderBottomSheet extends ConsumerWidget {
           children: [
             _buildServiceProviderTile(provider, () {
               onDataSelect?.call(provider);
-              Navigator.pop(context);
+              context.pop();
             }),
             if (provider != providers.last) const Divider(height: 20),
           ],
@@ -315,6 +315,7 @@ class ServiceProviderBottomSheet extends ConsumerWidget {
     final tvProvidersAsync = ref.watch(tvProvidersProvider);
 
     return tvProvidersAsync.when(
+      skipLoadingOnRefresh: false,
       data: (providers) {
         if (providers.isEmpty) {
           return Center(child: Text('No providers available'));
@@ -328,7 +329,7 @@ class ServiceProviderBottomSheet extends ConsumerWidget {
                   provider.name,
                   () {
                     onTvSelect?.call(provider);
-                    Navigator.pop(context);
+                    context.pop();
                   },
                   logo: provider.logo.isNotEmpty ? provider.logo : null,
                 ),
@@ -351,6 +352,7 @@ class ServiceProviderBottomSheet extends ConsumerWidget {
     final electricityProvidersAsync = ref.watch(electricityProvidersProvider);
 
     return electricityProvidersAsync.when(
+      skipLoadingOnRefresh: false,
       data: (providers) {
         if (providers.isEmpty) {
           return Center(child: Text('No providers available'));
@@ -364,7 +366,7 @@ class ServiceProviderBottomSheet extends ConsumerWidget {
                   provider.disco,
                   () {
                     onElectricitySelect?.call(provider);
-                    Navigator.pop(context);
+                    context.pop();
                   },
                   logo: provider.logo.isNotEmpty ? provider.logo : null,
                 ),
@@ -434,6 +436,7 @@ class CustomerDetailsConfirmationBottomSheet extends ConsumerWidget {
   final String cardNumber;
   final String providerName;
   final String packageName;
+  final VoidCallback? onConfirm;
 
   const CustomerDetailsConfirmationBottomSheet({
     super.key,
@@ -441,6 +444,7 @@ class CustomerDetailsConfirmationBottomSheet extends ConsumerWidget {
     required this.cardNumber,
     required this.providerName,
     required this.packageName,
+    this.onConfirm,
   });
 
   @override
@@ -450,16 +454,6 @@ class CustomerDetailsConfirmationBottomSheet extends ConsumerWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Gap(8),
-          Container(
-            width: 40,
-            padding: const EdgeInsets.all(2.5),
-            decoration: BoxDecoration(
-              color: AppColors.black,
-              borderRadius: BorderRadius.circular(20),
-            ),
-          ),
-          const Gap(24),
           SvgPicture.asset(Assets.bankSvg),
           const Gap(24),
           Text(
@@ -471,7 +465,7 @@ class CustomerDetailsConfirmationBottomSheet extends ConsumerWidget {
           Text.rich(
             textAlign: TextAlign.center,
             TextSpan(
-              text: 'You are sending to ',
+              text: 'You are purchasing units for ',
               children: [
                 TextSpan(
                   text: '$customerName ($providerName)',
@@ -501,14 +495,35 @@ class CustomerDetailsConfirmationBottomSheet extends ConsumerWidget {
                 child: CustomElevatedButton(
                   text: 'Confirm',
                   buttonColor: CustomButtonColor.black,
-                  onPressed: () {
-                    context.pop();
-                  },
+                  onPressed: onConfirm,
                 ),
               ),
             ],
           ),
         ],
+      ),
+    );
+  }
+
+  static void show(
+    BuildContext context, {
+    required String customerName,
+    required String cardNumber,
+    required String providerName,
+    required String packageName,
+    VoidCallback? onConfirm,
+  }) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      showDragHandle: true,
+      builder: (context) => CustomerDetailsConfirmationBottomSheet(
+        customerName: customerName,
+        cardNumber: cardNumber,
+        providerName: providerName,
+        packageName: packageName,
+        onConfirm: onConfirm,
       ),
     );
   }

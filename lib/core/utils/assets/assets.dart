@@ -3,6 +3,12 @@ class Assets {
 
   static const String _basePath = 'assets/images/other';
 
+  static const String onboardBg01 = '$_basePath/onboard-bg-01.png';
+  static const String onboardBg02 = '$_basePath/onboard-bg-02.png';
+  static const String onboardBg03 = '$_basePath/onboard-bg-03.png';
+  static const String onboardBg04 = '$_basePath/onboard-bg-04.png';
+  static const String onboardBg05 = '$_basePath/onboard-bg-05.png';
+
   static const String facialRecogSvg = '$_basePath/facial_recognition.svg';
   static const String verifySvg = '$_basePath/verify.svg';
   static const String verifyFilledSvg = '$_basePath/verify_filled.svg';

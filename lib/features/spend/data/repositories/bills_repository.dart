@@ -265,23 +265,20 @@ class BillsRepository {
 
   /// Initialize and validate electricity bill details
   ///
-  /// [phoneNo] - Phone number
   /// [provider] - Electricity provider short name (e.g., "IKEDC", "EKEDC")
-  /// [code] - Meter number or customer code
+  /// [meterNumber] - Meter number or customer code
   /// [amount] - Amount to pay
   /// [meterType] - Meter type: "prepaid" or "postpaid"
   Future<BillsResponse> initializeElectricity({
-    required String phoneNo,
     required String provider,
-    required String code,
+    required String meterNumber,
     required String amount,
     String meterType = 'prepaid',
   }) async {
     try {
       final formData = FormData.fromMap({
-        'PhoneNo': phoneNo,
         'Provider': provider,
-        'Code': code,
+        'MeterNumber': meterNumber,
         'Amount': amount,
         'MeterType': meterType,
       });

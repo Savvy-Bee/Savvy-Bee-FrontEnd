@@ -173,7 +173,6 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
 
   Widget _buildEmptyStateWidget() {
     return CustomCard(
-      height: 150,
       child: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,

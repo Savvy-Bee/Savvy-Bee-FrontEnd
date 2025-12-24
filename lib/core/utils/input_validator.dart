@@ -1,3 +1,5 @@
+import 'package:savvy_bee_mobile/core/utils/num_extensions.dart';
+
 class InputValidator {
   // Checks if a string is not empty or just whitespace.
   static String? validateRequired(
@@ -102,6 +104,23 @@ class InputValidator {
     }
     if (password != confirmPassword) {
       return 'Passwords do not match.';
+    }
+    return null; // Valid
+  }
+
+  // Checks if a string is not empty or just whitespace.
+  static String? validateAmount(
+    String? value,
+    String fieldName,
+    double minAmount,
+  ) {
+    if (value == null || value.trim().isEmpty) {
+      return '$fieldName cannot be empty.';
+    }
+    double amount = double.tryParse(value) ?? 0;
+
+    if (amount < minAmount) {
+      return '$fieldName must be at least ${minAmount.formatCurrency()}';
     }
     return null; // Valid
   }

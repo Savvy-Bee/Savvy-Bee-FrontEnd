@@ -151,25 +151,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         surfaceTintColor: Colors.transparent,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Form(
           key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(),
-              ListView(
-                shrinkWrap: true,
+          child: Center(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Column(
-                    children: [
-                      Image.asset(Logos.logo, scale: 3),
-                      const Gap(24.0),
-                      IntroText(
-                        title: 'Welcome\nback!',
-                        subtitle: 'The hive missed you. Log in to continue',
-                      ),
-                    ],
+                  Image.asset(Logos.logo, scale: 3),
+                  const Gap(24.0),
+                  IntroText(
+                    title: 'Welcome back!',
+                    subtitle: 'The hive missed you. Log in to continue',
                   ),
                   const Gap(24.0),
                   CustomTextFormField(
@@ -221,20 +215,22 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ),
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 32.0),
-                child: CustomElevatedButton(
-                  text: 'Continue',
-                  isLoading: authState.isLoading,
-                  onPressed:
-                      emailController.text.trim().isEmpty &&
-                          passwordController.text.trim().isEmpty
-                      ? null
-                      : _handleLogin,
-                ),
-              ),
-            ],
+            ),
           ),
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16,
+        ).copyWith(bottom: 32.0),
+        child: CustomElevatedButton(
+          text: 'Continue',
+          isLoading: authState.isLoading,
+          onPressed:
+              emailController.text.trim().isEmpty ||
+                  passwordController.text.trim().isEmpty
+              ? null
+              : _handleLogin,
         ),
       ),
     );

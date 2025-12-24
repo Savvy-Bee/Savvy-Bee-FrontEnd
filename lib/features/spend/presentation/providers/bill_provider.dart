@@ -220,10 +220,9 @@ class ElectricityNotifier extends AsyncNotifier<BillsResponse?> {
   }
 
   /// Initialize electricity bill payment
-  Future<void> initializeElectricity({
-    required String phoneNo,
+  Future<bool> initializeElectricity({
     required String provider,
-    required String code,
+    required String meterNumber,
     required String amount,
     String meterType = 'prepaid',
   }) async {
@@ -233,13 +232,14 @@ class ElectricityNotifier extends AsyncNotifier<BillsResponse?> {
 
     state = await AsyncValue.guard(() async {
       return await repository.initializeElectricity(
-        phoneNo: phoneNo,
         provider: provider,
-        code: code,
+        meterNumber: meterNumber,
         amount: amount,
-        meterType: meterType,
+        meterType: meterType.toUpperCase(),
       );
     });
+
+    return state.value?.success ?? false;
   }
 
   /// Verify electricity transaction
@@ -274,7 +274,7 @@ final electricityProvidersProvider = FutureProvider<List<ElectricityProvider>>((
   return await repository.fetchElectricityProviders();
 });
 
-// ==================== COMBINED BILLS NOTIFIER (OPTIONAL) ====================
+// ==================== COMBINED BILLS NOTIFIER ====================
 
 /// A unified notifier for managing all bill types in one place
 class BillsNotifier
@@ -421,7 +421,7 @@ class BillsNotifier
   Future<bool> payElectricity({
     required String phoneNo,
     required String provider,
-    required String code,
+    required String meterNumber,
     required String amount,
     required String pin,
     String meterType = 'prepaid',
@@ -436,11 +436,10 @@ class BillsNotifier
     state = await AsyncValue.guard(() async {
       // Initialize the electricity payment
       await repository.initializeElectricity(
-        phoneNo: phoneNo,
         provider: provider,
-        code: code,
+        meterNumber: meterNumber,
         amount: amount,
-        meterType: meterType,
+        meterType: meterType.toUpperCase(),
       );
 
       // Verify with PIN and store response locally

@@ -98,3 +98,43 @@ class ElectricityProvider {
     );
   }
 }
+
+class ElectricityCustomer {
+  final String name;
+  final String address;
+  final String district;
+
+  ElectricityCustomer({
+    required this.name,
+    required this.address,
+    required this.district,
+  });
+
+  factory ElectricityCustomer.fromJson(Map<String, dynamic> json) {
+    return ElectricityCustomer(
+      name: _sanitizeString(json['customer_name']),
+      address: _sanitizeString(json['customer_address']),
+      district: _sanitizeString(json['customer_district']),
+    );
+  }
+
+  static String _sanitizeString(dynamic value) {
+    if (value == null) return 'N/A';
+
+    String str = value.toString().trim();
+
+    // Remove multiple consecutive commas and spaces
+    str = str.replaceAll(RegExp(r',\s*,+'), ',');
+
+    // Remove trailing commas
+    str = str.replaceAll(RegExp(r',+\s*$'), '');
+
+    // Remove leading commas
+    str = str.replaceAll(RegExp(r'^\s*,+'), '');
+
+    // Replace multiple spaces with single space
+    str = str.replaceAll(RegExp(r'\s+'), ' ');
+
+    return str.trim().isEmpty ? 'N/A' : str.trim();
+  }
+}

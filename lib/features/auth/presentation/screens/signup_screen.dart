@@ -206,7 +206,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
           if (_nameFormKey.currentState!.validate()) {
             _goToNextPage();
           }
-          _goToNextPage();
           break;
 
         case 1:
@@ -214,7 +213,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
           if (_emailFormKey.currentState!.validate()) {
             _goToNextPage();
           }
-          // _goToNextPage();
           break;
 
         case 2:
@@ -222,7 +220,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
           if (_usernameFormKey.currentState!.validate()) {
             _goToNextPage();
           }
-          // _goToNextPage();
           break;
 
         case 3:
@@ -239,13 +236,11 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
 
           final success = await authNotifier.register(request);
 
-          // _goToNextPage();
           if (success) {
             _goToNextPage();
           } else {
             _showError(authState.errorMessage ?? 'Registration failed');
           }
-          // _goToNextPage();
           break;
 
         case 4:
@@ -262,13 +257,11 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
 
           final success = await authNotifier.verifyEmail(verifyRequest);
 
-          // _goToNextPage();
           if (success) {
             _goToNextPage();
           } else {
             _showError(authState.errorMessage ?? 'Verification failed');
           }
-          // _goToNextPage();
           break;
 
         case 5:
@@ -276,21 +269,18 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
           if (_dobFormKey.currentState!.validate()) {
             _goToNextPage();
           }
-          // _goToNextPage();
           break;
         case 6:
           // Page 6: Date of Birth Input
           if (_countryFormKey.currentState!.validate()) {
             _goToNextPage();
           }
-          // _goToNextPage();
           break;
         case 7:
           // Page 7: Date of Birth Input
           if (_languageFormKey.currentState!.validate()) {
             _goToNextPage();
           }
-          // _goToNextPage();
           break;
 
         case 8:
@@ -329,7 +319,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
 
         default:
           // Should not happen, but safe fallback
-          // _goToNextPage();
           break;
       }
     } catch (e) {
@@ -423,16 +412,15 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                 ),
               ),
             ),
-
-            Padding(
-              padding: const EdgeInsets.all(16.0).copyWith(bottom: 16),
-              child: CustomElevatedButton(
-                text: 'Continue',
-                isLoading: authState.isLoading,
-                onPressed: _handleContinue,
-              ),
-            ),
           ],
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(16.0).copyWith(bottom: 32),
+        child: CustomElevatedButton(
+          text: 'Continue',
+          isLoading: authState.isLoading,
+          onPressed: _handleContinue,
         ),
       ),
     );
@@ -452,7 +440,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
             controller: _firstNameController,
             textInputAction: TextInputAction.next,
             validator: (value) =>
-                InputValidator.validateName(value, 'First Name'),
+                InputValidator.validateName(value, 'First name'),
           ),
           const Gap(16.0),
           CustomTextFormField(
@@ -461,7 +449,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
             controller: _lastNameController,
             textInputAction: TextInputAction.done,
             validator: (value) =>
-                InputValidator.validateName(value, 'Last Name'),
+                InputValidator.validateName(value, 'Last name'),
           ),
         ],
       ),
