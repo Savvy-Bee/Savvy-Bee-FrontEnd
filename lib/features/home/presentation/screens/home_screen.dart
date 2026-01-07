@@ -34,6 +34,15 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
+  final courseImagePaths = [
+    Illustrations.bloom,
+    Illustrations.susu,
+    Illustrations.dash,
+  ];
+  final recentInsightsImagePaths = [
+    Illustrations.matchingAndQuizBee,
+    Illustrations.dash,
+  ];
   @override
   Widget build(BuildContext context) {
     final homeData = ref.watch(homeDataProvider);
@@ -148,6 +157,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 (course) => _buildCourseCard(
                                   course: course,
                                   color: AppColors.primary,
+                                  imagePath:
+                                      courseImagePaths[courses.indexOf(course)],
                                 ),
                               )
                               .toList(),
@@ -176,7 +187,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       title: 'Should you save financially with your partner?',
                       subtitle: "Let's get financially intimate",
                       backgroundColor: AppColors.primary,
-                      imagePath: Illustrations.matchingAndQuizBee,
+                      imagePath: recentInsightsImagePaths[0],
                       onTap: () {},
                     ),
                     ArticleCard(
@@ -184,7 +195,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       subtitle:
                           "Are you really listening to what they're saying?",
                       backgroundColor: AppColors.success,
-                      imagePath: Illustrations.matchingAndQuizBee,
+                      imagePath: recentInsightsImagePaths[1],
                       onTap: () {},
                     ),
                   ],
@@ -223,7 +234,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  Widget _buildCourseCard({required Course course, required Color color}) {
+  Widget _buildCourseCard({
+    required Course course,
+    required Color color,
+    required String imagePath,
+  }) {
     final width = MediaQuery.sizeOf(context).width / 1.9;
 
     return CustomCard(
@@ -237,9 +252,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(Illustrations.susu, height: 140, width: 140),
-            ],
+            children: [Image.asset(imagePath, height: 140, width: 140)],
           ),
           // const Gap(16),
           Text(

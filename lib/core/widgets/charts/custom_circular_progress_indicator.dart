@@ -31,6 +31,7 @@ class CustomCircularProgressIndicator extends StatelessWidget {
         children: [
           // The custom painter for the arcs
           CustomPaint(
+            size: Size(size, size),
             painter: CircularProgressPainter(
               progress: progress,
               trackColor: AppColors.primaryFaint.withValues(alpha: 0.8),

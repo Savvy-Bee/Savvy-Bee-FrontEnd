@@ -70,7 +70,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     // Check if we have either a message or a file
     if (message.isEmpty && _pickedFile == null) return;
 
-    _messageController.clear();
+    // _messageController.clear();
 
     // Determine file type (image or document)
     File? image;
@@ -101,6 +101,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         _pickedFile = null;
       });
     } else {
+      _messageController.text = message;
       if (mounted) {
         CustomSnackbar.show(
           context,
@@ -146,24 +147,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       loading: () =>
           Scaffold(body: const CustomLoadingWidget(text: 'Loading chat...')),
     );
-
-    // return Scaffold(
-    //   appBar: _buildAppBar(context),
-    //   body: Container(
-    //     decoration: BoxDecoration(
-    //       color: AppColors.primaryFaint.withValues(alpha: 0.3),
-    //       image: DecorationImage(
-    //         image: AssetImage(Assets.hivePatternYellow),
-    //         fit: BoxFit.cover,
-    //       ),
-    //     ),
-    //     child: chatAsync.when(
-    //       loading: () => _buildLoadingView(),
-    //       error: (error, stack) => _buildErrorView(error.toString()),
-    //       data: (chatState) => _buildChatView(chatState),
-    //     ),
-    //   ),
-    // );
   }
 
   /// Build main chat view
@@ -368,6 +351,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
             showOutline: _pickedFile == null,
             textInputAction: TextInputAction.send,
             onFieldSubmitted: (_) => _sendMessage(),
+            maxLines: 3,
+            minLines: 1,
             prefixIcon: IconButton(
               icon: const Icon(Icons.add),
               constraints: BoxConstraints(),
@@ -468,7 +453,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         child: SafeArea(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               BackButton(),
               InkWell(
@@ -482,7 +467,14 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                         color: AppColors.primary.withValues(alpha: 0.1),
                         border: Border.all(color: AppColors.primary),
                       ),
-                      child: Image.asset(Illustrations.dashAvatar, scale: 1.5),
+                      child: Image.asset(
+                        Illustrations.avatars.firstWhere(
+                          (element) => element.toLowerCase().contains(
+                            personaName.toLowerCase(),
+                          ),
+                        ),
+                        scale: 1.5,
+                      ),
                     ),
                     Text(
                       personaName,

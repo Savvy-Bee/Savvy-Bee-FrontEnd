@@ -182,7 +182,7 @@ class _LivePhotoScreenState extends ConsumerState<LivePhotoScreen>
         .verifyIdentity(
           encryptedData: nin,
           profileImageFile: _profileImageFile!,
-          type: KycIdentityType.nin,
+          // type: KycIdentityType.nin,
         );
   }
 

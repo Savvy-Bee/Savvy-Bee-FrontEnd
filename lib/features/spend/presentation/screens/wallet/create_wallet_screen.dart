@@ -32,7 +32,8 @@ class CreateWalletScreen extends ConsumerWidget {
             ),
             CustomElevatedButton(
               text: 'Get Started',
-              onPressed: () => context.pushNamed(NinVerificationScreen.path),
+              onPressed: () =>
+                  context.pushReplacementNamed(NinVerificationScreen.path),
               buttonColor: CustomButtonColor.black,
               showArrow: true,
             ),

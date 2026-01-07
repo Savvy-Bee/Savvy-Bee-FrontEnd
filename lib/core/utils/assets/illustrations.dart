@@ -11,7 +11,6 @@ class Illustrations {
   static const String familyBee = '$_basePath/family_bee.png';
   static const String penny = '$_basePath/penny.png';
 
-
   static const String coinJar = '$_basePath/jar.png';
   static const String savvyCoin = '$_basePath/savvy_coin.png';
 
@@ -25,7 +24,17 @@ class Illustrations {
   static const String bloomAvatar = '$_basePath/bloom_head.png';
   static const String booAvatar = '$_basePath/boo_head.png';
   static const String lunaAvatar = '$_basePath/luna_head.png';
-  static const String lokiAvatar = '$_basePath/scammer_bee_head.png';
+  static const String lokiAvatar = '$_basePath/loki_head.png';
+
+  static const List<String> avatars = [
+    dashAvatar,
+    pennyAvatar,
+    susuAvatar,
+    bloomAvatar,
+    booAvatar,
+    lunaAvatar,
+    lokiAvatar,
+  ];
 
   // Lessons Illustrations
   static const String lesson1 = '$_basePath/lesson-1.png';

@@ -128,9 +128,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   /// Clear all stored authentication data
   Future<void> _clearStorage() async {
     try {
-      await _storageService.deleteAuthToken();
-      await _storageService.deleteData(StorageService.userDataKey);
-      _authRepository.clearAuthToken();
+      await _storageService.clearAll();
       log('Storage cleared');
     } catch (e) {
       log('Error clearing storage: $e');

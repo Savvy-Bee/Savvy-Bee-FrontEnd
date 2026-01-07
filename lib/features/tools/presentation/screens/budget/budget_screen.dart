@@ -24,14 +24,22 @@ class BudgetScreen extends ConsumerStatefulWidget {
 }
 
 class _BudgetScreenState extends ConsumerState<BudgetScreen> {
+  final categoryColors = [
+    AppColors.primary,
+    AppColors.success,
+    AppColors.blue,
+    AppColors.primaryFaded,
+    AppColors.error,
+  ];
+
   @override
   Widget build(BuildContext context) {
-    // 2. Watch the provider
+    // Watch the provider
     final budgetState = ref.watch(budgetHomeNotifierProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Budgets')),
-      // 3. Use .when to handle loading, error, and data states
+      // Use .when to handle loading, error, and data states
       body: budgetState.when(
         loading: () =>
             const CustomLoadingWidget(text: 'Loading your budgets...'),
@@ -46,7 +54,7 @@ class _BudgetScreenState extends ConsumerState<BudgetScreen> {
           },
         ),
         data: (data) {
-          // 5. Calculate derived values from the data
+          // Calculate derived values from the data
           final totalSpent = data.budgets.fold<num>(
             0,
             (prev, budget) => prev + budget.balance,
@@ -54,16 +62,7 @@ class _BudgetScreenState extends ConsumerState<BudgetScreen> {
           final totalBudget = data.totalEarnings;
           final progress = (totalBudget > 0) ? (totalSpent / totalBudget) : 0.0;
 
-          // A simple list of colors to cycle through for categories
-          final categoryColors = [
-            AppColors.primary,
-            AppColors.success,
-            AppColors.blue, // Assuming AppColors has other colors
-            AppColors.primaryFaded,
-            AppColors.error,
-          ];
-
-          // 6. Return the UI with live data
+          // Return the UI with live data
           return RefreshIndicator(
             onRefresh: () async {
               ref.invalidate(budgetHomeNotifierProvider);
@@ -71,16 +70,16 @@ class _BudgetScreenState extends ConsumerState<BudgetScreen> {
             child: ListView(
               padding: const EdgeInsets.all(16),
               children: [
-                const Gap(20),
+                const Gap(50),
                 CustomCircularProgressIndicator(
                   // Use calculated progress
                   progress: progress.toDouble(),
                   // Format numbers as strings (assuming NGN currency from insight)
                   currentAmount: "₦${totalSpent.toStringAsFixed(0)}",
                   totalBudget: "₦${totalBudget.toStringAsFixed(0)} budget",
-                  size: 280,
+                  size: 250,
                 ),
-                const Gap(47),
+                const Gap(70),
                 CustomElevatedButton(
                   text: 'Edit budget',
                   icon: AppIcon(AppIcons.editIcon),
@@ -100,7 +99,7 @@ class _BudgetScreenState extends ConsumerState<BudgetScreen> {
                 ),
                 const Gap(16),
 
-                // 7. Dynamically build category list from data.budgets
+                // Dynamically build category list from data.budgets
                 ...List.generate(data.budgets.length, (index) {
                   final budget = data.budgets[index];
 

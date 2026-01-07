@@ -179,7 +179,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               dotColor: AppColors.greyDark.withValues(alpha: 0.5),
             ),
           ),
-          const Gap(24.0),
+          const Gap(32.0),
           Row(
             spacing: 8,
             mainAxisSize: MainAxisSize.min,

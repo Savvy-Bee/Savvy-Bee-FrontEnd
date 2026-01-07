@@ -91,7 +91,7 @@ class CustomSnackbar extends StatelessWidget {
     BuildContext context,
     String text, {
     SnackbarType type = SnackbarType.neutral,
-    SnackbarPosition position = SnackbarPosition.top,
+    SnackbarPosition position = SnackbarPosition.bottom,
   }) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
 

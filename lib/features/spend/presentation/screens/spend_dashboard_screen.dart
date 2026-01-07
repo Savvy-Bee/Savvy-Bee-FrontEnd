@@ -124,7 +124,7 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
         _buildQuickActionButton(
           AppIcons.walletIcon,
           'Pay bills',
-          !enabled ? () => context.pushNamed(PayBillsScreen.path) : null,
+          enabled ? () => context.pushNamed(PayBillsScreen.path) : null,
         ),
         _buildQuickActionButton(
           AppIcons.sendIcon,
@@ -432,6 +432,7 @@ class _OptionsBottomSheet extends StatelessWidget {
   static void showOptionsBottomSheet(BuildContext context, WidgetRef ref) {
     showModalBottomSheet(
       context: context,
+      useRootNavigator: true,
       builder: (context) => _OptionsBottomSheet(ref: ref),
     );
   }

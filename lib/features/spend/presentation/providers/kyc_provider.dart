@@ -19,7 +19,7 @@ class KycNotifier extends AsyncNotifier<KycData?> {
   Future<void> verifyIdentity({
     required String encryptedData,
     required File profileImageFile,
-    required KycIdentityType type, // Use a clear enum for identity type
+    // required KycIdentityType type, // Use a clear enum for identity type
   }) async {
     // Set state to loading
     state = const AsyncLoading<KycData?>().copyWithPrevious(state);
@@ -76,7 +76,7 @@ class KycNotifier extends AsyncNotifier<KycData?> {
 }
 
 // Define the Identity Type Enum
-enum KycIdentityType { nin, bvn }
+// enum KycIdentityType { nin, bvn }
 
 // Define the AsyncNotifierProvider
 final kycNotifierProvider = AsyncNotifierProvider<KycNotifier, KycData?>(

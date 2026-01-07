@@ -42,6 +42,8 @@ class ArticleCard extends StatelessWidget {
           const Gap(4),
           Text(
             subtitle,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: TextStyle(
               fontSize: 12,
               height: 1.1,

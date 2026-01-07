@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:savvy_bee_mobile/core/widgets/main_wrapper.dart';
+import 'package:savvy_bee_mobile/features/auth/presentation/providers/auth_providers.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/assets/assets.dart';
 import '../../../../core/utils/assets/illustrations.dart';
@@ -14,6 +16,7 @@ import '../../../../core/widgets/custom_loading_widget.dart';
 import '../../../../core/widgets/game_card.dart';
 import '../../../../core/widgets/icon_text_row_widget.dart';
 import '../../../../core/widgets/section_title_widget.dart';
+import '../../../auth/presentation/screens/login_screen.dart';
 import '../../../home/presentation/providers/home_data_provider.dart';
 import 'account_info_screen.dart';
 import 'achievements_screen.dart';
@@ -399,7 +402,13 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           ProfileListTile(
                             title: 'Log Out',
                             iconPath: AppIcons.logOutIcon,
-                            onTap: () {},
+                            onTap: () {
+                              ref.read(authProvider.notifier).logout();
+                              ref.read(bottomNavIndexProvider.notifier).state =
+                                  0;
+                              ref.invalidate(homeDataProvider);
+                              context.goNamed(LoginScreen.path);
+                            },
                             textColor: AppColors.error,
                             useDefaultTrailing: false,
                           ),
