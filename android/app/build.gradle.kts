@@ -21,7 +21,7 @@ android {
     }
     
     defaultConfig {
-        applicationId = "com.example.savvy_bee_mobile"
+        applicationId = "com.mysavvybee.app"
         minSdk = flutter.minSdkVersion
         targetSdk = 34
         versionCode = flutter.versionCode
