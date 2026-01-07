@@ -98,10 +98,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 ),
               ),
             ),
-            _buildAuthButtonsAndPageIndicator(context),
           ],
         ),
       ),
+      extendBody: true,
+      bottomNavigationBar: _buildAuthButtonsAndPageIndicator(context),
     );
   }
 
@@ -120,8 +121,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           ] else ...[
             Image.asset(
               item.imagePath,
-              height: height / 1.7,
-              fit: BoxFit.contain,
+              height: height / 2,
+              width: double.infinity,
+              fit: BoxFit.cover,
               alignment: Alignment.bottomCenter,
             ),
             Expanded(child: _buildIntroTexts()),
@@ -145,7 +147,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   Widget _buildIntroTexts({TextAlignment? alignment}) {
     return Container(
-      padding: const EdgeInsets.all(16.0).copyWith(bottom: 0),
+      padding: const EdgeInsets.all(
+        16.0,
+      ).copyWith(bottom: 0, top: _isFirstPage ? 0 : 32.0),
       decoration: BoxDecoration(
         color: _isFirstPage ? null : AppColors.background,
         border: _isFirstPage ? null : const Border(top: BorderSide()),
@@ -163,6 +167,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       padding: const EdgeInsets.all(16.0).copyWith(bottom: 32.0),
       color: _isFirstPage ? Colors.transparent : AppColors.background,
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           SmoothPageIndicator(
             controller: _pageController,
@@ -174,7 +179,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               dotColor: AppColors.greyDark.withValues(alpha: 0.5),
             ),
           ),
-          const Gap(32.0),
+          const Gap(24.0),
           Row(
             spacing: 8,
             mainAxisSize: MainAxisSize.min,
