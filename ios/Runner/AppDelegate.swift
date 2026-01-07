@@ -1,7 +1,7 @@
 import Flutter
 import UIKit
 
-// Unity setup
+// Unity setup - TEMPORARILY DISABLED
 // import flutter_unity_widget
 
 @main
@@ -10,7 +10,7 @@ import UIKit
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
-    // Unity setup
+    // Unity setup - TEMPORARILY DISABLED
     // InitUnityIntegrationWithOptions(argc: CommandLine.argc, argv: CommandLine.unsafeArgv, launchOptions)
 
     GeneratedPluginRegistrant.register(with: self)

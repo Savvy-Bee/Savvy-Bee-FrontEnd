@@ -6,7 +6,6 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/input_validator.dart';
-import 'package:savvy_bee_mobile/core/utils/string_extensions.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_dropdown_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';
@@ -16,6 +15,7 @@ import '../../../../../core/utils/constants.dart';
 import '../../../../../core/utils/num_extensions.dart';
 import '../../../../../core/widgets/custom_snackbar.dart';
 import '../../../domain/models/bills.dart';
+import '../../providers/wallet_provider.dart';
 import '../../widgets/bottom_sheets/bills_bottom_sheet.dart';
 import '../../widgets/mini_button.dart';
 import 'bill_confirmation_screen.dart';
@@ -149,6 +149,8 @@ class _ElectricityBillScreenState extends ConsumerState<ElectricityBillScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final dashboardAsync = ref.watch(spendDashboardDataProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Electricity'),
@@ -254,7 +256,10 @@ class _ElectricityBillScreenState extends ConsumerState<ElectricityBillScreen> {
             CustomTextFormField(
               label: 'Amount',
               hint: 'Enter amount',
-              endLabel: 'Balance: ₦11,638.16',
+              endLabel: dashboardAsync.whenOrNull(
+                data: (data) =>
+                    'Balance: ₦${data.data?.accounts.balance.formatCurrency() ?? 'N/A'}',
+              ),
               controller: _amountController,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               validator: (value) =>

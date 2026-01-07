@@ -55,6 +55,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         context,
         ref.read(authProvider).errorMessage ?? 'Login failed',
         type: SnackbarType.error,
+        position: SnackbarPosition.bottom,
       );
       return;
     }
@@ -71,6 +72,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             context,
             response.message,
             type: SnackbarType.error,
+            position: SnackbarPosition.bottom,
           );
 
           context.pushNamed(
@@ -89,6 +91,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             context,
             response.message,
             type: SnackbarType.error,
+            position: SnackbarPosition.bottom,
           );
           context.pushNamed(
             SignupScreen.path,
@@ -102,7 +105,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       }
 
       // Generic error message if no specific verification issue
-      CustomSnackbar.show(context, response.message, type: SnackbarType.error);
+      CustomSnackbar.show(
+        context,
+        response.message,
+        type: SnackbarType.error,
+        position: SnackbarPosition.bottom,
+      );
       return;
     }
 
@@ -116,6 +124,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           context,
           'Please verify your email first',
           type: SnackbarType.error,
+          position: SnackbarPosition.bottom,
         );
         context.pushNamed(SignupScreen.path, extra: 4);
         return;
@@ -126,6 +135,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           context,
           'Please complete your profile',
           type: SnackbarType.error,
+          position: SnackbarPosition.bottom,
         );
         context.pushNamed(SignupScreen.path, extra: 5);
         return;
@@ -138,6 +148,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         context,
         'Login failed - no data received',
         type: SnackbarType.error,
+        position: SnackbarPosition.bottom,
       );
     }
   }
@@ -164,6 +175,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   IntroText(
                     title: 'Welcome back!',
                     subtitle: 'The hive missed you. Log in to continue',
+                    alignment: TextAlignment.center,
                   ),
                   const Gap(24.0),
                   CustomTextFormField(

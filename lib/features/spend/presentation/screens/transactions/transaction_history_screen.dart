@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/utils/num_extensions.dart';
@@ -14,6 +13,7 @@ import 'package:savvy_bee_mobile/features/spend/domain/models/wallet.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/transactions/account_statement_screen.dart';
 
 import '../../../../../core/utils/assets/assets.dart';
+import '../../../../../core/utils/date_formatter.dart';
 import '../../providers/wallet_provider.dart';
 
 class TransactionHistoryScreen extends ConsumerStatefulWidget {
@@ -222,7 +222,7 @@ class TransactionHistoryCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          DateFormat('MMM dd, yyyy').format(date),
+          date.formatShortDate(),
           style: TextStyle(
             fontSize: 12,
             fontFamily: Constants.neulisNeueFontFamily,
@@ -244,9 +244,7 @@ class TransactionHistoryCard extends StatelessWidget {
 
   Widget _buildTransactionItem(WalletTransaction transaction) {
     // Determine title based on transaction type and purpose
-    String title = transaction.transactionFor.isNotEmpty
-        ? transaction.transactionFor
-        : transaction.narration;
+    String title = transaction.narration;
 
     // Truncate long titles
     if (title.length > 25) {
@@ -254,8 +252,7 @@ class TransactionHistoryCard extends StatelessWidget {
     }
 
     // Format time
-    final timeFormat = DateFormat('h:mma');
-    final time = timeFormat.format(transaction.createdAt);
+    final time = transaction.createdAt.formatTime();
 
     // Format amount with sign based on transaction type
     final amountPrefix = transaction.isCredit ? '+' : '-';

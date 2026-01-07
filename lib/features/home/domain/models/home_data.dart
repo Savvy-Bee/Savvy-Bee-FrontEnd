@@ -143,8 +143,14 @@ class HomeData {
   final String firstName;
   final String lastName;
   final String username;
-  final Kyc kyc;
+  final String email;
+  final String country;
+  final String currency;
+  final String language;
   final String profilePhoto;
+  final String aiPersonality;
+  final String dob;
+  final Kyc kyc;
   final AIData aiData;
   final HiveData hive;
 
@@ -152,8 +158,14 @@ class HomeData {
     required this.firstName,
     required this.lastName,
     required this.username,
-    required this.kyc,
+    required this.email,
+    required this.country,
+    required this.currency,
+    required this.language,
     required this.profilePhoto,
+    required this.aiPersonality,
+    required this.dob,
+    required this.kyc,
     required this.aiData,
     required this.hive,
   });
@@ -163,8 +175,14 @@ class HomeData {
       firstName: json['FirstName'] as String,
       lastName: json['LastName'] as String,
       username: json['Username'] as String,
-      kyc: Kyc.fromJson(json['Kyc'] as Map<String, dynamic>),
+      email: json['Email'] as String,
+      country: json['Country'] as String,
+      currency: json['Currency'] as String,
+      language: json['Language'] as String,
       profilePhoto: json['ProfilePhoto'] as String,
+      aiPersonality: json['AIPersonality'] as String,
+      dob: json['DOB'] as String,
+      kyc: Kyc.fromJson(json['Kyc'] as Map<String, dynamic>),
       aiData: AIData.fromJson(json['AIData'] as Map<String, dynamic>),
       hive: HiveData.fromJson(json['Hive'] as Map<String, dynamic>),
     );
@@ -175,8 +193,14 @@ class HomeData {
       'FirstName': firstName,
       'LastName': lastName,
       'Username': username,
-      'Kyc': kyc.toJson(),
+      'Email': email,
+      'Country': country,
+      'Currency': currency,
+      'Language': language,
       'ProfilePhoto': profilePhoto,
+      'AIPersonality': aiPersonality,
+      'DOB': dob,
+      'Kyc': kyc.toJson(),
       'AIData': aiData.toJson(),
       'Hive': hive.toJson(),
     };

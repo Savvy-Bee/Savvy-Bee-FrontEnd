@@ -581,7 +581,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
           if (date != null) {
             setState(() {
               // Format date consistently
-              _dobController.text = DateFormatter.formatDateForRequest(date);
+              _dobController.text = date.formatDateForRequest();
             });
           }
         },

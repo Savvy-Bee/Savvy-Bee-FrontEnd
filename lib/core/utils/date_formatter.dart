@@ -1,40 +1,40 @@
 import 'package:intl/intl.dart';
 
-class DateFormatter {
+extension DateFormatter on DateTime {
   // Format to show short month, day, year (e.g., Jun 20, 2025)
-  static String formatShortDate(DateTime dateTime) {
-    return DateFormat('MMM dd, yyyy').format(dateTime);
+  String formatShortDate() {
+    return DateFormat('MMM dd, yyyy').format(this);
   }
 
   // Format to show date for API request (e.g., 2025-06-20)
-  static String formatDateForRequest(DateTime dateTime) {
-    return DateFormat('yyyy-MM-dd').format(dateTime);
+  String formatDateForRequest() {
+    return DateFormat('yyyy-MM-dd').format(this);
   }
 
   // Format to show short month, day, year, and time (e.g., Jun 20, 2025, 03:07 PM)
-  static String formatDateTime(DateTime dateTime) {
-    return DateFormat('MMM dd, yyyy, hh:mm a').format(dateTime);
+  String formatDateTime() {
+    return DateFormat('MMM dd, yyyy, hh:mm a').format(this);
   }
 
   // Format to show only time (e.g., 03:07 PM)
-  static String formatTime(DateTime dateTime) {
-    return DateFormat('hh:mm a').format(dateTime);
+  String formatTime() {
+    return DateFormat('hh:mm a').format(this);
   }
 
   // Format to show short month and day (e.g., Jun 20)
-  static String formatMonthDay(DateTime dateTime) {
-    return DateFormat('MMM dd').format(dateTime);
+  String formatMonthDay() {
+    return DateFormat('MMM dd').format(this);
   }
 
   // Format to show only the year (e.g., 2025)
-  static String formatYear(DateTime dateTime) {
-    return DateFormat('yyyy').format(dateTime);
+  String formatYear() {
+    return DateFormat('yyyy').format(this);
   }
 
   // Format to show relative time (e.g. "2 hours ago", "in 3 days")
-  static String formatRelative(DateTime dateTime) {
+  String formatRelative() {
     final now = DateTime.now();
-    final difference = now.difference(dateTime);
+    final difference = now.difference(this);
 
     // If the date is in the future
     if (difference.isNegative) {
@@ -77,31 +77,29 @@ class DateFormatter {
   }
 
   // Format to show 'today' if the date is today, otherwise show the date
-  static String formatDayOrToday(DateTime dateTime) {
+  String formatDayOrToday() {
     final now = DateTime.now();
-    if (dateTime.year == now.year &&
-        dateTime.month == now.month &&
-        dateTime.day == now.day) {
+    if (year == now.year && month == now.month && day == now.day) {
       return 'Today';
     }
-    return formatShortDate(dateTime);
+    return formatShortDate();
   }
 
   // Format datetime from int timestamp (milliseconds since epoch)
-  static String formatFromTimestamp(int timestamp) {
+  String formatFromTimestamp(int timestamp) {
     final dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp);
-    return formatDateTime(dateTime);
+    return dateTime.formatDateTime();
   }
 
   // Format short date from int timestamp (milliseconds since epoch)
-  static String formatShortDateFromTimestamp(int timestamp) {
+  String formatShortDateFromTimestamp(int timestamp) {
     final dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp);
-    return formatShortDate(dateTime);
+    return dateTime.formatShortDate();
   }
 
   // Format relative time from int timestamp (milliseconds since epoch)
-  static String formatRelativeFromTimestamp(int timestamp) {
+  String formatRelativeFromTimestamp(int timestamp) {
     final dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp);
-    return formatRelative(dateTime);
+    return dateTime.formatRelative();
   }
 }

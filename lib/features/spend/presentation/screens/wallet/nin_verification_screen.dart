@@ -36,10 +36,10 @@ class _NinVerificationScreenState extends ConsumerState<NinVerificationScreen> {
   }
 
   // Helper to check if the input meets the required length (11 digits for NIN)
-  bool get _isNinValid => _ninController.text.trim().length == 11;
+  // bool get _isNinValid => _ninController.text.trim().length == 11;
 
   void _navigateToBvnVerification() async {
-    if (_formKey.currentState?.validate() ?? false) {
+    if (_formKey.currentState!.validate()) {
       final plainNin = _ninController.text.trim();
 
       final encryptedNin = await EncryptionService.encryptText(plainNin);
@@ -109,7 +109,7 @@ class _NinVerificationScreenState extends ConsumerState<NinVerificationScreen> {
               ),
               CustomElevatedButton(
                 text: 'Continue',
-                onPressed: _isNinValid ? _navigateToBvnVerification : null,
+                onPressed: _navigateToBvnVerification,
                 buttonColor: CustomButtonColor.black,
                 showArrow: true,
               ),

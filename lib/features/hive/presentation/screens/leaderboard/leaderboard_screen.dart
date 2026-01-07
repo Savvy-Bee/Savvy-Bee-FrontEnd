@@ -54,7 +54,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
             CustomElevatedButton(
               text: 'Continue',
               isGamePlay: true,
-              onPressed: () => context.pushNamed(LeagueScreen.path),
+              onPressed: () => context.pushReplacementNamed(LeagueScreen.path),
             ),
           ],
         ),

@@ -69,7 +69,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           ),
         ],
       ),
-      backgroundColor: AppColors.blue,
       body: homeDataAsync.when(
         loading: () => const CustomLoadingWidget(),
         error: (error, stack) => CustomErrorWidget.error(
@@ -81,6 +80,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           final hiveStats = data.hive.stats;
 
           return ListView(
+            physics: const ClampingScrollPhysics(),
             children: [
               _buildAvatarSection(context),
               // Container(
@@ -252,23 +252,18 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     const Gap(24),
                     Row(
                       spacing: 8,
-                      children: [
-                        Expanded(
-                          child: GameCard(
-                            child: Image.asset(Assets.bumblebeeLeagueBadge),
-                          ),
-                        ),
-                        Expanded(
-                          child: GameCard(
-                            child: Image.asset(Assets.honeyLeagueBadge),
-                          ),
-                        ),
-                        Expanded(
-                          child: GameCard(
-                            child: Image.asset(Assets.masonLeagueBadge),
-                          ),
-                        ),
-                      ],
+                      children: data.hive.achievement.map((achievement) {
+                        // Choose the asset whose name contains (case-insensitive) the achievement name
+                        final asset = Assets.leagueNames.firstWhere(
+                          (a) => a
+                              .toLowerCase()
+                              .split(' ')
+                              .contains(achievement.name.toLowerCase()),
+                          orElse: () => Assets.bumblebeeLeagueBadge,
+                        );
+
+                        return GameCard(child: Image.asset(asset));
+                      }).toList(),
                     ),
                     const Gap(24),
                     GameCard(

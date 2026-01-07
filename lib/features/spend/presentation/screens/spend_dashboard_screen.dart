@@ -34,7 +34,7 @@ class SpendScreen extends ConsumerStatefulWidget {
 class _SpendScreenState extends ConsumerState<SpendScreen> {
   @override
   Widget build(BuildContext context) {
-    final dashboardAsync = ref.watch(dashboardDataProvider);
+    final dashboardAsync = ref.watch(spendDashboardDataProvider);
 
     return Scaffold(
       body: Padding(
@@ -64,7 +64,7 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
 
             return RefreshIndicator(
               onRefresh: () async {
-                ref.invalidate(dashboardDataProvider);
+                ref.invalidate(spendDashboardDataProvider);
                 ref.invalidate(transactionListProvider);
               },
               child: ListView(
@@ -109,7 +109,7 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
           },
           loading: () => CustomLoadingWidget(),
           error: (error, stack) => CustomErrorWidget.error(
-            onRetry: () => ref.invalidate(dashboardDataProvider),
+            onRetry: () => ref.invalidate(spendDashboardDataProvider),
           ),
         ),
       ),
@@ -296,7 +296,7 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
                                     ),
                                   ),
                                   Text(
-                                    '${DateFormatter.formatRelative(transaction.createdAt)} ${DateFormatter.formatTime(transaction.createdAt)}',
+                                    '${transaction.createdAt.formatRelative()} ${transaction.createdAt.formatTime()}',
                                     style: TextStyle(
                                       fontSize: 10,
                                       color: AppColors.textLight,
@@ -400,7 +400,7 @@ class WalletBalanceCard extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                'Last updated ${DateFormatter.formatRelative(DateTime.now())}',
+                'Last updated ${DateTime.now().formatRelative()}',
                 style: TextStyle(
                   fontSize: 10,
                   color: AppColors.textSecondary,
@@ -469,7 +469,7 @@ class _OptionsBottomSheet extends StatelessWidget {
                 title: 'Refresh',
                 icon: Icons.refresh,
                 onTap: () {
-                  ref.invalidate(dashboardDataProvider);
+                  ref.invalidate(spendDashboardDataProvider);
                   ref.invalidate(transactionListProvider);
                   context.pop();
                 },

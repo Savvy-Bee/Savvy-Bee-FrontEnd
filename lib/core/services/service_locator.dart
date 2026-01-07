@@ -23,7 +23,13 @@ final storageServiceProvider = Provider<StorageService>((ref) {
 });
 
 final apiClientProvider = Provider<ApiClient>((ref) {
-  return ApiClient(baseUrl: ApiEndpoints.baseUrl);
+  return ApiClient(
+    baseUrl: ApiEndpoints.baseUrl,
+    timeoutSeconds: int.fromEnvironment(
+      'API_TIMEOUT_SECONDS',
+      defaultValue: 30,
+    ),
+  );
 });
 
 final authRepositoryProvider = Provider<AuthRepository>((ref) {

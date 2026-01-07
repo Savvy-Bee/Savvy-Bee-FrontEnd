@@ -11,7 +11,7 @@ final createNairaAccountProvider = FutureProvider.autoDispose
     });
 
 // Dashboard Data Provider
-final dashboardDataProvider =
+final spendDashboardDataProvider =
     FutureProvider.autoDispose<ApiResponse<WalletDashboardData>>((ref) async {
       final repository = ref.watch(walletRepositoryProvider);
       return await repository.fetchDashboardData();

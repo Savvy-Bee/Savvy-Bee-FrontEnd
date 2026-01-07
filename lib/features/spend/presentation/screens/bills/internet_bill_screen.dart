@@ -12,8 +12,10 @@ import 'package:savvy_bee_mobile/core/widgets/custom_loading_widget.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_snackbar.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/bills/bill_confirmation_screen.dart';
 
+import '../../../../../core/utils/num_extensions.dart';
 import '../../../domain/models/bills.dart';
 import '../../providers/bill_provider.dart';
+import '../../providers/wallet_provider.dart';
 import '../../widgets/bottom_sheets/bills_bottom_sheet.dart';
 import '../../widgets/mini_button.dart';
 
@@ -64,7 +66,10 @@ class _InternetBillScreenState extends ConsumerState<InternetBillScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final dashboardAsync = ref.watch(spendDashboardDataProvider);
+
     final dataState = ref.watch(dataProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Internet'),
@@ -160,7 +165,10 @@ class _InternetBillScreenState extends ConsumerState<InternetBillScreen> {
             CustomTextFormField(
               label: 'Amount',
               hint: 'Enter amount',
-              endLabel: 'Balance: ₦11,638.16',
+              endLabel: dashboardAsync.whenOrNull(
+                data: (data) =>
+                    'Balance: ${data.data?.accounts.balance.formatCurrency(decimalDigits: 0) ?? 'N/A'}',
+              ),
               controller: _amountController,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               validator: (value) =>

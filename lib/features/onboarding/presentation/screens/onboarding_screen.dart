@@ -27,8 +27,27 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final _pageController = PageController();
   int _currentIndex = 0;
 
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer.periodic(const Duration(seconds: 3), (timer) {
+      if (_currentIndex < OnboardingItem.items.length - 1) {
+        _pageController.animateToPage(
+          _currentIndex + 1,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.ease,
+        );
+      } else {
+        _timer?.cancel();
+      }
+    });
+  }
+
   @override
   void dispose() {
+    _timer?.cancel();
     _pageController.dispose();
     super.dispose();
   }

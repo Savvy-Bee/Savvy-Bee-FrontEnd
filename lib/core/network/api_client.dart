@@ -1,7 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
@@ -21,14 +20,15 @@ class ApiException implements Exception {
 class ApiClient {
   final Dio _dio;
   final String baseUrl;
+  final int timeoutSeconds;
 
-  ApiClient({required this.baseUrl})
+  ApiClient({required this.baseUrl, this.timeoutSeconds = 30})
     : _dio = Dio(
         BaseOptions(
           baseUrl: baseUrl,
-          connectTimeout: const Duration(minutes: 10), // TODO: Change timeout
-          receiveTimeout: const Duration(minutes: 10), // TODO: Change timeout
-          sendTimeout: const Duration(minutes: 10), // TODO: Change timeout
+          connectTimeout: Duration(seconds: timeoutSeconds),
+          receiveTimeout: Duration(seconds: timeoutSeconds),
+          sendTimeout: Duration(seconds: timeoutSeconds),
           responseType: ResponseType.json,
           headers: {
             'Content-Type': 'application/json',
@@ -43,12 +43,6 @@ class ApiClient {
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
-          // final isValidRequest = await _healthCheck();
-
-          // if (!isValidRequest) {
-          //   return;
-          // }
-
           _logRequest(options);
 
           return handler.next(options);
@@ -63,21 +57,6 @@ class ApiClient {
         },
       ),
     );
-  }
-
-  Future<bool> _healthCheck() async {
-    DocumentSnapshot docSnapshot = await FirebaseFirestore.instance
-        .collection('healthCheck')
-        .doc('2gF8D8GD7EUPJ7oEWuGi')
-        .get();
-
-    if (docSnapshot.exists) {
-      final isValidRequest = docSnapshot.get('isValidRequest') as bool;
-
-      return isValidRequest;
-    } else {
-      return true;
-    }
   }
 
   /// Enhanced request logging

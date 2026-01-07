@@ -5,6 +5,8 @@ import 'package:savvy_bee_mobile/core/utils/assets/assets.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/game_card.dart';
 
+import '../../../home/presentation/providers/home_data_provider.dart';
+
 class AchievementsScreen extends ConsumerStatefulWidget {
   static String path = '/achievements';
 
@@ -18,6 +20,8 @@ class AchievementsScreen extends ConsumerStatefulWidget {
 class _AchievementsScreenState extends ConsumerState<AchievementsScreen> {
   @override
   Widget build(BuildContext context) {
+    final homeDataAsync = ref.watch(homeDataProvider);
+
     return Scaffold(
       appBar: AppBar(title: Text('Achievements')),
       body: Padding(
@@ -29,7 +33,6 @@ class _AchievementsScreenState extends ConsumerState<AchievementsScreen> {
             Assets.leagueBadges.length,
             (index) => SizedBox(
               child: Column(
-                // mainAxisSize: MainAxisSize.min,
                 children: [
                   SizedBox(
                     width:

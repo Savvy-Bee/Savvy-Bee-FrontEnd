@@ -13,6 +13,7 @@ import 'package:savvy_bee_mobile/features/spend/presentation/screens/bills/bill_
 import 'package:savvy_bee_mobile/features/spend/presentation/widgets/mini_button.dart';
 
 import '../../providers/bill_provider.dart';
+import '../../providers/wallet_provider.dart';
 import '../../widgets/bottom_sheets/bills_bottom_sheet.dart';
 
 // State model for recent airtime purchase
@@ -146,7 +147,9 @@ class _AirtimeScreenState extends ConsumerState<AirtimeScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+    Widget build(BuildContext context) {
+      final dashboardAsync = ref.watch(spendDashboardDataProvider);
+
     // Listen to airtime provider state
     ref.listen(airtimeProvider, (previous, next) {
       next.whenOrNull(
@@ -246,7 +249,10 @@ class _AirtimeScreenState extends ConsumerState<AirtimeScreen> {
           const Gap(16),
           CustomTextFormField(
             label: 'Amount',
-            endLabel: 'Balance: ₦11,638.16', // TODO: Get from wallet provider
+            endLabel: dashboardAsync.whenOrNull(
+              data: (data) =>
+                  'Balance: ${data.data?.accounts.balance.formatCurrency(decimalDigits: 0) ?? 'N/A'}',
+            ),
             hint: 'Enter amount',
             isRounded: true,
             controller: _amountController,

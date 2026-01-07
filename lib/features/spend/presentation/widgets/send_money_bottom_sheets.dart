@@ -106,7 +106,7 @@ class _EnterAmountBottomSheetState
 
   @override
   Widget build(BuildContext context) {
-    final dashboardAsync = ref.watch(dashboardDataProvider);
+    final dashboardAsync = ref.watch(spendDashboardDataProvider);
 
     return Padding(
       padding: const EdgeInsets.all(16),
@@ -339,7 +339,7 @@ class _EnterPinBottomSheetState extends ConsumerState<EnterPinBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final dashboardAsync = ref.watch(dashboardDataProvider);
+    final dashboardAsync = ref.watch(spendDashboardDataProvider);
     final initAsync = ref.watch(
       initializeTransferProvider((
         accountNumber: widget.recipientAccountInfo.accountNumber,

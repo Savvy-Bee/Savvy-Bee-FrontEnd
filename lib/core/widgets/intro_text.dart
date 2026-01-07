@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/logos.dart';
-import 'package:savvy_bee_mobile/core/utils/constants.dart';
 
 enum TextAlignment { center, left, right }
 
