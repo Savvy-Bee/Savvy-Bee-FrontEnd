@@ -21,10 +21,10 @@ dependencies:
   flutter_screenutil: ^5.9.3
   flutter_secure_storage: ^9.0.0
   flutter_svg: ^2.2.1
-  # flutter_unity_widget: # TEMPORARILY DISABLED
-  #   git:
-  #     url: https://github.com/juicycleff/flutter-unity-view-widget.git
-  #     ref: master
+  flutter_unity_widget:
+    git:
+      url: https://github.com/juicycleff/flutter-unity-view-widget.git
+      ref: master
   gap: ^3.0.1
   go_router: ^13.2.0
   image_picker: ^1.2.0
