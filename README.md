@@ -230,7 +230,7 @@ features/[feature_name]/
 
 ## Development Setup
 
-Please refer to the [BUILD_DEPLOYMENT.md](BUILD_DEPLOYMENT.md) and [CONFIGURATION_GUIDELINES.md](CONFIGURATION_GUIDELINES.md) files for detailed build and deployment instructions.
+Please refer to the [BUILD_DEPLOYMENT.md](/docs/BUILD_DEPLOYMENT.md) and [CONFIGURATION_GUIDELINES.md](/docs/CONFIGURATION_GUIDELINES.md) files for detailed build and deployment instructions.
 
 ### Prerequisites
 - Flutter SDK: 3.8.1 or higher
@@ -294,7 +294,7 @@ flutter run --release
 
 ## Build & Deployment
 
-Please refer to the [BUILD_DEPLOYMENT.md](BUILD_DEPLOYMENT.md) file for detailed build and deployment instructions.
+Please refer to the [BUILD_DEPLOYMENT.md](/docs/BUILD_DEPLOYMENT.md) file for detailed build and deployment instructions.
 
 ## Testing Strategy
 
@@ -341,7 +341,7 @@ flutter test --coverage
 
 ## API Documentation
 
-Please refer to the [API_DOCUMENTATION.md](API_DOCUMENTATION.md) file for detailed API documentation.
+Please refer to the [API_DOCUMENTATION.md](/docs/API_DOCUMENTATION.md) file for detailed API documentation.
 
 ## State Management
 
@@ -422,7 +422,7 @@ final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
 
 ## Contributing Guidelines
 
-Please refer to the [CONTRIBUTION_GUIDELINES.md](CONTRIBUTION_GUIDELINES.md) file for detailed contribution guidelines.
+Please refer to the [CONTRIBUTION_GUIDELINES.md](/docs/CONTRIBUTION_GUIDELINES.md) file for detailed contribution guidelines.
 
 ## Troubleshooting
 
