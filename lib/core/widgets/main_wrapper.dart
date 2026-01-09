@@ -64,7 +64,7 @@ class MainWrapper extends ConsumerWidget {
             context.goNamed(HomeScreen.path);
             break;
           case 1:
-            context.goNamed(SpendScreen.path);
+            context.goNamed(DashboardScreen.path);
             break;
           case 2:
             context.goNamed(ToolsScreen.path);
@@ -78,6 +78,25 @@ class MainWrapper extends ConsumerWidget {
           default:
             break;
         }
+        // switch (index) {
+        //   case 0:
+        //     context.goNamed(HomeScreen.path);
+        //     break;
+        //   case 1:
+        //     context.goNamed(SpendScreen.path);
+        //     break;
+        //   case 2:
+        //     context.goNamed(ToolsScreen.path);
+        //     break;
+        //   case 3:
+        //     context.goNamed(HiveScreen.path);
+        //     break;
+        //   case 4:
+        //     context.pushNamed(PremiumScreen.path);
+        //     break;
+        //   default:
+        //     break;
+        // }
         // switch (index) {
         //   case 0:
         //     context.goNamed(HomeScreen.path);
