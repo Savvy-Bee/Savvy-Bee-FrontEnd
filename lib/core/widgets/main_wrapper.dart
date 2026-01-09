@@ -140,16 +140,16 @@ class MainWrapper extends ConsumerWidget {
           icon: AppIcon(AppIcons.homeIcon, size: 20, color: AppColors.grey),
           label: 'Home',
         ),
-        // BottomNavigationBarItem(
-        //   activeIcon: AppIcon(AppIcons.budgetIcon, size: 20),
-        //   icon: AppIcon(AppIcons.budgetIcon, size: 20, color: AppColors.grey),
-        //   label: 'Dashboard',
-        // ),
         BottomNavigationBarItem(
-          activeIcon: AppIcon(AppIcons.spendIcon, size: 20),
-          icon: AppIcon(AppIcons.spendIcon, size: 20, color: AppColors.grey),
-          label: 'Wallet',
+          activeIcon: AppIcon(AppIcons.budgetIcon, size: 20),
+          icon: AppIcon(AppIcons.budgetIcon, size: 20, color: AppColors.grey),
+          label: 'Dashboard',
         ),
+        // BottomNavigationBarItem(
+        //   activeIcon: AppIcon(AppIcons.spendIcon, size: 20),
+        //   icon: AppIcon(AppIcons.spendIcon, size: 20, color: AppColors.grey),
+        //   label: 'Wallet',
+        // ),
         BottomNavigationBarItem(
           activeIcon: AppIcon(AppIcons.toolsIcon, size: 20),
           icon: AppIcon(AppIcons.toolsIcon, size: 20, color: AppColors.grey),
