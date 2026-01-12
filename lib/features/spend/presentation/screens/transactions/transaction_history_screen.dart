@@ -17,7 +17,7 @@ import '../../../../../core/utils/date_formatter.dart';
 import '../../providers/wallet_provider.dart';
 
 class TransactionHistoryScreen extends ConsumerStatefulWidget {
-  static String path = '/transaction-history';
+  static const String path = '/transaction-history';
 
   const TransactionHistoryScreen({super.key});
 

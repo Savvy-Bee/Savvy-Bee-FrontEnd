@@ -8,7 +8,7 @@ import 'package:savvy_bee_mobile/features/onboarding/presentation/screens/onboar
 import '../../../auth/presentation/providers/auth_providers.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
-  static String path = '/splash';
+  static const String path = '/splash';
 
   const SplashScreen({super.key});
 

@@ -9,7 +9,7 @@ import 'package:savvy_bee_mobile/core/widgets/custom_snackbar.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/providers/profile_provider.dart';
 
 class ChooseAvatarScreen extends ConsumerStatefulWidget {
-  static String path = '/choose-avatar';
+  static const String path = '/choose-avatar';
   const ChooseAvatarScreen({super.key});
 
   @override

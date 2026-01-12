@@ -15,14 +15,14 @@ class Constants {
 
   static const Duration duration = Duration(milliseconds: 500);
 
-  static String exconFontFamily = 'Excon';
-  static String generalSansFontFamily = 'GeneralSans';
-  static String neulisNeueFontFamily = 'Nuelis Neue';
-  static String fredokaFontFamily = 'Fredoka';
+  static const String exconFontFamily = 'Excon';
+  static const String generalSansFontFamily = 'GeneralSans';
+  static const String neulisNeueFontFamily = 'Nuelis Neue';
+  static const String fredokaFontFamily = 'Fredoka';
 
   // Environment Variables
-  static String encryptionKey = 'ENCRYPTION_KEY';
+  static const String encryptionKey = 'ENCRYPTION_KEY';
 
-  static String monoSecret = 'MONO_SECRET';
-  static String monoPublic = 'MONO_PUBLIC';
+  static const String monoSecret = 'MONO_SECRET';
+  static const String monoPublic = 'MONO_PUBLIC';
 }

@@ -15,7 +15,7 @@ import '../../../auth/presentation/screens/signup_screen.dart';
 import '../../domain/models/onboarding_item.dart';
 
 class OnboardingScreen extends StatefulWidget {
-  static String path = '/onboarding';
+  static const String path = '/onboarding';
 
   const OnboardingScreen({super.key});
 

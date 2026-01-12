@@ -15,7 +15,7 @@ import 'package:savvy_bee_mobile/features/home/presentation/screens/home_screen.
 import '../../../../core/widgets/custom_snackbar.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
-  static String path = '/login';
+  static const String path = '/login';
 
   const LoginScreen({super.key});
 

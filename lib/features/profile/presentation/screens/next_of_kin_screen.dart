@@ -10,7 +10,7 @@ import 'package:savvy_bee_mobile/features/action_completed_screen.dart';
 import '../../../../core/widgets/custom_button.dart';
 
 class NextOfKinScreen extends ConsumerStatefulWidget {
-  static String path = '/next-of-kin';
+  static const String path = '/next-of-kin';
 
   const NextOfKinScreen({super.key});
 

@@ -16,7 +16,7 @@ const String kKycNinKey = 'kyc_nin_key';
 const String kKycBvnKey = 'kyc_bvn_key';
 
 class NinVerificationScreen extends ConsumerStatefulWidget {
-  static String path = '/nin-verification';
+  static const String path = '/nin-verification';
 
   const NinVerificationScreen({super.key});
 

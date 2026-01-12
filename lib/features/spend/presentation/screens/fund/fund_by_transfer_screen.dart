@@ -8,7 +8,7 @@ import 'package:savvy_bee_mobile/features/spend/presentation/widgets/mini_button
 import '../../widgets/copy_text_icon_button.dart';
 
 class FundByTransferScreen extends ConsumerStatefulWidget {
-  static String path = '/fund-by-transfer';
+  static const String path = '/fund-by-transfer';
 
   const FundByTransferScreen({super.key});
 

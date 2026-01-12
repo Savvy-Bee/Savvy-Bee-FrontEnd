@@ -12,7 +12,7 @@ import '../../../../../core/widgets/info_widget.dart';
 import '../../../../../core/widgets/icon_text_row_widget.dart';
 
 class PhotoVerificationScreen extends ConsumerWidget {
-  static String path = '/photo-verification';
+  static const String path = '/photo-verification';
 
   const PhotoVerificationScreen({super.key});
 

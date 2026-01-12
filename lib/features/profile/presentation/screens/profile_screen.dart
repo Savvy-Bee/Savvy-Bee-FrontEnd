@@ -35,7 +35,7 @@ import '../../../spend/presentation/screens/transactions/account_statement_scree
 import '../../../../core/utils/assets/app_icons.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
-  static String path = '/profile';
+  static const String path = '/profile';
 
   const ProfileScreen({super.key});
 

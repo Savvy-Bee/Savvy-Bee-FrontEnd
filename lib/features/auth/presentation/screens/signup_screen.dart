@@ -31,7 +31,7 @@ class IncompleteSignUpData {
 }
 
 class SignupScreen extends ConsumerStatefulWidget {
-  static String path = '/signup-name';
+  static const String path = '/signup-name';
 
   final IncompleteSignUpData? incompleteSignUpData;
 

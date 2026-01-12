@@ -7,7 +7,7 @@ import 'package:savvy_bee_mobile/core/widgets/game_card.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/widgets/profile_list_tile.dart';
 
 class ContactUsScreen extends ConsumerStatefulWidget {
-  static String path = '/contact-us';
+  static const String path = '/contact-us';
 
   const ContactUsScreen({super.key});
 

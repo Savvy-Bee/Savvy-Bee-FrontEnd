@@ -10,7 +10,7 @@ import 'package:savvy_bee_mobile/features/profile/presentation/screens/subscript
 import '../../../../core/widgets/game_card.dart';
 
 class ManageSubscriptionScreen extends ConsumerStatefulWidget {
-  static String path = '/manage-subscription';
+  static const String path = '/manage-subscription';
 
   const ManageSubscriptionScreen({super.key});
 

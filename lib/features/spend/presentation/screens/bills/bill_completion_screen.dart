@@ -9,7 +9,7 @@ import '../../../../../core/utils/assets/assets.dart';
 import '../../../../../core/utils/constants.dart';
 
 class BillCompletionScreen extends ConsumerStatefulWidget {
-  static String path = '/bill-completion';
+  static const String path = '/bill-completion';
 
   const BillCompletionScreen({super.key});
 

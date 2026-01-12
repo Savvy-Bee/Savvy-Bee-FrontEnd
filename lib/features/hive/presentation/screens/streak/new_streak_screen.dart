@@ -13,7 +13,7 @@ import '../../../domain/models/streak.dart';
 import '../../providers/hive_provider.dart';
 
 class NewStreakScreen extends ConsumerStatefulWidget {
-  static String path = '/new-streak';
+  static const String path = '/new-streak';
 
   const NewStreakScreen({super.key});
 

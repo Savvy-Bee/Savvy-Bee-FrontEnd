@@ -19,7 +19,7 @@ class ActionInfo {
 }
 
 class ActionCompletedScreen extends ConsumerStatefulWidget {
-  static String path = '/action-completed';
+  static const String path = '/action-completed';
 
   final ActionInfo actionInfo;
 

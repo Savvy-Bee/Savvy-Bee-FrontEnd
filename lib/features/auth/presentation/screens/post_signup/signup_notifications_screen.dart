@@ -10,7 +10,7 @@ import '../../../../../core/widgets/intro_text.dart';
 import 'signup_connect_bank_screen.dart';
 
 class SignupNotificationsScreen extends StatefulWidget {
-  static String path = '/signup-notifications';
+  static const String path = '/signup-notifications';
 
   const SignupNotificationsScreen({super.key});
 

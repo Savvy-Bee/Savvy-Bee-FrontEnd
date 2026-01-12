@@ -5,9 +5,10 @@ import 'package:savvy_bee_mobile/core/utils/assets/assets.dart';
 
 import '../../../../../core/widgets/custom_button.dart';
 import '../../../../../core/widgets/info_widget.dart';
+
 // TODO: DELETE FILE
 class WalletCreationCompletionScreen extends ConsumerWidget {
-  static String path = '/wallet-creation-complete';
+  static const String path = '/wallet-creation-complete';
 
   const WalletCreationCompletionScreen({super.key});
 

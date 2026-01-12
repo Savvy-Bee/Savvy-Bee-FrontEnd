@@ -55,7 +55,7 @@ enum Priority {
 }
 
 class SelectPriorityScreen extends ConsumerStatefulWidget {
-  static String path = '/select-priority';
+  static const String path = '/select-priority';
 
   const SelectPriorityScreen({super.key});
 

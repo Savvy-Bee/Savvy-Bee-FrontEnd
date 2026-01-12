@@ -14,7 +14,7 @@ import '../../widgets/bottom_sheets/bills_bottom_sheet.dart';
 import '../../widgets/mini_button.dart';
 
 class CableBillScreen extends ConsumerStatefulWidget {
-  static String path = '/cable-bill';
+  static const String path = '/cable-bill';
 
   const CableBillScreen({super.key});
 

@@ -18,7 +18,7 @@ import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/set_
 import '../../widgets/insight_card.dart';
 
 class EditBudgetScreen extends ConsumerStatefulWidget {
-  static String path = '/edit-budget';
+  static const String path = '/edit-budget';
 
   const EditBudgetScreen({super.key});
 

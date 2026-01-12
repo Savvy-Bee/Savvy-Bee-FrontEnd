@@ -25,7 +25,7 @@ import '../../../../domain/models/auth_models.dart';
 import '../../../providers/architype_providers.dart';
 
 class FinancialArchitypeScreen extends ConsumerStatefulWidget {
-  static String path = '/architype';
+  static const String path = '/architype';
 
   final String? priority;
 

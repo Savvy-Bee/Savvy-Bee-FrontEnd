@@ -25,7 +25,7 @@ import '../../../hive/presentation/screens/lesson/lesson_home_screen.dart';
 import '../widgets/health_card.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
-  static String path = '/home';
+  static const String path = '/home';
 
   const HomeScreen({super.key});
 

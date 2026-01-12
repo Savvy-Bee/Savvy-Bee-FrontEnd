@@ -8,7 +8,7 @@ import 'package:savvy_bee_mobile/core/widgets/game_card.dart';
 import '../../../home/presentation/providers/home_data_provider.dart';
 
 class AchievementsScreen extends ConsumerStatefulWidget {
-  static String path = '/achievements';
+  static const String path = '/achievements';
 
   const AchievementsScreen({super.key});
 

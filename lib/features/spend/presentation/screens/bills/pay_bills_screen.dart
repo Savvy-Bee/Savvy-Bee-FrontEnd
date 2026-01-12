@@ -12,7 +12,7 @@ import '../../../../../core/widgets/custom_input_field.dart';
 import 'electricity_bill_screen.dart';
 
 class PayBillsScreen extends ConsumerStatefulWidget {
-  static String path = '/pay-bills';
+  static const String path = '/pay-bills';
 
   const PayBillsScreen({super.key});
 

@@ -15,7 +15,7 @@ import '../../../../../core/widgets/custom_loading_widget.dart';
 import '../../widgets/insight_card.dart';
 
 class BudgetScreen extends ConsumerStatefulWidget {
-  static String path = '/budget-screen';
+  static const String path = '/budget-screen';
 
   const BudgetScreen({super.key});
 

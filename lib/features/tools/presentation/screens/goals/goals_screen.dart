@@ -13,7 +13,7 @@ import 'package:savvy_bee_mobile/features/tools/presentation/screens/goals/creat
 import '../../widgets/goal_stats_card.dart';
 
 class GoalsScreen extends ConsumerStatefulWidget {
-  static String path = '/goals';
+  static const String path = '/goals';
 
   const GoalsScreen({super.key});
 

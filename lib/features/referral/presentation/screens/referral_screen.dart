@@ -13,7 +13,7 @@ import '../../../../core/utils/assets/logos.dart';
 import '../../../../core/widgets/icon_text_row_widget.dart';
 
 class ReferralScreen extends ConsumerWidget {
-  static String path = '/referral';
+  static const String path = '/referral';
 
   const ReferralScreen({super.key});
 

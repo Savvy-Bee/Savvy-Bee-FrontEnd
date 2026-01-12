@@ -42,7 +42,7 @@ class BillConfirmationData {
 }
 
 class BillConfirmationScreen extends ConsumerStatefulWidget {
-  static String path = '/confirmation';
+  static const String path = '/confirmation';
 
   final BillConfirmationData confirmationData;
 

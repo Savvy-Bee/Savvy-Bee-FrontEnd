@@ -15,7 +15,7 @@ import '../../../../../core/widgets/custom_dropdown_button.dart';
 enum GoalType { save, increase }
 
 class CreateGoalScreen extends ConsumerStatefulWidget {
-  static String path = '/create-goal';
+  static const String path = '/create-goal';
 
   const CreateGoalScreen({super.key});
 

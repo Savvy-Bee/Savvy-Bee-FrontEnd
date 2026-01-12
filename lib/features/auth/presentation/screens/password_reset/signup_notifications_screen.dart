@@ -10,7 +10,7 @@ import '../../../../../core/widgets/custom_button.dart';
 import '../../../../../core/widgets/intro_text.dart';
 
 class SignupNotificationsScreen extends StatefulWidget {
-  static String path = '/signup-notifications';
+  static const String path = '/signup-notifications';
 
   const SignupNotificationsScreen({super.key});
 

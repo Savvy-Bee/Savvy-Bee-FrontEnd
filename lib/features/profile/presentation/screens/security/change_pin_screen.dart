@@ -11,7 +11,7 @@ import '../../../../../core/widgets/dial_pad_widget.dart';
 import '../../../../action_completed_screen.dart';
 
 class ChangePinScreen extends ConsumerStatefulWidget {
-  static String path = '/change-pin';
+  static const String path = '/change-pin';
 
   const ChangePinScreen({super.key});
 

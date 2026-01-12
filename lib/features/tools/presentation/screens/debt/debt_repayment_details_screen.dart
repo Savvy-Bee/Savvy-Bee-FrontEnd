@@ -19,7 +19,7 @@ import 'package:savvy_bee_mobile/features/tools/presentation/widgets/insight_car
 enum DebtRepaymentMethod { bankTransfer, card }
 
 class DebtRepaymentDetailsScreen extends ConsumerStatefulWidget {
-  static String path = '/debt-repayment-details';
+  static const String path = '/debt-repayment-details';
 
   // Pass the ID created in Step 1
   final String debtId;

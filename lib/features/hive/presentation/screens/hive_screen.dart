@@ -27,7 +27,7 @@ import '../../../home/presentation/providers/home_data_provider.dart';
 import '../providers/hive_provider.dart';
 
 class HiveScreen extends ConsumerStatefulWidget {
-  static String path = '/hive';
+  static const String path = '/hive';
 
   const HiveScreen({super.key});
 

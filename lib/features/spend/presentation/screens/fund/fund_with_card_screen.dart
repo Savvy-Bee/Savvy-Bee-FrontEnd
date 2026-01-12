@@ -11,7 +11,7 @@ import 'package:savvy_bee_mobile/features/spend/presentation/screens/fund/new_ca
 import 'package:savvy_bee_mobile/features/spend/presentation/widgets/mini_button.dart';
 
 class FundWithCardScreen extends ConsumerStatefulWidget {
-  static String path = '/fund-with-card';
+  static const String path = '/fund-with-card';
 
   const FundWithCardScreen({super.key});
 

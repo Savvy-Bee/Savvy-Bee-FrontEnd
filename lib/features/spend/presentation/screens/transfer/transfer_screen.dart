@@ -23,7 +23,7 @@ import '../../widgets/copy_text_icon_button.dart';
 import '../../widgets/mini_button.dart';
 
 class TransferScreen extends ConsumerStatefulWidget {
-  static String path = '/transfer';
+  static const String path = '/transfer';
 
   const TransferScreen({super.key});
 

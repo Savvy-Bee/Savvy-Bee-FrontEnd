@@ -22,7 +22,7 @@ import 'package:savvy_bee_mobile/features/chat/presentation/providers/chat_provi
 import 'package:savvy_bee_mobile/features/chat/presentation/screens/choose_personality_screen.dart';
 
 class ChatScreen extends ConsumerStatefulWidget {
-  static String path = '/chat';
+  static const String path = '/chat';
 
   const ChatScreen({super.key});
 

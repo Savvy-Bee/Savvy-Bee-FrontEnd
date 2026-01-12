@@ -10,7 +10,7 @@ import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/level/level_complete_screen.dart';
 
 class LessonUnlockedScreen extends ConsumerStatefulWidget {
-  static String path = '/lesson-unlocked';
+  static const String path = '/lesson-unlocked';
 
   const LessonUnlockedScreen({super.key});
 

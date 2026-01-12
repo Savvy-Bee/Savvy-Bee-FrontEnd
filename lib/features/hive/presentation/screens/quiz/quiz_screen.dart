@@ -33,7 +33,7 @@ class QuizData {
 }
 
 class QuizScreen extends ConsumerStatefulWidget {
-  static String path = '/quiz';
+  static const String path = '/quiz';
 
   final QuizData quizData;
   const QuizScreen({super.key, required this.quizData});

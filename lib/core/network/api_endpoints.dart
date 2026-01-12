@@ -53,49 +53,53 @@ class ApiEndpoints {
 
   /// Bills Endpoints
   // Airtime
-  static String initializeAirtime =
+  static const String initializeAirtime =
       '/wallet/transactions/bills/airtime/initialize';
-  static String verifyAirtimeTransaction =
+  static const String verifyAirtimeTransaction =
       '/wallet/transactions/bills/airtime/verify';
 
   // Data
-  static String fetchDataPlans = '/wallet/transactions/bills/data/plans';
-  static String initializeDataPurchase =
+  static const String fetchDataPlans = '/wallet/transactions/bills/data/plans';
+  static const String initializeDataPurchase =
       '/wallet/transactions/bills/data/initialize';
-  static String verifyDataTransaction =
+  static const String verifyDataTransaction =
       '/wallet/transactions/bills/data/verify';
 
   // TV
-  static String fetchTVProviders = '/wallet/transactions/bills/tv/providers';
-  static String fetchTVPlans = '/wallet/transactions/bills/tv/plans';
-  static String initializeTVSubscription =
+  static const String fetchTVProviders =
+      '/wallet/transactions/bills/tv/providers';
+  static const String fetchTVPlans = '/wallet/transactions/bills/tv/plans';
+  static const String initializeTVSubscription =
       '/wallet/transactions/bills/tv/initialize';
-  static String verifyTVSubscription = '/wallet/transactions/bills/tv/verify';
+  static const String verifyTVSubscription =
+      '/wallet/transactions/bills/tv/verify';
 
   // Electricity
-  static String fetchEletricityProviders =
+  static const String fetchEletricityProviders =
       '/wallet/transactions/bills/electricity/providers';
-  static String initializeElectricity =
+  static const String initializeElectricity =
       '/wallet/transactions/bills/electricity/initialize';
-  static String verifyElectricity =
+  static const String verifyElectricity =
       '/wallet/transactions/bills/electricity/verify';
 
   /// Streak Endpoints
-  static String streakDetails = '/hive/streak/details';
-  static String streaktopUp = '/hive/streak/topup';
-  static String hiveDetails = '/hive/details';
+  static const String streakDetails = '/hive/streak/details';
+  static const String streaktopUp = '/hive/streak/topup';
+  static const String hiveDetails = '/hive/details';
   static String resourceTopUp(String type) => '/hive/operations/$type';
-  static String addAchievement = '/hive/operations/add/achievement';
+  static const String addAchievement = '/hive/operations/add/achievement';
 
   /// Leaderboard Endpoint
-  static String leaderboard = '/hive/details/leaderboard';
+  static const String leaderboard = '/hive/details/leaderboard';
 
   /// Transfer Endpoint
-  static String banks = '/wallet/transactions/sendmoney/getbanks';
-  static String verifyAccounts = '/wallet/transactions/sendmoney/verifyaccount';
-  static String initializeTransaction =
+  static const String banks = '/wallet/transactions/sendmoney/getbanks';
+  static const String verifyAccounts =
+      '/wallet/transactions/sendmoney/verifyaccount';
+  static const String initializeTransaction =
       '/wallet/transactions/sendmoney/initialize';
-  static String verifyTransaction = '/wallet/transactions/sendmoney/verify';
-  static String sendMoneyInternally =
+  static const String verifyTransaction =
+      '/wallet/transactions/sendmoney/verify';
+  static const String sendMoneyInternally =
       '/wallet/transactions/sendmoney/send-internally';
 }

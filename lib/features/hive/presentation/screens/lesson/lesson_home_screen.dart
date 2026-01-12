@@ -15,7 +15,7 @@ import '../../../../../core/widgets/custom_button.dart';
 import '../../providers/course_providers.dart';
 
 class LessonHomeScreen extends ConsumerStatefulWidget {
-  static String path = '/lesson-home';
+  static const String path = '/lesson-home';
 
   final Course course;
   const LessonHomeScreen({super.key, required this.course});

@@ -8,7 +8,7 @@ import 'package:savvy_bee_mobile/core/widgets/game_card.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/screens/choose_avatar_screen.dart';
 
 class CompleteProfileScreen extends ConsumerStatefulWidget {
-  static String path = '/complete-profile';
+  static const String path = '/complete-profile';
 
   const CompleteProfileScreen({super.key});
 

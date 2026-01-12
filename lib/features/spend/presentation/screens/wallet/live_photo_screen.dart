@@ -14,7 +14,7 @@ import '../../../../../core/widgets/custom_button.dart';
 import 'nin_verification_screen.dart';
 
 class LivePhotoScreen extends ConsumerStatefulWidget {
-  static String path = '/live-photo';
+  static const String path = '/live-photo';
 
   final Map<String, dynamic> data;
 

@@ -10,7 +10,7 @@ import '../../../../../core/utils/num_extensions.dart';
 import '../../widgets/insight_card.dart';
 
 class SetBudgetScreen extends ConsumerStatefulWidget {
-  static String path = '/set-budget';
+  static const String path = '/set-budget';
 
   const SetBudgetScreen({super.key});
 

@@ -23,7 +23,7 @@ import '../../../chat/presentation/screens/chat_screen.dart';
 import '../../../dashboard/presentation/widgets/info_card.dart';
 
 class SpendScreen extends ConsumerStatefulWidget {
-  static String path = '/spend';
+  static const String path = '/spend';
 
   const SpendScreen({super.key});
 

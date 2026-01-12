@@ -20,7 +20,7 @@ import '../../widgets/bottom_sheets/bills_bottom_sheet.dart';
 import '../../widgets/mini_button.dart';
 
 class InternetBillScreen extends ConsumerStatefulWidget {
-  static String path = '/internet-bill';
+  static const String path = '/internet-bill';
   const InternetBillScreen({super.key});
 
   @override

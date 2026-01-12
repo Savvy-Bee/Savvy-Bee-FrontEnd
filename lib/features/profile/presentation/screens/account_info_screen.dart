@@ -13,7 +13,7 @@ import 'package:savvy_bee_mobile/core/widgets/game_card.dart';
 import '../../../home/presentation/providers/home_data_provider.dart';
 
 class AccountInfoScreen extends ConsumerStatefulWidget {
-  static String path = '/account-info';
+  static const String path = '/account-info';
 
   const AccountInfoScreen({super.key});
 

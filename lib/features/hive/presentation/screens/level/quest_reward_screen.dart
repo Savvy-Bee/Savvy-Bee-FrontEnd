@@ -8,7 +8,7 @@ import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/level/quest_update_screen.dart';
 
 class QuestRewardScreen extends ConsumerStatefulWidget {
-  static String path = '/quest-reward';
+  static const String path = '/quest-reward';
 
   const QuestRewardScreen({super.key});
 

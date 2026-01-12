@@ -11,7 +11,7 @@ import 'package:savvy_bee_mobile/features/tools/presentation/widgets/insight_car
 import '../../providers/budget_provider.dart';
 
 class SetIncomeScreen extends ConsumerStatefulWidget {
-  static String path = '/set-income';
+  static const String path = '/set-income';
 
   const SetIncomeScreen({super.key});
 

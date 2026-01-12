@@ -9,7 +9,7 @@ import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/hive_screen.dart';
 
 class QuestUpdateScreen extends ConsumerStatefulWidget {
-  static String path = '/quest-update';
+  static const String path = '/quest-update';
 
   const QuestUpdateScreen({super.key});
 

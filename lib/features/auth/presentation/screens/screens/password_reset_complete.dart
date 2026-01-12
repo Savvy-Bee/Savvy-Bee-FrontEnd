@@ -10,7 +10,7 @@ import '../../../../../../core/utils/image_shadow_effect.dart';
 import '../login_screen.dart';
 
 class PasswordResetComplete extends StatefulWidget {
-  static String path = '/password-reset-complete';
+  static const String path = '/password-reset-complete';
 
   const PasswordResetComplete({super.key});
 

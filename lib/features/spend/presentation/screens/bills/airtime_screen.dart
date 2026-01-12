@@ -25,7 +25,7 @@ class RecentAirtimePurchase {
 }
 
 class AirtimeScreen extends ConsumerStatefulWidget {
-  static String path = '/airtime';
+  static const String path = '/airtime';
 
   const AirtimeScreen({super.key});
 
@@ -147,8 +147,8 @@ class _AirtimeScreenState extends ConsumerState<AirtimeScreen> {
   }
 
   @override
-    Widget build(BuildContext context) {
-      final dashboardAsync = ref.watch(spendDashboardDataProvider);
+  Widget build(BuildContext context) {
+    final dashboardAsync = ref.watch(spendDashboardDataProvider);
 
     // Listen to airtime provider state
     ref.listen(airtimeProvider, (previous, next) {

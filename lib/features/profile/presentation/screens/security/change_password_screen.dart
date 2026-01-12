@@ -5,7 +5,7 @@ import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';
 
 class ChangePasswordScreen extends ConsumerStatefulWidget {
-  static String path = '/change-password';
+  static const String path = '/change-password';
 
   const ChangePasswordScreen({super.key});
 

@@ -14,7 +14,7 @@ import 'package:savvy_bee_mobile/features/hive/domain/models/leaderboard.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/providers/leaderboard_provider.dart';
 
 class LeagueScreen extends ConsumerStatefulWidget {
-  static String path = '/league';
+  static const String path = '/league';
 
   const LeagueScreen({super.key});
 

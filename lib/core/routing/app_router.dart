@@ -82,6 +82,7 @@ import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/auth/presentation/screens/post_signup/signup_complete_screen.dart';
 import '../../features/auth/presentation/screens/signup_screen.dart';
 import '../../features/splash/presentation/screens/splash_screen.dart';
+import '../../features/taxation/taxation_dashboard_screen.dart';
 import '../../features/tools/presentation/screens/debt/add_debt_screen.dart';
 import '../../features/tools/presentation/screens/debt/debt_screen.dart';
 import '../../features/tools/presentation/screens/goals/goals_screen.dart';
@@ -522,6 +523,15 @@ final GoRouter appRouter = GoRouter(
       name: DebtRepaymentDetailsScreen.path,
       builder: (BuildContext context, GoRouterState state) {
         return DebtRepaymentDetailsScreen(debtId: state.extra as String);
+      },
+    ),
+
+    // Taxation Routes
+    GoRoute(
+      path: TaxationDashboardScreen.path,
+      name: TaxationDashboardScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return const TaxationDashboardScreen();
       },
     ),
 

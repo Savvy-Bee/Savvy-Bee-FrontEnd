@@ -13,7 +13,7 @@ import '../providers/course_providers.dart';
 import 'lesson/lesson_room_screen.dart';
 
 class LevelsScreen extends ConsumerStatefulWidget {
-  static String path = '/levels';
+  static const String path = '/levels';
 
   final Lesson lesson;
   const LevelsScreen({super.key, required this.lesson});

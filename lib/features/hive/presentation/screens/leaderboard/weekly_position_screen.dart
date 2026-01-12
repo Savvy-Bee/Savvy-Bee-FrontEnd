@@ -6,7 +6,7 @@ import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 
 class WeeklyPositionScreen extends ConsumerStatefulWidget {
-  static String path = '/weekly-position';
+  static const String path = '/weekly-position';
 
   const WeeklyPositionScreen({super.key});
 

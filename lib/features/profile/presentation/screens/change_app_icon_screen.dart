@@ -4,7 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/logos.dart';
 
 class ChangeAppIconScreen extends ConsumerStatefulWidget {
-  static String path = '/app-icon';
+  static const String path = '/app-icon';
 
   const ChangeAppIconScreen({super.key});
 

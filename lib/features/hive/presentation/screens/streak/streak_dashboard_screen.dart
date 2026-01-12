@@ -17,7 +17,7 @@ import '../../providers/hive_provider.dart';
 import '../../widgets/streak_slider.dart';
 
 class StreakDashboardScreen extends ConsumerStatefulWidget {
-  static String path = '/streak';
+  static const String path = '/streak';
 
   const StreakDashboardScreen({super.key});
 

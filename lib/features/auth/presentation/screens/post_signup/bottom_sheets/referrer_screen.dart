@@ -13,7 +13,7 @@ import 'package:savvy_bee_mobile/features/premium/presentation/screens/premium_s
 import '../../../../../../core/utils/assets/logos.dart';
 
 class ReferrerScreen extends ConsumerStatefulWidget {
-  static String path = '/referrer';
+  static const String path = '/referrer';
 
   const ReferrerScreen({super.key});
 

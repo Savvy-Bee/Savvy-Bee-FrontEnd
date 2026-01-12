@@ -22,7 +22,7 @@ class LevelCompleteArgs {
 }
 
 class LevelCompleteScreen extends ConsumerStatefulWidget {
-  static String path = '/level-complete';
+  static const String path = '/level-complete';
 
   final LevelCompleteArgs args;
 

@@ -24,7 +24,7 @@ class RecipientAccountInfo {
 }
 
 class SendMoneyScreen extends ConsumerStatefulWidget {
-  static String path = '/send-money';
+  static const String path = '/send-money';
 
   final RecipientAccountInfo recipientAccountInfo;
 

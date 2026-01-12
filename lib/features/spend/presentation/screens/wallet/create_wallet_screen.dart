@@ -8,7 +8,7 @@ import 'package:savvy_bee_mobile/core/widgets/info_widget.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/nin_verification_screen.dart';
 
 class CreateWalletScreen extends ConsumerWidget {
-  static String path = '/wallet';
+  static const String path = '/wallet';
 
   const CreateWalletScreen({super.key});
 

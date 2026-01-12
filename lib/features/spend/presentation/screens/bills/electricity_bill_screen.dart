@@ -21,7 +21,7 @@ import '../../widgets/mini_button.dart';
 import 'bill_confirmation_screen.dart';
 
 class ElectricityBillScreen extends ConsumerStatefulWidget {
-  static String path = '/electricity-bill';
+  static const String path = '/electricity-bill';
 
   const ElectricityBillScreen({super.key});
 

@@ -4,7 +4,7 @@ import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 
 class LeaguePromotionScreen extends ConsumerStatefulWidget {
-  static String path = '/league-promotion';
+  static const String path = '/league-promotion';
 
   const LeaguePromotionScreen({super.key});
 

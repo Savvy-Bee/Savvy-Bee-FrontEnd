@@ -11,7 +11,7 @@ import 'package:savvy_bee_mobile/core/widgets/intro_text.dart';
 import 'package:savvy_bee_mobile/features/referral/presentation/screens/referral_screen.dart';
 
 class PremiumScreen extends ConsumerStatefulWidget {
-  static String path = '/premium';
+  static const String path = '/premium';
 
   final bool isFromSignup;
 

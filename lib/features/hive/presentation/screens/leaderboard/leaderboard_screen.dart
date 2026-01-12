@@ -8,7 +8,7 @@ import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/leaderboard/league_screen.dart';
 
 class LeaderboardScreen extends ConsumerStatefulWidget {
-  static String path = '/leaderboard';
+  static const String path = '/leaderboard';
 
   const LeaderboardScreen({super.key});
 

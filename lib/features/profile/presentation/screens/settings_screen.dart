@@ -6,7 +6,7 @@ import 'package:savvy_bee_mobile/features/profile/presentation/widgets/profile_l
 import '../../../../core/widgets/game_card.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
-  static String path = '/settings';
+  static const String path = '/settings';
 
   const SettingsScreen({super.key});
 

@@ -9,7 +9,7 @@ import 'package:savvy_bee_mobile/features/home/presentation/widgets/health_card.
 import '../../../home/presentation/providers/home_data_provider.dart';
 
 class FinancialHealthScreen extends ConsumerStatefulWidget {
-  static String path = '/financia;-health';
+  static const String path = '/financia;-health';
 
   const FinancialHealthScreen({super.key});
 

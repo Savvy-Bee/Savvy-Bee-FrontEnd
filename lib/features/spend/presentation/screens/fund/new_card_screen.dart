@@ -9,7 +9,7 @@ import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';
 import '../../widgets/copy_text_icon_button.dart';
 
 class NewCardScreen extends ConsumerStatefulWidget {
-  static String path = '/new-card';
+  static const String path = '/new-card';
 
   const NewCardScreen({super.key});
 

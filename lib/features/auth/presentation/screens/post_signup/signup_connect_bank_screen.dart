@@ -9,7 +9,7 @@ import '../../../../../core/utils/constants.dart';
 import '../../../../../core/widgets/custom_button.dart';
 
 class SignupConnectBankScreen extends StatefulWidget {
-  static String path = '/signup-connect-bank';
+  static const String path = '/signup-connect-bank';
 
   const SignupConnectBankScreen({super.key});
 

@@ -13,7 +13,7 @@ import '../../../../../core/widgets/custom_input_field.dart';
 import '../../../../../core/widgets/custom_card.dart';
 
 class AccountStatementScreen extends ConsumerStatefulWidget {
-  static String path = '/account-statement';
+  static const String path = '/account-statement';
 
   const AccountStatementScreen({super.key});
 

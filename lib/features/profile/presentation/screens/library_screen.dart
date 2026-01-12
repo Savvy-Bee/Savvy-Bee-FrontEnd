@@ -6,7 +6,7 @@ import 'package:savvy_bee_mobile/core/widgets/game_card.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/widgets/profile_list_tile.dart';
 
 class LibraryScreen extends ConsumerStatefulWidget {
-  static String path = '/library';
+  static const String path = '/library';
 
   const LibraryScreen({super.key});
 

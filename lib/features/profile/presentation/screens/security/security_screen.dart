@@ -9,7 +9,7 @@ import '../../../../../core/widgets/game_card.dart';
 import '../../widgets/profile_list_tile.dart';
 
 class SecurityScreen extends ConsumerStatefulWidget {
-  static String path = '/security';
+  static const String path = '/security';
 
   const SecurityScreen({super.key});
 

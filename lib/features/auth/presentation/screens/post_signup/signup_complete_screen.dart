@@ -11,7 +11,7 @@ import '../../../../../core/utils/assets/illustrations.dart';
 enum SignupCompleteScreenType { passwordReset, signup }
 
 class SignupCompleteScreen extends StatefulWidget {
-  static String path = '/signup-complete';
+  static const String path = '/signup-complete';
 
   final SignupCompleteScreenType type;
 

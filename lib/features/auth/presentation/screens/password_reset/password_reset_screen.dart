@@ -20,7 +20,7 @@ import '../../../../../core/widgets/custom_snackbar.dart';
 import '../../../../../core/widgets/intro_text.dart';
 
 class PasswordResetScreen extends ConsumerStatefulWidget {
-  static String path = '/password-reset';
+  static const String path = '/password-reset';
 
   const PasswordResetScreen({super.key});
 

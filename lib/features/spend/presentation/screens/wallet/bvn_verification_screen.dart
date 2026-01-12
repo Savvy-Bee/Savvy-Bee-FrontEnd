@@ -12,7 +12,7 @@ import 'nin_verification_screen.dart'; // Import keys
 import 'live_photo_screen.dart';
 
 class BvnVerificationScreen extends ConsumerStatefulWidget {
-  static String path = '/bvn-verification';
+  static const String path = '/bvn-verification';
 
   // NIN is passed via the GoRouter 'extra' property, but defining a property is helpful
   final Map<String, dynamic> data;
