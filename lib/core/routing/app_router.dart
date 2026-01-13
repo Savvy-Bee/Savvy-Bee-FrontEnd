@@ -98,7 +98,7 @@ final GlobalKey<NavigatorState> _shellNavigatorKey = GlobalKey<NavigatorState>(
 
 final GoRouter appRouter = GoRouter(
   navigatorKey: _rootNavigatorKey,
-  initialLocation: SplashScreen.path,
+  initialLocation: TaxationDashboardScreen.path,
   routes: [
     GoRoute(
       path: SplashScreen.path,

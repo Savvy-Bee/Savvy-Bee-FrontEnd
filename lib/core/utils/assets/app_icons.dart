@@ -60,6 +60,15 @@ class AppIcons {
   static const String tiktokIcon = '$_basePath/tiktok.svg';
   static const String linkedinIcon = '$_basePath/linkedin.svg';
   static const String telegramIcon = '$_basePath/telegram.svg';
+
+  static const String uploadIconBackgroundSvg =
+      '$_basePath/upload-icon-background.svg';
+  static const String strategyIcon = '$_basePath/strategy.svg';
+  static const String calculatorIcon = '$_basePath/calculator.svg';
+  static const String chatIcon = '$_basePath/chat.svg';
+  static const String barChartIcon = '$_basePath/bar-chart-square.svg';
+  static const String moneySackIcon = '$_basePath/money-sack.svg';
+  static const String sparkleBgShadowIcon = '$_basePath/sparkle-bg-shadow.svg';
 }
 
 class AppIcon extends StatelessWidget {

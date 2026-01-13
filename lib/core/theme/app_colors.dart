@@ -16,7 +16,7 @@ class AppColors {
   static const financialHealthBg = Color(0xFFDD6F3E);
 
   // Primary Colors
-  static const Color primary = Color(0xFFFFB800);
+  static const Color primary = Color(0xFFFFC300);
   static const Color primaryDark = Color(0xFFC19300);
   static const Color primaryExtraDark = Color(0xFF765A00);
   static const Color primaryLight = Color(0xFFFFCC33);

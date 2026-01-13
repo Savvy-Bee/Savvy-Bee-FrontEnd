@@ -117,7 +117,7 @@ SPEC CHECKSUMS:
   file_picker: b159e0c068aef54932bb15dc9fd1571818edaf49
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
   flutter_secure_storage: d33dac7ae2ea08509be337e775f6b59f1ff45f12
-  flutter_unity_widget: a27ce087bcce8fb31bf89f90b0f8fc2abbc95576
+  flutter_unity_widget: e509f3109933aa0c63b1bc149ca3d5b90fb68543
   image_picker_ios: 4f2f91b01abdb52842a8e277617df877e40f905b
   path_provider_foundation: 0b743cbb62d8e47eab856f09262bb8c1ddcfe6ba
   permission_handler_apple: 9878588469a2b0d0fc1e048d9f43605f92e6cec2
@@ -128,6 +128,6 @@ SPEC CHECKSUMS:
   url_launcher_ios: bb13df5870e8c4234ca12609d04010a21be43dfa
   webview_flutter_wkwebview: 29eb20d43355b48fe7d07113835b9128f84e3af4
 
-PODFILE CHECKSUM: 9ae192f763adbc33503b0f4926216486a3b06be9
+PODFILE CHECKSUM: 31f7b1b028c67054bc1ef084455c61b8fd969f69
 
 COCOAPODS: 1.16.2
