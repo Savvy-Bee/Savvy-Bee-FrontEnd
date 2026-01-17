@@ -82,6 +82,7 @@ import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/auth/presentation/screens/post_signup/signup_complete_screen.dart';
 import '../../features/auth/presentation/screens/signup_screen.dart';
 import '../../features/splash/presentation/screens/splash_screen.dart';
+import '../../features/taxation/calculate_tax_screen.dart';
 import '../../features/taxation/taxation_dashboard_screen.dart';
 import '../../features/tools/presentation/screens/debt/add_debt_screen.dart';
 import '../../features/tools/presentation/screens/debt/debt_screen.dart';
@@ -98,7 +99,7 @@ final GlobalKey<NavigatorState> _shellNavigatorKey = GlobalKey<NavigatorState>(
 
 final GoRouter appRouter = GoRouter(
   navigatorKey: _rootNavigatorKey,
-  initialLocation: TaxationDashboardScreen.path,
+  initialLocation: CalculateTaxScreen.path,
   routes: [
     GoRoute(
       path: SplashScreen.path,
@@ -532,6 +533,13 @@ final GoRouter appRouter = GoRouter(
       name: TaxationDashboardScreen.path,
       builder: (BuildContext context, GoRouterState state) {
         return const TaxationDashboardScreen();
+      },
+    ),
+    GoRoute(
+      path: CalculateTaxScreen.path,
+      name: CalculateTaxScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return const CalculateTaxScreen();
       },
     ),
 

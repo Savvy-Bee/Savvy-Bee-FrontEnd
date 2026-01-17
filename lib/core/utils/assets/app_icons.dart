@@ -69,6 +69,10 @@ class AppIcons {
   static const String barChartIcon = '$_basePath/bar-chart-square.svg';
   static const String moneySackIcon = '$_basePath/money-sack.svg';
   static const String sparkleBgShadowIcon = '$_basePath/sparkle-bg-shadow.svg';
+  static const String cloudUploadIcon = '$_basePath/cloud-upload.svg';
+  static const String receiptColorIcon = '$_basePath/receipt-color.svg';
+  static const String walletColorIcon = '$_basePath/wallet-color.svg';
+  static const String documentColorIcon = '$_basePath/document-color.svg';
 }
 
 class AppIcon extends StatelessWidget {
