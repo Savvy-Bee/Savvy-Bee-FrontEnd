@@ -35,44 +35,45 @@ class _CalculateTaxScreenState extends ConsumerState<CalculateTaxScreen> {
           const Gap(28),
           _buildBreakdownCard(),
           const Gap(28),
-          CustomCard(
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-            borderColor: AppColors.border,
-            child: Column(
-              spacing: 32,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    _buildMoreActionItem(
-                      AppIcons.documentColorIcon,
-                      'Export Tax\nSummary',
-                    ),
-                    _buildMoreActionItem(
-                      AppIcons.walletColorIcon,
-                      'Connect Bank\nfor Auto-Tracking',
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    _buildMoreActionItem(
-                      AppIcons.chatIcon,
-                      'Ask Nahl\nTo Explain',
-                    ),
-                    _buildMoreActionItem(
-                      AppIcons.receiptColorIcon,
-                      'Explain More\nTax REliefs',
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
+          _buildMoreActionsCard(),
           const Gap(48),
           CustomElevatedButton(text: 'Calculate Again', onPressed: () {}),
           // _buildUploadView(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMoreActionsCard() {
+    return CustomCard(
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+      borderColor: AppColors.border,
+      child: Column(
+        spacing: 32,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _buildMoreActionItem(
+                AppIcons.documentColorIcon,
+                'Export Tax\nSummary',
+              ),
+              _buildMoreActionItem(
+                AppIcons.walletColorIcon,
+                'Connect Bank\nfor Auto-Tracking',
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _buildMoreActionItem(AppIcons.chatIcon, 'Ask Nahl\nTo Explain'),
+              _buildMoreActionItem(
+                AppIcons.receiptColorIcon,
+                'Explain More\nTax REliefs',
+              ),
+            ],
+          ),
         ],
       ),
     );
