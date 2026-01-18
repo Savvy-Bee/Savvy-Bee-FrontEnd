@@ -3,6 +3,8 @@ import 'package:savvy_bee_mobile/core/services/service_locator.dart';
 import 'package:savvy_bee_mobile/features/dashboard/domain/models/dashboard_data.dart';
 import 'package:savvy_bee_mobile/features/spend/domain/models/institution.dart';
 
+import '../../domain/models/linked_account.dart';
+
 
 
 // Dashboard Data Notifier

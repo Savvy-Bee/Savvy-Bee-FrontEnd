@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:savvy_bee_mobile/core/utils/encryption_service.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_snackbar.dart';
-import 'package:savvy_bee_mobile/features/dashboard/presentation/providers/dashboard_data_provider.dart';
+
+import '../../../../../../core/utils/encryption_service.dart';
 import '../../../../../../core/theme/app_colors.dart';
 import '../../../../../../core/utils/assets/app_icons.dart';
 import '../../../../../../core/widgets/custom_button.dart';
 import '../../../../../../core/widgets/custom_card.dart';
+import '../../../../../dashboard/presentation/providers/dashboard_data_provider.dart';
 import '../../../../../spend/domain/models/institution.dart';
 import 'processing_connection_bottom_sheet.dart';
 
@@ -44,44 +45,45 @@ class _SelectedBankLoginBottomSheetState
   bool isLoadingData = false;
 
   void _fetchUserData() async {
-    ProcessingConnectionBottomSheet.show(
-      context,
-      institution: widget.institution,
-      inputData: MonoInputData(
-        name: 'John Doe',
-        email: 'info@savvybee.com',
-        identity:
-            await EncryptionService.encryptText('12345678909') ??
-            '122dfdvf8909',
-      ),
-    );
-    // try {
-    //   setState(() => isLoadingData = true);
+    // ProcessingConnectionBottomSheet.show(
+    //   context,
+    //   institution: widget.institution,
+    //   inputData: MonoInputData(
+    //     name: 'John Doe',
+    //     email: 'info@savvybee.com',
+    //     identity:
+    //         await EncryptionService.encryptText('12345678909') ??
+    //         '122dfdvf8909',
+    //   ),
+    // );
+    try {
+      setState(() => isLoadingData = true);
 
-    //   final data = await ref.read(monoInputDataProvider.notifier).build();
+      final data = await ref.read(monoInputDataProvider.notifier).build();
 
-    //   setState(() => isLoadingData = false);
+      setState(() => isLoadingData = false);
 
-    //   if (mounted) {
-    //     ProcessingConnectionBottomSheet.show(
-    //       context,
-    //       institution: widget.institution,
-    //       inputData: data,
-    //     );
-    //   }
-    // } catch (e) {
-    //   if (mounted) {
-    //     CustomSnackbar.show(
-    //       context,
-    //       'Failed to fetch user data. Please try again',
-    //       type: SnackbarType.error,
-    //       position: SnackbarPosition.bottom,
-    //     );
-    //   }
-    //   setState(() => isLoadingData = false);
-    // } finally {
-    //   setState(() => isLoadingData = false);
-    // }
+      if (mounted) {
+        ProcessingConnectionBottomSheet.show(
+          context,
+          institution: widget.institution,
+          inputData: data,
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        CustomSnackbar.show(
+          context,
+          e.toString(),
+          // 'Failed to fetch user data. Please try again',
+          type: SnackbarType.error,
+          position: SnackbarPosition.bottom,
+        );
+      }
+      setState(() => isLoadingData = false);
+    } finally {
+      setState(() => isLoadingData = false);
+    }
   }
 
   @override
@@ -134,7 +136,7 @@ class _SelectedBankLoginBottomSheetState
               const Gap(32),
               _buildInfo(
                 '1',
-                "You'll be sent to ${widget.institution} to securely log in.",
+                "You'll be sent to ${widget.institution.displayName} to securely log in.",
               ),
               const Gap(16),
               _buildInfo('2', "Then you'll return here to finish connecting"),
@@ -147,6 +149,7 @@ class _SelectedBankLoginBottomSheetState
                   color: AppColors.white,
                   size: 20,
                 ),
+                isLoading: isLoadingData,
                 onPressed: _fetchUserData,
               ),
             ],

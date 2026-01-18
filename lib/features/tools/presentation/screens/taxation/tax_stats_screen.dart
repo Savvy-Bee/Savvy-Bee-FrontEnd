@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 
-import '../../core/theme/app_colors.dart';
-import '../../core/utils/assets/app_icons.dart';
-import '../../core/widgets/custom_card.dart';
+import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/utils/assets/app_icons.dart';
+import '../../../../../core/widgets/custom_card.dart';
 
 class TaxStatsScreen extends ConsumerStatefulWidget {
   static const String path = '/tax-stats';

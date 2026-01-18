@@ -9,6 +9,7 @@ class LinkedAccount {
   final AccountBalance balance;
   final DateTime createdAt;
   final DateTime updatedAt;
+  final num? mainIncomeBalance;
 
   LinkedAccount({
     required this.id,
@@ -19,6 +20,7 @@ class LinkedAccount {
     required this.balance,
     required this.createdAt,
     required this.updatedAt,
+    this.mainIncomeBalance,
   });
 
   factory LinkedAccount.fromJson(Map<String, dynamic> json) {
@@ -30,6 +32,7 @@ class LinkedAccount {
       details: Details.fromJson(json['Details']),
       balance: AccountBalance.fromJson(json['Balance']),
       createdAt: DateTime.parse(json['createdAt'] as String),
+      mainIncomeBalance: json['MainIncomeBalance'] as num?,
       updatedAt: DateTime.parse(json['updatedAt'] as String),
     );
   }
@@ -44,6 +47,7 @@ class LinkedAccount {
       'Balance': balance.toJson(),
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(),
+      'MainIncomeBalance': mainIncomeBalance,
     };
   }
 }
@@ -95,14 +99,14 @@ class Details {
 }
 
 class AccountBalance {
-  final int available;
+  final double available;
   final String currency;
 
   AccountBalance({required this.available, required this.currency});
 
   factory AccountBalance.fromJson(Map<String, dynamic> json) {
     return AccountBalance(
-      available: json['available'] as int,
+      available: json['available'] as double,
       currency: json['currency'] as String,
     );
   }

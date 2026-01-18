@@ -6,6 +6,8 @@ import 'package:savvy_bee_mobile/core/network/models/api_response_model.dart';
 import 'package:savvy_bee_mobile/features/dashboard/domain/models/dashboard_data.dart';
 import 'package:savvy_bee_mobile/features/spend/domain/models/institution.dart';
 
+import '../../domain/models/linked_account.dart';
+
 class DashboardRepository {
   final ApiClient _apiClient;
 

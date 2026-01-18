@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 
-import '../../core/theme/app_colors.dart';
-import '../../core/utils/assets/app_icons.dart';
-import '../../core/widgets/custom_card.dart';
-import '../../core/widgets/intro_text.dart';
+import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/utils/assets/app_icons.dart';
+import '../../../../../core/widgets/custom_card.dart';
+import '../../../../../core/widgets/intro_text.dart';
 
 class StrategyCenterScreen extends ConsumerStatefulWidget {
   static const String path = '/strategy-center';

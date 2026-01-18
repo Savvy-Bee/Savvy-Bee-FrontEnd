@@ -165,48 +165,48 @@ class MonoInputData {
   }
 }
 
-class LinkedAccount {
-  final String id;
-  final String userId;
-  final String monoLinkedAcctId;
-  final String accountName;
-  final DateTime createdAt;
-  final DateTime updatedAt;
+// class LinkedAccount {
+//   final String id;
+//   final String userId;
+//   final String monoLinkedAcctId;
+//   final String accountName;
+//   final DateTime createdAt;
+//   final DateTime updatedAt;
 
-  LinkedAccount({
-    required this.id,
-    required this.userId,
-    required this.monoLinkedAcctId,
-    required this.accountName,
-    required this.createdAt,
-    required this.updatedAt,
-  });
+//   LinkedAccount({
+//     required this.id,
+//     required this.userId,
+//     required this.monoLinkedAcctId,
+//     required this.accountName,
+//     required this.createdAt,
+//     required this.updatedAt,
+//   });
 
-  factory LinkedAccount.fromJson(Map<String, dynamic> json) {
-    return LinkedAccount(
-      id: json['_id'] as String,
-      userId: json['UserID'] as String,
-      monoLinkedAcctId: json['MonoLinkedAcct_ID'] as String,
-      accountName: json['AccountName'] as String,
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      updatedAt: DateTime.parse(json['updatedAt'] as String),
-    );
-  }
+//   factory LinkedAccount.fromJson(Map<String, dynamic> json) {
+//     return LinkedAccount(
+//       id: json['_id'] as String,
+//       userId: json['UserID'] as String,
+//       monoLinkedAcctId: json['MonoLinkedAcct_ID'] as String,
+//       accountName: json['AccountName'] as String,
+//       createdAt: DateTime.parse(json['createdAt'] as String),
+//       updatedAt: DateTime.parse(json['updatedAt'] as String),
+//     );
+//   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      '_id': id,
-      'UserID': userId,
-      'MonoLinkedAcct_ID': monoLinkedAcctId,
-      'AccountName': accountName,
-      'createdAt': createdAt.toIso8601String(),
-      'updatedAt': updatedAt.toIso8601String(),
-    };
-  }
+//   Map<String, dynamic> toJson() {
+//     return {
+//       '_id': id,
+//       'UserID': userId,
+//       'MonoLinkedAcct_ID': monoLinkedAcctId,
+//       'AccountName': accountName,
+//       'createdAt': createdAt.toIso8601String(),
+//       'updatedAt': updatedAt.toIso8601String(),
+//     };
+//   }
 
-  // Helper method for display
-  String get displayName => accountName;
-}
+//   // Helper method for display
+//   String get displayName => accountName;
+// }
 
 // Response wrapper for API calls
 class InstitutionsResponse {
