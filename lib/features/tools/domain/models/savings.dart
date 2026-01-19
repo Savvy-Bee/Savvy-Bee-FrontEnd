@@ -1,5 +1,6 @@
 class SavingsGoal {
   final String id;
+  final String userId;
   final String goalName;
   final String goalType;
   final double balance;
@@ -10,6 +11,7 @@ class SavingsGoal {
 
   SavingsGoal({
     required this.id,
+    required this.userId,
     required this.goalName,
     required this.goalType,
     required this.balance,
@@ -22,6 +24,7 @@ class SavingsGoal {
   factory SavingsGoal.fromJson(Map<String, dynamic> json) {
     return SavingsGoal(
       id: json['_id'] as String,
+      userId: json['UserId'] as String,
       goalName: json['GoalName'] as String,
       goalType: json['GoalType'] as String,
       balance: (json['Balance'] as num).toDouble(),
@@ -35,6 +38,7 @@ class SavingsGoal {
   Map<String, dynamic> toJson() {
     return {
       '_id': id,
+      'UserId': userId,
       'GoalName': goalName,
       'GoalType': goalType,
       'Balance': balance,

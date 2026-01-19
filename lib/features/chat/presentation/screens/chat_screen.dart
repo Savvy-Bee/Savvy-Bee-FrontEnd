@@ -467,14 +467,14 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                         color: AppColors.primary.withValues(alpha: 0.1),
                         border: Border.all(color: AppColors.primary),
                       ),
-                      child: Image.asset(
-                        Illustrations.avatars.firstWhere(
-                          (element) => element.toLowerCase().contains(
-                            personaName.toLowerCase(),
-                          ),
-                        ),
-                        scale: 1.5,
-                      ),
+                      // child: Image.asset(
+                      //   Illustrations.avatars.firstWhere(
+                      //     (element) => element.toLowerCase().contains(
+                      //       personaName.toLowerCase(),
+                      //     ),
+                      //   ),
+                      //   scale: 1.5,
+                      // ),
                     ),
                     Text(
                       personaName,

@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
-import 'package:savvy_bee_mobile/core/utils/date_formatter.dart';
+import 'package:savvy_bee_mobile/core/utils/date_time_extension.dart';
 import 'package:savvy_bee_mobile/core/utils/date_time_utils.dart';
 import 'package:savvy_bee_mobile/core/utils/input_validator.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';

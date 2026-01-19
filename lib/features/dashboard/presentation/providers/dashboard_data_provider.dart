@@ -1,11 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:savvy_bee_mobile/core/services/service_locator.dart';
 import 'package:savvy_bee_mobile/features/dashboard/domain/models/dashboard_data.dart';
-import 'package:savvy_bee_mobile/features/spend/domain/models/institution.dart';
+import 'package:savvy_bee_mobile/features/spend/domain/models/mono_institution.dart';
 
 import '../../domain/models/linked_account.dart';
-
-
 
 // Dashboard Data Notifier
 class DashboardDataNotifier
@@ -19,7 +17,7 @@ class DashboardDataNotifier
     //   throw Exception(response.message);
     // }
 
-    return response.data;
+    return response.data?.data;
   }
 
   Future<void> refresh() async {
@@ -28,11 +26,11 @@ class DashboardDataNotifier
       final repository = ref.read(dashboardRepositoryProvider);
       final response = await repository.fetchDashboardData(arg);
 
-      if (response.data == null) {
+      if (response.data?.data == null) {
         throw Exception(response.message);
       }
 
-      return response.data!;
+      return response.data!.data;
     });
   }
 }
@@ -45,9 +43,9 @@ final dashboardDataProvider =
     >(DashboardDataNotifier.new);
 
 // Institutions Notifier
-class InstitutionsNotifier extends AsyncNotifier<List<Institution>> {
+class InstitutionsNotifier extends AsyncNotifier<List<MonoInstitution>> {
   @override
-  Future<List<Institution>> build() async {
+  Future<List<MonoInstitution>> build() async {
     final repository = ref.read(dashboardRepositoryProvider);
     final response = await repository.fetchInstitutions();
 
@@ -74,7 +72,7 @@ class InstitutionsNotifier extends AsyncNotifier<List<Institution>> {
 }
 
 final institutionsProvider =
-    AsyncNotifierProvider<InstitutionsNotifier, List<Institution>>(
+    AsyncNotifierProvider<InstitutionsNotifier, List<MonoInstitution>>(
       InstitutionsNotifier.new,
     );
 

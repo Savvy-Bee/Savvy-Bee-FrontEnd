@@ -10,14 +10,14 @@ import '../../../../../../core/utils/assets/app_icons.dart';
 import '../../../../../../core/widgets/custom_button.dart';
 import '../../../../../../core/widgets/custom_card.dart';
 import '../../../../../dashboard/presentation/providers/dashboard_data_provider.dart';
-import '../../../../../spend/domain/models/institution.dart';
+import '../../../../../spend/domain/models/mono_institution.dart';
 import 'processing_connection_bottom_sheet.dart';
 
 import '../../../../../../core/utils/constants.dart';
 import 'select_bank_bottom_sheet.dart';
 
 class SelectedBankLoginBottomSheet extends ConsumerStatefulWidget {
-  final Institution institution;
+  final MonoInstitution institution;
 
   const SelectedBankLoginBottomSheet({super.key, required this.institution});
 
@@ -25,7 +25,10 @@ class SelectedBankLoginBottomSheet extends ConsumerStatefulWidget {
   ConsumerState<ConsumerStatefulWidget> createState() =>
       _SelectedBankLoginBottomSheetState();
 
-  static void show(BuildContext context, {required Institution institution}) {
+  static void show(
+    BuildContext context, {
+    required MonoInstitution institution,
+  }) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,

@@ -188,7 +188,7 @@ class LinkedAccountInfo {
   final int balance;
   final String type;
   final String bvn;
-  final InstitutionInfo institution;
+  final Institution institution;
 
   LinkedAccountInfo({
     required this.id,
@@ -210,7 +210,7 @@ class LinkedAccountInfo {
       balance: json['balance'] ?? 0,
       type: json['type'] ?? '',
       bvn: json['bvn'] ?? '',
-      institution: InstitutionInfo.fromJson(json['institution'] ?? {}),
+      institution: Institution.fromJson(json['institution'] ?? {}),
     );
   }
 

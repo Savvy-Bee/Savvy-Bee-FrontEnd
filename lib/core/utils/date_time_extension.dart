@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart';
 
-extension DateFormatter on DateTime {
+extension DateTimeExtension on DateTime {
   // Format to show short month, day, year (e.g., Jun 20, 2025)
   String formatShortDate() {
     return DateFormat('MMM dd, yyyy').format(this);

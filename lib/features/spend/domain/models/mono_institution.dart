@@ -1,4 +1,4 @@
-class Institution {
+class MonoInstitution {
   final String id;
   final String institution;
   final String type;
@@ -8,7 +8,7 @@ class Institution {
   final List<AuthMethod> authMethods;
   final List<Scope> scope;
 
-  Institution({
+  MonoInstitution({
     required this.id,
     required this.institution,
     required this.type,
@@ -19,8 +19,8 @@ class Institution {
     required this.scope,
   });
 
-  factory Institution.fromJson(Map<String, dynamic> json) {
-    return Institution(
+  factory MonoInstitution.fromJson(Map<String, dynamic> json) {
+    return MonoInstitution(
       id: json['id'] as String,
       institution: json['institution'] as String,
       type: json['type'] as String,
@@ -32,11 +32,14 @@ class Institution {
           .toList(),
       // Filter out invalid scope objects
       scope: (json['scope'] as List)
-          .where((e) => e is Map<String, dynamic> && 
-                       e.containsKey('name') && 
-                       e.containsKey('type') &&
-                       e['name'] != null && 
-                       e['type'] != null)
+          .where(
+            (e) =>
+                e is Map<String, dynamic> &&
+                e.containsKey('name') &&
+                e.containsKey('type') &&
+                e['name'] != null &&
+                e['type'] != null,
+          )
           .map((e) => Scope.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
@@ -96,12 +99,7 @@ class AuthMethod {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      '_id': id,
-      'type': type,
-      'name': name,
-      'identifier': identifier,
-    };
+    return {'_id': id, 'type': type, 'name': name, 'identifier': identifier};
   }
 
   // Helper method for display
@@ -123,10 +121,7 @@ class Scope {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'type': type,
-    };
+    return {'name': name, 'type': type};
   }
 
   // Helper method to check if scope is valid
@@ -212,7 +207,7 @@ class MonoInputData {
 class InstitutionsResponse {
   final bool success;
   final String message;
-  final List<Institution> data;
+  final List<MonoInstitution> data;
 
   InstitutionsResponse({
     required this.success,
@@ -224,8 +219,9 @@ class InstitutionsResponse {
     return InstitutionsResponse(
       success: json['success'] as bool? ?? false,
       message: json['message'] as String? ?? '',
-      data: (json['data'] as List?)
-              ?.map((e) => Institution.fromJson(e as Map<String, dynamic>))
+      data:
+          (json['data'] as List?)
+              ?.map((e) => MonoInstitution.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
     );
@@ -241,46 +237,46 @@ class InstitutionsResponse {
 }
 
 // Helper extensions for filtering institutions
-extension InstitutionListExtensions on List<Institution> {
+extension InstitutionListExtensions on List<MonoInstitution> {
   /// Filter by institution type (PERSONAL_BANKING, BUSINESS_BANKING)
-  List<Institution> filterByType(String type) {
+  List<MonoInstitution> filterByType(String type) {
     return where((inst) => inst.type == type).toList();
   }
 
   /// Filter by auth method support
-  List<Institution> filterByAuthMethod(String methodType) {
+  List<MonoInstitution> filterByAuthMethod(String methodType) {
     return where((inst) => inst.supportsAuthMethod(methodType)).toList();
   }
 
   /// Sort alphabetically by institution name
-  List<Institution> sortedByName() {
-    final sorted = List<Institution>.from(this);
+  List<MonoInstitution> sortedByName() {
+    final sorted = List<MonoInstitution>.from(this);
     sorted.sort((a, b) => a.institution.compareTo(b.institution));
     return sorted;
   }
 
   /// Get personal banking institutions only
-  List<Institution> get personalBanking {
+  List<MonoInstitution> get personalBanking {
     return filterByType('PERSONAL_BANKING');
   }
 
   /// Get business banking institutions only
-  List<Institution> get businessBanking {
+  List<MonoInstitution> get businessBanking {
     return filterByType('BUSINESS_BANKING');
   }
 
   /// Filter institutions that support mobile banking
-  List<Institution> get withMobileBanking {
+  List<MonoInstitution> get withMobileBanking {
     return filterByAuthMethod('mobile_banking');
   }
 
   /// Filter institutions that support internet banking
-  List<Institution> get withInternetBanking {
+  List<MonoInstitution> get withInternetBanking {
     return filterByAuthMethod('internet_banking');
   }
 
   /// Filter institutions that support account number auth
-  List<Institution> get withAccountNumber {
+  List<MonoInstitution> get withAccountNumber {
     return filterByAuthMethod('account_number');
   }
 }

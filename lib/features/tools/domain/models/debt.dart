@@ -33,6 +33,7 @@ class DebtListResponse {
 
 class Debt {
   final String id; // Mapped from '_id'
+  final String userId;
   final String name;
   final double owed;
   final double interestRate;
@@ -49,6 +50,7 @@ class Debt {
 
   Debt({
     required this.id,
+    required this.userId,
     required this.name,
     required this.owed,
     required this.interestRate,
@@ -64,13 +66,12 @@ class Debt {
     required this.v,
   });
 
-
   bool get isActive => status == 'Active';
-  
 
   factory Debt.fromJson(Map<String, dynamic> json) {
     return Debt(
       id: json['_id'] as String,
+      userId: json['UserId'] as String,
       name: json['Name'] as String,
       // Using (json['x'] as num).toDouble() is safer for API numbers
       // because 1000 usually comes as int, but 1000.50 comes as double.
@@ -93,6 +94,7 @@ class Debt {
   Map<String, dynamic> toJson() {
     return {
       '_id': id,
+      'UserId': userId,
       'Name': name,
       'Owed': owed,
       'interestRate': interestRate,
