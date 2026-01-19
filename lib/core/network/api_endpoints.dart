@@ -102,4 +102,8 @@ class ApiEndpoints {
       '/wallet/transactions/sendmoney/verify';
   static const String sendMoneyInternally =
       '/wallet/transactions/sendmoney/send-internally';
+
+  /// Taxation Endpoints
+  static const String taxationHome = '/tools/taxation/home';
+  static const String taxationCalculator = '/tools/taxation/calculator';
 }

@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:intl/intl.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
+import 'package:savvy_bee_mobile/features/tools/domain/models/taxation.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/providers/taxation_provider.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/calculate_tax_screen.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/strategy_center_screen.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/tax_stats_screen.dart';
 
 import '../../../../../core/utils/assets/app_icons.dart';
 
@@ -18,36 +24,71 @@ class TaxationDashboardScreen extends ConsumerStatefulWidget {
 
 class _TaxationDashboardScreenState
     extends ConsumerState<TaxationDashboardScreen> {
+  String _formatCurrency(int amount) {
+    return NumberFormat.currency(symbol: '₦', decimalDigits: 0).format(amount);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Tax')),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          TaxDashboardCard(),
-          const Gap(18),
-          _buildUploadStatementTile(),
-          const Gap(18),
-          Text(
-            'Quick Actions',
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-              color: AppColors.greyDark,
+      body: ref
+          .watch(taxationHomeNotifierProvider)
+          .when(
+            data: (data) {
+              return RefreshIndicator(
+                onRefresh: () =>
+                    ref.read(taxationHomeNotifierProvider.notifier).refresh(),
+                child: ListView(
+                  padding: const EdgeInsets.all(16),
+                  children: [
+                    TaxDashboardCard(taxationData: data.data),
+                    const Gap(18),
+                    _buildUploadStatementTile(),
+                    const Gap(18),
+                    Text(
+                      'Quick Actions',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.greyDark,
+                      ),
+                    ),
+                    const Gap(12),
+                    _buildQuickActionCard(),
+                    const Gap(18),
+                    _buildTaxLeakCard(taxHistory: data.data.history),
+                    const Gap(18),
+                    _buildUnclaimedReliefCard(),
+                  ],
+                ),
+              );
+            },
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (error, stack) => Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Error loading taxation data'),
+                  const Gap(16),
+                  ElevatedButton(
+                    onPressed: () => ref
+                        .read(taxationHomeNotifierProvider.notifier)
+                        .refresh(),
+                    child: Text('Retry'),
+                  ),
+                ],
+              ),
             ),
           ),
-          const Gap(12),
-          _buildQuickActionCard(),
-          const Gap(18),
-          _buildTaxLeakCard(),
-          const Gap(18),
-          _buildUnclaimedReliefCard(),
-        ],
-      ),
     );
   }
 
-  Widget _buildTaxLeakCard() {
+  Widget _buildTaxLeakCard({required List<TaxHistoryItem> taxHistory}) {
+    // Calculate total tax leaks from history items
+    final totalTaxLeaks = taxHistory
+        .where((item) => item.type == 'debit' && item.amount <= 5000)
+        .fold(0, (sum, item) => sum + item.amount);
+
     return CustomCard(
       padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 22),
       borderColor: AppColors.borderLight,
@@ -93,7 +134,7 @@ class _TaxationDashboardScreenState
                       borderRadius: BorderRadius.circular(50),
                     ),
                     child: Text(
-                      '₦45,000',
+                      _formatCurrency(totalTaxLeaks),
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                         color: AppColors.primary,
@@ -110,15 +151,23 @@ class _TaxationDashboardScreenState
             ],
           ),
           const Gap(20),
-          _buildTaxLeakItem(),
-          const Gap(10),
-          _buildTaxLeakItem(),
+          // Show up to 3 recent tax leak items
+          ...taxHistory
+              .where((item) => item.type == 'debit' && item.amount <= 5000)
+              .take(3)
+              .map(
+                (item) =>
+                    Column(children: [_buildTaxLeakItem(item), const Gap(10)]),
+              ),
         ],
       ),
     );
   }
 
-  Widget _buildTaxLeakItem() {
+  Widget _buildTaxLeakItem(TaxHistoryItem item) {
+    final dateFormat = DateFormat('dd/MM/yyyy');
+    final formattedDate = dateFormat.format(item.date);
+
     return Container(
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
@@ -133,11 +182,11 @@ class _TaxationDashboardScreenState
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Shoprite Supermarket',
+                _extractMerchantName(item.narration),
                 style: TextStyle(fontWeight: FontWeight.w500),
               ),
               Text(
-                "05/01/2026 •  ₦25,000",
+                "$formattedDate • ${_formatCurrency(item.amount)}",
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w400,
@@ -161,7 +210,7 @@ class _TaxationDashboardScreenState
                   border: Border.all(color: AppColors.primary),
                 ),
                 child: Text(
-                  'VAT',
+                  'Stamp Duty',
                   style: TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.w600,
@@ -170,7 +219,7 @@ class _TaxationDashboardScreenState
                 ),
               ),
               Text(
-                "₦1,875",
+                _formatCurrency(item.amount),
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   color: AppColors.error,
@@ -181,6 +230,16 @@ class _TaxationDashboardScreenState
         ],
       ),
     );
+  }
+
+  String _extractMerchantName(String narration) {
+    // Extract merchant name from narration like "stamp duty on electronic funds transfer - 2067609802 to Cbn//Providus Bank"
+    final parts = narration.split('//');
+    if (parts.length > 1) {
+      return parts.last.trim();
+    }
+    // Fallback to a generic name if pattern doesn't match
+    return 'Bank Transfer';
   }
 
   Widget _buildUnclaimedReliefCard() {
@@ -245,22 +304,30 @@ class _TaxationDashboardScreenState
           _buildQuickActionItem(
             iconPath: AppIcons.calculatorIcon,
             label: 'Calculator',
-            onTap: () {},
+            onTap: () {
+              Navigator.pushNamed(context, CalculateTaxScreen.path);
+            },
           ),
           _buildQuickActionItem(
             iconPath: AppIcons.barChartIcon,
             label: 'Tax Stats',
-            onTap: () {},
+            onTap: () {
+              Navigator.pushNamed(context, TaxStatsScreen.path);
+            },
           ),
           _buildQuickActionItem(
             iconPath: AppIcons.chatIcon,
             label: 'Ask Nahl',
-            onTap: () {},
+            onTap: () {
+              // Navigate to AI assistant
+            },
           ),
           _buildQuickActionItem(
             iconPath: AppIcons.strategyIcon,
             label: 'Strategy',
-            onTap: () {},
+            onTap: () {
+              Navigator.pushNamed(context, StrategyCenterScreen.path);
+            },
           ),
         ],
       ),
@@ -334,7 +401,13 @@ class _TaxationDashboardScreenState
 }
 
 class TaxDashboardCard extends StatelessWidget {
-  const TaxDashboardCard({super.key});
+  final TaxationHomeData taxationData;
+
+  const TaxDashboardCard({super.key, required this.taxationData});
+
+  String _formatCurrency(int amount) {
+    return NumberFormat.currency(symbol: '₦', decimalDigits: 0).format(amount);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -359,7 +432,7 @@ class TaxDashboardCard extends StatelessWidget {
             ],
           ),
           Text(
-            '₦1,200,000.00',
+            _formatCurrency(taxationData.tax.yearly),
             style: TextStyle(
               fontSize: 32.0,
               fontWeight: FontWeight.w600,
@@ -367,7 +440,10 @@ class TaxDashboardCard extends StatelessWidget {
               height: 0.8,
             ),
           ),
-          Text('≈ ₦104,167/month', style: TextStyle(color: AppColors.white)),
+          Text(
+            '≈ ${_formatCurrency(taxationData.tax.monthly.toInt())}/month',
+            style: TextStyle(color: AppColors.white),
+          ),
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
@@ -385,7 +461,7 @@ class TaxDashboardCard extends StatelessWidget {
                       style: TextStyle(color: AppColors.white),
                     ),
                     Text(
-                      '18.5%',
+                      '${taxationData.tax.rate}%',
                       style: TextStyle(
                         color: AppColors.white,
                         fontWeight: FontWeight.bold,
@@ -395,7 +471,7 @@ class TaxDashboardCard extends StatelessWidget {
                   ],
                 ),
                 LinearProgressIndicator(
-                  value: 0.5,
+                  value: taxationData.tax.rate / 100,
                   backgroundColor: AppColors.white.withValues(alpha: 0.3),
                   minHeight: 10,
                   color: AppColors.white,
