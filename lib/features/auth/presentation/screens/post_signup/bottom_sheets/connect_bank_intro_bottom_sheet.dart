@@ -7,8 +7,8 @@ import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/features/auth/presentation/screens/post_signup/bottom_sheets/select_bank_bottom_sheet.dart';
 
-class ConnectBankSecurityBottomSheet extends StatelessWidget {
-  const ConnectBankSecurityBottomSheet({super.key});
+class ConnectBankIntroBottomSheet extends StatelessWidget {
+  const ConnectBankIntroBottomSheet({super.key});
 
   static void show(BuildContext context) {
     showModalBottomSheet(
@@ -19,7 +19,7 @@ class ConnectBankSecurityBottomSheet extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadiusGeometry.vertical(top: Radius.circular(16)),
       ),
-      builder: (context) => ConnectBankSecurityBottomSheet(),
+      builder: (context) => ConnectBankIntroBottomSheet(),
     );
   }
 

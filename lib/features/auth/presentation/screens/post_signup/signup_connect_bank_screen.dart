@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:savvy_bee_mobile/core/widgets/bottom_sheets/notification_prompt_bottom_sheet.dart';
-import 'package:savvy_bee_mobile/features/auth/presentation/screens/post_signup/bottom_sheets/connect_bank_security_bottom_sheet.dart';
+import 'package:savvy_bee_mobile/features/auth/presentation/screens/post_signup/bottom_sheets/connect_bank_intro_bottom_sheet.dart';
 
 import '../../../../../core/utils/assets/illustrations.dart';
 import '../../../../../core/utils/assets/logos.dart';
@@ -63,7 +63,7 @@ class _SignupConnectBankScreenState extends State<SignupConnectBankScreen> {
                   text: 'Connect bank account',
                   showArrow: true,
                   buttonColor: CustomButtonColor.black,
-                  onPressed: () => ConnectBankSecurityBottomSheet.show(context),
+                  onPressed: () => ConnectBankIntroBottomSheet.show(context),
                 ),
                 const Gap(8),
                 CustomOutlinedButton(
