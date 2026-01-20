@@ -13,7 +13,7 @@ import 'package:savvy_bee_mobile/features/spend/domain/models/wallet.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/transactions/account_statement_screen.dart';
 
 import '../../../../../core/utils/assets/assets.dart';
-import '../../../../../core/utils/date_formatter.dart';
+import '../../../../../core/utils/date_time_extension.dart';
 import '../../providers/wallet_provider.dart';
 
 class TransactionHistoryScreen extends ConsumerStatefulWidget {
