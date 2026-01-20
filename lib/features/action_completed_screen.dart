@@ -58,7 +58,12 @@ class _ActionCompletedScreenState extends ConsumerState<ActionCompletedScreen> {
           ),
           Padding(
             padding: const EdgeInsets.all(16),
-            child: CustomElevatedButton(text: 'Okay', onPressed: () {}),
+            child: CustomElevatedButton(
+              text: 'Okay',
+              onPressed: () {
+                Navigator.of(context).popUntil((route) => route.isFirst);
+              },
+            ),
           ),
         ],
       ),

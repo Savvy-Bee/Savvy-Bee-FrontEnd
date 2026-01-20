@@ -67,6 +67,7 @@ class _SelectedBankLoginBottomSheetState
       setState(() => isLoadingData = false);
 
       if (mounted) {
+        context.pop();
         ProcessingConnectionBottomSheet.show(
           context,
           institution: widget.institution,

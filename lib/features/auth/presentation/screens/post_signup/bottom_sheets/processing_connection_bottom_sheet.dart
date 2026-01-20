@@ -56,11 +56,29 @@ class ProcessingConnectionBottomSheet extends ConsumerStatefulWidget {
 
 class _ProcessingConnectionBottomSheetState
     extends ConsumerState<ProcessingConnectionBottomSheet> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      ConnectConfiguration configuration = await _connectionConfig();
+
+      if (mounted) {
+        MonoConnect.launch(context, config: configuration, showLogs: true);
+      }
+    });
+  }
+
   Future<ConnectConfiguration> _connectionConfig() async {
     final customer = widget.inputData;
 
     // Decrypt BVN
     final decryptedBvn = await EncryptionService.decryptText(customer.identity);
+
+    print(
+      '-----${customer.monoCustomerId}---${customer.name}---${customer.email}--------$decryptedBvn----------',
+    );
+    var isExistingCustomer =
+        customer.monoCustomerId != null && customer.monoCustomerId!.isNotEmpty;
 
     return ConnectConfiguration(
       publicKey: dotenv.env[Constants.monoPublic]!,
@@ -73,9 +91,7 @@ class _ProcessingConnectionBottomSheetState
         );
       },
       customer: MonoCustomer(
-        // If the user doesn't have a mono id, they're a new customer
-        newCustomer:
-            customer.monoCustomerId == null || customer.monoCustomerId!.isEmpty
+        newCustomer: isExistingCustomer
             ? null
             : MonoNewCustomer(
                 name: customer.name,
@@ -87,34 +103,22 @@ class _ProcessingConnectionBottomSheetState
               ),
 
         // If the user has a mono id, they're an existing customer
-        existingCustomer:
-            customer.monoCustomerId == null || customer.monoCustomerId!.isEmpty
-            ? null
-            : MonoExistingCustomer(id: customer.monoCustomerId!),
+        existingCustomer: isExistingCustomer
+            ? MonoExistingCustomer(id: customer.monoCustomerId!)
+            : null,
       ),
       selectedInstitution: ConnectInstitution(
-        id: widget.institution.id,
-        authMethod: ConnectAuthMethod.mobileBanking,
+        id: widget.institution.authMethods.first.id,
+        authMethod: ConnectAuthMethod.internetBanking,
       ),
       onEvent: (event) {
         log(event.toString());
       },
       onClose: () {
-        log('Widget closed.');
+        context.pop();
+        // context.pop();
       },
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      ConnectConfiguration configuration = await _connectionConfig();
-
-      if (mounted) {
-        MonoConnect.launch(context, config: configuration, showLogs: true);
-      }
-    });
   }
 
   void _handleLinkAccount(String code) async {

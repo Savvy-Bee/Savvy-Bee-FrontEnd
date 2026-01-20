@@ -180,9 +180,9 @@ class _LivePhotoScreenState extends ConsumerState<LivePhotoScreen>
     ref
         .read(kycNotifierProvider.notifier)
         .verifyIdentity(
-          encryptedData: nin,
+          encryptedNin: nin,
+          encryptedBvn: bvn,
           profileImageFile: _profileImageFile!,
-          // type: KycIdentityType.nin,
         );
   }
 
@@ -308,13 +308,7 @@ class _LivePhotoScreenState extends ConsumerState<LivePhotoScreen>
                 text: _profileImageFile == null
                     ? 'Capture Photo'
                     : 'Submit Verification',
-                onPressed: isVerifying
-                    ? null
-                    : _profileImageFile == null
-                    ? (_isCapturing || !_isCameraInitialized
-                          ? null
-                          : _capturePhoto)
-                    : _submitVerification,
+                onPressed: () => _handleButtonPressed(isVerifying),
                 showArrow: _profileImageFile != null,
                 isLoading: isVerifying || _isCapturing,
                 buttonColor: CustomButtonColor.black,
@@ -324,5 +318,13 @@ class _LivePhotoScreenState extends ConsumerState<LivePhotoScreen>
         ),
       ),
     );
+  }
+
+  void _handleButtonPressed(bool isVerifying) {
+    isVerifying
+        ? null
+        : _profileImageFile == null
+        ? (_isCapturing || !_isCameraInitialized ? null : _capturePhoto)
+        : _submitVerification;
   }
 }

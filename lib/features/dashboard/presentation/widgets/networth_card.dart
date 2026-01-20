@@ -17,10 +17,6 @@ class NetWorthCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final balance = dashboardData.netAnalysis.totalBalance;
-    print(
-      dashboardData.getAggregatedAccountData().map((e) => e.value).toList(),
-    );
-    print(dashboardData.accounts.length);
 
     return CustomCard(
       hasShadow: true,

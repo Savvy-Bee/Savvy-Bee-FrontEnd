@@ -20,10 +20,9 @@ class DashboardRepository {
 
       final data = ApiResponse.fromJson(
         response.data,
-        (data) => (data as List).map((e) => MonoInstitution.fromJson(e)).toList(),
+        (data) =>
+            (data as List).map((e) => MonoInstitution.fromJson(e)).toList(),
       );
-      log('API Response: $response');
-      log('Data response: ${data.toString()}');
       return data;
     } catch (e) {
       log("Error fetching institutions: $e");
@@ -40,8 +39,6 @@ class DashboardRepository {
         response.data,
         (data) => MonoInputData.fromJson(data),
       );
-      log('API Response: $response');
-      log('Data response: ${data.toString()}');
       return data;
     } catch (e) {
       log("Error fetching mono input data: $e");
@@ -65,8 +62,6 @@ class DashboardRepository {
         response.data,
         (data) => data as Map<String, dynamic>,
       );
-      log('API Response: $response');
-      log('Data response: ${data.toString()}');
       return data;
     } catch (e) {
       log("Error linking account: $e");
@@ -89,8 +84,6 @@ class DashboardRepository {
       );
 
       final data = ApiResponse.fromJson(response.data, (data) => null);
-      log('API Response: $response');
-      log('Data response: ${data.toString()}');
       return data;
     } catch (e) {
       log("Error unlinking account: $e");
@@ -107,8 +100,6 @@ class DashboardRepository {
         response.data,
         (data) => (data as List).map((e) => LinkedAccount.fromJson(e)).toList(),
       );
-      log('API Response: $response');
-      log('Data response: ${data.toString()}');
       return data;
     } catch (e) {
       log("Error fetching linked accounts: $e");
@@ -132,8 +123,6 @@ class DashboardRepository {
         response.data,
         (data) => data != null ? DashboardDataResponse.fromJson(data) : null,
       );
-      log('API Response: $response');
-      log('Data response: ${data.toString()}');
       return data;
     } catch (e) {
       log("Error fetching dashboard data: $e");

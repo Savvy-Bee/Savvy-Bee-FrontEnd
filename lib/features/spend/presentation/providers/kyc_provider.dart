@@ -14,12 +14,12 @@ class KycNotifier extends AsyncNotifier<KycData?> {
     return null; // The initial state is empty KYC data.
   }
 
-  /// Handles both NIN and BVN verification since the logic is similar.
-  /// The specific API call is delegated to the repository.
+  /// Handles identity verification using the combined NIN->BVN fallback method.
+  /// First attempts NIN verification, then BVN verification if NIN returns 409 conflict.
   Future<void> verifyIdentity({
-    required String encryptedData,
+    required String encryptedNin,
+    required String encryptedBvn,
     required File profileImageFile,
-    // required KycIdentityType type, // Use a clear enum for identity type
   }) async {
     // Set state to loading
     state = const AsyncLoading<KycData?>().copyWithPrevious(state);
@@ -28,33 +28,16 @@ class KycNotifier extends AsyncNotifier<KycData?> {
     final KycRepository kycRepository = ref.read(kycRepositoryProvider);
 
     try {
-      KycVerificationResponse response;
-
-      // if (type == KycIdentityType.nin) {
-      response = await kycRepository
-          .verifyNin(
-            encryptedData: encryptedData,
-            profileImageFile: profileImageFile,
-          )
-          .then((value) async {
-            response = await kycRepository.verifyBvn(
-              encryptedData: encryptedData,
-              profileImageFile: profileImageFile,
-            );
-            return value;
-          });
-      // } else if (type == KycIdentityType.bvn) {
-      // response = await kycRepository.verifyBvn(
-      //   encryptedData: encryptedData,
-      //   profileImageFile: profileImageFile,
-      // );
-      // } else {
-      // Handle unexpected type
-      // throw Exception('Unsupported KYC identity type.');
-      // }
+      // Use the new combined verification method
+      final response = await kycRepository.verifyIdentity(
+        encryptedNin: encryptedNin,
+        encryptedBvn: encryptedBvn,
+        profileImageFile: profileImageFile,
+      );
 
       // Set state to data with the successful KYC result
-      if (response.data != null) {
+      if (response.success) {
+        // Success case: use the data if available, or null if both 409
         state = AsyncData(response.data);
       } else {
         // Should not happen with the provided API logic, but good for safety
