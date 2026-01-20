@@ -4,7 +4,6 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_snackbar.dart';
 
-import '../../../../../../core/utils/encryption_service.dart';
 import '../../../../../../core/theme/app_colors.dart';
 import '../../../../../../core/utils/assets/app_icons.dart';
 import '../../../../../../core/widgets/custom_button.dart';

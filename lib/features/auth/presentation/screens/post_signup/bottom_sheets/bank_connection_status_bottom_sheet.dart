@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -6,8 +7,9 @@ import 'package:savvy_bee_mobile/core/utils/assets/assets.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 
 import '../../../../../../core/utils/constants.dart';
+import '../../../../../dashboard/presentation/providers/dashboard_data_provider.dart';
 
-class BankConnectionStatusBottomSheet extends StatelessWidget {
+class BankConnectionStatusBottomSheet extends ConsumerWidget {
   final String bankName;
 
   const BankConnectionStatusBottomSheet({super.key, required this.bankName});
@@ -25,7 +27,7 @@ class BankConnectionStatusBottomSheet extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -66,7 +68,11 @@ class BankConnectionStatusBottomSheet extends StatelessWidget {
           CustomElevatedButton(
             text: 'Done',
             buttonColor: CustomButtonColor.black,
-            onPressed: () {},
+            onPressed: () {
+              context.pop();
+              ref.invalidate(dashboardDataProvider('all'));
+              ref.invalidate(linkedAccountsProvider);
+            },
           ),
           const Gap(32),
         ],

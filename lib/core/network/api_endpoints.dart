@@ -27,7 +27,7 @@ class ApiEndpoints {
       '/wallet/mono/linkaccount/institutions';
   static const String fetchMonoInputData =
       '/wallet/mono/linkaccount/fetch_mono_inputdata';
-  static const String linkAccount = '/wallet/mono/linkaccount/link_account';
+  static const String linkAccount = '/wallet/mono/linkaccount/link';
   static const unlinkAccount = '/wallet/mono/linkaccount/unlink';
   static const dashboardData = '/wallet/mono/details/dashboard';
   static const String linkedAccounts = '/wallet/mono/details/alluserbanks';

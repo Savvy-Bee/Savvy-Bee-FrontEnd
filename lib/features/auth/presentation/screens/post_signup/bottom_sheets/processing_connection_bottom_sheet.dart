@@ -79,13 +79,10 @@ class _ProcessingConnectionBottomSheetState
 
     return ConnectConfiguration(
       publicKey: dotenv.env[Constants.monoPublic]!,
-      onSuccess: (code) {
+      onSuccess: (code) async {
         log('Success with code: $code');
-        context.pop();
-        BankConnectionStatusBottomSheet.show(
-          context,
-          bankName: widget.institution.displayName,
-        );
+
+        await _handleLinkAccount(code);
       },
       customer: MonoCustomer(
         newCustomer: isExistingCustomer
@@ -105,22 +102,35 @@ class _ProcessingConnectionBottomSheetState
             : null,
       ),
       selectedInstitution: ConnectInstitution(
-        id: widget.institution.authMethods.first.id,
-        authMethod: ConnectAuthMethod.internetBanking,
+        id: widget.institution.id,
+        authMethod: ConnectAuthMethod.mobileBanking,
       ),
+      onEvent: (event) {
+        log('***************** Event: $event *****************');
+      },
       onClose: () {
         context.pop();
-        // context.pop();
       },
     );
   }
 
-  void _handleLinkAccount(String code) async {
+  Future<void> _handleLinkAccount(String code) async {
     try {
-      final response = await ref
+      final success = await ref
           .read(linkedAccountsProvider.notifier)
           .linkAccount(code);
-    } catch (e) {}
+
+      if (success && mounted) {
+        context.pop();
+
+        BankConnectionStatusBottomSheet.show(
+          context,
+          bankName: widget.institution.displayName,
+        );
+      }
+    } catch (e) {
+      log('Error linking account: $e');
+    }
   }
 
   @override
