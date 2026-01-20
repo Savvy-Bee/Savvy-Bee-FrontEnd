@@ -8,6 +8,7 @@ import 'package:savvy_bee_mobile/features/auth/presentation/screens/post_signup/
 import 'package:savvy_bee_mobile/features/chat/presentation/screens/chat_screen.dart';
 import 'package:savvy_bee_mobile/features/chat/presentation/screens/choose_personality_screen.dart';
 import 'package:savvy_bee_mobile/features/dashboard/presentation/screens/dashboard_screen.dart';
+import 'package:savvy_bee_mobile/features/dashboard/presentation/screens/manual_transaction_log_screen.dart';
 import 'package:savvy_bee_mobile/features/hive/domain/models/course.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/games/game_screen.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/hive_screen.dart';
@@ -100,6 +101,7 @@ final GoRouter appRouter = GoRouter(
   navigatorKey: _rootNavigatorKey,
   initialLocation: SplashScreen.path,
   routes: [
+    // Auth Routes
     GoRoute(
       path: SplashScreen.path,
       name: SplashScreen.path,
@@ -206,6 +208,8 @@ final GoRouter appRouter = GoRouter(
         );
       },
     ),
+
+    // Main Routes
     ShellRoute(
       navigatorKey: _shellNavigatorKey,
       builder: (context, state, child) {
@@ -288,6 +292,13 @@ final GoRouter appRouter = GoRouter(
           },
         ),
       ],
+    ),
+    GoRoute(
+      path: ManualTransactionLogScreen.path,
+      name: ManualTransactionLogScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return const ManualTransactionLogScreen();
+      },
     ),
 
     // Wallet Routes

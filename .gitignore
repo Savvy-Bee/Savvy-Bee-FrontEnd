@@ -52,3 +52,6 @@ app.*.map.json
 ios/UnityLibrary/
 android/unityLibrary/
 launcher/
+
+/patch_unity_widget.sh
+/doc.json

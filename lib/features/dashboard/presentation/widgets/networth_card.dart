@@ -51,6 +51,7 @@ class _OptionsBottomSheet extends StatelessWidget {
   static void showOptionsBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
+      useRootNavigator: true,
       builder: (context) => _OptionsBottomSheet(),
     );
   }
@@ -84,21 +85,6 @@ class _OptionsBottomSheet extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              _buildOptionsTile(
-                title: 'Refresh',
-                icon: Icons.refresh,
-                onTap: () => context.pop(),
-              ),
-              _buildOptionsTile(
-                title: 'Refresh',
-                icon: Icons.refresh,
-                onTap: () => context.pop(),
-              ),
-              _buildOptionsTile(
-                title: 'Refresh',
-                icon: Icons.refresh,
-                onTap: () => context.pop(),
-              ),
               _buildOptionsTile(
                 title: 'Refresh',
                 icon: Icons.refresh,
