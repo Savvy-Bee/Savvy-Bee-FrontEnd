@@ -16,11 +16,11 @@ import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/features/auth/presentation/screens/post_signup/bottom_sheets/bank_connection_status_bottom_sheet.dart';
 import 'package:savvy_bee_mobile/features/dashboard/presentation/providers/dashboard_data_provider.dart';
 
-import '../../../../../spend/domain/models/institution.dart';
+import '../../../../../spend/domain/models/mono_institution.dart';
 
 class ProcessingConnectionBottomSheet extends ConsumerStatefulWidget {
   final MonoInputData inputData;
-  final Institution institution;
+  final MonoInstitution institution;
 
   const ProcessingConnectionBottomSheet({
     super.key,
@@ -35,7 +35,7 @@ class ProcessingConnectionBottomSheet extends ConsumerStatefulWidget {
   static void show(
     BuildContext context, {
     required MonoInputData inputData,
-    required Institution institution,
+    required MonoInstitution institution,
   }) {
     showModalBottomSheet(
       context: context,

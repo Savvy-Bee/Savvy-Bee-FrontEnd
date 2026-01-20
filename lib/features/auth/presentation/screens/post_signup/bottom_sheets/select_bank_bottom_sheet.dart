@@ -11,7 +11,7 @@ import 'package:savvy_bee_mobile/features/auth/presentation/screens/post_signup/
 import 'package:savvy_bee_mobile/features/dashboard/presentation/providers/dashboard_data_provider.dart';
 
 import '../../../../../../core/widgets/custom_error_widget.dart';
-import '../../../../../spend/domain/models/institution.dart';
+import '../../../../../spend/domain/models/mono_institution.dart';
 
 class SelectBankBottomSheet extends ConsumerStatefulWidget {
   const SelectBankBottomSheet({super.key});
@@ -104,7 +104,7 @@ class _SelectBankBottomSheetState extends ConsumerState<SelectBankBottomSheet> {
     );
   }
 
-  Widget _buildBankCard(Institution institution) {
+  Widget _buildBankCard(MonoInstitution institution) {
     return CustomCard(
       onTap: () {
         context.pop();

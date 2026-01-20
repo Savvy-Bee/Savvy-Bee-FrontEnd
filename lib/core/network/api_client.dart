@@ -22,7 +22,7 @@ class ApiClient {
   final String baseUrl;
   final int timeoutSeconds;
 
-  ApiClient({required this.baseUrl, this.timeoutSeconds = 30})
+  ApiClient({required this.baseUrl, this.timeoutSeconds = 3000})
     : _dio = Dio(
         BaseOptions(
           baseUrl: baseUrl,

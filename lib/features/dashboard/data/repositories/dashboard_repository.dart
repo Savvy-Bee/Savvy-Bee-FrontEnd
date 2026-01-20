@@ -4,7 +4,9 @@ import 'package:savvy_bee_mobile/core/network/api_client.dart';
 import 'package:savvy_bee_mobile/core/network/api_endpoints.dart';
 import 'package:savvy_bee_mobile/core/network/models/api_response_model.dart';
 import 'package:savvy_bee_mobile/features/dashboard/domain/models/dashboard_data.dart';
-import 'package:savvy_bee_mobile/features/spend/domain/models/institution.dart';
+import 'package:savvy_bee_mobile/features/spend/domain/models/mono_institution.dart';
+
+import '../../domain/models/linked_account.dart';
 
 class DashboardRepository {
   final ApiClient _apiClient;
@@ -12,13 +14,13 @@ class DashboardRepository {
   DashboardRepository(this._apiClient);
 
   /// Fetch Institutions/Banks
-  Future<ApiResponse<List<Institution>>> fetchInstitutions() async {
+  Future<ApiResponse<List<MonoInstitution>>> fetchInstitutions() async {
     try {
       final response = await _apiClient.get(ApiEndpoints.fetchInstitutions);
 
       final data = ApiResponse.fromJson(
         response.data,
-        (data) => (data as List).map((e) => Institution.fromJson(e)).toList(),
+        (data) => (data as List).map((e) => MonoInstitution.fromJson(e)).toList(),
       );
       log('API Response: $response');
       log('Data response: ${data.toString()}');
@@ -116,7 +118,9 @@ class DashboardRepository {
 
   /// Fetch Dashboard Data
   /// Pass empty string or 'all' for all banks, or specific bankId for single bank
-  Future<ApiResponse<DashboardData?>> fetchDashboardData(String bankId) async {
+  Future<ApiResponse<DashboardDataResponse?>> fetchDashboardData(
+    String bankId,
+  ) async {
     try {
       final endpoint = bankId.isEmpty || bankId == 'all'
           ? '${ApiEndpoints.dashboardData}/id'
@@ -126,7 +130,7 @@ class DashboardRepository {
 
       final data = ApiResponse.fromJson(
         response.data,
-        (data) => DashboardData.fromJson(data),
+        (data) => data != null ? DashboardDataResponse.fromJson(data) : null,
       );
       log('API Response: $response');
       log('Data response: ${data.toString()}');

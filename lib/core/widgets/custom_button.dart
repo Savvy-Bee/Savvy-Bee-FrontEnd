@@ -14,7 +14,7 @@ class CustomElevatedButton extends StatelessWidget {
   final bool isLoading;
   final bool isSmall;
   final bool isGamePlay;
-  final Widget? icon;
+  final Widget? icon, leadingIcon;
 
   const CustomElevatedButton({
     super.key,
@@ -28,6 +28,7 @@ class CustomElevatedButton extends StatelessWidget {
     this.isSmall = false,
     this.isGamePlay = false,
     this.icon,
+    this.leadingIcon,
   });
 
   @override
@@ -100,13 +101,22 @@ class CustomElevatedButton extends StatelessWidget {
                               : forgroundColor,
                         )
                       : null),
-        label: Text(
-          text,
-          style: TextStyle(
-            fontSize: isSmall ? 12 : 14,
-            fontWeight: FontWeight.bold,
-            color: onPressed == null ? disabledForegroundColor : forgroundColor,
-          ),
+        label: Row(
+          mainAxisSize: MainAxisSize.min,
+          spacing: 8,
+          children: [
+            if (leadingIcon != null) leadingIcon!,
+            Text(
+              text,
+              style: TextStyle(
+                fontSize: isSmall ? 12 : 14,
+                fontWeight: FontWeight.bold,
+                color: onPressed == null
+                    ? disabledForegroundColor
+                    : forgroundColor,
+              ),
+            ),
+          ],
         ),
       ),
     );

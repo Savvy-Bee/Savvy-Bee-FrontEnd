@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'dart:math' as math;
 
 import '../../../core/theme/app_colors.dart';
@@ -17,7 +16,7 @@ class CustomLineChart extends StatefulWidget {
   const CustomLineChart({
     super.key,
     required this.data,
-    this.primaryColor = AppColors.success,
+    this.primaryColor = AppColors.primary,
     this.valueIndicatorColor = Colors.white,
     this.showRangeSelector = true,
     this.height,
@@ -45,30 +44,31 @@ class _CustomLineChartState extends State<CustomLineChart> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          if (widget.title != null) _buildTitle(),
           Expanded(
-            child: GestureDetector(
-              onTapDown: widget.enableValueIndicator
-                  ? (details) => _handleTap(details, filteredData)
-                  : null,
-              onPanUpdate: widget.enableValueIndicator
-                  ? (details) => _handlePan(details, filteredData)
-                  : null,
-              onPanEnd: widget.enableValueIndicator
-                  ? (_) => setState(() {
-                      _selectedPointIndex = null;
-                      _tapPosition = null;
-                    })
-                  : null,
-              child: _ChartPainter(
-                data: filteredData,
-                primaryColor: widget.primaryColor,
-                valueIndicatorColor: widget.valueIndicatorColor,
-                selectedPointIndex: _selectedPointIndex,
-                tapPosition: _tapPosition,
-                enableValueIndicator: widget.enableValueIndicator,
-              ),
-            ),
+            child: widget.data.isEmpty
+                ? Center(child: Text('No data available'))
+                : GestureDetector(
+                    onTapDown: widget.enableValueIndicator
+                        ? (details) => _handleTap(details, filteredData)
+                        : null,
+                    onPanUpdate: widget.enableValueIndicator
+                        ? (details) => _handlePan(details, filteredData)
+                        : null,
+                    onPanEnd: widget.enableValueIndicator
+                        ? (_) => setState(() {
+                            _selectedPointIndex = null;
+                            _tapPosition = null;
+                          })
+                        : null,
+                    child: _ChartPainter(
+                      data: filteredData,
+                      primaryColor: widget.primaryColor,
+                      valueIndicatorColor: widget.valueIndicatorColor,
+                      selectedPointIndex: _selectedPointIndex,
+                      tapPosition: _tapPosition,
+                      enableValueIndicator: widget.enableValueIndicator,
+                    ),
+                  ),
           ),
           if (widget.showRangeSelector) _buildRangeSelector(),
         ],
@@ -104,21 +104,13 @@ class _CustomLineChartState extends State<CustomLineChart> {
     return index;
   }
 
-  Widget _buildTitle() {
-    return Padding(
-      padding: const EdgeInsets.all(0),
-      child: Text(
-        widget.title!,
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-      ),
-    );
-  }
-
   Widget _buildRangeSelector() {
+    final borderRadius = BorderRadius.circular(16);
+
     return Container(
-      margin: const EdgeInsets.only(top: 20),
+      margin: const EdgeInsets.only(top: 40),
       child: Row(
-        spacing: 20,
+        spacing: 8,
         mainAxisAlignment: MainAxisAlignment.center,
         children: TimeRange.values.map((range) {
           final isSelected = range == _selectedRange;
@@ -127,15 +119,19 @@ class _CustomLineChartState extends State<CustomLineChart> {
               setState(() => _selectedRange = range);
               widget.onRangeChanged?.call(range);
             },
-            borderRadius: BorderRadius.circular(16),
-            child: Text(
-              range.label,
-              style: TextStyle(
-                color: isSelected
-                    ? AppColors.primary
-                    : AppColors.grey.withValues(alpha: 0.3),
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
+            borderRadius: borderRadius,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+              decoration: BoxDecoration(
+                color: AppColors.primaryFaint,
+                borderRadius: borderRadius,
+                border: isSelected
+                    ? Border.all(color: AppColors.primary)
+                    : null,
+              ),
+              child: Text(
+                range.label,
+                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 10),
               ),
             ),
           );
@@ -247,7 +243,7 @@ class _LineChartPainter extends CustomPainter {
   ) {
     final linePaint = Paint()
       ..color = primaryColor
-      ..strokeWidth = 1.0
+      ..strokeWidth = 2.0
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round
       ..strokeJoin = StrokeJoin.round;
@@ -258,9 +254,8 @@ class _LineChartPainter extends CustomPainter {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              primaryColor.withValues(
-                alpha: 0.0,
-              ), // Change "alpha" value to get a gradient
+              // primaryColor.withValues(alpha: 0.3), // Initial value for gradient
+              primaryColor.withValues(alpha: 0.0),
               primaryColor.withValues(alpha: 0.0),
             ],
             stops: const [0.0, 1.0],
@@ -332,7 +327,7 @@ class _LineChartPainter extends CustomPainter {
 
     // Draw value label
     final textSpan = TextSpan(
-      text: '₦${dataPoint.value.toStringAsFixed(2)}',
+      text: dataPoint.value.toStringAsFixed(2),
       style: TextStyle(
         color: valueIndicatorColor,
         fontSize: 16,

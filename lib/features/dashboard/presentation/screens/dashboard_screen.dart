@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/app_icons.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/illustrations.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
@@ -35,14 +36,14 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   Widget build(BuildContext context) {
     // Fetch dashboard data for all banks
     final dashboardDataAsync = ref.watch(dashboardDataProvider('all'));
-    final linkedAccountsAsync = ref.watch(linkedAccountsProvider);
+    // final linkedAccountsAsync = ref.watch(linkedAccountsProvider);
 
     return Scaffold(
       body: SafeArea(
         child: dashboardDataAsync.when(
           skipLoadingOnRefresh: false,
-          data: (dashboardData) {
-            if (dashboardData == null) {
+          data: (dashboardResponse) {
+            if (dashboardResponse == null) {
               return CustomErrorWidget(
                 icon: Icons.link_off_rounded,
                 title: 'No linked account',
@@ -60,38 +61,39 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Gap(20),
-                    NetWorthCard(dashboardData: dashboardData),
-                    const Gap(16),
-
-                    // Smart Recommendation based on actual data
-                    if (dashboardData
-                        .widgets
-                        .spendCategoryBreakdown
-                        .alerts
-                        .isNotEmpty)
-                      InfoCard(
-                        title: 'Smart Recommendation',
-                        description:
-                            dashboardData.widgets.spendCategoryBreakdown.alerts,
-                        avatar: Illustrations.lunaAvatar,
-                        borderRadius: 32,
-                      ),
+                    NetWorthCard(dashboardData: dashboardResponse),
 
                     const Gap(24),
-                    _buildWidgetsSection(context, dashboardData),
-                    const Gap(16),
-
                     InfoCard(
                       title: 'Ask Nahl',
                       description:
                           'Get answers to questions on your spending, saving, budgets and cashflow!',
                       avatar: Illustrations.lunaAvatar,
                       borderRadius: 32,
+                      backgroundColor: AppColors.white,
                       onTap: () => context.pushNamed(ChatScreen.path),
                     ),
+                    const Divider(height: 48),
+                    _buildWidgetsSection(context, dashboardResponse),
+                    // Smart Recommendation based on actual data
+                    if (dashboardResponse
+                        .widgets
+                        .spendCategoryBreakdown
+                        .alerts
+                        .isNotEmpty) ...[
+                      const Gap(24),
+                      InfoCard(
+                        title: 'Smart Recommendation',
+                        description: dashboardResponse
+                            .widgets
+                            .spendCategoryBreakdown
+                            .alerts,
+                        avatar: Illustrations.lunaAvatar,
+                        borderRadius: 32,
+                      ),
+                    ],
+                    const Divider(height: 48),
 
-                    const Divider(height: 40),
-                    const Gap(10),
                     _buildArticlesSection(),
                   ],
                 ),
@@ -105,7 +107,6 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
             title: 'Unable to Load Dashboard',
             subtitle:
                 'We couldn\'t fetch your dashboard data. Please check your connection and try again.',
-            actionButtonText: 'Retry',
             onActionPressed: () {
               ref.invalidate(dashboardDataProvider);
             },
@@ -138,11 +139,11 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             spacing: 16,
             children: [
-              SpendingCategoryWidget(
-                spendingData: dashboardData.widgets.spendCategoryBreakdown,
-              ),
               FinancialHealthWidget(
                 healthData: dashboardData.widgets.financialHealth,
+              ),
+              SpendingCategoryWidget(
+                spendingData: dashboardData.widgets.spendCategoryBreakdown,
               ),
               SavingsTargetWidget(
                 savingsInsight: dashboardData.widgets.savingTargetInsight,

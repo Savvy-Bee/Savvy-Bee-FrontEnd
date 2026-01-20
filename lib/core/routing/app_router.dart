@@ -61,7 +61,6 @@ import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/live
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/nin_verification_screen.dart';
 import 'package:savvy_bee_mobile/features/auth/presentation/screens/password_reset/password_reset_complete.dart';
 import 'package:savvy_bee_mobile/features/auth/presentation/screens/password_reset/password_reset_screen.dart';
-import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/wallet_creation_complete_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/budget_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/edit_budget_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/set_income_screen.dart';
@@ -75,7 +74,6 @@ import '../../features/hive/presentation/screens/levels_screen.dart';
 import '../../features/spend/presentation/screens/bills/cable_bill_screen.dart';
 import '../../features/spend/presentation/screens/bills/electricity_bill_screen.dart';
 import '../../features/spend/presentation/screens/fund/username_screen.dart';
-import '../../features/spend/presentation/screens/transactions/statement_sent_screen.dart';
 import '../../features/spend/presentation/screens/transfer/transfer_screen.dart';
 import '../../features/spend/presentation/screens/wallet/photo_verification_screen.dart';
 import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
@@ -83,7 +81,10 @@ import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/auth/presentation/screens/post_signup/signup_complete_screen.dart';
 import '../../features/auth/presentation/screens/signup_screen.dart';
 import '../../features/splash/presentation/screens/splash_screen.dart';
-import '../../features/taxation/taxation_dashboard_screen.dart';
+import '../../features/tools/presentation/screens/taxation/calculate_tax_screen.dart';
+import '../../features/tools/presentation/screens/taxation/strategy_center_screen.dart';
+import '../../features/tools/presentation/screens/taxation/tax_stats_screen.dart';
+import '../../features/tools/presentation/screens/taxation/taxation_dashboard_screen.dart';
 import '../../features/tools/presentation/screens/debt/add_debt_screen.dart';
 import '../../features/tools/presentation/screens/debt/debt_screen.dart';
 import '../../features/tools/presentation/screens/goals/goals_screen.dart';
@@ -543,6 +544,27 @@ final GoRouter appRouter = GoRouter(
       name: TaxationDashboardScreen.path,
       builder: (BuildContext context, GoRouterState state) {
         return const TaxationDashboardScreen();
+      },
+    ),
+    GoRoute(
+      path: CalculateTaxScreen.path,
+      name: CalculateTaxScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return const CalculateTaxScreen();
+      },
+    ),
+    GoRoute(
+      path: StrategyCenterScreen.path,
+      name: StrategyCenterScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return const StrategyCenterScreen();
+      },
+    ),
+    GoRoute(
+      path: TaxStatsScreen.path,
+      name: TaxStatsScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return const TaxStatsScreen();
       },
     ),
 
