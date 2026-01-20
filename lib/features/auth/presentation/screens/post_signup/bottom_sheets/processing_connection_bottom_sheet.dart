@@ -74,10 +74,7 @@ class _ProcessingConnectionBottomSheetState
     // Decrypt BVN
     final decryptedBvn = await EncryptionService.decryptText(customer.identity);
 
-    print(
-      '-----${customer.monoCustomerId}---${customer.name}---${customer.email}--------$decryptedBvn----------',
-    );
-    var isExistingCustomer =
+    final isExistingCustomer =
         customer.monoCustomerId != null && customer.monoCustomerId!.isNotEmpty;
 
     return ConnectConfiguration(
@@ -111,9 +108,6 @@ class _ProcessingConnectionBottomSheetState
         id: widget.institution.authMethods.first.id,
         authMethod: ConnectAuthMethod.internetBanking,
       ),
-      onEvent: (event) {
-        log(event.toString());
-      },
       onClose: () {
         context.pop();
         // context.pop();
