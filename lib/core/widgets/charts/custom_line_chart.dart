@@ -16,7 +16,7 @@ class CustomLineChart extends StatefulWidget {
   const CustomLineChart({
     super.key,
     required this.data,
-    this.primaryColor = AppColors.success,
+    this.primaryColor = AppColors.primary,
     this.valueIndicatorColor = Colors.white,
     this.showRangeSelector = true,
     this.height,
