@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
-import 'package:intl/intl.dart';
+import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
+import 'package:savvy_bee_mobile/core/utils/date_time_extension.dart';
+import 'package:savvy_bee_mobile/core/utils/num_extensions.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_error_widget.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_loading_widget.dart';
+import 'package:savvy_bee_mobile/features/chat/presentation/screens/chat_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/domain/models/taxation.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/providers/taxation_provider.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/calculate_tax_screen.dart';
@@ -24,70 +29,59 @@ class TaxationDashboardScreen extends ConsumerStatefulWidget {
 
 class _TaxationDashboardScreenState
     extends ConsumerState<TaxationDashboardScreen> {
-  String _formatCurrency(int amount) {
-    return NumberFormat.currency(symbol: '₦', decimalDigits: 0).format(amount);
-  }
-
   @override
   Widget build(BuildContext context) {
+    final taxHomeAsync = ref.watch(taxationHomeNotifierProvider);
+    
     return Scaffold(
       appBar: AppBar(title: const Text('Tax')),
-      body: ref
-          .watch(taxationHomeNotifierProvider)
-          .when(
-            data: (data) {
-              return RefreshIndicator(
-                onRefresh: () =>
-                    ref.read(taxationHomeNotifierProvider.notifier).refresh(),
-                child: ListView(
-                  padding: const EdgeInsets.all(16),
-                  children: [
-                    TaxDashboardCard(taxationData: data.data),
-                    const Gap(18),
-                    _buildUploadStatementTile(),
-                    const Gap(18),
-                    Text(
-                      'Quick Actions',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        color: AppColors.greyDark,
-                      ),
-                    ),
-                    const Gap(12),
-                    _buildQuickActionCard(),
-                    const Gap(18),
-                    _buildTaxLeakCard(taxHistory: data.data.history),
-                    const Gap(18),
-                    _buildUnclaimedReliefCard(),
-                  ],
-                ),
-              );
-            },
-            loading: () => const Center(child: CircularProgressIndicator()),
-            error: (error, stack) => Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('Error loading taxation data'),
-                  const Gap(16),
-                  ElevatedButton(
-                    onPressed: () => ref
-                        .read(taxationHomeNotifierProvider.notifier)
-                        .refresh(),
-                    child: Text('Retry'),
+      body: taxHomeAsync.when(
+        data: (data) {
+          return RefreshIndicator(
+            onRefresh: () =>
+                ref.read(taxationHomeNotifierProvider.notifier).refresh(),
+            child: ListView(
+              padding: const EdgeInsets.all(16),
+              children: [
+                TaxDashboardCard(taxationData: data.data),
+                const Gap(18),
+                _buildUploadStatementTile(),
+                const Gap(18),
+                Text(
+                  'Quick Actions',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.greyDark,
                   ),
-                ],
-              ),
+                ),
+                const Gap(12),
+                _buildQuickActionCard(),
+                const Gap(18),
+                _buildTaxLeakCard(taxHistory: data.data.history),
+                const Gap(18),
+                _buildUnclaimedReliefCard(),
+              ],
             ),
+          );
+        },
+        loading: () =>
+            const CustomLoadingWidget(text: 'Loading tax dashboard...'),
+        error: (error, stack) => Center(
+          child: CustomErrorWidget.error(
+            subtitle: error.toString(),
+            onRetry: () =>
+                ref.read(taxationHomeNotifierProvider.notifier).refresh(),
           ),
+        ),
+      ),
     );
   }
 
   Widget _buildTaxLeakCard({required List<TaxHistoryItem> taxHistory}) {
     // Calculate total tax leaks from history items
     final totalTaxLeaks = taxHistory
-        .where((item) => item.type == 'debit' && item.amount <= 5000)
-        .fold(0, (sum, item) => sum + item.amount);
+        .where((item) => item.isDebit && item.amount <= 5000)
+        .fold(0.0, (sum, item) => sum + item.amount.toDouble());
 
     return CustomCard(
       padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 22),
@@ -134,7 +128,7 @@ class _TaxationDashboardScreenState
                       borderRadius: BorderRadius.circular(50),
                     ),
                     child: Text(
-                      _formatCurrency(totalTaxLeaks),
+                      totalTaxLeaks.formatCurrency(decimalDigits: 0),
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                         color: AppColors.primary,
@@ -165,9 +159,6 @@ class _TaxationDashboardScreenState
   }
 
   Widget _buildTaxLeakItem(TaxHistoryItem item) {
-    final dateFormat = DateFormat('dd/MM/yyyy');
-    final formattedDate = dateFormat.format(item.date);
-
     return Container(
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
@@ -186,7 +177,7 @@ class _TaxationDashboardScreenState
                 style: TextStyle(fontWeight: FontWeight.w500),
               ),
               Text(
-                "$formattedDate • ${_formatCurrency(item.amount)}",
+                "${item.date.formatShortDate()} • ${item.amount.formatCurrency(decimalDigits: 0)}",
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w400,
@@ -219,7 +210,7 @@ class _TaxationDashboardScreenState
                 ),
               ),
               Text(
-                _formatCurrency(item.amount),
+                item.amount.formatCurrency(decimalDigits: 0),
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   color: AppColors.error,
@@ -305,28 +296,28 @@ class _TaxationDashboardScreenState
             iconPath: AppIcons.calculatorIcon,
             label: 'Calculator',
             onTap: () {
-              Navigator.pushNamed(context, CalculateTaxScreen.path);
+              context.pushNamed(CalculateTaxScreen.path);
             },
           ),
           _buildQuickActionItem(
             iconPath: AppIcons.barChartIcon,
             label: 'Tax Stats',
             onTap: () {
-              Navigator.pushNamed(context, TaxStatsScreen.path);
+              context.pushNamed(TaxStatsScreen.path);
             },
           ),
           _buildQuickActionItem(
             iconPath: AppIcons.chatIcon,
             label: 'Ask Nahl',
             onTap: () {
-              // Navigate to AI assistant
+              context.pushNamed(ChatScreen.path);
             },
           ),
           _buildQuickActionItem(
             iconPath: AppIcons.strategyIcon,
             label: 'Strategy',
             onTap: () {
-              Navigator.pushNamed(context, StrategyCenterScreen.path);
+              context.pushNamed(StrategyCenterScreen.path);
             },
           ),
         ],
@@ -403,11 +394,9 @@ class _TaxationDashboardScreenState
 class TaxDashboardCard extends StatelessWidget {
   final TaxationHomeData taxationData;
 
-  const TaxDashboardCard({super.key, required this.taxationData});
+  TaxDashboardCard({super.key, required this.taxationData});
 
-  String _formatCurrency(int amount) {
-    return NumberFormat.currency(symbol: '₦', decimalDigits: 0).format(amount);
-  }
+  final year = DateTime.now().year;
 
   @override
   Widget build(BuildContext context) {
@@ -424,15 +413,12 @@ class TaxDashboardCard extends StatelessWidget {
           Row(
             spacing: 8,
             children: [
-              const Text(
-                'Your 2026 Tax',
-                style: TextStyle(color: AppColors.white),
-              ),
+              Text('Your $year Tax', style: TextStyle(color: AppColors.white)),
               Icon(Icons.visibility, color: AppColors.white),
             ],
           ),
           Text(
-            _formatCurrency(taxationData.tax.yearly),
+            taxationData.tax.yearly.formatCurrency(decimalDigits: 0),
             style: TextStyle(
               fontSize: 32.0,
               fontWeight: FontWeight.w600,
@@ -441,7 +427,7 @@ class TaxDashboardCard extends StatelessWidget {
             ),
           ),
           Text(
-            '≈ ${_formatCurrency(taxationData.tax.monthly.toInt())}/month',
+            '≈ ${taxationData.tax.monthly.toInt().formatCurrency(decimalDigits: 0)}/month',
             style: TextStyle(color: AppColors.white),
           ),
           Container(
@@ -482,7 +468,11 @@ class TaxDashboardCard extends StatelessWidget {
                   children: [
                     Text('●', style: TextStyle(color: AppColors.primary)),
                     Text(
-                      'Below average for your income bracket',
+                      taxationData.tax.rate < 15
+                          ? 'Below average for your income bracket'
+                          : taxationData.tax.rate < 25
+                          ? 'Average for your income bracket'
+                          : 'Above average for your income bracket',
                       style: TextStyle(color: AppColors.white, fontSize: 10),
                     ),
                   ],

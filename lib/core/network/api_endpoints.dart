@@ -106,4 +106,5 @@ class ApiEndpoints {
   /// Taxation Endpoints
   static const String taxationHome = '/tools/taxation/home';
   static const String taxationCalculator = '/tools/taxation/calculator';
+  static const String taxationStrategies = '/tools/taxation/strategies';
 }

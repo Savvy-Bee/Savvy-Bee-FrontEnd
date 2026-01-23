@@ -8,6 +8,7 @@ import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/debt/debt_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/goals/goals_screen.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/taxation_dashboard_screen.dart';
 
 import 'budget/budget_screen.dart';
 
@@ -70,6 +71,13 @@ class _ToolsScreenState extends ConsumerState<ToolsScreen> {
                   'Debt tracker',
                   'Stay on top of your debts and plan your payoff with ease.',
                   onPressed: () => context.pushNamed(DebtScreen.path),
+                ),
+                const Gap(8),
+                _buildToolItem(
+                  'Tax',
+                  'Calculate your tax and track you earnings with ease.',
+                  onPressed: () =>
+                      context.pushNamed(TaxationDashboardScreen.path),
                 ),
               ],
             ),

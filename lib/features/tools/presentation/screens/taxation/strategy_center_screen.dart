@@ -4,8 +4,13 @@ import 'package:gap/gap.dart';
 
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/utils/assets/app_icons.dart';
+import '../../../../../core/utils/num_extensions.dart';
 import '../../../../../core/widgets/custom_card.dart';
+import '../../../../../core/widgets/custom_error_widget.dart';
+import '../../../../../core/widgets/custom_loading_widget.dart';
 import '../../../../../core/widgets/intro_text.dart';
+import '../../../domain/models/taxation.dart';
+import '../../providers/taxation_provider.dart';
 
 class StrategyCenterScreen extends ConsumerStatefulWidget {
   static const String path = '/strategy-center';
@@ -20,35 +25,55 @@ class StrategyCenterScreen extends ConsumerStatefulWidget {
 class _StrategyCenterScreenState extends ConsumerState<StrategyCenterScreen> {
   @override
   Widget build(BuildContext context) {
+    final strategyAsync = ref.watch(taxationStrategyNotifierProvider);
+
     return Scaffold(
       appBar: AppBar(title: const Text('Strategy Center')),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          IntroText(
-            title: 'Strategy Center',
-            subtitle: 'Optimize your portfolio tax efficiency',
-          ),
-          const Gap(28),
-          Row(
-            spacing: 10,
+      body: strategyAsync.when(
+        loading: () => CustomLoadingWidget(),
+        error: (error, stack) => CustomErrorWidget.error(
+          title: 'Error',
+          subtitle: error.toString(),
+          onRetry: () =>
+              ref.read(taxationStrategyNotifierProvider.notifier).refresh(),
+        ),
+        data: (strategyData) {
+          final strategy = strategyData.data;
+          return ListView(
+            padding: const EdgeInsets.all(16),
             children: [
-              _buildProfitLossCard(isProfit: true, amount: 3500000),
-              _buildProfitLossCard(isProfit: false, amount: 700000),
+              IntroText(
+                title: 'Strategy Center',
+                subtitle: 'Optimize your portfolio tax efficiency',
+              ),
+              const Gap(28),
+              Row(
+                spacing: 10,
+                children: [
+                  _buildProfitLossCard(
+                    isProfit: true,
+                    amount: strategy.gains.toDouble(),
+                  ),
+                  _buildProfitLossCard(
+                    isProfit: false,
+                    amount: strategy.losses.toDouble(),
+                  ),
+                ],
+              ),
+              const Gap(28),
+              _buildHarvestCard(strategy.recommendation.data),
+              const Gap(28),
+              _buildBreakdownCard(strategy),
+              const Gap(28),
+              _buildAssetCard(strategy),
             ],
-          ),
-          const Gap(28),
-          _buildHarvestCard(),
-          const Gap(28),
-          _buildBreakdownCard(),
-          const Gap(28),
-          _buildAssetCard(),
-        ],
+          );
+        },
       ),
     );
   }
 
-  Widget _buildAssetCard() {
+  Widget _buildAssetCard(TaxationStrategyData strategy) {
     return CustomCard(
       padding: const EdgeInsets.symmetric(
         vertical: 20,
@@ -70,29 +95,35 @@ class _StrategyCenterScreenState extends ConsumerState<StrategyCenterScreen> {
             ],
           ),
           const Gap(16),
-          _buildAssetItemCard(
-            assetName: 'SavvyBee Stock',
-            datePurchased: '15/03/2025',
-            unitsPurchased: 100,
-            costBasis: '₦350,000',
-            currentValue: '₦350,000',
-            profitLoss: '₦350,000',
-            profitLossPercent: '20.00%',
-            isProfit: false,
-            potentialTaxSavings: '₦168,000',
-          ),
-          const Gap(18),
-          _buildAssetItemCard(
-            assetName: 'SavvyBee Stock',
-            datePurchased: '15/03/2025',
-            unitsPurchased: 100,
-            costBasis: '₦350,000',
-            currentValue: '₦350,000',
-            profitLoss: '₦350,000',
-            profitLossPercent: '20.00%',
-            isProfit: true,
-          ),
-          // _buildNoAssetWidget(),
+          if (strategy.statements.isEmpty)
+            _buildNoAssetWidget()
+          else
+            ...strategy.statements.map((statement) {
+              final cost = statement.cost ?? 0.0;
+              final isProfit = statement.returnValue >= cost;
+              final profitLoss = (statement.returnValue - cost).abs();
+              final profitLossPercent = cost > 0
+                  ? ((statement.returnValue - cost) / cost * 100).abs()
+                  : 0.0;
+              final potentialTaxSavings = isProfit
+                  ? null
+                  : (profitLoss * 0.24).round().formatCurrency();
+
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 18),
+                child: _buildAssetItemCard(
+                  assetName: statement.name,
+                  datePurchased: 'Unknown',
+                  unitsPurchased: statement.quantity ?? 0,
+                  costBasis: cost.formatCurrency(),
+                  currentValue: statement.returnValue.formatCurrency(),
+                  profitLoss: profitLoss.formatCurrency(),
+                  profitLossPercent: '${profitLossPercent.toStringAsFixed(2)}%',
+                  isProfit: isProfit,
+                  potentialTaxSavings: potentialTaxSavings,
+                ),
+              );
+            }),
         ],
       ),
     );
@@ -255,7 +286,10 @@ class _StrategyCenterScreenState extends ConsumerState<StrategyCenterScreen> {
     );
   }
 
-  Widget _buildBreakdownCard() {
+  Widget _buildBreakdownCard(TaxationStrategyData strategy) {
+    final netTaxableGains = strategy.gains - strategy.exemptions;
+    final estimatedCGT = (netTaxableGains * strategy.rate / 100).round();
+
     return CustomCard(
       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
       borderColor: AppColors.border,
@@ -267,9 +301,15 @@ class _StrategyCenterScreenState extends ConsumerState<StrategyCenterScreen> {
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
           ),
           const Gap(16),
-          _buildTaxBreakdownItem('Realized Gains', '+₦3,500,000'),
+          _buildTaxBreakdownItem(
+            'Realized Gains',
+            '+${strategy.gains.formatCurrency()}',
+          ),
           const Gap(8),
-          _buildTaxBreakdownItem('Base Exemption', '-₦700,000'),
+          _buildTaxBreakdownItem(
+            'Base Exemption',
+            '-${strategy.exemptions.formatCurrency()}',
+          ),
           const Gap(18),
           const Divider(height: 0),
           const Gap(24),
@@ -281,7 +321,7 @@ class _StrategyCenterScreenState extends ConsumerState<StrategyCenterScreen> {
                 style: TextStyle(fontWeight: FontWeight.w600),
               ),
               Text(
-                '₦2,800,000',
+                netTaxableGains.formatCurrency(),
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
@@ -295,11 +335,11 @@ class _StrategyCenterScreenState extends ConsumerState<StrategyCenterScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Estimated CGT (24%)',
+                'Estimated CGT (${strategy.rate}%)',
                 style: TextStyle(fontWeight: FontWeight.w600),
               ),
               Text(
-                '₦672,000',
+                estimatedCGT.formatCurrency(),
                 style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
               ),
             ],
@@ -326,7 +366,7 @@ class _StrategyCenterScreenState extends ConsumerState<StrategyCenterScreen> {
     );
   }
 
-  Widget _buildHarvestCard() {
+  Widget _buildHarvestCard(List<StrategyRecommendationItem> data) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 22, horizontal: 20),
       decoration: BoxDecoration(
@@ -351,16 +391,15 @@ class _StrategyCenterScreenState extends ConsumerState<StrategyCenterScreen> {
             style: TextStyle(color: AppColors.white),
           ),
           const Gap(16),
-          _buildHarvestItem(
-            'Harvestable Losses',
-            '₦700,000',
-            '1 Underperfoming assests identified',
-          ),
-          const Gap(16),
-          _buildHarvestItem(
-            'Potential Tax Savings',
-            '₦168,000',
-            'Offset against Capital Gains Tax (up to 24%)',
+          ...data.map(
+            (e) => Padding(
+              padding: EdgeInsets.only(bottom: e == data.last ? 0 : 16),
+              child: _buildHarvestItem(
+                e.title,
+                e.amount.formatCurrency(),
+                e.recommendation,
+              ),
+            ),
           ),
         ],
       ),
@@ -380,9 +419,12 @@ class _StrategyCenterScreenState extends ConsumerState<StrategyCenterScreen> {
         spacing: 6,
         children: [
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(title, style: TextStyle(color: AppColors.white)),
+              Expanded(
+                child: Text(title, style: TextStyle(color: AppColors.white)),
+              ),
               Text(
                 value,
                 style: TextStyle(
@@ -394,6 +436,7 @@ class _StrategyCenterScreenState extends ConsumerState<StrategyCenterScreen> {
             ],
           ),
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             spacing: 6,
             children: [
               Icon(
@@ -401,9 +444,11 @@ class _StrategyCenterScreenState extends ConsumerState<StrategyCenterScreen> {
                 size: 14,
                 color: AppColors.white,
               ),
-              Text(
-                infoText,
-                style: TextStyle(color: AppColors.white, fontSize: 10),
+              Expanded(
+                child: Text(
+                  infoText,
+                  style: TextStyle(color: AppColors.white, fontSize: 10),
+                ),
               ),
             ],
           ),
@@ -452,7 +497,7 @@ class _StrategyCenterScreenState extends ConsumerState<StrategyCenterScreen> {
               ],
             ),
             Text(
-              '₦$amount',
+              amount.formatCurrency(),
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.w600,

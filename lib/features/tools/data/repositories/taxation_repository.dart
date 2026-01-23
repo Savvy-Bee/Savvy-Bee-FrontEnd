@@ -1,9 +1,8 @@
 import 'dart:developer';
 
-import 'package:dio/dio.dart';
-import 'package:savvy_bee_mobile/core/network/api_client.dart';
-import 'package:savvy_bee_mobile/core/network/api_endpoints.dart';
-import 'package:savvy_bee_mobile/features/tools/domain/models/taxation.dart';
+import '../../../../core/network/api_client.dart';
+import '../../../../core/network/api_endpoints.dart';
+import '../../domain/models/taxation.dart';
 
 class TaxationRepository {
   final ApiClient _apiClient;
@@ -32,22 +31,12 @@ class TaxationRepository {
   Future<TaxCalculatorResponse> calculateTax({
     required int earnings,
     int? rent,
-    int? transport,
-    int? feeding,
-    int? utilities,
-    int? others,
   }) async {
     try {
-      final queryParameters = <String, dynamic>{
-        'earnings': earnings,
-      };
+      final queryParameters = <String, dynamic>{'earnings': earnings};
 
       // Add optional parameters if they are provided
       if (rent != null) queryParameters['rent'] = rent;
-      if (transport != null) queryParameters['transport'] = transport;
-      if (feeding != null) queryParameters['feeding'] = feeding;
-      if (utilities != null) queryParameters['utilities'] = utilities;
-      if (others != null) queryParameters['others'] = others;
 
       final response = await _apiClient.get(
         ApiEndpoints.taxationCalculator,
@@ -60,6 +49,25 @@ class TaxationRepository {
       } else {
         throw ApiException(
           message: response.data['message'] ?? 'Failed to calculate tax',
+          statusCode: response.statusCode,
+        );
+      }
+    } on ApiException {
+      rethrow;
+    } catch (e) {
+      throw ApiException(message: 'An unexpected error occurred: $e');
+    }
+  }
+
+  Future<TaxationStrategyResponse> getTaxationStrategies() async {
+    try {
+      final response = await _apiClient.get(ApiEndpoints.taxationStrategies);
+
+      if (response.data['success'] == true && response.data['data'] != null) {
+        return TaxationStrategyResponse.fromJson(response.data);
+      } else {
+        throw ApiException(
+          message: response.data['message'] ?? 'Failed to load taxation strategies',
           statusCode: response.statusCode,
         );
       }

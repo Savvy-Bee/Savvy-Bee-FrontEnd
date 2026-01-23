@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:savvy_bee_mobile/core/network/api_client.dart';
-import 'package:savvy_bee_mobile/core/services/service_locator.dart';
-import 'package:savvy_bee_mobile/features/tools/data/repositories/taxation_repository.dart';
-import 'package:savvy_bee_mobile/features/tools/domain/models/taxation.dart';
+
+import '../../../../core/services/service_locator.dart';
+import '../../data/repositories/taxation_repository.dart';
+import '../../domain/models/taxation.dart';
 
 class TaxationHomeNotifier extends AsyncNotifier<TaxationHomeResponse> {
   TaxationRepository get _repository => ref.read(taxationRepositoryProvider);
@@ -34,20 +34,12 @@ class TaxCalculatorNotifier extends AsyncNotifier<TaxCalculatorResponse?> {
   Future<void> calculateTax({
     required int earnings,
     int? rent,
-    int? transport,
-    int? feeding,
-    int? utilities,
-    int? others,
   }) async {
     state = const AsyncLoading();
     try {
       final response = await _repository.calculateTax(
         earnings: earnings,
         rent: rent,
-        transport: transport,
-        feeding: feeding,
-        utilities: utilities,
-        others: others,
       );
       state = AsyncData(response);
     } catch (e, st) {
@@ -60,6 +52,25 @@ class TaxCalculatorNotifier extends AsyncNotifier<TaxCalculatorResponse?> {
   }
 }
 
+class TaxationStrategyNotifier extends AsyncNotifier<TaxationStrategyResponse> {
+  TaxationRepository get _repository => ref.read(taxationRepositoryProvider);
+
+  @override
+  Future<TaxationStrategyResponse> build() async {
+    return _repository.getTaxationStrategies();
+  }
+
+  Future<void> refresh() async {
+    state = const AsyncLoading();
+    try {
+      final data = await _repository.getTaxationStrategies();
+      state = AsyncData(data);
+    } catch (e, st) {
+      state = AsyncError(e, st);
+    }
+  }
+}
+
 // Providers
 final taxationHomeNotifierProvider =
     AsyncNotifierProvider<TaxationHomeNotifier, TaxationHomeResponse>(
@@ -69,6 +80,11 @@ final taxationHomeNotifierProvider =
 final taxCalculatorNotifierProvider =
     AsyncNotifierProvider<TaxCalculatorNotifier, TaxCalculatorResponse?>(
       TaxCalculatorNotifier.new,
+    );
+
+final taxationStrategyNotifierProvider =
+    AsyncNotifierProvider<TaxationStrategyNotifier, TaxationStrategyResponse>(
+      TaxationStrategyNotifier.new,
     );
 
 // Repository provider

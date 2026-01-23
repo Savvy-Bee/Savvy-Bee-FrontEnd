@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_error_widget.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_loading_widget.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/providers/taxation_provider.dart';
+import 'package:savvy_bee_mobile/features/tools/domain/models/taxation.dart';
 
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/utils/assets/app_icons.dart';
+import '../../../../../core/utils/num_extensions.dart';
 import '../../../../../core/widgets/custom_card.dart';
 
 class TaxStatsScreen extends ConsumerStatefulWidget {
@@ -19,17 +24,25 @@ class TaxStatsScreen extends ConsumerStatefulWidget {
 class _TaxStatsScreenState extends ConsumerState<TaxStatsScreen> {
   @override
   Widget build(BuildContext context) {
+    final taxStatsState = ref.watch(taxationHomeNotifierProvider);
+
     return Scaffold(
       appBar: AppBar(title: const Text('Tax Stats')),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          _buildReportCard(),
-          const Gap(28),
-          _buildBreakdownCard(),
-          const Gap(28),
-          _buildMoreActionsCard(),
-        ],
+      body: taxStatsState.when(
+        loading: () => const CustomLoadingWidget(text: 'Loading tax stats...'),
+        error: (error, stackTrace) => CustomErrorWidget.error(
+          onRetry: () => ref.read(taxationHomeNotifierProvider),
+        ),
+        data: (taxStats) => ListView(
+          padding: const EdgeInsets.all(16),
+          children: [
+            _buildReportCard(),
+            const Gap(28),
+            _buildBreakdownCard(taxStats.data),
+            const Gap(28),
+            _buildMoreActionsCard(),
+          ],
+        ),
       ),
     );
   }
@@ -80,7 +93,7 @@ class _TaxStatsScreenState extends ConsumerState<TaxStatsScreen> {
     );
   }
 
-  Widget _buildBreakdownCard() {
+  Widget _buildBreakdownCard(TaxationHomeData taxData) {
     Widget buildTaxBreakdownItem(String title, String value) {
       return Container(
         padding: const EdgeInsets.all(10),
@@ -109,11 +122,20 @@ class _TaxStatsScreenState extends ConsumerState<TaxStatsScreen> {
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
           ),
           const Gap(16),
-          buildTaxBreakdownItem('Gross Income', '₦1,800,000'),
+          buildTaxBreakdownItem(
+            'Gross Income',
+            taxData.totalEarnings.formatCurrency(),
+          ),
           const Gap(8),
-          buildTaxBreakdownItem('Base Exemption', '-₦800,000'),
+          buildTaxBreakdownItem(
+            'Base Exemption',
+            '-${(taxData.totalEarnings - taxData.tax.yearly).formatCurrency()}',
+          ),
           const Gap(8),
-          buildTaxBreakdownItem('Taxable Income', '₦1,000,000'),
+          buildTaxBreakdownItem(
+            'Taxable Income',
+            taxData.tax.yearly.formatCurrency(),
+          ),
           const Gap(18),
           const Divider(height: 0),
           const Gap(24),
@@ -122,7 +144,7 @@ class _TaxStatsScreenState extends ConsumerState<TaxStatsScreen> {
             children: [
               Text('Total Tax', style: TextStyle(fontWeight: FontWeight.w600)),
               Text(
-                '₦114,000',
+                taxData.tax.yearly.formatCurrency(),
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
@@ -132,7 +154,10 @@ class _TaxStatsScreenState extends ConsumerState<TaxStatsScreen> {
             ],
           ),
           const Gap(24),
-          CustomElevatedButton(text: 'Recalculate Tax', onPressed: () {}),
+          CustomElevatedButton(
+            text: 'Recalculate Tax',
+            onPressed: () => ref.read(taxationHomeNotifierProvider),
+          ),
         ],
       ),
     );
