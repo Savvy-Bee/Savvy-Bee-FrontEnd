@@ -23,10 +23,10 @@ plugins {
 }
 
 include ':app'
-include ':unityLibrary'
-include 'unityLibrary:xrmanifest.androidlib'
+// include ':unityLibrary'
+// include 'unityLibrary:xrmanifest.androidlib'
 
-project(':unityLibrary').projectDir = new File('unityLibrary')
+// project(':unityLibrary').projectDir = new File('unityLibrary')
 
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
@@ -36,9 +36,9 @@ dependencyResolutionManagement {
         maven {
             url 'https://storage.googleapis.com/download.flutter.io'
         }
-        flatDir {
-            dirs "${project(':unityLibrary').projectDir}/libs"
-        }
+        // flatDir {
+        //     dirs "${project(':unityLibrary').projectDir}/libs"
+        // }
 
     }
 }

@@ -10,8 +10,6 @@
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
 		331C808B294A63AB00263BE5 /* RunnerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331C807B294A618700263BE5 /* RunnerTests.swift */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
-		424F72FA2F0FE07300CE88D9 /* UnityFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 424F72F92F0FE07300CE88D9 /* UnityFramework.framework */; };
-		424F72FB2F0FE07300CE88D9 /* UnityFramework.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 424F72F92F0FE07300CE88D9 /* UnityFramework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4BEB5BBBFC40022EF4EDD93F /* Pods_RunnerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF31B8D12182AFDBDF02BBE0 /* Pods_RunnerTests.framework */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
 		9319453D503F037376745292 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 428A689C9E6AE9D1773009F4 /* Pods_Runner.framework */; };
@@ -29,20 +27,6 @@
 			remoteInfo = Runner;
 		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		9705A1C41CF9048500538489 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				424F72FB2F0FE07300CE88D9 /* UnityFramework.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		08352B98D10F0D83278F5D9C /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
@@ -85,7 +69,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				9319453D503F037376745292 /* Pods_Runner.framework in Frameworks */,
-				424F72FA2F0FE07300CE88D9 /* UnityFramework.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -201,7 +184,6 @@
 				97C146EA1CF9000F007C117D /* Sources */,
 				97C146EB1CF9000F007C117D /* Frameworks */,
 				97C146EC1CF9000F007C117D /* Resources */,
-				9705A1C41CF9048500538489 /* Embed Frameworks */,
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
 				CAC474FC5D7F35586B337AA2 /* [CP] Embed Pods Frameworks */,
 				C107B0D54380FD04DFDFDC2F /* [CP] Copy Pods Resources */,
@@ -512,7 +494,6 @@
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/sqflite_darwin\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/url_launcher_ios\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/webview_flutter_wkwebview\"",
-					"$(PROJECT_DIR)/UnityLibrary/**",
 				);
 				INFOPLIST_FILE = Runner/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -713,7 +694,6 @@
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/sqflite_darwin\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/url_launcher_ios\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/webview_flutter_wkwebview\"",
-					"$(PROJECT_DIR)/UnityLibrary/**",
 				);
 				INFOPLIST_FILE = Runner/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -754,7 +734,6 @@
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/sqflite_darwin\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/url_launcher_ios\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/webview_flutter_wkwebview\"",
-					"$(PROJECT_DIR)/UnityLibrary/**",
 				);
 				INFOPLIST_FILE = Runner/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (

@@ -1,0 +1,16 @@
+com.SavvyBee.Savvybee:style/UnityThemeSelector.Translucent = 0x7f050002
+com.SavvyBee.Savvybee:style/UnityThemeSelector = 0x7f050001
+com.SavvyBee.Savvybee:style/BaseUnityTheme = 0x7f050000
+com.SavvyBee.Savvybee:string/game_view_content_description = 0x7f040006
+com.SavvyBee.Savvybee:string/app_name = 0x7f040005
+com.SavvyBee.Savvybee:mipmap/ic_launcher_background = 0x7f030002
+com.SavvyBee.Savvybee:string/FreeformWindowSize_tablet = 0x7f040004
+com.SavvyBee.Savvybee:string/FreeformWindowSize_phone = 0x7f040003
+com.SavvyBee.Savvybee:mipmap/app_icon = 0x7f030000
+com.SavvyBee.Savvybee:mipmap/ic_launcher_foreground = 0x7f030003
+com.SavvyBee.Savvybee:string/FreeformWindowOrientation_landscape = 0x7f040000
+com.SavvyBee.Savvybee:mipmap/app_icon_round = 0x7f030001
+com.SavvyBee.Savvybee:string/FreeformWindowSize_maximize = 0x7f040002
+com.SavvyBee.Savvybee:id/unitySurfaceView = 0x7f020000
+com.SavvyBee.Savvybee:string/FreeformWindowOrientation_portrait = 0x7f040001
+com.SavvyBee.Savvybee:color/staticSplashScreenBackgroundColor = 0x7f010000

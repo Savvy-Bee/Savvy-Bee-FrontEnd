@@ -1,0 +1,171 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/launcher/src/main/AndroidManifest.xml:2:1-5:12
+INJECTED from /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/launcher/src/main/AndroidManifest.xml:2:1-5:12
+INJECTED from /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/launcher/src/main/AndroidManifest.xml:2:1-5:12
+INJECTED from /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/launcher/src/main/AndroidManifest.xml:2:1-5:12
+MERGED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:2:1-68:12
+MERGED from [:unityandroidpermissions:] /Users/joshua/.gradle/caches/8.11.1/transforms/28fdb9c4df5ee17943fdb62f69abb87a/transformed/jetified-unityandroidpermissions/AndroidManifest.xml:6:1-15:12
+MERGED from [:unityLibrary:xrmanifest.androidlib] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/xrmanifest.androidlib/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:2:1-11:12
+	package
+		INJECTED from /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/launcher/src/main/AndroidManifest.xml
+	android:versionName
+		INJECTED from /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/launcher/src/main/AndroidManifest.xml
+	xmlns:tools
+		ADDED from /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/launcher/src/main/AndroidManifest.xml:2:70-116
+	android:versionCode
+		INJECTED from /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/launcher/src/main/AndroidManifest.xml
+	xmlns:android
+		ADDED from /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/launcher/src/main/AndroidManifest.xml:2:11-69
+	android:installLocation
+		ADDED from /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/launcher/src/main/AndroidManifest.xml:2:117-157
+application
+ADDED from /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/launcher/src/main/AndroidManifest.xml:3:3-83
+INJECTED from /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/launcher/src/main/AndroidManifest.xml:3:3-83
+MERGED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:24:5-66:19
+MERGED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:24:5-66:19
+MERGED from [:unityLibrary:xrmanifest.androidlib] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/xrmanifest.androidlib/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:7:5-9:19
+MERGED from [:unityLibrary:xrmanifest.androidlib] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/xrmanifest.androidlib/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:7:5-9:19
+	android:extractNativeLibs
+		INJECTED from /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/launcher/src/main/AndroidManifest.xml
+		REJECTED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:24:18-50
+	android:label
+		ADDED from /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/launcher/src/main/AndroidManifest.xml:3:16-48
+	android:icon
+		ADDED from /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/launcher/src/main/AndroidManifest.xml:3:49-80
+supports-screens
+ADDED from /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/launcher/src/main/AndroidManifest.xml:4:3-163
+	android:largeScreens
+		ADDED from /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/launcher/src/main/AndroidManifest.xml:4:78-105
+	android:smallScreens
+		ADDED from /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/launcher/src/main/AndroidManifest.xml:4:21-48
+	android:normalScreens
+		ADDED from /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/launcher/src/main/AndroidManifest.xml:4:49-77
+	android:xlargeScreens
+		ADDED from /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/launcher/src/main/AndroidManifest.xml:4:106-134
+	android:anyDensity
+		ADDED from /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/launcher/src/main/AndroidManifest.xml:4:135-160
+uses-sdk
+INJECTED from /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/launcher/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/launcher/src/main/AndroidManifest.xml
+INJECTED from /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/launcher/src/main/AndroidManifest.xml
+MERGED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:6:5-44
+MERGED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:6:5-44
+MERGED from [:unityandroidpermissions:] /Users/joshua/.gradle/caches/8.11.1/transforms/28fdb9c4df5ee17943fdb62f69abb87a/transformed/jetified-unityandroidpermissions/AndroidManifest.xml:11:5-13:41
+MERGED from [:unityandroidpermissions:] /Users/joshua/.gradle/caches/8.11.1/transforms/28fdb9c4df5ee17943fdb62f69abb87a/transformed/jetified-unityandroidpermissions/AndroidManifest.xml:11:5-13:41
+MERGED from [:unityLibrary:xrmanifest.androidlib] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/xrmanifest.androidlib/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:5:5-44
+MERGED from [:unityLibrary:xrmanifest.androidlib] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/xrmanifest.androidlib/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:5:5-44
+	android:targetSdkVersion
+		INJECTED from /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/launcher/src/main/AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/launcher/src/main/AndroidManifest.xml
+uses-permission#android.permission.INTERNET
+ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:8:5-67
+	android:name
+		ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:8:22-64
+uses-feature#0x00030000
+ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:10:5-54
+	android:glEsVersion
+		ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:10:19-51
+uses-feature#android.hardware.vulkan.version
+ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:11:5-13:36
+	android:required
+		ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:13:9-33
+	android:name
+		ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:12:9-55
+uses-feature#android.hardware.touchscreen
+ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:14:5-16:36
+	android:required
+		ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:16:9-33
+	android:name
+		ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:15:9-52
+uses-feature#android.hardware.touchscreen.multitouch
+ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:17:5-19:36
+	android:required
+		ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:19:9-33
+	android:name
+		ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:18:9-63
+uses-feature#android.hardware.touchscreen.multitouch.distinct
+ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:20:5-22:36
+	android:required
+		ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:22:9-33
+	android:name
+		ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:21:9-72
+meta-data#unity.splash-mode
+ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:25:9-27:33
+	android:value
+		ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:27:13-30
+	android:name
+		ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:26:13-45
+meta-data#unity.splash-enable
+ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:28:9-30:36
+	android:value
+		ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:30:13-33
+	android:name
+		ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:29:13-47
+meta-data#unity.launch-fullscreen
+ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:31:9-33:36
+	android:value
+		ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:33:13-33
+	android:name
+		ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:32:13-51
+meta-data#unity.render-outside-safearea
+ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:34:9-36:36
+	android:value
+		ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:36:13-33
+	android:name
+		ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:35:13-57
+meta-data#notch.config
+ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:37:9-39:50
+	android:value
+		ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:39:13-47
+	android:name
+		ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:38:13-40
+meta-data#unity.auto-report-fully-drawn
+ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:40:9-42:36
+	android:value
+		ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:42:13-33
+	android:name
+		ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:41:13-57
+activity#com.unity3d.player.UnityPlayerActivity
+ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:44:9-65:20
+MERGED from [:unityLibrary:xrmanifest.androidlib] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/xrmanifest.androidlib/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:8:9-75
+MERGED from [:unityLibrary:xrmanifest.androidlib] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/xrmanifest.androidlib/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:8:9-75
+	android:screenOrientation
+		ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:51:13-49
+	android:launchMode
+		ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:49:13-44
+	android:hardwareAccelerated
+		ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:48:13-48
+	android:exported
+		ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:47:13-36
+	android:resizeableActivity
+		ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:50:13-47
+	android:configChanges
+		ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:46:13-194
+	android:theme
+		ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:52:13-54
+	android:name
+		ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:45:13-66
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
+ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:53:13-57:29
+category#android.intent.category.LAUNCHER
+ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:54:17-77
+	android:name
+		ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:54:27-74
+action#android.intent.action.MAIN
+ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:56:17-69
+	android:name
+		ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:56:25-66
+meta-data#unityplayer.UnityActivity
+ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:59:13-61:40
+	android:value
+		ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:61:17-37
+	android:name
+		ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:60:17-57
+meta-data#notch_support
+ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:62:13-64:40
+	android:value
+		ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:64:17-37
+	android:name
+		ADDED from [:unityLibrary] /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:63:17-45

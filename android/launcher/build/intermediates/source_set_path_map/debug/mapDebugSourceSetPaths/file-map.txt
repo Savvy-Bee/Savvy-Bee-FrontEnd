@@ -1,0 +1,9 @@
+com.SavvyBee.Savvybee.app-pngs-0 /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/launcher/build/generated/res/pngs/debug
+com.SavvyBee.Savvybee.app-resValues-1 /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/launcher/build/generated/res/resValues/debug
+com.SavvyBee.Savvybee.app-packageDebugResources-2 /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/launcher/build/intermediates/incremental/debug/packageDebugResources/merged.dir
+com.SavvyBee.Savvybee.app-packageDebugResources-3 /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/launcher/build/intermediates/incremental/debug/packageDebugResources/stripped.dir
+com.SavvyBee.Savvybee.app-debug-4 /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/launcher/build/intermediates/merged_res/debug/mergeDebugResources
+com.SavvyBee.Savvybee.app-debug-5 /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/launcher/src/debug/res
+com.SavvyBee.Savvybee.app-main-6 /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/launcher/src/main/res
+com.SavvyBee.Savvybee.app-debug-7 /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/packaged_res/debug/packageDebugResources
+com.SavvyBee.Savvybee.app-debug-8 /Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/xrmanifest.androidlib/build/intermediates/packaged_res/debug/packageDebugResources

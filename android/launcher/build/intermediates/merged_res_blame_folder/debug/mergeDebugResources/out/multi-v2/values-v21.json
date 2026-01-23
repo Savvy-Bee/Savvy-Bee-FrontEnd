@@ -1,0 +1,20 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.SavvyBee.Savvybee.launcher-mergeDebugResources-2:/values-v21/values-v21.xml",
+            "map": [
+                {
+                    "source": "/Users/joshua/Documents/SavvyBee/Savvy-Bee-FrontEnd/android/unityLibrary/build/intermediates/packaged_res/debug/packageDebugResources/values-v21/values-v21.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endLines": "3",
+                        "endColumns": "8",
+                        "endOffsets": "154"
+                    }
+                }
+            ]
+        }
+    ]
+}

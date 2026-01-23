@@ -48,14 +48,14 @@ post_install do |installer|
   end
   
   # Unity Framework configuration
-  installer.pods_project.targets.each do |target|
-    if target.name == 'flutter_unity_widget'
-      target.build_configurations.each do |config|
-        config.build_settings['FRAMEWORK_SEARCH_PATHS'] ||= ['$(inherited)']
-        config.build_settings['FRAMEWORK_SEARCH_PATHS'] << '$(PROJECT_DIR)/../UnityLibrary'
-        config.build_settings['HEADER_SEARCH_PATHS'] ||= ['$(inherited)']
-        config.build_settings['HEADER_SEARCH_PATHS'] << '$(PROJECT_DIR)/../UnityLibrary'
-      end
-    end
-  end
+  # installer.pods_project.targets.each do |target|
+  #   if target.name == 'flutter_unity_widget'
+  #     target.build_configurations.each do |config|
+  #       config.build_settings['FRAMEWORK_SEARCH_PATHS'] ||= ['$(inherited)']
+  #       config.build_settings['FRAMEWORK_SEARCH_PATHS'] << '$(PROJECT_DIR)/../UnityLibrary'
+  #       config.build_settings['HEADER_SEARCH_PATHS'] ||= ['$(inherited)']
+  #       config.build_settings['HEADER_SEARCH_PATHS'] << '$(PROJECT_DIR)/../UnityLibrary'
+  #     end
+  #   end
+  # end
 end
