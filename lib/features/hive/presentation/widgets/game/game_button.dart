@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../../../core/utils/assets/game_assets.dart';
-import 'game_text_widget.dart';
+import 'game_text.dart';
 
 class GameButton extends StatefulWidget {
   final VoidCallback? onPressed;

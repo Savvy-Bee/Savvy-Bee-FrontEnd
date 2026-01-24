@@ -3,7 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 
 import '../../../../../core/utils/assets/game_assets.dart';
-import 'game_text_widget.dart';
+import 'game_text.dart';
 
 class TerrainCard extends StatelessWidget {
   final int starCount;

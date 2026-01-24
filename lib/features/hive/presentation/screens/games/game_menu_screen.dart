@@ -7,6 +7,7 @@ import '../../../../../core/utils/assets/game_assets.dart';
 import '../../../../../core/utils/constants.dart';
 import '../../widgets/game/game_button.dart';
 import 'game_terrain_screen.dart';
+import 'game_tips_screen.dart';
 
 class GameMenuScreen extends ConsumerStatefulWidget {
   static const String path = '/game-menu';
@@ -83,7 +84,10 @@ class _GameMenuScreenState extends ConsumerState<GameMenuScreen> {
                 },
                 buttonText: 'START',
               ),
-              GameButton(onPressed: () {}, buttonText: 'TIPS'),
+              GameButton(
+                onPressed: () => context.pushNamed(GameTipsScreen.path),
+                buttonText: 'TIPS',
+              ),
               GameButton(onPressed: () {}, buttonText: 'SETTINGS'),
             ],
           ),

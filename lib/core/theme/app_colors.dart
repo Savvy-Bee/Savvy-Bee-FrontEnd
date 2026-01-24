@@ -60,6 +60,7 @@ class AppColors {
 
   // Game Colors
   static const Color gameBg = Color(0xFF00778B);
+  static const Color gameBgLight = Color(0xFF72C6CC);
 
   // Gradient Colors
   static const List<Color> primaryGradient = [primary, primaryLight];

@@ -13,4 +13,5 @@ class GameAssets {
   static const String starFullSvg = '${basePath}star-full.svg';
   static const String starEmptySvg = '${basePath}star-empty.svg';
   static const String starOneSvg = '${basePath}star-one.svg';
+  static const String starSingleSvg = '${basePath}star-single.svg';
 }

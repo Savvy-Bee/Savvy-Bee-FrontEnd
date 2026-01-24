@@ -69,6 +69,7 @@ import 'package:savvy_bee_mobile/features/tools/presentation/screens/debt/debt_r
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/goals/create_goal_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/tools_screen.dart';
 import '../../features/hive/presentation/screens/games/game_terrain_screen.dart';
+import '../../features/hive/presentation/screens/games/game_tips_screen.dart';
 import '../../features/hive/presentation/screens/lesson/lesson_room_screen.dart';
 import '../../features/hive/presentation/screens/level/level_complete_screen.dart';
 import '../../features/hive/presentation/screens/levels_screen.dart';
@@ -823,6 +824,13 @@ final GoRouter appRouter = GoRouter(
       name: GameTerrainScreen.path,
       builder: (BuildContext context, GoRouterState state) {
         return GameTerrainScreen();
+      },
+    ),
+    GoRoute(
+      path: GameTipsScreen.path,
+      name: GameTipsScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return GameTipsScreen();
       },
     ),
   ],
