@@ -224,8 +224,9 @@ class _ChoosePersonalityScreenState
         });
       },
       borderColor: selectedPersonality == persona
-          ? AppColors.primaryDark
+          ? AppColors.black
           : AppColors.greyMid,
+      borderWidth: selectedPersonality == persona ? 2 : 0.5,
       child: Row(
         children: [
           if (persona.image != null)

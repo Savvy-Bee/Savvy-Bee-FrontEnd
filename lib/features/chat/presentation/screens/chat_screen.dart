@@ -6,20 +6,22 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
-import 'package:savvy_bee_mobile/core/utils/assets/assets.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/illustrations.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/utils/file_picker_util.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_error_widget.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_loading_widget.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_snackbar.dart';
 import 'package:savvy_bee_mobile/features/chat/presentation/screens/chat_bubble_widget.dart';
 import 'package:savvy_bee_mobile/features/chat/presentation/widgets/picked_file_preview.dart';
-import 'package:savvy_bee_mobile/features/chat/presentation/widgets/quick_action_widget.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';
 import 'package:savvy_bee_mobile/features/chat/domain/models/chat_models.dart';
 import 'package:savvy_bee_mobile/features/chat/presentation/providers/chat_providers.dart';
 import 'package:savvy_bee_mobile/features/chat/presentation/screens/choose_personality_screen.dart';
+
+enum ChatScreenState { newChat, existingChat, chatHistory }
 
 class ChatScreen extends ConsumerStatefulWidget {
   static const String path = '/chat';
@@ -34,13 +36,15 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _messageController = TextEditingController();
 
+  final ChatScreenState _chatScreenState = ChatScreenState.newChat;
+
   File? _pickedFile;
 
   final Set<String> _quickActions = {
     'Heal me',
     'Analyse me',
     'Scan Receipt',
-    'Smart assistant',
+    'Assistant',
   };
 
   @override
@@ -127,17 +131,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
     return chatAsync.when(
       data: (chatState) => Scaffold(
-        appBar: _buildAppBar(context, chatState.persona?.name ?? '-------'),
-        body: Container(
-          decoration: BoxDecoration(
-            color: AppColors.primaryFaint.withValues(alpha: 0.3),
-            image: DecorationImage(
-              image: AssetImage(Assets.hivePatternYellow),
-              fit: BoxFit.cover,
-            ),
-          ),
-          child: _buildChatView(chatState),
-        ),
+        appBar: _buildAppBar(context, chatState.persona?.name ?? '-----'),
+        body: _buildChatView(chatState),
       ),
       error: (error, stackTrace) => Scaffold(
         body: CustomErrorWidget.error(
@@ -155,61 +150,172 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        _buildQuickActions(),
+        if (_chatScreenState == ChatScreenState.chatHistory) ...[
+          const Gap(32),
+          _buildChatHistoryTitle(),
+          const Gap(16),
+          _buildChatHistoryCard(),
+        ],
+
+        if (chatState.isEmpty && _chatScreenState == ChatScreenState.newChat)
+          _buildNewChatWidget(),
         // Messages list
-        Expanded(
-          child: chatState.isEmpty
-              ? _buildEmptyState()
-              : Column(
-                  children: [
-                    Expanded(
-                      child: ListView.builder(
-                        controller: _scrollController,
-                        reverse: true,
-                        padding: const EdgeInsets.all(8.0),
-                        itemCount: chatState.messages.length,
-                        itemBuilder: (context, index) {
-                          final reversedIndex =
-                              chatState.messages.length - 1 - index;
-                          final message = chatState.messages[reversedIndex];
+        if (!chatState.isEmpty &&
+            _chatScreenState == ChatScreenState.existingChat)
+          Expanded(
+            child: Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    controller: _scrollController,
+                    reverse: true,
+                    padding: const EdgeInsets.all(8.0),
+                    itemCount: chatState.messages.length,
+                    itemBuilder: (context, index) {
+                      final reversedIndex =
+                          chatState.messages.length - 1 - index;
+                      final message = chatState.messages[reversedIndex];
 
-                          final isFirst =
-                              reversedIndex == 0 ||
-                              chatState.messages[reversedIndex - 1].from !=
-                                  message.from;
-                          final isLast =
-                              reversedIndex == chatState.messages.length - 1 ||
-                              (reversedIndex + 1 < chatState.messages.length &&
-                                  chatState.messages[reversedIndex + 1].from !=
-                                      message.from);
+                      final isFirst =
+                          reversedIndex == 0 ||
+                          chatState.messages[reversedIndex - 1].from !=
+                              message.from;
+                      final isLast =
+                          reversedIndex == chatState.messages.length - 1 ||
+                          (reversedIndex + 1 < chatState.messages.length &&
+                              chatState.messages[reversedIndex + 1].from !=
+                                  message.from);
 
-                          return buildChatBubble(
-                            context: context,
-                            message: message,
-                            isFirst: isFirst,
-                            isLast: isLast,
-                            onBudgetAction: () => _handleBudgetAction(message),
-                            onGoalAction: () => _handleGoalAction(message),
-                          );
-                        },
-                      ),
-                    ),
-
-                    // Typing indicator
-                    const Gap(6),
-                    if (chatState.isSending)
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: Row(children: [_buildTypingIndicator()]),
-                      ),
-                  ],
+                      return buildChatBubble(
+                        context: context,
+                        message: message,
+                        isFirst: isFirst,
+                        isLast: isLast,
+                        onBudgetAction: () => _handleBudgetAction(message),
+                        onGoalAction: () => _handleGoalAction(message),
+                      );
+                    },
+                  ),
                 ),
-        ),
 
-        if (!chatState.isSending && _pickedFile == null) _buildQuickActions(),
+                // Typing indicator
+                const Gap(6),
+                if (chatState.isSending)
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: Row(children: [_buildTypingIndicator()]),
+                  ),
+              ],
+            ),
+          ),
 
         // Message input
-        _buildTextField(chatState),
+        if (!chatState.isEmpty &&
+            _chatScreenState == ChatScreenState.existingChat)
+          _buildTextField(chatState),
       ],
+    );
+  }
+
+  Container _buildChatHistoryCard() {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.1),
+            spreadRadius: 1,
+            blurRadius: 4,
+            offset: const Offset(0, 2), // changes position of shadow
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _buildChatHistoryItem(
+            "Things You Need To Know About Nigeria's New Tax Reform",
+            "2:18PM",
+          ),
+          _buildChatHistoryItem(
+            "Things You Need To Know About Nigeria's New Tax Reform",
+            "2:18PM",
+            isLast: true,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Padding _buildChatHistoryTitle() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            'YOUR CHATS (2/50)',
+            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+          ),
+          InkWell(
+            onTap: () {},
+            child: Text(
+              'Start new chat',
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+                decoration: TextDecoration.underline,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildChatHistoryItem(
+    String chatTitle,
+    String chatTime, {
+    bool isLast = false,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(16).copyWith(top: 24),
+      decoration: BoxDecoration(
+        border: isLast
+            ? null
+            : Border(bottom: BorderSide(color: AppColors.grey, width: 0.5)),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: 24,
+        children: [
+          Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: 8,
+              children: [
+                Text(
+                  chatTitle,
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                ),
+                Text(
+                  chatTime,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.grey,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          IconButton(onPressed: () {}, icon: Icon(Icons.more_horiz_outlined)),
+        ],
+      ),
     );
   }
 
@@ -248,50 +354,60 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   }
 
   Widget _buildQuickActions() {
-    return Container(
-      color: AppColors.primaryFaint.withValues(alpha: 0.3),
+    return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // const Gap(10.0),
-          Row(
-            children: [
-              Text(
-                'Quick actions',
-                style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w500),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          spacing: 12,
+          children: _quickActions
+              .map(
+                (action) => _buildQuickActionItem(
+                  icon: Icon(
+                    Icons.auto_awesome_outlined,
+                    color: AppColors.primaryDark,
+                    size: 16,
+                  ),
+                  label: action,
+                  onTap: () => _sendQuickAction(action),
+                ),
+              )
+              .toList(),
+        ),
+      ),
+    );
+  }
+
+  /// Build quick action item
+  Widget _buildQuickActionItem({
+    required Widget icon,
+    required String label,
+    required VoidCallback onTap,
+  }) {
+    return CustomCard(
+      onTap: onTap,
+      height: 100,
+      width: 100,
+      borderRadius: 12,
+      borderColor: AppColors.grey,
+      bgColor: AppColors.background,
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          spacing: 16,
+          children: [
+            icon,
+            Text(
+              label,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 12.0,
+                fontWeight: FontWeight.w500,
               ),
-              const Gap(2.0),
-              Icon(
-                Icons.auto_awesome_outlined,
-                color: AppColors.primaryDark,
-                size: 16,
-              ),
-            ],
-          ),
-          const Gap(10.0),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: _quickActions
-                  .map(
-                    (action) => Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: QuickActionWidget(
-                        icon: Icon(
-                          Icons.auto_awesome_outlined,
-                          color: AppColors.primaryDark,
-                          size: 16,
-                        ),
-                        label: action,
-                        onTap: () => _sendQuickAction(action),
-                      ),
-                    ),
-                  )
-                  .toList(),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -408,7 +524,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   }
 
   /// Build empty state
-  Widget _buildEmptyState() {
+  Widget _buildNewChatWidget() {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32.0),
@@ -425,18 +541,23 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
             ),
             const Gap(24.0),
             const Text(
-              'Meet NAHL',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              'Nahl Chat',
+              style: TextStyle(fontSize: 28, fontWeight: FontWeight.w500),
             ),
-            const Gap(8.0),
+            const Gap(16),
             Text(
-              'Your AI financial assistant is here to help you manage your money better',
+              'Start a conversation to see your Nahl chat history',
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey.shade700,
-                height: 1.5,
-              ),
+              style: TextStyle(fontSize: 16),
+            ),
+            const Gap(16),
+            CustomElevatedButton(
+              text: 'Start conversation',
+              icon: Icon(Icons.add),
+              isSmall: true,
+              isFullWidth: false,
+              buttonColor: CustomButtonColor.black,
+              onPressed: () {},
             ),
           ],
         ),
@@ -458,7 +579,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
               BackButton(),
               InkWell(
                 onTap: () => context.pushNamed(ChoosePersonalityScreen.path),
-                child: Column(
+                child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Container(
@@ -535,7 +656,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           ),
           TextButton(
             onPressed: () {
-              Navigator.pop(context);
+              context.pop();
               // ref.read(chatProvider.notifier).clearHistory(clearOnServer: true);
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
