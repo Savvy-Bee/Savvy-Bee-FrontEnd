@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
+
 import '../../../../../core/utils/assets/game_assets.dart';
-import '../../../../../core/utils/constants.dart';
+import 'game_text_widget.dart';
 
 class GameButton extends StatefulWidget {
   final VoidCallback? onPressed;
@@ -110,36 +110,7 @@ class _GameButtonState extends State<GameButton>
             ),
             Positioned(
               top: widget.isSmall ? 3 : 20,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  // Outline
-                  Text(
-                    widget.buttonText,
-                    style: TextStyle(
-                      fontSize: fontSize + 1,
-                      letterSpacing: 1,
-                      fontWeight: FontWeight.w900,
-                      fontFamily: Constants.londrinaSolidFontFamily,
-                      foreground: Paint()
-                        ..style = PaintingStyle.stroke
-                        ..strokeWidth = 1
-                        ..color = AppColors.primaryDark,
-                    ),
-                  ),
-                  // Foreground text
-                  Text(
-                    widget.buttonText,
-                    style: TextStyle(
-                      fontSize: fontSize,
-                      letterSpacing: 1,
-                      fontWeight: FontWeight.w900,
-                      fontFamily: Constants.londrinaSolidFontFamily,
-                      color: AppColors.white,
-                    ),
-                  ),
-                ],
-              ),
+              child: GameText(text: widget.buttonText, fontSize: fontSize),
             ),
           ],
         ),
