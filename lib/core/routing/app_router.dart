@@ -103,7 +103,7 @@ final GlobalKey<NavigatorState> _shellNavigatorKey = GlobalKey<NavigatorState>(
 
 final GoRouter appRouter = GoRouter(
   navigatorKey: _rootNavigatorKey,
-  initialLocation: GameMenuScreen.path,
+  initialLocation: SplashScreen.path,
   routes: [
     // Auth Routes
     GoRoute(

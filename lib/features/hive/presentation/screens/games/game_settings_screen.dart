@@ -19,6 +19,7 @@ class GameSettingsScreen extends ConsumerStatefulWidget {
 
 class _GameSettingsScreenState extends ConsumerState<GameSettingsScreen> {
   bool _soundEnabled = true;
+  bool _musicEnabled = true;
 
   @override
   Widget build(BuildContext context) {
@@ -43,10 +44,10 @@ class _GameSettingsScreenState extends ConsumerState<GameSettingsScreen> {
                 ),
                 GameSettingsListTile(
                   title: 'Music',
-                  value: _soundEnabled,
+                  value: _musicEnabled,
                   onChanged: (value) {
                     setState(() {
-                      _soundEnabled = value;
+                      _musicEnabled = value;
                     });
                   },
                 ),
