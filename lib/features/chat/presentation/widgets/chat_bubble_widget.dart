@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:readmore/readmore.dart';
+import 'package:gap/gap.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/features/chat/domain/models/chat_models.dart';
 import 'package:savvy_bee_mobile/features/chat/presentation/widgets/budget_chat_widget.dart';
 import 'package:savvy_bee_mobile/features/chat/presentation/widgets/goal_chat_widget.dart';
+
+import 'formatted_chat_message_widget.dart';
 
 /// Build chat bubble with dynamic widget support
 Widget buildChatBubble({
@@ -101,15 +103,15 @@ Widget buildChatBubble({
           ? CrossAxisAlignment.end
           : CrossAxisAlignment.start,
       children: [
+        if (!isMe) CircleAvatar(radius: 16),
         // Main chat bubble
         Container(
           margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
-          constraints: BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width * 0.75,
-          ),
+          padding: isMe
+              ? const EdgeInsets.symmetric(vertical: 10, horizontal: 14)
+              : null,
           decoration: BoxDecoration(
-            color: isMe ? AppColors.primaryDark : AppColors.primaryFaint,
+            color: isMe ? AppColors.black : null,
             borderRadius: borderRadius,
           ),
           child: Column(
@@ -157,7 +159,7 @@ Widget buildChatBubble({
                                   : Colors.black54,
                               size: 32,
                             ),
-                            const SizedBox(height: 8),
+                            const Gap(8.0),
                             Text(
                               'Failed to load GIF',
                               style: TextStyle(
@@ -174,35 +176,17 @@ Widget buildChatBubble({
                   ),
                 ),
                 // Add spacing between GIF and text if both exist
-                if (hasText) const SizedBox(height: 8.0),
+                if (hasText) const Gap(8.0),
               ],
               // Display text if present
               if (hasText)
-                ReadMoreText(
-                  message.message,
-                  trimLines: 8,
-                  trimMode: TrimMode.Line,
-                  trimCollapsedText: 'Show more',
-                  trimExpandedText: 'Show less',
+                FormattedChatMessage(
+                  message: message.message,
                   style: TextStyle(
                     color: isMe ? AppColors.background : Colors.black87,
-                    fontSize: 15.0,
+                    fontSize: 16.0,
                     fontWeight: FontWeight.w500,
                     height: 1.4,
-                  ),
-                  moreStyle: TextStyle(
-                    color: isMe
-                        ? AppColors.background.withValues(alpha: 0.8)
-                        : AppColors.primary,
-                    fontSize: 15.0,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  lessStyle: TextStyle(
-                    color: isMe
-                        ? AppColors.background.withValues(alpha: 0.8)
-                        : AppColors.primary,
-                    fontSize: 15.0,
-                    fontWeight: FontWeight.w600,
                   ),
                 ),
             ],
@@ -211,7 +195,7 @@ Widget buildChatBubble({
 
         // Widget rendering below the chat bubble (for AI messages only)
         if (hasWidget) ...[
-          const SizedBox(height: 8),
+          const Gap(8.0),
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 8.0),
             constraints: BoxConstraints(
