@@ -123,13 +123,7 @@ class SpendingCategoryWidget extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  category.name,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontFamily: Constants.neulisNeueFontFamily,
-                  ),
-                ),
+                Text(category.name, style: TextStyle(fontSize: 14)),
                 const Text(
                   '\$0 last month',
                   style: TextStyle(

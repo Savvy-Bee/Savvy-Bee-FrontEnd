@@ -36,11 +36,7 @@ class _NextOfKinScreenState extends ConsumerState<NextOfKinScreen> {
               children: [
                 Text(
                   'Next of Kin (NOK)',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: Constants.neulisNeueFontFamily,
-                  ),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 const Gap(8),
                 Text(

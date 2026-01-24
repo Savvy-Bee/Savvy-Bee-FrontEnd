@@ -198,7 +198,7 @@ class _TransferScreenState extends ConsumerState<TransferScreen> {
                         style: TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.bold,
-                          fontFamily: Constants.neulisNeueFontFamily,
+
                           color: AppColors.primary,
                         ),
                         overflow: TextOverflow.ellipsis,
@@ -220,7 +220,7 @@ class _TransferScreenState extends ConsumerState<TransferScreen> {
                       'Verifying account...',
                       style: TextStyle(
                         fontSize: 10,
-                        fontFamily: Constants.neulisNeueFontFamily,
+
                         color: AppColors.textSecondary,
                       ),
                     ),
@@ -308,11 +308,7 @@ class _TransferScreenState extends ConsumerState<TransferScreen> {
   }
 
   Widget _buildRecentItem(String name) {
-    var textStyle = TextStyle(
-      height: 1.1,
-      fontSize: 10,
-      fontFamily: Constants.neulisNeueFontFamily,
-    );
+    var textStyle = TextStyle(height: 1.1, fontSize: 10);
     return InkWell(
       onTap: () {
         // TODO: Implement recent transfer selection
@@ -391,10 +387,7 @@ class _AccountConfirmationBottomSheet extends ConsumerWidget {
                 ),
                 const TextSpan(text: '. Is this correct?'),
               ],
-              style: TextStyle(
-                fontSize: 12,
-                fontFamily: Constants.neulisNeueFontFamily,
-              ),
+              style: TextStyle(fontSize: 12),
             ),
           ),
           const Gap(24),

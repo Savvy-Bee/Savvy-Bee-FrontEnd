@@ -107,11 +107,7 @@ class _PayBillsScreenState extends ConsumerState<PayBillsScreen> {
           const Gap(4),
           Text(
             label,
-            style: TextStyle(
-              fontSize: 10,
-              fontWeight: FontWeight.w500,
-              fontFamily: Constants.neulisNeueFontFamily,
-            ),
+            style: TextStyle(fontSize: 10, fontWeight: FontWeight.w500),
             textAlign: TextAlign.center,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,

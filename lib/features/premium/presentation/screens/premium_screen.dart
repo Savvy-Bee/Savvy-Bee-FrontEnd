@@ -48,19 +48,12 @@ class _PremiumScreenState extends ConsumerState<PremiumScreen> {
           Text(
             'Enjoy one week free then ₦5,000/month',
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              fontFamily: Constants.neulisNeueFontFamily,
-            ),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           Text(
             'billed at ₦50,000/year',
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 12,
-              fontFamily: Constants.neulisNeueFontFamily,
-            ),
+            style: TextStyle(fontSize: 12),
           ),
           const Gap(24),
           CustomElevatedButton(text: 'Start free trial', onPressed: () {}),
@@ -68,11 +61,7 @@ class _PremiumScreenState extends ConsumerState<PremiumScreen> {
           Text(
             "We'll remind you via push notification and email before your trial ends",
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 8,
-              fontFamily: Constants.neulisNeueFontFamily,
-              color: AppColors.textSecondary,
-            ),
+            style: TextStyle(fontSize: 8, color: AppColors.textSecondary),
           ),
         ],
       ),
@@ -90,7 +79,7 @@ class _PremiumScreenState extends ConsumerState<PremiumScreen> {
             text,
             style: TextStyle(
               fontSize: 12,
-              fontFamily: Constants.neulisNeueFontFamily,
+
               color: AppColors.background,
               height: 1.1,
             ),

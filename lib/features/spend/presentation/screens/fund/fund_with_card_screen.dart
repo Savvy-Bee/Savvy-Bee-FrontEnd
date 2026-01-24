@@ -48,7 +48,6 @@ class _FundWithCardScreenState extends ConsumerState<FundWithCardScreen> {
           Text(
             "You'll be charged for adding money with a card",
             textAlign: TextAlign.center,
-            style: TextStyle(fontFamily: Constants.neulisNeueFontFamily),
           ),
           const Gap(24),
           Column(
@@ -57,10 +56,7 @@ class _FundWithCardScreenState extends ConsumerState<FundWithCardScreen> {
               Text(
                 "Saved cards",
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontFamily: Constants.neulisNeueFontFamily,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontWeight: FontWeight.bold),
               ),
               Text(
                 "You do not have any saved card..",

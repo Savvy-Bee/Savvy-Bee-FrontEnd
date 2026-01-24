@@ -169,7 +169,6 @@ class _FinancialArchitypeScreenState
                         textStyle: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
-                          fontFamily: Constants.neulisNeueFontFamily,
                         ),
                         onTap: _isLoading ? null : _handleSkip,
                       ),
@@ -190,11 +189,7 @@ class _FinancialArchitypeScreenState
                 Text(
                   FinancialArchitypeItems.items[_currentPage].description,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: Constants.neulisNeueFontFamily,
-                  ),
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
                 ),
                 const Gap(24),
 

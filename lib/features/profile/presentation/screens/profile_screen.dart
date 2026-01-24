@@ -142,7 +142,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           '@${data.username}',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontFamily: Constants.neulisNeueFontFamily,
+
                             color: AppColors.greyDark,
                           ),
                         ),
@@ -245,7 +245,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         onTap: () => context.pushNamed(AchievementsScreen.path),
                         textStyle: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontFamily: Constants.neulisNeueFontFamily,
+
                           color: AppColors.primary,
                         ),
                         reverse: true,
@@ -462,17 +462,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      fontFamily: Constants.neulisNeueFontFamily,
+
                       height: 1.0,
                     ),
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
                     title,
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontFamily: Constants.neulisNeueFontFamily,
-                    ),
+                    style: TextStyle(fontSize: 12),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ],

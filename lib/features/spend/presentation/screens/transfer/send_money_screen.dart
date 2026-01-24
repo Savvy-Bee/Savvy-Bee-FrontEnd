@@ -143,13 +143,7 @@ class CutomChip extends StatelessWidget {
         children: [
           icon,
           const Gap(8),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 12,
-              fontFamily: Constants.neulisNeueFontFamily,
-            ),
-          ),
+          Text(label, style: TextStyle(fontSize: 12)),
         ],
       ),
     );

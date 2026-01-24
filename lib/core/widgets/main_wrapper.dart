@@ -125,13 +125,8 @@ class MainWrapper extends ConsumerWidget {
         fontSize: 10,
         fontWeight: FontWeight.w500,
         color: AppColors.grey,
-        fontFamily: Constants.neulisNeueFontFamily,
       ),
-      selectedLabelStyle: TextStyle(
-        fontSize: 10,
-        fontWeight: FontWeight.w500,
-        fontFamily: Constants.neulisNeueFontFamily,
-      ),
+      selectedLabelStyle: TextStyle(fontSize: 10, fontWeight: FontWeight.w500),
       selectedItemColor: AppColors.black,
       unselectedItemColor: AppColors.grey,
       items: [

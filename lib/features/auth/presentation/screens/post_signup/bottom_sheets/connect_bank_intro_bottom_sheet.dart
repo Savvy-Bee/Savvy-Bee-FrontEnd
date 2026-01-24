@@ -50,7 +50,7 @@ class ConnectBankIntroBottomSheet extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
-                  fontFamily: Constants.neulisNeueFontFamily,
+
                   height: 1.0,
                 ),
               ),
@@ -63,10 +63,7 @@ class ConnectBankIntroBottomSheet extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text.rich(
-                style: TextStyle(
-                  fontSize: 12,
-                  fontFamily: Constants.neulisNeueFontFamily,
-                ),
+                style: TextStyle(fontSize: 12),
                 textAlign: TextAlign.center,
                 TextSpan(
                   text: "By continuing, you agree to Mono's ",
@@ -106,13 +103,7 @@ class ConnectBankIntroBottomSheet extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                title,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontFamily: Constants.neulisNeueFontFamily,
-                ),
-              ),
+              Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
               Text(subtitle, style: TextStyle(fontSize: 10)),
             ],
           ),

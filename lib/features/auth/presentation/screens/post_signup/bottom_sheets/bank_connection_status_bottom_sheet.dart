@@ -50,19 +50,12 @@ class BankConnectionStatusBottomSheet extends ConsumerWidget {
           Text(
             'Success',
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 32,
-              fontWeight: FontWeight.bold,
-              fontFamily: Constants.neulisNeueFontFamily,
-            ),
+            style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
           ),
           Text(
             'You have successfully connected $bankName to Savvy Bee',
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 16,
-              fontFamily: Constants.neulisNeueFontFamily,
-            ),
+            style: TextStyle(fontSize: 16),
           ),
           const Gap(32),
           CustomElevatedButton(

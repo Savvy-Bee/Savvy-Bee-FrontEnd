@@ -101,9 +101,7 @@ class _AccountInfoScreenState extends ConsumerState<AccountInfoScreen> {
                   TextSpan(
                     text:
                         'To change your account details, please contact support at ',
-                    style: TextStyle(
-                      fontFamily: Constants.neulisNeueFontFamily,
-                    ),
+                    style: TextStyle(),
                     children: [
                       TextSpan(
                         text: 'contact@mysavvybee.com',
@@ -131,17 +129,8 @@ class _AccountInfoScreenState extends ConsumerState<AccountInfoScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            title,
-            style: TextStyle(
-              color: AppColors.grey,
-              fontFamily: Constants.neulisNeueFontFamily,
-            ),
-          ),
-          Text(
-            value,
-            style: TextStyle(fontFamily: Constants.neulisNeueFontFamily),
-          ),
+          Text(title, style: TextStyle(color: AppColors.grey)),
+          Text(value),
         ],
       ),
     );

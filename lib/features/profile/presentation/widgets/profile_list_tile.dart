@@ -34,13 +34,7 @@ class ProfileListTile extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 AppIcon(iconPath, useOriginal: true),
-                Text(
-                  title,
-                  style: TextStyle(
-                    fontFamily: Constants.neulisNeueFontFamily,
-                    color: textColor,
-                  ),
-                ),
+                Text(title, style: TextStyle(color: textColor)),
               ],
             ),
             if (useDefaultTrailing) Icon(Icons.keyboard_arrow_right),

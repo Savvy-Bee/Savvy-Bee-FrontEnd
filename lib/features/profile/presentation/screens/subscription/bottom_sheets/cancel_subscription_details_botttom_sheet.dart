@@ -68,7 +68,7 @@ class _CancelSubscriptionDetailsBottomSheetState
                 style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
-                  fontFamily: Constants.neulisNeueFontFamily,
+
                   height: 1.0,
                 ),
               ),
@@ -76,7 +76,6 @@ class _CancelSubscriptionDetailsBottomSheetState
               Text(
                 "We're so sad to see you go. If there's anything we can do to win you back in the future, please let us know.",
                 textAlign: TextAlign.center,
-                style: TextStyle(fontFamily: Constants.neulisNeueFontFamily),
               ),
               const Gap(16),
               CustomTextFormField(

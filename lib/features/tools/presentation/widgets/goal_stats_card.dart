@@ -44,11 +44,7 @@ class GoalStatsCard extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: Constants.neulisNeueFontFamily,
-                  ),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 const Gap(8),
                 Row(
@@ -79,10 +75,7 @@ class GoalStatsCard extends StatelessWidget {
                     const Gap(4),
                     Text(
                       '${((amountSaved / totalTarget) * 100).toStringAsFixed(1)}%',
-                      style: TextStyle(
-                        fontSize: 8,
-                        fontFamily: Constants.neulisNeueFontFamily,
-                      ),
+                      style: TextStyle(fontSize: 8),
                     ),
                   ],
                 ),
@@ -101,11 +94,7 @@ class GoalStatsCard extends StatelessWidget {
       children: [
         Text(
           title,
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
-            fontFamily: Constants.neulisNeueFontFamily,
-          ),
+          style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
         ),
         Text(
           value,

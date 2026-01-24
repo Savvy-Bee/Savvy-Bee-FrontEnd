@@ -59,7 +59,6 @@ class _LeagueScreenState extends ConsumerState<LeagueScreen> {
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
-                            fontFamily: Constants.neulisNeueFontFamily,
                           ),
                         ),
                         IconTextRowWidget(
@@ -135,7 +134,7 @@ class _LeagueScreenState extends ConsumerState<LeagueScreen> {
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
-            fontFamily: Constants.neulisNeueFontFamily,
+
             color: AppColors.primary,
           ),
         ),
@@ -213,11 +212,7 @@ class _LeagueScreenState extends ConsumerState<LeagueScreen> {
               ),
               Text(
                 displayName.isNotEmpty ? displayName : user.username,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: Constants.neulisNeueFontFamily,
-                ),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ],
           ),

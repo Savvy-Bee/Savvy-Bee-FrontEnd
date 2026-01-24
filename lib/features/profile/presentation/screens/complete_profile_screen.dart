@@ -64,7 +64,6 @@ class _CompleteProfileScreenState extends ConsumerState<CompleteProfileScreen> {
                 Text(
                   title,
                   style: TextStyle(
-                    fontFamily: Constants.neulisNeueFontFamily,
                     color: onTap == null ? AppColors.grey : null,
                     decoration: onTap == null
                         ? TextDecoration.lineThrough

@@ -30,11 +30,7 @@ class _InsightCardState extends State<InsightCard> {
 
   @override
   Widget build(BuildContext context) {
-    var textStyle = TextStyle(
-      fontSize: 12,
-      fontWeight: FontWeight.w500,
-      fontFamily: Constants.neulisNeueFontFamily,
-    );
+    var textStyle = TextStyle(fontSize: 12, fontWeight: FontWeight.w500);
     return CustomCard(
       onTap: widget.isExpandable
           ? () {
@@ -83,11 +79,7 @@ class _InsightCardState extends State<InsightCard> {
                       InsightType.nahlInsight => 'Nahl Insights',
                       InsightType.nextBestAction => 'Next best action',
                     },
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: Constants.neulisNeueFontFamily,
-                    ),
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                   ),
                 ),
               if (widget.isExpandable)

@@ -41,7 +41,6 @@ class _FundByTransferScreenState extends ConsumerState<FundByTransferScreen> {
         children: [
           Text(
             "Use the details below to send money to your Savvy Bee Wallet from any bank's app or through internet banking",
-            style: TextStyle(fontFamily: Constants.neulisNeueFontFamily),
           ),
           const Gap(24),
           CustomTextFormField(

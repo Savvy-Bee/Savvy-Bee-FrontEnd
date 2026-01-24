@@ -150,7 +150,7 @@ class _SetIncomeScreenState extends ConsumerState<SetIncomeScreen> {
                       style: TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.w500,
-                        fontFamily: Constants.neulisNeueFontFamily,
+
                         height: 1,
                       ),
                     ),

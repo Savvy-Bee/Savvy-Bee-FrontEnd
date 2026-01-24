@@ -40,7 +40,6 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
                     height: 1.0,
-                    fontFamily: Constants.neulisNeueFontFamily,
                   ),
                 ),
                 const Gap(8),

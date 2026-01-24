@@ -148,20 +148,12 @@ class _LessonRoomScreenState extends ConsumerState<LessonRoomScreen> {
                   borderColor: Colors.transparent,
                   child: Text(
                     'Test your knowledge',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: Constants.neulisNeueFontFamily,
-                    ),
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                   ),
                 ),
                 Text(
                   'Take the quiz',
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: Constants.neulisNeueFontFamily,
-                  ),
+                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                 ),
                 Image.asset(Illustrations.lesson1, scale: 1.3),
                 CustomElevatedButton(

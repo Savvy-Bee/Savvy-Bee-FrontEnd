@@ -70,7 +70,7 @@ class UsernameScreen extends ConsumerWidget {
                     style: TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
-                      fontFamily: Constants.neulisNeueFontFamily,
+
                       color: AppColors.background,
                     ),
                   ),
@@ -78,11 +78,7 @@ class UsernameScreen extends ConsumerWidget {
                   Text(
                     'Receive money from your friends on Bee with your username.',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontFamily: Constants.neulisNeueFontFamily,
-                      color: AppColors.background,
-                    ),
+                    style: TextStyle(fontSize: 12, color: AppColors.background),
                   ),
                   const Gap(24),
                   _buildUsernameTile(username),
@@ -132,13 +128,7 @@ class UsernameScreen extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('Your username', style: TextStyle(fontSize: 10)),
-              Text(
-                username,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontFamily: Constants.neulisNeueFontFamily,
-                ),
-              ),
+              Text(username, style: TextStyle(fontWeight: FontWeight.bold)),
             ],
           ),
           Row(mainAxisSize: MainAxisSize.min, children: []),

@@ -5,6 +5,7 @@ import 'package:gap/gap.dart';
 import '../../../../../core/utils/assets/assets.dart';
 import '../../../../../core/utils/constants.dart';
 import '../../../../../core/widgets/custom_button.dart';
+
 // TODO: DELETE FILE
 class StatementSentScreen extends StatelessWidget {
   static const String path = '/statement-sent';
@@ -27,19 +28,12 @@ class StatementSentScreen extends StatelessWidget {
                 const Gap(16),
                 Text(
                   'Sent!',
-                  style: TextStyle(
-                    fontFamily: Constants.neulisNeueFontFamily,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
-                  ),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
                 ),
                 const Gap(8),
                 Text(
                   'Your statement is on its way to your inbox.',
-                  style: TextStyle(
-                    fontFamily: Constants.neulisNeueFontFamily,
-                    fontSize: 12,
-                  ),
+                  style: TextStyle(fontSize: 12),
                 ),
               ],
             ),

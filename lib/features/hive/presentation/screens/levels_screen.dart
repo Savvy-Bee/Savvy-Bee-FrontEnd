@@ -156,11 +156,7 @@ class _LevelsScreenState extends ConsumerState<LevelsScreen> {
               ),
               Text(
                 widget.lesson.lessonTitle.truncate(20),
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: Constants.neulisNeueFontFamily,
-                ),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ],
           ),

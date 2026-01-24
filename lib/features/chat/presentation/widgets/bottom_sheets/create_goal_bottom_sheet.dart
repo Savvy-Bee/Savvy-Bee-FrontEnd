@@ -99,7 +99,6 @@ class _CreateGoalBottomSheetState extends ConsumerState<CreateGoalBottomSheet> {
                           ? 'Create Suggested Goal'
                           : 'Create Goal',
                       style: TextStyle(
-                        fontFamily: Constants.neulisNeueFontFamily,
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),

@@ -58,7 +58,6 @@ class SavingsTargetWidget extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 32,
                             fontWeight: FontWeight.w500,
-                            fontFamily: Constants.neulisNeueFontFamily,
                           ),
                         ),
                         Text(

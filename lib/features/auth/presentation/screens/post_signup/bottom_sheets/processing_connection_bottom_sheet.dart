@@ -177,11 +177,7 @@ class _ProcessingConnectionBottomSheetState
           Text(
             'Connecting to ${widget.institution.institution}',
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 32,
-              fontWeight: FontWeight.bold,
-              fontFamily: Constants.neulisNeueFontFamily,
-            ),
+            style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
           ),
           const Gap(32),
           Stack(
@@ -194,7 +190,6 @@ class _ProcessingConnectionBottomSheetState
           const Gap(32),
           Text(
             'Syncing your information. Please wait...',
-            style: TextStyle(fontFamily: Constants.neulisNeueFontFamily),
           ),
           const Gap(32),
         ],

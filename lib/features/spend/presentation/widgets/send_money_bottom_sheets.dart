@@ -373,10 +373,7 @@ class _EnterPinBottomSheetState extends ConsumerState<EnterPinBottomSheet> {
                 children: [
                   Text(
                     '${widget.recipientAccountInfo.accountName} (${widget.recipientAccountInfo.bankName})',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontFamily: Constants.neulisNeueFontFamily,
-                    ),
+                    style: TextStyle(fontWeight: FontWeight.w500),
                   ),
                 ],
               ),
@@ -425,7 +422,6 @@ class _EnterPinBottomSheetState extends ConsumerState<EnterPinBottomSheet> {
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
-                            fontFamily: Constants.neulisNeueFontFamily,
                           ),
                         ),
                       ],
@@ -447,7 +443,6 @@ class _EnterPinBottomSheetState extends ConsumerState<EnterPinBottomSheet> {
                               style: TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold,
-                                fontFamily: Constants.neulisNeueFontFamily,
                               ),
                             );
                           },
@@ -460,7 +455,6 @@ class _EnterPinBottomSheetState extends ConsumerState<EnterPinBottomSheet> {
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
-                              fontFamily: Constants.neulisNeueFontFamily,
                             ),
                           ),
                         ),
@@ -574,11 +568,7 @@ class TransactionCompletionBottomSheet extends StatelessWidget {
               const Gap(16),
               Text(
                 status.toLowerCase() == 'success' ? 'Sent' : 'Failed',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: Constants.neulisNeueFontFamily,
-                ),
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               const Gap(4),
               Text.rich(

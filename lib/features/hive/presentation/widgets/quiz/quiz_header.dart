@@ -49,11 +49,7 @@ class QuizHeader extends StatelessWidget {
             Image.asset(Illustrations.hiveFlower, scale: 1.2),
             Text(
               '$score',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                fontFamily: Constants.neulisNeueFontFamily,
-              ),
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
           ],
         ),

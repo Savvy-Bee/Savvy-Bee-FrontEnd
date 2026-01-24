@@ -71,11 +71,7 @@ class QuizeOptionTile extends StatelessWidget {
               child: Text(
                 text,
                 textAlign: textAlign,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  fontFamily: Constants.neulisNeueFontFamily,
-                ),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
               ),
             ),
           ],

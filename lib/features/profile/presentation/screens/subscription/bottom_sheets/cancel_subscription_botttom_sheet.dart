@@ -46,7 +46,7 @@ class CancelSubscriptionBottomSheet extends StatelessWidget {
             style: TextStyle(
               fontSize: 32,
               fontWeight: FontWeight.bold,
-              fontFamily: Constants.neulisNeueFontFamily,
+
               height: 1.0,
             ),
           ),
@@ -54,7 +54,6 @@ class CancelSubscriptionBottomSheet extends StatelessWidget {
           Text(
             "You'll lose access to your orem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
             textAlign: TextAlign.center,
-            style: TextStyle(fontFamily: Constants.neulisNeueFontFamily),
           ),
           const Gap(48),
           Column(

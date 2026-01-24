@@ -68,11 +68,7 @@ class CustomCircularProgressIndicator extends StatelessWidget {
                 const Gap(8),
                 Text(
                   currentAmount,
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.w500,
-                    fontFamily: Constants.neulisNeueFontFamily,
-                  ),
+                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.w500),
                 ),
                 const Gap(4),
                 Text(

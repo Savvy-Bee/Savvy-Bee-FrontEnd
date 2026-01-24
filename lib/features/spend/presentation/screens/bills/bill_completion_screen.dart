@@ -35,20 +35,10 @@ class _BillCompletionScreenState extends ConsumerState<BillCompletionScreen> {
                 const Gap(16),
                 Text(
                   'Recharged!',
-                  style: TextStyle(
-                    fontFamily: Constants.neulisNeueFontFamily,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
-                  ),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
                 ),
                 const Gap(8),
-                Text(
-                  'Successful',
-                  style: TextStyle(
-                    fontFamily: Constants.neulisNeueFontFamily,
-                    fontSize: 12,
-                  ),
-                ),
+                Text('Successful', style: TextStyle(fontSize: 12)),
               ],
             ),
             Padding(

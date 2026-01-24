@@ -56,7 +56,6 @@ class _BillBottomSheetState extends ConsumerState<BillBottomSheet> {
                     Text(
                       'Bill details',
                       style: TextStyle(
-                        fontFamily: Constants.neulisNeueFontFamily,
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),

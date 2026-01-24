@@ -225,13 +225,7 @@ class _ElectricityBillScreenState extends ConsumerState<ElectricityBillScreen> {
                   InputValidator.validateRequired(value, 'Meter number'),
             ),
             const Gap(16),
-            Text(
-              'Choose an amount',
-              style: TextStyle(
-                fontSize: 12,
-                fontFamily: Constants.neulisNeueFontFamily,
-              ),
-            ),
+            Text('Choose an amount', style: TextStyle(fontSize: 12)),
             const Gap(8),
             Row(
               spacing: 8,
@@ -281,11 +275,7 @@ class _ElectricityBillScreenState extends ConsumerState<ElectricityBillScreen> {
         child: Center(
           child: Text(
             amount,
-            style: TextStyle(
-              fontSize: 10,
-              fontWeight: FontWeight.w500,
-              fontFamily: Constants.neulisNeueFontFamily,
-            ),
+            style: TextStyle(fontSize: 10, fontWeight: FontWeight.w500),
           ),
         ),
       ),

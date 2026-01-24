@@ -85,7 +85,7 @@ class _DialPadButton extends StatelessWidget {
           style: TextStyle(
             fontSize: 42,
             fontWeight: FontWeight.bold,
-            fontFamily: Constants.neulisNeueFontFamily,
+
             height: 0.5,
           ),
         ),

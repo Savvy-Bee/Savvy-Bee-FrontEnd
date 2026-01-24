@@ -160,37 +160,24 @@ class _BillConfirmationScreenState
                 Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
-                      'To',
-                      style: TextStyle(
-                        fontSize: 10,
-                        fontFamily: Constants.neulisNeueFontFamily,
-                      ),
-                    ),
+                    Text('To', style: TextStyle(fontSize: 10)),
                     const Gap(4),
                     Text(
                       data.phoneNumber,
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        fontFamily: Constants.neulisNeueFontFamily,
                       ),
                     ),
                     const Gap(16),
-                    Text(
-                      'Amount',
-                      style: TextStyle(
-                        fontSize: 10,
-                        fontFamily: Constants.neulisNeueFontFamily,
-                      ),
-                    ),
+                    Text('Amount', style: TextStyle(fontSize: 10)),
                     const Gap(4),
                     Text(
                       data.amount.formatCurrency(decimalDigits: 0),
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        fontFamily: Constants.neulisNeueFontFamily,
+
                         color: AppColors.primary,
                       ),
                     ),
@@ -262,7 +249,7 @@ class _BillConfirmationScreenState
                           'Please review the details carefully before confirming',
                           style: TextStyle(
                             fontSize: 10,
-                            fontFamily: Constants.neulisNeueFontFamily,
+
                             color: AppColors.primary,
                           ),
                         ),
@@ -302,7 +289,7 @@ class _BillConfirmationScreenState
           title,
           style: TextStyle(
             fontSize: isTotal ? 12 : 10,
-            fontFamily: Constants.neulisNeueFontFamily,
+
             fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
           ),
         ),
@@ -311,7 +298,7 @@ class _BillConfirmationScreenState
           style: TextStyle(
             fontSize: isTotal ? 14 : 12,
             fontWeight: FontWeight.bold,
-            fontFamily: Constants.neulisNeueFontFamily,
+
             color: isTotal ? AppColors.primary : null,
           ),
         ),

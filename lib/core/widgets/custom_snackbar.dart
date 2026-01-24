@@ -65,7 +65,6 @@ class CustomSnackbar extends StatelessWidget {
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: AppColors.black,
-                    fontFamily: Constants.neulisNeueFontFamily,
                   ),
                 ),
                 Text(

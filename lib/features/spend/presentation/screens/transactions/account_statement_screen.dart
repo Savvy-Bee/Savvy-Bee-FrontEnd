@@ -98,13 +98,7 @@ class _AccountStatementScreenState
                     },
                   ),
                   const Gap(16),
-                  Text(
-                    'Format',
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontFamily: Constants.neulisNeueFontFamily,
-                    ),
-                  ),
+                  Text('Format', style: TextStyle(fontSize: 10)),
                   const Gap(4.0),
                   Row(
                     children: [

@@ -43,7 +43,6 @@ class NetWorthCard extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
-                        fontFamily: Constants.neulisNeueFontFamily,
                       ),
                     ),
                   ],
@@ -151,10 +150,7 @@ class _OptionsBottomSheet extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'OPTIONS',
-                style: TextStyle(fontFamily: Constants.neulisNeueFontFamily),
-              ),
+              Text('OPTIONS'),
               IconButton(
                 onPressed: () => context.pop(),
                 icon: const Icon(Icons.close),

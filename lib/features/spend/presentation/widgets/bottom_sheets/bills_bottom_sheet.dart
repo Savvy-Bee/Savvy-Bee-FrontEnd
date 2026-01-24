@@ -473,10 +473,7 @@ class CustomerDetailsConfirmationBottomSheet extends ConsumerWidget {
                 ),
                 const TextSpan(text: '. Is this correct?'),
               ],
-              style: TextStyle(
-                fontSize: 12,
-                fontFamily: Constants.neulisNeueFontFamily,
-              ),
+              style: TextStyle(fontSize: 12),
             ),
           ),
           const Gap(24),

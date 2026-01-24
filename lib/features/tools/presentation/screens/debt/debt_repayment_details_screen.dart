@@ -106,10 +106,7 @@ class _DebtRepaymentDetailsScreenState
                 children: [
                   Text(
                     'How would you like to pay this debt?',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontFamily: Constants.neulisNeueFontFamily,
-                    ),
+                    style: TextStyle(fontWeight: FontWeight.w500),
                   ),
                   const Gap(8),
                   Row(
@@ -183,7 +180,7 @@ class _DebtRepaymentDetailsScreenState
                       textStyle: TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.bold,
-                        fontFamily: Constants.neulisNeueFontFamily,
+
                         color: AppColors.primary,
                       ),
                     ),

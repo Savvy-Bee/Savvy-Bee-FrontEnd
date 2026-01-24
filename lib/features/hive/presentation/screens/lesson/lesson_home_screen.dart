@@ -145,11 +145,7 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
             children: [
               Text(
                 widget.course.courseTitle.truncate(10),
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: Constants.neulisNeueFontFamily,
-                ),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               Row(
                 spacing: 8,
@@ -174,11 +170,7 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
             const Gap(4),
             Text(
               '200',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                fontFamily: Constants.neulisNeueFontFamily,
-              ),
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
           ],
         ),
@@ -190,11 +182,7 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
             const Gap(4),
             Text(
               '200',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                fontFamily: Constants.neulisNeueFontFamily,
-              ),
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
           ],
         ),
@@ -272,7 +260,7 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
                     : 'Not started',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontFamily: Constants.neulisNeueFontFamily,
+
                   color: isLocked
                       ? AppColors.buttonDisabled
                       : hasNotStarted
@@ -292,10 +280,7 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
                       children: [
                         Text(
                           '+$pointsEarned',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontFamily: Constants.neulisNeueFontFamily,
-                          ),
+                          style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         Image.asset(Illustrations.hiveFlower),
                       ],
@@ -341,7 +326,7 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
                           style: TextStyle(
                             fontSize: 10,
                             fontWeight: FontWeight.bold,
-                            fontFamily: Constants.neulisNeueFontFamily,
+
                             height: 0.9,
                             color: isLocked ? AppColors.greyDark : null,
                           ),
@@ -351,7 +336,7 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
                           style: TextStyle(
                             fontSize: 32,
                             fontWeight: FontWeight.bold,
-                            fontFamily: Constants.neulisNeueFontFamily,
+
                             height: 0.9,
                             color: isLocked ? AppColors.greyDark : null,
                           ),
@@ -379,7 +364,7 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        fontFamily: Constants.neulisNeueFontFamily,
+
                         height: 0.9,
                         color: isLocked ? AppColors.greyDark : null,
                       ),

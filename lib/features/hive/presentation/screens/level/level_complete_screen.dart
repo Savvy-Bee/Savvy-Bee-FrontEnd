@@ -145,7 +145,6 @@ class _LevelCompleteScreenState extends ConsumerState<LevelCompleteScreen> {
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
                         color: AppColors.primary,
-                        fontFamily: Constants.neulisNeueFontFamily,
                       ),
                     ),
                     Row(
@@ -218,7 +217,6 @@ class _LevelCompleteScreenState extends ConsumerState<LevelCompleteScreen> {
               fontSize: 14,
               color: AppColors.white,
               fontWeight: FontWeight.bold,
-              fontFamily: Constants.neulisNeueFontFamily,
             ),
           ),
           CustomCard(
@@ -234,11 +232,7 @@ class _LevelCompleteScreenState extends ConsumerState<LevelCompleteScreen> {
                 icon,
                 Text(
                   score,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontFamily: Constants.neulisNeueFontFamily,
-                    color: color,
-                  ),
+                  style: TextStyle(fontWeight: FontWeight.bold, color: color),
                 ),
               ],
             ),

@@ -109,7 +109,7 @@ class _StreakDashboardScreenState extends ConsumerState<StreakDashboardScreen> {
                             color: AppColors.primaryExtraDark,
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
-                            fontFamily: Constants.neulisNeueFontFamily,
+
                             height: 1.0,
                           ),
                         ),
@@ -256,17 +256,11 @@ class _StreakDashboardScreenState extends ConsumerState<StreakDashboardScreen> {
                 style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
-                  fontFamily: Constants.neulisNeueFontFamily,
+
                   height: 1.0,
                 ),
               ),
-              Text(
-                title,
-                style: TextStyle(
-                  fontSize: 12,
-                  fontFamily: Constants.neulisNeueFontFamily,
-                ),
-              ),
+              Text(title, style: TextStyle(fontSize: 12)),
             ],
           ),
         ],
@@ -289,18 +283,14 @@ class _StreakDashboardScreenState extends ConsumerState<StreakDashboardScreen> {
             children: [
               Text(
                 '$challengeDays Day Challenge',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: Constants.neulisNeueFontFamily,
-                ),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               Text(
                 'Day $currentDay of $challengeDays',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  fontFamily: Constants.neulisNeueFontFamily,
+
                   color: AppColors.grey,
                 ),
               ),
@@ -328,7 +318,7 @@ class _StreakDashboardScreenState extends ConsumerState<StreakDashboardScreen> {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
-                fontFamily: Constants.neulisNeueFontFamily,
+
                 height: 1.3,
               ),
             ),
@@ -347,7 +337,7 @@ class _StreakDashboardScreenState extends ConsumerState<StreakDashboardScreen> {
           style: TextStyle(
             fontSize: 120,
             fontWeight: FontWeight.w500,
-            fontFamily: Constants.neulisNeueFontFamily,
+
             foreground: Paint()
               ..style = PaintingStyle.stroke
               ..strokeWidth = 12
@@ -361,7 +351,7 @@ class _StreakDashboardScreenState extends ConsumerState<StreakDashboardScreen> {
           style: TextStyle(
             fontSize: 120,
             fontWeight: FontWeight.w500,
-            fontFamily: Constants.neulisNeueFontFamily,
+
             color: Colors.white,
             height: 1.0,
           ),
@@ -415,7 +405,6 @@ class CustomCalendar extends StatelessWidget {
                 color: AppColors.greyDark,
                 fontWeight: FontWeight.w500,
                 fontSize: 14,
-                fontFamily: Constants.neulisNeueFontFamily,
               ),
             ),
           ),

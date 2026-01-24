@@ -91,7 +91,6 @@ class _TransactionHistoryScreenState
                             style: TextStyle(
                               fontSize: 16,
                               color: AppColors.textSecondary,
-                              fontFamily: Constants.neulisNeueFontFamily,
                             ),
                           ),
                         ],
@@ -118,7 +117,6 @@ class _TransactionHistoryScreenState
                         style: TextStyle(
                           fontSize: 16,
                           color: AppColors.textSecondary,
-                          fontFamily: Constants.neulisNeueFontFamily,
                         ),
                       ),
                     );
@@ -159,7 +157,6 @@ class _TransactionHistoryScreenState
                         style: TextStyle(
                           fontSize: 16,
                           color: AppColors.textSecondary,
-                          fontFamily: Constants.neulisNeueFontFamily,
                         ),
                       ),
                       const Gap(8),
@@ -221,13 +218,7 @@ class TransactionHistoryCard extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          date.formatShortDate(),
-          style: TextStyle(
-            fontSize: 12,
-            fontFamily: Constants.neulisNeueFontFamily,
-          ),
-        ),
+        Text(date.formatShortDate(), style: TextStyle(fontSize: 12)),
         const Gap(8),
         CustomCard(
           child: Column(
@@ -286,10 +277,7 @@ class TransactionHistoryCard extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontFamily: Constants.neulisNeueFontFamily,
-                      ),
+                      style: TextStyle(fontWeight: FontWeight.w500),
                       overflow: TextOverflow.ellipsis,
                     ),
                     Row(
@@ -298,7 +286,7 @@ class TransactionHistoryCard extends StatelessWidget {
                           time,
                           style: TextStyle(
                             fontSize: 8,
-                            fontFamily: Constants.neulisNeueFontFamily,
+
                             color: AppColors.textSecondary,
                           ),
                         ),
@@ -319,7 +307,7 @@ class TransactionHistoryCard extends StatelessWidget {
                               transaction.status.value,
                               style: TextStyle(
                                 fontSize: 8,
-                                fontFamily: Constants.neulisNeueFontFamily,
+
                                 color: transaction.isPending
                                     ? Colors.orange
                                     : Colors.red,
@@ -339,11 +327,7 @@ class TransactionHistoryCard extends StatelessWidget {
         const Gap(8),
         Text(
           amount,
-          style: TextStyle(
-            fontWeight: FontWeight.w500,
-            fontFamily: Constants.neulisNeueFontFamily,
-            color: amountColor,
-          ),
+          style: TextStyle(fontWeight: FontWeight.w500, color: amountColor),
         ),
       ],
     );

@@ -7,13 +7,11 @@ import 'package:savvy_bee_mobile/features/dashboard/domain/models/dashboard_data
 import 'package:savvy_bee_mobile/features/tools/presentation/widgets/insight_card.dart';
 
 import '../../../../core/widgets/custom_card.dart';
+
 class FinancialHealthWidget extends StatelessWidget {
   final FinancialHealth healthData;
 
-  const FinancialHealthWidget({
-    super.key,
-    required this.healthData,
-  });
+  const FinancialHealthWidget({super.key, required this.healthData});
 
   @override
   Widget build(BuildContext context) {
@@ -51,20 +49,13 @@ class FinancialHealthWidget extends StatelessWidget {
                   Text(
                     'Your financial health is ${healthStatus}!',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: Constants.neulisNeueFontFamily,
-                    ),
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                   const Gap(16.0),
                   Text(
                     healthData.insight,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontFamily: Constants.neulisNeueFontFamily,
-                    ),
+                    style: TextStyle(fontSize: 12),
                   ),
                   const Gap(24.0),
                   InsightCard(

@@ -37,7 +37,7 @@ class _SetBudgetScreenState extends ConsumerState<SetBudgetScreen> {
                     style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.w500,
-                      fontFamily: Constants.neulisNeueFontFamily,
+
                       height: 1,
                     ),
                   ),
@@ -69,7 +69,6 @@ class _SetBudgetScreenState extends ConsumerState<SetBudgetScreen> {
                             style: TextStyle(
                               fontSize: 28,
                               fontWeight: FontWeight.bold,
-                              fontFamily: Constants.neulisNeueFontFamily,
                             ),
                           ),
                           const Gap(42),
@@ -93,7 +92,6 @@ class _SetBudgetScreenState extends ConsumerState<SetBudgetScreen> {
                             style: TextStyle(
                               fontSize: 28,
                               fontWeight: FontWeight.bold,
-                              fontFamily: Constants.neulisNeueFontFamily,
                             ),
                           ),
                           const Gap(32),

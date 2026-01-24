@@ -63,11 +63,7 @@ class _SelectBankBottomSheetState extends ConsumerState<SelectBankBottomSheet> {
           const Gap(16),
           Text(
             'Popular banks',
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-              fontFamily: Constants.neulisNeueFontFamily,
-            ),
+            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
           ),
           const Gap(16),
           Expanded(

@@ -257,11 +257,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           // const Gap(16),
           Text(
             course.courseTitle,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-              fontFamily: Constants.neulisNeueFontFamily,
-            ),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
           ),
           const Gap(4),
           Text(
@@ -314,11 +310,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           // const Gap(16),
           Text(
             title,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-              fontFamily: Constants.neulisNeueFontFamily,
-            ),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
           ),
           const Gap(4),
           Text(subtitle, style: TextStyle(fontSize: 10)),
@@ -349,18 +341,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             children: [
               Text(
                 title,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  fontFamily: Constants.neulisNeueFontFamily,
-                ),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
               ),
               Text(
                 ctaText,
                 style: TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.bold,
-                  fontFamily: Constants.neulisNeueFontFamily,
+
                   color: AppColors.primary,
                 ),
               ),
@@ -386,7 +374,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           textStyle: TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.bold,
-            fontFamily: Constants.neulisNeueFontFamily,
+
             color: actionColor,
           ),
           spacing: 0,
@@ -412,11 +400,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         children: [
           Text(
             'Hello $firstName',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              fontFamily: Constants.neulisNeueFontFamily,
-            ),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           Text(
             'Welcome back!',

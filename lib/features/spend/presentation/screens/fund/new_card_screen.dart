@@ -112,11 +112,7 @@ class AccountStatementBottomSheet extends StatelessWidget {
           const Gap(8),
           Text(
             'Account details',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              fontFamily: Constants.neulisNeueFontFamily,
-            ),
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
           const Gap(24),
           CustomTextFormField(

@@ -38,10 +38,7 @@ class _BudgetCategoryBottomSheetState
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'Add budget category',
-                style: TextStyle(fontFamily: Constants.neulisNeueFontFamily),
-              ),
+              Text('Add budget category'),
               IconButton(
                 onPressed: () => context.pop(),
                 icon: const Icon(Icons.close),
@@ -101,13 +98,7 @@ class _BudgetCategoryBottomSheetState
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Auto & transport',
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    fontFamily: Constants.neulisNeueFontFamily,
-                  ),
-                ),
+                Text('Auto & transport', style: TextStyle(fontSize: 16.0)),
                 Text(
                   '${40000.formatCurrency(decimalDigits: 0)} last month',
                   style: TextStyle(
@@ -132,7 +123,6 @@ class _BudgetCategoryBottomSheetState
                     style: TextStyle(
                       fontSize: 16.0,
                       fontWeight: FontWeight.w500,
-                      fontFamily: Constants.neulisNeueFontFamily,
                     ),
                   ),
                   const Gap(8),

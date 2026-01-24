@@ -179,11 +179,7 @@ class _DebtScreenState extends ConsumerState<DebtScreen>
         children: [
           Text(
             'TOTAL DEBTS REMAINING',
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 12,
-              fontFamily: Constants.neulisNeueFontFamily,
-            ),
+            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 12),
           ),
           const Gap(8),
           if (isLoading)
@@ -196,20 +192,12 @@ class _DebtScreenState extends ConsumerState<DebtScreen>
           else
             Text(
               amountRemaining.formatCurrency(),
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 36,
-                fontFamily: Constants.neulisNeueFontFamily,
-              ),
+              style: TextStyle(fontWeight: FontWeight.w500, fontSize: 36),
             ),
           const Gap(8),
           Text(
             isLoading ? 'Loading...' : 'Last updated 49 sec ago',
-            style: TextStyle(
-              fontSize: 12,
-              fontFamily: Constants.neulisNeueFontFamily,
-              color: AppColors.textLight,
-            ),
+            style: TextStyle(fontSize: 12, color: AppColors.textLight),
           ),
         ],
       ),

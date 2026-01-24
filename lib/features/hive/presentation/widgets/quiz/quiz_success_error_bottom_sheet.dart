@@ -100,7 +100,7 @@ class QuizSuccessErrorBottomSheet extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 32,
                               fontWeight: FontWeight.bold,
-                              fontFamily: Constants.neulisNeueFontFamily,
+
                               color: accentColor,
                               height: 1.0,
                             ),
@@ -112,7 +112,7 @@ class QuizSuccessErrorBottomSheet extends StatelessWidget {
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
-                                fontFamily: Constants.neulisNeueFontFamily,
+
                                 color: accentColor,
                               ),
                             ),

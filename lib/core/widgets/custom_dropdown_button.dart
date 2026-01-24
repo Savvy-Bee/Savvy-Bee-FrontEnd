@@ -37,14 +37,7 @@ class CustomDropdownButton extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (label != null)
-          Text(
-            label!,
-            style: TextStyle(
-              fontSize: 12,
-              fontFamily: Constants.neulisNeueFontFamily,
-            ),
-          ),
+        if (label != null) Text(label!, style: TextStyle(fontSize: 12)),
         if (label != null) const Gap(4),
         DropdownMenu<String>(
           leadingIcon: leadingIcon,

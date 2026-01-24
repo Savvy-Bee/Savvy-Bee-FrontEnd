@@ -126,10 +126,7 @@ class _EditBudgetBottomSheetState extends ConsumerState<EditBudgetBottomSheet> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'Budget by category',
-                  style: TextStyle(fontFamily: Constants.neulisNeueFontFamily),
-                ),
+                Text('Budget by category'),
                 IconButton(
                   onPressed: () => context.pop(),
                   icon: const Icon(Icons.close),
@@ -156,7 +153,6 @@ class _EditBudgetBottomSheetState extends ConsumerState<EditBudgetBottomSheet> {
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w500,
-                        fontFamily: Constants.neulisNeueFontFamily,
                       ),
                     ),
                   ],
@@ -187,7 +183,7 @@ class _EditBudgetBottomSheetState extends ConsumerState<EditBudgetBottomSheet> {
                     const Gap(3),
                     Text(
                       // 11. Show available funds
-                      '${unbudgeted.toDouble().formatCurrency( decimalDigits: 0)} available',
+                      '${unbudgeted.toDouble().formatCurrency(decimalDigits: 0)} available',
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
@@ -219,9 +215,7 @@ class _EditBudgetBottomSheetState extends ConsumerState<EditBudgetBottomSheet> {
                           const Gap(4),
                           Text(
                             // 12. Use widget.budget data (balance)
-                            widget.budget.balance.toDouble().formatCurrency(
-                              
-                            ),
+                            widget.budget.balance.toDouble().formatCurrency(),
                             style: const TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: 12,

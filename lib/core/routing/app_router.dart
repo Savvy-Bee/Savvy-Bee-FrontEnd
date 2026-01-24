@@ -10,7 +10,7 @@ import 'package:savvy_bee_mobile/features/chat/presentation/screens/choose_perso
 import 'package:savvy_bee_mobile/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:savvy_bee_mobile/features/dashboard/presentation/screens/manual_transaction_log_screen.dart';
 import 'package:savvy_bee_mobile/features/hive/domain/models/course.dart';
-import 'package:savvy_bee_mobile/features/hive/presentation/screens/games/game_screen.dart';
+import 'package:savvy_bee_mobile/features/hive/presentation/screens/games/game_menu_screen.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/hive_screen.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/leaderboard/leaderboard_screen.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/leaderboard/league_promotion_screen.dart';
@@ -68,6 +68,7 @@ import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/set_
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/debt/debt_repayment_details_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/goals/create_goal_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/tools_screen.dart';
+import '../../features/hive/presentation/screens/games/game_terrain_screen.dart';
 import '../../features/hive/presentation/screens/lesson/lesson_room_screen.dart';
 import '../../features/hive/presentation/screens/level/level_complete_screen.dart';
 import '../../features/hive/presentation/screens/levels_screen.dart';
@@ -100,7 +101,7 @@ final GlobalKey<NavigatorState> _shellNavigatorKey = GlobalKey<NavigatorState>(
 
 final GoRouter appRouter = GoRouter(
   navigatorKey: _rootNavigatorKey,
-  initialLocation: SplashScreen.path,
+  initialLocation: GameMenuScreen.path,
   routes: [
     // Auth Routes
     GoRoute(
@@ -811,10 +812,17 @@ final GoRouter appRouter = GoRouter(
 
     // Game Routes
     GoRoute(
-      path: GameScreen.path,
-      name: GameScreen.path,
+      path: GameMenuScreen.path,
+      name: GameMenuScreen.path,
       builder: (BuildContext context, GoRouterState state) {
-        return GameScreen();
+        return GameMenuScreen();
+      },
+    ),
+    GoRoute(
+      path: GameTerrainScreen.path,
+      name: GameTerrainScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return GameTerrainScreen();
       },
     ),
   ],

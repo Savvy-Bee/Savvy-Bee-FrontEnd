@@ -14,11 +14,7 @@ class SectionTitleWidget extends StatelessWidget {
       children: [
         Text(
           title,
-          style: TextStyle(
-            fontSize: 16.0,
-            fontWeight: FontWeight.bold,
-            fontFamily: Constants.neulisNeueFontFamily,
-          ),
+          style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
         ),
         if (actionWidget != null) actionWidget!,
       ],

@@ -147,18 +147,11 @@ class _EditBudgetScreenState extends ConsumerState<EditBudgetScreen> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      fontFamily: Constants.neulisNeueFontFamily,
-                      fontSize: 16,
-                    ),
-                  ),
+                  Text(title, style: TextStyle(fontSize: 16)),
                   Text(
                     // Using amountSpent here, was 'last month' before
                     '${amountSpent.toDouble().formatCurrency(decimalDigits: 0)} spent',
                     style: TextStyle(
-                      fontFamily: Constants.neulisNeueFontFamily,
                       fontSize: 8,
                       fontWeight: FontWeight.w500,
                       color: AppColors.textSecondary,
@@ -173,10 +166,7 @@ class _EditBudgetScreenState extends ConsumerState<EditBudgetScreen> {
             children: [
               Text(
                 amount.toDouble().formatCurrency(decimalDigits: 0),
-                style: TextStyle(
-                  fontFamily: Constants.neulisNeueFontFamily,
-                  fontSize: 16,
-                ),
+                style: TextStyle(fontSize: 16),
               ),
               const Gap(16),
               InkWell(onTap: onEditPressed, child: AppIcon(AppIcons.editIcon)),
@@ -197,13 +187,7 @@ class _EditBudgetScreenState extends ConsumerState<EditBudgetScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            'Budget Basics',
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-              fontFamily: Constants.neulisNeueFontFamily,
-            ),
-          ),
+          Text('Budget Basics', style: TextStyle(fontWeight: FontWeight.w500)),
           const Gap(24),
           _buildBudgetBasicsItem(
             'Monthly income',

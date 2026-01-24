@@ -41,9 +41,7 @@ class _ManageSubscriptionScreenState
                   Text(
                     "You're currently on a free trial which will convert on 19/12/2025. Cancel 24 hours before renewal if you don't want to continue.",
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontFamily: Constants.neulisNeueFontFamily,
-                    ),
+                    style: TextStyle(),
                   ),
                 const Gap(16),
                 GameCard(
@@ -90,17 +88,8 @@ class _ManageSubscriptionScreenState
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            title,
-            style: TextStyle(
-              color: AppColors.grey,
-              fontFamily: Constants.neulisNeueFontFamily,
-            ),
-          ),
-          Text(
-            value,
-            style: TextStyle(fontFamily: Constants.neulisNeueFontFamily),
-          ),
+          Text(title, style: TextStyle(color: AppColors.grey)),
+          Text(value),
         ],
       ),
     );

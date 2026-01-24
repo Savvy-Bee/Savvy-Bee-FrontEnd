@@ -12,7 +12,7 @@ import 'package:savvy_bee_mobile/core/widgets/custom_loading_widget.dart';
 import 'package:savvy_bee_mobile/core/widgets/section_title_widget.dart';
 import 'package:savvy_bee_mobile/core/widgets/icon_text_row_widget.dart';
 import 'package:savvy_bee_mobile/features/hive/domain/models/course.dart';
-import 'package:savvy_bee_mobile/features/hive/presentation/screens/games/game_screen.dart';
+import 'package:savvy_bee_mobile/features/hive/presentation/screens/games/game_menu_screen.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/leaderboard/leaderboard_screen.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/lesson/lesson_home_screen.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/streak/streak_dashboard_screen.dart';
@@ -135,7 +135,7 @@ class _HiveScreenState extends ConsumerState<HiveScreen> {
               ),
               const Gap(24),
               TextButton(
-                onPressed: () => context.pushNamed(GameScreen.path),
+                onPressed: () => context.pushNamed(GameMenuScreen.path),
                 child: const Text('Game'),
               ),
             ],
@@ -294,13 +294,7 @@ class _HiveScreenState extends ConsumerState<HiveScreen> {
         children: [
           icon,
           if (text != null && text.isNotEmpty)
-            Text(
-              text,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontFamily: Constants.neulisNeueFontFamily,
-              ),
-            ),
+            Text(text, style: TextStyle(fontWeight: FontWeight.bold)),
         ],
       ),
     );
@@ -384,11 +378,7 @@ class _HiveScreenState extends ConsumerState<HiveScreen> {
 
           Text(
             course.courseTitle,
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              fontFamily: Constants.neulisNeueFontFamily,
-            ),
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
           const Gap(8),
           Text(

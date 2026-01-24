@@ -34,7 +34,7 @@ class _LeaguePromotionScreenState extends ConsumerState<LeaguePromotionScreen> {
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
-                    fontFamily: Constants.neulisNeueFontFamily,
+
                     height: 1.0,
                   ),
                 ),

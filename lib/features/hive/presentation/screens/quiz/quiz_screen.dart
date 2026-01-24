@@ -451,11 +451,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
               ),
               child: Text(
                 '${pageIndex + 1}/${_quizQuestions.length}',
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: Constants.neulisNeueFontFamily,
-                ),
+                style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
               ),
             ),
           ],
@@ -467,7 +463,6 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
             fontSize: 16,
             color: AppColors.primary,
             fontWeight: FontWeight.bold,
-            fontFamily: Constants.neulisNeueFontFamily,
           ),
         ),
         const Gap(8),
@@ -476,7 +471,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
-            fontFamily: Constants.neulisNeueFontFamily,
+
             height: 1.2,
           ),
         ),

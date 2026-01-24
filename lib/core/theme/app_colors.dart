@@ -58,6 +58,9 @@ class AppColors {
   static const Color overlay = Color(0x80000000);
   static const Color overlayLight = Color(0x40000000);
 
+  // Game Colors
+  static const Color gameBg = Color(0xFF00778B);
+
   // Gradient Colors
   static const List<Color> primaryGradient = [primary, primaryLight];
 

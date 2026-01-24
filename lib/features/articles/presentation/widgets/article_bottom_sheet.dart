@@ -30,9 +30,7 @@ class _ArticleBottomSheetState extends ConsumerState<ArticleBottomSheet> {
     return Theme(
       data: Theme.of(context).copyWith(
         textTheme: Theme.of(context).textTheme.copyWith(
-          bodyMedium: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            fontFamily: Constants.neulisNeueFontFamily,
-          ),
+          bodyMedium: Theme.of(context).textTheme.bodyMedium?.copyWith(),
         ),
       ),
       child: Scaffold(

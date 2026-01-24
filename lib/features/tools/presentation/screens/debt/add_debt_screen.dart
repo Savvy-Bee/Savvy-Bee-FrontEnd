@@ -165,10 +165,7 @@ class _AddDebtScreenState extends ConsumerState<AddDebtScreen> {
                     const Gap(16),
                     Text(
                       'How would you prefer to pay off this debt?',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontFamily: Constants.neulisNeueFontFamily,
-                      ),
+                      style: TextStyle(fontWeight: FontWeight.w500),
                     ),
                     const Gap(8),
                     Row(

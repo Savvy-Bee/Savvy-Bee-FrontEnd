@@ -193,13 +193,7 @@ class _AirtimeScreenState extends ConsumerState<AirtimeScreen> {
         children: [
           // Recent purchases section would be populated from a provider
           // For now, keeping the mock data structure
-          Text(
-            'Most recent',
-            style: TextStyle(
-              fontSize: 12,
-              fontFamily: Constants.neulisNeueFontFamily,
-            ),
-          ),
+          Text('Most recent', style: TextStyle(fontSize: 12)),
           const Gap(16),
           // TODO: Replace with actual recent purchases from provider
           SingleChildScrollView(
@@ -219,13 +213,7 @@ class _AirtimeScreenState extends ConsumerState<AirtimeScreen> {
             ),
           ),
           const Gap(16),
-          Text(
-            'Choose an amount',
-            style: TextStyle(
-              fontSize: 12,
-              fontFamily: Constants.neulisNeueFontFamily,
-            ),
-          ),
+          Text('Choose an amount', style: TextStyle(fontSize: 12)),
           const Gap(8),
           Row(
             spacing: 8,
@@ -261,13 +249,7 @@ class _AirtimeScreenState extends ConsumerState<AirtimeScreen> {
             onChanged: (value) => setState(() {}),
           ),
           const Gap(16),
-          Text(
-            'Network',
-            style: TextStyle(
-              fontSize: 12,
-              fontFamily: Constants.neulisNeueFontFamily,
-            ),
-          ),
+          Text('Network', style: TextStyle(fontSize: 12)),
           const Gap(8),
           GridView.count(
             shrinkWrap: true,
@@ -330,7 +312,7 @@ class _AirtimeScreenState extends ConsumerState<AirtimeScreen> {
             style: TextStyle(
               fontSize: 10,
               fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-              fontFamily: Constants.neulisNeueFontFamily,
+
               color: isSelected ? AppColors.primary : null,
             ),
             textAlign: TextAlign.center,
@@ -350,11 +332,7 @@ class _AirtimeScreenState extends ConsumerState<AirtimeScreen> {
         child: Center(
           child: Text(
             amount,
-            style: TextStyle(
-              fontSize: 10,
-              fontWeight: FontWeight.w500,
-              fontFamily: Constants.neulisNeueFontFamily,
-            ),
+            style: TextStyle(fontSize: 10, fontWeight: FontWeight.w500),
           ),
         ),
       ),
@@ -366,11 +344,7 @@ class _AirtimeScreenState extends ConsumerState<AirtimeScreen> {
     String phoneNumber,
     VoidCallback onTap,
   ) {
-    final textStyle = TextStyle(
-      height: 1.1,
-      fontSize: 10,
-      fontFamily: Constants.neulisNeueFontFamily,
-    );
+    final textStyle = TextStyle(height: 1.1, fontSize: 10);
     return InkWell(
       onTap: onTap,
       child: Column(

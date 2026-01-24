@@ -35,11 +35,7 @@ class _ToolsScreenState extends ConsumerState<ToolsScreen> {
               children: [
                 Text(
                   'Tools',
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: Constants.neulisNeueFontFamily,
-                  ),
+                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                 ),
                 Text(
                   'Your one stop shop for peak financial health',
@@ -113,11 +109,7 @@ class _ToolsScreenState extends ConsumerState<ToolsScreen> {
               children: [
                 Text(
                   title,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: Constants.neulisNeueFontFamily,
-                  ),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 Text(subtitle, style: TextStyle(fontSize: 12, height: 1.2)),
               ],

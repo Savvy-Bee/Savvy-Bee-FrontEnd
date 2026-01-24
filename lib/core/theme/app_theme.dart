@@ -86,7 +86,7 @@ class AppTheme {
       titleTextStyle: TextStyle(
         fontSize: 16,
         fontWeight: FontWeight.bold,
-        fontFamily: Constants.neulisNeueFontFamily,
+        fontFamily: Constants.generalSansFontFamily,
         color: AppColors.black,
       ),
       systemOverlayStyle: SystemUiOverlayStyle(

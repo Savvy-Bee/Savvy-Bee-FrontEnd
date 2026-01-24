@@ -34,11 +34,7 @@ class _ReferrerScreenState extends ConsumerState<ReferrerScreen> {
               'Skip',
               AppIcon(AppIcons.arrowRightIcon),
               reverse: true,
-              textStyle: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.bold,
-                fontFamily: Constants.neulisNeueFontFamily,
-              ),
+              textStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
               onTap: () => context.pushNamed(PremiumScreen.path, extra: true),
             ),
           ),

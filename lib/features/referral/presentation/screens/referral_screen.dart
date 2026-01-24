@@ -32,11 +32,7 @@ class ReferralScreen extends ConsumerWidget {
               'Next',
               AppIcon(AppIcons.arrowRightIcon),
               reverse: true,
-              textStyle: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.bold,
-                fontFamily: Constants.neulisNeueFontFamily,
-              ),
+              textStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
               onTap: () => context.pushNamed(SelectPriorityScreen.path),
             ),
           ),
@@ -53,11 +49,7 @@ class ReferralScreen extends ConsumerWidget {
           Text(
             'Refer 2 friends to cover 6 months of Savvy Bee. Refer 1 more friend and earn 1 year free',
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 12,
-              fontFamily: Constants.neulisNeueFontFamily,
-              height: 1.1,
-            ),
+            style: TextStyle(fontSize: 12, height: 1.1),
           ),
           const Gap(24),
           _buildPerkItem(
@@ -107,11 +99,7 @@ class ReferralScreen extends ConsumerWidget {
           ),
           child: Text(
             number,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-              fontFamily: Constants.neulisNeueFontFamily,
-            ),
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
           ),
         ),
         const Gap(16),
@@ -125,19 +113,12 @@ class ReferralScreen extends ConsumerWidget {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  fontFamily: Constants.neulisNeueFontFamily,
+
                   height: 1.1,
                 ),
               ),
               const Gap(12),
-              Text(
-                subtitle,
-                style: TextStyle(
-                  fontSize: 12,
-                  fontFamily: Constants.neulisNeueFontFamily,
-                  height: 1.1,
-                ),
-              ),
+              Text(subtitle, style: TextStyle(fontSize: 12, height: 1.1)),
             ],
           ),
         ),

@@ -41,17 +41,13 @@ class _SignupConnectBankScreenState extends State<SignupConnectBankScreen> {
                     fontSize: 38,
                     height: 0.9,
                     fontWeight: FontWeight.bold,
-                    fontFamily: Constants.neulisNeueFontFamily,
                   ),
                 ),
                 const Gap(16),
                 Text(
                   'Find out where your money is going. Link your bank accounts',
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    height: 1.1,
-                    fontFamily: Constants.neulisNeueFontFamily,
-                  ),
+                  style: TextStyle(height: 1.1),
                 ),
               ],
             ),

@@ -64,7 +64,7 @@ class _CancelSubscriptionReasonBottomSheetState
             style: TextStyle(
               fontSize: 32,
               fontWeight: FontWeight.bold,
-              fontFamily: Constants.neulisNeueFontFamily,
+
               height: 1.0,
             ),
           ),
@@ -72,7 +72,6 @@ class _CancelSubscriptionReasonBottomSheetState
           Text(
             "Tell us why you're cancelling your plan and we'll do our best to fix it.",
             textAlign: TextAlign.center,
-            style: TextStyle(fontFamily: Constants.neulisNeueFontFamily),
           ),
           const Gap(24),
           _buildTile('I have an issue with my account or plan'),

@@ -45,20 +45,9 @@ class _AchievementsScreenState extends ConsumerState<AchievementsScreen> {
                   const Gap(12),
                   Text(
                     Assets.leagueNames[index],
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontFamily: Constants.neulisNeueFontFamily,
-                      height: 1.0,
-                    ),
+                    style: TextStyle(fontWeight: FontWeight.bold, height: 1.0),
                   ),
-                  Text(
-                    'League',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontFamily: Constants.neulisNeueFontFamily,
-                      height: 1.0,
-                    ),
-                  ),
+                  Text('League', style: TextStyle(fontSize: 12, height: 1.0)),
                 ],
               ),
             ),

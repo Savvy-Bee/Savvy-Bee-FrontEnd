@@ -36,7 +36,7 @@ class _WeeklyPositionScreenState extends ConsumerState<WeeklyPositionScreen> {
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
-                    fontFamily: Constants.neulisNeueFontFamily,
+
                     height: 1.0,
                   ),
                 ),
@@ -72,11 +72,7 @@ class _WeeklyPositionScreenState extends ConsumerState<WeeklyPositionScreen> {
               CircleAvatar(),
               Text(
                 'Joshua',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: Constants.neulisNeueFontFamily,
-                ),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ],
           ),

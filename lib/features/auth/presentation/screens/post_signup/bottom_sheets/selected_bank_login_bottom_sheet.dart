@@ -130,11 +130,7 @@ class _SelectedBankLoginBottomSheetState
               Text(
                 'Login at ${widget.institution.displayName}',
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: Constants.neulisNeueFontFamily,
-                ),
+                style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
               ),
               const Gap(32),
               _buildInfo(

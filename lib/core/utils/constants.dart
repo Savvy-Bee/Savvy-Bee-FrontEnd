@@ -17,7 +17,7 @@ class Constants {
 
   static const String exconFontFamily = 'Excon';
   static const String generalSansFontFamily = 'GeneralSans';
-  static const String neulisNeueFontFamily = 'Nuelis Neue';
+  static const String londrinaSolidFontFamily = 'Londrina Solid';
   static const String fredokaFontFamily = 'Fredoka';
 
   // Environment Variables

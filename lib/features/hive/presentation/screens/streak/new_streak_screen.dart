@@ -142,7 +142,7 @@ class _NewStreakScreenState extends ConsumerState<NewStreakScreen>
                       style: TextStyle(
                         fontSize: 160,
                         fontWeight: FontWeight.w900,
-                        fontFamily: Constants.neulisNeueFontFamily,
+
                         color: AppColors.primary,
                         height: 1.0,
                       ),
@@ -163,7 +163,6 @@ class _NewStreakScreenState extends ConsumerState<NewStreakScreen>
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        fontFamily: Constants.neulisNeueFontFamily,
                       ),
                     ),
                   ),
@@ -193,7 +192,7 @@ class _NewStreakScreenState extends ConsumerState<NewStreakScreen>
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.w500,
-                                  fontFamily: Constants.neulisNeueFontFamily,
+
                                   height: 1.3,
                                 ),
                               ),
@@ -250,7 +249,6 @@ class _NewStreakScreenState extends ConsumerState<NewStreakScreen>
                 fontSize: 14,
                 fontWeight: isToday ? FontWeight.bold : FontWeight.w500,
                 color: isToday ? AppColors.primary : AppColors.greyDark,
-                fontFamily: Constants.neulisNeueFontFamily,
               ),
             ),
             Container(

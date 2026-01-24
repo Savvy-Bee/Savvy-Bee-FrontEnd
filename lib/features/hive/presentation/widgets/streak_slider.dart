@@ -115,7 +115,6 @@ class StreakSlider extends StatelessWidget {
                               : inactiveThumbColor,
                           fontSize: 10,
                           fontWeight: FontWeight.bold,
-                          fontFamily: Constants.neulisNeueFontFamily,
                         ),
                       ),
                     ),

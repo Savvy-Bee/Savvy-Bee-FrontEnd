@@ -49,7 +49,7 @@ class _LessonUnlockedScreenState extends ConsumerState<LessonUnlockedScreen> {
                       style: TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
-                        fontFamily: Constants.neulisNeueFontFamily,
+
                         height: 1.1,
                       ),
                     ),
@@ -90,7 +90,7 @@ class _LessonUnlockedScreenState extends ConsumerState<LessonUnlockedScreen> {
         style: TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.bold,
-          fontFamily: Constants.neulisNeueFontFamily,
+
           color: AppColors.white,
         ),
       ),

@@ -211,24 +211,14 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'RECENT TRANSACTIONS',
-                  style: TextStyle(
-                    fontSize: 10,
-                    fontFamily: Constants.neulisNeueFontFamily,
-                  ),
-                ),
+                Text('RECENT TRANSACTIONS', style: TextStyle(fontSize: 10)),
                 InkWell(
                   onTap: hasWallet
                       ? () => context.pushNamed(TransactionHistoryScreen.path)
                       : null,
                   child: Text(
                     'VIEW ALL',
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontFamily: Constants.neulisNeueFontFamily,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
                   ),
                 ),
               ],
@@ -291,8 +281,6 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
                                     style: TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w500,
-                                      fontFamily:
-                                          Constants.neulisNeueFontFamily,
                                     ),
                                   ),
                                   Text(
@@ -300,8 +288,6 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
                                     style: TextStyle(
                                       fontSize: 10,
                                       color: AppColors.textLight,
-                                      fontFamily:
-                                          Constants.neulisNeueFontFamily,
                                     ),
                                   ),
                                 ],
@@ -315,7 +301,7 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
-                              fontFamily: Constants.neulisNeueFontFamily,
+
                               color: transaction.type.name == 'credit'
                                   ? AppColors.success
                                   : null,
@@ -355,11 +341,7 @@ class WalletBalanceCard extends ConsumerWidget {
                 children: [
                   Text(
                     'SAVVY WALLET - ${primaryAccount.ngnAccount?.accountNumber}',
-                    style: TextStyle(
-                      fontSize: 10,
-                      color: AppColors.textLight,
-                      fontFamily: Constants.neulisNeueFontFamily,
-                    ),
+                    style: TextStyle(fontSize: 10, color: AppColors.textLight),
                   ),
                   const Gap(8),
                   InkWell(
@@ -387,11 +369,7 @@ class WalletBalanceCard extends ConsumerWidget {
             children: [
               Text(
                 primaryAccount.balance.formatCurrency(),
-                style: TextStyle(
-                  fontSize: 36,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: Constants.neulisNeueFontFamily,
-                ),
+                style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
               ),
             ],
           ),
@@ -401,11 +379,7 @@ class WalletBalanceCard extends ConsumerWidget {
             children: [
               Text(
                 'Last updated ${DateTime.now().formatRelative()}',
-                style: TextStyle(
-                  fontSize: 10,
-                  color: AppColors.textSecondary,
-                  fontFamily: Constants.neulisNeueFontFamily,
-                ),
+                style: TextStyle(fontSize: 10, color: AppColors.textSecondary),
               ),
               IconButton(
                 onPressed: () {
@@ -448,10 +422,7 @@ class _OptionsBottomSheet extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'OPTIONS',
-                style: TextStyle(fontFamily: Constants.neulisNeueFontFamily),
-              ),
+              Text('OPTIONS'),
               IconButton(
                 onPressed: () => context.pop(),
                 icon: const Icon(Icons.close),
