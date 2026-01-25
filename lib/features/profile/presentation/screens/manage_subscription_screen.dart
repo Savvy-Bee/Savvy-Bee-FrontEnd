@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
-import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
-import 'package:savvy_bee_mobile/core/utils/assets/illustrations.dart';
-import 'package:savvy_bee_mobile/core/utils/constants.dart';
-import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
-import 'package:savvy_bee_mobile/features/profile/presentation/screens/subscription/bottom_sheets/cancel_subscription_botttom_sheet.dart';
 
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/utils/assets/illustrations.dart';
+import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/game_card.dart';
+import 'subscription/bottom_sheets/cancel_subscription_botttom_sheet.dart';
 
 class ManageSubscriptionScreen extends ConsumerStatefulWidget {
   static const String path = '/manage-subscription';

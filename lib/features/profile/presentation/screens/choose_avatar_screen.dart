@@ -6,6 +6,7 @@ import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/avatars.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_snackbar.dart';
+import 'package:savvy_bee_mobile/features/home/presentation/providers/home_data_provider.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/providers/profile_provider.dart';
 
 class ChooseAvatarScreen extends ConsumerStatefulWidget {
@@ -81,6 +82,8 @@ class _ChooseAvatarScreenState extends ConsumerState<ChooseAvatarScreen> {
           .read(updateProfileAvatarProvider.notifier)
           .updateAvatar(_selectedCharacter!);
       if (success) {
+        ref.invalidate(homeDataProvider);
+
         if (mounted) {
           context.pop(_selectedCharacter);
 

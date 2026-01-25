@@ -5,8 +5,11 @@ import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/num_extensions.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
+import 'package:savvy_bee_mobile/features/tools/domain/models/budget.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/providers/budget_provider.dart';
 
 import '../../utils/constants.dart';
+import 'edit_budget_bottom_sheet.dart';
 
 class BudgetCategoryBottomSheet extends ConsumerStatefulWidget {
   const BudgetCategoryBottomSheet({super.key});
@@ -27,8 +30,48 @@ class BudgetCategoryBottomSheet extends ConsumerStatefulWidget {
 
 class _BudgetCategoryBottomSheetState
     extends ConsumerState<BudgetCategoryBottomSheet> {
+  /// Creates a new budget category
+  Future<void> _createBudgetCategory(String categoryName) async {
+    try {
+      await ref
+          .read(budgetHomeNotifierProvider.notifier)
+          .createBudgetCategory(categoryName);
+
+      if (mounted) {
+        context.pop(); // Close the bottom sheet on success
+
+        // Show success message
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('$categoryName budget category added successfully'),
+            backgroundColor: AppColors.success,
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        // Show error message
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to add $categoryName budget category: $e'),
+            backgroundColor: AppColors.error,
+          ),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    // Watch the available budget categories provider
+    final availableCategories = ref.watch(availableBudgetCategoriesProvider);
+    final existingBudgets = ref.watch(existingBudgetCategoriesProvider);
+
+    // Create a map of existing budgets for quick lookup
+    final existingBudgetsMap = {
+      for (var budget in existingBudgets) budget.budgetName: budget,
+    };
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -55,29 +98,21 @@ class _BudgetCategoryBottomSheetState
             padding: const EdgeInsets.all(16.0),
             borderColor: AppColors.grey.withValues(alpha: 0.3),
             child: Column(
-              children: [
-                _buildCategoryListTile(),
-                const Gap(8),
-                _buildCategoryListTile(),
-                const Gap(8),
-                _buildCategoryListTile(),
-                const Gap(8),
-                _buildCategoryListTile(),
-                const Gap(8),
-                _buildCategoryListTile(),
-                const Gap(8),
-                _buildCategoryListTile(),
-                const Gap(8),
-                _buildCategoryListTile(),
-                const Gap(8),
-                _buildCategoryListTile(),
-                const Gap(8),
-                _buildCategoryListTile(),
-                const Gap(8),
-                _buildCategoryListTile(),
-                const Gap(8),
-                _buildCategoryListTile(),
-              ],
+              children: predefinedBudgetCategories.map((category) {
+                final isAvailable = availableCategories.contains(category);
+                final existingBudget = existingBudgetsMap[category];
+
+                return Column(
+                  children: [
+                    _buildCategoryListTile(
+                      categoryName: category,
+                      isAvailable: isAvailable,
+                      existingBudget: existingBudget,
+                    ),
+                    const Gap(8),
+                  ],
+                );
+              }).toList(),
             ),
           ),
         ),
@@ -85,28 +120,50 @@ class _BudgetCategoryBottomSheetState
     );
   }
 
-  Widget _buildCategoryListTile() {
+  Widget _buildCategoryListTile({
+    required String categoryName,
+    required bool isAvailable,
+    Budget? existingBudget,
+  }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            CircleAvatar(),
+            CircleAvatar(
+              backgroundColor: AppColors.primary.withValues(alpha: 0.2),
+              child: const Icon(
+                Icons.category,
+                size: 16,
+                color: AppColors.primary,
+              ),
+            ),
             const Gap(16),
             Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Auto & transport', style: TextStyle(fontSize: 16.0)),
-                Text(
-                  '${40000.formatCurrency(decimalDigits: 0)} last month',
-                  style: TextStyle(
-                    fontSize: 8.0,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.textSecondary,
+                Text(categoryName, style: TextStyle(fontSize: 16.0)),
+                if (existingBudget != null) ...[
+                  Text(
+                    '${existingBudget.targetAmountMonthly.formatCurrency(decimalDigits: 0)} monthly limit',
+                    style: TextStyle(
+                      fontSize: 12.0,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.textSecondary,
+                    ),
                   ),
-                ),
+                ] else ...[
+                  Text(
+                    'Not set up yet',
+                    style: TextStyle(
+                      fontSize: 12.0,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.textSecondary.withValues(alpha: 0.6),
+                    ),
+                  ),
+                ],
               ],
             ),
           ],
@@ -114,12 +171,15 @@ class _BudgetCategoryBottomSheetState
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (1 == 7)
+            if (!isAvailable &&
+                existingBudget != null) // Category already exists
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    40000.formatCurrency(decimalDigits: 0),
+                    existingBudget.targetAmountMonthly.formatCurrency(
+                      decimalDigits: 0,
+                    ),
                     style: TextStyle(
                       fontSize: 16.0,
                       fontWeight: FontWeight.w500,
@@ -127,7 +187,13 @@ class _BudgetCategoryBottomSheetState
                   ),
                   const Gap(8),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      context.pop();
+                      EditBudgetBottomSheet.show(
+                        context,
+                        budget: existingBudget,
+                      );
+                    },
                     icon: const Icon(Icons.edit_outlined),
                     iconSize: 20,
                     constraints: BoxConstraints(),
@@ -135,9 +201,9 @@ class _BudgetCategoryBottomSheetState
                   ),
                 ],
               ),
-            if (7 == 7)
+            if (isAvailable) // Category doesn't exist yet - show add button
               IconButton(
-                onPressed: () {},
+                onPressed: () => _createBudgetCategory(categoryName),
                 icon: const Icon(Icons.add),
                 iconSize: 20,
                 constraints: BoxConstraints(),

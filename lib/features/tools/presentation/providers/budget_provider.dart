@@ -3,6 +3,21 @@ import 'package:savvy_bee_mobile/core/services/service_locator.dart';
 import 'package:savvy_bee_mobile/features/tools/data/repositories/budget_repository.dart';
 import 'package:savvy_bee_mobile/features/tools/domain/models/budget.dart';
 
+/// Predefined budget categories
+const List<String> predefinedBudgetCategories = [
+  'Auto & transport',
+  'Childcare & education',
+  'Drinks & dining',
+  'Entertainment',
+  'Financial',
+  'Groceries',
+  'Healthcare',
+  'Household',
+  'Other',
+  'Personal care',
+  'Shopping',
+];
+
 /// A simple FutureProvider to fetch the budget home data.
 ///
 /// This is read-only. To refetch, you would call `ref.invalidate(budgetHomeDataProvider)`.
@@ -15,9 +30,8 @@ final budgetHomeDataProvider = FutureProvider<BudgetHomeData>((ref) {
 /// and mutations.
 class BudgetHomeNotifier extends StateNotifier<AsyncValue<BudgetHomeData>> {
   final BudgetRepository _toolsRepository;
-  final Ref _ref; // Store Ref to read other providers
 
-  BudgetHomeNotifier(this._toolsRepository, this._ref)
+  BudgetHomeNotifier(this._toolsRepository)
     : super(const AsyncValue.loading()) {
     // Fetch data when the notifier is first created
     fetchBudgetHomeData();
@@ -104,7 +118,58 @@ class BudgetHomeNotifier extends StateNotifier<AsyncValue<BudgetHomeData>> {
       rethrow;
     }
   }
+
+  /// Creates a new budget category with default values
+  Future<String> createBudgetCategory(String categoryName) async {
+    // Set state to loading
+    state = const AsyncValue.loading();
+
+    try {
+      // Create budget with default values (0 spent, 0 total budget initially)
+      final message = await _toolsRepository.createBudget(
+        budgetName: categoryName,
+        totalBudget: 0,
+        amountSpent: 0,
+      );
+
+      // On success, refetch the data
+      await fetchBudgetHomeData();
+
+      return message; // Return success message
+    } catch (e, st) {
+      // On error, update the state and rethrow
+      state = AsyncValue.error(e, st);
+      rethrow;
+    }
+  }
 }
+
+/// Provider to get available budget categories (not yet created by user)
+final availableBudgetCategoriesProvider = Provider<List<String>>((ref) {
+  final budgetState = ref.watch(budgetHomeNotifierProvider);
+
+  return budgetState.when(
+    data: (data) {
+      final existingCategories = data.budgets.map((b) => b.budgetName).toSet();
+      return predefinedBudgetCategories
+          .where((category) => !existingCategories.contains(category))
+          .toList();
+    },
+    loading: () => [],
+    error: (_, __) => [],
+  );
+});
+
+/// Provider to get existing budget categories (already created by user)
+final existingBudgetCategoriesProvider = Provider<List<Budget>>((ref) {
+  final budgetState = ref.watch(budgetHomeNotifierProvider);
+
+  return budgetState.when(
+    data: (data) => data.budgets,
+    loading: () => [],
+    error: (_, __) => [],
+  );
+});
 
 /// The provider that exposes the [BudgetHomeNotifier] and its state.
 final budgetHomeNotifierProvider =
@@ -112,5 +177,5 @@ final budgetHomeNotifierProvider =
       ref,
     ) {
       final toolsRepository = ref.watch(toolsRepositoryProvider);
-      return BudgetHomeNotifier(toolsRepository, ref);
+      return BudgetHomeNotifier(toolsRepository);
     });

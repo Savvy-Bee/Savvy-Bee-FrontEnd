@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:savvy_bee_mobile/core/utils/assets/avatars.dart';
 import 'package:savvy_bee_mobile/core/widgets/main_wrapper.dart';
 import 'package:savvy_bee_mobile/features/auth/presentation/providers/auth_providers.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -59,7 +60,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.blue,
         actions: [
           IconButton(
             onPressed: () {},
@@ -82,44 +82,15 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           final data = response.data;
           final hiveStats = data.hive.stats;
 
+          bool hasUnfinishedProfile =
+              (data.kyc.bvn == false) ||
+              (data.kyc.nin == false) ||
+              (data.profilePhoto.isEmpty);
+
           return ListView(
             physics: const ClampingScrollPhysics(),
             children: [
-              _buildAvatarSection(context),
-              // Container(
-              //   alignment: Alignment.bottomCenter,
-              //   height: 130,
-              //   decoration: BoxDecoration(color: AppColors.blue),
-              //   child: Stack(
-              //     alignment: Alignment.center,
-              //     children: [
-              //       GestureDetector(
-              //         onTap: () => context.pushNamed(ChooseAvatarScreen.path),
-              //         child: CircleAvatar(
-              //           radius: 50,
-              //           backgroundColor: Colors.transparent,
-              //           backgroundImage:
-              //               data.profilePhoto.isNotEmpty &&
-              //                   !data.profilePhoto.startsWith('Dash') &&
-              //                   !data.profilePhoto.startsWith('Luna')
-              //               ? CachedNetworkImageProvider(data.profilePhoto)
-              //               : null,
-              //           child:
-              //               data.profilePhoto.isEmpty ||
-              //                   data.profilePhoto.startsWith('Dash') ||
-              //                   data.profilePhoto.startsWith('Luna')
-              //               ? Image.asset(Assets.profileBlank)
-              //               : null,
-              //         ),
-              //       ),
-              //       Positioned(
-              //         bottom: 0,
-              //         right: 0,
-              //         child: Icon(Icons.add, color: AppColors.white),
-              //       ),
-              //     ],
-              //   ),
-              // ),
+              _buildAvatarSection(context, avatar: data.profilePhoto),
               Container(
                 color: AppColors.white,
                 padding: const EdgeInsets.all(16),
@@ -157,38 +128,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       ],
                     ),
                     const Gap(24),
-                    CustomCard(
-                      bgColor: AppColors.primaryFaded,
-                      borderColor: Colors.transparent,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Finish setting up!',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            '2 steps left',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.greyDark,
-                            ),
-                          ),
-                          const Gap(28),
-                          CustomElevatedButton(
-                            text: 'Complete Profile',
-                            isGamePlay: true,
-                            onPressed: () =>
-                                context.pushNamed(CompleteProfileScreen.path),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const Gap(24),
+                    if (hasUnfinishedProfile) ...[
+                      _buildCompleteProfileCard(context),
+                      const Gap(24),
+                    ],
+
                     SectionTitleWidget(title: 'Overview'),
                     Row(
                       spacing: 8,
@@ -425,20 +369,51 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     );
   }
 
-  Container _buildAvatarSection(BuildContext context) {
-    return Container(
-      alignment: Alignment.bottomCenter,
-      height: 130,
-      decoration: BoxDecoration(color: AppColors.blue),
-      child: Stack(
-        alignment: Alignment.center,
+  CustomCard _buildCompleteProfileCard(BuildContext context) {
+    return CustomCard(
+      bgColor: AppColors.primaryFaded,
+      borderColor: Colors.transparent,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          GestureDetector(
-            onTap: () => context.pushNamed(ChooseAvatarScreen.path),
-            child: Image.asset(Assets.profileBlank),
+          Text(
+            'Finish setting up!',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
-          Icon(Icons.add, color: AppColors.white),
+          Text(
+            '2 steps left',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: AppColors.greyDark,
+            ),
+          ),
+          const Gap(28),
+          CustomElevatedButton(
+            text: 'Complete Profile',
+            isGamePlay: true,
+            onPressed: () => context.pushNamed(CompleteProfileScreen.path),
+          ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildAvatarSection(BuildContext context, {required String avatar}) {
+    return GestureDetector(
+      onTap: () => context.pushNamed(ChooseAvatarScreen.path),
+      child: Container(
+        alignment: Alignment.bottomCenter,
+        height: 130,
+        child: avatar.isNotEmpty
+            ? Image.asset(Avatars.getAvatar(avatar))
+            : Stack(
+                alignment: Alignment.center,
+                children: [
+                  Image.asset(Assets.profileBlank),
+                  Icon(Icons.add, color: AppColors.white),
+                ],
+              ),
       ),
     );
   }

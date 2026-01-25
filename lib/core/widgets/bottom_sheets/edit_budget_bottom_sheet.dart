@@ -8,7 +8,6 @@ import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/utils/num_extensions.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';
-import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/features/tools/domain/models/budget.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/providers/budget_provider.dart';
 
@@ -192,66 +191,66 @@ class _EditBudgetBottomSheetState extends ConsumerState<EditBudgetBottomSheet> {
                     ),
                   ],
                 ),
-                const Gap(24),
-                CustomCard(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 32,
-                    vertical: 24,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Text(
-                            'Spent last month',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 12,
-                              color: AppColors.textLight,
-                            ),
-                          ),
-                          const Gap(4),
-                          Text(
-                            // 12. Use widget.budget data (balance)
-                            widget.budget.balance.toDouble().formatCurrency(),
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 12,
-                              color: AppColors.textSecondary,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Text(
-                            'Monthly average',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 12,
-                              color: AppColors.textLight,
-                            ),
-                          ),
-                          const Gap(4),
-                          Text(
-                            // TODO: Need real data for this
-                            0.formatCurrency(),
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 12,
-                              color: AppColors.textSecondary,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                const Gap(24),
-                const Text('Chart goes here'), // TODO: Implement chart
+                // const Gap(24),
+                // CustomCard(
+                //   padding: const EdgeInsets.symmetric(
+                //     horizontal: 32,
+                //     vertical: 24,
+                //   ),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //     children: [
+                //       Column(
+                //         mainAxisSize: MainAxisSize.min,
+                //         children: [
+                //           const Text(
+                //             'Spent last month',
+                //             style: TextStyle(
+                //               fontWeight: FontWeight.w500,
+                //               fontSize: 12,
+                //               color: AppColors.textLight,
+                //             ),
+                //           ),
+                //           const Gap(4),
+                //           Text(
+                //             // 12. Use widget.budget data (balance)
+                //             widget.budget.balance.toDouble().formatCurrency(),
+                //             style: const TextStyle(
+                //               fontWeight: FontWeight.w500,
+                //               fontSize: 12,
+                //               color: AppColors.textSecondary,
+                //             ),
+                //           ),
+                //         ],
+                //       ),
+                //       Column(
+                //         mainAxisSize: MainAxisSize.min,
+                //         children: [
+                //           const Text(
+                //             'Monthly average',
+                //             style: TextStyle(
+                //               fontWeight: FontWeight.w500,
+                //               fontSize: 12,
+                //               color: AppColors.textLight,
+                //             ),
+                //           ),
+                //           const Gap(4),
+                //           Text(
+                //             // TODO: Need real data for this
+                //             0.formatCurrency(),
+                //             style: const TextStyle(
+                //               fontWeight: FontWeight.w500,
+                //               fontSize: 12,
+                //               color: AppColors.textSecondary,
+                //             ),
+                //           ),
+                //         ],
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                // const Gap(24),
+                // const Text('Chart goes here'), // TODO: Implement chart
                 const Gap(24),
                 CustomElevatedButton(
                   text: 'Save',

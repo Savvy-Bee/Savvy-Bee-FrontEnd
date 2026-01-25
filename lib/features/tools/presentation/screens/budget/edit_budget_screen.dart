@@ -4,17 +4,18 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/app_icons.dart';
-import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/utils/num_extensions.dart';
 import 'package:savvy_bee_mobile/core/widgets/bottom_sheets/edit_budget_bottom_sheet.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_error_widget.dart';
 import 'package:savvy_bee_mobile/core/widgets/section_title_widget.dart';
 import 'package:savvy_bee_mobile/features/tools/domain/models/budget.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/providers/budget_provider.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/set_budget_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/set_income_screen.dart';
 
+import '../../../../../core/widgets/bottom_sheets/budget_category_bottom_sheet.dart';
 import '../../widgets/insight_card.dart';
 
 class EditBudgetScreen extends ConsumerStatefulWidget {
@@ -30,29 +31,17 @@ class EditBudgetScreen extends ConsumerStatefulWidget {
 class _EditBudgetScreenState extends ConsumerState<EditBudgetScreen> {
   @override
   Widget build(BuildContext context) {
+    final availableCategories = ref.watch(availableBudgetCategoriesProvider);
     final budgetState = ref.watch(budgetHomeNotifierProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Budgets')),
       body: budgetState.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => Center(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('Error: $error', textAlign: TextAlign.center),
-                const Gap(20),
-                CustomElevatedButton(
-                  text: 'Retry',
-                  onPressed: () => ref
-                      .read(budgetHomeNotifierProvider.notifier)
-                      .fetchBudgetHomeData(),
-                ),
-              ],
-            ),
-          ),
+        error: (error, stack) => CustomErrorWidget.error(
+          onRetry: () => ref
+              .read(budgetHomeNotifierProvider.notifier)
+              .fetchBudgetHomeData(),
         ),
         data: (data) {
           final totalBudget = data.budgets.fold<num>(
@@ -62,23 +51,23 @@ class _EditBudgetScreenState extends ConsumerState<EditBudgetScreen> {
           final remaining = data.totalEarnings - totalBudget;
 
           return ListView(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16).copyWith(bottom: 32),
             children: [
-              Row(
-                spacing: 8,
-                children: List.generate(
-                  3,
-                  (index) => Expanded(
-                    child: CustomCard(
-                      borderColor: index == 2 ? AppColors.primary : null,
-                      bgColor: index == 2 ? AppColors.primaryFaint : null,
-                      borderRadius: 8,
-                      child: Center(child: Text('Aug')), // TODO: Make dynamic
-                    ),
-                  ),
-                ),
-              ),
-              const Gap(24),
+              // Row(
+              //   spacing: 8,
+              //   children: List.generate(
+              //     3,
+              //     (index) => Expanded(
+              //       child: CustomCard(
+              //         borderColor: index == 2 ? AppColors.primary : null,
+              //         bgColor: index == 2 ? AppColors.primaryFaint : null,
+              //         borderRadius: 8,
+              //         child: Center(child: Text('Aug')), // TODO: Make dynamic
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              // const Gap(24),
               const InsightCard(
                 insightType: InsightType.nextBestAction,
                 text:
@@ -100,22 +89,21 @@ class _EditBudgetScreenState extends ConsumerState<EditBudgetScreen> {
                     budget.targetAmountMonthly, // 'amount'
                     AppIcons.editIcon,
                     onEditPressed: () {
-                      // 7. Pass the budget object to the bottom sheet
                       EditBudgetBottomSheet.show(context, budget: budget);
                     },
                   ),
                 );
               }),
               const Gap(28),
-              CustomOutlinedButton(
-                text: 'Add category',
-                onPressed: () {
-                  // TODO: Implement 'Add Category' logic.
-                  // This might show the same bottom sheet but with
-                  // a null budget object to signify "create" mode.
-                },
-              ),
-              const Gap(8),
+              if (availableCategories.isNotEmpty) ...[
+                CustomOutlinedButton(
+                  text: 'Add category',
+                  onPressed: () {
+                    BudgetCategoryBottomSheet.show(context);
+                  },
+                ),
+                const Gap(8),
+              ],
               CustomElevatedButton(
                 text: 'Save', // This button's action is unclear from spec
                 onPressed: () => context.pop(), // Changed to pop

@@ -60,4 +60,73 @@ class Avatars {
   static const String susu2 = '$_basePath/susu-2.png';
 
   static const List<String> susuAvatars = [susu1, susu2];
+
+  // Get all avatars
+  static const List<String> avatars = [
+    ...bloomAvatars,
+    ...booAvatars,
+    ...dashAvatars,
+    ...lokiAvatars,
+    ...lunaAvatars,
+    ...pennyAvatars,
+    ...susuAvatars,
+  ];
+
+  // Get avatar by index
+  static String getAvatar(String name) {
+    switch (name.toLowerCase()) {
+      case 'bloom1':
+        return bloom1;
+      case 'bloom2':
+        return bloom2;
+      case 'bloom3':
+        return bloom3;
+      case 'bloom4':
+        return bloom4;
+      case 'boo1':
+        return boo1;
+      case 'boo2':
+        return boo2;
+      case 'dash1':
+        return dash1;
+      case 'dash2':
+        return dash2;
+      case 'dash3':
+        return dash3;
+      case 'dash4':
+        return dash4;
+      case 'loki1':
+        return loki1;
+      case 'loki2':
+        return loki2;
+      case 'loki3':
+        return loki3;
+      case 'loki4':
+        return loki4;
+      case 'luna1':
+        return luna1;
+      case 'luna2':
+        return luna2;
+      case 'luna3':
+        return luna3;
+      case 'luna4':
+        return luna4;
+      case 'luna5':
+        return luna5;
+      case 'luna6':
+        return luna6;
+      case 'penny1':
+        return penny1;
+      case 'penny2':
+        return penny2;
+      case 'penny3':
+        return penny3;
+      case 'susu1':
+        return susu1;
+      case 'susu2':
+        return susu2;
+      default:
+        throw ArgumentError('Unknown avatar name: $name');
+    }
+  }
 }
