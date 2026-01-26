@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
-import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/utils/date_time_utils.dart';
 import 'package:savvy_bee_mobile/core/utils/string_extensions.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
@@ -112,161 +111,140 @@ class _AddDebtScreenState extends ConsumerState<AddDebtScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // You can also watch the provider state for loading if you prefer
-    // final providerState = ref.watch(debtListNotifierProvider);
-
     return Scaffold(
       appBar: AppBar(title: const Text('Add a debt')),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              Expanded(
-                child: ListView(
-                  children: [
-                    CustomTextFormField(
-                      isRounded: true,
-                      label: 'Debt name',
-                      hint: 'Car loan',
-                      controller: _nameController,
-                      validator: (v) =>
-                          v == null || v.isEmpty ? 'Required' : null,
-                    ),
-                    const Gap(16),
-                    CustomTextFormField(
-                      isRounded: true,
-                      label: 'Amount owed',
-                      hint: '100,000,000',
-                      controller: _amountOwedController,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      validator: (v) =>
-                          v == null || v.isEmpty ? 'Required' : null,
-                    ),
-                    const Gap(16),
-                    CustomTextFormField(
-                      isRounded: true,
-                      label: 'Interest rate',
-                      hint: '5%',
-                      controller: _interestRateController,
-                      keyboardType: const TextInputType.numberWithOptions(
-                        decimal: true,
-                      ),
-                      inputFormatters: [
-                        FilteringTextInputFormatter.allow(
-                          RegExp(r'^\d+\.?\d{0,2}'),
-                        ),
-                      ],
-                      validator: (v) =>
-                          v == null || v.isEmpty ? 'Required' : null,
-                    ),
-                    const Gap(16),
-                    Text(
-                      'How would you prefer to pay off this debt?',
-                      style: TextStyle(fontWeight: FontWeight.w500),
-                    ),
-                    const Gap(8),
-                    Row(
-                      spacing: 8,
-                      children: LoanRepaymentFrequency.values.map((frequency) {
-                        return Expanded(
-                          child: _buildPaymentFrequencyButton(
-                            frequency.name[0].toUpperCase() +
-                                frequency.name.substring(1),
-                            isSelected: _selectedPaymentFrequency == frequency,
-                            onTap: () => setState(() {
-                              _selectedPaymentFrequency = frequency;
-                              _selectedRepaymentDay =
-                                  null; // Reset dropdown selection
-                            }),
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                    const Gap(8),
-                    const InsightCard(
-                      insightType: InsightType.nextBestAction,
-                      text:
-                          'Pay ₦125,000/month to clear ₦1,000,000 loan in 8 months.',
-                    ),
-                    const Gap(16),
-                    // Only show dropdown if relevant
-                    if (_selectedPaymentFrequency !=
-                        LoanRepaymentFrequency.manually)
-                      CustomDropdownButton(
-                        items: _getDropdownItems(),
-                        label:
-                            'Day of the ${_selectedPaymentFrequency.name.replaceFirst('ly', '')}',
-                        onChanged: (val) {
-                          setState(() => _selectedRepaymentDay = val);
-                        },
-                      ),
-                    const Gap(16),
-                    CustomTextFormField(
-                      isRounded: true,
-                      label: 'Minimum monthly payment',
-                      hint: '100,000',
-                      controller: _minimumPaymentController,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.allow(
-                          RegExp(r'^\d+\.?\d{0,2}'),
-                        ),
-                      ],
-                      validator: (v) =>
-                          v == null || v.isEmpty ? 'Required' : null,
-                    ),
-                    const Gap(8),
-                    const InsightCard(
-                      insightType: InsightType.nahlInsight,
-                      text:
-                          'At ₦100,000/month and 5% interest, your loan will be be paid off in 9 months.',
-                    ),
-                    const Gap(8),
-                    const InsightCard(
-                      insightType: InsightType.nextBestAction,
-                      text:
-                          'We will send you a reminder when each repayment is due',
-                    ),
-                    const Gap(16),
-                    CustomTextFormField(
-                      isRounded: true,
-                      controller: _dateController,
-                      hint: '01/03/26',
-                      label: 'Target payoff date',
-                      suffixIcon: const Icon(Icons.calendar_month),
-                      readOnly: true, // Prevent manual typing to ensure format
-                      validator: (v) =>
-                          v == null || v.isEmpty ? 'Required' : null,
-                      onTap: () async {
-                        final date = await DateTimeUtils.pickDate(
-                          context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime.now(),
-                          lastDate: DateTime(2050),
-                        );
-                        if (date != null) {
-                          setState(() {
-                            _selectedDate = date;
-                            _dateController.text =
-                                '${date.month}/${date.day}/${date.year}';
-                          });
-                        }
-                      },
-                    ),
-                    const Gap(16),
-                  ],
-                ),
+      body: Form(
+        key: _formKey,
+        child: ListView(
+          padding: const EdgeInsets.all(16),
+          children: [
+            CustomTextFormField(
+              isRounded: true,
+              label: 'Debt name',
+              hint: 'Car loan',
+              controller: _nameController,
+              validator: (v) => v == null || v.isEmpty ? 'Required' : null,
+            ),
+            const Gap(16),
+            CustomTextFormField(
+              isRounded: true,
+              label: 'Amount owed',
+              hint: '100,000,000',
+              controller: _amountOwedController,
+              keyboardType: TextInputType.number,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              validator: (v) => v == null || v.isEmpty ? 'Required' : null,
+            ),
+            const Gap(16),
+            CustomTextFormField(
+              isRounded: true,
+              label: 'Interest rate',
+              hint: '5%',
+              controller: _interestRateController,
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
               ),
-              CustomElevatedButton(
-                text: 'Add repayment details',
-                isLoading: _isLoading,
-                onPressed: _submitDebtStep1,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+              ],
+              validator: (v) => v == null || v.isEmpty ? 'Required' : null,
+            ),
+            const Gap(16),
+            Text(
+              'How would you prefer to pay off this debt?',
+              style: TextStyle(fontWeight: FontWeight.w500),
+            ),
+            const Gap(8),
+            Row(
+              spacing: 8,
+              children: LoanRepaymentFrequency.values.map((frequency) {
+                return Expanded(
+                  child: _buildPaymentFrequencyButton(
+                    frequency.name[0].toUpperCase() +
+                        frequency.name.substring(1),
+                    isSelected: _selectedPaymentFrequency == frequency,
+                    onTap: () => setState(() {
+                      _selectedPaymentFrequency = frequency;
+                      _selectedRepaymentDay = null; // Reset dropdown selection
+                    }),
+                  ),
+                );
+              }).toList(),
+            ),
+            const Gap(8),
+            const InsightCard(
+              insightType: InsightType.nextBestAction,
+              text: 'Pay ₦125,000/month to clear ₦1,000,000 loan in 8 months.',
+            ),
+            const Gap(16),
+            // Only show dropdown if relevant
+            if (_selectedPaymentFrequency != LoanRepaymentFrequency.manually)
+              CustomDropdownButton(
+                items: _getDropdownItems(),
+                label:
+                    'Day of the ${_selectedPaymentFrequency.name.replaceFirst('ly', '')}',
+                onChanged: (val) {
+                  setState(() => _selectedRepaymentDay = val);
+                },
               ),
-            ],
-          ),
+            const Gap(16),
+            CustomTextFormField(
+              isRounded: true,
+              label: 'Minimum monthly payment',
+              hint: '100,000',
+              controller: _minimumPaymentController,
+              keyboardType: TextInputType.number,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+              ],
+              validator: (v) => v == null || v.isEmpty ? 'Required' : null,
+            ),
+            const Gap(8),
+            const InsightCard(
+              insightType: InsightType.nahlInsight,
+              text:
+                  'At ₦100,000/month and 5% interest, your loan will be be paid off in 9 months.',
+            ),
+            const Gap(8),
+            const InsightCard(
+              insightType: InsightType.nextBestAction,
+              text: 'We will send you a reminder when each repayment is due',
+            ),
+            const Gap(16),
+            CustomTextFormField(
+              isRounded: true,
+              controller: _dateController,
+              hint: '01/03/26',
+              label: 'Target payoff date',
+              suffixIcon: const Icon(Icons.calendar_month),
+              readOnly: true, // Prevent manual typing to ensure format
+              validator: (v) => v == null || v.isEmpty ? 'Required' : null,
+              onTap: () async {
+                final date = await DateTimeUtils.pickDate(
+                  context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime.now(),
+                  lastDate: DateTime(2050),
+                );
+                if (date != null) {
+                  setState(() {
+                    _selectedDate = date;
+                    _dateController.text =
+                        '${date.month}/${date.day}/${date.year}';
+                  });
+                }
+              },
+            ),
+            const Gap(16),
+          ],
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(16).copyWith(bottom: 32),
+        child: CustomElevatedButton(
+          text: 'Add repayment details',
+          isLoading: _isLoading,
+          onPressed: _submitDebtStep1,
         ),
       ),
     );

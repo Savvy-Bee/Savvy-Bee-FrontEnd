@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/dot.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/app_icons.dart';
@@ -27,6 +26,7 @@ class QuizeOptionTile extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
+        height: quizType == 'match' ? 100 : null,
         padding: EdgeInsets.symmetric(
           horizontal: quizType == 'multiChoice' ? 30 : 16,
           vertical: 16,
@@ -39,13 +39,13 @@ class QuizeOptionTile extends StatelessWidget {
                 color ??
                 (isSelected
                     ? AppColors.primary
-                    : AppColors.grey.withOpacity(0.6)),
+                    : AppColors.grey.withValues(alpha: 0.6)),
           ),
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
               offset: const Offset(0, 4),
-              color: AppColors.grey.withOpacity(0.6),
+              color: AppColors.grey.withValues(alpha: 0.6),
             ),
           ],
         ),

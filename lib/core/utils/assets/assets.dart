@@ -96,4 +96,6 @@ class Assets {
 
   // Blank profile
   static const String profileBlank = '$_basePath/profile-blank.png';
+
+  static const String arcadeBg = '$_basePath/arcade-bg.png';
 }

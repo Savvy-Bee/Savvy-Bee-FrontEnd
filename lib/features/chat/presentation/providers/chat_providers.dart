@@ -32,6 +32,8 @@ class ChatState {
   final bool hasError;
   final bool needsReAuth;
   final Persona? persona;
+  final List<RoomData> allRooms;
+  final String? currentRoomId;
 
   ChatState({
     this.messages = const [],
@@ -40,6 +42,8 @@ class ChatState {
     this.errorMessage,
     this.needsReAuth = false,
     this.persona,
+    this.allRooms = const [],
+    this.currentRoomId,
   }) : hasError = errorMessage != null;
 
   ChatState copyWith({
@@ -50,6 +54,9 @@ class ChatState {
     bool? needsReAuth,
     bool clearError = false,
     Persona? persona,
+    List<RoomData>? allRooms,
+    String? currentRoomId,
+    bool clearCurrentRoom = false,
   }) {
     return ChatState(
       messages: messages ?? this.messages,
@@ -58,6 +65,10 @@ class ChatState {
       errorMessage: clearError ? null : (errorMessage ?? this.errorMessage),
       needsReAuth: needsReAuth ?? this.needsReAuth,
       persona: persona ?? this.persona,
+      allRooms: allRooms ?? this.allRooms,
+      currentRoomId: clearCurrentRoom
+          ? null
+          : (currentRoomId ?? this.currentRoomId),
     );
   }
 
@@ -78,7 +89,8 @@ class ChatState {
   @override
   String toString() {
     return 'ChatState(messages: ${messages.length}, isLoading: $isLoading, '
-        'isSending: $isSending, hasError: $hasError, needsReAuth: $needsReAuth)';
+        'isSending: $isSending, hasError: $hasError, needsReAuth: $needsReAuth, '
+        'currentRoomId: $currentRoomId, allRooms: ${allRooms.length})';
   }
 }
 
@@ -89,19 +101,18 @@ class ChatNotifier extends AsyncNotifier<ChatState> {
   @override
   Future<ChatState> build() async {
     // Initialize by loading chat history
-    return await _loadChatHistory();
+    return await fetchChatHistory();
   }
 
-  /// Load chat history from API
-  Future<ChatState> _loadChatHistory() async {
+  /// Fetch all chat rooms (chat history)
+  Future<ChatState> fetchChatHistory() async {
     try {
-      log('Loading chat history...');
-      final response = await _chatRepository.getChatHistory();
+      final response = await _chatRepository.fetchChatHistory();
 
       if (response != null && response.success) {
-        log('Chat history loaded: ${response.allChats.length} messages');
-        return ChatState(
-          messages: response.allChats,
+        final currentState = state.value ?? ChatState();
+        return currentState.copyWith(
+          allRooms: response.allRooms,
           isLoading: false,
           persona: response.persona,
         );
@@ -112,24 +123,81 @@ class ChatNotifier extends AsyncNotifier<ChatState> {
           errorMessage: response?.message ?? 'Failed to load chat history',
         );
       }
-    } on ApiException catch (e) {
-      log('ApiException loading chat history: ${e.message}');
-      // Check if it's an auth error
-      if (e.statusCode == 401) {
-        return ChatState(
-          isLoading: false,
-          errorMessage: 'Session expired. Please login again.',
-          needsReAuth: true,
-        );
-      }
-      return ChatState(isLoading: false, errorMessage: e.message);
     } catch (e) {
-      log('Error loading chat history: $e');
+      log('Error fetching chat history: $e');
       return ChatState(
         isLoading: false,
         errorMessage: 'Failed to load chat history',
       );
     }
+  }
+
+  /// Load a specific chat by ID
+  Future<void> loadChatById(String chatId) async {
+    try {
+      // Set loading state
+      final currentState = state.value ?? ChatState();
+      state = AsyncValue.data(currentState.copyWith(isLoading: true));
+
+      final response = await _chatRepository.getChatById(chatId);
+
+      if (response != null && response.success) {
+        state = AsyncValue.data(
+          currentState.copyWith(
+            messages: response.allChats,
+            isLoading: false,
+            persona: response.persona,
+            currentRoomId: chatId,
+            clearError: true,
+          ),
+        );
+      } else {
+        log('Failed to load chat by ID: ${response?.message}');
+        state = AsyncValue.data(
+          currentState.copyWith(
+            isLoading: false,
+            errorMessage: response?.message ?? 'Failed to load chat',
+          ),
+        );
+      }
+    } on ApiException catch (e) {
+      final currentState = state.value ?? ChatState();
+      // Check if it's an auth error
+      if (e.statusCode == 401) {
+        state = AsyncValue.data(
+          currentState.copyWith(
+            isLoading: false,
+            errorMessage: 'Session expired. Please login again.',
+            needsReAuth: true,
+          ),
+        );
+      } else {
+        state = AsyncValue.data(
+          currentState.copyWith(isLoading: false, errorMessage: e.message),
+        );
+      }
+    } catch (e) {
+      log('Error loading chat by id: $e');
+      final currentState = state.value ?? ChatState();
+      state = AsyncValue.data(
+        currentState.copyWith(
+          isLoading: false,
+          errorMessage: 'Failed to load chat',
+        ),
+      );
+    }
+  }
+
+  /// Clear current chat and start fresh
+  void clearCurrentChat() {
+    final currentState = state.value ?? ChatState();
+    state = AsyncValue.data(
+      currentState.copyWith(
+        messages: [],
+        clearCurrentRoom: true,
+        clearError: true,
+      ),
+    );
   }
 
   /// Send a message to the AI with optional image and document attachments
@@ -253,7 +321,7 @@ class ChatNotifier extends AsyncNotifier<ChatState> {
   /// Refresh chat history
   Future<void> refresh() async {
     state = const AsyncValue.loading();
-    state = await AsyncValue.guard(() => _loadChatHistory());
+    state = await AsyncValue.guard(() => fetchChatHistory());
   }
 
   /// Clear error message
@@ -298,4 +366,12 @@ final chatIsEmptyProvider = Provider<bool>((ref) {
 
 final chatNeedsReAuthProvider = Provider<bool>((ref) {
   return ref.watch(chatProvider).value?.needsReAuth ?? false;
+});
+
+final chatRoomsProvider = Provider<List<RoomData>>((ref) {
+  return ref.watch(chatProvider).value?.allRooms ?? [];
+});
+
+final currentRoomIdProvider = Provider<String?>((ref) {
+  return ref.watch(chatProvider).value?.currentRoomId;
 });

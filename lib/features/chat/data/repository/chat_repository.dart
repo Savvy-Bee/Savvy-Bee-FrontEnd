@@ -123,7 +123,41 @@ class ChatRepository {
 
   /// Get chat history for the authenticated user
   /// Requires authentication (Bearer token)
-  Future<ChatHistoryResponse?> getChatHistory() async {
+  Future<ChatByIdResponse?> getChatById(String chatId) async {
+    try {
+      // Verify token exists
+      if (!_hasAuthToken()) {
+        throw ApiException(
+          message: 'Authentication required. Please login again.',
+          statusCode: 401,
+        );
+      }
+
+      final response = await _apiClient.get(ApiEndpoints.chatById(chatId));
+
+      return ChatByIdResponse.fromJson(response.data);
+    } catch (e) {
+      return _handleError(e, 'Get chat by id', () => null);
+    }
+  }
+
+  /// Fetch all available AI personalities
+  /// Requires authentication (Bearer token)
+  Future<List<Personality>> fetchPersonalities() async {
+    try {
+      final response = await _apiClient.get(ApiEndpoints.allPersona);
+
+      return (response.data['data'] as List)
+          .map((e) => Personality.fromJson(e))
+          .toList();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  /// Fetch chat history
+  /// Requires authentication (Bearer token)
+  Future<ChatHistoryResponse?> fetchChatHistory() async {
     try {
       // Verify token exists
       if (!_hasAuthToken()) {
@@ -134,22 +168,9 @@ class ChatRepository {
       }
 
       final response = await _apiClient.get(ApiEndpoints.chatHistory);
-
       return ChatHistoryResponse.fromJson(response.data);
     } catch (e) {
       return _handleError(e, 'Get chat history', () => null);
-    }
-  }
-
-  Future<List<Personality>> fetchPersonalities() async {
-    try {
-      final response = await _apiClient.get(ApiEndpoints.allPersona);
-
-      return (response.data['data'] as List)
-          .map((e) => Personality.fromJson(e))
-          .toList();
-    } catch (e) {
-      rethrow;
     }
   }
 

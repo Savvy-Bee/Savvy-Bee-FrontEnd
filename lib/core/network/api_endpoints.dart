@@ -20,7 +20,8 @@ class ApiEndpoints {
 
   /// Chat endpoints (NAHL - AI Assistant)
   static const String chatSend = '/nahl/chat/send';
-  static const String chatHistory = '/nahl/chat/history';
+  static const String chatHistory = '/nahl/chat/rooms';
+  static String chatById(String chatId) => '/nahl/chat/history/$chatId';
 
   /// Mono Link Account endpoints
   static const String fetchInstitutions =

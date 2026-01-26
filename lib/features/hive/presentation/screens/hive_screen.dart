@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/assets.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/illustrations.dart';
-import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/article_card.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_loading_widget.dart';
@@ -134,9 +133,34 @@ class _HiveScreenState extends ConsumerState<HiveScreen> {
                 ),
               ),
               const Gap(24),
-              TextButton(
-                onPressed: () => context.pushNamed(GameMenuScreen.path),
-                child: const Text('Game'),
+              Padding(
+                padding: const EdgeInsets.only(left: 16),
+                child: SectionTitleWidget(title: 'Arcade'),
+              ),
+              const Gap(16),
+              SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  spacing: 8,
+                  children: [
+                    GestureDetector(
+                      onTap: () => context.pushNamed(GameMenuScreen.path),
+                      child: Container(
+                        height: 200,
+                        width: MediaQuery.widthOf(context) * 0.6,
+                        decoration: BoxDecoration(
+                          border: Border.all(),
+                          borderRadius: BorderRadius.circular(16),
+                          image: DecorationImage(
+                            image: AssetImage(Assets.arcadeBg),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
@@ -159,114 +183,42 @@ class _HiveScreenState extends ConsumerState<HiveScreen> {
     );
   }
 
-  Widget _buildLoadingSection() {
-    return Container(
-      height: 400,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            CircularProgressIndicator(color: AppColors.primary),
-            const Gap(16),
-            Text(
-              'Loading courses...',
-              style: TextStyle(color: AppColors.greyDark),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildErrorSection(Object error) {
-    return Container(
-      height: 400,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.error_outline, size: 48, color: AppColors.error),
-            const Gap(16),
-            Text(
-              'Failed to load courses',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const Gap(8),
-            Text(
-              error.toString(),
-              textAlign: TextAlign.center,
-              style: TextStyle(color: AppColors.greyDark),
-            ),
-            const Gap(16),
-            CustomElevatedButton(
-              text: 'Retry',
-              onPressed: () {
-                ref.invalidate(allCoursesProvider);
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   AppBar _buildAppBar(
     AsyncValue<HiveState> hiveAsync,
     AsyncValue<HomeDataResponse> homeDataAsync,
   ) {
     return AppBar(
-      title: homeDataAsync.when(
-        data: (homeData) => Text(
-          'Hi ${homeData.data.firstName}!',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+      title: Text(
+        homeDataAsync.when(
+          data: (data) => 'Hi ${data.data.firstName}!',
+          error: (error, stackTrace) => 'Hi User!',
+          loading: () => 'Hi User!',
         ),
-        loading: () => Text(
-          'Hi User!',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        ),
-        error: (_, __) => Text(
-          'Hi User!',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        ),
+        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
       ),
       centerTitle: false,
       actions: [
         // Flowers count
-        hiveAsync.when(
-          data: (hiveState) => _buildActionButton(
-            icon: Image.asset(Illustrations.hiveFlower),
-            text: '${hiveState.hiveData?.flowers ?? 0}',
-            onTap: () => context.pushNamed(ProfileScreen.path),
+        _buildActionButton(
+          icon: Image.asset(Illustrations.hiveFlower),
+          text: hiveAsync.when(
+            data: (hiveState) => '${hiveState.hiveData?.flowers ?? 0}',
+            error: (_, __) => '0',
+            loading: () => '...',
           ),
-          loading: () => _buildActionButton(
-            icon: Image.asset(Illustrations.hiveFlower),
-            text: '...',
-          ),
-          error: (_, __) => _buildActionButton(
-            icon: Image.asset(Illustrations.hiveFlower),
-            text: '0',
-          ),
+          onTap: () => context.pushNamed(ProfileScreen.path),
         ),
+
         const Gap(4),
         // Streak count
-        hiveAsync.when(
-          data: (hiveState) => _buildActionButton(
-            icon: Icon(Icons.hive, size: 20, color: AppColors.primary),
-            text: '${hiveState.hiveData?.streak ?? 0}',
-            onTap: () => context.pushNamed(StreakDashboardScreen.path),
+        _buildActionButton(
+          icon: Icon(Icons.hive, size: 20, color: AppColors.primary),
+          text: hiveAsync.when(
+            data: (hiveState) => '${hiveState.hiveData?.streak ?? 0}',
+            error: (_, __) => '0',
+            loading: () => '...',
           ),
-          loading: () => _buildActionButton(
-            icon: Icon(Icons.hive, size: 20, color: AppColors.primary),
-            text: '...',
-            onTap: () => context.pushNamed(StreakDashboardScreen.path),
-          ),
-          error: (_, __) => _buildActionButton(
-            icon: Icon(Icons.hive, size: 20, color: AppColors.primary),
-            text: '0',
-            onTap: () => context.pushNamed(StreakDashboardScreen.path),
-          ),
+          onTap: () => context.pushNamed(StreakDashboardScreen.path),
         ),
         const Gap(4),
         // Trophy/Leaderboard

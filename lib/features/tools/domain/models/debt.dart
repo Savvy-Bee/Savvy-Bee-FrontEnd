@@ -13,12 +13,11 @@ class DebtListResponse {
     return DebtListResponse(
       success: json['success'] as bool,
       message: json['message'] as String,
-      // Handle the list parsing safely
       data:
           (json['data'] as List<dynamic>?)
               ?.map((item) => Debt.fromJson(item as Map<String, dynamic>))
               .toList() ??
-          [], // Returns empty list if data is null
+          [],
     );
   }
 
@@ -32,8 +31,7 @@ class DebtListResponse {
 }
 
 class Debt {
-  final String id; // Mapped from '_id'
-  final String userId;
+  final String id;
   final String name;
   final double owed;
   final double interestRate;
@@ -46,11 +44,10 @@ class Debt {
   final bool creationCompletion;
   final DateTime createdAt;
   final DateTime updatedAt;
-  final int v; // Mapped from '__v' (Mongoose version key)
+  final int v;
 
   Debt({
     required this.id,
-    required this.userId,
     required this.name,
     required this.owed,
     required this.interestRate,
@@ -71,17 +68,13 @@ class Debt {
   factory Debt.fromJson(Map<String, dynamic> json) {
     return Debt(
       id: json['_id'] as String,
-      userId: json['UserId'] as String,
       name: json['Name'] as String,
-      // Using (json['x'] as num).toDouble() is safer for API numbers
-      // because 1000 usually comes as int, but 1000.50 comes as double.
       owed: (json['Owed'] as num).toDouble(),
       interestRate: (json['interestRate'] as num).toDouble(),
       balance: (json['Balance'] as num).toDouble(),
       preferrablePayout: json['PreferrablePayout'] as String,
       day: json['Day'] as int,
       minPayment: (json['minPayment'] as num).toDouble(),
-      // Parsing the date strings to DateTime objects
       expectedPayoffDate: DateTime.parse(json['expectedPayoffDate']),
       status: json['Status'] as String,
       creationCompletion: json['CreationCompletion'] as bool,
@@ -94,7 +87,6 @@ class Debt {
   Map<String, dynamic> toJson() {
     return {
       '_id': id,
-      'UserId': userId,
       'Name': name,
       'Owed': owed,
       'interestRate': interestRate,
@@ -102,7 +94,6 @@ class Debt {
       'PreferrablePayout': preferrablePayout,
       'Day': day,
       'minPayment': minPayment,
-      // Formatting dates back to string for the API
       'expectedPayoffDate': expectedPayoffDate.toIso8601String(),
       'Status': status,
       'CreationCompletion': creationCompletion,

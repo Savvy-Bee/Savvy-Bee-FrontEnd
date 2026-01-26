@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/utils/num_extensions.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_error_widget.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_loading_widget.dart';
 import 'package:savvy_bee_mobile/features/tools/domain/models/debt.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/providers/debt_provider.dart';
 import '../../../../../core/theme/app_colors.dart';
@@ -99,10 +100,13 @@ class _DebtScreenState extends ConsumerState<DebtScreen>
             // Tab Content
             debtState.when(
               loading: () => const SliverFillRemaining(
-                child: Center(child: CircularProgressIndicator()),
+                child: CustomLoadingWidget(text: 'Loading debt...'),
               ),
               error: (e, st) => SliverFillRemaining(
-                child: Center(child: Text('Error: ${e.toString()}')),
+                child: CustomErrorWidget.error(
+                  onRetry: () =>
+                      ref.read(debtListNotifierProvider.notifier).refresh(),
+                ),
               ),
               data: (data) {
                 final activeDebts = data.data

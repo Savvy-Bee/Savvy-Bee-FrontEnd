@@ -69,7 +69,7 @@ class HiveData {
   factory HiveData.fromJson(Map<String, dynamic> json) {
     return HiveData(
       id: json['_id'] as String,
-      totalFlowers: json['TotalFlowers'] as int,
+      totalFlowers: json['TotalFlower'] as int,
       streak: json['Streak'] as int,
       flowers: json['Flowers'] as int,
       honeyDrop: json['HoneyDrop'] as int,

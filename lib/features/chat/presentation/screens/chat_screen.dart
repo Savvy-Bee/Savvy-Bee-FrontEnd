@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/illustrations.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
+import 'package:savvy_bee_mobile/core/utils/date_time_extension.dart';
 import 'package:savvy_bee_mobile/core/utils/file_picker_util.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
@@ -52,6 +54,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   // Local state
   File? _pickedFile;
   ChatViewMode _viewMode = ChatViewMode.newChat;
+  bool _isInitialized = false;
 
   // Constants
   static const Set<String> _quickActions = {
@@ -62,6 +65,19 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   };
 
   @override
+  void initState() {
+    super.initState();
+
+    // Load specific chat if chatId is provided
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (widget.chatId != null && widget.chatId!.isNotEmpty) {
+        _loadChatById(widget.chatId!);
+      }
+      _isInitialized = true;
+    });
+  }
+
+  @override
   void dispose() {
     _scrollController.dispose();
     _messageController.dispose();
@@ -69,6 +85,57 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   }
 
   // ==================== State Management ====================
+
+  /// Load a specific chat by its ID
+  Future<void> _loadChatById(String chatId) async {
+    try {
+      await ref.read(chatProvider.notifier).loadChatById(chatId);
+
+      final chatState = ref.read(chatProvider).value;
+
+      if (chatState == null) return;
+
+      if (chatState.needsReAuth) {
+        if (mounted) {
+          CustomSnackbar.show(
+            context,
+            'Session expired. Please login again.',
+            type: SnackbarType.error,
+          );
+          // Navigate to login screen
+          // context.go('/login');
+        }
+        return;
+      }
+
+      if (chatState.hasError) {
+        if (mounted) {
+          CustomSnackbar.show(
+            context,
+            chatState.errorMessage ?? 'Failed to load chat',
+            type: SnackbarType.error,
+          );
+        }
+        return;
+      }
+
+      // Update state to show active chat if messages were loaded
+      if (chatState.messages.isNotEmpty && mounted) {
+        setState(() {
+          _viewMode = ChatViewMode.activeChat;
+        });
+        _scrollToBottom();
+      }
+    } catch (e) {
+      if (mounted) {
+        CustomSnackbar.show(
+          context,
+          'Error loading chat',
+          type: SnackbarType.error,
+        );
+      }
+    }
+  }
 
   /// Determine the appropriate view mode based on chat state
   ChatViewMode _determineViewMode(ChatState chatState) {
@@ -91,6 +158,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     setState(() {
       _viewMode = ChatViewMode.chatHistory;
     });
+    // Refresh chat history when showing it
+    ref.read(chatProvider.notifier).fetchChatHistory();
   }
 
   /// Start a new chat (from history view or anywhere else)
@@ -98,8 +167,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     setState(() {
       _viewMode = ChatViewMode.newChat;
     });
-    // Clear current chat if needed
-    // ref.read(chatProvider.notifier).clearCurrentChat();
+    // Clear current chat
+    ref.read(chatProvider.notifier).clearCurrentChat();
   }
 
   /// Return to active chat from history
@@ -107,6 +176,11 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     setState(() {
       _viewMode = ChatViewMode.activeChat;
     });
+  }
+
+  /// Handle loading a chat room from history
+  void _loadChatRoom(RoomData room) {
+    _loadChatById(room.id);
   }
 
   // ==================== Message Handling ====================
@@ -210,19 +284,48 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           TextButton(
             onPressed: () {
               context.pop();
-              ref.read(chatProvider.notifier).refresh();
-              // ref.read(chatProvider.notifier).clearHistory(clearOnServer: true);
+              ref.read(chatProvider.notifier).clearCurrentChat();
               setState(() {
                 _viewMode = ChatViewMode.newChat;
               });
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
-                  content: Text('Chat history cleared'),
+                  content: Text('Chat cleared'),
                   backgroundColor: Colors.green,
                 ),
               );
             },
             child: const Text('Clear', style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _handleDeleteChatRoom(RoomData room) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Delete Chat'),
+        content: Text('Are you sure you want to delete "${room.roomName}"?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              context.pop();
+              // TODO: Implement delete chat room API call
+              // ref.read(chatProvider.notifier).deleteRoom(room.id);
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Chat deleted'),
+                  backgroundColor: Colors.green,
+                ),
+              );
+            },
+            child: const Text('Delete', style: TextStyle(color: Colors.red)),
           ),
         ],
       ),
@@ -256,7 +359,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
         return Scaffold(
           appBar: _buildAppBar(context, chatState, currentMode),
-          body: _buildChatView(chatState, currentMode),
+          body: chatState.isLoading && _isInitialized
+              ? const CustomLoadingWidget(text: 'Loading chat...')
+              : _buildChatView(chatState, currentMode),
         );
       },
       error: (error, stackTrace) => Scaffold(
@@ -266,7 +371,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         ),
       ),
       loading: () =>
-          const Scaffold(body: CustomLoadingWidget(text: 'Loading chat...')),
+          const Scaffold(body: CustomLoadingWidget(text: 'Loading...')),
     );
   }
 
@@ -290,7 +395,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   Widget _buildMainContent(ChatState chatState, ChatViewMode mode) {
     switch (mode) {
       case ChatViewMode.chatHistory:
-        return _buildChatHistoryView();
+        return _buildChatHistoryView(chatState);
 
       case ChatViewMode.activeChat:
         return _buildActiveChatView(chatState);
@@ -315,7 +420,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // Back button or menu button based on mode
+              // Back button or close button based on mode
               if (mode == ChatViewMode.chatHistory)
                 IconButton(
                   icon: const Icon(Icons.close),
@@ -327,7 +432,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                 const BackButton(),
 
               // Persona selector
-              _buildPersonaSelector(chatState.persona?.name ?? '-----'),
+              _buildPersonaSelector(chatState.persona?.name ?? 'Select AI'),
 
               // Menu
               _buildMenuButton(mode),
@@ -352,6 +457,11 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
               color: AppColors.primary.withValues(alpha: 0.1),
               border: Border.all(color: AppColors.primary),
             ),
+            child: const Icon(
+              Icons.smart_toy,
+              size: 18,
+              color: AppColors.primary,
+            ),
           ),
           const Gap(8),
           Text(
@@ -375,7 +485,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
             children: [
               Icon(Icons.refresh, size: 20),
               Gap(12.0),
-              Text('Refresh Chat'),
+              Text('Refresh'),
             ],
           ),
         ),
@@ -397,7 +507,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
               children: [
                 Icon(Icons.delete_outline, size: 20),
                 Gap(12.0),
-                Text('Clear Chat'),
+                Text('Clear Current Chat'),
               ],
             ),
           ),
@@ -465,27 +575,32 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
   // ==================== Chat History View ====================
 
-  Widget _buildChatHistoryView() {
+  Widget _buildChatHistoryView(ChatState chatState) {
+    final rooms = chatState.allRooms;
+    final maxChats = 50; // This could come from API or config
+
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
         children: [
-          _buildChatHistoryHeader(),
+          _buildChatHistoryHeader(rooms.length, maxChats),
           const Gap(16),
-          _buildChatHistoryList(),
+          rooms.isEmpty
+              ? _buildEmptyChatHistory()
+              : _buildChatHistoryList(rooms),
           const Gap(24),
         ],
       ),
     );
   }
 
-  Widget _buildChatHistoryHeader() {
+  Widget _buildChatHistoryHeader(int currentCount, int maxCount) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Text(
-          'YOUR CHATS (2/50)',
-          style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+        Text(
+          'YOUR CHATS ($currentCount/$maxCount)',
+          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
         ),
         InkWell(
           onTap: _startNewChat,
@@ -502,7 +617,49 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     );
   }
 
-  Widget _buildChatHistoryList() {
+  Widget _buildEmptyChatHistory() {
+    return Container(
+      padding: const EdgeInsets.all(32.0),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.1),
+            spreadRadius: 1,
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Icon(
+            Icons.chat_bubble_outline,
+            size: 48,
+            color: AppColors.grey.withValues(alpha: 0.5),
+          ),
+          const Gap(16),
+          const Text(
+            'No chat history yet',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              color: AppColors.grey,
+            ),
+          ),
+          const Gap(8),
+          const Text(
+            'Start a conversation to see your chats here',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 14, color: AppColors.grey),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildChatHistoryList(List<RoomData> rooms) {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.white,
@@ -518,37 +675,23 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        children: [
-          _buildChatHistoryItem(
-            "Things You Need To Know About Nigeria's New Tax Reform",
-            "2:18PM",
-            onTap: () {
-              // Load specific chat
-              _returnToActiveChat();
-            },
-          ),
-          _buildChatHistoryItem(
-            "Budget Planning for Q1 2026",
-            "Yesterday",
-            isLast: true,
-            onTap: () {
-              // Load specific chat
-              _returnToActiveChat();
-            },
-          ),
-        ],
+        children: rooms.asMap().entries.map((entry) {
+          final index = entry.key;
+          final room = entry.value;
+          return _buildChatHistoryItem(
+            room: room,
+            isLast: index == rooms.length - 1,
+          );
+        }).toList(),
       ),
     );
   }
 
-  Widget _buildChatHistoryItem(
-    String chatTitle,
-    String chatTime, {
-    bool isLast = false,
-    VoidCallback? onTap,
-  }) {
+  Widget _buildChatHistoryItem({required RoomData room, bool isLast = false}) {
+    final timeAgo = room.updatedAt.formatRelative();
+
     return InkWell(
-      onTap: onTap,
+      onTap: () => _loadChatRoom(room),
       child: Container(
         padding: const EdgeInsets.all(16).copyWith(top: 24),
         decoration: BoxDecoration(
@@ -570,14 +713,16 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                 spacing: 8,
                 children: [
                   Text(
-                    chatTitle,
+                    room.roomName,
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
                     ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    chatTime,
+                    timeAgo,
                     style: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w500,
@@ -587,11 +732,36 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                 ],
               ),
             ),
-            IconButton(
-              onPressed: () {
-                // Show options for this chat item
-              },
+            PopupMenuButton<String>(
               icon: const Icon(Icons.more_horiz_outlined),
+              onSelected: (value) {
+                if (value == 'delete') {
+                  _handleDeleteChatRoom(room);
+                } else if (value == 'open') {
+                  _loadChatRoom(room);
+                }
+              },
+              itemBuilder: (context) => [
+                const PopupMenuItem(
+                  child: Row(
+                    children: [
+                      Icon(Icons.open_in_new, size: 20),
+                      Gap(12.0),
+                      Text('Open'),
+                    ],
+                  ),
+                ),
+                const PopupMenuItem(
+                  value: 'delete',
+                  child: Row(
+                    children: [
+                      Icon(Icons.delete_outline, size: 20, color: Colors.red),
+                      Gap(12.0),
+                      Text('Delete', style: TextStyle(color: Colors.red)),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -651,10 +821,17 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         spacing: 8.0,
         children: [
-          CircleAvatar(backgroundColor: AppColors.primaryFaint),
-          Text(
+          CircleAvatar(
+            backgroundColor: AppColors.primaryFaint,
+            child: const Icon(
+              Icons.smart_toy,
+              size: 18,
+              color: AppColors.primary,
+            ),
+          ),
+          const Text(
             'Thinking...',
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
           ),
         ],
       ),
@@ -711,7 +888,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   // ==================== Message Input Area ====================
 
   Widget _buildMessageInputArea(ChatState chatState, ChatViewMode mode) {
-    // Show simplified input in new chat mode, full input in active chat
     return Container(
       padding: const EdgeInsets.all(8.0),
       margin: const EdgeInsets.all(8),

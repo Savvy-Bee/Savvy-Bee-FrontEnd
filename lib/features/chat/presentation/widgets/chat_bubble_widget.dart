@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
@@ -122,56 +123,15 @@ Widget buildChatBubble({
               if (hasGif) ...[
                 ClipRRect(
                   borderRadius: BorderRadius.circular(8),
-                  child: Image.network(
-                    message.gif!,
+                  child: CachedNetworkImage(
+                    imageUrl: message.gif!,
                     fit: BoxFit.cover,
-                    loadingBuilder: (context, child, loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return Container(
-                        height: 150,
-                        alignment: Alignment.center,
-                        child: CircularProgressIndicator(
-                          value: loadingProgress.expectedTotalBytes != null
-                              ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes!
-                              : null,
-                          color: isMe
-                              ? AppColors.background
-                              : AppColors.primary,
-                        ),
-                      );
-                    },
-                    errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        height: 150,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: Colors.grey.withValues(alpha: 0.2),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.broken_image,
-                              color: isMe
-                                  ? AppColors.background
-                                  : Colors.black54,
-                              size: 32,
-                            ),
-                            const Gap(8.0),
-                            Text(
-                              'Failed to load GIF',
-                              style: TextStyle(
-                                color: isMe
-                                    ? AppColors.background
-                                    : Colors.black54,
-                                fontSize: 12.0,
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
+                    progressIndicatorBuilder:
+                        (context, child, loadingProgress) {
+                          return _buildGifLoadingWidget(loadingProgress, isMe);
+                        },
+                    errorWidget: (context, error, stackTrace) {
+                      return _buildGifErrorWidget(isMe);
                     },
                   ),
                 ),
@@ -208,6 +168,48 @@ Widget buildChatBubble({
             ),
           ),
         ],
+      ],
+    ),
+  );
+}
+
+Container _buildGifLoadingWidget(DownloadProgress loadingProgress, bool isMe) {
+  return Container(
+    height: 150,
+    alignment: Alignment.center,
+    child: CircularProgressIndicator(
+      value: loadingProgress.totalSize != null
+          ? loadingProgress.downloaded / loadingProgress.totalSize!
+          : null,
+      color: isMe ? AppColors.background : AppColors.primary,
+    ),
+  );
+}
+
+Container _buildGifErrorWidget(bool isMe) {
+  return Container(
+    height: 150,
+    alignment: Alignment.center,
+    decoration: BoxDecoration(
+      color: Colors.grey.withValues(alpha: 0.2),
+      borderRadius: BorderRadius.circular(8.0),
+    ),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(
+          Icons.broken_image,
+          color: isMe ? AppColors.background : Colors.black54,
+          size: 32,
+        ),
+        const Gap(8.0),
+        Text(
+          'Failed to load GIF',
+          style: TextStyle(
+            color: isMe ? AppColors.background : Colors.black54,
+            fontSize: 12.0,
+          ),
+        ),
       ],
     ),
   );

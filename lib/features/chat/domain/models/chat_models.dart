@@ -269,28 +269,94 @@ class ChatResponse {
 }
 
 /// Chat history response model
-class ChatHistoryResponse {
+class ChatByIdResponse {
   final bool success;
   final String message;
   final List<ChatMessage> allChats;
   final Persona persona;
 
-  ChatHistoryResponse({
+  ChatByIdResponse({
     required this.success,
     required this.message,
     required this.allChats,
     required this.persona,
   });
 
-  factory ChatHistoryResponse.fromJson(Map<String, dynamic> json) {
+  factory ChatByIdResponse.fromJson(Map<String, dynamic> json) {
     final data = json['data'] as Map<String, dynamic>?;
     final chatsList = data?['allchat'] as List<dynamic>? ?? [];
+
+    return ChatByIdResponse(
+      success: json['success'] ?? false,
+      message: json['message'] ?? '',
+      persona: Persona.fromJson(data!['Persona']),
+      allChats: chatsList.map((chat) => ChatMessage.fromJson(chat)).toList(),
+    );
+  }
+}
+
+/// Room data model for chat history
+class RoomData {
+  final String id;
+  final String userId;
+  final String roomName;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+
+  RoomData({
+    required this.id,
+    required this.userId,
+    required this.roomName,
+    required this.createdAt,
+    required this.updatedAt,
+  });
+
+  factory RoomData.fromJson(Map<String, dynamic> json) {
+    return RoomData(
+      id: json['_id'] ?? '',
+      userId: json['UserId'] ?? '',
+      roomName: json['RoomName'] ?? '',
+      createdAt: DateTime.parse(
+        json['createdAt'] ?? DateTime.now().toIso8601String(),
+      ),
+      updatedAt: DateTime.parse(
+        json['updatedAt'] ?? DateTime.now().toIso8601String(),
+      ),
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+    '_id': id,
+    'UserId': userId,
+    'RoomName': roomName,
+    'createdAt': createdAt.toIso8601String(),
+    'updatedAt': updatedAt.toIso8601String(),
+  };
+}
+
+/// Chat history response model
+class ChatHistoryResponse {
+  final bool success;
+  final String message;
+  final Persona persona;
+  final List<RoomData> allRooms;
+
+  ChatHistoryResponse({
+    required this.success,
+    required this.message,
+    required this.persona,
+    required this.allRooms,
+  });
+
+  factory ChatHistoryResponse.fromJson(Map<String, dynamic> json) {
+    final data = json['data'] as Map<String, dynamic>?;
+    final roomsList = data?['allRooms'] as List<dynamic>? ?? [];
 
     return ChatHistoryResponse(
       success: json['success'] ?? false,
       message: json['message'] ?? '',
       persona: Persona.fromJson(data!['Persona']),
-      allChats: chatsList.map((chat) => ChatMessage.fromJson(chat)).toList(),
+      allRooms: roomsList.map((room) => RoomData.fromJson(room)).toList(),
     );
   }
 }
