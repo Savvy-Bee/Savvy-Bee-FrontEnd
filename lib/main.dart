@@ -7,7 +7,6 @@ import 'core/theme/app_theme.dart';
 import 'core/routing/app_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -27,7 +26,11 @@ void main() async {
     ),
   );
 
-  await dotenv.load(fileName: ".env");
+  // await dotenv.load(fileName: ".env");
+
+  try {
+    await dotenv.load(fileName: ".env");
+  } catch (_) {}
 
   runApp(
     ScreenUtilInit(
