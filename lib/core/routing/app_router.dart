@@ -24,6 +24,9 @@ import 'package:savvy_bee_mobile/features/hive/presentation/screens/quiz/quiz_sc
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/streak/new_streak_screen.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/streak/streak_dashboard_screen.dart';
 import 'package:savvy_bee_mobile/features/home/presentation/screens/home_screen.dart';
+import 'package:savvy_bee_mobile/features/onboarding/presentation/screens/priority_screen.dart';
+import 'package:savvy_bee_mobile/features/onboarding/presentation/screens/satisfaction_screen.dart';
+import 'package:savvy_bee_mobile/features/onboarding/presentation/screens/we_help_screen.dart';
 import 'package:savvy_bee_mobile/features/premium/presentation/screens/premium_screen.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/screens/account_info_screen.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/screens/achievements_screen.dart';
@@ -118,6 +121,27 @@ final GoRouter appRouter = GoRouter(
       name: OnboardingScreen.path,
       builder: (BuildContext context, GoRouterState state) {
         return const OnboardingScreen();
+      },
+    ),
+    GoRoute(
+      path: WeHelpScreen.path,
+      name: WeHelpScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return const WeHelpScreen();
+      },
+    ),
+    GoRoute(
+      path: PriorityScreen.path,
+      name: PriorityScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return const PriorityScreen();
+      },
+    ),
+    GoRoute(
+      path: SatisfactionScreen.path,
+      name: SatisfactionScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return const SatisfactionScreen();
       },
     ),
     GoRoute(

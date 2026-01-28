@@ -60,6 +60,7 @@ flutter:
     - assets/images/game/
     - assets/icons/
     - assets/data/courses/
+    - assets/images/other/bee_onboarding_img.png
 
   fonts:
     - family: Excon
@@ -72,9 +73,13 @@ flutter:
     - family: GeneralSans
       fonts:
         - asset: assets/fonts/generalsans/GeneralSans-Semibold.otf
+          weight: 600
         - asset: assets/fonts/generalsans/GeneralSans-Bold.otf
+          weight: 700
         - asset: assets/fonts/generalsans/GeneralSans-Medium.otf
+          weight: 500
         - asset: assets/fonts/generalsans/GeneralSans-Regular.otf
+          weight: 400
 
     - family: Fredoka
       fonts:
