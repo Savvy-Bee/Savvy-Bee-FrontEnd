@@ -4,9 +4,22 @@ import 'package:savvy_bee_mobile/features/home/domain/models/home_data.dart';
 
 /// Provides the HomeData, handling loading and error states automatically.
 /// It uses the HomeRepository (accessed via service_locator.dart) to fetch the data.
-final homeDataProvider = FutureProvider<HomeDataResponse>((ref) async {
-  final repository = ref.watch(homeRepositoryProvider);
+// final homeDataProvider = FutureProvider<HomeDataResponse>((ref) async {
+//   final repository = ref.watch(homeRepositoryProvider);
 
-  // Calls the repository method to fetch the data
-  return await repository.fetchHomeData();
+//   // Calls the repository method to fetch the data
+//   return await repository.fetchHomeData();
+// });
+
+final homeDataProvider = FutureProvider<HomeDataResponse>((ref) async {
+  try {
+    final repository = ref.watch(homeRepositoryProvider);
+    final result = await repository.fetchHomeData();
+    print('✅ Home data loaded successfully: ${result.success}');
+    return result;
+  } catch (e, stackTrace) {
+    print('❌ Error loading home data: $e');
+    print('Stack trace: $stackTrace');
+    rethrow;
+  }
 });

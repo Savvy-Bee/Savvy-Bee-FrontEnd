@@ -16,6 +16,8 @@ class HomeRepository {
     try {
       final response = await apiClient.get(ApiEndpoints.homeDashboard);
 
+      print('Responseee: ${response.data}');
+
       // The response.data contains the raw JSON map which we pass to the model.
       return HomeDataResponse.fromJson(response.data);
     } catch (e) {

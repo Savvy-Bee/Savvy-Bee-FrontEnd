@@ -136,8 +136,8 @@ class MainWrapper extends ConsumerWidget {
           label: 'Home',
         ),
         BottomNavigationBarItem(
-          activeIcon: AppIcon(AppIcons.budgetIcon, size: 20),
-          icon: AppIcon(AppIcons.budgetIcon, size: 20, color: AppColors.grey),
+          activeIcon: AppIcon(AppIcons.dashIcon, size: 20),
+          icon: AppIcon(AppIcons.dashIcon, size: 20, color: AppColors.grey),
           label: 'Dashboard',
         ),
         // BottomNavigationBarItem(
@@ -146,8 +146,8 @@ class MainWrapper extends ConsumerWidget {
         //   label: 'Wallet',
         // ),
         BottomNavigationBarItem(
-          activeIcon: AppIcon(AppIcons.toolsIcon, size: 20),
-          icon: AppIcon(AppIcons.toolsIcon, size: 20, color: AppColors.grey),
+          activeIcon: AppIcon(AppIcons.budgetIcon, size: 20),
+          icon: AppIcon(AppIcons.budgetIcon, size: 20, color: AppColors.grey),
           label: 'Tools',
         ),
         BottomNavigationBarItem(
@@ -155,11 +155,11 @@ class MainWrapper extends ConsumerWidget {
           icon: AppIcon(AppIcons.hiveIcon, size: 20, color: AppColors.grey),
           label: 'Hive',
         ),
-        BottomNavigationBarItem(
-          activeIcon: AppIcon(AppIcons.crownIcon, size: 20),
-          icon: AppIcon(AppIcons.crownIcon, size: 20, color: AppColors.grey),
-          label: 'Premium',
-        ),
+        // BottomNavigationBarItem(
+        //   activeIcon: AppIcon(AppIcons.crownIcon, size: 20),
+        //   icon: AppIcon(AppIcons.crownIcon, size: 20, color: AppColors.grey),
+        //   label: 'Premium',
+        // ),
       ],
     );
   }

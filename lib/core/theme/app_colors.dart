@@ -66,4 +66,6 @@ class AppColors {
   static const List<Color> primaryGradient = [primary, primaryLight];
 
   static const List<Color> secondaryGradient = [secondary, secondaryLight];
+
+  //  static const Color yellow = Color(0xFFFFC300);
 }

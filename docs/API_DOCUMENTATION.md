@@ -10,7 +10,8 @@ The app communicates with backend services through RESTful APIs with JSON payloa
 ```dart
 // Base URL configuration in lib/core/network/api_endpoints.dart
 class ApiEndpoints {
-  static const String baseUrl = 'https://savvy-bee-backend-nodejs-express-mongodb.onrender.com';
+ // static const String baseUrl = 'https://savvy-bee-backend-nodejs-express-mongodb.onrender.com';
+  static const String baseUrl = 'https://savvy-bee-backend-nodejs-express-mongodb-production.up.railway.app';
 }
 ```
 ## Documentation
