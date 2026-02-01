@@ -50,7 +50,7 @@ import 'package:savvy_bee_mobile/features/spend/presentation/screens/bills/pay_b
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/fund/fund_with_card_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/fund/new_card_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/fund/fund_by_transfer_screen.dart';
-import 'package:savvy_bee_mobile/features/spend/presentation/screens/spend_dashboard_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/spend_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/transactions/account_statement_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/transactions/transaction_history_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/transfer/send_money_screen.dart';

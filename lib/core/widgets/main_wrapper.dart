@@ -3,13 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/illustrations.dart';
-import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/app_bar_builder.dart';
 import 'package:savvy_bee_mobile/features/chat/presentation/screens/chat_screen.dart';
 import 'package:savvy_bee_mobile/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/hive_screen.dart';
 import 'package:savvy_bee_mobile/features/premium/presentation/screens/premium_screen.dart';
-import 'package:savvy_bee_mobile/features/spend/presentation/screens/spend_dashboard_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/tools_screen.dart';
 
 import '../../features/home/presentation/screens/home_screen.dart';
