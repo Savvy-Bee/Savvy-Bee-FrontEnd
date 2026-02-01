@@ -63,6 +63,15 @@ flutter:
     - assets/images/other/bee_onboarding_img.png
     - assets/images/topbar/nav-left-icon.png
     - assets/images/topbar/nav-center-icon.png
+    - assets/icons/Calculator.png
+    - assets/icons/Square-Check.png
+    - assets/icons/BookOpen.png
+    - assets/images/other/learn-one.jpg
+    - assets/images/other/learn-two.jpg
+    - assets/images/other/learn-three.jpg
+    - assets/images/other/insights-one.jpg
+    - assets/images/other/insights-two.jpg
+    - assets/images/other/insights-three.jpg
 
   fonts:
     - family: Excon
