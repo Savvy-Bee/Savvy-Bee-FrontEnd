@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:savvy_bee_mobile/features/onboarding/presentation/screens/we_help_screen.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../../../core/theme/app_colors.dart';
@@ -193,7 +194,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               Expanded(
                 child: CustomElevatedButton(
                   text: 'Get started',
-                  onPressed: () => context.pushNamed(SignupScreen.path),
+                  onPressed: () => context.pushNamed(WeHelpScreen.path),
                 ),
               ),
             ],

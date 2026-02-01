@@ -1,7 +1,9 @@
 class ApiEndpoints {
   /// Base URL
+  // static const String baseUrl =
+  //     'https://savvy-bee-backend-nodejs-express-mongodb.onrender.com';
   static const String baseUrl =
-      'https://savvy-bee-backend-nodejs-express-mongodb.onrender.com';
+      'https://savvy-bee-backend-nodejs-express-mongodb-production.up.railway.app';
 
   /// Auth endpoints
   static const String register = '/auth/register';

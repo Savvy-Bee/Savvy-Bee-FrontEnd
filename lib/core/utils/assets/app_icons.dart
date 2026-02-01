@@ -13,6 +13,7 @@ class AppIcons {
   static const String spendIcon = '$_basePath/spend.svg';
   static const String toolsIcon = '$_basePath/tools.svg';
   static const String hiveIcon = '$_basePath/hive.svg';
+  static const String dashIcon = '$_basePath/Dashboar_new.svg';
 
   static const String sparklesIcon = '$_basePath/sparkles.svg';
   static const String zapIcon = '$_basePath/zap.svg';

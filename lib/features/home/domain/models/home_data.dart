@@ -54,7 +54,7 @@ class HiveStats {
 
   factory HiveStats.fromJson(Map<String, dynamic> json) {
     return HiveStats(
-      id: json['_id'] as String,
+      id: json['id'] as String,
       streak: json['Streak'] as int,
       flowers: json['Flowers'] as int,
       honeyDrop: json['HoneyDrop'] as int,
@@ -66,7 +66,7 @@ class HiveStats {
 
   Map<String, dynamic> toJson() {
     return {
-      '_id': id,
+      'id': id,
       'Streak': streak,
       'Flowers': flowers,
       'HoneyDrop': honeyDrop,
@@ -92,7 +92,7 @@ class Achievement {
 
   factory Achievement.fromJson(Map<String, dynamic> json) {
     return Achievement(
-      id: json['_id'] as String,
+      id: json['id'] as String,
       name: json['Name'] as String,
       createdAt: json['createdAt'] as String,
       updatedAt: json['updatedAt'] as String,
@@ -101,7 +101,7 @@ class Achievement {
 
   Map<String, dynamic> toJson() {
     return {
-      '_id': id,
+      'id': id,
       'Name': name,
       'createdAt': createdAt,
       'updatedAt': updatedAt,
