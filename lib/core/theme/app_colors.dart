@@ -14,6 +14,8 @@ class AppColors {
   static const purple = Color(0xFFC179AB);
 
   static const financialHealthBg = Color(0xFFDD6F3E);
+  static const yellow = Color(0xFFFDD252);
+  static const green = Color(0xFFCFD6AC);
 
   // Primary Colors
   static const Color primary = Color(0xFFFFC300);
@@ -66,6 +68,4 @@ class AppColors {
   static const List<Color> primaryGradient = [primary, primaryLight];
 
   static const List<Color> secondaryGradient = [secondary, secondaryLight];
-
-  //  static const Color yellow = Color(0xFFFFC300);
 }

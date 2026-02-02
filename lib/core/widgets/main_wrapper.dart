@@ -31,20 +31,20 @@ class MainWrapper extends ConsumerWidget {
         ref.watch(bottomNavIndexProvider),
         ref,
       ),
-      floatingActionButton: index == 0 || index == 1
-          ? GestureDetector(
-              onTap: () => context.pushNamed(ChatScreen.path),
-              child: Container(
-                height: 50,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.primary,
-                  border: Border.all(color: AppColors.primaryLight),
-                ),
-                child: Image.asset(Illustrations.dashAvatar),
-              ),
-            )
-          : null,
+      // floatingActionButton: index == 0 || index == 1
+      //     ? GestureDetector(
+      //         onTap: () => context.pushNamed(ChatScreen.path),
+      //         child: Container(
+      //           height: 50,
+      //           decoration: BoxDecoration(
+      //             shape: BoxShape.circle,
+      //             color: AppColors.primary,
+      //             border: Border.all(color: AppColors.primaryLight),
+      //           ),
+      //           child: Image.asset(Illustrations.dashAvatar),
+      //         ),
+      //       )
+      //     : null,
     );
   }
 

@@ -11,10 +11,16 @@ import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/core/widgets/dot.dart';
 import 'package:savvy_bee_mobile/core/widgets/icon_text_row_widget.dart';
 import 'package:savvy_bee_mobile/core/widgets/section_title_widget.dart';
+import 'package:savvy_bee_mobile/features/chat/presentation/screens/chat_screen.dart';
 import 'package:savvy_bee_mobile/features/hive/domain/models/course.dart';
+import 'package:savvy_bee_mobile/features/home/domain/models/blog_post.dart';
 import 'package:savvy_bee_mobile/features/home/presentation/providers/home_data_provider.dart';
+import 'package:savvy_bee_mobile/features/home/presentation/widgets/action_prompt_card.dart';
+import 'package:savvy_bee_mobile/features/home/presentation/widgets/blog_post_bottom_sheet.dart';
 import 'package:savvy_bee_mobile/features/home/presentation/widgets/complete_setup.dart';
 import 'package:savvy_bee_mobile/features/home/presentation/widgets/insights.dart';
+import 'package:savvy_bee_mobile/features/home/presentation/widgets/smart_recommendations.dart';
+import 'package:savvy_bee_mobile/features/profile/presentation/screens/profile_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/nin_verification_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/budget_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/goals/goals_screen.dart';
@@ -45,6 +51,25 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     Illustrations.matchingAndQuizBee,
     Illustrations.dash,
   ];
+
+  bool _showRecommendation = true;
+  String? _selectedFeedback;
+
+  @override
+  void initState() {
+    super.initState();
+    // Reset recommendation visibility when screen is opened
+    _showRecommendation = true;
+  }
+
+  void _handleFeedback(String feedback) {
+    setState(() {
+      _selectedFeedback = feedback;
+    });
+    // You can add analytics or API call here
+    print('User feedback: $feedback');
+  }
+
   @override
   Widget build(BuildContext context) {
     final homeData = ref.watch(homeDataProvider);
@@ -275,30 +300,92 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               InsightsSection(
                 cards: [
                   LearnCard(
-                    imagePath:
-                        'assets/images/other/insights-one.jpg', // Your asset path
+                    imagePath: 'assets/images/other/insights-one.jpg',
                     title: 'The art of credit scoring in Nigeria',
                     description: '📖 3 min story',
                     onTap: () {
-                      // () => context.pushNamed(LessonHomeScreen.path, extra: course),
+                      showBlogPostBottomSheet(
+                        context,
+                        BlogPost(
+                          category: 'FROM SAVVY BLOG',
+                          title: 'The Art of Credit Scoring in Nigeria',
+                          subtitle:
+                              'Are you really listening to what they\'re saying',
+                          date: 'October 27, 2025',
+                          imagePath: 'assets/images/other/insights-one.jpg',
+                          readTimeMinutes: 3,
+                          content:
+                              '''Afrobeats isn't just about good vibes, dance floors, and catchy hooks—if you're really listening, there's serious money advice tucked between the basslines.
+
+Behind the flashy lyrics about "chilling with the big boys" or "getting that bag" lies a reflection of hustle culture, financial growth, and self-belief.
+
+Take Burna Boy, for instance—he raps about consistency, resilience, and betting on yourself long before anyone believes in you. That's an investment mindset: put in the work, not before, but before expecting returns. Wizkid and Davido often emphasize staying focused on wealth quietly, not loudly, which echoes the mantra to save and invest, not just to live large on credit or do diversification and long-term thinking.
+
+The truth? Afrobeats is a masterclass in ambition, discipline, and financial evolution—wrapped in rhythm. The next time you're vibing to your favorite track, ask yourself: are you just dancing, or are you also learning the game these artists are preaching?''',
+                        ),
+                      );
                     },
                   ),
                   LearnCard(
-                    imagePath:
-                        'assets/images/other/insights-two.jpg', // Your asset path
+                    imagePath: 'assets/images/other/insights-two.jpg',
                     title: 'How to build an emergency fund on a tight budget',
                     description: '📖 3 min story',
                     onTap: () {
-                      // () => context.pushNamed(LessonHomeScreen.path, extra: course),
+                      showBlogPostBottomSheet(
+                        context,
+                        BlogPost(
+                          category: 'FROM SAVVY BLOG',
+                          title:
+                              'How to build an emergency fund on a tight budget',
+                          subtitle: 'Small steps, big security',
+                          date: 'November 15, 2025',
+                          imagePath: 'assets/images/other/insights-two.jpg',
+                          readTimeMinutes: 3,
+                          content:
+                              '''Building an emergency fund on a tight budget might seem impossible, but it's absolutely achievable with the right strategy.
+
+Start small—even ₦1,000 per week adds up to ₦52,000 in a year. The key is consistency, not the amount.
+
+Here are some practical tips:
+- Automate your savings so you never skip it
+- Cut one unnecessary expense each month
+- Use windfalls wisely (bonuses, gifts, refunds)
+- Track every naira that comes in and goes out
+
+Remember, an emergency fund isn't built overnight. It's about creating a habit that protects your future self. Start today, no matter how small.''',
+                        ),
+                      );
                     },
                   ),
                   LearnCard(
-                    imagePath:
-                        'assets/images/other/insights-three.jpg', // Your asset path
+                    imagePath: 'assets/images/other/insights-three.jpg',
                     title: 'Should i save financially with my partner?',
                     description: '📖 3 min story',
                     onTap: () {
-                      // () => context.pushNamed(LessonHomeScreen.path, extra: course),
+                      showBlogPostBottomSheet(
+                        context,
+                        BlogPost(
+                          category: 'FROM SAVVY BLOG',
+                          title:
+                              'Should you save financially with your partner?',
+                          subtitle: 'Let\'s get financially intimate',
+                          date: 'December 3, 2025',
+                          imagePath: 'assets/images/other/insights-three.jpg',
+                          readTimeMinutes: 3,
+                          content:
+                              '''Joint savings with your partner can strengthen your relationship—or complicate it. Here's what you need to know.
+
+The benefits are clear: shared goals, better accountability, and building something together. But the risks include loss of autonomy, potential conflicts, and what happens if things don't work out.
+
+Best practices:
+- Keep personal savings separate too
+- Set clear expectations and goals
+- Review finances together monthly
+- Be honest about spending habits
+
+The bottom line? Joint savings work best when there's trust, communication, and a solid foundation. Don't rush into it—build financial intimacy gradually.''',
+                        ),
+                      );
                     },
                   ),
                 ],
@@ -336,14 +423,97 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               const Gap(24),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: InfoCard(
-                  title: 'Smart Recommendation',
-                  description:
-                      'Your expenses are high, consider a budget review this week.',
-                  avatar: Illustrations.lunaAvatar,
-                  borderRadius: 32,
+                child: Text(
+                  'WAYS TO SAVE',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontFamily: 'GeneralSans',
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.grey,
+                    letterSpacing: 0.5,
+                  ),
                 ),
               ),
+              const Gap(16),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: ActionPromptCard(
+                  title: 'Manage your bills and expenses',
+                  description:
+                      'Create smart budgets, track spending, and get personalized insights.',
+                  buttonText: 'Set up Categories',
+                  backgroundColor: AppColors.yellow, // Yellow color
+                  onButtonPressed: () {
+                    // Navigate to categories setup
+                    // context.pushNamed(CategoriesScreen.path);
+                  },
+                ),
+              ),
+              const Gap(24),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: ActionPromptCard(
+                  title: 'Set your financial goals',
+                  description:
+                      'Create smart budgets, track spending, and get personalized insights.',
+                  buttonText: 'Start saving with Goals',
+                  backgroundColor: Colors.white, // Yellow color
+                  borderColor: Colors.black,
+                  onButtonPressed: () {
+                    // Navigate to categories setup
+                    // context.pushNamed(CategoriesScreen.path);
+                  },
+                ),
+              ),
+              const Gap(24),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: ActionPromptCard(
+                  title: 'Reduce your existing debt',
+                  description:
+                      'Create smart budgets, track spending, and get personalized insights.',
+                  buttonText: 'Manage your Debt',
+                  backgroundColor: AppColors.green, // Green color
+                  onButtonPressed: () {
+                    // Navigate to categories setup
+                    // context.pushNamed(CategoriesScreen.path);
+                  },
+                ),
+              ),
+              const Gap(24),
+              // Smart Recommendation Card
+              if (_showRecommendation)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: SmartRecommendationCard(
+                    title: 'SMART RECOMMENDATION',
+                    description:
+                        'Hey Danaerys, we detected you could save approximately ₦200k in the next 12 months using Goals.',
+                    highlightedText: '\₦200k',
+                    buttonText: 'Set a new Saving Goal',
+                    onButtonPressed: () {
+                      context.pushNamed(GoalsScreen.path);
+                    },
+                    onClose: () {
+                      setState(() {
+                        _showRecommendation = false;
+                      });
+                    },
+                  ),
+                ),
+
+              if (_showRecommendation) const Gap(24),
+              _buildFeedbackSection(),
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(horizontal: 16),
+              //   child: InfoCard(
+              //     title: 'Smart Recommendation',
+              //     description:
+              //         'Your expenses are high, consider a budget review this week.',
+              //     avatar: Illustrations.lunaAvatar,
+              //     borderRadius: 32,
+              //   ),
+              // ),
             ],
           ),
         );
@@ -625,35 +795,43 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Container(
-                        width: 32,
-                        height: 32,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(color: AppColors.primary),
-                        ),
-                        child: Center(
-                          child: Image.asset(
-                            'assets/images/topbar/nav-left-icon.png',
-                            width: 32,
-                            height: 32,
-                          ),
+                      InkWell(
+                        onTap: () => context.pushNamed(ChatScreen.path),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              width: 32,
+                              height: 32,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(color: AppColors.primary),
+                              ),
+                              child: Center(
+                                child: Image.asset(
+                                  'assets/images/topbar/nav-left-icon.png',
+                                  width: 32,
+                                  height: 32,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 6),
+                            const Text(
+                              'Chat with Nahl',
+                              style: TextStyle(
+                                fontFamily: 'GeneralSans',
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      const SizedBox(
-                        width: 6,
-                      ), // Replaced Gap with SizedBox (standard)
-                      const Text(
-                        'Chat with Nahl',
-                        style: TextStyle(
-                          fontFamily: 'GeneralSans',
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black,
-                        ),
-                      ),
+
                       const SizedBox(width: 25),
-                      // CENTER: Icon – always stays exactly in the horizontal center
+
+                      // CENTER: Icon – NOT clickable
                       Image.asset(
                         'assets/images/topbar/nav-center-icon.png',
                         width: 30,
@@ -670,26 +848,29 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           // RIGHT: User avatar/initials – stays right-aligned
           Positioned(
             right: 0,
-            child: Container(
-              width: 32,
-              height: 32,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-                border: Border.all(color: Colors.black, width: 1),
-              ),
-              child: Center(
-                child: Text(
-                  firstName.isNotEmpty
-                      ? (firstName.length > 1
-                            ? firstName.substring(0, 2).toUpperCase()
-                            : firstName[0].toUpperCase())
-                      : 'DT',
-                  style: const TextStyle(
-                    fontFamily: 'GeneralSans',
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16,
-                    color: Colors.black,
+            child: GestureDetector(
+              onTap: () => context.pushNamed(ProfileScreen.path),
+              child: Container(
+                width: 32,
+                height: 32,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.black, width: 1),
+                ),
+                child: Center(
+                  child: Text(
+                    firstName.isNotEmpty
+                        ? (firstName.length > 1
+                              ? firstName.substring(0, 2).toUpperCase()
+                              : firstName[0].toUpperCase())
+                        : 'DT',
+                    style: const TextStyle(
+                      fontFamily: 'GeneralSans',
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16,
+                      color: Colors.black,
+                    ),
                   ),
                 ),
               ),
@@ -700,6 +881,81 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       centerTitle: false, // We control positioning manually → must be false
       automaticallyImplyLeading:
           false, // Optional: remove default back button if not needed
+    );
+  }
+
+  Widget _buildFeedbackSection() {
+    return Column(
+      children: [
+        Text(
+          'HOW ARE YOU LIKING SAVVY BEE?',
+          style: TextStyle(
+            fontSize: 12,
+            fontFamily: 'GeneralSans',
+            fontWeight: FontWeight.w500,
+            color: Colors.black,
+            letterSpacing: 0.5,
+          ),
+        ),
+        const Gap(16),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            _buildFeedbackIcon(
+              'very_sad',
+              '😞',
+              _selectedFeedback == 'very_sad',
+            ),
+            _buildFeedbackIcon('sad', '😕', _selectedFeedback == 'sad'),
+            _buildFeedbackIcon('neutral', '😊', _selectedFeedback == 'neutral'),
+            _buildFeedbackIcon('happy', '😃', _selectedFeedback == 'happy'),
+          ],
+        ),
+        const Gap(16),
+        RichText(
+          textAlign: TextAlign.center,
+          text: TextSpan(
+            style: TextStyle(
+              fontSize: 12,
+              fontFamily: 'GeneralSans',
+              color: Colors.black87,
+            ),
+            children: [
+              TextSpan(text: 'How can we help? '),
+              TextSpan(
+                text: 'Contact Us.',
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFeedbackIcon(String value, String emoji, bool isSelected) {
+    return GestureDetector(
+      onTap: () => _handleFeedback(value),
+      child: Container(
+        width: 48,
+        height: 48,
+        decoration: BoxDecoration(
+          color: isSelected
+              ? AppColors.success.withValues(alpha: 0.2)
+              : Colors.white,
+          shape: BoxShape.circle,
+          border: Border.all(
+            color: isSelected
+                ? AppColors.success
+                : Colors.black.withValues(alpha: 0.2),
+            width: isSelected ? 2 : 1,
+          ),
+        ),
+        child: Center(child: Text(emoji, style: TextStyle(fontSize: 24))),
+      ),
     );
   }
 
