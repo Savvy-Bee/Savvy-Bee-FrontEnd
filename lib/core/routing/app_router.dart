@@ -77,6 +77,10 @@ import '../../features/hive/presentation/screens/games/game_tips_screen.dart';
 import '../../features/hive/presentation/screens/lesson/lesson_room_screen.dart';
 import '../../features/hive/presentation/screens/level/level_complete_screen.dart';
 import '../../features/hive/presentation/screens/levels_screen.dart';
+import '../../features/profile/presentation/screens/subscription/downgrade_subscription_screen.dart';
+import '../../features/profile/presentation/screens/subscription/subscription_cancelled_screen.dart';
+import '../../features/profile/presentation/screens/subscription/subscription_downgrade_reason_screen.dart';
+import '../../features/profile/presentation/screens/subscription/subscription_feedback_screen.dart';
 import '../../features/spend/presentation/screens/bills/cable_bill_screen.dart';
 import '../../features/spend/presentation/screens/bills/electricity_bill_screen.dart';
 import '../../features/spend/presentation/screens/fund/username_screen.dart';
@@ -801,6 +805,34 @@ final GoRouter appRouter = GoRouter(
       name: ManageSubscriptionScreen.path,
       builder: (BuildContext context, GoRouterState state) {
         return ManageSubscriptionScreen();
+      },
+    ),
+    GoRoute(
+      path: DowngradeSubscriptionScreen.path,
+      name: DowngradeSubscriptionScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return DowngradeSubscriptionScreen();
+      },
+    ),
+    GoRoute(
+      path: SubscriptionDowngradeReasonScreen.path,
+      name: SubscriptionDowngradeReasonScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return SubscriptionDowngradeReasonScreen();
+      },
+    ),
+    GoRoute(
+      path: SubscriptionFeedbackScreen.path,
+      name: SubscriptionFeedbackScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return SubscriptionFeedbackScreen();
+      },
+    ),
+    GoRoute(
+      path: SubscriptionCancelledScreen.path,
+      name: SubscriptionCancelledScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return SubscriptionCancelledScreen();
       },
     ),
 
