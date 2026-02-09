@@ -15,6 +15,7 @@ import 'package:savvy_bee_mobile/features/chat/presentation/screens/chat_screen.
 import 'package:savvy_bee_mobile/features/hive/domain/models/course.dart';
 import 'package:savvy_bee_mobile/features/home/domain/models/blog_post.dart';
 import 'package:savvy_bee_mobile/features/home/presentation/providers/home_data_provider.dart';
+import 'package:savvy_bee_mobile/features/home/presentation/screens/feedback_webview.dart';
 import 'package:savvy_bee_mobile/features/home/presentation/widgets/action_prompt_card.dart';
 import 'package:savvy_bee_mobile/features/home/presentation/widgets/blog_post_bottom_sheet.dart';
 import 'package:savvy_bee_mobile/features/home/presentation/widgets/complete_setup.dart';
@@ -23,6 +24,8 @@ import 'package:savvy_bee_mobile/features/home/presentation/widgets/smart_recomm
 import 'package:savvy_bee_mobile/features/profile/presentation/screens/profile_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/nin_verification_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/budget_screen.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/budgets_screen.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/debt/debt_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/goals/goals_screen.dart';
 
 import '../../../../core/widgets/custom_error_widget.dart';
@@ -68,6 +71,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     });
     // You can add analytics or API call here
     print('User feedback: $feedback');
+    // Immediately open the form in WebView
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const FeedbackWebViewScreen()),
+    );
   }
 
   @override
@@ -164,7 +172,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       icon: 'assets/icons/Calculator.png',
                       title: 'Set up Budgeting',
                       subtitle: 'Take control of your spending',
-                      onTap: () => context.pushNamed(BudgetScreen.path),
+                      onTap: () => context.pushNamed(BudgetsScreen.path),
                     ),
                     SetupItem(
                       icon: 'assets/icons/Square-Check.png',
@@ -176,9 +184,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       icon: 'assets/icons/BookOpen.png',
                       title: 'Reduce your Debt',
                       subtitle: 'A smarter way to track existing debt',
-                      onTap: () {
-                        // Navigate to debt screen
-                      },
+                      onTap: () => context.pushNamed(DebtScreen.path),
                     ),
                   ],
                 ),
@@ -445,7 +451,7 @@ The bottom line? Joint savings work best when there's trust, communication, and 
                   backgroundColor: AppColors.yellow, // Yellow color
                   onButtonPressed: () {
                     // Navigate to categories setup
-                    // context.pushNamed(CategoriesScreen.path);
+                    context.pushNamed(BudgetsScreen.path);
                   },
                 ),
               ),
@@ -461,7 +467,7 @@ The bottom line? Joint savings work best when there's trust, communication, and 
                   borderColor: Colors.black,
                   onButtonPressed: () {
                     // Navigate to categories setup
-                    // context.pushNamed(CategoriesScreen.path);
+                    context.pushNamed(GoalsScreen.path);
                   },
                 ),
               ),
@@ -476,32 +482,32 @@ The bottom line? Joint savings work best when there's trust, communication, and 
                   backgroundColor: AppColors.green, // Green color
                   onButtonPressed: () {
                     // Navigate to categories setup
-                    // context.pushNamed(CategoriesScreen.path);
+                    context.pushNamed(DebtScreen.path);
                   },
                 ),
               ),
               const Gap(24),
-              // Smart Recommendation Card
-              if (_showRecommendation)
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: SmartRecommendationCard(
-                    title: 'SMART RECOMMENDATION',
-                    description:
-                        'Hey Danaerys, we detected you could save approximately ₦200k in the next 12 months using Goals.',
-                    highlightedText: '\₦200k',
-                    buttonText: 'Set a new Saving Goal',
-                    onButtonPressed: () {
-                      context.pushNamed(GoalsScreen.path);
-                    },
-                    onClose: () {
-                      setState(() {
-                        _showRecommendation = false;
-                      });
-                    },
-                  ),
-                ),
 
+              // Smart Recommendation Card
+              // if (_showRecommendation)
+              //   Padding(
+              //     padding: const EdgeInsets.symmetric(horizontal: 16),
+              //     child: SmartRecommendationCard(
+              //       title: 'SMART RECOMMENDATION',
+              //       description:
+              //           'Hey Danaerys, we detected you could save approximately ₦200k in the next 12 months using Goals.',
+              //       highlightedText: '\₦200k',
+              //       buttonText: 'Set a new Saving Goal',
+              //       onButtonPressed: () {
+              //         context.pushNamed(GoalsScreen.path);
+              //       },
+              //       onClose: () {
+              //         setState(() {
+              //           _showRecommendation = false;
+              //         });
+              //       },
+              //     ),
+              //   ),
               if (_showRecommendation) const Gap(24),
               _buildFeedbackSection(),
               // Padding(
@@ -545,6 +551,7 @@ The bottom line? Joint savings work best when there's trust, communication, and 
       onTap: () => context.pushNamed(LessonHomeScreen.path, extra: course),
       child: Container(
         width: 238,
+        padding: const EdgeInsets.only(top: 4),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(32),

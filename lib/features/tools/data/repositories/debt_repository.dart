@@ -13,6 +13,15 @@ class DebtRepository {
   Future<DebtListResponse> getDebtHomeData() async {
     try {
       final response = await _apiClient.get(ApiEndpoints.debtHome);
+      final firstDebt = (response.data['data'] as List?)?.first as Map?;
+      if (firstDebt != null) {
+        print(
+          'Owed type: ${firstDebt['Owed']?.runtimeType} value: ${firstDebt['Owed']}',
+        );
+        print('interestRate type: ${firstDebt['interestRate']?.runtimeType}');
+        print('Day type: ${firstDebt['Day']?.runtimeType}');
+        print('minPayment type: ${firstDebt['minPayment']?.runtimeType}');
+      }
 
       if (response.data['success'] == true && response.data['data'] is List) {
         return DebtListResponse.fromJson(response.data);
@@ -26,6 +35,7 @@ class DebtRepository {
       rethrow;
     } catch (e) {
       throw ApiException(message: 'An unexpected error occurred: $e');
+      // rethrow;
     }
   }
 

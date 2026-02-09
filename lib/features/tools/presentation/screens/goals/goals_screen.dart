@@ -442,34 +442,34 @@ class GoalsScreen extends ConsumerWidget {
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Colors.grey.shade200),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          const Text(
-            'Deposits paused since Jan 1',
-            style: TextStyle(
-              fontSize: 14,
-              fontFamily: 'GeneralSans',
-              color: Colors.black87,
-            ),
-          ),
-          TextButton(
-            onPressed: () {
-              // Resume deposits logic
-            },
-            child: const Text(
-              'Resume',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                fontFamily: 'GeneralSans',
-                color: Colors.black,
-                decoration: TextDecoration.underline,
-              ),
-            ),
-          ),
-        ],
-      ),
+      // child: Row(
+      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //   children: [
+      //     const Text(
+      //       'Deposits paused since Jan 1',
+      //       style: TextStyle(
+      //         fontSize: 14,
+      //         fontFamily: 'GeneralSans',
+      //         color: Colors.black87,
+      //       ),
+      //     ),
+      //     TextButton(
+      //       onPressed: () {
+      //         // Resume deposits logic
+      //       },
+      //       child: const Text(
+      //         'Resume',
+      //         style: TextStyle(
+      //           fontSize: 14,
+      //           fontWeight: FontWeight.w600,
+      //           fontFamily: 'GeneralSans',
+      //           color: Colors.black,
+      //           decoration: TextDecoration.underline,
+      //         ),
+      //       ),
+      //     ),
+      //   ],
+      // ),
     );
   }
 }

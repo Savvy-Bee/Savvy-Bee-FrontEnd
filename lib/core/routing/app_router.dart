@@ -10,6 +10,7 @@ import 'package:savvy_bee_mobile/features/chat/presentation/screens/choose_perso
 import 'package:savvy_bee_mobile/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:savvy_bee_mobile/features/dashboard/presentation/screens/manual_transaction_log_screen.dart';
 import 'package:savvy_bee_mobile/features/hive/domain/models/course.dart';
+import 'package:savvy_bee_mobile/features/hive/presentation/screens/arcade_webview.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/games/game_menu_screen.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/hive_screen.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/leaderboard/leaderboard_screen.dart';
@@ -966,6 +967,13 @@ final GoRouter appRouter = GoRouter(
     ),
 
     // Game Routes
+    GoRoute(
+      path: ArcadeWebViewScreen.path,
+      name: ArcadeWebViewScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return ArcadeWebViewScreen();
+      },
+    ),
     GoRoute(
       path: GameMenuScreen.path,
       name: GameMenuScreen.path,

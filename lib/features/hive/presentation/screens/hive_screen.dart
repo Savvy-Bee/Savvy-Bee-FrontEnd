@@ -11,6 +11,7 @@ import 'package:savvy_bee_mobile/core/widgets/custom_loading_widget.dart';
 import 'package:savvy_bee_mobile/core/widgets/section_title_widget.dart';
 import 'package:savvy_bee_mobile/core/widgets/icon_text_row_widget.dart';
 import 'package:savvy_bee_mobile/features/hive/domain/models/course.dart';
+import 'package:savvy_bee_mobile/features/hive/presentation/screens/arcade_webview.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/games/game_menu_screen.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/leaderboard/leaderboard_screen.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/lesson/lesson_home_screen.dart';
@@ -296,7 +297,8 @@ The bottom line? Joint savings work best when there's trust, communication, and 
                   spacing: 8,
                   children: [
                     GestureDetector(
-                      onTap: () => context.pushNamed(GameMenuScreen.path),
+                     onTap: () => context.pushNamed(ArcadeWebViewScreen.path),
+                      // onTap: () => context.pushNamed(GameMenuScreen.path),
                       child: Container(
                         height: 200,
                         width: MediaQuery.widthOf(context) * 0.6,
@@ -422,6 +424,7 @@ The bottom line? Joint savings work best when there's trust, communication, and 
       onTap: () => context.pushNamed(LessonHomeScreen.path, extra: course),
       child: Container(
         width: 238,
+        padding: EdgeInsets.only(top: 4),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(32),
