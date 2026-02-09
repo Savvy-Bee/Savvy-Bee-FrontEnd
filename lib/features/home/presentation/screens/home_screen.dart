@@ -849,7 +849,7 @@ The bottom line? Joint savings work best when there's trust, communication, and 
           Positioned(
             right: 0,
             child: GestureDetector(
-              onTap: () => context.pushNamed(ProfileScreen.path),
+              onTap: () => context.pushNamed(ProfileScreen.path, extra: ''),
               child: Container(
                 width: 32,
                 height: 32,

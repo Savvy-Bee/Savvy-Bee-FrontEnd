@@ -21,22 +21,34 @@ class Budget {
 
   factory Budget.fromMap(Map<String, dynamic> map) {
     return Budget(
-      id: map['_id'] ?? '',
-      userId: map['UserID'] ?? '',
-      budgetName: map['BudgetName'] ?? '',
-      balance: map['Balance'] ?? 0,
-      targetAmountMonthly: map['TargetAmountMonthly'] ?? 0,
-      createdAt: DateTime.parse(map['createdAt']),
-      updatedAt: DateTime.parse(map['updatedAt']),
+      // ✅ API returns 'id' as number, convert to string
+      id: (map['id'] ?? map['_id'] ?? '').toString(),
+
+      // ✅ UserID might be missing
+      userId: (map['UserID'] ?? '').toString(),
+
+      budgetName: map['BudgetName']?.toString() ?? '',
+
+      // ✅ Handle both int and double
+      balance: num.tryParse(map['Balance']?.toString() ?? '0') ?? 0,
+      targetAmountMonthly:
+          num.tryParse(map['TargetAmountMonthly']?.toString() ?? '0') ?? 0,
+
+      // ✅ Safe date parsing
+      createdAt:
+          DateTime.tryParse(map['createdAt']?.toString() ?? '') ??
+          DateTime.now(),
+      updatedAt:
+          DateTime.tryParse(map['updatedAt']?.toString() ?? '') ??
+          DateTime.now(),
     );
   }
 
-  factory Budget.fromJson(String source) =>
-      Budget.fromMap(json.decode(source));
+  factory Budget.fromJson(String source) => Budget.fromMap(json.decode(source));
 
   @override
   String toString() {
-    return 'BudgetModel(id: $id, budgetName: $budgetName, balance: $balance, targetAmountMonthly: $targetAmountMonthly)';
+    return 'Budget(id: $id, budgetName: $budgetName, balance: $balance, targetAmountMonthly: $targetAmountMonthly)';
   }
 }
 
@@ -48,10 +60,19 @@ class BudgetHomeData {
 
   factory BudgetHomeData.fromMap(Map<String, dynamic> map) {
     return BudgetHomeData(
-      totalEarnings: map['TotalEarnings'] ?? 0,
-      budgets: List<Budget>.from(
-        (map['Budgets'] as List? ?? []).map((x) => Budget.fromMap(x)),
-      ),
+      totalEarnings: num.tryParse(map['TotalEarnings']?.toString() ?? '0') ?? 0,
+
+      budgets: (map['Budgets'] as List? ?? [])
+          .map((x) {
+            try {
+              return Budget.fromMap(x as Map<String, dynamic>);
+            } catch (e) {
+              print('⚠️ Error parsing budget item: $e');
+              return null;
+            }
+          })
+          .whereType<Budget>() // Filter out nulls
+          .toList(),
     );
   }
 
@@ -60,5 +81,5 @@ class BudgetHomeData {
 
   @override
   String toString() =>
-      'BudgetHomeDataModel(totalEarnings: $totalEarnings, budgets: $budgets)';
+      'BudgetHomeData(totalEarnings: $totalEarnings, budgets: ${budgets.length} items)';
 }

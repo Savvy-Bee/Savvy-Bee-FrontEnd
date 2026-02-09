@@ -30,6 +30,7 @@ import 'package:savvy_bee_mobile/features/onboarding/presentation/screens/we_hel
 import 'package:savvy_bee_mobile/features/premium/presentation/screens/premium_screen.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/screens/account_info_screen.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/screens/achievements_screen.dart';
+import 'package:savvy_bee_mobile/features/profile/presentation/screens/bvn_verification_screen.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/screens/change_app_icon_screen.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/screens/choose_avatar_screen.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/screens/complete_profile_screen.dart';
@@ -39,10 +40,12 @@ import 'package:savvy_bee_mobile/features/profile/presentation/screens/library_s
 import 'package:savvy_bee_mobile/features/profile/presentation/screens/manage_subscription_screen.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/screens/next_of_kin_screen.dart';
 import 'package:savvy_bee_mobile/features/action_completed_screen.dart';
+import 'package:savvy_bee_mobile/features/profile/presentation/screens/nin_verification_screen.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/screens/profile_screen.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/screens/security/change_password_screen.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/screens/security/change_pin_screen.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/screens/security/security_screen.dart';
+import 'package:savvy_bee_mobile/features/profile/presentation/screens/selfie_capture_screen.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/screens/settings_screen.dart';
 import 'package:savvy_bee_mobile/features/referral/presentation/screens/referral_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/bills/airtime_screen.dart';
@@ -58,18 +61,26 @@ import 'package:savvy_bee_mobile/features/spend/presentation/screens/transaction
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/transactions/transaction_history_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/transfer/send_money_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/add_money_screen.dart';
-import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/bvn_verification_screen.dart';
+// import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/bvn_verification_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/create_wallet_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/live_photo_screen.dart';
-import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/nin_verification_screen.dart';
+// import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/nin_verification_screen.dart';
 import 'package:savvy_bee_mobile/features/auth/presentation/screens/password_reset/password_reset_complete.dart';
 import 'package:savvy_bee_mobile/features/auth/presentation/screens/password_reset/password_reset_screen.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/budget_completion_screen.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/budget_onboarding_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/budget_screen.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/budgets_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/edit_budget_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/set_income_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/set_budget_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/debt/debt_repayment_details_screen.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/goals/create_goal_onboarding_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/goals/create_goal_screen.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/goals/goal_amount_screen.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/goals/goal_finalyzing_screen.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/goals/goal_recommendations_screen.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/goals/goal_success_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/tools_screen.dart';
 import '../../features/hive/presentation/screens/games/game_settings_screen.dart';
 import '../../features/hive/presentation/screens/games/game_terrain_screen.dart';
@@ -341,20 +352,20 @@ final GoRouter appRouter = GoRouter(
         return const CreateWalletScreen();
       },
     ),
-    GoRoute(
-      path: NinVerificationScreen.path,
-      name: NinVerificationScreen.path,
-      builder: (BuildContext context, GoRouterState state) {
-        return const NinVerificationScreen();
-      },
-    ),
-    GoRoute(
-      path: BvnVerificationScreen.path,
-      name: BvnVerificationScreen.path,
-      builder: (BuildContext context, GoRouterState state) {
-        return BvnVerificationScreen(data: state.extra as Map<String, dynamic>);
-      },
-    ),
+    // GoRoute(
+    //   path: NinVerificationScreen.path,
+    //   name: NinVerificationScreen.path,
+    //   builder: (BuildContext context, GoRouterState state) {
+    //     return const NinVerificationScreen();
+    //   },
+    // ),
+    // GoRoute(
+    //   path: BvnVerificationScreen.path,
+    //   name: BvnVerificationScreen.path,
+    //   builder: (BuildContext context, GoRouterState state) {
+    //     return BvnVerificationScreen(data: state.extra as Map<String, dynamic>);
+    //   },
+    // ),
     GoRoute(
       path: PhotoVerificationScreen.path,
       name: PhotoVerificationScreen.path,
@@ -367,6 +378,32 @@ final GoRouter appRouter = GoRouter(
       name: LivePhotoScreen.path,
       builder: (BuildContext context, GoRouterState state) {
         return LivePhotoScreen(data: state.extra as Map<String, dynamic>);
+      },
+    ),
+
+    // Add these routes to your router configuration
+    GoRoute(
+      path: SelfieCaptureScreen.path,
+      name: SelfieCaptureScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        final verificationType = state.extra as String? ?? 'NIN';
+        return SelfieCaptureScreen(verificationType: verificationType);
+      },
+    ),
+
+    GoRoute(
+      path: NinVerificationScreen.path,
+      name: NinVerificationScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return const NinVerificationScreen();
+      },
+    ),
+
+    GoRoute(
+      path: BvnVerificationScreen.path,
+      name: BvnVerificationScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return const BvnVerificationScreen();
       },
     ),
     // GoRoute(
@@ -534,6 +571,21 @@ final GoRouter appRouter = GoRouter(
       },
     ),
     GoRoute(
+      path: BudgetOnboardingIntroScreen.path,
+      name: BudgetOnboardingIntroScreen.path,
+      builder: (context, state) => const BudgetOnboardingIntroScreen(),
+    ),
+    GoRoute(
+      path: BudgetCompletionScreen.path,
+      name: BudgetCompletionScreen.path,
+      builder: (context, state) => const BudgetCompletionScreen(),
+    ),
+    GoRoute(
+      path: BudgetsScreen.path,
+      name: BudgetsScreen.path,
+      builder: (context, state) => const BudgetsScreen(),
+    ),
+    GoRoute(
       path: GoalsScreen.path,
       name: GoalsScreen.path,
       builder: (BuildContext context, GoRouterState state) {
@@ -546,6 +598,50 @@ final GoRouter appRouter = GoRouter(
       builder: (BuildContext context, GoRouterState state) {
         return CreateGoalScreen();
       },
+    ),
+    GoRoute(
+      path: CreateGoalOnboardingScreen.path,
+      name: CreateGoalOnboardingScreen.path,
+      builder: (context, state) => const CreateGoalOnboardingScreen(),
+    ),
+    GoRoute(
+      path: GoalAmountScreen.path,
+      name: GoalAmountScreen.path,
+      builder: (context, state) =>
+          GoalAmountScreen(goalType: state.extra as String),
+    ),
+    GoRoute(
+      path: GoalRecommendationsScreen.path,
+      name: GoalRecommendationsScreen.path,
+      builder: (context, state) => GoalRecommendationsScreen(
+        goalData: state.extra as Map<String, dynamic>,
+      ),
+    ),
+    // GoRoute(
+    //   path: GoalFinalizingScreen.path,
+    //   name: GoalFinalizingScreen.path,
+    //   builder: (context, state) =>
+    //       GoalFinalizingScreen(goalData: state.extra as Map<String, dynamic>),
+    // ),
+    GoRoute(
+  path: '/goal-finalizing',
+  builder: (context, state) {
+    final data = state.extra as Map<String, dynamic>?;
+    print('🔍 Route data: $data');
+    
+    if (data == null) {
+      return Scaffold(
+        body: Center(child: Text('Error: No data provided')),
+      );
+    }
+    
+    return GoalFinalizingScreen(goalData: data);
+  },
+),
+    GoRoute(
+      path: GoalSuccessScreen.path,
+      name: GoalSuccessScreen.path,
+      builder: (context, state) => const GoalSuccessScreen(),
     ),
     GoRoute(
       path: DebtScreen.path,
@@ -727,7 +823,8 @@ final GoRouter appRouter = GoRouter(
       path: ProfileScreen.path,
       name: ProfileScreen.path,
       builder: (BuildContext context, GoRouterState state) {
-        return ProfileScreen();
+        final verificationStatus = state.extra as String?;
+        return ProfileScreen(verificationStatus: verificationStatus);
       },
     ),
     GoRoute(

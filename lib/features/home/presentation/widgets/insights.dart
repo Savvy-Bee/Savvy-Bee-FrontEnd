@@ -54,7 +54,7 @@ class _LearnCardWidget extends StatelessWidget {
     return GestureDetector(
       onTap: card.onTap,
       child: Container(
-        width: 238,
+        width: 258,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(32),
@@ -80,7 +80,7 @@ class _LearnCardWidget extends StatelessWidget {
                 borderRadius: BorderRadius.all(Radius.circular(32)),
                 child: Image.asset(
                   card.imagePath,
-                  width: 230,
+                  width: 250,
                   height: 230,
                   fit: BoxFit.fill,
                 ),

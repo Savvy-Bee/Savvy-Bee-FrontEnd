@@ -50,7 +50,7 @@ class ConnectBankIntroBottomSheet extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
-
+                  fontFamily: 'GeneralSans',
                   height: 1.0,
                 ),
               ),
@@ -70,7 +70,10 @@ class ConnectBankIntroBottomSheet extends StatelessWidget {
                   children: [
                     TextSpan(
                       text: 'Privacy Policy',
-                      style: TextStyle(decoration: TextDecoration.underline),
+                      style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        fontFamily: 'GeneralSans',
+                      ),
                     ),
                   ],
                 ),
@@ -103,8 +106,17 @@ class ConnectBankIntroBottomSheet extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
-              Text(subtitle, style: TextStyle(fontSize: 10)),
+              Text(
+                title,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'GeneralSans',
+                ),
+              ),
+              Text(
+                subtitle,
+                style: TextStyle(fontSize: 10, fontFamily: 'GeneralSans'),
+              ),
             ],
           ),
         ),

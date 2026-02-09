@@ -28,7 +28,16 @@ class _AccountInfoScreenState extends ConsumerState<AccountInfoScreen> {
     final homeDataAsync = ref.watch(homeDataProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Account Info')),
+      appBar: AppBar(
+        title: const Text(
+          'My account',
+          style: TextStyle(
+            fontFamily: 'General Sans',
+            fontWeight: FontWeight.w600,
+            fontSize: 16,
+          ),
+        ),
+      ),
       body: homeDataAsync.when(
         data: (data) {
           final user = data.data;
@@ -93,7 +102,7 @@ class _AccountInfoScreenState extends ConsumerState<AccountInfoScreen> {
             mainAxisSize: MainAxisSize.min,
             spacing: 16,
             children: [
-              CustomElevatedButton(text: 'Edit Account Info', onPressed: () {}),
+              CustomOutlinedButton(text: 'Delete Account', onPressed: () {}, ),
               InkWell(
                 onTap: () => UrlUtils.openEmail('contact@mysavvybee.com'),
                 child: Text.rich(
@@ -129,8 +138,23 @@ class _AccountInfoScreenState extends ConsumerState<AccountInfoScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(title, style: TextStyle(color: AppColors.grey)),
-          Text(value),
+          Text(
+            title,
+            style: TextStyle(
+              color: AppColors.grey,
+              fontFamily: 'General Sans',
+              fontWeight: FontWeight.w500,
+              fontSize: 12,
+            ),
+          ),
+          Text(
+            value,
+            style: TextStyle(
+              fontFamily: 'General Sans',
+              fontWeight: FontWeight.w500,
+              fontSize: 14,
+            ),
+          ),
         ],
       ),
     );

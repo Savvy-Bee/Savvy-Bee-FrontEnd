@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:savvy_bee_mobile/core/services/service_locator.dart';
 import 'package:savvy_bee_mobile/features/dashboard/domain/models/dashboard_data.dart';
@@ -111,6 +114,9 @@ final monoInputDataProvider =
     );
 
 // Linked Accounts Notifier
+
+// Updated LinkedAccountsNotifier with better error handling
+
 class LinkedAccountsNotifier
     extends AutoDisposeAsyncNotifier<List<LinkedAccount>> {
   @override
@@ -139,18 +145,36 @@ class LinkedAccountsNotifier
     });
   }
 
+  /// Link account with improved error handling
   Future<bool> linkAccount(String code) async {
     try {
       final repository = ref.read(dashboardRepositoryProvider);
       final response = await repository.linkAccount(code: code);
 
+      // ✅ Check for success flag
       if (response.success) {
+        log('✅ Link account API successful');
         await refresh();
         return true;
+      } else {
+        // ❌ Backend returned success: false
+        log('❌ Link account failed: ${response.message}');
+        throw Exception(response.message ?? 'Failed to link account');
       }
-      return false;
+    } on DioException catch (e) {
+      // ❌ Network/HTTP errors
+      log('❌ DioException in linkAccount: ${e.message}');
+      log('   Status Code: ${e.response?.statusCode}');
+      log('   Response Data: ${e.response?.data}');
+
+      // Extract error message from response
+      final errorMessage =
+          e.response?.data?['message'] ?? 'Network error. Please try again.';
+      throw Exception(errorMessage);
     } catch (e) {
-      return false;
+      // ❌ Other errors
+      log('❌ Unexpected error in linkAccount: $e');
+      throw Exception('Issue on our end. Please try again.');
     }
   }
 
@@ -174,10 +198,79 @@ class LinkedAccountsNotifier
       }
       return false;
     } catch (e) {
+      log('Error unlinking account: $e');
       return false;
     }
   }
 }
+
+// class LinkedAccountsNotifier
+//     extends AutoDisposeAsyncNotifier<List<LinkedAccount>> {
+//   @override
+//   Future<List<LinkedAccount>> build() async {
+//     final repository = ref.read(dashboardRepositoryProvider);
+//     final response = await repository.fetchLinkedAccounts();
+
+//     if (response.data == null) {
+//       throw Exception(response.message);
+//     }
+
+//     return response.data!;
+//   }
+
+//   Future<void> refresh() async {
+//     state = const AsyncValue.loading();
+//     state = await AsyncValue.guard(() async {
+//       final repository = ref.read(dashboardRepositoryProvider);
+//       final response = await repository.fetchLinkedAccounts();
+
+//       if (response.data == null) {
+//         throw Exception(response.message);
+//       }
+
+//       return response.data!;
+//     });
+//   }
+
+//   Future<bool> linkAccount(String code) async {
+//     try {
+//       final repository = ref.read(dashboardRepositoryProvider);
+//       final response = await repository.linkAccount(code: code);
+
+//       if (response.success) {
+//         await refresh();
+//         return true;
+//       }
+//       return false;
+//     } catch (e) {
+//       return false;
+//     }
+//   }
+
+//   Future<bool> unlinkAccount({
+//     required String accountId,
+//     required String code,
+//     required String accountName,
+//   }) async {
+//     try {
+//       final repository = ref.read(dashboardRepositoryProvider);
+//       final response = await repository.unlinkAccount(
+//         accountId: accountId,
+//         code: code,
+//         accountName: accountName,
+//       );
+
+//       if (response.success) {
+//         await refresh();
+//         ref.invalidate(dashboardDataProvider);
+//         return true;
+//       }
+//       return false;
+//     } catch (e) {
+//       return false;
+//     }
+//   }
+// }
 
 final linkedAccountsProvider =
     AutoDisposeAsyncNotifierProvider<
