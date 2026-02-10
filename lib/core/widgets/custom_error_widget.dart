@@ -51,6 +51,7 @@ class CustomErrorWidget extends StatelessWidget {
                 title!,
                 style: theme.textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.w600,
+                  fontFamily: 'GeneralSans',
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -63,6 +64,7 @@ class CustomErrorWidget extends StatelessWidget {
                 subtitle!,
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: theme.textTheme.bodySmall?.color,
+                  fontFamily: 'GeneralSans',
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -79,7 +81,10 @@ class CustomErrorWidget extends StatelessWidget {
                       ? AppColors.primary
                       : null,
                 ),
-                child: Text(actionButtonText!),
+                child: Text(
+                  actionButtonText!,
+                  style: TextStyle(fontFamily: 'GeneralSans'),
+                ),
               ),
           ],
         ),

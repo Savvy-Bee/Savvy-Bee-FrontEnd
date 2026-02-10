@@ -5,10 +5,7 @@ import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 class InsightsSection extends StatelessWidget {
   final List<LearnCard> cards;
 
-  const InsightsSection({
-    super.key,
-    required this.cards,
-  });
+  const InsightsSection({super.key, required this.cards});
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +51,8 @@ class _LearnCardWidget extends StatelessWidget {
     return GestureDetector(
       onTap: card.onTap,
       child: Container(
-        width: 238,
+        width: 258,
+        padding: const EdgeInsets.only(top: 4),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(32),
@@ -80,7 +78,7 @@ class _LearnCardWidget extends StatelessWidget {
                 borderRadius: BorderRadius.all(Radius.circular(32)),
                 child: Image.asset(
                   card.imagePath,
-                  width: 230,
+                  width: 250,
                   height: 230,
                   fit: BoxFit.fill,
                 ),

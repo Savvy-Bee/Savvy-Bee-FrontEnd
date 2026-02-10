@@ -24,7 +24,7 @@ class MainWrapper extends ConsumerWidget {
     final index = ref.watch(bottomNavIndexProvider);
 
     return Scaffold(
-      appBar: index == 0 || index == 3 ? null : buildAppBar(context),
+      appBar: index == 0 || index == 3 || index == 2 ? null : buildAppBar(context),
       body: child,
       bottomNavigationBar: _buildBottomNavigationBar(
         context,

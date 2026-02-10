@@ -66,27 +66,63 @@ class Debt {
   bool get isActive => status == 'Active';
 
   factory Debt.fromJson(Map<String, dynamic> json) {
+    // Helper to safely convert to double (handles num, String, null)
+    double toDouble(dynamic value, {double fallback = 0.0}) {
+      if (value == null) return fallback;
+      if (value is num) return value.toDouble();
+      if (value is String) return double.tryParse(value) ?? fallback;
+      return fallback;
+    }
+
+    // Helper for int
+    int toInt(dynamic value, {int fallback = 0}) {
+      if (value == null) return fallback;
+      if (value is int) return value;
+      if (value is num) return value.toInt();
+      if (value is String) return int.tryParse(value) ?? fallback;
+      return fallback;
+    }
+
     return Debt(
-      id: json['_id'] as String,
-      name: json['Name'] as String,
-      owed: (json['Owed'] as num).toDouble(),
-      interestRate: (json['interestRate'] as num).toDouble(),
-      balance: (json['Balance'] as num).toDouble(),
-      preferrablePayout: json['PreferrablePayout'] as String,
-      day: json['Day'] as int,
-      minPayment: (json['minPayment'] as num).toDouble(),
-      expectedPayoffDate: DateTime.parse(json['expectedPayoffDate']),
-      status: json['Status'] as String,
-      creationCompletion: json['CreationCompletion'] as bool,
-      createdAt: DateTime.parse(json['createdAt']),
-      updatedAt: DateTime.parse(json['updatedAt']),
-      v: json['__v'] as int,
+      id: json['id']?.toString() ?? '', // handles int or string
+
+      name: json['Name'] as String? ?? 'Unnamed Debt',
+
+      owed: toDouble(json['Owed']),
+      interestRate: toDouble(json['interestRate']),
+      balance: toDouble(json['Balance']),
+      minPayment: toDouble(json['minPayment']),
+
+      preferrablePayout: json['PreferrablePayout'] as String? ?? 'Monthly',
+
+      day: toInt(json['Day'], fallback: 1),
+
+      expectedPayoffDate: json['expectedPayoffDate'] != null
+          ? DateTime.tryParse(json['expectedPayoffDate'] as String? ?? '') ??
+                DateTime.now()
+          : DateTime.now(),
+
+      status: json['Status'] as String? ?? 'Unknown',
+
+      creationCompletion: json['CreationCompletion'] as bool? ?? false,
+
+      createdAt: json['createdAt'] != null
+          ? DateTime.tryParse(json['createdAt'] as String? ?? '') ??
+                DateTime.now()
+          : DateTime.now(),
+
+      updatedAt: json['updatedAt'] != null
+          ? DateTime.tryParse(json['updatedAt'] as String? ?? '') ??
+                DateTime.now()
+          : DateTime.now(),
+
+      v: toInt(json['__v']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      '_id': id,
+      'id': id,
       'Name': name,
       'Owed': owed,
       'interestRate': interestRate,

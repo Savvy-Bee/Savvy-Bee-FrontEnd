@@ -16,6 +16,8 @@ final homeDataProvider = FutureProvider<HomeDataResponse>((ref) async {
     final repository = ref.watch(homeRepositoryProvider);
     final result = await repository.fetchHomeData();
     print('✅ Home data loaded successfully: ${result.success}');
+    print('✅ Home data: ${result.data.kyc.nin}');
+    print('✅ Home data: ${result.data.kyc.bvn}');
     return result;
   } catch (e, stackTrace) {
     print('❌ Error loading home data: $e');

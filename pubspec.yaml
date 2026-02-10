@@ -1,7 +1,7 @@
 name: savvy_bee_mobile
 description: "An AI-powered financial literacy and management app"
 publish_to: 'none'
-version: 1.0.0+1
+version: 1.0.0+3
 
 environment:
   sdk: ^3.8.1
@@ -41,6 +41,10 @@ dependencies:
   shared_preferences: ^2.2.2
   smooth_page_indicator: ^1.2.1
   url_launcher: ^6.3.2
+  pointycastle: ^3.7.3
+  http: ^1.1.0
+  convert: ^3.1.1
+  webview_flutter: ^4.9.0
 
 dev_dependencies:
   flutter_lints: ^5.0.0
@@ -52,7 +56,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - .env
+    # - .env
     - assets/
     - assets/images/
     - assets/images/logos/
@@ -74,6 +78,12 @@ flutter:
     - assets/images/other/insights-one.jpg
     - assets/images/other/insights-two.jpg
     - assets/images/other/insights-three.jpg
+    - assets/images/icons/budget_icon.png
+    - assets/images/icons/goals_icon.png
+    - assets/images/icons/debt_icon.png
+    - assets/images/icons/tax_icon.png
+    - assets/images/icons/budget_category.png
+    - assets/images/icons/Vacation.png
 
   fonts:
     - family: Excon

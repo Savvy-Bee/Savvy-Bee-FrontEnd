@@ -132,12 +132,8 @@ class _BudgetCategoryBottomSheetState
           mainAxisSize: MainAxisSize.min,
           children: [
             CircleAvatar(
-              backgroundColor: AppColors.primary.withValues(alpha: 0.2),
-              child: const Icon(
-                Icons.category,
-                size: 16,
-                color: AppColors.primary,
-              ),
+              backgroundColor: Color(0xFF76D4FF),
+              child: Image.asset('assets/images/icons/budget_category.png'),
             ),
             const Gap(16),
             Column(

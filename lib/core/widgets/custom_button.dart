@@ -132,6 +132,7 @@ class CustomOutlinedButton extends StatelessWidget {
   final bool isLoading;
   final bool isSmall;
   final Widget? icon;
+  final String? borderColor;
 
   const CustomOutlinedButton({
     super.key,
@@ -143,6 +144,7 @@ class CustomOutlinedButton extends StatelessWidget {
     this.isLoading = false,
     this.isSmall = false,
     this.icon,
+    this.borderColor,
   });
 
   @override

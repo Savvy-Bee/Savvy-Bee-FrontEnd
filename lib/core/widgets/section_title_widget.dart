@@ -14,7 +14,12 @@ class SectionTitleWidget extends StatelessWidget {
       children: [
         Text(
           title,
-          style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontSize: 16.0,
+            fontFamily: 'GeneralSans',
+            fontWeight: FontWeight.w600,
+            color: Color(0xFF828383),
+          ),
         ),
         if (actionWidget != null) actionWidget!,
       ],

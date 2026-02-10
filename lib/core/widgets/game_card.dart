@@ -12,17 +12,17 @@ class GameCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomCard(
       padding: padding,
-      hasShadow: true,
-      shadow: [
-        BoxShadow(
-          offset: Offset(0, 2),
-          blurRadius: 0,
-          spreadRadius: 0,
-          color: AppColors.black.withValues(alpha: 0.25),
-        ),
-      ],
-      bgColor: AppColors.white,
-      borderColor: AppColors.grey,
+      hasShadow: false,
+      // shadow: [
+      //   BoxShadow(
+      //     offset: Offset(0, 2),
+      //     blurRadius: 0,
+      //     spreadRadius: 0,
+      //     color: AppColors.black.withValues(alpha: 0.25),
+      //   ),
+      // ],
+      bgColor: const Color.fromARGB(5, 0, 0, 0),
+      borderColor: AppColors.white,
       child: child,
     );
   }
