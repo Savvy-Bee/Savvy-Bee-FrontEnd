@@ -2,15 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'core/theme/app_theme.dart';
 import 'core/routing/app_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'core/utils/constants.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
 
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -26,11 +29,8 @@ void main() async {
     ),
   );
 
-  // await dotenv.load(fileName: ".env");
-
-  try {
-    await dotenv.load(fileName: ".env");
-  } catch (_) {}
+  final apiKey = dotenv.env[Constants.revenueCatApiKey]!;
+  await Purchases.configure(PurchasesConfiguration(apiKey));
 
   runApp(
     ScreenUtilInit(
