@@ -777,117 +777,97 @@ The bottom line? Joint savings work best when there's trust, communication, and 
     );
   }
 
-  AppBar _buildAppBar(String firstName, BuildContext context) {
+ AppBar _buildAppBar(String firstName, BuildContext context) {
     return AppBar(
       backgroundColor: Colors.white,
       elevation: 0,
+      automaticallyImplyLeading: false,
+      toolbarHeight: 56, // Standard AppBar height
       title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // LEFT: "Chat with Nahl" section – stays left-aligned
-          Positioned(
-            left: 0,
-            child: GestureDetector(
-              onTap: () {
-                // Uncomment when ready
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (_) => const ChatWithNahlScreen()),
-                // );
-              },
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                // sub row
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      InkWell(
-                        onTap: () => context.pushNamed(ChatScreen.path),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Container(
-                              width: 32,
-                              height: 32,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(color: AppColors.primary),
-                              ),
-                              child: Center(
-                                child: Image.asset(
-                                  'assets/images/topbar/nav-left-icon.png',
-                                  width: 32,
-                                  height: 32,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 6),
-                            const Text(
-                              'Chat with Nahl',
-                              style: TextStyle(
-                                fontFamily: 'GeneralSans',
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      const SizedBox(width: 25),
-
-                      // CENTER: Icon – NOT clickable
-                      Image.asset(
-                        'assets/images/topbar/nav-center-icon.png',
-                        width: 30,
-                        height: 32,
-                        fit: BoxFit.contain,
-                      ),
-                    ],
+          // LEFT: "Chat with Nahl" section
+          InkWell(
+            onTap: () => context.pushNamed(ChatScreen.path),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 32,
+                  height: 32,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: AppColors.primary),
                   ),
-                ],
-              ),
-            ),
-          ),
-
-          // RIGHT: User avatar/initials – stays right-aligned
-          Positioned(
-            right: 0,
-            child: GestureDetector(
-              onTap: () => context.pushNamed(ProfileScreen.path, extra: ''),
-              child: Container(
-                width: 32,
-                height: 32,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  shape: BoxShape.circle,
-                  border: Border.all(color: Colors.black, width: 1),
-                ),
-                child: Center(
-                  child: Text(
-                    firstName.isNotEmpty
-                        ? (firstName.length > 1
-                              ? firstName.substring(0, 2).toUpperCase()
-                              : firstName[0].toUpperCase())
-                        : 'DT',
-                    style: const TextStyle(
-                      fontFamily: 'GeneralSans',
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16,
-                      color: Colors.black,
+                  child: Center(
+                    child: Image.asset(
+                      'assets/images/topbar/nav-left-icon.png',
+                      width: 32,
+                      height: 32,
                     ),
                   ),
                 ),
+                const SizedBox(width: 6),
+                const Text(
+                  'Chat with Nahl',
+                  style: TextStyle(
+                    fontFamily: 'GeneralSans',
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          
+          // Spacer to push center icon to middle
+          const Spacer(),
+          
+          // CENTER: Icon
+          Image.asset(
+            'assets/images/topbar/nav-center-icon.png',
+            width: 30,
+            height: 32,
+            fit: BoxFit.contain,
+          ),
+          
+          // Spacer to balance and push avatar to right
+          const Spacer(),
+        ],
+      ),
+      actions: [
+        // RIGHT: User avatar
+        Padding(
+          padding: const EdgeInsets.only(right: 16),
+          child: GestureDetector(
+            onTap: () => context.pushNamed(ProfileScreen.path, extra: ''),
+            child: Container(
+              width: 32,
+              height: 32,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+                border: Border.all(color: Colors.black, width: 1),
+              ),
+              child: Center(
+                child: Text(
+                  firstName.isNotEmpty
+                      ? (firstName.length > 1
+                            ? firstName.substring(0, 2).toUpperCase()
+                            : firstName[0].toUpperCase())
+                      : 'DT',
+                  style: const TextStyle(
+                    fontFamily: 'GeneralSans',
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16,
+                    color: Colors.black,
+                  ),
+                ),
               ),
             ),
           ),
-        ],
-      ),
-      centerTitle: false, // We control positioning manually → must be false
-      automaticallyImplyLeading:
-          false, // Optional: remove default back button if not needed
+        ),
+      ],
     );
   }
 
