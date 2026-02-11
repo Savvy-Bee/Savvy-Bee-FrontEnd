@@ -132,7 +132,9 @@ class CustomOutlinedButton extends StatelessWidget {
   final bool isLoading;
   final bool isSmall;
   final Widget? icon;
-  final String? borderColor;
+  final Color? borderColor;
+  final Color? textColor;
+  final bool isDestructive; // New parameter for red delete button
 
   const CustomOutlinedButton({
     super.key,
@@ -145,20 +147,28 @@ class CustomOutlinedButton extends StatelessWidget {
     this.isSmall = false,
     this.icon,
     this.borderColor,
+    this.textColor,
+    this.isDestructive = false,
   });
 
   @override
   Widget build(BuildContext context) {
+    // Use destructive colors if isDestructive is true
+    final effectiveBorderColor = isDestructive
+        ? AppColors.error
+        : (borderColor ?? AppColors.grey);
+    final effectiveTextColor = isDestructive
+        ? AppColors.error
+        : (textColor ?? AppColors.black);
+
     return SizedBox(
       width: isFullWidth ? double.infinity : null,
       child: OutlinedButton.icon(
         onPressed: isLoading ? null : onPressed,
         style: OutlinedButton.styleFrom(
           iconAlignment: IconAlignment.end,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-            side: BorderSide(color: AppColors.grey),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          side: BorderSide(color: effectiveBorderColor, width: 1),
           padding: EdgeInsets.symmetric(
             vertical: isSmall ? 10 : 14,
             horizontal: 44,
@@ -170,19 +180,22 @@ class CustomOutlinedButton extends StatelessWidget {
                 dimension: 16,
                 child: CircularProgressIndicator(
                   strokeWidth: 1.5,
-                  color: AppColors.black,
+                  color: effectiveTextColor,
                 ),
               )
             : icon ??
                   (showArrow
-                      ? AppIcon(AppIcons.arrowRightIcon, color: AppColors.black)
+                      ? AppIcon(
+                          AppIcons.arrowRightIcon,
+                          color: effectiveTextColor,
+                        )
                       : null),
         label: Text(
           text,
           style: TextStyle(
             fontSize: isSmall ? 12 : 14,
             fontWeight: FontWeight.bold,
-            color: AppColors.black,
+            color: onPressed == null ? AppColors.grey : effectiveTextColor,
           ),
         ),
       ),

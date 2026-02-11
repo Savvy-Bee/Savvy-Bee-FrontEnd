@@ -131,7 +131,7 @@ class _CustomLineChartState extends State<CustomLineChart> {
               ),
               child: Text(
                 range.label,
-                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 10),
+                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 7),
               ),
             ),
           );

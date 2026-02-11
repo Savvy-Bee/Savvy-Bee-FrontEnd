@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_error_widget.dart';
 import 'package:savvy_bee_mobile/features/home/presentation/widgets/health_card.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/tools_screen.dart';
 
 import '../../../home/presentation/providers/home_data_provider.dart';
 
-class FinancialHealthScreen extends ConsumerStatefulWidget {
+class FinancialHealthScreen extends ConsumerStatefulWidget { 
   static const String path = '/financia;-health';
 
   const FinancialHealthScreen({super.key});
@@ -53,7 +55,7 @@ class _FinancialHealthScreenState extends ConsumerState<FinancialHealthScreen> {
                 Row(
                   spacing: 8,
                   children: [
-                    ShareButton(onPressed: () {}),
+                    ShareButton(onPressed: () => context.go(ToolsScreen.path)),
                     Expanded(
                       flex: 2,
                       child: CustomElevatedButton(

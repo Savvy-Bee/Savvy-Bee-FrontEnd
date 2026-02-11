@@ -9,6 +9,7 @@ import 'package:savvy_bee_mobile/features/chat/presentation/screens/chat_screen.
 import 'package:savvy_bee_mobile/features/chat/presentation/screens/choose_personality_screen.dart';
 import 'package:savvy_bee_mobile/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:savvy_bee_mobile/features/dashboard/presentation/screens/manual_transaction_log_screen.dart';
+import 'package:savvy_bee_mobile/features/dashboard/presentation/screens/spending_screen.dart';
 import 'package:savvy_bee_mobile/features/hive/domain/models/course.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/arcade_webview.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/games/game_menu_screen.dart';
@@ -618,12 +619,13 @@ final GoRouter appRouter = GoRouter(
         goalData: state.extra as Map<String, dynamic>,
       ),
     ),
-    // GoRoute(
-    //   path: GoalFinalizingScreen.path,
-    //   name: GoalFinalizingScreen.path,
-    //   builder: (context, state) =>
-    //       GoalFinalizingScreen(goalData: state.extra as Map<String, dynamic>),
-    // ),
+    GoRoute(
+      path: SpendingScreen.path,
+      name: SpendingScreen.path,
+       builder: (BuildContext context, GoRouterState state) {
+        return SpendingScreen();
+      },
+    ),
     GoRoute(
   path: '/goal-finalizing',
   builder: (context, state) {

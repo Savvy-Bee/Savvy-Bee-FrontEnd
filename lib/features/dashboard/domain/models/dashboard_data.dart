@@ -13,6 +13,9 @@ class DashboardDataResponse {
   });
 
   factory DashboardDataResponse.fromJson(Map<String, dynamic> json) {
+    print('📦 DashboardDataResponse - Keys: ${json.keys}');
+    print('📦 Success: ${json['success']}');
+    print('📦 Data null: ${json['data'] == null}');
     return DashboardDataResponse(
       success: json['success'] ?? false,
       message: json['message'] ?? '',
@@ -40,10 +43,12 @@ class DashboardData {
 
     for (final account in accounts) {
       for (final transaction in account.history12Months) {
-        data.add(ChartDataPoint(
-          value: transaction.amount,
-          timestamp: transaction.date,
-        ));
+        data.add(
+          ChartDataPoint(
+            timestamp: transaction.date,
+            value: transaction.amount,
+          ),
+        );
       }
     }
 
@@ -63,6 +68,23 @@ class DashboardData {
   });
 
   factory DashboardData.fromJson(Map<String, dynamic> json) {
+    print('📊 DashboardData - Keys: ${json.keys}');
+    print('📊 Accounts: ${(json['accounts'] as List?)?.length ?? 0}');
+    print('📊 Savings: ${(json['savings'] as List?)?.length ?? 0}');
+
+    final accounts =
+        (json['accounts'] as List?)
+            ?.map((e) => BankAccount.fromJson(e))
+            .toList() ??
+        [];
+
+    print('📊 Parsed ${accounts.length} accounts');
+    if (accounts.isNotEmpty) {
+      print(
+        '📊 First account transactions: ${accounts[0].history12Months.length}',
+      );
+    }
+
     return DashboardData(
       isMultiAccount: json['isMultiAccount'] ?? false,
       accounts:
@@ -145,53 +167,53 @@ class BankAccount {
 }
 
 // Account Details Model
-class AccountDetails {
-  final String id;
-  final String name;
-  final String accountNumber;
-  final String currency;
-  final double balance;
-  final String type;
-  final String bvn;
-  final Institution institution;
+// class AccountDetails {
+//   final String id;
+//   final String name;
+//   final String accountNumber;
+//   final String currency;
+//   final double balance;
+//   final String type;
+//   final String bvn;
+//   final Institution institution;
 
-  AccountDetails({
-    required this.id,
-    required this.name,
-    required this.accountNumber,
-    required this.currency,
-    required this.balance,
-    required this.type,
-    required this.bvn,
-    required this.institution,
-  });
+//   AccountDetails({
+//     required this.id,
+//     required this.name,
+//     required this.accountNumber,
+//     required this.currency,
+//     required this.balance,
+//     required this.type,
+//     required this.bvn,
+//     required this.institution,
+//   });
 
-  factory AccountDetails.fromJson(Map<String, dynamic> json) {
-    return AccountDetails(
-      id: json['id'] ?? '',
-      name: json['name'] ?? '',
-      accountNumber: json['account_number'] ?? '',
-      currency: json['currency'] ?? '',
-      balance: (json['balance'] ?? 0).toDouble(),
-      type: json['type'] ?? '',
-      bvn: json['bvn'] ?? '',
-      institution: Institution.fromJson(json['institution'] ?? {}),
-    );
-  }
+//   factory AccountDetails.fromJson(Map<String, dynamic> json) {
+//     return AccountDetails(
+//       id: json['id'] ?? '',
+//       name: json['name'] ?? '',
+//       accountNumber: json['account_number'] ?? '',
+//       currency: json['currency'] ?? '',
+//       balance: (json['balance'] ?? 0).toDouble(),
+//       type: json['type'] ?? '',
+//       bvn: json['bvn'] ?? '',
+//       institution: Institution.fromJson(json['institution'] ?? {}),
+//     );
+//   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'account_number': accountNumber,
-      'currency': currency,
-      'balance': balance,
-      'type': type,
-      'bvn': bvn,
-      'institution': institution.toJson(),
-    };
-  }
-}
+//   Map<String, dynamic> toJson() {
+//     return {
+//       'id': id,
+//       'name': name,
+//       'account_number': accountNumber,
+//       'currency': currency,
+//       'balance': balance,
+//       'type': type,
+//       'bvn': bvn,
+//       'institution': institution.toJson(),
+//     };
+//   }
+// }
 
 // Institution Model
 class Institution {
@@ -260,37 +282,37 @@ class Transaction {
 }
 
 // Net Analysis Model
-class NetAnalysis {
-  final double totalBalance;
-  final int accountCount;
-  final double totalIncome;
-  final double totalExpenses;
+// class NetAnalysis {
+//   final double totalBalance;
+//   final int accountCount;
+//   final double totalIncome;
+//   final double totalExpenses;
 
-  NetAnalysis({
-    required this.totalBalance,
-    required this.accountCount,
-    required this.totalIncome,
-    required this.totalExpenses,
-  });
+//   NetAnalysis({
+//     required this.totalBalance,
+//     required this.accountCount,
+//     required this.totalIncome,
+//     required this.totalExpenses,
+//   });
 
-  factory NetAnalysis.fromJson(Map<String, dynamic> json) {
-    return NetAnalysis(
-      totalBalance: (json['totalBalance'] ?? 0).toDouble(),
-      accountCount: json['accountCount'] ?? 0,
-      totalIncome: (json['totalIncome'] ?? 0).toDouble(),
-      totalExpenses: (json['totalExpenses'] ?? 0).toDouble(),
-    );
-  }
+//   factory NetAnalysis.fromJson(Map<String, dynamic> json) {
+//     return NetAnalysis(
+//       totalBalance: (json['totalBalance'] ?? 0).toDouble(),
+//       accountCount: json['accountCount'] ?? 0,
+//       totalIncome: (json['totalIncome'] ?? 0).toDouble(),
+//       totalExpenses: (json['totalExpenses'] ?? 0).toDouble(),
+//     );
+//   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'totalBalance': totalBalance,
-      'accountCount': accountCount,
-      'totalIncome': totalIncome,
-      'totalExpenses': totalExpenses,
-    };
-  }
-}
+//   Map<String, dynamic> toJson() {
+//     return {
+//       'totalBalance': totalBalance,
+//       'accountCount': accountCount,
+//       'totalIncome': totalIncome,
+//       'totalExpenses': totalExpenses,
+//     };
+//   }
+// }
 
 // Widgets Model
 class Widgets {
@@ -361,23 +383,23 @@ class SpendCategoryBreakdown {
 }
 
 // Category Amount Model
-class CategoryAmount {
-  final String name;
-  final double amount;
+// class CategoryAmount {
+//   final String name;
+//   final double amount;
 
-  CategoryAmount({required this.name, required this.amount});
+//   CategoryAmount({required this.name, required this.amount});
 
-  factory CategoryAmount.fromJson(Map<String, dynamic> json) {
-    return CategoryAmount(
-      name: json['name'] ?? '',
-      amount: (json['amount'] ?? 0).toDouble(),
-    );
-  }
+//   factory CategoryAmount.fromJson(Map<String, dynamic> json) {
+//     return CategoryAmount(
+//       name: json['name'] ?? '',
+//       amount: (json['amount'] ?? 0).toDouble(),
+//     );
+//   }
 
-  Map<String, dynamic> toJson() {
-    return {'name': name, 'amount': amount};
-  }
-}
+//   Map<String, dynamic> toJson() {
+//     return {'name': name, 'amount': amount};
+//   }
+// }
 
 // Financial Health Model
 class FinancialHealth {
@@ -398,7 +420,8 @@ class FinancialHealth {
   }
 }
 
-// Savings Goal Model
+// Replace your SavingsGoal class with this version
+
 class SavingsGoal {
   final String id;
   final String userId;
@@ -428,8 +451,10 @@ class SavingsGoal {
       userId: json['UserID'] ?? '',
       goalName: json['GoalName'] ?? '',
       goalType: json['GoalType'] ?? '',
-      balance: (json['Balance'] ?? 0).toDouble(),
-      targetAmount: (json['TargetAmount'] ?? 0).toDouble(),
+      balance: _parseDouble(json['Balance']), // ← FIXED: Handle strings
+      targetAmount: _parseDouble(
+        json['TargetAmount'],
+      ), // ← FIXED: Handle strings
       endDate: DateTime.parse(
         json['EndDate'] ?? DateTime.now().toIso8601String(),
       ),
@@ -440,6 +465,15 @@ class SavingsGoal {
         json['updatedAt'] ?? DateTime.now().toIso8601String(),
       ),
     );
+  }
+
+  // Helper method to safely parse doubles from various types
+  static double _parseDouble(dynamic value) {
+    if (value == null) return 0.0;
+    if (value is double) return value;
+    if (value is int) return value.toDouble();
+    if (value is String) return double.tryParse(value) ?? 0.0;
+    return 0.0;
   }
 
   Map<String, dynamic> toJson() {
@@ -466,7 +500,7 @@ class SavingsGoal {
   bool get isCompleted => balance >= targetAmount;
 }
 
-// Debt Model
+// Also fix the Debt class the same way
 class Debt {
   final String id;
   final String userId;
@@ -505,12 +539,12 @@ class Debt {
       id: json['_id'] ?? '',
       userId: json['UserID'] ?? '',
       name: json['Name'] ?? '',
-      owed: (json['Owed'] ?? 0).toDouble(),
-      interestRate: (json['interestRate'] ?? 0).toDouble(),
-      balance: (json['Balance'] ?? 0).toDouble(),
+      owed: _parseDouble(json['Owed']), // ← FIXED
+      interestRate: _parseDouble(json['interestRate']), // ← FIXED
+      balance: _parseDouble(json['Balance']), // ← FIXED
       preferrablePayout: json['PreferrablePayout'] ?? '',
       day: json['Day'] ?? 0,
-      minPayment: (json['minPayment'] ?? 0).toDouble(),
+      minPayment: _parseDouble(json['minPayment']), // ← FIXED
       expectedPayoffDate: DateTime.parse(
         json['expectedPayoffDate'] ?? DateTime.now().toIso8601String(),
       ),
@@ -523,6 +557,15 @@ class Debt {
         json['updatedAt'] ?? DateTime.now().toIso8601String(),
       ),
     );
+  }
+
+  // Helper method to safely parse doubles
+  static double _parseDouble(dynamic value) {
+    if (value == null) return 0.0;
+    if (value is double) return value;
+    if (value is int) return value.toDouble();
+    if (value is String) return double.tryParse(value) ?? 0.0;
+    return 0.0;
   }
 
   Map<String, dynamic> toJson() {
@@ -556,3 +599,286 @@ class Debt {
     return (balance / owed * 100).clamp(0, 100);
   }
 }
+
+// Also check your NetAnalysis and AccountDetails classes
+class NetAnalysis {
+  final double totalBalance;
+  final int accountCount;
+  final double totalIncome;
+  final double totalExpenses;
+
+  NetAnalysis({
+    required this.totalBalance,
+    required this.accountCount,
+    required this.totalIncome,
+    required this.totalExpenses,
+  });
+
+  factory NetAnalysis.fromJson(Map<String, dynamic> json) {
+    return NetAnalysis(
+      totalBalance: _parseDouble(json['totalBalance']), // ← FIXED
+      accountCount: json['accountCount'] ?? 0,
+      totalIncome: _parseDouble(json['totalIncome']), // ← FIXED
+      totalExpenses: _parseDouble(json['totalExpenses']), // ← FIXED
+    );
+  }
+
+  static double _parseDouble(dynamic value) {
+    if (value == null) return 0.0;
+    if (value is double) return value;
+    if (value is int) return value.toDouble();
+    if (value is String) return double.tryParse(value) ?? 0.0;
+    return 0.0;
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'totalBalance': totalBalance,
+      'accountCount': accountCount,
+      'totalIncome': totalIncome,
+      'totalExpenses': totalExpenses,
+    };
+  }
+}
+
+class AccountDetails {
+  final String id;
+  final String name;
+  final String accountNumber;
+  final String currency;
+  final double balance;
+  final String type;
+  final String bvn;
+  final Institution institution;
+
+  AccountDetails({
+    required this.id,
+    required this.name,
+    required this.accountNumber,
+    required this.currency,
+    required this.balance,
+    required this.type,
+    required this.bvn,
+    required this.institution,
+  });
+
+  factory AccountDetails.fromJson(Map<String, dynamic> json) {
+    return AccountDetails(
+      id: json['id'] ?? '',
+      name: json['name'] ?? '',
+      accountNumber: json['account_number'] ?? '',
+      currency: json['currency'] ?? '',
+      balance: _parseDouble(json['balance']), // ← FIXED
+      type: json['type'] ?? '',
+      bvn: json['bvn'] ?? '',
+      institution: Institution.fromJson(json['institution'] ?? {}),
+    );
+  }
+
+  static double _parseDouble(dynamic value) {
+    if (value == null) return 0.0;
+    if (value is double) return value;
+    if (value is int) return value.toDouble();
+    if (value is String) return double.tryParse(value) ?? 0.0;
+    return 0.0;
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'account_number': accountNumber,
+      'currency': currency,
+      'balance': balance,
+      'type': type,
+      'bvn': bvn,
+      'institution': institution.toJson(),
+    };
+  }
+}
+
+// CategoryAmount also needs the fix
+class CategoryAmount {
+  final String name;
+  final double amount;
+
+  CategoryAmount({required this.name, required this.amount});
+
+  factory CategoryAmount.fromJson(Map<String, dynamic> json) {
+    return CategoryAmount(
+      name: json['name'] ?? '',
+      amount: _parseDouble(json['amount']), // ← FIXED
+    );
+  }
+
+  static double _parseDouble(dynamic value) {
+    if (value == null) return 0.0;
+    if (value is double) return value;
+    if (value is int) return value.toDouble();
+    if (value is String) return double.tryParse(value) ?? 0.0;
+    return 0.0;
+  }
+
+  Map<String, dynamic> toJson() {
+    return {'name': name, 'amount': amount};
+  }
+}
+
+// // Savings Goal Model
+// class SavingsGoal {
+//   final String id;
+//   final String userId;
+//   final String goalName;
+//   final String goalType;
+//   final double balance;
+//   final double targetAmount;
+//   final DateTime endDate;
+//   final DateTime createdAt;
+//   final DateTime updatedAt;
+
+//   SavingsGoal({
+//     required this.id,
+//     required this.userId,
+//     required this.goalName,
+//     required this.goalType,
+//     required this.balance,
+//     required this.targetAmount,
+//     required this.endDate,
+//     required this.createdAt,
+//     required this.updatedAt,
+//   });
+
+//   factory SavingsGoal.fromJson(Map<String, dynamic> json) {
+//     return SavingsGoal(
+//       id: json['_id'] ?? '',
+//       userId: json['UserID'] ?? '',
+//       goalName: json['GoalName'] ?? '',
+//       goalType: json['GoalType'] ?? '',
+//       balance: (json['Balance'] ?? 0).toDouble(),
+//       targetAmount: (json['TargetAmount'] ?? 0).toDouble(),
+//       endDate: DateTime.parse(
+//         json['EndDate'] ?? DateTime.now().toIso8601String(),
+//       ),
+//       createdAt: DateTime.parse(
+//         json['createdAt'] ?? DateTime.now().toIso8601String(),
+//       ),
+//       updatedAt: DateTime.parse(
+//         json['updatedAt'] ?? DateTime.now().toIso8601String(),
+//       ),
+//     );
+//   }
+
+//   Map<String, dynamic> toJson() {
+//     return {
+//       '_id': id,
+//       'UserID': userId,
+//       'GoalName': goalName,
+//       'GoalType': goalType,
+//       'Balance': balance,
+//       'TargetAmount': targetAmount,
+//       'EndDate': endDate.toIso8601String().split('T')[0],
+//       'createdAt': createdAt.toIso8601String(),
+//       'updatedAt': updatedAt.toIso8601String(),
+//     };
+//   }
+
+//   // Calculate progress percentage
+//   double get progressPercentage {
+//     if (targetAmount == 0) return 0;
+//     return (balance / targetAmount * 100).clamp(0, 100);
+//   }
+
+//   // Check if goal is completed
+//   bool get isCompleted => balance >= targetAmount;
+// }
+
+// // Debt Model
+// class Debt {
+//   final String id;
+//   final String userId;
+//   final String name;
+//   final double owed;
+//   final double interestRate;
+//   final double balance;
+//   final String preferrablePayout;
+//   final int day;
+//   final double minPayment;
+//   final DateTime expectedPayoffDate;
+//   final String status;
+//   final bool creationCompletion;
+//   final DateTime createdAt;
+//   final DateTime updatedAt;
+
+//   Debt({
+//     required this.id,
+//     required this.userId,
+//     required this.name,
+//     required this.owed,
+//     required this.interestRate,
+//     required this.balance,
+//     required this.preferrablePayout,
+//     required this.day,
+//     required this.minPayment,
+//     required this.expectedPayoffDate,
+//     required this.status,
+//     required this.creationCompletion,
+//     required this.createdAt,
+//     required this.updatedAt,
+//   });
+
+//   factory Debt.fromJson(Map<String, dynamic> json) {
+//     return Debt(
+//       id: json['_id'] ?? '',
+//       userId: json['UserID'] ?? '',
+//       name: json['Name'] ?? '',
+//       owed: (json['Owed'] ?? 0).toDouble(),
+//       interestRate: (json['interestRate'] ?? 0).toDouble(),
+//       balance: (json['Balance'] ?? 0).toDouble(),
+//       preferrablePayout: json['PreferrablePayout'] ?? '',
+//       day: json['Day'] ?? 0,
+//       minPayment: (json['minPayment'] ?? 0).toDouble(),
+//       expectedPayoffDate: DateTime.parse(
+//         json['expectedPayoffDate'] ?? DateTime.now().toIso8601String(),
+//       ),
+//       status: json['Status'] ?? '',
+//       creationCompletion: json['CreationCompletion'] ?? false,
+//       createdAt: DateTime.parse(
+//         json['createdAt'] ?? DateTime.now().toIso8601String(),
+//       ),
+//       updatedAt: DateTime.parse(
+//         json['updatedAt'] ?? DateTime.now().toIso8601String(),
+//       ),
+//     );
+//   }
+
+//   Map<String, dynamic> toJson() {
+//     return {
+//       '_id': id,
+//       'UserID': userId,
+//       'Name': name,
+//       'Owed': owed,
+//       'interestRate': interestRate,
+//       'Balance': balance,
+//       'PreferrablePayout': preferrablePayout,
+//       'Day': day,
+//       'minPayment': minPayment,
+//       'expectedPayoffDate': expectedPayoffDate.toIso8601String().split('T')[0],
+//       'Status': status,
+//       'CreationCompletion': creationCompletion,
+//       'createdAt': createdAt.toIso8601String(),
+//       'updatedAt': updatedAt.toIso8601String(),
+//     };
+//   }
+
+//   // Calculate remaining debt
+//   double get remainingDebt => owed - balance;
+
+//   // Check if debt is paid off
+//   bool get isPaidOff => balance >= owed;
+
+//   // Calculate payoff progress percentage
+//   double get payoffPercentage {
+//     if (owed == 0) return 0;
+//     return (balance / owed * 100).clamp(0, 100);
+//   }
+// }

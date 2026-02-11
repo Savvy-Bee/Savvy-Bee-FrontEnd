@@ -24,11 +24,11 @@ class MainWrapper extends ConsumerWidget {
     final index = ref.watch(bottomNavIndexProvider);
 
     return Scaffold(
-      appBar: index == 0 || index == 3 || index == 2 ? null : buildAppBar(context),
+      appBar: index == 0 || index == 3 || index == 2 || index == 1 ? null : buildAppBar(context),
       body: child,
       bottomNavigationBar: _buildBottomNavigationBar(
         context,
-        ref.watch(bottomNavIndexProvider),
+        ref.watch(bottomNavIndexProvider), 
         ref,
       ),
       // floatingActionButton: index == 0 || index == 1
