@@ -47,13 +47,21 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
                 ProfileListTile(
                   title: 'How-to Videos',
                   iconPath: AppIcons.videoIcon,
-                  onTap: () {},
+                  onTap: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Coming soon')),
+                    );
+                  },
                 ),
                 const Divider(),
                 ProfileListTile(
                   title: 'Savvy Bee Storybook',
                   iconPath: AppIcons.documentIcon,
-                  onTap: () {},
+                  onTap: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Coming soon')),
+                    );
+                  },
                 ),
                 const Divider(),
                 ProfileListTile(

@@ -21,6 +21,7 @@ import 'package:savvy_bee_mobile/features/home/presentation/widgets/blog_post_bo
 import 'package:savvy_bee_mobile/features/home/presentation/widgets/complete_setup.dart';
 import 'package:savvy_bee_mobile/features/home/presentation/widgets/insights.dart';
 import 'package:savvy_bee_mobile/features/home/presentation/widgets/smart_recommendations.dart';
+import 'package:savvy_bee_mobile/features/profile/presentation/screens/contact_us_screen.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/screens/profile_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/nin_verification_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/budget_screen.dart';
@@ -899,24 +900,27 @@ The bottom line? Joint savings work best when there's trust, communication, and 
           ],
         ),
         const Gap(16),
-        RichText(
-          textAlign: TextAlign.center,
-          text: TextSpan(
-            style: TextStyle(
-              fontSize: 12,
-              fontFamily: 'GeneralSans',
-              color: Colors.black87,
-            ),
-            children: [
-              TextSpan(text: 'How can we help? '),
-              TextSpan(
-                text: 'Contact Us.',
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  decoration: TextDecoration.underline,
-                ),
+        TextButton(
+          onPressed: () => context.pushNamed(ContactUsScreen.path),
+          child: RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(
+              style: TextStyle(
+                fontSize: 12,
+                fontFamily: 'GeneralSans',
+                color: Colors.black87,
               ),
-            ],
+              children: [
+                TextSpan(text: 'How can we help? '),
+                TextSpan(
+                  text: 'Contact Us.',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ],

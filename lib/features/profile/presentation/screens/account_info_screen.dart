@@ -52,10 +52,10 @@ class _AccountInfoScreenState extends ConsumerState<AccountInfoScreen> {
       return;
     }
 
-    if (!deleteState.isOtpSent) {
-      _showErrorSnackbar('Failed to send verification code. Please try again.');
-      return;
-    }
+    // if (!deleteState.isOtpSent) {
+    //   _showErrorSnackbar('Failed to send verification code. Please try again.');
+    //   return;
+    // }
 
     // Step 2: Show OTP verification dialog
     final verified = await showDeleteAccountOtpDialog(

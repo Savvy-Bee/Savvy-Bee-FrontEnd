@@ -13,7 +13,7 @@ import 'core/utils/constants.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await dotenv.load(fileName: ".env");
+  // await dotenv.load(fileName: ".env");
 
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -29,8 +29,12 @@ void main() async {
     ),
   );
 
-  final apiKey = dotenv.env[Constants.revenueCatApiKey]!;
-  await Purchases.configure(PurchasesConfiguration(apiKey));
+  try {
+    await dotenv.load(fileName: ".env");
+
+    final apiKey = dotenv.env[Constants.revenueCatApiKey]!;
+    await Purchases.configure(PurchasesConfiguration(apiKey));
+  } catch (_) {}
 
   runApp(
     ScreenUtilInit(

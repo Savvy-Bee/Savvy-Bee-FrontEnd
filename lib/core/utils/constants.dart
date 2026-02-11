@@ -23,8 +23,10 @@ class Constants {
   // Environment Variables
   static const String encryptionKey = 'ENCRYPTION_KEY';
 
-  static const String monoSecret = 'MONO_SECRET';
-  static const String monoPublic = 'MONO_PUBLIC';
+  // static const String monoSecret = 'test_sk_j9hfeaeyl0gaevt9v37v';
+  // static const String monoPublic = 'test_pk_u7qxf0kjlnwa8o4dg64w';
+  static const String monoSecret = 'live_sk_jvylqkysp13tn93qdtff';
+  static const String monoPublic = 'live_pk_e6u6uvkoi7wf05lqtrp9';
 
   static const String revenueCatApiKey = 'REVENUE_CAT_API_KEY';
 }

@@ -123,15 +123,15 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     return Scaffold(
       appBar: AppBar(
         actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.edit_outlined),
-            style: Constants.collapsedButtonStyle,
-          ),
-          IconButton(
-            onPressed: () => context.pushNamed(SettingsScreen.path),
-            icon: Icon(Icons.settings_outlined),
-          ),
+          // IconButton(
+          //   onPressed: () {},
+          //   icon: Icon(Icons.edit_outlined),
+          //   style: Constants.collapsedButtonStyle,
+          // ),
+          // IconButton(
+          //   onPressed: () => context.pushNamed(SettingsScreen.path),
+          //   icon: Icon(Icons.settings_outlined),
+          // ),
         ],
       ),
       body: Stack(
@@ -302,9 +302,18 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                 ProfileListTile(
                                   title: 'Manage Subscription',
                                   iconPath: AppIcons.bankNoteIcon,
-                                  onTap: () => context.pushNamed(
-                                    ManageSubscriptionScreen.path,
-                                  ),
+                                  onTap: () {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                          'Subscriptions coming soon',
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  // onTap: () => context.pushNamed(
+                                  //   ManageSubscriptionScreen.path,
+                                  // ),
                                 ),
                               ],
                             ),
@@ -364,23 +373,23 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                 //     AccountStatementScreen.path,
                                 //   ),
                                 // ),
-                                const Divider(),
-                                ProfileListTile(
-                                  title: 'Enable Dark Mode',
-                                  iconPath: AppIcons.moonIcon,
-                                  onTap: () {},
-                                  useDefaultTrailing: false,
-                                  trailing: Transform.scale(
-                                    scale: 0.5,
-                                    child: Switch(
-                                      value: false,
-                                      onChanged: (value) {},
-                                      materialTapTargetSize:
-                                          MaterialTapTargetSize.shrinkWrap,
-                                      padding: EdgeInsets.zero,
-                                    ),
-                                  ),
-                                ),
+                                // const Divider(),
+                                // ProfileListTile(
+                                //   title: 'Enable Dark Mode',
+                                //   iconPath: AppIcons.moonIcon,
+                                //   onTap: () {},
+                                //   useDefaultTrailing: false,
+                                //   trailing: Transform.scale(
+                                //     scale: 0.5,
+                                //     child: Switch(
+                                //       value: false,
+                                //       onChanged: (value) {},
+                                //       materialTapTargetSize:
+                                //           MaterialTapTargetSize.shrinkWrap,
+                                //       padding: EdgeInsets.zero,
+                                //     ),
+                                //   ),
+                                // ),
                                 const Divider(),
                                 ProfileListTile(
                                   title: 'Security',
@@ -420,9 +429,18 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                 ProfileListTile(
                                   title: 'Change App Icon',
                                   iconPath: AppIcons.appIconIcon,
-                                  onTap: () => context.pushNamed(
-                                    ChangeAppIconScreen.path,
-                                  ),
+                                  onTap: () {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                          'Coming soon',
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  // onTap: () => context.pushNamed(
+                                  //   ChangeAppIconScreen.path,
+                                  // ),
                                 ),
                                 const Divider(),
                                 ProfileListTile(

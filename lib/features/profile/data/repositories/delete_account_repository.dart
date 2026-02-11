@@ -149,7 +149,7 @@ class DeleteAccountRepository {
       final response = await apiClient.delete(
         '/auth/deleteaccount/verify',
         queryParameters: {'email': email},
-        data: formData,
+        data: {'Otp': otp},
       );
 
       print('📥 Response status: ${response.statusCode}');

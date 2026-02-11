@@ -102,7 +102,8 @@ class _ToolsScreenState extends ConsumerState<ToolsScreen> {
                               'Create smart budgets, track spending, and get personalized insights.',
                           iconPath:
                               'assets/images/icons/budget_icon.png', // Replace with your actual icon path
-                          onPressed: () => context.pushNamed(BudgetsScreen.path),
+                          onPressed: () =>
+                              context.pushNamed(BudgetsScreen.path),
                         ),
                         Divider(
                           color: AppColors.grey.withValues(alpha: 0.2),
@@ -139,7 +140,10 @@ class _ToolsScreenState extends ConsumerState<ToolsScreen> {
                           iconPath:
                               'assets/images/icons/tax_icon.png', // Replace with your actual icon path
                           onPressed: () =>
-                              context.pushNamed(TaxationDashboardScreen.path),
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('Coming soon')),
+                              ),
+                          // context.pushNamed(TaxationDashboardScreen.path),
                         ),
                       ],
                     ),

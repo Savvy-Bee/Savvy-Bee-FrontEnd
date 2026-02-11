@@ -43,18 +43,33 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
                       padding: EdgeInsets.zero,
                     ),
                   ),
+                  onTap: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Coming soon')),
+                    );
+                  },
                 ),
                 const Divider(height: 0),
                 ProfileListTile(
                   title: 'Change PIN',
                   iconPath: AppIcons.infoIcon,
-                  onTap: () => context.pushNamed(ChangePinScreen.path),
+                  // onTap: () => context.pushNamed(ChangePinScreen.path),
+                  onTap: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Coming soon')),
+                    );
+                  },
                 ),
                 const Divider(height: 0),
                 ProfileListTile(
                   title: 'Change Password',
                   iconPath: AppIcons.infoIcon,
-                  onTap: () => context.pushNamed(ChangePasswordScreen.path),
+                  // onTap: () => context.pushNamed(ChangePasswordScreen.path),
+                  onTap: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Coming soon')),
+                    );
+                  },
                 ),
               ],
             ),
