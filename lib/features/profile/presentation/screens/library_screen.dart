@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/app_icons.dart';
 import 'package:savvy_bee_mobile/core/widgets/game_card.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/widgets/profile_list_tile.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LibraryScreen extends ConsumerStatefulWidget {
   static const String path = '/library';
@@ -35,13 +36,33 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
                 ProfileListTile(
                   title: 'About Savvy Bee',
                   iconPath: AppIcons.infoIcon,
-                  onTap: () {},
+                  onTap: () async {
+                    final Uri url = Uri.parse(
+                      'https://mysavvybee.com/about-us',
+                    );
+
+                    if (!await launchUrl(
+                      url,
+                      mode: LaunchMode.externalApplication,
+                    )) {
+                      throw 'Could not launch $url';
+                    }
+                  },
                 ),
                 const Divider(),
                 ProfileListTile(
                   title: 'Visit FAQs',
                   iconPath: AppIcons.questionIcon,
-                  onTap: () {},
+                  onTap: () async {
+                    final Uri url = Uri.parse('https://mysavvybee.com/faq');
+
+                    if (!await launchUrl(
+                      url,
+                      mode: LaunchMode.externalApplication,
+                    )) {
+                      throw 'Could not launch $url';
+                    }
+                  },
                 ),
                 const Divider(),
                 ProfileListTile(
@@ -67,13 +88,33 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
                 ProfileListTile(
                   title: 'Terms of Use',
                   iconPath: AppIcons.documentIcon,
-                  onTap: () {},
+                  onTap: () async {
+                    final Uri url = Uri.parse('https://mysavvybee.com/terms');
+
+                    if (!await launchUrl(
+                      url,
+                      mode: LaunchMode.externalApplication,
+                    )) {
+                      throw 'Could not launch $url';
+                    }
+                  },
                 ),
                 const Divider(),
                 ProfileListTile(
                   title: 'Privacy Policy',
                   iconPath: AppIcons.documentIcon,
-                  onTap: () {},
+                  onTap: () async {
+                    final Uri url = Uri.parse(
+                      'https://mysavvybee.com/privacy-policy',
+                    );
+
+                    if (!await launchUrl(
+                      url,
+                      mode: LaunchMode.externalApplication,
+                    )) {
+                      throw 'Could not launch $url';
+                    }
+                  },
                 ),
               ],
             ),

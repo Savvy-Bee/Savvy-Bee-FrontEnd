@@ -8,6 +8,8 @@ class CustomErrorWidget extends StatelessWidget {
   final IconData? icon;
   final String? actionButtonText;
   final VoidCallback? onActionPressed;
+  final String? logoutButtonText;
+  final VoidCallback? onLogoutPressed;
   final Color? iconColor;
   final double? iconSize;
   final bool isActionButtonFilled;
@@ -19,6 +21,8 @@ class CustomErrorWidget extends StatelessWidget {
     this.icon,
     this.actionButtonText,
     this.onActionPressed,
+    this.logoutButtonText,
+    this.onLogoutPressed,
     this.iconColor,
     this.iconSize,
     this.isActionButtonFilled = false,
@@ -83,6 +87,20 @@ class CustomErrorWidget extends StatelessWidget {
                 ),
                 child: Text(
                   actionButtonText!,
+                  style: TextStyle(fontFamily: 'GeneralSans'),
+                ),
+              ),
+            if (logoutButtonText != null && onLogoutPressed != null)
+              TextButton(
+                onPressed: onLogoutPressed,
+                style: TextButton.styleFrom(
+                  foregroundColor: AppColors.error,
+                  backgroundColor: isActionButtonFilled
+                      ? AppColors.primary
+                      : null,
+                ),
+                child: Text(
+                  logoutButtonText!,
                   style: TextStyle(fontFamily: 'GeneralSans'),
                 ),
               ),

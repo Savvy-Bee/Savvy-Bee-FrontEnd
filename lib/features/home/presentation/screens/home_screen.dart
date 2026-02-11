@@ -10,7 +10,10 @@ import 'package:savvy_bee_mobile/core/widgets/article_card.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/core/widgets/dot.dart';
 import 'package:savvy_bee_mobile/core/widgets/icon_text_row_widget.dart';
+import 'package:savvy_bee_mobile/core/widgets/main_wrapper.dart';
 import 'package:savvy_bee_mobile/core/widgets/section_title_widget.dart';
+import 'package:savvy_bee_mobile/features/auth/presentation/providers/auth_providers.dart';
+import 'package:savvy_bee_mobile/features/auth/presentation/screens/login_screen.dart';
 import 'package:savvy_bee_mobile/features/chat/presentation/screens/chat_screen.dart';
 import 'package:savvy_bee_mobile/features/hive/domain/models/course.dart';
 import 'package:savvy_bee_mobile/features/home/domain/models/blog_post.dart';
@@ -535,6 +538,12 @@ The bottom line? Joint savings work best when there's trust, communication, and 
           onActionPressed: () {
             ref.invalidate(homeDataProvider);
           },
+          onLogoutPressed: () {
+            ref.read(authProvider.notifier).logout();
+            ref.read(bottomNavIndexProvider.notifier).state = 0;
+            context.goNamed(LoginScreen.path);
+          },
+          logoutButtonText: 'Logout',
         ),
       ),
       loading: () => Scaffold(
@@ -778,7 +787,7 @@ The bottom line? Joint savings work best when there's trust, communication, and 
     );
   }
 
- AppBar _buildAppBar(String firstName, BuildContext context) {
+  AppBar _buildAppBar(String firstName, BuildContext context) {
     return AppBar(
       backgroundColor: Colors.white,
       elevation: 0,
@@ -820,10 +829,10 @@ The bottom line? Joint savings work best when there's trust, communication, and 
               ],
             ),
           ),
-          
+
           // Spacer to push center icon to middle
           const Spacer(),
-          
+
           // CENTER: Icon
           Image.asset(
             'assets/images/topbar/nav-center-icon.png',
@@ -831,7 +840,7 @@ The bottom line? Joint savings work best when there's trust, communication, and 
             height: 32,
             fit: BoxFit.contain,
           ),
-          
+
           // Spacer to balance and push avatar to right
           const Spacer(),
         ],

@@ -77,7 +77,7 @@ class SelfieValidation extends ValidationField {
     return SelfieValidation(
       value: json['value'] as String? ?? '',
       match: json['match'] as bool? ?? false,
-      confidenceRating: json['confidence_rating'] as double? ?? 0,
+      confidenceRating: (json['confidence_rating'] as num?)?.toDouble() ?? 0.0,
     );
   }
 }
