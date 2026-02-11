@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
+import 'package:purchases_ui_flutter/purchases_ui_flutter.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/core/widgets/intro_text.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/assets/illustrations.dart';
+import '../../../../core/utils/constants.dart';
 import 'subscription/downgrade_subscription_screen.dart';
 
 class ManageSubscriptionScreen extends ConsumerStatefulWidget {
@@ -23,6 +27,21 @@ class ManageSubscriptionScreen extends ConsumerStatefulWidget {
 class _ManageSubscriptionScreenState
     extends ConsumerState<ManageSubscriptionScreen> {
   bool isFreePlan = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _checkSubscriptionStatus();
+  }
+
+  void _checkSubscriptionStatus() async {
+    final customerInfo = await Purchases.getCustomerInfo();
+
+    setState(() {
+      isFreePlan = !customerInfo.entitlements.active.containsKey('Bee+');
+    });
+  }
 
   final cardBorderColor = AppColors.grey.withValues(alpha: 0.5);
 
@@ -53,7 +72,12 @@ class _ManageSubscriptionScreenState
           text: isFreePlan ? 'Upgrade to Bee+' : 'Downgrade to Free',
           buttonColor: CustomButtonColor.black,
           onPressed: isFreePlan
-              ? () {}
+              ? () async {
+                  final paywallResult = await RevenueCatUI.presentPaywall();
+                  if (paywallResult == PaywallResult.purchased) {
+                    _checkSubscriptionStatus();
+                  }
+                }
               : () {
                   context.pushNamed(DowngradeSubscriptionScreen.path);
                 },
@@ -228,3 +252,12 @@ class _ManageSubscriptionScreenState
     );
   }
 }
+
+// class SubscriptionPaymentView extends StatelessWidget {
+//   const SubscriptionPaymentView({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(body: PaywallView(onDismiss: () => context.pop()));
+//   }
+// }
