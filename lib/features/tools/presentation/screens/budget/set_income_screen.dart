@@ -85,9 +85,22 @@ class _SetIncomeScreenState extends ConsumerState<SetIncomeScreen> {
     try {
       final notifier = ref.read(budgetHomeNotifierProvider.notifier);
       await notifier.updateMonthlyEarnings(monthlyEarning);
-      if (mounted) context.pushReplacementNamed(SetBudgetScreen.path);
-    } catch (_) {
-      setState(() => _isLoading = false);
+
+      if (mounted) {
+        // Use push instead of pushReplacementNamed
+        context.pushNamed(SetBudgetScreen.path);
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(e.toString().replaceAll('Exception: ', '')),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 

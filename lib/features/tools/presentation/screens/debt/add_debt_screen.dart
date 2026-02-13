@@ -39,11 +39,22 @@ class _AddDebtScreenState extends ConsumerState<AddDebtScreen> {
   LoanRepaymentFrequency _selectedPaymentFrequency =
       LoanRepaymentFrequency.monthly;
 
-  // Variable to hold selected day (e.g. "1", "15", "Monday")
   String? _selectedRepaymentDay;
   DateTime? _selectedDate;
-
   bool _isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // Add listeners to recalculate when values change
+    _amountOwedController.addListener(_updateInsight);
+    _interestRateController.addListener(_updateInsight);
+    _minimumPaymentController.addListener(_updateInsight);
+  }
+
+  void _updateInsight() {
+    setState(() {}); // Trigger rebuild when values change
+  }
 
   @override
   void dispose() {
@@ -55,28 +66,105 @@ class _AddDebtScreenState extends ConsumerState<AddDebtScreen> {
     super.dispose();
   }
 
+  // Calculate months to payoff
+  String _calculatePayoffInsight() {
+    final amountText = _amountOwedController.text.replaceAll(',', '');
+    final interestText = _interestRateController.text.replaceAll('%', '');
+    final minPaymentText = _minimumPaymentController.text.replaceAll(',', '');
+
+    final amount = num.tryParse(amountText);
+    final interestRate = num.tryParse(interestText);
+    final minPayment = num.tryParse(minPaymentText);
+
+    if (amount == null || interestRate == null || minPayment == null) {
+      return 'Enter all fields to see payoff calculation';
+    }
+
+    if (amount <= 0 || minPayment <= 0) {
+      return 'Enter valid amounts to see payoff calculation';
+    }
+
+    // Calculate months to pay off with interest
+    final monthlyInterestRate = (interestRate / 100) / 12;
+
+    if (minPayment <= (amount * monthlyInterestRate)) {
+      return 'Minimum payment is too low to cover interest. Increase payment amount.';
+    }
+
+    int months = 0;
+    double remainingBalance = amount.toDouble();
+
+    // Simple amortization calculation
+    while (remainingBalance > 0 && months < 1200) {
+      // Cap at 100 years to prevent infinite loop
+      final interestCharge = remainingBalance * monthlyInterestRate;
+      final principalPayment = minPayment - interestCharge;
+      remainingBalance -= principalPayment;
+      months++;
+
+      if (remainingBalance <= 0) break;
+    }
+
+    final formattedPayment = minPayment
+        .toStringAsFixed(0)
+        .replaceAllMapped(
+          RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+          (Match m) => '${m[1]},',
+        );
+
+    return 'At ₦$formattedPayment/month and ${interestRate.toStringAsFixed(1)}% interest, your loan will be paid off in $months months.';
+  }
+
   Future<void> _submitDebtStep1() async {
     if (!_formKey.currentState!.validate()) return;
+
     if (_selectedDate == null) {
       CustomSnackbar.show(context, 'Please select a target payoff date');
       return;
     }
 
-    setState(() => _isLoading = true);
+    // Add validation for repayment day (except for manual payments)
+    if (_selectedPaymentFrequency != LoanRepaymentFrequency.manually &&
+        _selectedRepaymentDay == null) {
+      CustomSnackbar.show(
+        context,
+        'Please select a repayment day for ${_selectedPaymentFrequency.name} payments',
+      );
+      return;
+    }
 
     // Clean data (remove commas if formatted, etc.)
     final amount = _amountOwedController.text.replaceAll(',', '');
     final minPayment = _minimumPaymentController.text.replaceAll(',', '');
     final interest = _interestRateController.text.replaceAll('%', '');
 
+    // Validate that parsing will succeed
+    if (num.tryParse(amount) == null) {
+      CustomSnackbar.show(context, 'Invalid amount owed');
+      return;
+    }
+    if (num.tryParse(interest) == null) {
+      CustomSnackbar.show(context, 'Invalid interest rate');
+      return;
+    }
+    if (num.tryParse(minPayment) == null) {
+      CustomSnackbar.show(context, 'Invalid minimum payment');
+      return;
+    }
+
+    setState(() => _isLoading = true);
+
     final DebtRequestModel reqData = DebtRequestModel(
       name: _nameController.text.trim(),
-      amountOwed: num.tryParse(amount)!,
-      interestRate: num.tryParse(interest)!,
+      amountOwed: num.parse(
+        amount,
+      ), // Now safe to use parse instead of tryParse
+      interestRate: num.parse(interest),
       paymentFrequency: _selectedPaymentFrequency.name.capitalizeFirstLetter(),
-      minPayment: num.tryParse(minPayment)!,
+      minPayment: num.parse(minPayment),
       expectedPayoffDate: _selectedDate!,
-      repaymentDay: _selectedRepaymentDay!,
+      repaymentDay:
+          _selectedRepaymentDay ?? '1', // Provide default for manual payments
     );
 
     try {
@@ -86,14 +174,9 @@ class _AddDebtScreenState extends ConsumerState<AddDebtScreen> {
           .createDebt(reqData);
 
       if (mounted) {
-        // Assuming response contains 'id' or 'data'['id']. Adjust based on actual API response.
-        // Example: response is Map<String, dynamic>
         final String debtId = response.debtId;
 
-        context.pushNamed(
-          DebtRepaymentDetailsScreen.path,
-          extra: debtId, // Pass the ID to the next screen
-        );
+        context.pushNamed(DebtRepaymentDetailsScreen.path, extra: debtId);
       }
     } catch (e) {
       if (mounted) {
@@ -104,7 +187,6 @@ class _AddDebtScreenState extends ConsumerState<AddDebtScreen> {
     }
   }
 
-  // Helper to generate days
   List<String> _getDropdownItems() {
     return List.generate(31, (index) => (index + 1).toString());
   }
@@ -165,19 +247,18 @@ class _AddDebtScreenState extends ConsumerState<AddDebtScreen> {
                     isSelected: _selectedPaymentFrequency == frequency,
                     onTap: () => setState(() {
                       _selectedPaymentFrequency = frequency;
-                      _selectedRepaymentDay = null; // Reset dropdown selection
+                      _selectedRepaymentDay = null;
                     }),
                   ),
                 );
               }).toList(),
             ),
-            const Gap(8),
-            const InsightCard(
-              insightType: InsightType.nextBestAction,
-              text: 'Pay ₦125,000/month to clear ₦1,000,000 loan in 8 months.',
-            ),
+            // const Gap(8),
+            // const InsightCard(
+            //   insightType: InsightType.nextBestAction,
+            //   text: 'Pay ₦125,000/month to clear ₦1,000,000 loan in 8 months.',
+            // ),
             const Gap(16),
-            // Only show dropdown if relevant
             if (_selectedPaymentFrequency != LoanRepaymentFrequency.manually)
               CustomDropdownButton(
                 items: _getDropdownItems(),
@@ -200,10 +281,10 @@ class _AddDebtScreenState extends ConsumerState<AddDebtScreen> {
               validator: (v) => v == null || v.isEmpty ? 'Required' : null,
             ),
             const Gap(8),
-            const InsightCard(
+            // Dynamic calculated insight
+            InsightCard(
               insightType: InsightType.nahlInsight,
-              text:
-                  'At ₦100,000/month and 5% interest, your loan will be be paid off in 9 months.',
+              text: _calculatePayoffInsight(),
             ),
             const Gap(8),
             const InsightCard(
@@ -217,7 +298,7 @@ class _AddDebtScreenState extends ConsumerState<AddDebtScreen> {
               hint: '01/03/26',
               label: 'Target payoff date',
               suffixIcon: const Icon(Icons.calendar_month),
-              readOnly: true, // Prevent manual typing to ensure format
+              readOnly: true,
               validator: (v) => v == null || v.isEmpty ? 'Required' : null,
               onTap: () async {
                 final date = await DateTimeUtils.pickDate(

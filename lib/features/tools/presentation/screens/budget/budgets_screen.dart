@@ -136,13 +136,13 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> {
                 const Gap(16),
 
                 // Alert Insight Card
-                InsightCard(
-                  insightType: InsightType.nahlInsight,
-                  text:
-                      "You've spent 15% more on transport this month. Try adjusting your allocation.",
-                  // backgroundColor: const Color(0xFFE3F2FD),
-                ),
-                const Gap(24),
+                // InsightCard(
+                //   insightType: InsightType.nahlInsight,
+                //   text:
+                //       "You've spent 15% more on transport this month. Try adjusting your allocation.",
+                //   // backgroundColor: const Color(0xFFE3F2FD),
+                // ),
+                // const Gap(24),
 
                 // Spending Card
                 _buildSpendingCard(safeToSpend, totalSpent, totalBudget),
@@ -261,9 +261,9 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> {
             padding: EdgeInsets.only(right: index < 2 ? 8 : 0),
             child: InkWell(
               onTap: () {
-                setState(() {
-                  _selectedMonthIndex = monthIndex;
-                });
+                // setState(() {
+                //   _selectedMonthIndex = monthIndex;
+                // });
               },
               borderRadius: BorderRadius.circular(8),
               child: Container(
@@ -337,7 +337,7 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> {
                   ),
                 ],
               ),
-              Icon(Icons.chevron_right, color: Colors.grey.shade400),
+              // Icon(Icons.chevron_right, color: Colors.grey.shade400),
             ],
           ),
           const Gap(12),
@@ -454,7 +454,7 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> {
           Text(
             label,
             style: const TextStyle(
-              fontSize: 16,
+              fontSize: 14,
               fontWeight: FontWeight.w500,
               fontFamily: 'GeneralSans',
             ),
@@ -463,7 +463,7 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> {
           Text(
             amount.toDouble().formatCurrency(decimalDigits: 2),
             style: const TextStyle(
-              fontSize: 16,
+              fontSize: 12,
               fontWeight: FontWeight.w600,
               fontFamily: 'GeneralSans',
             ),
@@ -527,7 +527,7 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> {
           Text(
             budget.budgetName,
             style: const TextStyle(
-              fontSize: 16,
+              fontSize: 14,
               fontWeight: FontWeight.w500,
               fontFamily: 'GeneralSans',
             ),
@@ -538,7 +538,7 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> {
               decimalDigits: 0,
             ),
             style: const TextStyle(
-              fontSize: 16,
+              fontSize: 12,
               fontWeight: FontWeight.w600,
               fontFamily: 'GeneralSans',
             ),

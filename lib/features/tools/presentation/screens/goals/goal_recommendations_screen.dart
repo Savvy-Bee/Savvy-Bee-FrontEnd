@@ -28,14 +28,20 @@ class _GoalRecommendationsScreenState
     extends ConsumerState<GoalRecommendationsScreen> {
   double _monthlySavings = 0;
   bool _isInitialized = false;
+  final TextEditingController _manualInputController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    // Initialize savings amount after first frame
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _initializeSavings();
     });
+  }
+
+  @override
+  void dispose() {
+    _manualInputController.dispose();
+    super.dispose();
   }
 
   void _initializeSavings() {
@@ -44,12 +50,25 @@ class _GoalRecommendationsScreenState
     budgetState.whenData((data) {
       if (!_isInitialized) {
         setState(() {
-          // Set default to 50% of monthly income
-          _monthlySavings = (data.totalEarnings * 0.5);
+          // Set default to 30% of monthly income (conservative)
+          _monthlySavings = (data.totalEarnings * 0.3);
           _isInitialized = true;
         });
       }
     });
+  }
+
+  // Get slider color based on savings percentage
+  Color _getSliderColor(double percentage) {
+    if (percentage <= 20) {
+      return Colors.green; // Safe - Low savings
+    } else if (percentage <= 40) {
+      return AppColors.yellow; // Moderate - Good savings
+    } else if (percentage <= 60) {
+      return Colors.orange; // High - Aggressive savings
+    } else {
+      return Colors.red; // Very high - May be unsustainable
+    }
   }
 
   @override
@@ -75,12 +94,13 @@ class _GoalRecommendationsScreenState
       body: budgetState.when(
         data: (budgetData) {
           final monthlyIncome = budgetData.totalEarnings.toDouble();
+          final hasIncome = monthlyIncome > 0;
 
           // Initialize if not already done
           if (!_isInitialized && monthlyIncome > 0) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               setState(() {
-                _monthlySavings = monthlyIncome * 0.5;
+                _monthlySavings = monthlyIncome * 0.3;
                 _isInitialized = true;
               });
             });
@@ -160,142 +180,16 @@ class _GoalRecommendationsScreenState
                     ),
                     const Gap(32),
 
-                    // Savings Plan Card
-                    Container(
-                      padding: const EdgeInsets.all(24),
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade50,
-                        borderRadius: BorderRadius.circular(16),
+                    // Conditional rendering based on income
+                    if (!hasIncome)
+                      _buildManualInputCard(targetAmount)
+                    else
+                      _buildSavingsPlanCard(
+                        monthlyIncome,
+                        targetAmount,
+                        percentage,
+                        formattedDate,
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Savings Plan',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              fontFamily: 'GeneralSans',
-                              color: Colors.black87,
-                            ),
-                          ),
-                          const Gap(24),
-
-                          // Amount with slider
-                          Center(
-                            child: Column(
-                              children: [
-                                Text(
-                                  '${_monthlySavings.toDouble().formatCurrency(decimalDigits: 0)} / month',
-                                  style: const TextStyle(
-                                    fontSize: 28,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'GeneralSans',
-                                  ),
-                                ),
-                                const Gap(4),
-                                Text(
-                                  '$percentage% of your income',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontFamily: 'GeneralSans',
-                                    color: AppColors.yellow.withOpacity(0.8),
-                                  ),
-                                ),
-                                const Gap(16),
-
-                                // Slider
-                                SliderTheme(
-                                  data: SliderThemeData(
-                                    activeTrackColor: AppColors.yellow,
-                                    inactiveTrackColor: Colors.grey.shade300,
-                                    thumbColor: AppColors.yellow,
-                                    overlayColor: AppColors.yellow.withOpacity(
-                                      0.2,
-                                    ),
-                                    trackHeight: 4,
-                                  ),
-                                  child: Slider(
-                                    value: _monthlySavings.clamp(
-                                      0,
-                                      monthlyIncome,
-                                    ),
-                                    min: 0,
-                                    max: monthlyIncome > 0
-                                        ? monthlyIncome
-                                        : 1000000,
-                                    divisions: monthlyIncome > 10000
-                                        ? (monthlyIncome / 10000).toInt()
-                                        : 100,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        _monthlySavings = value;
-                                      });
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const Gap(24),
-
-                          // Info section
-                          Container(
-                            padding: const EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    const Text(
-                                      'Based on your monthly income of',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        fontFamily: 'GeneralSans',
-                                        color: Colors.black87,
-                                      ),
-                                    ),
-                                    const Gap(4),
-                                    Text(
-                                      monthlyIncome.toDouble().formatCurrency(
-                                        decimalDigits: 0,
-                                      ),
-                                      style: const TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w600,
-                                        fontFamily: 'GeneralSans',
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const Gap(12),
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.calendar_today,
-                                      size: 16,
-                                      color: Colors.grey.shade600,
-                                    ),
-                                    const Gap(8),
-                                    Text(
-                                      "You'll reach your goal $formattedDate",
-                                      style: const TextStyle(
-                                        fontSize: 12,
-                                        fontFamily: 'GeneralSans',
-                                        color: Colors.black87,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
                   ],
                 ),
               ),
@@ -314,31 +208,10 @@ class _GoalRecommendationsScreenState
                               'monthlyIncome': monthlyIncome,
                             };
 
-                            print('📊 Passing data to finalizing screen:');
-                            print('  - goalType: ${dataToPass['goalType']}');
-                            print('  - amount: ${dataToPass['amount']}');
-                            print(
-                              '  - monthlySavings: ${dataToPass['monthlySavings']}',
+                            context.push(
+                              GoalFinalizingScreen.path,
+                              extra: dataToPass,
                             );
-                            print(
-                              '  - monthlyIncome: ${dataToPass['monthlyIncome']}',
-                            );
-
-                            // ✅ FIXED: Use context.push instead of context.pushReplacementNamed
-                            try {
-                              context.push(
-                                GoalFinalizingScreen.path,
-                                extra: dataToPass,
-                              );
-                            } catch (e) {
-                              print('❌ Navigation error: $e');
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text('Navigation failed: $e'),
-                                  backgroundColor: Colors.red,
-                                ),
-                              );
-                            }
                           }
                         : null,
                     style: ElevatedButton.styleFrom(
@@ -411,6 +284,293 @@ class _GoalRecommendationsScreenState
         ),
       ),
     );
+  }
+
+  // Manual input card for users with no income
+  Widget _buildManualInputCard(double targetAmount) {
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade50,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Savings Plan',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              fontFamily: 'GeneralSans',
+              color: Colors.black87,
+            ),
+          ),
+          const Gap(16),
+
+          // Info message
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.blue.shade50,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.blue.shade200),
+            ),
+            child: Row(
+              children: [
+                Icon(Icons.info_outline, color: Colors.blue.shade700, size: 20),
+                const Gap(12),
+                Expanded(
+                  child: Text(
+                    'No monthly income detected. Enter your desired monthly savings manually.',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontFamily: 'GeneralSans',
+                      color: Colors.blue.shade900,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const Gap(24),
+
+          // Manual input field
+          TextFormField(
+            controller: _manualInputController,
+            keyboardType: TextInputType.number,
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            decoration: InputDecoration(
+              labelText: 'Monthly savings amount',
+              hintText: 'Enter amount',
+              prefixText: '₦ ',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: const BorderSide(color: Colors.black, width: 2),
+              ),
+            ),
+            onChanged: (value) {
+              final amount = double.tryParse(value.replaceAll(',', '')) ?? 0;
+              setState(() {
+                _monthlySavings = amount;
+              });
+            },
+          ),
+          const Gap(16),
+
+          if (_monthlySavings > 0)
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.calendar_today,
+                        size: 16,
+                        color: Colors.grey.shade600,
+                      ),
+                      const Gap(8),
+                      Expanded(
+                        child: Text(
+                          "You'll reach your ${targetAmount.formatCurrency(decimalDigits: 0)} goal in ${(targetAmount / _monthlySavings).ceil()} months",
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontFamily: 'GeneralSans',
+                            color: Colors.black87,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  // Savings plan card with slider for users with income
+  Widget _buildSavingsPlanCard(
+    double monthlyIncome,
+    double targetAmount,
+    int percentage,
+    String formattedDate,
+  ) {
+    final sliderColor = _getSliderColor(percentage.toDouble());
+
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade50,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Savings Plan',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              fontFamily: 'GeneralSans',
+              color: Colors.black87,
+            ),
+          ),
+          const Gap(24),
+
+          // Amount with slider
+          Center(
+            child: Column(
+              children: [
+                Text(
+                  '${_monthlySavings.toDouble().formatCurrency(decimalDigits: 0)} / month',
+                  style: const TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'GeneralSans',
+                  ),
+                ),
+                const Gap(4),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 8,
+                      height: 8,
+                      decoration: BoxDecoration(
+                        color: sliderColor,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                    const Gap(6),
+                    Text(
+                      '$percentage% of your income',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontFamily: 'GeneralSans',
+                        color: sliderColor,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+                const Gap(8),
+                Text(
+                  _getSavingsAdvice(percentage),
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontFamily: 'GeneralSans',
+                    color: Colors.grey.shade600,
+                    fontStyle: FontStyle.italic,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const Gap(16),
+
+                // Slider
+                SliderTheme(
+                  data: SliderThemeData(
+                    activeTrackColor: sliderColor,
+                    inactiveTrackColor: Colors.grey.shade300,
+                    thumbColor: sliderColor,
+                    overlayColor: sliderColor.withOpacity(0.2),
+                    trackHeight: 4,
+                  ),
+                  child: Slider(
+                    value: _monthlySavings.clamp(0, monthlyIncome),
+                    min: 0,
+                    max: monthlyIncome,
+                    divisions: monthlyIncome > 10000
+                        ? (monthlyIncome / 10000).toInt()
+                        : 100,
+                    onChanged: (value) {
+                      setState(() {
+                        _monthlySavings = value;
+                      });
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const Gap(24),
+
+          // Info section
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    const Text(
+                      'Based on your monthly income of',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontFamily: 'GeneralSans',
+                        color: Colors.black87,
+                      ),
+                    ),
+                    const Gap(4),
+                    Text(
+                      monthlyIncome.toDouble().formatCurrency(decimalDigits: 0),
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'GeneralSans',
+                      ),
+                    ),
+                  ],
+                ),
+                const Gap(12),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.calendar_today,
+                      size: 16,
+                      color: Colors.grey.shade600,
+                    ),
+                    const Gap(8),
+                    Text(
+                      "You'll reach your goal $formattedDate",
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontFamily: 'GeneralSans',
+                        color: Colors.black87,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _getSavingsAdvice(int percentage) {
+    if (percentage <= 20) {
+      return 'Conservative - Safe and sustainable';
+    } else if (percentage <= 40) {
+      return 'Recommended - Good balance';
+    } else if (percentage <= 60) {
+      return 'Aggressive - Ensure you have buffer for expenses';
+    } else {
+      return 'Very high - May impact daily living expenses';
+    }
   }
 
   String _getMonthName(int month) {

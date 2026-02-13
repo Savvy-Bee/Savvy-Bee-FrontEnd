@@ -155,7 +155,8 @@ class DebtCreationResponse {
     return DebtCreationResponse(
       success: json['success'] as bool? ?? false,
       message: json['message'] as String? ?? 'Unknown response message',
-      debtId: json['data']?['debtid'] as String? ?? '',
+      // Fix: Handle both int and String for debtid
+      debtId: (json['data']?['debtid']?.toString() ?? ''),
     );
   }
 }

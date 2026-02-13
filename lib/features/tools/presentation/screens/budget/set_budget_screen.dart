@@ -60,7 +60,12 @@ class _SetBudgetScreenState extends ConsumerState<SetBudgetScreen> {
   void _decrementBudget() {
     final budgetState = ref.read(budgetHomeNotifierProvider);
     budgetState.whenData((data) {
-      if (_monthlyBudget >= 10000 && _monthlyBudget <= data.totalEarnings) {
+      // if (_monthlyBudget >= 10000 && _monthlyBudget <= data.totalEarnings) {
+      //   setState(() {
+      //     _monthlyBudget -= 10000; // Decrement by ₦10,000
+      //   });
+      // }
+      if (_monthlyBudget >= 10000) {
         setState(() {
           _monthlyBudget -= 10000; // Decrement by ₦10,000
         });
@@ -68,43 +73,195 @@ class _SetBudgetScreenState extends ConsumerState<SetBudgetScreen> {
     });
   }
 
+  // Future<void> _handleSave() async {
+  //   final budgetState = ref.read(budgetHomeNotifierProvider);
+
+  //   await budgetState.whenData((data) async {
+  //     if (_monthlyBudget > data.totalEarnings) {
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         const SnackBar(
+  //           content: Text('Budget cannot exceed your monthly income'),
+  //           backgroundColor: Colors.red,
+  //         ),
+  //       );
+  //       return;
+  //     }
+
+  //     if (_monthlyBudget <= 0) {
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         const SnackBar(
+  //           content: Text('Please set a valid budget amount'),
+  //           backgroundColor: Colors.red,
+  //         ),
+  //       );
+  //       return;
+  //     }
+
+  //     setState(() => _isLoading = true);
+
+  //     try {
+  //       // Simply navigate - the budget will be set when users add categories
+  //       // Or create a placeholder "General" budget if none exist
+  //       final existingBudgets = data.budgets;
+
+  //       if (existingBudgets.isEmpty) {
+  //         // Create an initial "Other" category with the full budget
+  //         await ref
+  //             .read(budgetHomeNotifierProvider.notifier)
+  //             .createBudget(
+  //               budgetName: 'Other',
+  //               totalBudget: _monthlyBudget,
+  //               amountSpent: 0,
+  //             );
+  //       } else {
+  //         // Budgets already exist - distribute the total budget proportionally
+  //         final currentTotal = existingBudgets.fold<num>(
+  //           0,
+  //           (sum, budget) => sum + budget.targetAmountMonthly,
+  //         );
+
+  //         if (currentTotal > 0) {
+  //           final scaleFactor = _monthlyBudget / currentTotal;
+
+  //           // Update each budget proportionally
+  //           for (final budget in existingBudgets) {
+  //             final newAmount = (budget.targetAmountMonthly * scaleFactor)
+  //                 .round();
+
+  //             await ref
+  //                 .read(budgetHomeNotifierProvider.notifier)
+  //                 .updateBudget(
+  //                   budgetName: budget.budgetName,
+  //                   newTargetAmount: newAmount,
+  //                   amountSpent: budget.balance,
+  //                 );
+  //           }
+  //         }
+  //       }
+
+  //       if (mounted) {
+  //         // Refresh data before navigating
+  //         await ref
+  //             .read(budgetHomeNotifierProvider.notifier)
+  //             .fetchBudgetHomeData();
+
+  //         if (mounted) {
+  //           context.pushReplacementNamed(BudgetCompletionScreen.path);
+  //         }
+  //       }
+  //     } catch (e) {
+  //       setState(() => _isLoading = false);
+
+  //       if (mounted) {
+  //         ScaffoldMessenger.of(context).showSnackBar(
+  //           SnackBar(
+  //             content: Text(e.toString().replaceAll('Exception: ', '')),
+  //             backgroundColor: Colors.red,
+  //             duration: const Duration(seconds: 3),
+  //           ),
+  //         );
+  //       }
+  //     } finally {
+  //       if (mounted) setState(() => _isLoading = false);
+  //     }
+  //   });
+  // }
+
   Future<void> _handleSave() async {
-    final budgetState = ref.read(budgetHomeNotifierProvider);
+  final budgetState = ref.read(budgetHomeNotifierProvider);
 
-    await budgetState.whenData((data) async {
-      if (_monthlyBudget > data.totalEarnings) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Budget cannot exceed your monthly income'),
-            backgroundColor: Colors.red,
-          ),
+  await budgetState.whenData((data) async {
+    if (_monthlyBudget > data.totalEarnings) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Budget cannot exceed your monthly income'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    if (_monthlyBudget <= 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please set a valid budget amount'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    setState(() => _isLoading = true);
+
+    try {
+      final notifier = ref.read(budgetHomeNotifierProvider.notifier);
+      final existingBudgets = data.budgets;
+      
+      if (existingBudgets.isEmpty) {
+        // Create or update "Other" category with the full budget
+        await notifier.createOrUpdateBudget(
+          budgetName: 'Other',
+          totalBudget: _monthlyBudget,
+          amountSpent: 0,
         );
-        return;
-      }
+      } else {
+        // Budgets already exist - distribute the total budget proportionally
+        final currentTotal = existingBudgets.fold<num>(
+          0,
+          (sum, budget) => sum + budget.targetAmountMonthly,
+        );
 
-      setState(() => _isLoading = true);
+        if (currentTotal > 0) {
+          final scaleFactor = _monthlyBudget / currentTotal;
 
-      try {
-        // Here you might want to save the total budget or proceed to category setup
-        // For now, we'll just navigate to the completion screen
-        if (mounted) {
-          context.pushReplacementNamed(BudgetCompletionScreen.path);
-        }
-      } catch (e) {
-        setState(() => _isLoading = false);
-
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(e.toString().replaceAll('Exception: ', '')),
-              backgroundColor: Colors.red,
-              duration: const Duration(seconds: 3),
-            ),
+          // Update each budget proportionally
+          for (final budget in existingBudgets) {
+            final newAmount = (budget.targetAmountMonthly * scaleFactor).round();
+            
+            await notifier.updateBudget(
+              budgetName: budget.budgetName,
+              newTargetAmount: newAmount,
+              amountSpent: budget.balance,
+            );
+          }
+        } else {
+          // All budgets are 0, create or update "Other"
+          await notifier.createOrUpdateBudget(
+            budgetName: 'Other',
+            totalBudget: _monthlyBudget,
+            amountSpent: 0,
           );
         }
       }
-    });
-  }
+
+      // CRITICAL: Wait for data to be refreshed
+      await notifier.fetchBudgetHomeData();
+      
+      if (mounted) {
+        // Small delay to ensure state update completes
+        await Future.delayed(const Duration(milliseconds: 300));
+        
+        if (mounted) {
+          context.pushReplacementNamed(BudgetCompletionScreen.path);
+        }
+      }
+    } catch (e) {
+      print('❌ Error saving budget: $e');
+      
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to save budget: ${e.toString().replaceAll('Exception: ', '')}'),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 3),
+          ),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  });
+}
 
   @override
   Widget build(BuildContext context) {
@@ -172,12 +329,12 @@ class _SetBudgetScreenState extends ConsumerState<SetBudgetScreen> {
                     const Gap(28),
 
                     // Nahl's Recommendation
-                    const InsightCard(
-                      insightType: InsightType.nahlInsight,
-                      text:
-                          'Based on your past spending, Nahl recommends allocating 40% to needs, 30% to wants, and saving 30%.',
-                    ),
-                    const Gap(40),
+                    // const InsightCard(
+                    //   insightType: InsightType.nahlInsight,
+                    //   text:
+                    //       'Based on your past spending, Nahl recommends allocating 40% to needs, 30% to wants, and saving 30%.',
+                    // ),
+                    // const Gap(40),
 
                     // Monthly Income
                     Column(

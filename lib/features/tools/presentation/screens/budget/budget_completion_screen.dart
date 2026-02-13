@@ -8,13 +8,29 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/providers/budget_provider.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/edit_budget_screen.dart';
 
-class BudgetCompletionScreen extends ConsumerWidget {
+class BudgetCompletionScreen extends ConsumerStatefulWidget {
   static const String path = '/budget-completion';
 
   const BudgetCompletionScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<BudgetCompletionScreen> createState() =>
+      _BudgetCompletionScreenState();
+}
+
+class _BudgetCompletionScreenState
+    extends ConsumerState<BudgetCompletionScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Force refresh data when screen loads
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(budgetHomeNotifierProvider.notifier).fetchBudgetHomeData();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final budgetState = ref.watch(budgetHomeNotifierProvider);
 
     return Scaffold(
@@ -39,6 +55,13 @@ class BudgetCompletionScreen extends ConsumerWidget {
       ),
       body: budgetState.when(
         data: (data) {
+          print('📊 Budget Completion Screen Data:');
+          print('  Total Earnings: ${data.totalEarnings}');
+          print('  Budgets Count: ${data.budgets.length}');
+          for (final budget in data.budgets) {
+            print('  - ${budget.budgetName}: ${budget.targetAmountMonthly}');
+          }
+
           final monthlyIncome = data.totalEarnings;
           final totalBudget = data.budgets.fold<num>(
             0,
@@ -132,7 +155,7 @@ class BudgetCompletionScreen extends ConsumerWidget {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
-                      context.goNamed('/budget-screen');
+                      context.goNamed('/budgets');
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.black,
@@ -158,7 +181,10 @@ class BudgetCompletionScreen extends ConsumerWidget {
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => Center(child: Text('Error: $error')),
+        error: (error, stack) {
+          print('❌ Budget Completion Error: $error');
+          return Center(child: Text('Error: $error'));
+        },
       ),
     );
   }
@@ -196,23 +222,30 @@ class BudgetCompletionScreen extends ConsumerWidget {
             ),
           ),
           const Gap(16),
-          Text(
-            label,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-              fontFamily: 'GeneralSans',
-              color: Colors.black,
+          Expanded(
+            child: Text(
+              label,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                fontFamily: 'GeneralSans',
+                color: Colors.black,
+              ),
             ),
           ),
-          const Spacer(),
-          Text(
-            amount.toDouble().formatCurrency(decimalDigits: 2),
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              fontFamily: 'GeneralSans',
-              color: Colors.black,
+          const Gap(12),
+          Flexible(
+            child: Text(
+              amount.toDouble().formatCurrency(decimalDigits: 2),
+              style: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                fontFamily: 'GeneralSans',
+                color: Colors.black,
+              ),
+              textAlign: TextAlign.right,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
             ),
           ),
         ],

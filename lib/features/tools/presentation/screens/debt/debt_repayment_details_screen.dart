@@ -104,61 +104,47 @@ class _DebtRepaymentDetailsScreenState
             Expanded(
               child: ListView(
                 children: [
-                  Text(
-                    'How would you like to pay this debt?',
-                    style: TextStyle(fontWeight: FontWeight.w500),
-                  ),
-                  const Gap(8),
-                  Row(
-                    spacing: 8,
-                    children: [
-                      Expanded(
-                        child: _buildPaymentOptionButton(
-                          'Bank transfer',
-                          isSelected:
-                              _repaymentMethod ==
-                              DebtRepaymentMethod.bankTransfer,
-                          onTap: () {
-                            setState(() {
-                              _repaymentMethod =
-                                  DebtRepaymentMethod.bankTransfer;
-                            });
-                          },
-                        ),
-                      ),
-                      Expanded(
-                        child: _buildPaymentOptionButton(
-                          'Card',
-                          isSelected:
-                              _repaymentMethod == DebtRepaymentMethod.card,
-                          onTap: () {
-                            setState(() {
-                              _repaymentMethod = DebtRepaymentMethod.card;
-                            });
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                  const Gap(16),
+                  // Text(
+                  //   'How would you like to pay this debt?',
+                  //   style: TextStyle(fontWeight: FontWeight.w500),
+                  // ),
+                  // const Gap(8),
+                  // Row(
+                  //   spacing: 8,
+                  //   children: [
+                  //     Expanded(
+                  //       child: _buildPaymentOptionButton(
+                  //         'Bank transfer',
+                  //         isSelected:
+                  //             _repaymentMethod ==
+                  //             DebtRepaymentMethod.bankTransfer,
+                  //         onTap: () {
+                  //           setState(() {
+                  //             _repaymentMethod =
+                  //                 DebtRepaymentMethod.bankTransfer;
+                  //           });
+                  //         },
+                  //       ),
+                  //     ),
+                  //     Expanded(
+                  //       child: _buildPaymentOptionButton(
+                  //         'Card',
+                  //         isSelected:
+                  //             _repaymentMethod == DebtRepaymentMethod.card,
+                  //         onTap: () {
+                  //           setState(() {
+                  //             _repaymentMethod = DebtRepaymentMethod.card;
+                  //           });
+                  //         },
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
+                  // const Gap(16),
                   CustomTextFormField(
                     label: 'Account Number',
                     isRounded: true,
                     controller: _accNumberController,
-                    suffixIcon: Padding(
-                      padding: const EdgeInsets.only(right: 16),
-                      child: CopyTextIconButton(
-                        label: 'Paste',
-                        onPressed: () async {
-                          final data = await Clipboard.getData(
-                            Clipboard.kTextPlain,
-                          );
-                          if (data?.text != null) {
-                            _accNumberController.text = data!.text!;
-                          }
-                        },
-                      ),
-                    ),
                     keyboardType: const TextInputType.numberWithOptions(
                       decimal: false,
                     ),
@@ -167,23 +153,23 @@ class _DebtRepaymentDetailsScreenState
                       LengthLimitingTextInputFormatter(10),
                     ],
                   ),
-                  const Gap(4),
-                  // Account Name Resolution (Placeholder logic)
-                  if (_accNumberController.text.length == 10)
-                    IconTextRowWidget(
-                      'Aegon Targaryen',
-                      Icon(
-                        Icons.check_circle,
-                        color: AppColors.primary,
-                        size: 16,
-                      ),
-                      textStyle: TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
+                  // const Gap(4),
+                  // // Account Name Resolution (Placeholder logic)
+                  // if (_accNumberController.text.length == 10)
+                  //   IconTextRowWidget(
+                  //     'Aegon Targaryen',
+                  //     Icon(
+                  //       Icons.check_circle,
+                  //       color: AppColors.primary,
+                  //       size: 16,
+                  //     ),
+                  //     textStyle: TextStyle(
+                  //       fontSize: 10,
+                  //       fontWeight: FontWeight.bold,
 
-                        color: AppColors.primary,
-                      ),
-                    ),
+                  //       color: AppColors.primary,
+                  //     ),
+                  //   ),
                   const Gap(16),
                   CustomDropdownButton(
                     items: _dummyBanks.map((e) => e['name']!).toList(),
@@ -226,17 +212,17 @@ class _DebtRepaymentDetailsScreenState
                           style: TextStyle(fontSize: 12),
                           TextSpan(
                             text:
-                                'I hereby agree to Nahl automatically repaying this debt from my Savvy Wallet to ',
+                                'I hereby agree to Nahl automatically repaying this debt from my Savvy Wallet ',
                             children: [
-                              TextSpan(
-                                text: 'Aegon Targaryen (First Bank) ',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              TextSpan(text: 'on the '),
-                              TextSpan(
-                                text: 'first day of every month ',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
+                              // TextSpan(
+                              //   text: 'Aegon Targaryen (First Bank) ',
+                              //   style: TextStyle(fontWeight: FontWeight.bold),
+                              // ),
+                              // TextSpan(text: 'on the '),
+                              // TextSpan(
+                              //   text: 'first day of every month ',
+                              //   style: TextStyle(fontWeight: FontWeight.bold),
+                              // ),
                               TextSpan(
                                 text: 'until the debt has been fully repaid',
                               ),

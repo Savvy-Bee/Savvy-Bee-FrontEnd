@@ -68,11 +68,11 @@ class _EditBudgetScreenState extends ConsumerState<EditBudgetScreen> {
               //   ),
               // ),
               // const Gap(24),
-              const InsightCard(
-                insightType: InsightType.nextBestAction,
-                text:
-                    "You've spent 15% more on transport this month. Try adjusting your allocation.",
-              ),
+              // const InsightCard(
+              //   insightType: InsightType.nextBestAction,
+              //   text:
+              //       "You've spent 15% more on transport this month. Try adjusting your allocation.",
+              // ),
               const Gap(28),
               _buildBudgetBasicsCard(data, totalBudget, remaining),
               const Gap(28),

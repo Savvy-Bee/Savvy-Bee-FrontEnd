@@ -19,16 +19,13 @@ class DebtListNotifier extends AsyncNotifier<DebtListResponse> {
     try {
       final response = await _repository.createDebtStep1(debtData);
 
-      // We don't invalidate yet if we want to keep the loading state
-      // logic clean between steps, but usually, we invalidate to refresh the list
-      // in the background.
+      // Refresh the debt list after creation
       ref.invalidateSelf();
 
       return response;
     } catch (e, st) {
-      state =
-          AsyncError(e, st).copyWithPrevious(state)
-              as AsyncValue<DebtListResponse>;
+      // Fix: Specify the generic type explicitly
+      state = AsyncError<DebtListResponse>(e, st).copyWithPrevious(state);
 
       if (e is ApiException) {
         rethrow;
@@ -40,14 +37,13 @@ class DebtListNotifier extends AsyncNotifier<DebtListResponse> {
   Future<void> createDebtStep2({
     required DebtCreationStep2Request reqBody,
   }) async {
-    state = const AsyncLoading(); // Set loading state
+    state = const AsyncLoading();
     try {
       await _repository.createDebtStep2(reqBody: reqBody);
       ref.invalidateSelf();
     } catch (e, st) {
-      state =
-          AsyncError(e, st).copyWithPrevious(state)
-              as AsyncValue<DebtListResponse>;
+      // Fix: Specify the generic type explicitly
+      state = AsyncError<DebtListResponse>(e, st).copyWithPrevious(state);
       rethrow;
     }
   }
@@ -56,7 +52,9 @@ class DebtListNotifier extends AsyncNotifier<DebtListResponse> {
     try {
       await _repository.manualFundDebt(debtId, amount);
       ref.invalidateSelf();
-    } catch (e) {
+    } catch (e, st) {
+      // Fix: Add error state handling here too
+      state = AsyncError<DebtListResponse>(e, st).copyWithPrevious(state);
       rethrow;
     }
   }

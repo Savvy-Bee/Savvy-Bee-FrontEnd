@@ -76,11 +76,14 @@ class BudgetHomeNotifier extends StateNotifier<AsyncValue<BudgetHomeData>> {
         amountSpent: amountSpent,
       );
 
+      print('✅ Budget created: $budgetName with amount $totalBudget');
+
       // Refetch data to include new budget
       await fetchBudgetHomeData();
 
       return budget;
     } catch (e, st) {
+      print('❌ Error creating budget: $e');
       state = AsyncValue.error(e, st);
       rethrow;
     }
@@ -99,14 +102,91 @@ class BudgetHomeNotifier extends StateNotifier<AsyncValue<BudgetHomeData>> {
         amountSpent: amountSpent,
       );
 
+      print('✅ Budget updated: $budgetName to $newTargetAmount');
+
       // Refetch data to show updated values
       await fetchBudgetHomeData();
 
       return message;
     } catch (e) {
+      print('❌ Error updating budget: $e');
       rethrow;
     }
   }
+
+  /// Creates or updates a budget (handles "already exists" error gracefully)
+  Future<Budget> createOrUpdateBudget({
+    required String budgetName,
+    required num totalBudget,
+    required num amountSpent,
+  }) async {
+    try {
+      // Try to create first
+      final budget = await _toolsRepository.createBudget(
+        budgetName: budgetName,
+        totalBudget: totalBudget,
+        amountSpent: amountSpent,
+      );
+
+      print('✅ Budget created: $budgetName with amount $totalBudget');
+
+      // Refetch data to include new budget
+      await fetchBudgetHomeData();
+
+      return budget;
+    } catch (e) {
+      // If it already exists, update it instead
+      if (e.toString().contains('already exists')) {
+        print('⚠️ Budget exists, updating instead: $budgetName');
+
+        await _toolsRepository.updateBudget(
+          budgetName: budgetName,
+          newTargetAmount: totalBudget,
+          amountSpent: amountSpent,
+        );
+
+        // Refetch data
+        await fetchBudgetHomeData();
+
+        // Return the updated budget from state
+        final currentState = state;
+        if (currentState is AsyncData<BudgetHomeData>) {
+          final updatedBudget = currentState.value.budgets.firstWhere(
+            (b) => b.budgetName == budgetName,
+          );
+          return updatedBudget;
+        }
+
+        throw Exception('Failed to retrieve updated budget');
+      }
+
+      // If it's a different error, rethrow
+      state = AsyncValue.error(e, StackTrace.current);
+      rethrow;
+    }
+  }
+
+  /// Updates an existing budget
+  // Future<String> updateBudget({
+  //   required String budgetName,
+  //   required num newTargetAmount,
+  //   required num amountSpent,
+  // }) async {
+  //   try {
+  //     final message = await _toolsRepository.updateBudget(
+  //       budgetName: budgetName,
+  //       newTargetAmount: newTargetAmount,
+  //       amountSpent: amountSpent,
+  //     );
+
+  //     // Refetch data to show updated values
+  //     await fetchBudgetHomeData();
+
+  //     return message;
+  //   } catch (e) {
+  //     rethrow;
+  //   }
+  // }
 
   /// Creates a new budget category with default values
   Future<Budget> createBudgetCategory(String categoryName) async {

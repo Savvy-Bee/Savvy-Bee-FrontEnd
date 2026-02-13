@@ -10,10 +10,14 @@ class DebtRepository {
 
   DebtRepository({required ApiClient apiClient}) : _apiClient = apiClient;
 
-  Future<DebtListResponse> getDebtHomeData() async {
-    try {
-      final response = await _apiClient.get(ApiEndpoints.debtHome);
-      final firstDebt = (response.data['data'] as List?)?.first as Map?;
+ Future<DebtListResponse> getDebtHomeData() async {
+  try {
+    final response = await _apiClient.get(ApiEndpoints.debtHome);
+    
+    // Safe access - check if list is not empty before accessing first
+    final dataList = response.data['data'] as List?;
+    if (dataList != null && dataList.isNotEmpty) {
+      final firstDebt = dataList.first as Map?;
       if (firstDebt != null) {
         print(
           'Owed type: ${firstDebt['Owed']?.runtimeType} value: ${firstDebt['Owed']}',
@@ -22,22 +26,22 @@ class DebtRepository {
         print('Day type: ${firstDebt['Day']?.runtimeType}');
         print('minPayment type: ${firstDebt['minPayment']?.runtimeType}');
       }
-
-      if (response.data['success'] == true && response.data['data'] is List) {
-        return DebtListResponse.fromJson(response.data);
-      } else {
-        throw ApiException(
-          message: response.data['message'] ?? 'Failed to load debt data',
-          statusCode: response.statusCode,
-        );
-      }
-    } on ApiException {
-      rethrow;
-    } catch (e) {
-      throw ApiException(message: 'An unexpected error occurred: $e');
-      // rethrow;
     }
+
+    if (response.data['success'] == true && response.data['data'] is List) {
+      return DebtListResponse.fromJson(response.data);
+    } else {
+      throw ApiException(
+        message: response.data['message'] ?? 'Failed to load debt data',
+        statusCode: response.statusCode,
+      );
+    }
+  } on ApiException {
+    rethrow;
+  } catch (e) {
+    throw ApiException(message: 'An unexpected error occurred: $e');
   }
+}
 
   Future<DebtCreationResponse> createDebtStep1(
     DebtRequestModel debtData,
