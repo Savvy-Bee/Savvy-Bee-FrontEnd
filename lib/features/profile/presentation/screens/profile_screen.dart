@@ -560,7 +560,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       incompleteItems.add({
         'icon': Icons.fingerprint,
         'title': 'Enable Biometric Login',
-        'subtitle': 'Start a new goal',
+        'subtitle': '',
         'onTap': () {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Biometric setup coming soon')),
@@ -573,7 +573,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       incompleteItems.add({
         'icon': Icons.book_outlined,
         'title': 'Setup your 6-digit PIN',
-        'subtitle': 'A smarter way to track existing debt',
+        'subtitle': '',
         'onTap': () {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('PIN setup coming soon')),

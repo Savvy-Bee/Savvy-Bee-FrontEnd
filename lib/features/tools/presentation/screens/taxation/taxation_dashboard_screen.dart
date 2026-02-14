@@ -59,7 +59,7 @@ class _TaxationDashboardScreenState
                 const Gap(18),
                 _buildTaxLeakCard(taxHistory: data.data.history),
                 const Gap(18),
-                _buildUnclaimedReliefCard(),
+                // _buildUnclaimedReliefCard(),
               ],
             ),
           );
@@ -352,43 +352,39 @@ class _TaxationDashboardScreenState
     );
   }
 
-  Widget _buildUploadStatementTile() {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
-      decoration: BoxDecoration(
-        color: AppColors.primary,
-        borderRadius: BorderRadius.circular(18),
+ Widget _buildUploadStatementTile() {
+  return Material(
+    color: Colors.transparent,
+    child: InkWell(
+      borderRadius: BorderRadius.circular(18),
+      onTap: () {
+        context.pushNamed(CalculateTaxScreen.path);
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+        decoration: BoxDecoration(
+          color: AppColors.primary,
+          borderRadius: BorderRadius.circular(18),
+        ),
+        child: Row(
+          children: [
+            AppIcon(AppIcons.uploadIconBackgroundSvg, useOriginal: true),
+            const SizedBox(width: 10),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: const [
+                Text('Upload Bank Statement'),
+                Text('Get instant tax calculation in seconds'),
+              ],
+            ),
+          ],
+        ),
       ),
-      child: Row(
-        spacing: 10,
-        children: [
-          AppIcon(AppIcons.uploadIconBackgroundSvg, useOriginal: true),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Upload Bank Statement',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.white,
-                ),
-              ),
-              Text(
-                'Get instant tax calculation in seconds',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                  color: AppColors.white,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
+    ),
+  );
+}
+
 }
 
 class TaxDashboardCard extends StatelessWidget {

@@ -140,10 +140,10 @@ class _ToolsScreenState extends ConsumerState<ToolsScreen> {
                           iconPath:
                               'assets/images/icons/tax_icon.png', // Replace with your actual icon path
                           onPressed: () =>
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Coming soon')),
-                              ),
-                          // context.pushNamed(TaxationDashboardScreen.path),
+                              // ScaffoldMessenger.of(context).showSnackBar(
+                              //   const SnackBar(content: Text('Coming soon')),
+                              // ),
+                          context.pushNamed(TaxationDashboardScreen.path),
                         ),
                       ],
                     ),

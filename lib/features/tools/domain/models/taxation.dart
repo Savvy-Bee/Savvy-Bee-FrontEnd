@@ -112,10 +112,10 @@ class TaxHistoryItem {
 
   factory TaxHistoryItem.fromJson(Map<String, dynamic> json) {
     return TaxHistoryItem(
-      id: json['id'] as String,
-      narration: json['narration'] as String,
+      id: json['id']?.toString() ?? '',
+      narration: json['narration'] as String? ?? '',
       amount: (json['amount'] as num).toDouble(),
-      type: json['type'] as String,
+      type: json['type'] as String? ?? '',
       category: json['category'] as String?,
       balance: (json['balance'] as num).toDouble(),
       date: DateTime.parse(json['date'] as String),
