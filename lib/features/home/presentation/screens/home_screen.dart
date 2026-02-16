@@ -321,17 +321,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           title: 'The Art of Credit Scoring in Nigeria',
                           subtitle:
                               'Are you really listening to what they\'re saying',
-                          date: 'October 27, 2025',
+                          date: 'January, 2026',
                           imagePath: 'assets/images/other/insights-one.jpg',
                           readTimeMinutes: 3,
                           content:
-                              '''Afrobeats isn't just about good vibes, dance floors, and catchy hooks—if you're really listening, there's serious money advice tucked between the basslines.
-
-Behind the flashy lyrics about "chilling with the big boys" or "getting that bag" lies a reflection of hustle culture, financial growth, and self-belief.
-
-Take Burna Boy, for instance—he raps about consistency, resilience, and betting on yourself long before anyone believes in you. That's an investment mindset: put in the work, not before, but before expecting returns. Wizkid and Davido often emphasize staying focused on wealth quietly, not loudly, which echoes the mantra to save and invest, not just to live large on credit or do diversification and long-term thinking.
-
-The truth? Afrobeats is a masterclass in ambition, discipline, and financial evolution—wrapped in rhythm. The next time you're vibing to your favorite track, ask yourself: are you just dancing, or are you also learning the game these artists are preaching?''',
+                              '''Credit scoring isn't just an "abroad" thing, it's already shaping financial lives in Nigeria. Every time you apply for a loan, buy a phone on credit, or even use some fintech apps, your credit score is being checked. Yet, many Nigerians still think it's a foreign concept.
+The truth? Your financial reputation is now a digital score, and it can open doors or close them. Understanding how it works here, in our own system, is the first step to using it to your advantage.
+Ask yourself:
+●	Do I know my credit score is being tracked right now?
+●	Do I understand how my daily money habits affect it?
+●	Am I building a score that will help me or hold me back?
+Your credit score is not just a number, it’s your financial CV in today’s Nigeria.
+''',
                         ),
                       );
                     },
@@ -348,21 +349,22 @@ The truth? Afrobeats is a masterclass in ambition, discipline, and financial evo
                           title:
                               'How to build an emergency fund on a tight budget',
                           subtitle: 'Small steps, big security',
-                          date: 'November 15, 2025',
+                          date: 'January, 2026',
                           imagePath: 'assets/images/other/insights-two.jpg',
                           readTimeMinutes: 3,
                           content:
-                              '''Building an emergency fund on a tight budget might seem impossible, but it's absolutely achievable with the right strategy.
+                              '''An emergency fund isn’t a luxury, it’s your financial seatbelt. Life doesn’t wait for you to be ready, and having a safety net can mean the difference between a setback and a crisis. But when money is tight, building one can feel impossible.
 
-Start small—even ₦1,000 per week adds up to ₦52,000 in a year. The key is consistency, not the amount.
+The good news? You don’t need to save thousands overnight. The key is starting small, staying consistent, and making your money move without you even noticing.
 
-Here are some practical tips:
-- Automate your savings so you never skip it
-- Cut one unnecessary expense each month
-- Use windfalls wisely (bonuses, gifts, refunds)
-- Track every naira that comes in and goes out
+Ask yourself these three starter questions:
 
-Remember, an emergency fund isn't built overnight. It's about creating a habit that protects your future self. Start today, no matter how small.''',
+●	Do I know what a true “emergency” is for me?
+●	Can I find even ₦100 a day to redirect?
+●	Am I willing to automate the process so I don’t have to think about it?
+
+If you answered “yes,” you’re already on your way. The hardest part is simply beginning. Need a plan? We’ve got you covered.
+''',
                         ),
                       );
                     },
@@ -379,21 +381,21 @@ Remember, an emergency fund isn't built overnight. It's about creating a habit t
                           title:
                               'Should you save financially with your partner?',
                           subtitle: 'Let\'s get financially intimate',
-                          date: 'December 3, 2025',
+                          date: 'January, 2026',
                           imagePath: 'assets/images/other/insights-three.jpg',
                           readTimeMinutes: 3,
                           content:
-                              '''Joint savings with your partner can strengthen your relationship—or complicate it. Here's what you need to know.
+                              '''Saving as a couple is about more than just pooling funds, it’s a powerful way to build trust, strengthen communication, and bring your shared dreams to life. But before you open a joint account, it’s important to pause and reflect.
 
-The benefits are clear: shared goals, better accountability, and building something together. But the risks include loss of autonomy, potential conflicts, and what happens if things don't work out.
+Not every couple is ready to save together, and that’s okay. The key is honesty and alignment. Start by asking yourselves three important questions:
 
-Best practices:
-- Keep personal savings separate too
-- Set clear expectations and goals
-- Review finances together monthly
-- Be honest about spending habits
+Do we share the same goals?
 
-The bottom line? Joint savings work best when there's trust, communication, and a solid foundation. Don't rush into it—build financial intimacy gradually.''',
+Are we both committed to contributing regularly?
+
+Can we talk about money openly?
+If you answered “yes” to all these questions, you’re ready to take the next step toward building a stronger financial future together. Still not sure?
+''',
                         ),
                       );
                     },
@@ -958,139 +960,4 @@ The bottom line? Joint savings work best when there's trust, communication, and 
       ),
     );
   }
-
-  // AppBar _buildAppBar(String firstName, BuildContext context) {
-  //   return AppBar(
-  //     centerTitle: false,
-  //     title: Column(
-  //       crossAxisAlignment: CrossAxisAlignment.start,
-  //       mainAxisSize: MainAxisSize.min,
-  //       children: [
-  //         Text(
-  //           'Hello $firstName',
-  //           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-  //         ),
-  //         Text(
-  //           'Welcome back!',
-  //           style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
-  //         ),
-  //       ],
-  //     ),
-  //     actions: [
-  //       Padding(
-  //         padding: const EdgeInsets.only(right: 16),
-  //         child: Dot(size: 35),
-  //       ),
-  //     ],
-  //   );
-  // }
-
-  // AppBar _buildAppBar(String firstName, BuildContext context) {
-  //   return AppBar(
-  //     backgroundColor: Colors.white,
-  //     elevation: 0,
-  //     title: Stack(
-  //       alignment: Alignment.center,
-  //       children: [
-  //         // LEFT HALF: Up to 50% width – contains left content + center icon
-  //         Positioned(
-  //           left: 0,
-  //           top: 0,
-  //           bottom: 0,
-  //           // width:
-  //           //     MediaQuery.of(context).size.width *
-  //           //     0.5, // Exactly 50% of screen
-  //           child: Row(
-  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //             children: [
-  //               // Left content: back icon + "Chat with Nahl" text
-  //               GestureDetector(
-  //                 onTap: () {
-  //                   // Navigator.push(
-  //                   //   context,
-  //                   //   MaterialPageRoute(builder: (_) => const ChatWithNahlScreen()),
-  //                   // );
-  //                 },
-  //                 child: Row(
-  //                   mainAxisSize: MainAxisSize.min,
-  //                   children: [
-  //                     Container(
-  //                       width: 32,
-  //                       height: 32,
-  //                       decoration: BoxDecoration(
-  //                         shape: BoxShape.circle,
-  //                         border: Border.all(color: AppColors.primary),
-  //                       ),
-  //                       child: Center(
-  //                         child: Image.asset(
-  //                           'assets/images/topbar/nav-left-icon.png',
-  //                           width: 32,
-  //                           height: 32,
-  //                         ),
-  //                       ),
-  //                     ),
-  //                     const SizedBox(width: 6),
-  //                     const Text(
-  //                       'Chat with Nahl',
-  //                       style: TextStyle(
-  //                         fontFamily: 'GeneralSans',
-  //                         fontSize: 12,
-  //                         fontWeight: FontWeight.w500,
-  //                         color: Colors.black,
-  //                       ),
-  //                     ),
-  //                   ],
-  //                 ),
-  //               ),
-
-  //               // Center icon – pushed to the right edge of this 50% container → screen center
-  //               Image.asset(
-  //                 'assets/images/topbar/nav-center-icon.png',
-  //                 width: 30,
-  //                 height: 32,
-  //                 fit: BoxFit.contain,
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-
-  //         // RIGHT: User avatar – pinned to the far right
-  //         Positioned(
-  //           right: 0,
-  //           top: 0,
-  //           bottom: 0,
-  //           // width:
-  //           //     MediaQuery.of(context).size.width *
-  //           //     0.5, // Exactly 50% of screen
-  //           child: Container(
-  //             width: 32,
-  //             height: 32,
-  //             decoration: BoxDecoration(
-  //               color: Colors.white,
-  //               shape: BoxShape.circle,
-  //               border: Border.all(color: Colors.black, width: 1),
-  //             ),
-  //             child: Center(
-  //               child: Text(
-  //                 firstName.isNotEmpty
-  //                     ? (firstName.length > 1
-  //                           ? firstName.substring(0, 2).toUpperCase()
-  //                           : firstName[0].toUpperCase())
-  //                     : 'DT',
-  //                 style: const TextStyle(
-  //                   fontFamily: 'GeneralSans',
-  //                   fontWeight: FontWeight.w500,
-  //                   fontSize: 16,
-  //                   color: Colors.black,
-  //                 ),
-  //               ),
-  //             ),
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //     centerTitle: false,
-  //     automaticallyImplyLeading: false, // Prevents default back button
-  //   );
-  // }
 }

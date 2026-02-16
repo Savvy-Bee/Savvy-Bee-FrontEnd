@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/logos.dart';
 import 'package:savvy_bee_mobile/features/dashboard/presentation/screens/dashboard_screen.dart';
+import 'package:savvy_bee_mobile/features/home/presentation/screens/home_screen.dart';
 import 'package:savvy_bee_mobile/features/onboarding/presentation/screens/onboarding_screen.dart';
 
 import '../../../auth/presentation/providers/auth_providers.dart';
@@ -35,8 +36,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
 
       if (authState.isAuthenticated) {
         // User is logged in - go to home
-        // context.goNamed(HomeScreen.path);
-        context.goNamed(DashboardScreen.path);
+        context.goNamed(HomeScreen.path);
+        // context.goNamed(DashboardScreen.path);
       } else {
         // User not logged in - go to onboarding
         context.goNamed(OnboardingScreen.path);

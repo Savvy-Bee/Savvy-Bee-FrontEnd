@@ -445,7 +445,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
   Widget _buildPersonaSelector(String personaName) {
     return InkWell(
-      onTap: () => context.pushNamed(ChoosePersonalityScreen.path),
+      // onTap: () => context.pushNamed(ChoosePersonalityScreen.path),
+      onTap: () {},
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [

@@ -410,7 +410,7 @@ class TaxDashboardCard extends StatelessWidget {
             spacing: 8,
             children: [
               Text('Your $year Tax', style: TextStyle(color: AppColors.white)),
-              Icon(Icons.visibility, color: AppColors.white),
+              // Icon(Icons.visibility, color: AppColors.white),
             ],
           ),
           Text(

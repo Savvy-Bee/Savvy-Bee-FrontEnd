@@ -23,7 +23,8 @@ class TaxationHomeResponse {
 }
 
 class TaxationHomeData {
-  final double totalEarnings;
+  // final double totalEarnings;
+  final num totalEarnings; // Keep as num or convert safely
   final TaxData tax;
   final List<TaxHistoryItem> history;
 
@@ -71,10 +72,15 @@ class TaxData {
 
   factory TaxData.fromJson(Map<String, dynamic> json) {
     return TaxData(
-      yearly: (json['yearly'] as num).toDouble(),
-      monthly: (json['monthly'] as num).toDouble(),
-      rate: json['Rate'] as int,
-      exemption: json['Exemption'] as int?,
+      // Safe conversion: handles int, double, or num
+      yearly: (json['yearly'] as num?)?.toDouble() ?? 0,
+      monthly: (json['monthly'] as num?)?.toDouble() ?? 0,
+      rate: (json['Rate'] as num?)?.toInt() ?? 0,
+      exemption: (json['Exemption'] as num?)?.toInt(),
+      // yearly: (json['yearly'] as num).toDouble(),
+      // monthly: (json['monthly'] as num).toDouble(),
+      // rate: json['Rate'] as int,
+      // exemption: json['Exemption'] as int?,
     );
   }
 
@@ -114,10 +120,14 @@ class TaxHistoryItem {
     return TaxHistoryItem(
       id: json['id']?.toString() ?? '',
       narration: json['narration'] as String? ?? '',
-      amount: (json['amount'] as num).toDouble(),
+      // amount: (json['amount'] as num).toDouble(),
+      // Divide amount by 100 as per API requirement
+      amount: (json['amount'] as num).toDouble() / 100,
       type: json['type'] as String? ?? '',
       category: json['category'] as String?,
-      balance: (json['balance'] as num).toDouble(),
+      // balance: (json['balance'] as num).toDouble(),
+      // Divide balance by 100 as per API requirement
+      balance: (json['balance'] as num).toDouble() / 100,
       date: DateTime.parse(json['date'] as String),
     );
   }
@@ -126,10 +136,12 @@ class TaxHistoryItem {
     return {
       'id': id,
       'narration': narration,
-      'amount': amount,
+      // 'amount': amount,
+      'amount': amount * 100, // Multiply back when sending
       'type': type,
       'category': category,
-      'balance': balance,
+      // 'balance': balance,
+      'balance': balance * 100, // Multiply back when sending
       'date': date.toIso8601String(),
     };
   }
@@ -167,7 +179,9 @@ class TaxCalculatorData {
 
   factory TaxCalculatorData.fromJson(Map<String, dynamic> json) {
     return TaxCalculatorData(
-      totalEarnings: json['TotalEarnings'] as int,
+      // totalEarnings: json['TotalEarnings'] as int,
+      // Safe conversion: handles int, double, or num
+      totalEarnings: (json['TotalEarnings'] as num?)?.toInt() ?? 0,
       tax: TaxData.fromJson(json['Tax'] as Map<String, dynamic>),
     );
   }
@@ -220,18 +234,24 @@ class TaxationStrategyData {
 
   factory TaxationStrategyData.fromJson(Map<String, dynamic> json) {
     return TaxationStrategyData(
-      gains: (json['Gains'] as num).toDouble(),
-      losses: (json['Losses'] as num).toDouble(),
-      rate: json['Rate'] as int,
+      // Safe conversion with fallback to 0
+      gains: (json['Gains'] as num?)?.toDouble() ?? 0.0,
+      losses: (json['Losses'] as num?)?.toDouble() ?? 0.0,
+      rate: (json['Rate'] as num?)?.toInt() ?? 0,
       statements:
-          (json['Statment'] as List<dynamic>)
-              .map((item) => StrategyStatement.fromJson(item as Map<String, dynamic>))
-              .toList(),
-      recommendation:
-          StrategyRecommendation.fromJson(
-            json['Recommendation'] as Map<String, dynamic>,
-          ),
-      exemptions: json['Exemptions'] as int,
+          (json['Statment'] as List<dynamic>?)
+              ?.map(
+                (item) =>
+                    StrategyStatement.fromJson(item as Map<String, dynamic>),
+              )
+              .toList() ??
+          [],
+      recommendation: json['Recommendation'] != null
+          ? StrategyRecommendation.fromJson(
+              json['Recommendation'] as Map<String, dynamic>,
+            )
+          : StrategyRecommendation(data: []), // Provide default
+      exemptions: (json['Exemptions'] as num?)?.toInt() ?? 0,
     );
   }
 
@@ -268,13 +288,19 @@ class StrategyStatement {
 
   factory StrategyStatement.fromJson(Map<String, dynamic> json) {
     return StrategyStatement(
-      name: json['name'] as String,
-      type: json['type'] as String,
-      cost: json['cost'] != null ? (json['cost'] as num).toDouble() : null,
-      returnValue: (json['return'] as num).toDouble(),
-      quantity: json['quantity'] != null ? (json['quantity'] as num).toDouble() : null,
-      currency: json['currency'] as String,
-      details: StrategyDetails.fromJson(json['details'] as Map<String, dynamic>),
+      name: json['name'] as String? ?? '',
+      type: json['type'] as String? ?? '',
+      // Divide cost by 100
+      cost: json['cost'] != null ? (json['cost'] as num).toDouble() / 100 : null,
+      // Divide return value by 100
+      returnValue: ((json['return'] as num?)?.toDouble() ?? 0.0) / 100,
+      quantity: json['quantity'] != null
+          ? (json['quantity'] as num).toDouble()
+          : null,
+      currency: json['currency'] as String? ?? '',
+      details: json['details'] != null
+          ? StrategyDetails.fromJson(json['details'] as Map<String, dynamic>)
+          : StrategyDetails(currentBalance: 0), // Provide default
     );
   }
 
@@ -282,8 +308,8 @@ class StrategyStatement {
     return {
       'name': name,
       'type': type,
-      'cost': cost,
-      'return': returnValue,
+      'cost': cost != null ? cost! * 100 : null, // Multiply back when sending
+      'return': returnValue * 100, // Multiply back when sending
       'quantity': quantity,
       'currency': currency,
       'details': details.toJson(),
@@ -296,17 +322,14 @@ class StrategyDetails {
   final double? price;
   final double currentBalance;
 
-  StrategyDetails({
-    this.symbol,
-    this.price,
-    required this.currentBalance,
-  });
+  StrategyDetails({this.symbol, this.price, required this.currentBalance});
 
   factory StrategyDetails.fromJson(Map<String, dynamic> json) {
     return StrategyDetails(
       symbol: json['symbol'] as String?,
       price: json['price'] != null ? (json['price'] as num).toDouble() : null,
-      currentBalance: (json['current_balance'] as num).toDouble(),
+      // Divide current_balance by 100
+      currentBalance: ((json['current_balance'] as num?)?.toDouble() ?? 0.0) / 100,
     );
   }
 
@@ -314,7 +337,7 @@ class StrategyDetails {
     return {
       'symbol': symbol,
       'price': price,
-      'current_balance': currentBalance,
+      'current_balance': currentBalance * 100, // Multiply back when sending
     };
   }
 }
@@ -327,9 +350,14 @@ class StrategyRecommendation {
   factory StrategyRecommendation.fromJson(Map<String, dynamic> json) {
     return StrategyRecommendation(
       data:
-          (json['Data'] as List<dynamic>)
-              .map((item) => StrategyRecommendationItem.fromJson(item as Map<String, dynamic>))
-              .toList(),
+          (json['Data'] as List<dynamic>?)
+              ?.map(
+                (item) => StrategyRecommendationItem.fromJson(
+                  item as Map<String, dynamic>,
+                ),
+              )
+              .toList() ??
+          [],
     );
   }
 
@@ -351,13 +379,18 @@ class StrategyRecommendationItem {
 
   factory StrategyRecommendationItem.fromJson(Map<String, dynamic> json) {
     return StrategyRecommendationItem(
-      title: json['Title'] as String,
-      recommendation: json['Recommendation'] as String,
-      amount: (json['Amount'] as num).toDouble(),
+      title: json['Title'] as String? ?? '',
+      recommendation: json['Recommendation'] as String? ?? '',
+      // Divide amount by 100
+      amount: ((json['Amount'] as num?)?.toDouble() ?? 0.0) / 100,
     );
   }
 
   Map<String, dynamic> toJson() {
-    return {'Title': title, 'Recommendation': recommendation, 'Amount': amount};
+    return {
+      'Title': title,
+      'Recommendation': recommendation,
+      'Amount': amount * 100, // Multiply back when sending
+    };
   }
 }

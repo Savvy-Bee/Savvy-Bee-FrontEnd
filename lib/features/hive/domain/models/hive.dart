@@ -68,20 +68,29 @@ class HiveData {
 
   factory HiveData.fromJson(Map<String, dynamic> json) {
     return HiveData(
-      id: json['_id'] as String,
-      totalFlowers: json['TotalFlower'] as int,
-      streak: json['Streak'] as int,
-      flowers: json['Flowers'] as int,
-      honeyDrop: json['HoneyDrop'] as int,
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      updatedAt: DateTime.parse(json['updatedAt'] as String),
+      // Use 'id' instead of '_id' - the API returns 'id'
+      id: json['id']?.toString() ?? '',
+
+      // Safe parsing with fallback to 0
+      totalFlowers: (json['TotalFlower'] as num?)?.toInt() ?? 0,
+      streak: (json['Streak'] as num?)?.toInt() ?? 0,
+      flowers: (json['Flowers'] as num?)?.toInt() ?? 0,
+      honeyDrop: (json['HoneyDrop'] as num?)?.toInt() ?? 0,
+
+      // Safe date parsing
+      createdAt:
+          DateTime.tryParse(json['createdAt']?.toString() ?? '') ??
+          DateTime.now(),
+      updatedAt:
+          DateTime.tryParse(json['updatedAt']?.toString() ?? '') ??
+          DateTime.now(),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      '_id': id,
-      'TotalFlowers': totalFlowers,
+      'id': id,
+      'TotalFlower': totalFlowers,
       'Streak': streak,
       'Flowers': flowers,
       'HoneyDrop': honeyDrop,
@@ -108,17 +117,22 @@ class Achievement {
 
   factory Achievement.fromJson(Map<String, dynamic> json) {
     return Achievement(
-      id: json['_id'] as String,
-      userId: json['UserID'] as String,
-      name: json['Name'] as String,
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      updatedAt: DateTime.parse(json['updatedAt'] as String),
+      // Use 'id' instead of '_id'
+      id: json['id']?.toString() ?? json['_id']?.toString() ?? '',
+      userId: json['UserID']?.toString() ?? '',
+      name: json['Name']?.toString() ?? '',
+      createdAt:
+          DateTime.tryParse(json['createdAt']?.toString() ?? '') ??
+          DateTime.now(),
+      updatedAt:
+          DateTime.tryParse(json['updatedAt']?.toString() ?? '') ??
+          DateTime.now(),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      '_id': id,
+      'id': id,
       'UserID': userId,
       'Name': name,
       'createdAt': createdAt.toIso8601String(),

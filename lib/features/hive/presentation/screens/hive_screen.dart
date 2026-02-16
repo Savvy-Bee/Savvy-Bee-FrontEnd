@@ -182,17 +182,17 @@ class _HiveScreenState extends ConsumerState<HiveScreen> {
                           title: 'The Art of Credit Scoring in Nigeria',
                           subtitle:
                               'Are you really listening to what they\'re saying',
-                          date: 'October 27, 2025',
+                          date: 'January, 2026',
                           imagePath: 'assets/images/other/insights-one.jpg',
                           readTimeMinutes: 3,
                           content:
-                              '''Afrobeats isn't just about good vibes, dance floors, and catchy hooks—if you're really listening, there's serious money advice tucked between the basslines.
-
-Behind the flashy lyrics about "chilling with the big boys" or "getting that bag" lies a reflection of hustle culture, financial growth, and self-belief.
-
-Take Burna Boy, for instance—he raps about consistency, resilience, and betting on yourself long before anyone believes in you. That's an investment mindset: put in the work, not before, but before expecting returns. Wizkid and Davido often emphasize staying focused on wealth quietly, not loudly, which echoes the mantra to save and invest, not just to live large on credit or do diversification and long-term thinking.
-
-The truth? Afrobeats is a masterclass in ambition, discipline, and financial evolution—wrapped in rhythm. The next time you're vibing to your favorite track, ask yourself: are you just dancing, or are you also learning the game these artists are preaching?''',
+                              '''Credit scoring isn't just an "abroad" thing, it's already shaping financial lives in Nigeria. Every time you apply for a loan, buy a phone on credit, or even use some fintech apps, your credit score is being checked. Yet, many Nigerians still think it's a foreign concept.
+The truth? Your financial reputation is now a digital score, and it can open doors or close them. Understanding how it works here, in our own system, is the first step to using it to your advantage.
+Ask yourself:
+●	Do I know my credit score is being tracked right now?
+●	Do I understand how my daily money habits affect it?
+●	Am I building a score that will help me or hold me back?
+Your credit score is not just a number, it’s your financial CV in today’s Nigeria.''',
                         ),
                       );
                     },
@@ -209,21 +209,21 @@ The truth? Afrobeats is a masterclass in ambition, discipline, and financial evo
                           title:
                               'How to build an emergency fund on a tight budget',
                           subtitle: 'Small steps, big security',
-                          date: 'November 15, 2025',
+                          date: 'January, 2026',
                           imagePath: 'assets/images/other/insights-two.jpg',
                           readTimeMinutes: 3,
                           content:
-                              '''Building an emergency fund on a tight budget might seem impossible, but it's absolutely achievable with the right strategy.
+                              '''An emergency fund isn’t a luxury, it’s your financial seatbelt. Life doesn’t wait for you to be ready, and having a safety net can mean the difference between a setback and a crisis. But when money is tight, building one can feel impossible.
 
-Start small—even ₦1,000 per week adds up to ₦52,000 in a year. The key is consistency, not the amount.
+The good news? You don’t need to save thousands overnight. The key is starting small, staying consistent, and making your money move without you even noticing.
 
-Here are some practical tips:
-- Automate your savings so you never skip it
-- Cut one unnecessary expense each month
-- Use windfalls wisely (bonuses, gifts, refunds)
-- Track every naira that comes in and goes out
+Ask yourself these three starter questions:
 
-Remember, an emergency fund isn't built overnight. It's about creating a habit that protects your future self. Start today, no matter how small.''',
+●	Do I know what a true “emergency” is for me?
+●	Can I find even ₦100 a day to redirect?
+●	Am I willing to automate the process so I don’t have to think about it?
+
+If you answered “yes,” you’re already on your way. The hardest part is simply beginning. Need a plan? We’ve got you covered.''',
                         ),
                       );
                     },
@@ -240,21 +240,20 @@ Remember, an emergency fund isn't built overnight. It's about creating a habit t
                           title:
                               'Should you save financially with your partner?',
                           subtitle: 'Let\'s get financially intimate',
-                          date: 'December 3, 2025',
+                          date: 'January, 2026',
                           imagePath: 'assets/images/other/insights-three.jpg',
                           readTimeMinutes: 3,
                           content:
-                              '''Joint savings with your partner can strengthen your relationship—or complicate it. Here's what you need to know.
+                              '''Saving as a couple is about more than just pooling funds, it’s a powerful way to build trust, strengthen communication, and bring your shared dreams to life. But before you open a joint account, it’s important to pause and reflect.
 
-The benefits are clear: shared goals, better accountability, and building something together. But the risks include loss of autonomy, potential conflicts, and what happens if things don't work out.
+Not every couple is ready to save together, and that’s okay. The key is honesty and alignment. Start by asking yourselves three important questions:
 
-Best practices:
-- Keep personal savings separate too
-- Set clear expectations and goals
-- Review finances together monthly
-- Be honest about spending habits
+Do we share the same goals?
 
-The bottom line? Joint savings work best when there's trust, communication, and a solid foundation. Don't rush into it—build financial intimacy gradually.''',
+Are we both committed to contributing regularly?
+
+Can we talk about money openly?
+If you answered “yes” to all these questions, you’re ready to take the next step toward building a stronger financial future together. Still not sure?''',
                         ),
                       );
                     },
@@ -492,125 +491,6 @@ The bottom line? Joint savings work best when there's trust, communication, and 
       ),
     );
   }
-
-  // Widget _buildCourseCard({required Course course}) {
-  //   final stats = ref.watch(courseStatsProvider(course));
-  //   final difficultyLevel = _extractDifficultyLevel(course);
-
-  //   return CustomCard(
-  //     width: MediaQuery.sizeOf(context).width / 1.3,
-  //     child: Column(
-  //       crossAxisAlignment: CrossAxisAlignment.start,
-  //       mainAxisSize: MainAxisSize.min,
-  //       children: [
-  //         // Progress indicator if course is started
-  //         if (stats.isStarted && !stats.isCompleted)
-  //           Column(
-  //             children: [
-  //               Row(
-  //                 children: [
-  //                   Expanded(
-  //                     child: LinearProgressIndicator(
-  //                       value: stats.progressPercentage / 100,
-  //                       backgroundColor: AppColors.greyLight,
-  //                       color: AppColors.primary,
-  //                       borderRadius: BorderRadius.circular(4),
-  //                     ),
-  //                   ),
-  //                   const Gap(8),
-  //                   Text(
-  //                     '${stats.progressPercentage.toStringAsFixed(0)}%',
-  //                     style: TextStyle(
-  //                       fontSize: 12,
-  //                       fontWeight: FontWeight.bold,
-  //                       color: AppColors.primary,
-  //                     ),
-  //                   ),
-  //                 ],
-  //               ),
-  //               const Gap(12),
-  //             ],
-  //           ),
-
-  //         // Completed badge
-  //         if (stats.isCompleted)
-  //           Column(
-  //             children: [
-  //               Container(
-  //                 padding: const EdgeInsets.symmetric(
-  //                   horizontal: 8,
-  //                   vertical: 4,
-  //                 ),
-  //                 decoration: BoxDecoration(
-  //                   color: AppColors.success.withValues(alpha: 0.1),
-  //                   borderRadius: BorderRadius.circular(12),
-  //                 ),
-  //                 child: Row(
-  //                   mainAxisSize: MainAxisSize.min,
-  //                   spacing: 4,
-  //                   children: [
-  //                     Icon(
-  //                       Icons.check_circle,
-  //                       size: 16,
-  //                       color: AppColors.success,
-  //                     ),
-  //                     Text(
-  //                       'Completed',
-  //                       style: TextStyle(
-  //                         fontSize: 12,
-  //                         fontWeight: FontWeight.bold,
-  //                         color: AppColors.success,
-  //                       ),
-  //                     ),
-  //                   ],
-  //                 ),
-  //               ),
-  //               const Gap(12),
-  //             ],
-  //           ),
-
-  //         Text(
-  //           course.courseTitle,
-  //           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-  //         ),
-  //         const Gap(8),
-  //         Text(
-  //           course.courseDescription,
-  //           style: TextStyle(),
-  //           maxLines: 3,
-  //           overflow: TextOverflow.ellipsis,
-  //         ),
-  //         const Gap(24),
-  //         Row(
-  //           spacing: 8,
-  //           children: [
-  //             IconTextRowWidget(
-  //               '${course.lessons.length} Lessons',
-  //               AppIcon(AppIcons.openBookIcon, size: 16.0),
-  //             ),
-  //             IconTextRowWidget(
-  //               difficultyLevel,
-  //               AppIcon(AppIcons.chartIncreasingIcon, size: 16.0),
-  //             ),
-  //           ],
-  //         ),
-  //         CustomElevatedButton(
-  //           text: stats.isStarted ? 'Continue' : 'Start lesson',
-  //           rounded: true,
-  //           icon: Icon(
-  //             stats.isStarted
-  //                 ? Icons.play_arrow_rounded
-  //                 : Icons.play_arrow_rounded,
-  //             color: AppColors.black,
-  //           ),
-  //           onPressed: () {
-  //             context.pushNamed(LessonHomeScreen.path, extra: course);
-  //           },
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
 
   String _extractDifficultyLevel(Course course) {
     final totalLevels = 3;

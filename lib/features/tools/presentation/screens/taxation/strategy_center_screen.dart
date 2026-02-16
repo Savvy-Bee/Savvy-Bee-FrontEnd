@@ -91,7 +91,7 @@ class _StrategyCenterScreenState extends ConsumerState<StrategyCenterScreen> {
                 'Your Assests',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
               ),
-              _buildTextIconButton('Add Asset', () {}),
+              // _buildTextIconButton('Add Asset', () {}),
             ],
           ),
           const Gap(16),
@@ -263,9 +263,9 @@ class _StrategyCenterScreenState extends ConsumerState<StrategyCenterScreen> {
           child: Icon(Icons.trending_up, color: AppColors.greyDark),
         ),
         const Gap(16),
-        Text('No Assests added yet'),
+        Text('No Assests yet'),
         const Gap(16),
-        _buildTextIconButton('Add Your First Asset', () {}),
+        // _buildTextIconButton('Add Your First Asset', () {}),
       ],
     );
   }
