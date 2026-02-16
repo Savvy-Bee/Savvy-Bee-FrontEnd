@@ -10,11 +10,11 @@ class FinancialHealthCard extends StatelessWidget {
   const FinancialHealthCard({super.key, required this.healthData});
 
   String getHealthStatus() {
-    if (healthData.rate >= 80) return 'Thriving';
-    if (healthData.rate >= 60) return 'Stable';
-    if (healthData.rate >= 40) return 'Surviving';
-    if (healthData.rate >= 20) return 'Struggling';
-    return 'Critical';
+    if (healthData.rate >= 80) return 'Flourishing';
+    if (healthData.rate >= 60) return 'Thriving';
+    if (healthData.rate >= 40) return 'Stabilizing';
+    if (healthData.rate >= 20) return 'Building';
+    return 'Surviving';
   }
 
   String getHealthImage() {
@@ -60,7 +60,8 @@ class FinancialHealthCard extends StatelessWidget {
               width: double.infinity,
               child: Image.asset(
                 getHealthImage(),
-                fit: BoxFit.cover,
+                fit: BoxFit.contain,
+                height: 400,
                 errorBuilder: (context, error, stackTrace) {
                   // Fallback if image doesn't exist
                   return Container(

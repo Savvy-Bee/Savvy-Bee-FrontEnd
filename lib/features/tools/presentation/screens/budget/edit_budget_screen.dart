@@ -12,6 +12,7 @@ import 'package:savvy_bee_mobile/core/widgets/custom_error_widget.dart';
 import 'package:savvy_bee_mobile/core/widgets/section_title_widget.dart';
 import 'package:savvy_bee_mobile/features/tools/domain/models/budget.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/providers/budget_provider.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/budgets_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/set_budget_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/set_income_screen.dart';
 
@@ -106,7 +107,7 @@ class _EditBudgetScreenState extends ConsumerState<EditBudgetScreen> {
               ],
               CustomElevatedButton(
                 text: 'Save', // This button's action is unclear from spec
-                onPressed: () => context.pop(), // Changed to pop
+                onPressed: () => context.pushNamed(BudgetsScreen.path), // Changed to push to BudgetsScreen
               ),
             ],
           );

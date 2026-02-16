@@ -14,6 +14,7 @@ import 'package:savvy_bee_mobile/features/tools/domain/models/budget.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/providers/budget_provider.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/set_budget_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/set_income_screen.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/tools_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/widgets/insight_card.dart';
 
 /// Main Budgets Screen matching the new design
@@ -96,7 +97,7 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> {
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => context.pop(),
+          onPressed: () => context.go('/tools'),
         ),
       ),
       body: budgetState.when(

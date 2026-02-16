@@ -146,6 +146,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 onActionPressed: () {
                   ref.invalidate(dashboardDataProvider);
                 },
+                actionButtonText: 'Reload',
               ),
             ),
           ),
