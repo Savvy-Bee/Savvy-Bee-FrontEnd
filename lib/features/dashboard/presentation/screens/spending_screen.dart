@@ -23,8 +23,8 @@ class _SpendingScreenState extends ConsumerState<SpendingScreen> {
   String _selectedPeriod = 'Month';
 
   String formatMoney(double amount) {
-    // Format without decimals for cleaner look
-    return '₦${NumberFormat('#,###').format(amount.round())}';
+    // Format with 2 decimal places
+    return '₦${NumberFormat('#,##0.00').format(amount)}';
   }
 
   @override
@@ -162,9 +162,9 @@ class _SpendingScreenState extends ConsumerState<SpendingScreen> {
   }
 
   Widget _buildBarChart(DashboardData dashboardData) {
-    final months = _getLastFiveMonths();
-    final incomeMap = _getMonthlyIncome(dashboardData);
-    final spendMap = _getMonthlySpend(dashboardData);
+    final periods = _getPeriods();
+    final incomeMap = _getIncomeByPeriod(dashboardData);
+    final spendMap = _getSpendByPeriod(dashboardData);
 
     // Find max value for scaling
     final maxIncome = incomeMap.values.isEmpty
@@ -183,11 +183,11 @@ class _SpendingScreenState extends ConsumerState<SpendingScreen> {
             BarChartData(
               alignment: BarChartAlignment.spaceEvenly,
               maxY: maxValue > 0 ? maxValue * 1.2 : 100,
-              barGroups: months.asMap().entries.map((e) {
+              barGroups: periods.asMap().entries.map((e) {
                 final index = e.key;
-                final month = e.value;
-                final income = incomeMap[month] ?? 0;
-                final spend = spendMap[month] ?? 0;
+                final period = e.value;
+                final income = incomeMap[period] ?? 0;
+                final spend = spendMap[period] ?? 0;
 
                 return BarChartGroupData(
                   x: index,
@@ -225,12 +225,12 @@ class _SpendingScreenState extends ConsumerState<SpendingScreen> {
                     showTitles: true,
                     getTitlesWidget: (value, meta) {
                       final index = value.toInt();
-                      if (index < 0 || index >= months.length)
+                      if (index < 0 || index >= periods.length)
                         return const SizedBox();
                       return Padding(
                         padding: const EdgeInsets.only(top: 8),
                         child: Text(
-                          DateFormat('MMM').format(months[index]),
+                          _getPeriodLabel(periods[index]),
                           style: const TextStyle(
                             fontSize: 12,
                             color: Colors.black54,
@@ -276,8 +276,8 @@ class _SpendingScreenState extends ConsumerState<SpendingScreen> {
   }
 
   Widget _buildSummaryCards(DashboardData dashboardData) {
-    final totalIncome = _getTotalIncome(dashboardData);
-    final totalSpend = _getTotalSpend(dashboardData);
+    final totalIncome = _getTotalIncomeForPeriod(dashboardData);
+    final totalSpend = _getTotalSpendForPeriod(dashboardData);
 
     return Column(
       children: [
@@ -331,7 +331,7 @@ class _SpendingScreenState extends ConsumerState<SpendingScreen> {
                 ),
               ),
               const Gap(4),
-              const Icon(Icons.keyboard_arrow_down, size: 20),
+              // const Icon(Icons.keyboard_arrow_down, size: 20),
             ],
           ),
         ],
@@ -340,11 +340,11 @@ class _SpendingScreenState extends ConsumerState<SpendingScreen> {
   }
 
   Widget _buildBudgetSection(DashboardData dashboardData) {
-    final spent = _getCurrentMonthSpent(dashboardData);
+    final spent = _getCurrentPeriodSpent(dashboardData);
     final budget = 1000000.0; // Mock budget, replace with actual if available
     final left = budget - spent;
     final progress = spent / budget;
-    final monthName = DateFormat('MMMM').format(DateTime.now());
+    final periodName = _getCurrentPeriodName();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -382,14 +382,13 @@ class _SpendingScreenState extends ConsumerState<SpendingScreen> {
                   const Gap(12),
                   Expanded(
                     child: Text(
-                      '$monthName Budget',
+                      '$periodName Budget',
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
-                  // const Icon(Icons.chevron_right),
                 ],
               ),
               const Gap(16),
@@ -430,15 +429,13 @@ class _SpendingScreenState extends ConsumerState<SpendingScreen> {
   }
 
   Widget _buildBreakdownSection(DashboardData dashboardData) {
-    final categories = dashboardData.widgets.spendCategoryBreakdown.categories
-        .where((cat) => cat.amount > 0)
-        .toList();
+    final categories = _getCategoryBreakdownForPeriod(dashboardData);
 
     if (categories.isEmpty) {
       return const SizedBox.shrink();
     }
 
-    final totalSpent = categories.fold(0.0, (sum, cat) => sum + cat.amount);
+    final totalSpent = categories.values.fold(0.0, (sum, amount) => sum + amount);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -470,10 +467,10 @@ class _SpendingScreenState extends ConsumerState<SpendingScreen> {
                   children: [
                     PieChart(
                       PieChartData(
-                        sections: categories.map((cat) {
+                        sections: categories.entries.map((entry) {
                           return PieChartSectionData(
-                            value: cat.amount,
-                            color: _getColorForCategory(cat.name),
+                            value: entry.value,
+                            color: _getColorForCategory(entry.key),
                             title: '',
                             radius: 70,
                           );
@@ -492,9 +489,9 @@ class _SpendingScreenState extends ConsumerState<SpendingScreen> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const Text(
-                          'Spent this month',
-                          style: TextStyle(fontSize: 11, color: Colors.black54),
+                        Text(
+                          'Spent this ${_selectedPeriod.toLowerCase()}',
+                          style: const TextStyle(fontSize: 11, color: Colors.black54),
                         ),
                       ],
                     ),
@@ -503,9 +500,9 @@ class _SpendingScreenState extends ConsumerState<SpendingScreen> {
               ),
               const Gap(24),
               // Category list
-              ...categories.map((cat) {
-                final percent = (cat.amount / totalSpent * 100).round();
-                final color = _getColorForCategory(cat.name);
+              ...categories.entries.map((entry) {
+                final percent = (entry.value / totalSpent * 100).round();
+                final color = _getColorForCategory(entry.key);
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 12),
                   child: Row(
@@ -529,7 +526,7 @@ class _SpendingScreenState extends ConsumerState<SpendingScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              cat.name,
+                              entry.key,
                               style: const TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
@@ -546,7 +543,7 @@ class _SpendingScreenState extends ConsumerState<SpendingScreen> {
                         ),
                       ),
                       Text(
-                        formatMoney(cat.amount),
+                        formatMoney(entry.value),
                         style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
@@ -563,22 +560,78 @@ class _SpendingScreenState extends ConsumerState<SpendingScreen> {
     );
   }
 
-  // Helper methods for data calculation
-  List<DateTime> _getLastFiveMonths() {
+  // Helper methods for period calculations
+  List<DateTime> _getPeriods() {
     final now = DateTime.now();
-    return List.generate(5, (i) => DateTime(now.year, now.month - (4 - i)));
+    
+    switch (_selectedPeriod) {
+      case 'Week':
+        // Last 5 weeks
+        return List.generate(5, (i) {
+          return now.subtract(Duration(days: 7 * (4 - i)));
+        });
+      
+      case 'Month':
+        // Last 5 months
+        return List.generate(5, (i) => DateTime(now.year, now.month - (4 - i)));
+      
+      case 'Quarter':
+        // Last 4 quarters
+        return List.generate(4, (i) {
+          final quarterIndex = ((now.month - 1) ~/ 3) - (3 - i);
+          final year = now.year + (quarterIndex ~/ 4);
+          final quarter = quarterIndex % 4;
+          return DateTime(year, (quarter * 3) + 1);
+        });
+      
+      case 'Year':
+        // Last 5 years
+        return List.generate(5, (i) => DateTime(now.year - (4 - i)));
+      
+      default:
+        return List.generate(5, (i) => DateTime(now.year, now.month - (4 - i)));
+    }
   }
 
-  Map<DateTime, double> _getMonthlyIncome(DashboardData dashboardData) {
+  String _getPeriodLabel(DateTime period) {
+    switch (_selectedPeriod) {
+      case 'Week':
+        // Show week number or date range
+        return 'W${_weekOfYear(period)}';
+      
+      case 'Month':
+        return DateFormat('MMM').format(period);
+      
+      case 'Quarter':
+        final quarter = ((period.month - 1) ~/ 3) + 1;
+        return 'Q$quarter';
+      
+      case 'Year':
+        return DateFormat('yy').format(period);
+      
+      default:
+        return DateFormat('MMM').format(period);
+    }
+  }
+
+  int _weekOfYear(DateTime date) {
+    final firstDayOfYear = DateTime(date.year, 1, 1);
+    final daysSinceFirstDay = date.difference(firstDayOfYear).inDays;
+    return (daysSinceFirstDay / 7).ceil() + 1;
+  }
+
+  Map<DateTime, double> _getIncomeByPeriod(DashboardData dashboardData) {
     final map = <DateTime, double>{};
+    
     for (var account in dashboardData.accounts) {
       for (var tx in account.history12Months) {
         if (tx.type == 'credit') {
-          final month = DateTime(tx.date.year, tx.date.month);
+          final period = _getPeriodForDate(tx.date);
+          final amount = (tx.amount / 100);
           map.update(
-            month,
-            (value) => value + (tx.amount / 100), // Convert kobo to naira
-            ifAbsent: () => tx.amount / 100,
+            period,
+            (value) => double.parse((value + amount).toStringAsFixed(2)),
+            ifAbsent: () => double.parse(amount.toStringAsFixed(2)),
           );
         }
       }
@@ -586,16 +639,18 @@ class _SpendingScreenState extends ConsumerState<SpendingScreen> {
     return map;
   }
 
-  Map<DateTime, double> _getMonthlySpend(DashboardData dashboardData) {
+  Map<DateTime, double> _getSpendByPeriod(DashboardData dashboardData) {
     final map = <DateTime, double>{};
+    
     for (var account in dashboardData.accounts) {
       for (var tx in account.history12Months) {
         if (tx.type == 'debit') {
-          final month = DateTime(tx.date.year, tx.date.month);
+          final period = _getPeriodForDate(tx.date);
+          final amount = (tx.amount / 100);
           map.update(
-            month,
-            (value) => value + (tx.amount / 100), // Convert kobo to naira
-            ifAbsent: () => tx.amount / 100,
+            period,
+            (value) => double.parse((value + amount).toStringAsFixed(2)),
+            ifAbsent: () => double.parse(amount.toStringAsFixed(2)),
           );
         }
       }
@@ -603,43 +658,144 @@ class _SpendingScreenState extends ConsumerState<SpendingScreen> {
     return map;
   }
 
-  double _getTotalIncome(DashboardData dashboardData) {
-    double total = 0;
-    for (var account in dashboardData.accounts) {
-      for (var tx in account.history12Months) {
-        if (tx.type == 'credit') {
-          total += tx.amount / 100; // Convert kobo to naira
-        }
-      }
+  DateTime _getPeriodForDate(DateTime date) {
+    switch (_selectedPeriod) {
+      case 'Week':
+        // Get the Monday of the week
+        final daysFromMonday = date.weekday - 1;
+        return date.subtract(Duration(days: daysFromMonday));
+      
+      case 'Month':
+        return DateTime(date.year, date.month);
+      
+      case 'Quarter':
+        final quarter = ((date.month - 1) ~/ 3);
+        return DateTime(date.year, (quarter * 3) + 1);
+      
+      case 'Year':
+        return DateTime(date.year);
+      
+      default:
+        return DateTime(date.year, date.month);
     }
-    return total;
   }
 
-  double _getTotalSpend(DashboardData dashboardData) {
-    double total = 0;
-    for (var account in dashboardData.accounts) {
-      for (var tx in account.history12Months) {
-        if (tx.type == 'debit') {
-          total += tx.amount / 100; // Convert kobo to naira
-        }
-      }
-    }
-    return total;
-  }
-
-  double _getCurrentMonthSpent(DashboardData dashboardData) {
+  double _getTotalIncomeForPeriod(DashboardData dashboardData) {
     final now = DateTime.now();
-    double spent = 0;
+    final periodStart = _getPeriodStart(now);
+    
+    double total = 0;
     for (var account in dashboardData.accounts) {
       for (var tx in account.history12Months) {
-        if (tx.date.year == now.year &&
-            tx.date.month == now.month &&
-            tx.type == 'debit') {
-          spent += tx.amount / 100; // Convert kobo to naira
+        if (tx.type == 'credit' && tx.date.isAfter(periodStart)) {
+          total += tx.amount / 100;
         }
       }
     }
-    return spent;
+    return double.parse(total.toStringAsFixed(2));
+  }
+
+  double _getTotalSpendForPeriod(DashboardData dashboardData) {
+    final now = DateTime.now();
+    final periodStart = _getPeriodStart(now);
+    
+    double total = 0;
+    for (var account in dashboardData.accounts) {
+      for (var tx in account.history12Months) {
+        if (tx.type == 'debit' && tx.date.isAfter(periodStart)) {
+          total += tx.amount / 100;
+        }
+      }
+    }
+    return double.parse(total.toStringAsFixed(2));
+  }
+
+  double _getCurrentPeriodSpent(DashboardData dashboardData) {
+    return _getTotalSpendForPeriod(dashboardData);
+  }
+
+  String _getCurrentPeriodName() {
+    final now = DateTime.now();
+    
+    switch (_selectedPeriod) {
+      case 'Week':
+        return 'This Week';
+      
+      case 'Month':
+        return DateFormat('MMMM').format(now);
+      
+      case 'Quarter':
+        final quarter = ((now.month - 1) ~/ 3) + 1;
+        return 'Q$quarter ${now.year}';
+      
+      case 'Year':
+        return '${now.year}';
+      
+      default:
+        return DateFormat('MMMM').format(now);
+    }
+  }
+
+  DateTime _getPeriodStart(DateTime date) {
+    switch (_selectedPeriod) {
+      case 'Week':
+        final daysFromMonday = date.weekday - 1;
+        return date.subtract(Duration(days: daysFromMonday));
+      
+      case 'Month':
+        return DateTime(date.year, date.month, 1);
+      
+      case 'Quarter':
+        final quarter = ((date.month - 1) ~/ 3);
+        return DateTime(date.year, (quarter * 3) + 1, 1);
+      
+      case 'Year':
+        return DateTime(date.year, 1, 1);
+      
+      default:
+        return DateTime(date.year, date.month, 1);
+    }
+  }
+
+  Map<String, double> _getCategoryBreakdownForPeriod(DashboardData dashboardData) {
+    final now = DateTime.now();
+    final periodStart = _getPeriodStart(now);
+    final categoryMap = <String, double>{};
+
+    // Simple category detection based on transaction narration
+    for (var account in dashboardData.accounts) {
+      for (var tx in account.history12Months) {
+        if (tx.type == 'debit' && tx.date.isAfter(periodStart)) {
+          final category = _categorizeTransaction(tx.narration);
+          final amount = (tx.amount / 100);
+          categoryMap.update(
+            category,
+            (value) => double.parse((value + amount).toStringAsFixed(2)),
+            ifAbsent: () => double.parse(amount.toStringAsFixed(2)),
+          );
+        }
+      }
+    }
+
+    return categoryMap;
+  }
+
+  String _categorizeTransaction(String narration) {
+    final lower = narration.toLowerCase();
+    
+    if (lower.contains('groceries') || lower.contains('food') || lower.contains('supermarket')) {
+      return 'Groceries';
+    } else if (lower.contains('electricity') || lower.contains('bill') || lower.contains('utility')) {
+      return 'Bills & Utilities';
+    } else if (lower.contains('transport') || lower.contains('uber') || lower.contains('fuel')) {
+      return 'Auto & Transport';
+    } else if (lower.contains('shop') || lower.contains('cloth') || lower.contains('fashion')) {
+      return 'Shopping';
+    } else if (lower.contains('restaurant') || lower.contains('dining')) {
+      return 'Dining';
+    } else {
+      return 'Other';
+    }
   }
 
   Color _getColorForCategory(String name) {
@@ -649,13 +805,14 @@ class _SpendingScreenState extends ConsumerState<SpendingScreen> {
       case 'auto & transport':
         return const Color(0xFFFF5252); // Red
       case 'electricity':
-        return const Color(0xFFFDD835); // Yellow
-      case 'other':
-        return const Color(0xFF66BB6A); // Green
       case 'bills & utilities':
         return const Color(0xFFFDD835); // Yellow
       case 'shopping':
         return const Color(0xFF42A5F5); // Blue
+      case 'dining':
+        return const Color(0xFFFF9800); // Orange
+      case 'other':
+        return const Color(0xFF66BB6A); // Green
       default:
         return Colors.grey;
     }

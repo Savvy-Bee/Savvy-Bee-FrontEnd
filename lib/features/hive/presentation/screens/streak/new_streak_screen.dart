@@ -159,7 +159,7 @@ class _NewStreakScreenState extends ConsumerState<NewStreakScreen>
                   child: SlideTransition(
                     position: _slideAnimation,
                     child: Text(
-                      'day streak',
+                      'day streak1',
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
