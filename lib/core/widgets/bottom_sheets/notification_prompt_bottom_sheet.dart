@@ -38,13 +38,19 @@ class NotificationPromptBottomSheet extends StatelessWidget {
               fontSize: 32,
               height: 1.0,
               fontWeight: FontWeight.bold,
+              fontFamily: 'GeneralSans',
+              letterSpacing: 32 * 0.02,
             ),
           ),
           const Gap(16),
           Text(
             'Get timely nudges to stay on track, celebrate your savings wins, and unlock smart money insights before everyone else.',
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 12),
+            style: TextStyle(
+              fontSize: 12,
+              fontFamily: 'GeneralSans',
+              letterSpacing: 12 * 0.02,
+            ),
           ),
           const Gap(24),
           CustomElevatedButton(

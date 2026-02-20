@@ -114,6 +114,8 @@ class CustomElevatedButton extends StatelessWidget {
                 color: onPressed == null
                     ? disabledForegroundColor
                     : forgroundColor,
+                fontFamily: 'GeneralSans',
+                letterSpacing: 13 * 0.02,
               ),
             ),
           ],
@@ -196,6 +198,8 @@ class CustomOutlinedButton extends StatelessWidget {
             fontSize: isSmall ? 12 : 14,
             fontWeight: FontWeight.bold,
             color: onPressed == null ? AppColors.grey : effectiveTextColor,
+            fontFamily: 'GeneralSans',
+            letterSpacing: 13 * 0.02,
           ),
         ),
       ),

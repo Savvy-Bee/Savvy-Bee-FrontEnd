@@ -85,11 +85,25 @@ class CustomTextFormField extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             if (label != null && labelType == LabelType.standalone)
-              Text(label!, style: TextStyle(fontSize: 12)),
+              Text(
+                label!,
+                style: TextStyle(
+                  fontSize: 12,
+                  fontFamily: 'GeneralSans',
+                  letterSpacing: 12 * 0.02,
+                ),
+              ),
             if (endLabel != null && labelType == LabelType.standalone)
               InkWell(
                 onTap: onEndLabelPressed,
-                child: Text(endLabel!, style: TextStyle(fontSize: 12)),
+                child: Text(
+                  endLabel!,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontFamily: 'GeneralSans',
+                    letterSpacing: 12 * 0.02,
+                  ),
+                ),
               ),
           ],
         ),
@@ -185,7 +199,8 @@ class CustomTextFormField extends StatelessWidget {
               subText!,
               style: TextStyle(
                 fontSize: 10,
-                fontFamily: Constants.exconFontFamily,
+                fontFamily: 'GeneralSans',
+                letterSpacing: 10 * 0.02,
               ),
             ),
           ),

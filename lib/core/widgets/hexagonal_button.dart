@@ -60,6 +60,8 @@ class HexagonalButton extends StatelessWidget {
               fontSize: size * 0.3,
               fontWeight: FontWeight.bold,
               color: AppColors.white,
+              fontFamily: 'GeneralSans',
+              letterSpacing: size * 0.3 * 0.02,
             ),
           ),
         ],
@@ -71,6 +73,8 @@ class HexagonalButton extends StatelessWidget {
           fontSize: size * 0.4,
           fontWeight: FontWeight.bold,
           color: AppColors.white,
+          fontFamily: 'GeneralSans',
+          letterSpacing: size * 0.4 * 0.02,
         ),
       );
     }

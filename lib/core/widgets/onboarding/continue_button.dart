@@ -48,6 +48,8 @@ class ContinueButton extends StatelessWidget {
                   fontSize: 17.sp,
                   fontWeight: FontWeight.w600,
                   color: isEnabled ? Colors.white : const Color(0xFF999999),
+                  fontFamily: 'GeneralSans',
+                  letterSpacing: 17 * 0.02,
                 ),
               ),
             ),

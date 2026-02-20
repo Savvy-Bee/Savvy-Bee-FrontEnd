@@ -58,7 +58,12 @@ class DialPad extends StatelessWidget {
               style: Constants.collapsedButtonStyle,
               child: Text(
                 'Delete',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'GeneralSans',
+                  letterSpacing: 16 * 0.02,
+                ),
               ),
             ),
           ],
@@ -87,6 +92,8 @@ class _DialPadButton extends StatelessWidget {
             fontWeight: FontWeight.bold,
 
             height: 0.5,
+            fontFamily: 'GeneralSans',
+            letterSpacing: 42 * 0.02,
           ),
         ),
       ),
@@ -138,7 +145,14 @@ class _EnterPinBottomSheetState extends State<EnterPinBottomSheet> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(Icons.lock_outline, color: AppColors.primary, size: 16),
-              const Text('Transaction PIN', style: TextStyle(fontSize: 12)),
+              const Text(
+                'Transaction PIN',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontFamily: 'GeneralSans',
+                  letterSpacing: 12 * 0.02,
+                ),
+              ),
             ],
           ),
           Row(

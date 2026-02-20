@@ -38,6 +38,8 @@ class OnboardingScaffold extends StatelessWidget {
                       color: Colors.black,
                       fontSize: 16.sp,
                       fontWeight: FontWeight.w400,
+                      fontFamily: 'GeneralSans',
+                      letterSpacing: 16 * 0.02,
                     ),
                   ),
                 ),

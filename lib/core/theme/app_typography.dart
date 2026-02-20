@@ -12,6 +12,7 @@ class AppTypography {
     fontWeight: FontWeight.bold,
     color: AppColors.textPrimary,
     height: 1.2,
+    letterSpacing: 32.0 * 0.02,
   );
 
   static TextStyle h2 = TextStyle(
@@ -20,6 +21,7 @@ class AppTypography {
     fontWeight: FontWeight.bold,
     color: AppColors.textPrimary,
     height: 1.2,
+    letterSpacing: 28.0 * 0.02,
   );
 
   static TextStyle h3 = TextStyle(
@@ -28,6 +30,7 @@ class AppTypography {
     fontWeight: FontWeight.bold,
     color: AppColors.textPrimary,
     height: 1.3,
+    letterSpacing: 24.0 * 0.02,
   );
 
   // Body Text
@@ -37,6 +40,7 @@ class AppTypography {
     fontWeight: FontWeight.normal,
     color: AppColors.textPrimary,
     height: 1.5,
+    letterSpacing: 18.0 * 0.02,
   );
 
   static TextStyle bodyMedium = TextStyle(
@@ -45,6 +49,7 @@ class AppTypography {
     fontWeight: FontWeight.normal,
     color: AppColors.textPrimary,
     height: 1.5,
+    letterSpacing: 16.0 * 0.02,
   );
 
   static TextStyle bodySmall = TextStyle(
@@ -53,6 +58,7 @@ class AppTypography {
     fontWeight: FontWeight.normal,
     color: AppColors.textPrimary,
     height: 1.5,
+    letterSpacing: 14.0 * 0.02,
   );
 
   // Button Text
@@ -62,6 +68,7 @@ class AppTypography {
     fontWeight: FontWeight.bold,
     color: AppColors.textPrimary,
     height: 1.5,
+    letterSpacing: 18.0 * 0.02,
   );
 
   static TextStyle buttonMedium = TextStyle(
@@ -70,6 +77,7 @@ class AppTypography {
     fontWeight: FontWeight.bold,
     color: AppColors.textPrimary,
     height: 1.5,
+    letterSpacing: 16.0 * 0.02,
   );
 
   static TextStyle buttonSmall = TextStyle(
@@ -78,6 +86,7 @@ class AppTypography {
     fontWeight: FontWeight.bold,
     color: AppColors.textPrimary,
     height: 1.5,
+    letterSpacing: 14.0 * 0.02,
   );
 
   // Caption Text
@@ -87,6 +96,7 @@ class AppTypography {
     fontWeight: FontWeight.normal,
     color: AppColors.textSecondary,
     height: 1.4,
+    letterSpacing: 12.0 * 0.02,
   );
 
   // Link Text
@@ -97,5 +107,6 @@ class AppTypography {
     color: AppColors.primary,
     height: 1.5,
     decoration: TextDecoration.underline,
+    letterSpacing: 16.0 * 0.02,
   );
 }

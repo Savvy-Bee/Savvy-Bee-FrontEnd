@@ -43,7 +43,12 @@ class CategoryProgressWidget extends StatelessWidget {
               ),
               Text(
                 title,
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  fontFamily: 'GeneralSans',
+                  letterSpacing: 14 * 0.02,
+                ),
               ),
             ],
           ),
@@ -63,7 +68,12 @@ class CategoryProgressWidget extends StatelessWidget {
                 totalAmount == 0
                     ? '0%'
                     : '${(totalSpent / totalAmount * 100).toStringAsFixed(0)}%',
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                  fontFamily: 'GeneralSans',
+                  letterSpacing: 12 * 0.02,
+                ),
               ),
               Text.rich(
                 TextSpan(
@@ -72,11 +82,19 @@ class CategoryProgressWidget extends StatelessWidget {
                     TextSpan(
                       text:
                           ' of ${totalAmount.formatCurrency(decimalDigits: 0)}',
-                      style: TextStyle(fontWeight: FontWeight.w500),
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontFamily: 'GeneralSans',
+                      ),
                     ),
                   ],
                 ),
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'GeneralSans',
+                  letterSpacing: 12 * 0.02,
+                ),
               ),
             ],
           ),

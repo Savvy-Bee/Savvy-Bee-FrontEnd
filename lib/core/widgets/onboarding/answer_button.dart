@@ -38,6 +38,8 @@ class AnswerButton extends StatelessWidget {
             fontSize: 17.sp,
             fontWeight: FontWeight.w600,
             color: isSelected ? Colors.white : Colors.black,
+            fontFamily: 'GeneralSans',
+            letterSpacing: 17 * 0.02,
           ),
         ),
       ),

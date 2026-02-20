@@ -156,6 +156,8 @@ class _EditBudgetBottomSheetState extends ConsumerState<EditBudgetBottomSheet> {
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w500,
+                        fontFamily: 'GeneralSans',
+                        letterSpacing: 20 * 0.02
                       ),
                     ),
                   ],
@@ -184,6 +186,8 @@ class _EditBudgetBottomSheetState extends ConsumerState<EditBudgetBottomSheet> {
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
                         color: AppColors.textLight,
+                        fontFamily: 'GeneralSans',
+                        letterSpacing: 12 * 0.02
                       ),
                     ),
                   ],

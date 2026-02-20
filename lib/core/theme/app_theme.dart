@@ -55,6 +55,8 @@ class AppTheme {
         fontWeight: FontWeight.w500,
         fontSize: 16.0,
         color: AppColors.greyDark,
+        fontFamily: 'GeneralSans',
+        letterSpacing: 16.0 * 0.02
       ),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       border: OutlineInputBorder(
@@ -88,6 +90,7 @@ class AppTheme {
         fontWeight: FontWeight.bold,
         fontFamily: Constants.generalSansFontFamily,
         color: AppColors.black,
+        letterSpacing: 16.0 * 0.02,
       ),
       systemOverlayStyle: SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,

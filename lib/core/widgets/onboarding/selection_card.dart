@@ -34,11 +34,7 @@ class SelectionCard extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Icon(
-              icon,
-              size: 24.sp,
-              color: Colors.black,
-            ),
+            Icon(icon, size: 24.sp, color: Colors.black),
             SizedBox(width: 16.w),
             Expanded(
               child: Text(
@@ -47,6 +43,8 @@ class SelectionCard extends StatelessWidget {
                   fontSize: 17.sp,
                   fontWeight: FontWeight.w500,
                   color: Colors.black,
+                  fontFamily: 'GeneralSans',
+                  letterSpacing: 17 * 0.02,
                 ),
               ),
             ),
