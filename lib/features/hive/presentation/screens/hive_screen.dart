@@ -339,7 +339,7 @@ If you answered “yes” to all these questions, you’re ready to take the nex
             .toList(),
       ),
     );
-  }
+  } 
 
   AppBar _buildAppBar(
     AsyncValue<HiveState> hiveAsync,

@@ -24,12 +24,16 @@ class QuizData {
   final String lessonNumber;
   final int levelNumber;
   final List<QuizQuestion> quizQuestions;
+  final String moduleName; // ← ADD THIS to pass module name through
+  final DateTime quizStartTime; // ← ADD THIS to track start time
 
   QuizData({
     required this.lessonNumber,
     required this.levelNumber,
     required this.quizQuestions,
-  });
+    required this.moduleName,
+    DateTime? quizStartTime,
+  }) : quizStartTime = quizStartTime ?? DateTime.now();
 }
 
 class QuizScreen extends ConsumerStatefulWidget {
@@ -47,6 +51,8 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
   final TextEditingController _fillInGapTextController =
       TextEditingController();
 
+  late final DateTime _quizStartTime; // ← ADD THIS
+
   int _currentPage = 0;
   int _score = 0;
 
@@ -60,6 +66,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
 
     _pageController = PageController();
     _quizQuestions = widget.quizData.quizQuestions;
+    _quizStartTime = widget.quizData.quizStartTime; // ← CAPTURE START TIME
 
     for (int i = 0; i < _quizQuestions.length; i++) {
       final q = _quizQuestions[i];
@@ -130,7 +137,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
         );
 
         if (allCorrect) {
-          _score += 20;
+          _score += 1;
         }
 
         // Show result bottom sheet
@@ -255,7 +262,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
       );
 
       if (isCorrect) {
-        _score += 20;
+        _score += 1;
       }
 
       QuizSuccessErrorBottomSheet.show(
@@ -526,8 +533,10 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
         state: state,
         onLeftSelected: (leftIndex) {
           setState(() {
+             // Toggle: if clicking the same option, deselect it
+            final isAlreadySelected = state.selectedLeftIndex == leftIndex;
             _pageStates[pageIndex] = state.copyWith(
-              selectedLeftIndex: leftIndex,
+              selectedLeftIndex: isAlreadySelected ? null : leftIndex,
               errorMessage: null,
             );
           });
@@ -636,6 +645,8 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
       extra: LevelCompleteArgs(
         score: _score.toDouble(),
         newFlowers: _quizQuestions.length,
+        moduleName: widget.quizData.moduleName, // ← PASS MODULE NAME
+        quizStartTime: _quizStartTime, // ← PASS START TIME
       ),
     );
   }

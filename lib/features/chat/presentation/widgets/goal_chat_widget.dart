@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/num_extensions.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/features/chat/domain/models/chat_models.dart';
+import 'package:savvy_bee_mobile/features/profile/presentation/screens/achievements_screen.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/goals/create_goal_onboarding_screen.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/goals/goals_screen.dart';
 
 class GoalChatWidget extends ConsumerStatefulWidget {
   final GoalData? goalData;
@@ -197,7 +201,10 @@ Every small step counts toward your financial goals 🌱''',
           // Action buttons
           const Divider(height: 0),
           TextButton.icon(
-            onPressed: widget.onCreateGoal,
+            // onPressed: widget.onCreateGoal,
+            onPressed: () {
+              context.pushNamed((CreateGoalOnboardingScreen.path));
+            },
             label: Text(hasGoalData ? 'Create This Goal' : 'Create Goal'),
             style: TextButton.styleFrom(
               padding: const EdgeInsets.all(20),
@@ -206,7 +213,10 @@ Every small step counts toward your financial goals 🌱''',
           ),
           const Divider(height: 0),
           TextButton.icon(
-            onPressed: widget.onViewAchievements,
+            // onPressed: widget.onViewAchievements,
+            onPressed: () {
+              context.pushNamed((AchievementsScreen.path));
+            },
             label: const Text('View Achievements'),
             style: TextButton.styleFrom(
               padding: const EdgeInsets.all(20),

@@ -55,7 +55,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   void _resumeRegistration({
     required bool emailVerified,
     required bool otherDetails,
-    required bool postOnboarding,
+    // required bool postOnboarding,
     required String email,
     String? message,
   }) {
@@ -87,11 +87,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       return;
     }
 
-    if (!postOnboarding) {
-      // Profile complete but the onboarding questionnaire wasn't finished.
-      context.pushNamed(FinancialArchitypeScreen.path);
-      return;
-    }
+    // if (!postOnboarding) {
+    //   // Profile complete but the onboarding questionnaire wasn't finished.
+    //   context.pushNamed(FinancialArchitypeScreen.path);
+    //   return;
+    // }
 
     // Everything is done — go home.
     context.goNamed(HomeScreen.path);
@@ -129,12 +129,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       // Even on success, guard against a partially completed account.
       if (verification != null &&
           (!verification.emailVerification ||
-              !verification.otherDetails ||
-              !verification.postOnboarding)) {
+              !verification.otherDetails  
+              // || !verification.postOnboarding    
+              )) {
         _resumeRegistration(
           emailVerified: verification.emailVerification,
           otherDetails: verification.otherDetails,
-          postOnboarding: verification.postOnboarding,
+          // postOnboarding: verification.postOnboarding,
           email: email,
           message: response.message,
         );
@@ -150,7 +151,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         _resumeRegistration(
           emailVerified: verification.emailVerification,
           otherDetails: verification.otherDetails,
-          postOnboarding: verification.postOnboarding,
+          // postOnboarding: verification.postOnboarding,
           email: email,
           message: response.message,
         );

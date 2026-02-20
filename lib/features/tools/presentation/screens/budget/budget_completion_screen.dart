@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
+import 'package:savvy_bee_mobile/core/tracking/minxpanel_tracking.dart';
 import 'package:savvy_bee_mobile/core/utils/num_extensions.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -27,6 +28,7 @@ class _BudgetCompletionScreenState
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(budgetHomeNotifierProvider.notifier).fetchBudgetHomeData();
     });
+    MixpanelService.trackFirstFeatureUsed('Tools-Budget');
   }
 
   @override

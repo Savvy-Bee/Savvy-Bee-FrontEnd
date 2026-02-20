@@ -55,13 +55,13 @@ class _SignupConnectBankScreenState extends State<SignupConnectBankScreen> {
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                CustomElevatedButton(
-                  text: 'Connect bank account',
-                  showArrow: true,
-                  buttonColor: CustomButtonColor.black,
-                  onPressed: () => ConnectBankIntroBottomSheet.show(context),
-                ),
-                const Gap(8),
+                // CustomElevatedButton(
+                //   text: 'Connect bank account',
+                //   showArrow: true,
+                //   buttonColor: CustomButtonColor.black,
+                //   onPressed: () => ConnectBankIntroBottomSheet.show(context),
+                // ),
+                // const Gap(8),
                 CustomOutlinedButton(
                   text: 'Next',
                   showArrow: true,

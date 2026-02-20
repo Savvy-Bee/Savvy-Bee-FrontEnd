@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:savvy_bee_mobile/core/services/service_locator.dart';
 import 'package:savvy_bee_mobile/core/services/storage_service.dart';
+import 'package:savvy_bee_mobile/core/tracking/minxpanel_tracking.dart';
 import 'package:savvy_bee_mobile/features/auth/data/repositories/auth_repository.dart';
 import 'package:savvy_bee_mobile/features/auth/domain/models/auth_models.dart';
 
@@ -63,7 +64,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   final StorageService _storageService;
 
   AuthNotifier(this._authRepository, this._storageService)
-      : super(AuthState.initial()) {
+    : super(AuthState.initial()) {
     _initialize();
   }
 
@@ -74,7 +75,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
       // Check if token is valid (not expired)
       final hasValidSession = await _storageService.hasValidSession();
-      
+
       if (!hasValidSession) {
         log('⚠ No valid session found (token expired or missing)');
         await _clearStorage();
@@ -94,7 +95,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
       // Log session info
       final remainingTime = await _storageService.getTokenRemainingTime();
       if (remainingTime != null) {
-        log('✓ Auth initialized - Session valid for: ${remainingTime.inHours}h ${remainingTime.inMinutes % 60}m');
+        log(
+          '✓ Auth initialized - Session valid for: ${remainingTime.inHours}h ${remainingTime.inMinutes % 60}m',
+        );
       } else {
         log('✓ Auth initialized - Authenticated: ${state.isAuthenticated}');
       }
@@ -139,6 +142,22 @@ class AuthNotifier extends StateNotifier<AuthState> {
       log('✓ User saved to storage: ${user.email}');
     } catch (e) {
       log('✗ Error saving user to storage: $e');
+    }
+  }
+
+  Future<User?> getUserFromStorage() async {
+    try {
+      final userString = await _storageService.getData(
+        StorageService.userDataKey,
+      );
+
+      if (userString == null) return null;
+
+      final Map<String, dynamic> jsonMap = jsonDecode(userString);
+      return User.fromJson(jsonMap);
+    } catch (e) {
+      log('✗ Error reading user from storage: $e');
+      return null;
     }
   }
 
@@ -300,7 +319,21 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
         state = state.copyWith(user: user, isLoading: false);
         await _saveUserToStorage(user);
-        
+
+        // ── Mixpanel tracking for successful login ──
+        try {
+          await MixpanelService.identifyUser(
+            userId: user.id,
+            email: user.email,
+            signupDate: DateTime.now(), // Use createdAt if available
+            acquisitionSource: 'organic', // or from your source
+          );
+          await MixpanelService.trackLogin('organic');
+          log('✓ Mixpanel tracking completed for login');
+        } catch (e) {
+          log('✗ Mixpanel tracking failed: $e');
+        }
+
         log('✓ Login successful - Token valid for 24 hours');
         return response;
       } else {
@@ -442,12 +475,12 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<bool> checkSessionValidity() async {
     try {
       final hasValid = await _storageService.hasValidSession();
-      
+
       if (!hasValid && state.isAuthenticated) {
         log('⚠ Session expired - logging out');
         await logout();
       }
-      
+
       return hasValid;
     } catch (e) {
       log('✗ Error checking session validity: $e');
@@ -498,7 +531,6 @@ final isLoadingProvider = Provider<bool>((ref) {
 final authIsInitializedProvider = Provider<bool>((ref) {
   return ref.watch(authProvider).isInitialized;
 });
-
 
 // import 'dart:convert';
 // import 'dart:developer';

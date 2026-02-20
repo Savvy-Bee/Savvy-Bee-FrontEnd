@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:savvy_bee_mobile/core/tracking/minxpanel_tracking.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 
@@ -19,6 +20,8 @@ class _ArcadeWebViewScreenState extends State<ArcadeWebViewScreen> {
   @override
   void initState() {
     super.initState();
+
+    MixpanelService.trackFirstFeatureUsed('Game');
 
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)

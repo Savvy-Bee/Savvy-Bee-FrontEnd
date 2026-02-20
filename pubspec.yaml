@@ -1,7 +1,7 @@
 name: savvy_bee_mobile
 description: "An AI-powered financial literacy and management app"
 publish_to: 'none'
-version: 1.0.0+6
+version: 1.0.0+7
 
 environment:
   sdk: ^3.8.1
@@ -54,6 +54,7 @@ dependencies:
   csv: ^6.0.0
   firebase_core: ^2.24.2
   firebase_messaging: ^14.7.10
+  mixpanel_flutter: ^2.3.1
   # flutter_local_notifications: ^16.3.0
 
 dev_dependencies:

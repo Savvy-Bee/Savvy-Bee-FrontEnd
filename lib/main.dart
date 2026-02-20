@@ -4,6 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
+import 'package:savvy_bee_mobile/core/tracking/minxpanel_tracking.dart';
 import 'core/theme/app_theme.dart';
 import 'core/routing/app_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -35,6 +36,9 @@ void main() async {
     final apiKey = dotenv.env[Constants.revenueCatApiKey]!;
     await Purchases.configure(PurchasesConfiguration(apiKey));
   } catch (_) {}
+
+    // Initialize Mixpanel BEFORE runApp()
+  await MixpanelService.initialize('0b9bfa95112c6154772de9e7adfde75b');
 
   runApp(
     ScreenUtilInit(

@@ -463,15 +463,15 @@
                                     "Receipt"
                                 ],
                                 "rightOptions": [
-                                    "Helps you plan your spending and saving",
-                                    "Helps you record what you spend money on",
                                     "Helps you track your progress toward a goal",
+                                    "Helps you record what you spend money on",
+                                    "Helps you plan your spending and saving", 
                                     "A record of what you have purchased"
                                 ],
                                 "correctMatches": {
-                                    "0": 0,
+                                    "0": 2,
                                     "1": 1,
-                                    "2": 2,
+                                    "2": 0,
                                     "3": 3
                                 }
                             },

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
+import 'package:savvy_bee_mobile/core/tracking/minxpanel_tracking.dart';
 import 'package:savvy_bee_mobile/core/utils/num_extensions.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/providers/goals_provider.dart';
 
@@ -11,10 +12,21 @@ import 'package:savvy_bee_mobile/features/tools/presentation/providers/goals_pro
 // Step 5: Success / Milestone Screen
 // ============================================================================
 
-class GoalSuccessScreen extends StatelessWidget {
+class GoalSuccessScreen extends StatefulWidget {
   static const String path = '/goal-success';
 
   const GoalSuccessScreen({super.key});
+
+  @override
+  State<GoalSuccessScreen> createState() => _GoalSuccessScreenState();
+}
+
+class _GoalSuccessScreenState extends State<GoalSuccessScreen> {
+  @override
+  void initState() {
+    super.initState();
+    MixpanelService.trackFirstFeatureUsed('Tools-Goals');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +61,7 @@ class GoalSuccessScreen extends StatelessWidget {
               const Gap(40),
 
               const Text(
-                'First milestone unlocked!',
+                'New milestone unlocked!',
                 style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.w600,
@@ -59,7 +71,7 @@ class GoalSuccessScreen extends StatelessWidget {
               const Gap(16),
 
               const Text(
-                "Congratulations on taking the first step toward your goal! You've hit your first milestone!",
+                "Congratulations on taking a step toward your goal! You've hit a milestone!",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 16,

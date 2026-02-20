@@ -1,12 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
+import 'package:savvy_bee_mobile/core/tracking/minxpanel_tracking.dart';
 
-class InsightsSection extends StatelessWidget {
+class InsightsSection extends StatefulWidget {
   final List<LearnCard> cards;
 
   const InsightsSection({super.key, required this.cards});
 
+  @override
+  State<InsightsSection> createState() => _InsightsSectionState();
+}
+
+class _InsightsSectionState extends State<InsightsSection> {
+   @override
+  void initState() {
+    super.initState();
+    MixpanelService.trackFirstFeatureUsed('Hive-Insights');
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -31,7 +43,7 @@ class InsightsSection extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           child: Row(
             spacing: 12,
-            children: cards
+            children: widget.cards
                 .map((card) => _LearnCardWidget(card: card))
                 .toList(),
           ),

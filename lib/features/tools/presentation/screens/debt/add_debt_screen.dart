@@ -16,7 +16,8 @@ import 'package:savvy_bee_mobile/features/tools/presentation/providers/debt_prov
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/debt/debt_repayment_details_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/widgets/insight_card.dart';
 
-enum LoanRepaymentFrequency { weekly, monthly, quarterly, manually }
+// enum LoanRepaymentFrequency { weekly, monthly, quarterly, manually }
+enum LoanRepaymentFrequency { weekly, monthly, quarterly }
 
 class AddDebtScreen extends ConsumerStatefulWidget {
   static const String path = '/add-debt';
@@ -124,8 +125,15 @@ class _AddDebtScreenState extends ConsumerState<AddDebtScreen> {
     }
 
     // Add validation for repayment day (except for manual payments)
-    if (_selectedPaymentFrequency != LoanRepaymentFrequency.manually &&
-        _selectedRepaymentDay == null) {
+    // if (_selectedPaymentFrequency != LoanRepaymentFrequency.manually &&
+    //     _selectedRepaymentDay == null) {
+    //   CustomSnackbar.show(
+    //     context,
+    //     'Please select a repayment day for ${_selectedPaymentFrequency.name} payments',
+    //   );
+    //   return;
+    // }
+    if (_selectedRepaymentDay == null) {
       CustomSnackbar.show(
         context,
         'Please select a repayment day for ${_selectedPaymentFrequency.name} payments',
@@ -188,7 +196,18 @@ class _AddDebtScreenState extends ConsumerState<AddDebtScreen> {
   }
 
   List<String> _getDropdownItems() {
-    return List.generate(31, (index) => (index + 1).toString());
+    switch (_selectedPaymentFrequency) {
+      case LoanRepaymentFrequency.weekly:
+        return List.generate(7, (index) => (index + 1).toString());
+
+      case LoanRepaymentFrequency.monthly:
+      case LoanRepaymentFrequency.quarterly:
+        // Use 1–28 so it works for all months safely
+        return List.generate(28, (index) => (index + 1).toString());
+
+      // case LoanRepaymentFrequency.manually:
+      //   return [];
+    }
   }
 
   @override
@@ -259,15 +278,15 @@ class _AddDebtScreenState extends ConsumerState<AddDebtScreen> {
             //   text: 'Pay ₦125,000/month to clear ₦1,000,000 loan in 8 months.',
             // ),
             const Gap(16),
-            if (_selectedPaymentFrequency != LoanRepaymentFrequency.manually)
-              CustomDropdownButton(
-                items: _getDropdownItems(),
-                label:
-                    'Day of the ${_selectedPaymentFrequency.name.replaceFirst('ly', '')}',
-                onChanged: (val) {
-                  setState(() => _selectedRepaymentDay = val);
-                },
-              ),
+            // if (_selectedPaymentFrequency != LoanRepaymentFrequency.manually)
+            CustomDropdownButton(
+              items: _getDropdownItems(),
+              label:
+                  'Day of the ${_selectedPaymentFrequency.name.replaceFirst('ly', '')}',
+              onChanged: (val) {
+                setState(() => _selectedRepaymentDay = val);
+              },
+            ),
             const Gap(16),
             CustomTextFormField(
               isRounded: true,

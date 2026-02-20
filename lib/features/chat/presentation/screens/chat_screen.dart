@@ -6,6 +6,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
+import 'package:savvy_bee_mobile/core/tracking/minxpanel_tracking.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/illustrations.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/utils/date_time_extension.dart';
@@ -60,7 +61,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   static const Set<String> _quickActions = {
     'Heal me',
     'Analyse me',
-    'Scan Receipt',
+    'Upload Receipt',
     'Assistant',
   };
 
@@ -75,6 +76,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       }
       _isInitialized = true;
     });
+
+  MixpanelService.trackFirstFeatureUsed('NAHL');
   }
 
   @override
@@ -578,22 +581,45 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
   Widget _buildChatHistoryView(ChatState chatState) {
     final rooms = chatState.allRooms;
-    final maxChats = 50; // This could come from API or config
+    final maxChats = 50;
 
-    return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Column(
-        children: [
-          _buildChatHistoryHeader(rooms.length, maxChats),
-          const Gap(16),
-          rooms.isEmpty
-              ? _buildEmptyChatHistory()
-              : _buildChatHistoryList(rooms),
-          const Gap(24),
-        ],
+    return RefreshIndicator(
+      onRefresh: () => ref.read(chatProvider.notifier).fetchChatHistory(),
+      child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(), // Required for refresh
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Column(
+          children: [
+            _buildChatHistoryHeader(rooms.length, maxChats),
+            const Gap(16),
+            rooms.isEmpty
+                ? _buildEmptyChatHistory()
+                : _buildChatHistoryList(rooms),
+            const Gap(24),
+          ],
+        ),
       ),
     );
   }
+
+  // Widget _buildChatHistoryView(ChatState chatState) {
+  //   final rooms = chatState.allRooms;
+  //   final maxChats = 50; // This could come from API or config
+
+  //   return SingleChildScrollView(
+  //     padding: const EdgeInsets.symmetric(horizontal: 16.0),
+  //     child: Column(
+  //       children: [
+  //         _buildChatHistoryHeader(rooms.length, maxChats),
+  //         const Gap(16),
+  //         rooms.isEmpty
+  //             ? _buildEmptyChatHistory()
+  //             : _buildChatHistoryList(rooms),
+  //         const Gap(24),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget _buildChatHistoryHeader(int currentCount, int maxCount) {
     return Row(
@@ -961,8 +987,11 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
     return IconButton(
       icon: Icon(
-        hasContent ? Icons.send_rounded : Icons.multitrack_audio_rounded,
-        color: AppColors.primary,
+        // hasContent ? Icons.send_rounded : Icons.multitrack_audio_rounded,
+        Icons.send_rounded,
+        color: hasContent
+            ? AppColors.primary
+            : AppColors.primary.withValues(alpha: 0.2),
       ),
       onPressed: chatState.isSending
           ? null

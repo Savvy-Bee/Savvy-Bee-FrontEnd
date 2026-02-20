@@ -129,19 +129,19 @@ class LoginData {
 class Verification {
   final bool emailVerification;
   final bool otherDetails;
-  final bool postOnboarding;
+  // final bool postOnboarding;
 
   Verification({
     required this.emailVerification,
     required this.otherDetails,
-    required this.postOnboarding,
+    // required this.postOnboarding,
   });
 
   factory Verification.fromJson(Map<String, dynamic> json) {
     return Verification(
       emailVerification: json['EmailVerification'] ?? false,
       otherDetails: json['OtherDetails'] ?? false,
-      postOnboarding: json['Postonboarding'] ?? false,
+      // postOnboarding: json['Postonboarding'] ?? false,
     );
   }
 
@@ -149,12 +149,17 @@ class Verification {
     return {
       'EmailVerification': emailVerification,
       'OtherDetails': otherDetails,
-      'Postonboarding': postOnboarding,
+      // 'Postonboarding': postOnboarding,
     };
   }
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// REPLACE the existing PostOnboardRequest class in your auth_models.dart with this:
+// ─────────────────────────────────────────────────────────────────────────────
+
 class PostOnboardRequest {
+  final String email;
   final String whatMatters;
   final String userArchetype;
   final String financePriorities;
@@ -164,6 +169,7 @@ class PostOnboardRequest {
   final String motivatesyou;
 
   PostOnboardRequest({
+    required this.email,
     required this.whatMatters,
     required this.userArchetype,
     required this.financePriorities,
@@ -175,6 +181,7 @@ class PostOnboardRequest {
 
   Map<String, dynamic> toJson() {
     return {
+      'Email': email,
       'WhatMatters': whatMatters,
       'UserArchetype': userArchetype,
       'FinancePriorities': financePriorities,

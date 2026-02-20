@@ -9,7 +9,10 @@ import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/utils/string_extensions.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/features/hive/domain/models/course.dart';
+import 'package:savvy_bee_mobile/features/hive/presentation/providers/hive_provider.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/levels_screen.dart';
+import 'package:savvy_bee_mobile/features/home/domain/models/home_data.dart';
+import 'package:savvy_bee_mobile/features/home/presentation/providers/home_data_provider.dart';
 
 import '../../../../../core/widgets/custom_button.dart';
 import '../../providers/course_providers.dart';
@@ -29,9 +32,21 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
   // final int _selectedLessonIndex = 0;
 
   @override
+  void initState() {
+    super.initState();
+    // Fetch hive data when screen loads
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(hiveNotifierProvider.notifier).fetchHiveDetails();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final hiveAsync = ref.watch(hiveNotifierProvider);
+    final homeDataAsync = ref.watch(homeDataProvider);
+
     return Scaffold(
-      appBar: _buildAppBar(),
+      appBar: _buildAppBar(hiveAsync, homeDataAsync),
       body: Column(
         children: [
           Expanded(
@@ -129,14 +144,17 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
     );
   }
 
-  AppBar _buildAppBar() {
+  AppBar _buildAppBar(
+    AsyncValue<HiveState> hiveAsync,
+    AsyncValue<HomeDataResponse> homeDataAsync,
+  ) {
     return AppBar(
       centerTitle: false,
       automaticallyImplyLeading: false,
       title: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          BackButton(),
+          const BackButton(),
           Image.asset(Assets.lessonProgress1, scale: 1.3),
           const Gap(8),
           Column(
@@ -145,7 +163,10 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
             children: [
               Text(
                 widget.course.courseTitle.truncate(10),
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               Row(
                 spacing: 8,
@@ -153,9 +174,8 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
                 children: [
                   Text(
                     '${widget.course.lessons.length} lessons',
-                    style: TextStyle(fontSize: 8),
+                    style: const TextStyle(fontSize: 8),
                   ),
-                  // Text('5 quizzes', style: TextStyle(fontSize: 8)),
                 ],
               ),
             ],
@@ -169,8 +189,12 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
             Image.asset(Illustrations.hiveFlower),
             const Gap(4),
             Text(
-              '200',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              hiveAsync.when(
+                data: (hiveState) => '${hiveState.hiveData?.flowers ?? 0}',
+                loading: () => '...',
+                error: (_, __) => '0',
+              ),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
           ],
         ),
@@ -178,11 +202,15 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.hive, color: AppColors.primary),
+            const Icon(Icons.hive, color: AppColors.primary),
             const Gap(4),
             Text(
-              '200',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              hiveAsync.when(
+                data: (hiveState) => '${hiveState.hiveData?.streak ?? 0}',
+                loading: () => '...',
+                error: (_, __) => '0',
+              ),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
           ],
         ),
@@ -190,6 +218,68 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
       ],
     );
   }
+
+  // AppBar _buildAppBar() {
+  //   return AppBar(
+  //     centerTitle: false,
+  //     automaticallyImplyLeading: false,
+  //     title: Row(
+  //       mainAxisSize: MainAxisSize.min,
+  //       children: [
+  //         BackButton(),
+  //         Image.asset(Assets.lessonProgress1, scale: 1.3),
+  //         const Gap(8),
+  //         Column(
+  //           crossAxisAlignment: CrossAxisAlignment.start,
+  //           mainAxisSize: MainAxisSize.min,
+  //           children: [
+  //             Text(
+  //               widget.course.courseTitle.truncate(10),
+  //               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+  //             ),
+  //             Row(
+  //               spacing: 8,
+  //               mainAxisSize: MainAxisSize.min,
+  //               children: [
+  //                 Text(
+  //                   '${widget.course.lessons.length} lessons',
+  //                   style: TextStyle(fontSize: 8),
+  //                 ),
+  //                 // Text('5 quizzes', style: TextStyle(fontSize: 8)),
+  //               ],
+  //             ),
+  //           ],
+  //         ),
+  //       ],
+  //     ),
+  //     actions: [
+  //       Row(
+  //         mainAxisSize: MainAxisSize.min,
+  //         children: [
+  //           Image.asset(Illustrations.hiveFlower),
+  //           const Gap(4),
+  //           Text(
+  //             '200',
+  //             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+  //           ),
+  //         ],
+  //       ),
+  //       const Gap(12),
+  //       Row(
+  //         mainAxisSize: MainAxisSize.min,
+  //         children: [
+  //           Icon(Icons.hive, color: AppColors.primary),
+  //           const Gap(4),
+  //           Text(
+  //             '200',
+  //             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+  //           ),
+  //         ],
+  //       ),
+  //       const Gap(16),
+  //     ],
+  //   );
+  // }
 
   Widget _buildLessonCard({
     required String status,

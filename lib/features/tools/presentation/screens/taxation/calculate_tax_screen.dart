@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:open_file/open_file.dart';
+import 'package:savvy_bee_mobile/core/tracking/minxpanel_tracking.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:savvy_bee_mobile/core/utils/file_picker_util.dart';
 import 'package:savvy_bee_mobile/core/utils/num_extensions.dart'; // ADD THIS IMPORT
@@ -41,6 +42,8 @@ class _CalculateTaxScreenState extends ConsumerState<CalculateTaxScreen> {
     super.initState();
     monthlyIncomeController = TextEditingController();
     annualRentController = TextEditingController();
+
+    MixpanelService.trackFirstFeatureUsed('Tools-Tax');
   }
 
   @override
@@ -428,7 +431,8 @@ class _CalculateTaxScreenState extends ConsumerState<CalculateTaxScreen> {
             ref
                 .read(taxCalculatorNotifierProvider.notifier)
                 .calculateTax(
-                  earnings: annualEarnings,
+                  // earnings: annualEarnings,
+                  earnings: monthlyIncome,
                   rent: int.tryParse(annualRentController.text),
                 );
           },

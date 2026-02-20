@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:savvy_bee_mobile/core/tracking/minxpanel_tracking.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
@@ -87,6 +88,12 @@ class _BlogPostBottomSheetState extends State<BlogPostBottomSheet> {
         );
       }
     }
+  }
+
+   @override
+  void initState() {
+    super.initState();
+    MixpanelService.trackFirstFeatureUsed('Hive-Insights');
   }
 
   @override
@@ -208,16 +215,16 @@ class _BlogPostBottomSheetState extends State<BlogPostBottomSheet> {
                         Row(
                           spacing: 16,
                           children: [
-                            GestureDetector(
-                              onTap: _toggleFavorite,
-                              child: Icon(
-                                _isFavorited
-                                    ? Icons.favorite
-                                    : Icons.favorite_border,
-                                size: 16,
-                                color: _isFavorited ? Colors.red : Colors.black,
-                              ),
-                            ),
+                            // GestureDetector(
+                            //   onTap: _toggleFavorite,
+                            //   child: Icon(
+                            //     _isFavorited
+                            //         ? Icons.favorite
+                            //         : Icons.favorite_border,
+                            //     size: 16,
+                            //     color: _isFavorited ? Colors.red : Colors.black,
+                            //   ),
+                            // ),
                             GestureDetector(
                               onTap: _sharePost,
                               child: Icon(

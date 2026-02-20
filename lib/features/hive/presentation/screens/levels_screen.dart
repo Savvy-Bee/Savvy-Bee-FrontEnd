@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
+import 'package:savvy_bee_mobile/core/tracking/minxpanel_tracking.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/assets.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/utils/string_extensions.dart';
@@ -23,6 +24,12 @@ class LevelsScreen extends ConsumerStatefulWidget {
 }
 
 class _LevelsScreenState extends ConsumerState<LevelsScreen> {
+  @override
+  void initState() {
+    super.initState();
+    MixpanelService.trackFirstFeatureUsed('Hive-Learn & Grow');
+  }
+
   @override
   Widget build(BuildContext context) {
     final levels = widget.lesson.levels;

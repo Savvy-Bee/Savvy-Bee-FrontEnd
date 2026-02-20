@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
+import 'package:savvy_bee_mobile/core/tracking/minxpanel_tracking.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
@@ -14,87 +15,44 @@ import 'package:savvy_bee_mobile/core/widgets/icon_text_row_widget.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/widgets/copy_text_icon_button.dart';
 import 'package:savvy_bee_mobile/features/tools/domain/models/debt.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/providers/debt_provider.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/debt/provider/bank.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/widgets/insight_card.dart';
 
 enum DebtRepaymentMethod { bankTransfer, card }
 
 class DebtRepaymentDetailsScreen extends ConsumerStatefulWidget {
   static const String path = '/debt-repayment-details';
-
-  // Pass the ID created in Step 1
   final String debtId;
 
   const DebtRepaymentDetailsScreen({super.key, required this.debtId});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
+  ConsumerState<DebtRepaymentDetailsScreen> createState() =>
       _DebtRepaymentDetailsScreenState();
 }
 
 class _DebtRepaymentDetailsScreenState
     extends ConsumerState<DebtRepaymentDetailsScreen> {
   final _accNumberController = TextEditingController();
-  DebtRepaymentMethod _repaymentMethod = DebtRepaymentMethod.bankTransfer;
+
+  String? _selectedBankCode;
+  String? _selectedBankName;
+  String? _resolvedAccountName;
   bool _hasAgreedToTerms = false;
   bool _isLoading = false;
+  bool _isResolvingAccount = false;
+  String? _accountResolveError;
 
-  // Placeholder for bank selection
-  String? _selectedBankCode;
-
-  // TODO: You usually fetch this list from a BankProvider
-  final List<Map<String, String>> _dummyBanks = [
-    {'name': 'First Bank', 'code': '100033'},
-    {'name': 'GTBank', 'code': '100033'},
-    {'name': 'Zenith Bank', 'code': '100033'},
-  ];
-
-  Future<void> _submitStep2() async {
-    if (_selectedBankCode == null &&
-        _repaymentMethod == DebtRepaymentMethod.bankTransfer) {
-      CustomSnackbar.show(context, 'Please select a bank');
-      return;
-    }
-    if (_accNumberController.text.length < 10) {
-      CustomSnackbar.show(context, 'Invalid Account Number');
-      return;
-    }
-    if (!_hasAgreedToTerms) {
-      CustomSnackbar.show(context, 'Please agree to the terms');
-      return;
-    }
-
-    setState(() => _isLoading = true);
-
-    final reqBody = DebtCreationStep2Request(
-      debtId: widget.debtId,
-      bankCode: _selectedBankCode ?? '000',
-      accNumber: _accNumberController.text.trim(),
-    );
-
-    try {
-      await ref
-          .read(debtListNotifierProvider.notifier)
-          .createDebtStep2(reqBody: reqBody);
-
-      if (mounted) {
-        // Success - Go back to debt home
-        context.pop(); // Pop this screen
-        context.pop(); // Pop add screen (Simple approach)
-      }
-    } catch (e) {
-      if (mounted) {
-        CustomSnackbar.show(
-          context,
-          'An unexpected error occurred. Please try again.',
-        );
-      }
-    } finally {
-      if (mounted) setState(() => _isLoading = false);
-    }
+  @override
+  void initState() {
+    super.initState();
+    MixpanelService.trackFirstFeatureUsed('Tools-Debt');
   }
 
   @override
   Widget build(BuildContext context) {
+    final banksAsync = ref.watch(bankListProvider);
+
     return Scaffold(
       appBar: AppBar(title: const Text('Debt repayment details')),
       body: Padding(
@@ -104,87 +62,120 @@ class _DebtRepaymentDetailsScreenState
             Expanded(
               child: ListView(
                 children: [
-                  // Text(
-                  //   'How would you like to pay this debt?',
-                  //   style: TextStyle(fontWeight: FontWeight.w500),
-                  // ),
-                  // const Gap(8),
-                  // Row(
-                  //   spacing: 8,
-                  //   children: [
-                  //     Expanded(
-                  //       child: _buildPaymentOptionButton(
-                  //         'Bank transfer',
-                  //         isSelected:
-                  //             _repaymentMethod ==
-                  //             DebtRepaymentMethod.bankTransfer,
-                  //         onTap: () {
-                  //           setState(() {
-                  //             _repaymentMethod =
-                  //                 DebtRepaymentMethod.bankTransfer;
-                  //           });
-                  //         },
-                  //       ),
-                  //     ),
-                  //     Expanded(
-                  //       child: _buildPaymentOptionButton(
-                  //         'Card',
-                  //         isSelected:
-                  //             _repaymentMethod == DebtRepaymentMethod.card,
-                  //         onTap: () {
-                  //           setState(() {
-                  //             _repaymentMethod = DebtRepaymentMethod.card;
-                  //           });
-                  //         },
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
-                  // const Gap(16),
+                  banksAsync.when(
+                    data: (banks) => CustomDropdownButton(
+                      items: banks.map((e) => e['name']!).toList(),
+                      hint: 'Bank name',
+                      label: 'Bank',
+                      leadingIcon: const Icon(Icons.account_balance_rounded),
+                      onChanged: (val) {
+                        final bank = banks.firstWhere((e) => e['name'] == val);
+                        setState(() {
+                          _selectedBankCode = bank['code'];
+                          _selectedBankName = bank['name'];
+                          _resolvedAccountName = null;
+                          _isResolvingAccount = false;
+                          _accountResolveError = null;
+                        });
+                      },
+                    ),
+                    loading: () =>
+                        const Center(child: CircularProgressIndicator()),
+                    error: (_, __) => const Text('Failed to load banks'),
+                  ),
+
+                  const Gap(16),
                   CustomTextFormField(
                     label: 'Account Number',
                     isRounded: true,
                     controller: _accNumberController,
-                    keyboardType: const TextInputType.numberWithOptions(
-                      decimal: false,
-                    ),
+                    keyboardType: const TextInputType.numberWithOptions(),
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
                       LengthLimitingTextInputFormatter(10),
                     ],
+                    onChanged: (val) async {
+                      if (val.length == 10 && _selectedBankCode != null) {
+                        setState(() {
+                          _isResolvingAccount = true;
+                          _resolvedAccountName = null;
+                          _accountResolveError = null;
+                        });
+
+                        try {
+                          final name = await ref.read(
+                            accountResolutionProvider((
+                              bankCode: _selectedBankCode!,
+                              accNumber: val,
+                            )).future,
+                          );
+
+                          setState(() {
+                            _resolvedAccountName = name;
+                            _isResolvingAccount = false;
+                          });
+                        } catch (e) {
+                          setState(() {
+                            _isResolvingAccount = false;
+                            _accountResolveError = 'Failed to resolve account';
+                          });
+                        }
+                      }
+                    },
                   ),
-                  // const Gap(4),
-                  // // Account Name Resolution (Placeholder logic)
-                  // if (_accNumberController.text.length == 10)
+                  const Gap(8),
+
+                  // if (_resolvedAccountName != null)
                   //   IconTextRowWidget(
-                  //     'Aegon Targaryen',
-                  //     Icon(
+                  //     _resolvedAccountName!,
+                  //     const Icon(
                   //       Icons.check_circle,
                   //       color: AppColors.primary,
                   //       size: 16,
                   //     ),
-                  //     textStyle: TextStyle(
+                  //     textStyle: const TextStyle(
                   //       fontSize: 10,
                   //       fontWeight: FontWeight.bold,
-
                   //       color: AppColors.primary,
                   //     ),
                   //   ),
-                  const Gap(16),
-                  CustomDropdownButton(
-                    items: _dummyBanks.map((e) => e['name']!).toList(),
-                    hint: 'Bank name',
-                    label: 'Bank',
-                    leadingIcon: const Icon(Icons.account_balance_rounded),
-                    onChanged: (val) {
-                      final bank = _dummyBanks.firstWhere(
-                        (element) => element['name'] == val,
-                      );
-                      setState(() {
-                        _selectedBankCode = bank['code'];
-                      });
-                    },
-                  ),
+                  if (_isResolvingAccount)
+                    const Row(
+                      children: [
+                        SizedBox(
+                          height: 14,
+                          width: 14,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        ),
+                        Gap(6),
+                        Text(
+                          'Resolving account...',
+                          style: TextStyle(fontSize: 10),
+                        ),
+                      ],
+                    ),
+
+                  if (_resolvedAccountName != null)
+                    IconTextRowWidget(
+                      _resolvedAccountName!,
+                      const Icon(
+                        Icons.check_circle,
+                        color: AppColors.primary,
+                        size: 16,
+                      ),
+                      textStyle: const TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.primary,
+                      ),
+                    ),
+
+                  if (_accountResolveError != null)
+                    Text(
+                      _accountResolveError!,
+                      style: const TextStyle(fontSize: 10, color: Colors.red),
+                    ),
+ 
                   const Gap(16),
                   const InsightCard(
                     text:
@@ -192,42 +183,18 @@ class _DebtRepaymentDetailsScreenState
                     insightType: InsightType.nextBestAction,
                   ),
                   const Gap(16),
+
                   Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Checkbox(
                         value: _hasAgreedToTerms,
-                        onChanged: (value) {
-                          setState(() {
-                            _hasAgreedToTerms = !_hasAgreedToTerms;
-                          });
-                        },
-                        visualDensity: VisualDensity.compact,
-                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        onChanged: (v) =>
+                            setState(() => _hasAgreedToTerms = v!),
                       ),
-                      const Gap(12),
                       const Expanded(
-                        child: Text.rich(
+                        child: Text(
+                          'I hereby agree to Nahl automatically repaying this debt from my Savvy Wallet until the debt has been fully repaid',
                           style: TextStyle(fontSize: 12),
-                          TextSpan(
-                            text:
-                                'I hereby agree to Nahl automatically repaying this debt from my Savvy Wallet ',
-                            children: [
-                              // TextSpan(
-                              //   text: 'Aegon Targaryen (First Bank) ',
-                              //   style: TextStyle(fontWeight: FontWeight.bold),
-                              // ),
-                              // TextSpan(text: 'on the '),
-                              // TextSpan(
-                              //   text: 'first day of every month ',
-                              //   style: TextStyle(fontWeight: FontWeight.bold),
-                              // ),
-                              TextSpan(
-                                text: 'until the debt has been fully repaid',
-                              ),
-                            ],
-                          ),
                         ),
                       ),
                     ],
@@ -235,6 +202,7 @@ class _DebtRepaymentDetailsScreenState
                 ],
               ),
             ),
+
             CustomElevatedButton(
               text: 'Add repayment details',
               isLoading: _isLoading,
@@ -244,6 +212,46 @@ class _DebtRepaymentDetailsScreenState
         ),
       ),
     );
+  }
+
+  Future<void> _submitStep2() async {
+    if (_selectedBankCode == null) {
+      CustomSnackbar.show(context, 'Please select a bank');
+      return;
+    }
+
+    if (_accNumberController.text.length != 10) {
+      CustomSnackbar.show(context, 'Invalid account number');
+      return;
+    }
+
+    if (_resolvedAccountName == null) {
+      CustomSnackbar.show(context, 'Account not resolved');
+      return;
+    }
+
+    setState(() => _isLoading = true);
+
+    final reqBody = DebtCreationStep2Request(
+      debtId: widget.debtId,
+      bankCode: _selectedBankCode!,
+      accNumber: _accNumberController.text.trim(),
+    );
+
+    try {
+      await ref
+          .read(debtListNotifierProvider.notifier)
+          .createDebtStep2(reqBody: reqBody);
+
+      if (mounted) {
+        context.pop();
+        context.pop();
+      }
+    } catch (_) {
+      CustomSnackbar.show(context, 'Something went wrong');
+    } finally {
+      setState(() => _isLoading = false);
+    }
   }
 
   Widget _buildPaymentOptionButton(
