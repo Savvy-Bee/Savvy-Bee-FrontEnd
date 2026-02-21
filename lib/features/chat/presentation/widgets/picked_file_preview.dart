@@ -82,6 +82,8 @@ class PickedFilePreview extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 14.0,
                             fontWeight: FontWeight.w500,
+                            fontFamily: 'GeneralSans',
+                    letterSpacing: 14 * 0.02,
                           ),
                         ),
                         const Gap(16),
@@ -107,6 +109,8 @@ class PickedFilePreview extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 12.0,
                         fontWeight: FontWeight.w400,
+                        fontFamily: 'GeneralSans',
+                    letterSpacing: 12 * 0.02,
                       ),
                     ),
                   ],

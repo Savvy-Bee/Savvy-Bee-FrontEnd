@@ -94,6 +94,8 @@ class _BudgetChatWidgetState extends ConsumerState<BudgetChatWidget> {
                             style: TextStyle(
                               fontSize: 8,
                               fontWeight: FontWeight.w500,
+                              fontFamily: 'GeneralSans',
+                              letterSpacing: 8 * 0.02,
                             ),
                           ),
                         ],
@@ -106,6 +108,8 @@ class _BudgetChatWidgetState extends ConsumerState<BudgetChatWidget> {
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
+                          fontFamily: 'GeneralSans',
+                          letterSpacing: 12 * 0.02,
                         ),
                       ),
                     ],
@@ -123,11 +127,17 @@ class _BudgetChatWidgetState extends ConsumerState<BudgetChatWidget> {
                         style: TextStyle(
                           fontWeight: FontWeight.w500,
                           fontSize: 16,
+                          fontFamily: 'GeneralSans',
+                          letterSpacing: 16 * 0.02,
                         ),
                       ),
                       Text(
                         '${totalSpent.formatCurrency(decimalDigits: 0)}/${totalBudget.formatCurrency(decimalDigits: 0)}',
-                        style: TextStyle(fontSize: 10),
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontFamily: 'GeneralSans',
+                          letterSpacing: 10 * 0.02,
+                        ),
                       ),
                     ],
                   ),
@@ -153,7 +163,10 @@ class _BudgetChatWidgetState extends ConsumerState<BudgetChatWidget> {
                       const Gap(4),
                       Text(
                         '${(overallProgress * 100).toStringAsFixed(0)}%',
-                        style: TextStyle(fontWeight: FontWeight.w500),
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontFamily: 'GeneralSans',
+                        ),
                       ),
                     ],
                   ),
@@ -196,6 +209,8 @@ class _BudgetChatWidgetState extends ConsumerState<BudgetChatWidget> {
                               fontSize: 12,
                               fontWeight: FontWeight.w500,
                               color: AppColors.primary,
+                              fontFamily: 'GeneralSans',
+                              letterSpacing: 12 * 0.02,
                             ),
                           ),
                           Icon(
@@ -245,6 +260,8 @@ class _BudgetChatWidgetState extends ConsumerState<BudgetChatWidget> {
                           fontSize: 10,
                           fontWeight: FontWeight.w500,
                           color: AppColors.warning.withValues(alpha: 0.9),
+                          fontFamily: 'GeneralSans',
+                          letterSpacing: 10 * 0.02,
                         ),
                       ),
                     ),
@@ -315,6 +332,8 @@ class _BudgetChatWidgetState extends ConsumerState<BudgetChatWidget> {
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
+                        fontFamily: 'GeneralSans',
+                        letterSpacing: 14 * 0.02,
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -322,7 +341,11 @@ class _BudgetChatWidgetState extends ConsumerState<BudgetChatWidget> {
                   const Gap(8),
                   Text(
                     '${amountSpent.formatCurrency(decimalDigits: 0)} of ${totalAmount.formatCurrency(decimalDigits: 0)}',
-                    style: TextStyle(fontSize: 9),
+                    style: TextStyle(
+                      fontSize: 9,
+                      fontFamily: 'GeneralSans',
+                      letterSpacing: 9 * 0.02,
+                    ),
                   ),
                 ],
               ),
@@ -347,6 +370,8 @@ class _BudgetChatWidgetState extends ConsumerState<BudgetChatWidget> {
                       fontSize: 10,
                       fontWeight: FontWeight.w500,
                       color: isOverBudget ? AppColors.error : color,
+                      fontFamily: 'GeneralSans',
+                      letterSpacing: 10 * 0.02,
                     ),
                   ),
                 ],

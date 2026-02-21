@@ -37,7 +37,12 @@ class InfoWidget extends StatelessWidget {
             InfoWidgetTextAlignment.left => TextAlign.left,
             InfoWidgetTextAlignment.right => TextAlign.right,
           },
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'GeneralSans',
+            letterSpacing: 16 * 0.02,
+          ),
         ),
         const Gap(8),
         Text(
@@ -47,7 +52,11 @@ class InfoWidget extends StatelessWidget {
             InfoWidgetTextAlignment.left => TextAlign.left,
             InfoWidgetTextAlignment.right => TextAlign.right,
           },
-          style: TextStyle(fontSize: 12),
+          style: TextStyle(
+            fontSize: 12,
+            fontFamily: 'GeneralSans',
+            letterSpacing: 12 * 0.02,
+          ),
         ),
       ],
     );

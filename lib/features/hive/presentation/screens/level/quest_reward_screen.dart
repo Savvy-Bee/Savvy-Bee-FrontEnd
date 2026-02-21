@@ -45,6 +45,8 @@ class _QuestCompleteScreenState extends ConsumerState<QuestRewardScreen> {
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
                         color: AppColors.primary,
+                        fontFamily: 'GeneralSans',
+                        letterSpacing: 32 * 0.02,
                       ),
                     ),
                     Image.asset(Assets.honeyJar4),
@@ -56,6 +58,8 @@ class _QuestCompleteScreenState extends ConsumerState<QuestRewardScreen> {
                         fontWeight: FontWeight.bold,
 
                         height: 1.1,
+                        fontFamily: 'GeneralSans',
+                        letterSpacing: 24 * 0.02,
                       ),
                     ),
                   ],

@@ -102,7 +102,7 @@ class _LevelCompleteScreenState extends ConsumerState<LevelCompleteScreen> {
         await Future.delayed(const Duration(milliseconds: 1500));
         // if (mounted) context.goNamed(HiveScreen.path);
         if (mounted) context.pop();
-      } 
+      }
     } else {
       // ── Flower API failed ────────────────────────────────────────────────
       setState(() => _isProcessing = false);
@@ -142,6 +142,8 @@ class _LevelCompleteScreenState extends ConsumerState<LevelCompleteScreen> {
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
                         color: AppColors.primary,
+                        fontFamily: 'GeneralSans',
+                        letterSpacing: 32 * 0.02,
                       ),
                     ),
                     const SizedBox(height: 24),
@@ -215,6 +217,8 @@ class _LevelCompleteScreenState extends ConsumerState<LevelCompleteScreen> {
               fontSize: 14,
               color: AppColors.white,
               fontWeight: FontWeight.bold,
+              fontFamily: 'GeneralSans',
+              letterSpacing: 14 * 0.02,
             ),
           ),
           const SizedBox(height: 8),
@@ -231,7 +235,11 @@ class _LevelCompleteScreenState extends ConsumerState<LevelCompleteScreen> {
                 const SizedBox(width: 6),
                 Text(
                   score,
-                  style: TextStyle(fontWeight: FontWeight.bold, color: color),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: color,
+                    fontFamily: 'GeneralSans',
+                  ),
                 ),
               ],
             ),

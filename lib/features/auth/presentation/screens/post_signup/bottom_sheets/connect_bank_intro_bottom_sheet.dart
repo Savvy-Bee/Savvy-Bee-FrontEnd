@@ -52,6 +52,7 @@ class ConnectBankIntroBottomSheet extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                   fontFamily: 'GeneralSans',
                   height: 1.0,
+                  letterSpacing: 32 * 0.02,
                 ),
               ),
 
@@ -115,7 +116,7 @@ class ConnectBankIntroBottomSheet extends StatelessWidget {
               ),
               Text(
                 subtitle,
-                style: TextStyle(fontSize: 10, fontFamily: 'GeneralSans'),
+                style: TextStyle(fontSize: 10, fontFamily: 'GeneralSans', letterSpacing: 10 * 0.02,),
               ),
             ],
           ),

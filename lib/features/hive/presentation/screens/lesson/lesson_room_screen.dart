@@ -8,7 +8,7 @@ import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/features/hive/domain/models/course.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/quiz/quiz_screen.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
- 
+
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/utils/assets/app_icons.dart';
 import '../../../../../core/utils/assets/assets.dart';
@@ -73,7 +73,11 @@ class _LessonRoomScreenState extends ConsumerState<LessonRoomScreen> {
         lessonNumber: widget.args.lessonNumber,
         levelNumber: widget.args.level.levelNumber,
         quizQuestions: widget.args.level.quiz.questions,
-        moduleName: widget.args.level.quiz.focus, // Pass module name for completion tracking
+        moduleName: widget
+            .args
+            .level
+            .quiz
+            .focus, // Pass module name for completion tracking
       ),
     );
   }
@@ -164,12 +168,22 @@ class _LessonRoomScreenState extends ConsumerState<LessonRoomScreen> {
                   borderColor: Colors.transparent,
                   child: Text(
                     'Test your knowledge',
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'GeneralSans',
+                      letterSpacing: 12 * 0.02,
+                    ),
                   ),
                 ),
                 Text(
                   'Take the quiz',
-                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'GeneralSans',
+                    letterSpacing: 12 * 0.02,
+                  ),
                 ),
                 Image.asset(Illustrations.lesson1, scale: 1.3),
                 CustomElevatedButton(
@@ -244,18 +258,18 @@ class _LessonRoomScreenState extends ConsumerState<LessonRoomScreen> {
               IconButton.filled(
                 onPressed: _currentPage > 0
                     ? () => _pageController.previousPage(
-                          duration: Duration(milliseconds: 300),
-                          curve: Curves.easeOut,
-                        )
+                        duration: Duration(milliseconds: 300),
+                        curve: Curves.easeOut,
+                      )
                     : null,
                 icon: const Icon(Icons.keyboard_arrow_left_rounded),
               ),
               IconButton.filled(
                 onPressed: _currentPage < _pages.length - 1
                     ? () => _pageController.nextPage(
-                          duration: Duration(milliseconds: 300),
-                          curve: Curves.easeOut,
-                        )
+                        duration: Duration(milliseconds: 300),
+                        curve: Curves.easeOut,
+                      )
                     : null,
                 icon: const Icon(Icons.keyboard_arrow_right_rounded),
               ),
@@ -317,9 +331,6 @@ class _LessonRoomScreenState extends ConsumerState<LessonRoomScreen> {
     );
   }
 }
-
-
-
 
 // import 'package:flutter/material.dart';
 // import 'package:flutter_riverpod/flutter_riverpod.dart';

@@ -521,7 +521,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
           children: [
             Text(
               "Didn't receive a code? ",
-              style: TextStyle(fontSize: 14, color: AppColors.grey),
+              style: TextStyle(fontSize: 14, color: AppColors.grey, fontFamily: 'GeneralSans',
+                    letterSpacing: 14 * 0.02,),
             ),
             GestureDetector(
               onTap: isLoading ? null : () => _sendOtp(),
@@ -533,6 +534,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                   color: isLoading ? AppColors.grey : AppColors.primary,
                   decoration: TextDecoration.underline,
                   decorationColor: AppColors.primary,
+                  fontFamily: 'GeneralSans',
+                    letterSpacing: 14 * 0.02,
                 ),
               ),
             ),
@@ -549,6 +552,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                 fontSize: 13,
                 color: AppColors.grey,
                 decoration: TextDecoration.underline,
+                fontFamily: 'GeneralSans',
+                    letterSpacing: 13 * 0.02,
               ),
             ),
           ),

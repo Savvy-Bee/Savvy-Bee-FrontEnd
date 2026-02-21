@@ -38,6 +38,8 @@ class _WeeklyPositionScreenState extends ConsumerState<WeeklyPositionScreen> {
                     fontWeight: FontWeight.bold,
 
                     height: 1.0,
+                    fontFamily: 'GeneralSans',
+                    letterSpacing: 28 * 0.02,
                   ),
                 ),
                 _buildPositionIndicator(),
@@ -72,14 +74,16 @@ class _WeeklyPositionScreenState extends ConsumerState<WeeklyPositionScreen> {
               CircleAvatar(),
               Text(
                 'Joshua',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, fontFamily: 'GeneralSans',
+                    letterSpacing: 16 * 0.02,),
               ),
             ],
           ),
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('1000', style: TextStyle(fontSize: 16)),
+              Text('1000', style: TextStyle(fontSize: 16, fontFamily: 'GeneralSans',
+                    letterSpacing: 16 * 0.02,)),
               Image.asset(Illustrations.hiveFlower),
             ],
           ),

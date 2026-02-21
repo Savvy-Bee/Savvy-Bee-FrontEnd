@@ -77,7 +77,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                   onRefresh: () =>
                       ref.read(dashboardDataProvider('all').notifier).refresh(),
                   child: SingleChildScrollView(
-                    physics: const AlwaysScrollableScrollPhysics(), // Ensures pull to refresh always works
+                    physics:
+                        const AlwaysScrollableScrollPhysics(), // Ensures pull to refresh always works
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Column(
@@ -220,6 +221,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
                           color: Colors.black,
+                          letterSpacing: 12 * 0.02,
                         ),
                       ),
                     ],
@@ -261,6 +263,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                     fontWeight: FontWeight.w500,
                     fontSize: 16,
                     color: Colors.black,
+                    letterSpacing: 16 * 0.02,
                   ),
                 ),
               ),
@@ -411,7 +414,12 @@ class _SpendCardState extends State<SpendCard> {
               children: [
                 Text(
                   _getCurrentPeriodLabel(_selectedRange),
-                  style: const TextStyle(fontSize: 12, color: AppColors.grey),
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: AppColors.grey,
+                    fontFamily: 'GeneralSans',
+                    letterSpacing: 12 * 0.02,
+                  ),
                 ),
 
                 const Gap(4),
@@ -434,6 +442,8 @@ class _SpendCardState extends State<SpendCard> {
                                   ? AppColors.success
                                   : AppColors.grey,
                               fontSize: 11,
+                              fontFamily: 'GeneralSans',
+                              letterSpacing: 11 * 0.02,
                             ),
                             softWrap: true,
                             maxLines: 2,
@@ -448,15 +458,25 @@ class _SpendCardState extends State<SpendCard> {
             const Gap(8),
             Text(
               formatMoney(currentSpend),
-              style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                fontSize: 32,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'GeneralSans',
+                letterSpacing: 32 * 0.02,
+              ),
             ),
             const Gap(16),
             Expanded(
               child: chartData.isNotEmpty || _forceShowChart
                   ? CustomLineChart(
-                      data: chartData.isNotEmpty 
-                          ? chartData 
-                          : [ChartDataPoint(value: 0, timestamp: DateTime.now())],
+                      data: chartData.isNotEmpty
+                          ? chartData
+                          : [
+                              ChartDataPoint(
+                                value: 0,
+                                timestamp: DateTime.now(),
+                              ),
+                            ],
                       onRangeChanged: (range) {
                         setState(() {
                           _selectedRange = range;
@@ -478,6 +498,8 @@ class _SpendCardState extends State<SpendCard> {
                             style: TextStyle(
                               color: AppColors.grey,
                               fontSize: 14,
+                              fontFamily: 'GeneralSans',
+                              letterSpacing: 14 * 0.02,
                             ),
                           ),
                           const Gap(16),
@@ -665,7 +687,12 @@ class _NetWorthCardState extends State<NetWorthCard> {
               children: [
                 const Text(
                   'Net Worth',
-                  style: TextStyle(fontSize: 12, color: AppColors.grey),
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: AppColors.grey,
+                    fontFamily: 'GeneralSans',
+                    letterSpacing: 12 * 0.02,
+                  ),
                 ),
                 Row(
                   children: [
@@ -680,6 +707,8 @@ class _NetWorthCardState extends State<NetWorthCard> {
                       style: TextStyle(
                         color: isPositive ? AppColors.success : AppColors.grey,
                         fontSize: 11,
+                        fontFamily: 'GeneralSans',
+                        letterSpacing: 11 * 0.02,
                       ),
                     ),
                   ],
@@ -689,7 +718,12 @@ class _NetWorthCardState extends State<NetWorthCard> {
             const Gap(8),
             Text(
               formatMoney(netWorth),
-              style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                fontSize: 32,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'GeneralSans',
+                letterSpacing: 32 * 0.02,
+              ),
             ),
             const Gap(16),
             Expanded(
@@ -697,7 +731,12 @@ class _NetWorthCardState extends State<NetWorthCard> {
                   ? CustomLineChart(
                       data: chartData.length >= 2
                           ? chartData
-                          : [ChartDataPoint(value: netWorth, timestamp: DateTime.now())],
+                          : [
+                              ChartDataPoint(
+                                value: netWorth,
+                                timestamp: DateTime.now(),
+                              ),
+                            ],
                       onRangeChanged: (range) {
                         setState(() {
                           _selectedRange = range;
@@ -719,6 +758,8 @@ class _NetWorthCardState extends State<NetWorthCard> {
                             style: TextStyle(
                               color: AppColors.grey,
                               fontSize: 14,
+                              fontFamily: 'GeneralSans',
+                              letterSpacing: 14 * 0.02,
                             ),
                           ),
                           const Gap(16),
@@ -797,7 +838,8 @@ class _AccountsSectionState extends State<AccountsSection> {
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
-                    letterSpacing: 0.5,
+                    fontFamily: 'GeneralSans',
+                    letterSpacing: 12 * 0.02,
                   ),
                 ),
                 // TextButton(
@@ -824,7 +866,10 @@ class _AccountsSectionState extends State<AccountsSection> {
                 children: [
                   Text(
                     formatMoney(netCash),
-                    style: const TextStyle(fontWeight: FontWeight.w600),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'GeneralSans',
+                    ),
                   ),
                   const Gap(8),
                   const Icon(
@@ -846,7 +891,10 @@ class _AccountsSectionState extends State<AccountsSection> {
                 children: [
                   Text(
                     formatMoney(savingsBalance),
-                    style: const TextStyle(fontWeight: FontWeight.w600),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'GeneralSans',
+                    ),
                   ),
                   const Gap(8),
                   Icon(
@@ -880,7 +928,10 @@ class _AccountsSectionState extends State<AccountsSection> {
                       Gap(8),
                       Text(
                         'No financial goals yet',
-                        style: TextStyle(color: AppColors.grey),
+                        style: TextStyle(
+                          color: AppColors.grey,
+                          fontFamily: 'GeneralSans',
+                        ),
                       ),
                     ],
                   ),
@@ -908,19 +959,25 @@ class _AccountsSectionState extends State<AccountsSection> {
                         const Gap(4),
                         Text(
                           goal.isCompleted ? 'Completed' : 'Ongoing',
-                          style: const TextStyle(fontSize: 11),
+                          style: const TextStyle(
+                            fontSize: 11,
+                            fontFamily: 'GeneralSans',
+                            letterSpacing: 11 * 0.02,
+                          ),
                         ),
                       ],
                     ),
                     trailing: Text(
                       formatMoney(goal.balance),
-                      style: const TextStyle(fontWeight: FontWeight.w600),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'GeneralSans',
+                      ),
                     ),
                   ),
                 ),
 
-              if (widget.dashboardData.savings.length > 2)
-                const Gap(8),
+              if (widget.dashboardData.savings.length > 2) const Gap(8),
 
               SizedBox(
                 width: double.infinity,
@@ -1020,7 +1077,10 @@ class RecentTransactionsSection extends StatelessWidget {
                       Gap(8),
                       Text(
                         'No recent transactions',
-                        style: TextStyle(color: AppColors.grey),
+                        style: TextStyle(
+                          color: AppColors.grey,
+                          fontFamily: 'GeneralSans',
+                        ),
                       ),
                     ],
                   ),
@@ -1059,6 +1119,7 @@ class RecentTransactionsSection extends StatelessWidget {
                       color: tx.type == 'credit'
                           ? AppColors.success
                           : AppColors.black,
+                      fontFamily: 'GeneralSans',
                     ),
                   ),
                 ),
@@ -1150,6 +1211,7 @@ class AllTransactionsBottomSheet extends StatelessWidget {
                         fontSize: 20,
                         fontWeight: FontWeight.w600,
                         fontFamily: 'GeneralSans',
+                        letterSpacing: 20 * 0.02,
                       ),
                     ),
                     IconButton(
@@ -1179,6 +1241,8 @@ class AllTransactionsBottomSheet extends StatelessWidget {
                               style: TextStyle(
                                 color: AppColors.grey,
                                 fontSize: 16,
+                                fontFamily: 'GeneralSans',
+                                letterSpacing: 16 * 0.02,
                               ),
                             ),
                           ],
@@ -1216,6 +1280,7 @@ class AllTransactionsBottomSheet extends StatelessWidget {
                                 color: tx.type == 'credit'
                                     ? AppColors.success
                                     : AppColors.black,
+                                fontFamily: 'GeneralSans',
                               ),
                             ),
                           );
@@ -1277,7 +1342,6 @@ class AllTransactionsBottomSheet extends StatelessWidget {
     return '₦${NumberFormat('#,###.00').format(amount)}';
   }
 }
-
 
 // import 'package:fl_chart/fl_chart.dart';
 // import 'package:flutter/material.dart';

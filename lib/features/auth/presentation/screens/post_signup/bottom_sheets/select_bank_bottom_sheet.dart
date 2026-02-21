@@ -118,6 +118,8 @@ class _SelectBankBottomSheetState extends ConsumerState<SelectBankBottomSheet> {
                 style: const TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
+                  fontFamily: 'GeneralSans',
+                    letterSpacing: 12 * 0.02,
                 ),
               ),
               if (_searchQuery.isNotEmpty)
@@ -127,6 +129,8 @@ class _SelectBankBottomSheetState extends ConsumerState<SelectBankBottomSheet> {
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
                     color: Colors.grey.shade600,
+                    fontFamily: 'GeneralSans',
+                    letterSpacing: 12 * 0.02,
                   ),
                 ),
             ],
@@ -156,6 +160,8 @@ class _SelectBankBottomSheetState extends ConsumerState<SelectBankBottomSheet> {
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
                             color: Colors.grey.shade600,
+                            fontFamily: 'GeneralSans',
+                    letterSpacing: 16 * 0.02,
                           ),
                         ),
                         const Gap(8),
@@ -166,6 +172,8 @@ class _SelectBankBottomSheetState extends ConsumerState<SelectBankBottomSheet> {
                           style: TextStyle(
                             fontSize: 14,
                             color: Colors.grey.shade500,
+                            fontFamily: 'GeneralSans',
+                    letterSpacing: 14 * 0.02,
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -223,7 +231,8 @@ class _SelectBankBottomSheetState extends ConsumerState<SelectBankBottomSheet> {
         child: Text(
           institution.institution,
           textAlign: TextAlign.center,
-          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'GeneralSans',
+                    letterSpacing: 12 * 0.02,),
         ),
       ),
     );

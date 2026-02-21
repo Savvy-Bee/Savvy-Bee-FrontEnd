@@ -90,7 +90,7 @@ class _BlogPostBottomSheetState extends State<BlogPostBottomSheet> {
     }
   }
 
-   @override
+  @override
   void initState() {
     super.initState();
     MixpanelService.trackFirstFeatureUsed('Hive-Insights');
@@ -148,7 +148,7 @@ class _BlogPostBottomSheetState extends State<BlogPostBottomSheet> {
                         fontFamily: 'GeneralSans',
                         fontWeight: FontWeight.w500,
                         color: AppColors.grey,
-                        letterSpacing: 0.5,
+                        letterSpacing: 10 * 0.02,
                       ),
                     ),
                     const Gap(12),
@@ -162,6 +162,7 @@ class _BlogPostBottomSheetState extends State<BlogPostBottomSheet> {
                         fontWeight: FontWeight.w500,
                         color: Colors.black,
                         height: 1.2,
+                        letterSpacing: 28 * 0.02,
                       ),
                     ),
                     const Gap(8),
@@ -175,6 +176,7 @@ class _BlogPostBottomSheetState extends State<BlogPostBottomSheet> {
                         fontWeight: FontWeight.w400,
                         color: Colors.black87,
                         height: 1.4,
+                        letterSpacing: 16 * 0.02,
                       ),
                     ),
                     const Gap(16),
@@ -192,6 +194,7 @@ class _BlogPostBottomSheetState extends State<BlogPostBottomSheet> {
                                 fontFamily: 'GeneralSans',
                                 fontWeight: FontWeight.w500,
                                 color: AppColors.grey,
+                                letterSpacing: 10 * 0.02,
                               ),
                             ),
                             const Gap(12),
@@ -208,6 +211,7 @@ class _BlogPostBottomSheetState extends State<BlogPostBottomSheet> {
                                 fontFamily: 'GeneralSans',
                                 fontWeight: FontWeight.w500,
                                 color: AppColors.grey,
+                                letterSpacing: 10 * 0.02,
                               ),
                             ),
                           ],
@@ -259,6 +263,7 @@ class _BlogPostBottomSheetState extends State<BlogPostBottomSheet> {
                         fontWeight: FontWeight.w400,
                         color: Colors.black87,
                         height: 1.6,
+                        letterSpacing: 12 * 0.02,
                       ),
                     ),
                     const Gap(24),
@@ -277,6 +282,7 @@ class _BlogPostBottomSheetState extends State<BlogPostBottomSheet> {
                               color: AppColors.primary,
                               decoration: TextDecoration.underline,
                               decorationColor: AppColors.primary,
+                              letterSpacing: 14 * 0.02,
                             ),
                           ),
                           const Gap(6),

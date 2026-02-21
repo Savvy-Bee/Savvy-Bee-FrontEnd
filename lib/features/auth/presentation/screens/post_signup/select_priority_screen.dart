@@ -80,7 +80,8 @@ class _SelectPriorityScreenState extends ConsumerState<SelectPriorityScreen> {
               'Skip',
               AppIcon(AppIcons.arrowRightIcon),
               reverse: true,
-              textStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+              textStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'GeneralSans',
+                    letterSpacing: 12 * 0.02,),
               onTap: () => context.pushNamed(FinancialArchitypeScreen.path),
             ),
           ),
@@ -99,7 +100,7 @@ class _SelectPriorityScreenState extends ConsumerState<SelectPriorityScreen> {
                   Text(
                     'Select what matters to you most right now',
                     textAlign: TextAlign.center,
-                    style: TextStyle(height: 1.1),
+                    style: TextStyle(height: 1.1, fontFamily: 'GeneralSans'),
                   ),
                   const Gap(33),
                   Column(

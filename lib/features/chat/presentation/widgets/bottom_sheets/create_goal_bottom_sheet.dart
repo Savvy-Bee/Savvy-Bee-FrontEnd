@@ -101,6 +101,8 @@ class _CreateGoalBottomSheetState extends ConsumerState<CreateGoalBottomSheet> {
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
+                        fontFamily: 'GeneralSans',
+                        letterSpacing: 18 * 0.02,
                       ),
                     ),
                     if (hasSuggestedGoal)
@@ -119,6 +121,8 @@ class _CreateGoalBottomSheetState extends ConsumerState<CreateGoalBottomSheet> {
                               style: TextStyle(
                                 fontSize: 12,
                                 color: Colors.grey[600],
+                                fontFamily: 'GeneralSans',
+                                letterSpacing: 12 * 0.02,
                               ),
                             ),
                           ],
@@ -173,6 +177,8 @@ class _CreateGoalBottomSheetState extends ConsumerState<CreateGoalBottomSheet> {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
+                        fontFamily: 'GeneralSans',
+                        letterSpacing: 16 * 0.02,
                       ),
                     ),
                   ),
@@ -209,6 +215,8 @@ class _CreateGoalBottomSheetState extends ConsumerState<CreateGoalBottomSheet> {
                               fontSize: 12,
                               color: Colors.blue[800],
                               height: 1.3,
+                              fontFamily: 'GeneralSans',
+                              letterSpacing: 12 * 0.02,
                             ),
                           ),
                         ),

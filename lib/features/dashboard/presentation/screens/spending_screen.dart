@@ -43,6 +43,8 @@ class _SpendingScreenState extends ConsumerState<SpendingScreen> {
             color: Colors.black,
             fontSize: 18,
             fontWeight: FontWeight.w600,
+            fontFamily: 'GeneralSans',
+            letterSpacing: 18 * 0.02,
           ),
         ),
         leading: IconButton(
@@ -116,7 +118,8 @@ class _SpendingScreenState extends ConsumerState<SpendingScreen> {
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
-                      letterSpacing: 1,
+                      fontFamily: 'GeneralSans',
+                      letterSpacing: 12 * 0.02,
                     ),
                   ),
                   const Gap(16),
@@ -269,7 +272,12 @@ class _SpendingScreenState extends ConsumerState<SpendingScreen> {
         const Gap(6),
         Text(
           label,
-          style: const TextStyle(fontSize: 13, color: Colors.black87),
+          style: const TextStyle(
+            fontSize: 13,
+            color: Colors.black87,
+            fontFamily: 'GeneralSans',
+            letterSpacing: 13 * 0.02,
+          ),
         ),
       ],
     );
@@ -318,7 +326,12 @@ class _SpendingScreenState extends ConsumerState<SpendingScreen> {
           Expanded(
             child: Text(
               title,
-              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                fontFamily: 'GeneralSans',
+                letterSpacing: 14 * 0.02,
+              ),
             ),
           ),
           Row(
@@ -328,6 +341,8 @@ class _SpendingScreenState extends ConsumerState<SpendingScreen> {
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
+                  fontFamily: 'GeneralSans',
+                  letterSpacing: 16 * 0.02,
                 ),
               ),
               const Gap(4),
@@ -354,8 +369,9 @@ class _SpendingScreenState extends ConsumerState<SpendingScreen> {
           style: TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w600,
-            letterSpacing: 1,
             color: Colors.black54,
+            fontFamily: 'GeneralSans',
+            letterSpacing: 12 * 0.02,
           ),
         ),
         const Gap(12),
@@ -386,6 +402,8 @@ class _SpendingScreenState extends ConsumerState<SpendingScreen> {
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
+                        fontFamily: 'GeneralSans',
+                        letterSpacing: 16 * 0.02,
                       ),
                     ),
                   ),
@@ -394,7 +412,12 @@ class _SpendingScreenState extends ConsumerState<SpendingScreen> {
               const Gap(16),
               const Text(
                 'Left To Spend',
-                style: TextStyle(fontSize: 12, color: Colors.black54),
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.black54,
+                  fontFamily: 'GeneralSans',
+                  letterSpacing: 12 * 0.02,
+                ),
               ),
               const Gap(4),
               Text(
@@ -402,12 +425,19 @@ class _SpendingScreenState extends ConsumerState<SpendingScreen> {
                 style: const TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
+                  fontFamily: 'GeneralSans',
+                  letterSpacing: 28 * 0.02,
                 ),
               ),
               const Gap(4),
               Text(
                 '${formatMoney(spent)} spent',
-                style: const TextStyle(fontSize: 13, color: Colors.black54),
+                style: const TextStyle(
+                  fontSize: 13,
+                  color: Colors.black54,
+                  fontFamily: 'GeneralSans',
+                  letterSpacing: 13 * 0.02,
+                ),
               ),
               const Gap(12),
               ClipRRect(
@@ -435,7 +465,10 @@ class _SpendingScreenState extends ConsumerState<SpendingScreen> {
       return const SizedBox.shrink();
     }
 
-    final totalSpent = categories.values.fold(0.0, (sum, amount) => sum + amount);
+    final totalSpent = categories.values.fold(
+      0.0,
+      (sum, amount) => sum + amount,
+    );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -445,8 +478,9 @@ class _SpendingScreenState extends ConsumerState<SpendingScreen> {
           style: TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w600,
-            letterSpacing: 1,
             color: Colors.black54,
+            fontFamily: 'GeneralSans',
+            letterSpacing: 12 * 0.02,
           ),
         ),
         const Gap(12),
@@ -487,11 +521,18 @@ class _SpendingScreenState extends ConsumerState<SpendingScreen> {
                           style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
+                            fontFamily: 'GeneralSans',
+                            letterSpacing: 20 * 0.02,
                           ),
                         ),
                         Text(
                           'Spent this ${_selectedPeriod.toLowerCase()}',
-                          style: const TextStyle(fontSize: 11, color: Colors.black54),
+                          style: const TextStyle(
+                            fontSize: 11,
+                            color: Colors.black54,
+                            fontFamily: 'GeneralSans',
+                            letterSpacing: 11 * 0.02,
+                          ),
                         ),
                       ],
                     ),
@@ -530,6 +571,8 @@ class _SpendingScreenState extends ConsumerState<SpendingScreen> {
                               style: const TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
+                                fontFamily: 'GeneralSans',
+                                letterSpacing: 14 * 0.02,
                               ),
                             ),
                             Text(
@@ -537,6 +580,8 @@ class _SpendingScreenState extends ConsumerState<SpendingScreen> {
                               style: const TextStyle(
                                 fontSize: 12,
                                 color: Colors.black54,
+                                fontFamily: 'GeneralSans',
+                                letterSpacing: 12 * 0.02,
                               ),
                             ),
                           ],
@@ -547,6 +592,8 @@ class _SpendingScreenState extends ConsumerState<SpendingScreen> {
                         style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
+                          fontFamily: 'GeneralSans',
+                          letterSpacing: 14 * 0.02,
                         ),
                       ),
                     ],
@@ -563,18 +610,18 @@ class _SpendingScreenState extends ConsumerState<SpendingScreen> {
   // Helper methods for period calculations
   List<DateTime> _getPeriods() {
     final now = DateTime.now();
-    
+
     switch (_selectedPeriod) {
       case 'Week':
         // Last 5 weeks
         return List.generate(5, (i) {
           return now.subtract(Duration(days: 7 * (4 - i)));
         });
-      
+
       case 'Month':
         // Last 5 months
         return List.generate(5, (i) => DateTime(now.year, now.month - (4 - i)));
-      
+
       case 'Quarter':
         // Last 4 quarters
         return List.generate(4, (i) {
@@ -583,11 +630,11 @@ class _SpendingScreenState extends ConsumerState<SpendingScreen> {
           final quarter = quarterIndex % 4;
           return DateTime(year, (quarter * 3) + 1);
         });
-      
+
       case 'Year':
         // Last 5 years
         return List.generate(5, (i) => DateTime(now.year - (4 - i)));
-      
+
       default:
         return List.generate(5, (i) => DateTime(now.year, now.month - (4 - i)));
     }
@@ -598,17 +645,17 @@ class _SpendingScreenState extends ConsumerState<SpendingScreen> {
       case 'Week':
         // Show week number or date range
         return 'W${_weekOfYear(period)}';
-      
+
       case 'Month':
         return DateFormat('MMM').format(period);
-      
+
       case 'Quarter':
         final quarter = ((period.month - 1) ~/ 3) + 1;
         return 'Q$quarter';
-      
+
       case 'Year':
         return DateFormat('yy').format(period);
-      
+
       default:
         return DateFormat('MMM').format(period);
     }
@@ -622,7 +669,7 @@ class _SpendingScreenState extends ConsumerState<SpendingScreen> {
 
   Map<DateTime, double> _getIncomeByPeriod(DashboardData dashboardData) {
     final map = <DateTime, double>{};
-    
+
     for (var account in dashboardData.accounts) {
       for (var tx in account.history12Months) {
         if (tx.type == 'credit') {
@@ -641,7 +688,7 @@ class _SpendingScreenState extends ConsumerState<SpendingScreen> {
 
   Map<DateTime, double> _getSpendByPeriod(DashboardData dashboardData) {
     final map = <DateTime, double>{};
-    
+
     for (var account in dashboardData.accounts) {
       for (var tx in account.history12Months) {
         if (tx.type == 'debit') {
@@ -664,17 +711,17 @@ class _SpendingScreenState extends ConsumerState<SpendingScreen> {
         // Get the Monday of the week
         final daysFromMonday = date.weekday - 1;
         return date.subtract(Duration(days: daysFromMonday));
-      
+
       case 'Month':
         return DateTime(date.year, date.month);
-      
+
       case 'Quarter':
         final quarter = ((date.month - 1) ~/ 3);
         return DateTime(date.year, (quarter * 3) + 1);
-      
+
       case 'Year':
         return DateTime(date.year);
-      
+
       default:
         return DateTime(date.year, date.month);
     }
@@ -683,7 +730,7 @@ class _SpendingScreenState extends ConsumerState<SpendingScreen> {
   double _getTotalIncomeForPeriod(DashboardData dashboardData) {
     final now = DateTime.now();
     final periodStart = _getPeriodStart(now);
-    
+
     double total = 0;
     for (var account in dashboardData.accounts) {
       for (var tx in account.history12Months) {
@@ -698,7 +745,7 @@ class _SpendingScreenState extends ConsumerState<SpendingScreen> {
   double _getTotalSpendForPeriod(DashboardData dashboardData) {
     final now = DateTime.now();
     final periodStart = _getPeriodStart(now);
-    
+
     double total = 0;
     for (var account in dashboardData.accounts) {
       for (var tx in account.history12Months) {
@@ -716,21 +763,21 @@ class _SpendingScreenState extends ConsumerState<SpendingScreen> {
 
   String _getCurrentPeriodName() {
     final now = DateTime.now();
-    
+
     switch (_selectedPeriod) {
       case 'Week':
         return 'This Week';
-      
+
       case 'Month':
         return DateFormat('MMMM').format(now);
-      
+
       case 'Quarter':
         final quarter = ((now.month - 1) ~/ 3) + 1;
         return 'Q$quarter ${now.year}';
-      
+
       case 'Year':
         return '${now.year}';
-      
+
       default:
         return DateFormat('MMMM').format(now);
     }
@@ -741,23 +788,25 @@ class _SpendingScreenState extends ConsumerState<SpendingScreen> {
       case 'Week':
         final daysFromMonday = date.weekday - 1;
         return date.subtract(Duration(days: daysFromMonday));
-      
+
       case 'Month':
         return DateTime(date.year, date.month, 1);
-      
+
       case 'Quarter':
         final quarter = ((date.month - 1) ~/ 3);
         return DateTime(date.year, (quarter * 3) + 1, 1);
-      
+
       case 'Year':
         return DateTime(date.year, 1, 1);
-      
+
       default:
         return DateTime(date.year, date.month, 1);
     }
   }
 
-  Map<String, double> _getCategoryBreakdownForPeriod(DashboardData dashboardData) {
+  Map<String, double> _getCategoryBreakdownForPeriod(
+    DashboardData dashboardData,
+  ) {
     final now = DateTime.now();
     final periodStart = _getPeriodStart(now);
     final categoryMap = <String, double>{};
@@ -782,14 +831,22 @@ class _SpendingScreenState extends ConsumerState<SpendingScreen> {
 
   String _categorizeTransaction(String narration) {
     final lower = narration.toLowerCase();
-    
-    if (lower.contains('groceries') || lower.contains('food') || lower.contains('supermarket')) {
+
+    if (lower.contains('groceries') ||
+        lower.contains('food') ||
+        lower.contains('supermarket')) {
       return 'Groceries';
-    } else if (lower.contains('electricity') || lower.contains('bill') || lower.contains('utility')) {
+    } else if (lower.contains('electricity') ||
+        lower.contains('bill') ||
+        lower.contains('utility')) {
       return 'Bills & Utilities';
-    } else if (lower.contains('transport') || lower.contains('uber') || lower.contains('fuel')) {
+    } else if (lower.contains('transport') ||
+        lower.contains('uber') ||
+        lower.contains('fuel')) {
       return 'Auto & Transport';
-    } else if (lower.contains('shop') || lower.contains('cloth') || lower.contains('fashion')) {
+    } else if (lower.contains('shop') ||
+        lower.contains('cloth') ||
+        lower.contains('fashion')) {
       return 'Shopping';
     } else if (lower.contains('restaurant') || lower.contains('dining')) {
       return 'Dining';
@@ -842,6 +899,8 @@ class _TabButton extends StatelessWidget {
             color: active ? Colors.black : Colors.black54,
             fontSize: 13,
             fontWeight: active ? FontWeight.w600 : FontWeight.w500,
+            fontFamily: 'GeneralSans',
+            letterSpacing: 13 * 0.02,
           ),
         ),
       ),

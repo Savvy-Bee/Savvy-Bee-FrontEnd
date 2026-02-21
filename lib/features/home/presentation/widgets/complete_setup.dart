@@ -26,7 +26,7 @@ class CompleteSetupCard extends StatelessWidget {
             fontFamily: 'GeneralSans',
             fontWeight: FontWeight.w500,
             color: AppColors.grey,
-            letterSpacing: 0.5,
+            letterSpacing: 10 * 0.02,
           ),
         ),
         const Gap(12),
@@ -105,6 +105,7 @@ class _SetupItemTile extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                     color: Colors.black,
                     height: 1.2,
+                    letterSpacing: 16 * 0.02,
                   ),
                 ),
                 const Gap(4),
@@ -116,6 +117,7 @@ class _SetupItemTile extends StatelessWidget {
                     fontWeight: FontWeight.w400,
                     color: AppColors.grey,
                     height: 1.3,
+                    letterSpacing: 12 * 0.02,
                   ),
                 ),
               ],
@@ -123,11 +125,7 @@ class _SetupItemTile extends StatelessWidget {
           ),
           const Gap(12),
           // Arrow icon
-          Icon(
-            Icons.arrow_forward_ios_rounded,
-            size: 16,
-            color: Colors.black,
-          ),
+          Icon(Icons.arrow_forward_ios_rounded, size: 16, color: Colors.black),
         ],
       ),
     );
@@ -178,10 +176,7 @@ class DottedDivider extends StatelessWidget {
                 margin: EdgeInsets.only(right: spacing),
                 width: dotSize,
                 height: dotSize,
-                decoration: BoxDecoration(
-                  color: color,
-                  shape: BoxShape.circle,
-                ),
+                decoration: BoxDecoration(color: color, shape: BoxShape.circle),
               );
             }),
           );
@@ -387,4 +382,3 @@ class DottedDivider extends StatelessWidget {
 //     );
 //   }
 // }
-

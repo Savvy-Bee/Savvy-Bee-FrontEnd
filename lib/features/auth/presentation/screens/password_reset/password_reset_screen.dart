@@ -336,7 +336,12 @@ class _PasswordResetScreenState extends ConsumerState<PasswordResetScreen> {
           children: [
             Text(
               "Didn't receive a code? ",
-              style: TextStyle(fontSize: 14, color: AppColors.grey),
+              style: TextStyle(
+                fontSize: 14,
+                color: AppColors.grey,
+                fontFamily: 'GeneralSans',
+                letterSpacing: 14 * 0.02,
+              ),
             ),
             GestureDetector(
               onTap: isLoading ? null : _handleResendOtp,
@@ -348,6 +353,8 @@ class _PasswordResetScreenState extends ConsumerState<PasswordResetScreen> {
                   color: isLoading ? AppColors.grey : AppColors.primary,
                   decoration: TextDecoration.underline,
                   decorationColor: AppColors.primary,
+                  fontFamily: 'GeneralSans',
+                  letterSpacing: 14 * 0.02,
                 ),
               ),
             ),

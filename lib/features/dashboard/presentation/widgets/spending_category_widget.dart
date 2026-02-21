@@ -62,6 +62,8 @@ class SpendingCategoryWidget extends StatelessWidget {
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,
+                    fontFamily: 'GeneralSans',
+                    letterSpacing: 16 * 0.02,
                   ),
                 ),
               ),
@@ -110,6 +112,8 @@ class SpendingCategoryWidget extends StatelessWidget {
                         style: const TextStyle(
                           fontSize: 13,
                           color: AppColors.textPrimary,
+                          fontFamily: 'GeneralSans',
+                          letterSpacing: 13 * 0.02,
                         ),
                       ),
                     ),
@@ -119,6 +123,8 @@ class SpendingCategoryWidget extends StatelessWidget {
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
                         color: AppColors.textPrimary,
+                        fontFamily: 'GeneralSans',
+                        letterSpacing: 13 * 0.02,
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -127,6 +133,8 @@ class SpendingCategoryWidget extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 13,
                         color: AppColors.textSecondary,
+                        fontFamily: 'GeneralSans',
+                        letterSpacing: 13 * 0.02,
                       ),
                     ),
                   ],
@@ -152,6 +160,8 @@ class SpendingCategoryWidget extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 14,
                       color: AppColors.textSecondary,
+                      fontFamily: 'GeneralSans',
+                      letterSpacing: 14 * 0.02,
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -161,6 +171,8 @@ class SpendingCategoryWidget extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 12,
                       color: AppColors.textSecondary,
+                      fontFamily: 'GeneralSans',
+                      letterSpacing: 12 * 0.02,
                     ),
                   ),
                 ],
@@ -187,6 +199,8 @@ class SpendingCategoryWidget extends StatelessWidget {
           fontSize: 11,
           fontWeight: FontWeight.w600,
           color: Colors.white,
+          fontFamily: 'GeneralSans',
+          letterSpacing: 11 * 0.02,
         ),
       );
     }).toList();

@@ -51,6 +51,8 @@ class _LessonUnlockedScreenState extends ConsumerState<LessonUnlockedScreen> {
                         fontWeight: FontWeight.bold,
 
                         height: 1.1,
+                        fontFamily: 'GeneralSans',
+                        letterSpacing: 32 * 0.02,
                       ),
                     ),
                   ],
@@ -92,6 +94,8 @@ class _LessonUnlockedScreenState extends ConsumerState<LessonUnlockedScreen> {
           fontWeight: FontWeight.bold,
 
           color: AppColors.white,
+          fontFamily: 'GeneralSans',
+          letterSpacing: 18 * 0.02,
         ),
       ),
     );

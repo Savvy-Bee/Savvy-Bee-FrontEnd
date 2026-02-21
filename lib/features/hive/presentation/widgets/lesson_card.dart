@@ -59,6 +59,8 @@ class LessonCard extends StatelessWidget {
                       fontWeight: FontWeight.bold,
 
                       height: 1.1,
+                      fontFamily: 'GeneralSans',
+                      letterSpacing: 18 * 0.02,
                     ),
                   ),
                   const Gap(16),
@@ -66,7 +68,12 @@ class LessonCard extends StatelessWidget {
                 if (bodyText != null && bodyText!.isNotEmpty) ...[
                   Text(
                     bodyText!,
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: 'GeneralSans',
+                      letterSpacing: 16 * 0.02,
+                    ),
                   ),
                   const Gap(16),
                 ],
@@ -122,6 +129,7 @@ class LessonCard extends StatelessWidget {
               fontWeight: FontWeight.w500,
 
               height: 1.1,
+              fontFamily: 'GeneralSans',
             ),
           ),
         ),
@@ -138,7 +146,12 @@ class LessonCard extends StatelessWidget {
       borderColor: isHighlight ? AppColors.primary : Colors.transparent,
       child: Text(
         superscript,
-        style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+        style: TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.bold,
+          fontFamily: 'GeneralSans',
+          letterSpacing: 12 * 0.02,
+        ),
       ),
     );
   }

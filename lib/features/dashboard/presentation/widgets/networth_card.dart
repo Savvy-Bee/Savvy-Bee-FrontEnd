@@ -9,10 +9,7 @@ import 'package:savvy_bee_mobile/features/dashboard/domain/models/dashboard_data
 class NetWorthCard extends StatelessWidget {
   final DashboardData dashboardData;
 
-  const NetWorthCard({
-    super.key,
-    required this.dashboardData,
-  });
+  const NetWorthCard({super.key, required this.dashboardData});
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +39,8 @@ class NetWorthCard extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 14,
                   color: AppColors.textSecondary,
+                  fontFamily: 'GeneralSans',
+                  letterSpacing: 14 * 0.02,
                 ),
               ),
               const Spacer(),
@@ -65,6 +64,8 @@ class NetWorthCard extends StatelessWidget {
                         fontSize: 11,
                         color: AppColors.success,
                         fontWeight: FontWeight.w500,
+                        fontFamily: 'GeneralSans',
+                        letterSpacing: 11 * 0.02,
                       ),
                     ),
                   ],
@@ -79,6 +80,8 @@ class NetWorthCard extends StatelessWidget {
               fontSize: 32,
               fontWeight: FontWeight.bold,
               color: AppColors.textPrimary,
+              fontFamily: 'GeneralSans',
+              letterSpacing: 32 * 0.02,
             ),
           ),
           const Gap(20),
@@ -121,6 +124,8 @@ class NetWorthCard extends StatelessWidget {
                               style: const TextStyle(
                                 color: AppColors.textSecondary,
                                 fontSize: 10,
+                                fontFamily: 'GeneralSans',
+                                letterSpacing: 10 * 0.02,
                               ),
                             ),
                           );
@@ -161,6 +166,8 @@ class NetWorthCard extends StatelessWidget {
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                               fontSize: 12,
+                              fontFamily: 'GeneralSans',
+                              letterSpacing: 12 * 0.02,
                             ),
                           );
                         }).toList();
@@ -189,6 +196,8 @@ class NetWorthCard extends StatelessWidget {
                       fontSize: 14,
                       color: AppColors.textPrimary,
                       fontWeight: FontWeight.w500,
+                      fontFamily: 'GeneralSans',
+                      letterSpacing: 14 * 0.02,
                     ),
                   ),
                   const Spacer(),
@@ -217,6 +226,8 @@ class NetWorthCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 12,
                       color: AppColors.textSecondary,
+                      fontFamily: 'GeneralSans',
+                      letterSpacing: 12 * 0.02,
                     ),
                   ),
                 ],
@@ -241,10 +252,7 @@ class NetWorthCard extends StatelessWidget {
     }
 
     return sampledData.asMap().entries.map((entry) {
-      return FlSpot(
-        entry.key.toDouble(),
-        entry.value.value,
-      );
+      return FlSpot(entry.key.toDouble(), entry.value.value);
     }).toList();
   }
 }

@@ -111,6 +111,8 @@ class _StreakDashboardScreenState extends ConsumerState<StreakDashboardScreen> {
                             fontWeight: FontWeight.bold,
 
                             height: 1.0,
+                            fontFamily: 'GeneralSans',
+                            letterSpacing: 24 * 0.02,
                           ),
                         ),
                       ],
@@ -258,9 +260,18 @@ class _StreakDashboardScreenState extends ConsumerState<StreakDashboardScreen> {
                   fontWeight: FontWeight.bold,
 
                   height: 1.0,
+                  fontFamily: 'GeneralSans',
+                  letterSpacing: 32 * 0.02,
                 ),
               ),
-              Text(title, style: TextStyle(fontSize: 12)),
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 12,
+                  fontFamily: 'GeneralSans',
+                  letterSpacing: 12 * 0.02,
+                ),
+              ),
             ],
           ),
         ],
@@ -292,6 +303,8 @@ class _StreakDashboardScreenState extends ConsumerState<StreakDashboardScreen> {
                   fontWeight: FontWeight.bold,
 
                   color: AppColors.grey,
+                  fontFamily: 'GeneralSans',
+                  letterSpacing: 16 * 0.02,
                 ),
               ),
             ],
@@ -320,6 +333,8 @@ class _StreakDashboardScreenState extends ConsumerState<StreakDashboardScreen> {
                 fontWeight: FontWeight.w500,
 
                 height: 1.3,
+                fontFamily: 'GeneralSans',
+                letterSpacing: 16 * 0.02,
               ),
             ),
           ),
@@ -343,6 +358,8 @@ class _StreakDashboardScreenState extends ConsumerState<StreakDashboardScreen> {
               ..strokeWidth = 12
               ..color = AppColors.primaryDark,
             height: 1.0,
+            fontFamily: 'GeneralSans',
+            letterSpacing: 120 * 0.02,
           ),
         ),
         // Fill
@@ -354,6 +371,8 @@ class _StreakDashboardScreenState extends ConsumerState<StreakDashboardScreen> {
 
             color: Colors.white,
             height: 1.0,
+            fontFamily: 'GeneralSans',
+            letterSpacing: 120 * 0.02,
           ),
         ),
       ],
@@ -405,6 +424,8 @@ class CustomCalendar extends StatelessWidget {
                 color: AppColors.greyDark,
                 fontWeight: FontWeight.w500,
                 fontSize: 14,
+                fontFamily: 'GeneralSans',
+                letterSpacing: 14 * 0.02,
               ),
             ),
           ),
@@ -486,6 +507,8 @@ class CustomCalendar extends StatelessWidget {
                         : highlighted
                         ? const Color(0xFFD97706)
                         : Colors.grey.shade600,
+                    fontFamily: 'GeneralSans',
+                    letterSpacing: 16 * 0.02,
                   ),
                 ),
               ),

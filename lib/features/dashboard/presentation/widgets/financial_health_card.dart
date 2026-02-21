@@ -21,7 +21,7 @@ class FinancialHealthCard extends StatelessWidget {
     final status = getHealthStatus();
     // Map to your actual asset paths
     switch (status) {
-       case 'stabilizing':
+      case 'stabilizing':
         return 'assets/images/illustrations/health/stabilizing.png';
       case 'surviving':
         return 'assets/images/illustrations/health/surviving.png';
@@ -72,7 +72,12 @@ class FinancialHealthCard extends StatelessWidget {
                         children: [
                           const Text(
                             'Your financial health is',
-                            style: TextStyle(color: Colors.white, fontSize: 16),
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontFamily: 'GeneralSans',
+                              letterSpacing: 16 * 0.02,
+                            ),
                           ),
                           const Gap(8),
                           Text(
@@ -81,6 +86,8 @@ class FinancialHealthCard extends StatelessWidget {
                               fontSize: 48,
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
+                              fontFamily: 'GeneralSans',
+                              letterSpacing: 48 * 0.02,
                             ),
                           ),
                           const Gap(16),
@@ -94,6 +101,8 @@ class FinancialHealthCard extends StatelessWidget {
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 14,
+                                fontFamily: 'GeneralSans',
+                                letterSpacing: 14 * 0.02,
                               ),
                             ),
                           ),

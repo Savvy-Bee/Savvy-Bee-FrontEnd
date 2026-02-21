@@ -103,6 +103,8 @@ class QuizSuccessErrorBottomSheet extends StatelessWidget {
 
                               color: accentColor,
                               height: 1.0,
+                              fontFamily: 'GeneralSans',
+                              letterSpacing: 32 * 0.02,
                             ),
                           ),
                           if (!isSuccess) const Gap(4),
@@ -114,6 +116,8 @@ class QuizSuccessErrorBottomSheet extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
 
                                 color: accentColor,
+                                fontFamily: 'GeneralSans',
+                                letterSpacing: 16 * 0.02,
                               ),
                             ),
                         ],

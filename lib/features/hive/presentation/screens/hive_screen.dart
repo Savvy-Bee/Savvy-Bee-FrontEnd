@@ -114,6 +114,7 @@ class _HiveScreenState extends ConsumerState<HiveScreen> {
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
                     color: Colors.black,
+                    letterSpacing: 12 * 0.02,
                   ),
                 ),
                 // child: SectionTitleWidget(title: 'Explore courses'),
@@ -133,7 +134,7 @@ class _HiveScreenState extends ConsumerState<HiveScreen> {
                             fontFamily: 'GeneralSans',
                             fontWeight: FontWeight.w500,
                             color: AppColors.grey,
-                            letterSpacing: 0.5,
+                            letterSpacing: 12 * 0.02,
                           ),
                         ),
                       ),
@@ -296,7 +297,7 @@ If you answered “yes” to all these questions, you’re ready to take the nex
                   spacing: 8,
                   children: [
                     GestureDetector(
-                     onTap: () => context.pushNamed(ArcadeWebViewScreen.path),
+                      onTap: () => context.pushNamed(ArcadeWebViewScreen.path),
                       // onTap: () => context.pushNamed(GameMenuScreen.path),
                       child: Container(
                         height: 200,
@@ -339,7 +340,7 @@ If you answered “yes” to all these questions, you’re ready to take the nex
             .toList(),
       ),
     );
-  } 
+  }
 
   AppBar _buildAppBar(
     AsyncValue<HiveState> hiveAsync,
@@ -356,6 +357,7 @@ If you answered “yes” to all these questions, you’re ready to take the nex
           fontSize: 24,
           fontFamily: 'GeneralSans',
           fontWeight: FontWeight.w500,
+          letterSpacing: 24 * 0.02,
         ),
       ),
       centerTitle: false,
@@ -408,7 +410,13 @@ If you answered “yes” to all these questions, you’re ready to take the nex
         children: [
           icon,
           if (text != null && text.isNotEmpty)
-            Text(text, style: TextStyle(fontWeight: FontWeight.bold)),
+            Text(
+              text,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontFamily: 'GeneralSans',
+              ),
+            ),
         ],
       ),
     );
@@ -468,6 +476,7 @@ If you answered “yes” to all these questions, you’re ready to take the nex
                       fontFamily: 'GeneralSans',
                       fontWeight: FontWeight.w500,
                       color: Colors.black,
+                      letterSpacing: 16 * 0.02,
                     ),
                   ),
                   const Gap(8),
@@ -479,6 +488,7 @@ If you answered “yes” to all these questions, you’re ready to take the nex
                       fontWeight: FontWeight.w500,
                       color: AppColors.grey,
                       height: 1.4,
+                      letterSpacing: 12 * 0.02,
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,

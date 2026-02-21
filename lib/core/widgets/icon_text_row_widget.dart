@@ -34,7 +34,16 @@ class IconTextRowWidget extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             icon,
-            Text(text, style: textStyle ?? TextStyle(fontSize: 12)),
+            Text(
+              text,
+              style:
+                  textStyle ??
+                  TextStyle(
+                    fontSize: 12,
+                    fontFamily: 'GeneralSans',
+                    letterSpacing: 12 * 0.02,
+                  ),
+            ),
           ],
         ),
       ),

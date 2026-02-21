@@ -68,7 +68,12 @@ class FinancialHealthCard extends StatelessWidget {
                   children: [
                     const Text(
                       'Your financial health is',
-                      style: TextStyle(color: Colors.white, fontSize: 16),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontFamily: 'GeneralSans',
+                        letterSpacing: 16 * 0.02,
+                      ),
                     ),
                     const Gap(16),
                     Text(
@@ -77,13 +82,20 @@ class FinancialHealthCard extends StatelessWidget {
                         fontSize: 48,
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
+                        fontFamily: 'GeneralSans',
+                        letterSpacing: 48 * 0.02,
                       ),
                     ),
                     const Gap(24),
                     Text(
                       healthData.insight,
                       textAlign: TextAlign.center,
-                      style: const TextStyle(color: Colors.white, fontSize: 14),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontFamily: 'GeneralSans',
+                        letterSpacing: 14 * 0.02,
+                      ),
                     ),
                   ],
                 ),

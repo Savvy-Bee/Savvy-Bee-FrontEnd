@@ -285,6 +285,8 @@ class _ProcessingConnectionBottomSheetState
                 style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
+                  fontFamily: 'GeneralSans',
+                    letterSpacing: 14 * 0.02,
                 ),
               ),
             ),
@@ -339,6 +341,8 @@ class _ProcessingConnectionBottomSheetState
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
+                    fontFamily: 'GeneralSans',
+                    letterSpacing: 16 * 0.02,
                   ),
                 ),
               ),
@@ -348,7 +352,8 @@ class _ProcessingConnectionBottomSheetState
           Text(
             'Connecting to ${widget.institution.institution}',
             textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold, fontFamily: 'GeneralSans',
+                    letterSpacing: 32 * 0.02,),
           ),
           const Gap(32),
           Stack(
@@ -363,7 +368,8 @@ class _ProcessingConnectionBottomSheetState
           Text(
             statusMessage,
             textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 14),
+            style: const TextStyle(fontSize: 14, fontFamily: 'GeneralSans',
+                    letterSpacing: 14 * 0.02,),
           ),
           if (currentRetryAttempt > 0)
             Padding(
@@ -374,6 +380,8 @@ class _ProcessingConnectionBottomSheetState
                   fontSize: 12,
                   color: Colors.grey.shade600,
                   fontWeight: FontWeight.w500,
+                  fontFamily: 'GeneralSans',
+                    letterSpacing: 12 * 0.02,
                 ),
               ),
             ),

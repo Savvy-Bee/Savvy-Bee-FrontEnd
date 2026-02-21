@@ -36,6 +36,8 @@ class _LeaguePromotionScreenState extends ConsumerState<LeaguePromotionScreen> {
                     fontWeight: FontWeight.bold,
 
                     height: 1.0,
+                    fontFamily: 'GeneralSans',
+                    letterSpacing: 28 * 0.02,
                   ),
                 ),
               ],

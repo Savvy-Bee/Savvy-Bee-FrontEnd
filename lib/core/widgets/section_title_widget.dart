@@ -19,6 +19,7 @@ class SectionTitleWidget extends StatelessWidget {
             fontFamily: 'GeneralSans',
             fontWeight: FontWeight.w600,
             color: Color(0xFF828383),
+            letterSpacing: 16 * 0.02
           ),
         ),
         if (actionWidget != null) actionWidget!,

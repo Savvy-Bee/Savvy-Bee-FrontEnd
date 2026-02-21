@@ -44,6 +44,8 @@ class PasswordRequirementItem extends StatelessWidget {
                   : password.isNotEmpty && !isValid
                   ? AppColors.error
                   : Colors.grey.shade700,
+              fontFamily: 'GeneralSans',
+              letterSpacing: 15 * 0.02
             ),
           ),
         ],

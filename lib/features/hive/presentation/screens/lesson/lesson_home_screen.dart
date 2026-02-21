@@ -166,6 +166,8 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
+                  fontFamily: 'GeneralSans',
+                  letterSpacing: 16 * 0.02,
                 ),
               ),
               Row(
@@ -174,7 +176,11 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
                 children: [
                   Text(
                     '${widget.course.lessons.length} lessons',
-                    style: const TextStyle(fontSize: 8),
+                    style: const TextStyle(
+                      fontSize: 8,
+                      fontFamily: 'GeneralSans',
+                      letterSpacing: 8 * 0.02,
+                    ),
                   ),
                 ],
               ),
@@ -194,7 +200,12 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
                 loading: () => '...',
                 error: (_, __) => '0',
               ),
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'GeneralSans',
+                letterSpacing: 16 * 0.02,
+              ),
             ),
           ],
         ),
@@ -210,7 +221,12 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
                 loading: () => '...',
                 error: (_, __) => '0',
               ),
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'GeneralSans',
+                letterSpacing: 16 * 0.02,
+              ),
             ),
           ],
         ),
@@ -356,6 +372,7 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
                       : hasNotStarted
                       ? AppColors.buttonDisabled
                       : null,
+                  fontFamily: 'GeneralSans',
                 ),
               ),
               const Spacer(),
@@ -370,7 +387,10 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
                       children: [
                         Text(
                           '+$pointsEarned',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'GeneralSans',
+                          ),
                         ),
                         Image.asset(Illustrations.hiveFlower),
                       ],
@@ -419,6 +439,8 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
 
                             height: 0.9,
                             color: isLocked ? AppColors.greyDark : null,
+                            fontFamily: 'GeneralSans',
+                            letterSpacing: 10 * 0.02,
                           ),
                         ),
                         Text(
@@ -429,6 +451,8 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
 
                             height: 0.9,
                             color: isLocked ? AppColors.greyDark : null,
+                            fontFamily: 'GeneralSans',
+                            letterSpacing: 32 * 0.02,
                           ),
                         ),
                       ],
@@ -457,6 +481,8 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
 
                         height: 0.9,
                         color: isLocked ? AppColors.greyDark : null,
+                        fontFamily: 'GeneralSans',
+                        letterSpacing: 24 * 0.02,
                       ),
                     ),
                     const Gap(8),
@@ -467,6 +493,8 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
                         fontSize: 12,
                         height: 0.9,
                         color: isLocked ? AppColors.greyDark : null,
+                        fontFamily: 'GeneralSans',
+                        letterSpacing: 12 * 0.02,
                       ),
                     ),
 
@@ -490,6 +518,8 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
                               fontSize: 10,
                               fontWeight: FontWeight.bold,
                               color: AppColors.primary,
+                              fontFamily: 'GeneralSans',
+                              letterSpacing: 10 * 0.02,
                             ),
                           ),
                         ],

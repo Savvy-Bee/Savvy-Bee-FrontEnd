@@ -145,6 +145,8 @@ class _NewStreakScreenState extends ConsumerState<NewStreakScreen>
 
                         color: AppColors.primary,
                         height: 1.0,
+                        fontFamily: 'GeneralSans',
+                        letterSpacing: 160 * 0.02,
                       ),
                     ),
                   );
@@ -159,10 +161,12 @@ class _NewStreakScreenState extends ConsumerState<NewStreakScreen>
                   child: SlideTransition(
                     position: _slideAnimation,
                     child: Text(
-                      'day streak1',
+                      'day streak',
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
+                        fontFamily: 'GeneralSans',
+                        letterSpacing: 24 * 0.02,
                       ),
                     ),
                   ),
@@ -194,6 +198,8 @@ class _NewStreakScreenState extends ConsumerState<NewStreakScreen>
                                   fontWeight: FontWeight.w500,
 
                                   height: 1.3,
+                                  fontFamily: 'GeneralSans',
+                                  letterSpacing: 20 * 0.02,
                                 ),
                               ),
                             ),
@@ -286,13 +292,21 @@ class _NewStreakScreenState extends ConsumerState<NewStreakScreen>
             const Gap(16),
             Text(
               'Failed to load streak data',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'GeneralSans',
+                letterSpacing: 18 * 0.02,
+              ),
               textAlign: TextAlign.center,
             ),
             const Gap(8),
             Text(
               error.toString(),
-              style: TextStyle(color: AppColors.greyDark),
+              style: TextStyle(
+                color: AppColors.greyDark,
+                fontFamily: 'GeneralSans',
+              ),
               textAlign: TextAlign.center,
             ),
             const Gap(24),

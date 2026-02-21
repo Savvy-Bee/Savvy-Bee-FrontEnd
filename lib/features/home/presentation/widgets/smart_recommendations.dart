@@ -75,7 +75,7 @@ class _SmartRecommendationCardState extends State<SmartRecommendationCard> {
                     fontFamily: 'GeneralSans',
                     fontWeight: FontWeight.w500,
                     color: Colors.black,
-                    letterSpacing: 0.5,
+                    letterSpacing: 12 * 0.02,
                   ),
                 ),
               ),
@@ -107,10 +107,7 @@ class _SmartRecommendationCardState extends State<SmartRecommendationCard> {
               style: OutlinedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 14),
                 backgroundColor: Colors.white,
-                side: BorderSide(
-                  color: Colors.black,
-                  width: 1,
-                ),
+                side: BorderSide(color: Colors.black, width: 1),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
@@ -122,6 +119,7 @@ class _SmartRecommendationCardState extends State<SmartRecommendationCard> {
                   fontFamily: 'GeneralSans',
                   fontWeight: FontWeight.w500,
                   color: Colors.black,
+                  letterSpacing: 16 * 0.02,
                 ),
               ),
             ),
@@ -145,6 +143,7 @@ class _SmartRecommendationCardState extends State<SmartRecommendationCard> {
           fontWeight: FontWeight.w500,
           color: Colors.black87,
           height: 1.4,
+          letterSpacing: 12 * 0.02,
         ),
       );
     }
@@ -159,6 +158,7 @@ class _SmartRecommendationCardState extends State<SmartRecommendationCard> {
           fontWeight: FontWeight.w400,
           color: Colors.black87,
           height: 1.4,
+          letterSpacing: 13 * 0.02,
         ),
         children: [
           TextSpan(text: parts[0]),
@@ -167,6 +167,7 @@ class _SmartRecommendationCardState extends State<SmartRecommendationCard> {
             style: TextStyle(
               color: AppColors.success,
               fontWeight: FontWeight.w600,
+              fontFamily: 'GeneralSans',
             ),
           ),
           if (parts.length > 1) TextSpan(text: parts[1]),

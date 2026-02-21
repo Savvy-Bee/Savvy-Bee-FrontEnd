@@ -59,6 +59,8 @@ class _LeagueScreenState extends ConsumerState<LeagueScreen> {
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
+                            fontFamily: 'GeneralSans',
+                            letterSpacing: 24 * 0.02,
                           ),
                         ),
                         IconTextRowWidget(
@@ -67,6 +69,8 @@ class _LeagueScreenState extends ConsumerState<LeagueScreen> {
                             color: AppColors.primary,
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
+                            fontFamily: 'GeneralSans',
+                            letterSpacing: 16 * 0.02,
                           ),
                           Icon(Icons.access_time, color: AppColors.primary),
                         ),
@@ -75,7 +79,12 @@ class _LeagueScreenState extends ConsumerState<LeagueScreen> {
                     const Gap(8),
                     const Text(
                       'Top 10 advance to the next league',
-                      style: TextStyle(fontSize: 16, height: 1.0),
+                      style: TextStyle(
+                        fontSize: 16,
+                        height: 1.0,
+                        fontFamily: 'GeneralSans',
+                        letterSpacing: 16 * 0.02,
+                      ),
                     ),
                   ],
                 ),
@@ -136,6 +145,8 @@ class _LeagueScreenState extends ConsumerState<LeagueScreen> {
             fontWeight: FontWeight.bold,
 
             color: AppColors.primary,
+            fontFamily: 'GeneralSans',
+            letterSpacing: 20 * 0.02,
           ),
         ),
         Icon(Icons.arrow_upward_sharp, color: AppColors.primary, size: 24),
@@ -181,6 +192,8 @@ class _LeagueScreenState extends ConsumerState<LeagueScreen> {
           fontSize: 16,
           fontWeight: FontWeight.bold,
           color: rank <= 10 ? AppColors.success : AppColors.primary,
+          fontFamily: 'GeneralSans',
+          letterSpacing: 16 * 0.02,
         ),
       );
     }
@@ -212,14 +225,26 @@ class _LeagueScreenState extends ConsumerState<LeagueScreen> {
               ),
               Text(
                 displayName.isNotEmpty ? displayName : user.username,
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'GeneralSans',
+                  letterSpacing: 16 * 0.02,
+                ),
               ),
             ],
           ),
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(entry.flowers.toString(), style: TextStyle(fontSize: 16)),
+              Text(
+                entry.flowers.toString(),
+                style: TextStyle(
+                  fontSize: 16,
+                  fontFamily: 'GeneralSans',
+                  letterSpacing: 16 * 0.02,
+                ),
+              ),
               const Gap(4),
               Image.asset(Illustrations.hiveFlower, width: 24, height: 24),
             ],

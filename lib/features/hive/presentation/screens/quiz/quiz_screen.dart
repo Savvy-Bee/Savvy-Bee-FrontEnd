@@ -458,7 +458,12 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
               ),
               child: Text(
                 '${pageIndex + 1}/${_quizQuestions.length}',
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'GeneralSans',
+                  letterSpacing: 12 * 0.02,
+                ),
               ),
             ),
           ],
@@ -470,6 +475,8 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
             fontSize: 16,
             color: AppColors.primary,
             fontWeight: FontWeight.bold,
+            fontFamily: 'GeneralSans',
+            letterSpacing: 16 * 0.02,
           ),
         ),
         const Gap(8),
@@ -480,6 +487,8 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
             fontWeight: FontWeight.bold,
 
             height: 1.2,
+            fontFamily: 'GeneralSans',
+            letterSpacing: 24 * 0.02,
           ),
         ),
         const Gap(24),
@@ -533,7 +542,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
         state: state,
         onLeftSelected: (leftIndex) {
           setState(() {
-             // Toggle: if clicking the same option, deselect it
+            // Toggle: if clicking the same option, deselect it
             final isAlreadySelected = state.selectedLeftIndex == leftIndex;
             _pageStates[pageIndex] = state.copyWith(
               selectedLeftIndex: isAlreadySelected ? null : leftIndex,

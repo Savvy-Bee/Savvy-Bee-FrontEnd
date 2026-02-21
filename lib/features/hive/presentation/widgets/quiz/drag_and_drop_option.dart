@@ -89,7 +89,7 @@ class DragAndDropOptions extends StatelessWidget {
                           padding: EdgeInsets.all(8.0),
                           child: Text(
                             "Drop items here",
-                            style: TextStyle(color: Colors.grey),
+                            style: TextStyle(color: Colors.grey, fontFamily: 'GeneralSans'),
                           ),
                         )
                       else

@@ -122,9 +122,11 @@ class MainWrapper extends ConsumerWidget {
       unselectedLabelStyle: TextStyle(
         fontSize: 10,
         fontWeight: FontWeight.w500,
-        color: AppColors.grey,
+        color: AppColors.grey,fontFamily: 'GeneralSans',
+                        letterSpacing: 10 * 0.02
       ),
-      selectedLabelStyle: TextStyle(fontSize: 10, fontWeight: FontWeight.w500),
+      selectedLabelStyle: TextStyle(fontSize: 10, fontWeight: FontWeight.w500, fontFamily: 'GeneralSans',
+                        letterSpacing: 10 * 0.02),
       selectedItemColor: AppColors.black,
       unselectedItemColor: AppColors.grey,
       items: [

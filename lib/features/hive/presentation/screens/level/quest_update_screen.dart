@@ -46,6 +46,8 @@ class _QuestUpdateScreenState extends ConsumerState<QuestUpdateScreen> {
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
                         color: AppColors.primary,
+                        fontFamily: 'GeneralSans',
+                        letterSpacing: 32 * 0.02,
                       ),
                     ),
                     _buildQuestProgressCard(),
@@ -81,7 +83,12 @@ class _QuestUpdateScreenState extends ConsumerState<QuestUpdateScreen> {
               children: [
                 Text(
                   'Complete your next 2 lessons',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'GeneralSans',
+                    letterSpacing: 16 * 0.02,
+                  ),
                 ),
                 Stack(
                   alignment: Alignment.centerRight,

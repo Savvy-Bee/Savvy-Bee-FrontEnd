@@ -123,14 +123,16 @@ class _SelectedBankLoginBottomSheetState
                 ),
                 child: Text(
                   widget.institution.institution,
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, fontFamily: 'GeneralSans',
+                    letterSpacing: 16 * 0.02,),
                 ),
               ),
               const Gap(32),
               Text(
                 'Login at ${widget.institution.displayName}',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, fontFamily: 'GeneralSans',
+                    letterSpacing: 32 * 0.02,),
               ),
               const Gap(32),
               _buildInfo(
@@ -171,11 +173,13 @@ class _SelectedBankLoginBottomSheetState
           ),
           child: Text(
             number,
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, fontFamily: 'GeneralSans',
+                    letterSpacing: 16 * 0.02,),
           ),
         ),
         const Gap(16),
-        Expanded(child: Text(text, style: TextStyle(fontSize: 16))),
+        Expanded(child: Text(text, style: TextStyle(fontSize: 16, fontFamily: 'GeneralSans',
+                    letterSpacing: 16 * 0.02,))),
       ],
     );
   }

@@ -250,6 +250,8 @@ class _FinancialArchitypeScreenState
                   style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
+                    fontFamily: 'GeneralSans',
+                    letterSpacing: 14 * 0.02,
                   ),
                 ),
                 const Gap(24),

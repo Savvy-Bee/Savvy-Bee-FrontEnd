@@ -28,7 +28,8 @@ class BudgetAnalysisWidget extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 11,
                   color: Colors.grey,
-                  letterSpacing: 0.5,
+                  fontFamily: 'GeneralSans',
+                  letterSpacing: 11 * 0.02,
                 ),
               ),
             ),
@@ -74,6 +75,8 @@ class BudgetAnalysisWidget extends StatelessWidget {
                                 fontSize: 12,
                                 fontWeight: FontWeight.w500,
                                 color: AppColors.secondaryLight,
+                                fontFamily: 'GeneralSans',
+                                letterSpacing: 12 * 0.02,
                               ),
                             ),
                             Text(
@@ -81,6 +84,8 @@ class BudgetAnalysisWidget extends StatelessWidget {
                               style: TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.w500,
+                                fontFamily: 'GeneralSans',
+                                letterSpacing: 24 * 0.02,
                               ),
                             ),
                             Text(
@@ -89,6 +94,8 @@ class BudgetAnalysisWidget extends StatelessWidget {
                                 fontSize: 10,
                                 fontWeight: FontWeight.w500,
                                 color: AppColors.textSecondary,
+                                fontFamily: 'GeneralSans',
+                                letterSpacing: 10 * 0.02,
                               ),
                             ),
                           ],

@@ -143,6 +143,8 @@ class _ChoosePersonalityScreenState
                   textStyle: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
+                    fontFamily: 'GeneralSans',
+                    letterSpacing: 12 * 0.02,
                   ),
                   onTap: () {
                     context.pushNamed(SignupConnectBankScreen.path);
@@ -243,6 +245,8 @@ class _ChoosePersonalityScreenState
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
                     color: AppColors.grey,
+                    fontFamily: 'GeneralSans',
+                    letterSpacing: 12 * 0.02,
                   ),
                 ),
                 Text(
@@ -250,6 +254,8 @@ class _ChoosePersonalityScreenState
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
+                    fontFamily: 'GeneralSans',
+                    letterSpacing: 16 * 0.02,
                   ),
                 ),
                 Text(
@@ -258,6 +264,8 @@ class _ChoosePersonalityScreenState
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
                     color: AppColors.grey,
+                    fontFamily: 'GeneralSans',
+                    letterSpacing: 14 * 0.02,
                   ),
                 ),
               ],

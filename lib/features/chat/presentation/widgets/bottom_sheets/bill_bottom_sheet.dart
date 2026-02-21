@@ -58,6 +58,8 @@ class _BillBottomSheetState extends ConsumerState<BillBottomSheet> {
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
+                        fontFamily: 'GeneralSans',
+                    letterSpacing: 18 * 0.02,
                       ),
                     ),
                     // if (hasSuggestedGoal)
@@ -76,6 +78,8 @@ class _BillBottomSheetState extends ConsumerState<BillBottomSheet> {
                             style: TextStyle(
                               fontSize: 12,
                               color: Colors.grey[600],
+                              fontFamily: 'GeneralSans',
+                    letterSpacing: 12 * 0.02,
                             ),
                           ),
                         ],

@@ -147,6 +147,8 @@ Widget buildChatBubble({
                     fontSize: 16.0,
                     fontWeight: FontWeight.w500,
                     height: 1.4,
+                    fontFamily: 'GeneralSans',
+                    letterSpacing: 16 * 0.02,
                   ),
                 ),
             ],
@@ -208,6 +210,8 @@ Container _buildGifErrorWidget(bool isMe) {
           style: TextStyle(
             color: isMe ? AppColors.background : Colors.black54,
             fontSize: 12.0,
+            fontFamily: 'GeneralSans',
+            letterSpacing: 12 * 0.02,
           ),
         ),
       ],
