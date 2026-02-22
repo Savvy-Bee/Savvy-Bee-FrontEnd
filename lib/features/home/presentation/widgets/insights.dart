@@ -91,7 +91,7 @@ class _LearnCardWidget extends StatelessWidget {
                 child: Image.asset(
                   card.imagePath,
                   width: 250,
-                  height: 230,
+                  height: 180,
                   fit: BoxFit.fill,
                 ),
               ),

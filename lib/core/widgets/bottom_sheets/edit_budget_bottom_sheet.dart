@@ -3,9 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/utils/num_extensions.dart';
+import 'package:savvy_bee_mobile/core/utils/number_input_formatter.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';
 import 'package:savvy_bee_mobile/features/tools/domain/models/budget.dart';
@@ -34,14 +36,15 @@ class EditBudgetBottomSheet extends ConsumerStatefulWidget {
 
 class _EditBudgetBottomSheetState extends ConsumerState<EditBudgetBottomSheet> {
   late final TextEditingController _controller;
+  final NumberFormat _formatter = NumberFormat('#,###');
   bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController(
-      text: widget.budget.targetAmountMonthly.toStringAsFixed(0),
-    );
+    // Format the initial value with commas
+    final initialAmount = widget.budget.targetAmountMonthly.toInt();
+    _controller = TextEditingController(text: _formatter.format(initialAmount));
   }
 
   @override
@@ -70,10 +73,17 @@ class _EditBudgetBottomSheetState extends ConsumerState<EditBudgetBottomSheet> {
     return months[now.month - 1];
   }
 
+  // Helper to get numeric value from formatted text
+  num _getNumericValue(String formattedText) {
+    if (formattedText.isEmpty) return 0;
+    final numericString = formattedText.replaceAll(',', '');
+    return num.tryParse(numericString) ?? 0;
+  }
+
   void _onSave() async {
     setState(() => _isLoading = true);
     try {
-      final newAmount = num.tryParse(_controller.text) ?? 0;
+      final newAmount = _getNumericValue(_controller.text);
 
       final message = await ref
           .read(budgetHomeNotifierProvider.notifier)
@@ -84,9 +94,9 @@ class _EditBudgetBottomSheetState extends ConsumerState<EditBudgetBottomSheet> {
           );
 
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(message)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(message)));
         context.pop();
       }
     } catch (e) {
@@ -109,14 +119,22 @@ class _EditBudgetBottomSheetState extends ConsumerState<EditBudgetBottomSheet> {
   Widget build(BuildContext context) {
     final budgetState = ref.watch(budgetHomeNotifierProvider);
     final totalEarnings = budgetState.value?.totalEarnings ?? 0;
-    final totalBudgeted =
-        budgetState.value?.budgets.fold<num>(
-          0,
-          (prev, budget) => prev + budget.targetAmountMonthly,
-        ) ??
+
+    // Calculate total budgeted from all OTHER budgets (excluding current)
+    final otherBudgetsTotal =
+        budgetState.value?.budgets
+            .where((b) => b.budgetName != widget.budget.budgetName)
+            .fold<num>(
+              0,
+              (prev, budget) => prev + budget.targetAmountMonthly,
+            ) ??
         0;
-    final unbudgeted =
-        totalEarnings - (totalBudgeted - widget.budget.targetAmountMonthly);
+
+    // Get the current input value (with commas removed)
+    final currentBudgetValue = _getNumericValue(_controller.text);
+
+    // Calculate unbudgeted = total earnings - (other budgets + current input)
+    final unbudgeted = totalEarnings - (otherBudgetsTotal + currentBudgetValue);
 
     return Padding(
       padding: EdgeInsets.only(
@@ -130,7 +148,7 @@ class _EditBudgetBottomSheetState extends ConsumerState<EditBudgetBottomSheet> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Budget by category'),
+                const Text('Budget by category'),
                 IconButton(
                   onPressed: () => context.pop(),
                   icon: const Icon(Icons.close),
@@ -153,11 +171,11 @@ class _EditBudgetBottomSheetState extends ConsumerState<EditBudgetBottomSheet> {
                     const Gap(8),
                     Text(
                       widget.budget.budgetName,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w500,
                         fontFamily: 'GeneralSans',
-                        letterSpacing: 20 * 0.02
+                        letterSpacing: 20 * 0.02,
                       ),
                     ),
                   ],
@@ -165,13 +183,20 @@ class _EditBudgetBottomSheetState extends ConsumerState<EditBudgetBottomSheet> {
                 const Gap(24),
                 CustomTextFormField(
                   controller: _controller,
-                  // Updated to show current month dynamically
                   label: 'Budget for ${_getCurrentMonthName()}',
-                  hint: '\$${widget.budget.targetAmountMonthly}',
+                  hint: 'Enter amount',
                   isRounded: true,
                   keyboardType: TextInputType.number,
-                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    NumberInputFormatter(),
+                  ],
+                  onChanged: (value) {
+                    // Trigger rebuild to update "available" text
+                    setState(() {});
+                  },
                 ),
+                const Gap(8),
                 Row(
                   children: [
                     Icon(
@@ -182,12 +207,12 @@ class _EditBudgetBottomSheetState extends ConsumerState<EditBudgetBottomSheet> {
                     const Gap(3),
                     Text(
                       '${unbudgeted.toDouble().formatCurrency(decimalDigits: 0)} available',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
                         color: AppColors.textLight,
                         fontFamily: 'GeneralSans',
-                        letterSpacing: 12 * 0.02
+                        letterSpacing: 12 * 0.02,
                       ),
                     ),
                   ],
@@ -207,7 +232,6 @@ class _EditBudgetBottomSheetState extends ConsumerState<EditBudgetBottomSheet> {
     );
   }
 }
-
 
 // import 'package:flutter/material.dart';
 // import 'package:flutter/services.dart';

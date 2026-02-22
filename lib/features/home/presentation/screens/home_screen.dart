@@ -62,6 +62,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   bool _showRecommendation = true;
   String? _selectedFeedback;
 
+  String _getTimeBasedGreeting() {
+    final hour = DateTime.now().hour;
+
+    if (hour < 12) {
+      return 'Good morning!';
+    } else if (hour < 17) {
+      return 'Good afternoon!';
+    } else {
+      return 'Good evening!';
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -115,7 +127,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       ),
                     ),
                     Text(
-                      "Good morning!",
+                      _getTimeBasedGreeting(),
                       style: TextStyle(
                         fontFamily: 'GeneralSans',
                         fontSize: 12,
@@ -798,92 +810,112 @@ If you answered “yes” to all these questions, you’re ready to take the nex
       backgroundColor: Colors.white,
       elevation: 0,
       automaticallyImplyLeading: false,
-      toolbarHeight: 56, // Standard AppBar height
+      toolbarHeight: 56,
+      titleSpacing: 0, // Remove default padding
       title: Row(
         children: [
-          // LEFT: "Chat with Nahl" section
-          InkWell(
-            onTap: () => context.pushNamed(ChatScreen.path),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 32,
-                  height: 32,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: AppColors.primary),
-                  ),
-                  child: Center(
-                    child: Image.asset(
-                      'assets/images/topbar/nav-left-icon.png',
-                      width: 32,
-                      height: 32,
+          // ═══════════════════════════════════════════════════════════════════
+          // LEFT SECTION - 50% width
+          // ═══════════════════════════════════════════════════════════════════
+          Expanded(
+            flex: 27, // 50% of available width
+            child: Padding(
+              padding: const EdgeInsets.only(left: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // Chat with Nahl (far left of left section)
+                  InkWell(
+                    onTap: () => context.pushNamed(ChatScreen.path),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          width: 32,
+                          height: 32,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: AppColors.primary),
+                          ),
+                          child: Center(
+                            child: Image.asset(
+                              'assets/images/topbar/nav-left-icon.png',
+                              width: 32,
+                              height: 32,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 6),
+                        const Text(
+                          'Chat with Nahl',
+                          style: TextStyle(
+                            fontFamily: 'GeneralSans',
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ),
-                const SizedBox(width: 6),
-                const Text(
-                  'Chat with Nahl',
-                  style: TextStyle(
-                    fontFamily: 'GeneralSans',
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black,
+
+                  // Center icon (far right of left section)
+                  Image.asset(
+                    'assets/images/topbar/nav-center-icon.png',
+                    width: 30,
+                    height: 32,
+                    fit: BoxFit.contain,
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
 
-          // Spacer to push center icon to middle
-          const Spacer(),
-
-          // CENTER: Icon
-          Image.asset(
-            'assets/images/topbar/nav-center-icon.png',
-            width: 30,
-            height: 32,
-            fit: BoxFit.contain,
+          // ═══════════════════════════════════════════════════════════════════
+          // RIGHT SECTION - 50% width
+          // ═══════════════════════════════════════════════════════════════════
+          Expanded(
+            flex: 23, // 50% of available width
+            child: Padding(
+              padding: const EdgeInsets.only(right: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end, // Align to far right
+                children: [
+                  // User avatar (far right of right section)
+                  GestureDetector(
+                    onTap: () =>
+                        context.pushNamed(ProfileScreen.path, extra: ''),
+                    child: Container(
+                      width: 32,
+                      height: 32,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.black, width: 1),
+                      ),
+                      child: Center(
+                        child: Text(
+                          firstName.isNotEmpty
+                              ? (firstName.length > 1
+                                    ? firstName.substring(0, 2).toUpperCase()
+                                    : firstName[0].toUpperCase())
+                              : 'DT',
+                          style: const TextStyle(
+                            fontFamily: 'GeneralSans',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
-
-          // Spacer to balance and push avatar to right
-          const Spacer(),
         ],
       ),
-      actions: [
-        // RIGHT: User avatar
-        Padding(
-          padding: const EdgeInsets.only(right: 16),
-          child: GestureDetector(
-            onTap: () => context.pushNamed(ProfileScreen.path, extra: ''),
-            child: Container(
-              width: 32,
-              height: 32,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-                border: Border.all(color: Colors.black, width: 1),
-              ),
-              child: Center(
-                child: Text(
-                  firstName.isNotEmpty
-                      ? (firstName.length > 1
-                            ? firstName.substring(0, 2).toUpperCase()
-                            : firstName[0].toUpperCase())
-                      : 'DT',
-                  style: const TextStyle(
-                    fontFamily: 'GeneralSans',
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
     );
   }
 

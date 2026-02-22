@@ -94,7 +94,7 @@ class _ToolsScreenState extends ConsumerState<ToolsScreen> {
                       ),
                     ),
                     child: ListView(
-                      padding: const EdgeInsets.all(24),
+                      padding: const EdgeInsets.fromLTRB(24, 0, 24, 12),
                       children: [
                         _buildToolItem(
                           title: 'Budgets',

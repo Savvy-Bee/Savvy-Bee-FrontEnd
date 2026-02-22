@@ -100,6 +100,7 @@ flutter:
     - assets/images/illustrations/health/flourishing.png
     - assets/images/illustrations/health/thriving.png
     - assets/images/illustrations/health/building.png
+    - assets/images/icons/Wallet.png
 
   fonts:
     - family: Excon

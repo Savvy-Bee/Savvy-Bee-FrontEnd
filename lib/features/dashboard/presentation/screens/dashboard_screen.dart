@@ -531,12 +531,27 @@ class _SpendCardState extends State<SpendCard> {
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
               child: Row(
-                children: const [
-                  Icon(Icons.receipt_long, size: 16),
+                children: [
+                  // Icon(Icons.receipt_long, size: 16),
+                  Image.asset(
+                    'assets/images/icons/Wallet.png',
+                    width: 16,
+                    height: 16,
+                  ),
                   Gap(4),
-                  Text('View Spending'),
-                  Gap(4),
-                  Icon(Icons.chevron_right, size: 16),
+                  Text(
+                    'View Spending',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: 'GeneralSans',
+                      letterSpacing: 14 * 0.02,
+                      fontSize: 14,
+                    ),
+                  ),
+                  // Gap(4),
+                  Spacer(),
+                  Icon(Icons.chevron_right, size: 16, color: Colors.black),
                 ],
               ),
             ),

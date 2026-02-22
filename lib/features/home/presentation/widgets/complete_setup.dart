@@ -31,9 +31,9 @@ class CompleteSetupCard extends StatelessWidget {
         ),
         const Gap(12),
         Container(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            color: Colors.white,
+            // color: Colors.white,
             border: Border.all(
               color: AppColors.grey.withValues(alpha: 0.2),
               width: 1,
@@ -49,9 +49,9 @@ class CompleteSetupCard extends StatelessWidget {
               return Column(
                 children: [
                   _SetupItemTile(item: item),
-                  if (!isLast) const Gap(20),
+                  if (!isLast) const Gap(5),
                   if (!isLast) const DottedDivider(),
-                  if (!isLast) const Gap(20),
+                  if (!isLast) const Gap(5),
                 ],
               );
             }).toList(),

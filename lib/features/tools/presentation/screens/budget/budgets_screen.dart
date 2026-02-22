@@ -10,6 +10,7 @@ import 'package:savvy_bee_mobile/core/widgets/bottom_sheets/edit_budget_bottom_s
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_error_widget.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_loading_widget.dart';
+import 'package:savvy_bee_mobile/features/dashboard/presentation/screens/spending_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/domain/models/budget.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/providers/budget_provider.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/set_budget_screen.dart';
@@ -113,16 +114,24 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> {
             ref.invalidate(budgetHomeNotifierProvider);
           },
         ),
+
+        // In your budgets_screen.dart, replace the data callback in budgetState.when() with this:
         data: (data) {
+          // Safely calculate totals with fallback to 0
           final totalBudget = data.budgets.fold<num>(
             0,
-            (prev, budget) => prev + budget.targetAmountMonthly,
+            (prev, budget) => prev + (budget.targetAmountMonthly ?? 0),
           );
+
           final totalSpent = data.budgets.fold<num>(
             0,
-            (prev, budget) => prev + budget.balance,
+            (prev, budget) => prev + (budget.balance ?? 0),
           );
-          final monthlySavings = data.totalEarnings - totalBudget;
+
+          final totalEarnings = data.totalEarnings ?? 0;
+
+          // Calculate derived values with NaN protection
+          final monthlySavings = totalEarnings - totalBudget;
           final safeToSpend = totalBudget - totalSpent;
 
           return RefreshIndicator(
@@ -135,15 +144,6 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> {
                 // Month Selector
                 _buildMonthSelector(),
                 const Gap(16),
-
-                // Alert Insight Card
-                // InsightCard(
-                //   insightType: InsightType.nahlInsight,
-                //   text:
-                //       "You've spent 15% more on transport this month. Try adjusting your allocation.",
-                //   // backgroundColor: const Color(0xFFE3F2FD),
-                // ),
-                // const Gap(24),
 
                 // Spending Card
                 _buildSpendingCard(safeToSpend, totalSpent, totalBudget),
@@ -162,11 +162,7 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> {
                 ),
                 const Gap(12),
 
-                _buildBudgetBasics(
-                  data.totalEarnings,
-                  totalBudget,
-                  monthlySavings,
-                ),
+                _buildBudgetBasics(totalEarnings, totalBudget, monthlySavings),
                 const Gap(32),
 
                 // Category Breakdown
@@ -270,9 +266,13 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> {
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 decoration: BoxDecoration(
-                  color: isSelected ? AppColors.yellow : Colors.white,
+                  color: isSelected
+                      ? Color.fromARGB(26, 255, 196, 0)
+                      : Colors.white,
                   border: Border.all(
-                    color: isSelected ? AppColors.yellow : Colors.grey.shade300,
+                    color: isSelected
+                        ? const Color(0xFFFFC300)
+                        : Colors.grey.shade300,
                   ),
                   borderRadius: BorderRadius.circular(8),
                 ),
@@ -317,28 +317,37 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Header Row
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  Icon(
-                    Icons.calculate_outlined,
-                    size: 20,
-                    color: Colors.grey.shade700,
-                  ),
-                  const Gap(8),
-                  const Text(
-                    'Spending',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      fontFamily: 'GeneralSans',
+              // Left side: Clickable label
+              InkWell(
+                onTap: () => context.pushNamed(SpendingScreen.path),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Image.asset(
+                      'assets/icons/Calculator.png',
+                      width: 20,
+                      height: 20,
+                      color: Colors.black,
                     ),
-                  ),
-                ],
+                    const Gap(8),
+                    const Text(
+                      'Spending',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'GeneralSans',
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              // Icon(Icons.chevron_right, color: Colors.grey.shade400),
+
+              // Right side: Chevron icon
+              Icon(Icons.chevron_right, size: 20, color: Colors.black),
             ],
           ),
           const Gap(12),

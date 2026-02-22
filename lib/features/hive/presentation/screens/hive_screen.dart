@@ -78,6 +78,18 @@ class _HiveScreenState extends ConsumerState<HiveScreen> {
     'assets/images/other/learn-two.jpg',
   ];
 
+   String _getTimeBasedGreeting() {
+    final hour = DateTime.now().hour;
+
+    if (hour < 12) {
+      return 'Good morning!';
+    } else if (hour < 17) {
+      return 'Good afternoon!';
+    } else {
+      return 'Good evening!';
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -108,7 +120,7 @@ class _HiveScreenState extends ConsumerState<HiveScreen> {
               Padding(
                 padding: const EdgeInsets.only(left: 16),
                 child: Text(
-                  "Good morning!",
+                  _getTimeBasedGreeting(),
                   style: TextStyle(
                     fontFamily: 'GeneralSans',
                     fontSize: 12,
@@ -285,36 +297,36 @@ If you answered “yes” to all these questions, you’re ready to take the nex
               //   ),
               // ),
               const Gap(24),
-              Padding(
-                padding: const EdgeInsets.only(left: 16),
-                child: SectionTitleWidget(title: 'Arcade'),
-              ),
-              const Gap(16),
-              SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  spacing: 8,
-                  children: [
-                    GestureDetector(
-                      onTap: () => context.pushNamed(ArcadeWebViewScreen.path),
-                      // onTap: () => context.pushNamed(GameMenuScreen.path),
-                      child: Container(
-                        height: 200,
-                        width: MediaQuery.widthOf(context) * 0.6,
-                        decoration: BoxDecoration(
-                          border: Border.all(),
-                          borderRadius: BorderRadius.circular(16),
-                          image: DecorationImage(
-                            image: AssetImage(Assets.arcadeBg),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.only(left: 16),
+              //   child: SectionTitleWidget(title: 'Arcade'),
+              // ),
+              // const Gap(16),
+              // SingleChildScrollView(
+              //   padding: const EdgeInsets.symmetric(horizontal: 16),
+              //   scrollDirection: Axis.horizontal,
+              //   child: Row(
+              //     spacing: 8,
+              //     children: [
+              //       GestureDetector(
+              //         onTap: () => context.pushNamed(ArcadeWebViewScreen.path),
+              //         // onTap: () => context.pushNamed(GameMenuScreen.path),
+              //         child: Container(
+              //           height: 200,
+              //           width: MediaQuery.widthOf(context) * 0.6,
+              //           decoration: BoxDecoration(
+              //             border: Border.all(),
+              //             borderRadius: BorderRadius.circular(16),
+              //             image: DecorationImage(
+              //               image: AssetImage(Assets.arcadeBg),
+              //               fit: BoxFit.cover,
+              //             ),
+              //           ),
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
             ],
           ),
         ),
