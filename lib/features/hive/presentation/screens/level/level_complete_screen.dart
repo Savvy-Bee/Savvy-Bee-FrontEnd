@@ -164,7 +164,8 @@ class _LevelCompleteScreenState extends ConsumerState<LevelCompleteScreen> {
                         Expanded(
                           child: _buildScoreCard(
                             title: 'Score',
-                            score: '${widget.args.score.toInt() * 20}%',
+                            score:
+                                '${widget.args.score == '10' ? widget.args.score.toInt() * 10 : widget.args.score.toInt() * 20}%',
                             icon: AppIcon(
                               AppIcons.scoreIcon,
                               color: AppColors.success,

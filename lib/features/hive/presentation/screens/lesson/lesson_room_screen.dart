@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/tracking/minxpanel_tracking.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/illustrations.dart';
@@ -8,6 +9,7 @@ import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/features/hive/domain/models/course.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/quiz/quiz_screen.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/utils/assets/app_icons.dart';
@@ -79,6 +81,84 @@ class _LessonRoomScreenState extends ConsumerState<LessonRoomScreen> {
             .quiz
             .focus, // Pass module name for completion tracking
       ),
+    );
+  }
+
+  void _shareLesson() {
+    final level = widget.args.level;
+    final lessonNumber = widget.args.lessonNumber;
+
+    // Determine what content to share based on current page
+    String shareText;
+
+    if (_currentPage == 0) {
+      // Introduction page
+      shareText =
+          '''
+🐝 Learning with SavvyBee!
+
+📚 Lesson ${lessonNumber}: ${level.levelNumber}
+
+${level.introduction}
+
+Join me on my financial literacy journey!
+''';
+    } else if (_currentPage < _pages.length - 2) {
+      // Section pages (skip last 2 pages which are highlights/tip/quiz)
+      final sectionIndex = _currentPage - 1;
+      if (sectionIndex >= 0 && sectionIndex < level.sections.length) {
+        final section = level.sections[sectionIndex];
+
+        final bullets = section.bulletPoints != null
+            ? '\n\n' + section.bulletPoints!.map((b) => '• $b').join('\n')
+            : '';
+
+        shareText =
+            '''
+🐝 Learning with SavvyBee!
+
+📚 ${section.heading}
+
+${section.content}$bullets
+
+Join me on my financial literacy journey!
+''';
+      } else {
+        // Fallback for edge cases
+        shareText =
+            '''
+🐝 Learning with SavvyBee!
+
+📚 Lesson ${lessonNumber}
+I'm learning about ${level.quiz.focus}
+
+Join me on my financial literacy journey!
+''';
+      }
+    } else {
+      // Highlights, Tips, or Quiz page
+      shareText =
+          '''
+🐝 Learning with SavvyBee!
+
+📚 Just completed Lesson ${lessonNumber}
+Topic: ${level.quiz.focus}
+
+💡 Key Highlights:
+${level.highlights.map((h) => '• $h').join('\n')}
+
+Join me on my financial literacy journey!
+''';
+    }
+
+    // Share the text
+    Share.share(shareText, subject: 'SavvyBee - ${level.quiz.focus}');
+
+    // Optional: Track the share event in Mixpanel
+    MixpanelService.trackLessonShared(
+      moduleName: level.quiz.focus,
+      lessonNumber: lessonNumber,
+      pageIndex: _currentPage,
     );
   }
 
@@ -246,7 +326,7 @@ class _LessonRoomScreenState extends ConsumerState<LessonRoomScreen> {
         children: [
           /// SHARE BUTTON
           IconButton.filled(
-            onPressed: () {},
+            onPressed: _shareLesson,
             icon: AppIcon(AppIcons.shareIcon, color: AppColors.primary),
             style: IconButton.styleFrom(backgroundColor: AppColors.background),
           ),
@@ -300,12 +380,15 @@ class _LessonRoomScreenState extends ConsumerState<LessonRoomScreen> {
             iconSize: 18,
             style: Constants.collapsedButtonStyle,
           ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.bookmark_outline),
-            iconSize: 18,
-            style: Constants.collapsedButtonStyle,
-          ),
+          // IconButton(
+          //   onPressed: () {},
+          //   icon: const Icon(Icons.bookmark_outline),
+          //   iconSize: 18,
+          //   style: Constants.collapsedButtonStyle,
+          // ),
+
+          // this gap is in place of the icon commented
+          Gap(18),
 
           /// PAGE INDICATOR
           SmoothPageIndicator(

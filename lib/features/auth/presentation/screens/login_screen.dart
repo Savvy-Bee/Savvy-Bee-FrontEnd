@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:savvy_bee_mobile/core/services/device_info_service.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/logos.dart';
 import 'package:savvy_bee_mobile/core/utils/input_validator.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
@@ -32,11 +33,31 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   bool _showPassword = false;
 
+  String? _deviceID;
+
   @override
+  void initState() {
+    super.initState();
+    _getDeviceId(); // ← ADD THIS
+  }
+
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  Future<void> _getDeviceId() async {
+    try {
+      final deviceId = await DeviceInfoService.getDeviceId();
+      setState(() => _deviceID = deviceId);
+      debugPrint('Device ID: $deviceId');
+    } catch (e) {
+      debugPrint('Failed to get device ID: $e');
+      setState(() {
+        _deviceID = 'fallback_${DateTime.now().millisecondsSinceEpoch}';
+      });
+    }
   }
 
   // ─── Registration resume logic ───────────────────────────────────────────────
@@ -106,7 +127,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     final response = await ref
         .read(authProvider.notifier)
-        .login(email, _passwordController.text.trim());
+        .login(email, _passwordController.text.trim(), _deviceID!);
 
     if (!mounted) return;
 
@@ -128,10 +149,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       // ── Successful login ────────────────────────────────────────────────────
       // Even on success, guard against a partially completed account.
       if (verification != null &&
-          (!verification.emailVerification ||
-              !verification.otherDetails  
-              // || !verification.postOnboarding    
-              )) {
+          (!verification.emailVerification || !verification.otherDetails
+          // || !verification.postOnboarding
+          )) {
         _resumeRegistration(
           emailVerified: verification.emailVerification,
           otherDetails: verification.otherDetails,

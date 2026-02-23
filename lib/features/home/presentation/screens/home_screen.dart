@@ -544,24 +544,43 @@ If you answered “yes” to all these questions, you’re ready to take the nex
           ),
         );
       },
-      error: (error, stackTrace) => Scaffold(
-        body: CustomErrorWidget(
-          icon: Icons.person_outline,
-          title: 'Unable to Load User Info',
-          subtitle:
-              'We couldn\'t fetch your account data. Please check your connection and try again.',
-          actionButtonText: 'Retry',
-          onActionPressed: () {
-            ref.invalidate(homeDataProvider);
-          },
-          onLogoutPressed: () {
-            ref.read(authProvider.notifier).logout();
-            ref.read(bottomNavIndexProvider.notifier).state = 0;
-            context.goNamed(LoginScreen.path);
-          },
-          logoutButtonText: 'Logout',
-        ),
-      ),
+      error: (error, stackTrace) {
+        final errorMessage = error.toString();
+
+        // 🚨 AUTO LOGOUT if token is missing
+        // if (errorMessage.contains('Unauthorized: No token provided')) {
+        //   Future.microtask(() {
+        //     ref.read(authProvider.notifier).logout();
+        //     ref.read(bottomNavIndexProvider.notifier).state = 0;
+        //     context.goNamed(LoginScreen.path);
+        //   });
+
+        //   // Show nothing briefly while redirecting
+        //   return const Scaffold(
+        //     body: Center(child: CircularProgressIndicator()),
+        //   );
+        // }
+
+        // Normal error UI for other errors
+        return Scaffold(
+          body: CustomErrorWidget(
+            icon: Icons.person_outline,
+            title: 'Unable to Load User Info',
+            subtitle:
+                'We couldn\'t fetch your account data. Please check your connection and try again.',
+            actionButtonText: 'Retry',
+            onActionPressed: () {
+              ref.invalidate(homeDataProvider);
+            },
+            onLogoutPressed: () {
+              ref.read(authProvider.notifier).logout();
+              ref.read(bottomNavIndexProvider.notifier).state = 0;
+              context.goNamed(LoginScreen.path);
+            },
+            logoutButtonText: 'Logout',
+          ),
+        );
+      },
       loading: () => Scaffold(
         body: CustomLoadingWidget(text: 'Loading your account info...'),
       ),

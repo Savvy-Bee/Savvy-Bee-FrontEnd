@@ -62,13 +62,13 @@
                                     "Budget"
                                 ],
                                 "rightOptions": [
-                                    "Money coming in",
                                     "Money going out (spent)",
+                                    "Money coming in",                                    
                                     "A plan for managing money"
                                 ],
                                 "correctMatches": {
-                                    "0": 0,
-                                    "1": 1,
+                                    "0": 1,
+                                    "1": 0,
                                     "2": 2
                                 }
                             },
@@ -2191,14 +2191,14 @@
                                     "Broken household item"
                                 ],
                                 "rightOptions": [
-                                    "Use funds from your emergency savings",
+                                    "Use funds from your miscellaneous savings",
                                     "Use funds from your emergency savings",
                                     "Reallocate money from non-essential spending",
                                     "Review and modify your spending plan immediately"
                                 ],
                                 "correctMatches": {
-                                    "0": 0,
-                                    "1": 1,
+                                    "0": 1,
+                                    "1": 0,
                                     "2": 2,
                                     "3": 3
                                 }

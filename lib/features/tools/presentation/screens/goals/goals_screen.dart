@@ -387,10 +387,15 @@ class GoalsScreen extends ConsumerWidget {
                 ),
               ),
               const Gap(8),
-              Icon(
-                Icons.emoji_events_outlined,
-                color: AppColors.yellow,
-                size: 24,
+              // Icon(
+              //   Icons.emoji_events_outlined,
+              //   color: AppColors.yellow,
+              //   size: 24,
+              // ),
+              Image.asset(
+                'assets/images/icons/Vacation.png',
+                width: 24,
+                height: 24, 
               ),
             ],
           ),

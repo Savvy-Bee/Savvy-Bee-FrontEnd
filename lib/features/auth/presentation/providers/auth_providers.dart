@@ -300,11 +300,15 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   /// Login with email and password
   /// Returns the full API response for verification status checking
-  Future<ApiResponse<LoginData>?> login(String email, String password) async {
+  Future<ApiResponse<LoginData>?> login(
+    String email,
+    String password,
+    String deviceID,
+  ) async {
     state = state.copyWith(isLoading: true, clearError: true);
 
     try {
-      final response = await _authRepository.login(email, password);
+      final response = await _authRepository.login(email, password, deviceID);
 
       if (response != null && response.success && response.data != null) {
         // Token is already saved in repository

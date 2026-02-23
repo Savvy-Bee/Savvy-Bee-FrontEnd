@@ -38,7 +38,7 @@ class MixpanelService {
     _mixpanel!.getPeople().set('email', email);
     _mixpanel!.getPeople().set('signup_date', signupDate.toIso8601String());
     _mixpanel!.getPeople().set('acquisition_source', acquisitionSource);
-    
+
     if (kDebugMode) print('✓ User identified: $userId');
   }
 
@@ -49,15 +49,11 @@ class MixpanelService {
   /// Track successful user signup.
   /// Call this after registration is complete (email verified + details saved).
   static Future<void> trackSignup(String acquisitionSource) async {
-    await _track('USER_SIGNED_UP', {
-      'acquisition_source': acquisitionSource,
-    });
+    await _track('USER_SIGNED_UP', {'acquisition_source': acquisitionSource});
   }
-  
+
   static Future<void> trackLogin(String acquisitionSource) async {
-    await _track('USER_LOGGED_IN', {
-      'acquisition_source': acquisitionSource,
-    });
+    await _track('USER_LOGGED_IN', {'acquisition_source': acquisitionSource});
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -66,15 +62,13 @@ class MixpanelService {
 
   /// Track the first time a user engages with a major feature.
   /// feature_name: 'Hive' | 'Tools' | 'Game' | 'NAHL'
-  /// 
+  ///
   /// Call this once per user, as soon as they interact with any feature.
   static Future<void> trackFirstFeatureUsed(String featureName) async {
     // Check if we've already tracked this (use local flag or server-side check)
     // For simplicity, always fire it — Mixpanel funnels handle duplicates.
-    await _track('FIRST_MEANINGFUL_ACTION', {
-      'feature_name': featureName,
-    });
-    
+    await _track('FIRST_MEANINGFUL_ACTION', {'feature_name': featureName});
+
     // Update user property so you can segment by first feature
     _mixpanel?.getPeople().set('first_feature_used', featureName);
   }
@@ -86,9 +80,7 @@ class MixpanelService {
   /// Track when a user starts a quiz module.
   /// moduleName: 'Budgeting' | 'Numeracy' | 'Savings' | <your course titles>
   static Future<void> trackQuizStarted(String moduleName) async {
-    await _track('QUIZ_STARTED', {
-      'module_name': moduleName,
-    });
+    await _track('QUIZ_STARTED', {'module_name': moduleName});
   }
 
   /// Track when a user completes a quiz module.
@@ -152,8 +144,14 @@ class MixpanelService {
     });
 
     // Accumulate AI cost and token usage for this user
-    _mixpanel?.getPeople().increment('ai_token_usage_total', tokenCount.toDouble());
-    _mixpanel?.getPeople().increment('ai_cost_estimate_total', costEstimate.toDouble());
+    _mixpanel?.getPeople().increment(
+      'ai_token_usage_total',
+      tokenCount.toDouble(),
+    );
+    _mixpanel?.getPeople().increment(
+      'ai_cost_estimate_total',
+      costEstimate.toDouble(),
+    );
   }
 
   /// Track when a receipt scan is completed.
@@ -200,6 +198,18 @@ class MixpanelService {
     );
   }
 
+  static Future<void> trackLessonShared({
+    required String moduleName,
+    required String lessonNumber,
+    required int pageIndex,
+  }) async {
+    await _track('LESSON_SHARED', {
+      'module_name': moduleName,
+      'lesson_number': lessonNumber,
+      'page_index': pageIndex,
+    });
+  }
+
   // ═══════════════════════════════════════════════════════════════════════════
   // 6. FUNNELS POSSIBLE ✅
   // ═══════════════════════════════════════════════════════════════════════════
@@ -217,7 +227,10 @@ class MixpanelService {
   // ═══════════════════════════════════════════════════════════════════════════
 
   /// Internal method to send an event to Mixpanel.
-  static Future<void> _track(String eventName, Map<String, dynamic> properties) async {
+  static Future<void> _track(
+    String eventName,
+    Map<String, dynamic> properties,
+  ) async {
     if (_mixpanel == null) {
       if (kDebugMode) print('⚠ Mixpanel not initialized, skipping: $eventName');
       return;

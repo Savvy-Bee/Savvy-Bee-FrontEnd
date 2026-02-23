@@ -145,11 +145,15 @@ class AuthRepository {
   }
 
   /// Login with email and password
-  Future<ApiResponse<LoginData>?> login(String email, String password) async {
+  Future<ApiResponse<LoginData>?> login(
+    String email,
+    String password,
+    String deviceID,
+  ) async {
     try {
       final response = await _apiClient.post(
         ApiEndpoints.login,
-        data: {'email': email, 'password': password},
+        data: {'email': email, 'password': password, 'deviceID': deviceID},
       );
 
       // Parse the login response with nested token structure

@@ -91,16 +91,16 @@
                                     "Retirement savings"
                                 ],
                                 "rightOptions": [
-                                    "For unexpected expenses",
-                                    "For small purchases like books or a school trip",
                                     "For big goals like university or a car",
-                                    "For when you stop working"
+                                    "For unexpected expenses",                 
+                                    "For when you stop working",
+                                    "For small purchases like books or a school trip"
                                 ],
                                 "correctMatches": {
-                                    "0": 0,
-                                    "1": 1,
-                                    "2": 2,
-                                    "3": 3
+                                    "0": 1,
+                                    "1": 3,
+                                    "2": 0,
+                                    "3": 2
                                 }
                             },
                             {
@@ -190,15 +190,15 @@
                                 ],
                                 "rightOptions": [
                                     "Helps",
+                                    "Hurts",                                    
                                     "Hurts",
-                                    "Helps",
-                                    "Hurts"
+                                    "Helps"
                                 ],
                                 "correctMatches": {
                                     "0": 0,
                                     "1": 1,
-                                    "2": 0,
-                                    "3": 1
+                                    "2": 3,
+                                    "3": 2
                                 }
                             },
                             {
@@ -790,13 +790,15 @@
                                 ],
                                 "rightOptions": [
                                     "Helps",
+                                    "Hurts",
+                                    "Helps",
                                     "Hurts"
                                 ],
                                 "correctMatches": {
                                     "0": 0,
                                     "1": 1,
-                                    "2": 0,
-                                    "3": 1
+                                    "2": 2,
+                                    "3": 3
                                 }
                             },
                             {
@@ -1287,17 +1289,17 @@
                                     "Checking product reviews before buying",
                                     "Buying something without knowing if it works well"
                                 ],
-                                "rightOptions": [
-                                    "Smart spending",
+                                "rightOptions": [                                    
                                     "Not smart spending",
                                     "Smart spending",
-                                    "Not smart spending"
+                                    "Not smart spending",
+                                    "Smart spending"
                                 ],
                                 "correctMatches": {
-                                    "0": 0,
-                                    "1": 1,
-                                    "2": 2,
-                                    "3": 3
+                                    "0": 1,
+                                    "1": 0,
+                                    "2": 3,
+                                    "3": 2
                                 }
                             },
                             {
@@ -2083,16 +2085,16 @@
                                     "Active income",
                                     "Budget"
                                 ],
-                                "rightOptions": [
-                                    "Buying something without planning",
+                                "rightOptions": [                                    
                                     "Money earned with little to no daily effort",
                                     "Money earned by working for it",
+                                    "Buying something without planning",
                                     "A plan for how to spend and save money"
                                 ],
                                 "correctMatches": {
-                                    "0": 0,
-                                    "1": 1,
-                                    "2": 2,
+                                    "0": 2,
+                                    "1": 0,
+                                    "2": 1,
                                     "3": 3
                                 }
                             },
@@ -2268,16 +2270,16 @@
                                     "Principal"
                                 ],
                                 "rightOptions": [
-                                    "Interest earned only on the money you deposit",
-                                    "Interest earned on your savings and previous interest",
+                                    "Interest earned only on the money you deposit",                                    
                                     "A bank account that keeps your money safe and earns interest",
-                                    "The original amount of money you saved"
+                                    "The original amount of money you saved",
+                                    "Interest earned on your savings and previous interest"
                                 ],
                                 "correctMatches": {
                                     "0": 0,
-                                    "1": 1,
-                                    "2": 2,
-                                    "3": 3
+                                    "1": 3,
+                                    "2": 1,
+                                    "3": 2
                                 }
                             },
                             {
@@ -2588,14 +2590,14 @@
                                 "rightOptions": [
                                     "Leads to poor money decisions",
                                     "Makes it harder to save",
-                                    "Helps you manage money better",
-                                    "Keeps you motivated"
+                                    "Keeps you motivated",
+                                    "Helps you manage money better"                                    
                                 ],
                                 "correctMatches": {
                                     "0": 0,
                                     "1": 1,
-                                    "2": 2,
-                                    "3": 3
+                                    "2": 3,
+                                    "3": 2
                                 }
                             },
                             {

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:savvy_bee_mobile/core/services/device_info_service.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/date_time_extension.dart';
 import 'package:savvy_bee_mobile/core/utils/date_time_utils.dart';
@@ -79,9 +80,12 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   // Whether this session was resumed from an incomplete registration.
   bool get _isResuming => widget.incompleteSignUpData != null;
 
+  String? _deviceID;
+
   @override
   void initState() {
     super.initState();
+    _getDeviceId();
 
     _pageController.addListener(() {
       final newPage = _pageController.page?.round() ?? 0;
@@ -129,6 +133,19 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
     });
   }
 
+  Future<void> _getDeviceId() async {
+    try {
+      final deviceId = await DeviceInfoService.getDeviceId();
+      setState(() => _deviceID = deviceId);
+      debugPrint('Device ID: $deviceId');
+    } catch (e) {
+      debugPrint('Failed to get device ID: $e');
+      setState(() {
+        _deviceID = 'fallback_${DateTime.now().millisecondsSinceEpoch}';
+      });
+    }
+  }
+
   @override
   void dispose() {
     _firstNameController.dispose();
@@ -150,9 +167,9 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   // ─── Helpers ────────────────────────────────────────────────────────────────
 
   void _goToNextPage() => _pageController.nextPage(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
+    duration: const Duration(milliseconds: 300),
+    curve: Curves.easeInOut,
+  );
 
   void _goToPreviousPage() {
     // Prevent going back when the screen was opened to resume registration
@@ -194,9 +211,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
     if (success) {
       if (!silent) _showSuccess('OTP sent to $email');
     } else {
-      _showError(
-        ref.read(authProvider).errorMessage ?? 'Failed to send OTP',
-      );
+      _showError(ref.read(authProvider).errorMessage ?? 'Failed to send OTP');
     }
   }
 
@@ -227,13 +242,16 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
         case 3:
           if (!_passwordFormKey.currentState!.validate()) return;
 
-          final success = await ref.read(authProvider.notifier).register(
+          final success = await ref
+              .read(authProvider.notifier)
+              .register(
                 RegisterRequest(
                   firstName: _firstNameController.text.trim(),
                   lastName: _lastNameController.text.trim(),
                   email: _emailController.text.trim(),
                   password: _passwordController.text.trim(),
                   username: _usernameController.text.trim(),
+                  deviceID: _deviceID!, // ← ADD THIS
                 ),
               );
 
@@ -254,7 +272,9 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
             return;
           }
 
-          final success = await ref.read(authProvider.notifier).verifyEmail(
+          final success = await ref
+              .read(authProvider.notifier)
+              .verifyEmail(
                 VerifyEmailRequest(
                   email: _emailController.text.trim(),
                   otp: otp,
@@ -340,10 +360,9 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 BackButton(
-                  onPressed:
-                      _currentPage == 0 || _isResuming
-                          ? null
-                          : _goToPreviousPage,
+                  onPressed: _currentPage == 0 || _isResuming
+                      ? null
+                      : _goToPreviousPage,
                 ),
                 Expanded(
                   child: SmoothPageIndicator(
@@ -484,8 +503,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
             obscureText: !_showPassword,
             textInputAction: TextInputAction.done,
             suffixIcon: IconButton(
-              onPressed: () =>
-                  setState(() => _showPassword = !_showPassword),
+              onPressed: () => setState(() => _showPassword = !_showPassword),
               icon: Icon(
                 _showPassword
                     ? Icons.visibility_outlined
@@ -496,8 +514,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
             validator: (v) => InputValidator.validatePassword(v),
           ),
           const Gap(24),
-          PasswordRequirementWidget(
-              password: _passwordController.text.trim()),
+          PasswordRequirementWidget(password: _passwordController.text.trim()),
         ],
       ),
     );
@@ -521,8 +538,12 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
           children: [
             Text(
               "Didn't receive a code? ",
-              style: TextStyle(fontSize: 14, color: AppColors.grey, fontFamily: 'GeneralSans',
-                    letterSpacing: 14 * 0.02,),
+              style: TextStyle(
+                fontSize: 14,
+                color: AppColors.grey,
+                fontFamily: 'GeneralSans',
+                letterSpacing: 14 * 0.02,
+              ),
             ),
             GestureDetector(
               onTap: isLoading ? null : () => _sendOtp(),
@@ -535,7 +556,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                   decoration: TextDecoration.underline,
                   decorationColor: AppColors.primary,
                   fontFamily: 'GeneralSans',
-                    letterSpacing: 14 * 0.02,
+                  letterSpacing: 14 * 0.02,
                 ),
               ),
             ),
@@ -543,20 +564,20 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
         ),
         const Gap(8),
         // Only show "different email" if this is a fresh signup, not a resume.
-        if (!_isResuming)
-          GestureDetector(
-            onTap: () => _pageController.jumpToPage(1),
-            child: Text(
-              'Send to a different email',
-              style: TextStyle(
-                fontSize: 13,
-                color: AppColors.grey,
-                decoration: TextDecoration.underline,
-                fontFamily: 'GeneralSans',
-                    letterSpacing: 13 * 0.02,
-              ),
-            ),
-          ),
+        // if (!_isResuming)
+        //   GestureDetector(
+        //     onTap: () => _pageController.jumpToPage(1),
+        //     child: Text(
+        //       ' a different email',
+        //       style: TextStyle(
+        //         fontSize: 13,
+        //         color: AppColors.grey,
+        //         decoration: TextDecoration.underline,
+        //         fontFamily: 'GeneralSans',
+        //         letterSpacing: 13 * 0.02,
+        //       ),
+        //     ),
+        //   ),
       ],
     );
   }
@@ -569,8 +590,9 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
         controller: _dobController,
         readOnly: true,
         onTap: () async {
-          final initialDate =
-              DateTime.now().subtract(const Duration(days: 365 * 16));
+          final initialDate = DateTime.now().subtract(
+            const Duration(days: 365 * 16),
+          );
           final date = await DateTimeUtils.pickDate(
             context,
             initialDate: initialDate,
@@ -637,9 +659,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
     );
   }
 }
-
-
-
 
 // import 'dart:developer';
 

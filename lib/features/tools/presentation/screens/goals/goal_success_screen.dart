@@ -39,24 +39,29 @@ class _GoalSuccessScreenState extends State<GoalSuccessScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               // Two chat bubbles illustration (placeholder)
-              Container(
+              // Container(
+              //   width: 200,
+              //   height: 200,
+              //   decoration: const BoxDecoration(color: Colors.transparent),
+              //   child: Stack(
+              //     children: [
+              //       Positioned(
+              //         top: 40,
+              //         left: 20,
+              //         child: _buildChatBubble(Colors.black, 80),
+              //       ),
+              //       Positioned(
+              //         bottom: 40,
+              //         right: 20,
+              //         child: _buildChatBubble(AppColors.yellow, 120),
+              //       ),
+              //     ],
+              //   ),
+              // ),
+              Image.asset(
+                'assets/images/icons/Milestone.png',
                 width: 200,
                 height: 200,
-                decoration: const BoxDecoration(color: Colors.transparent),
-                child: Stack(
-                  children: [
-                    Positioned(
-                      top: 40,
-                      left: 20,
-                      child: _buildChatBubble(Colors.black, 80),
-                    ),
-                    Positioned(
-                      bottom: 40,
-                      right: 20,
-                      child: _buildChatBubble(AppColors.yellow, 120),
-                    ),
-                  ],
-                ),
               ),
               const Gap(40),
 

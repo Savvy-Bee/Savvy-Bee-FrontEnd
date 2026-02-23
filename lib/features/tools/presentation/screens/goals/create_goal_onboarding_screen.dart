@@ -248,7 +248,13 @@ class _CreateGoalOnboardingScreenState
         ),
         child: Row(
           children: [
-            Icon(icon, size: 24, color: Colors.black87),
+            // Icon(icon, size: 24, color: Colors.black87),
+            Image.asset(
+              'assets/images/icons/Tree.png',
+              width: 24,
+              height: 24,
+              color: Colors.black87,
+             ),
             const Gap(16),
             Expanded(
               child: Column(

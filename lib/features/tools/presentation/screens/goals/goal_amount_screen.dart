@@ -129,7 +129,7 @@ class _GoalAmountScreenState extends State<GoalAmountScreen> {
                           prefix: const Text(
                             '₦',
                             style: TextStyle(
-                              fontSize: 48,
+                              fontSize: 28,
                               fontWeight: FontWeight.bold,
                               fontFamily: 'GeneralSans',
                             ),
