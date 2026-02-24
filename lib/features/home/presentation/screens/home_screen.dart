@@ -66,11 +66,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final hour = DateTime.now().hour;
 
     if (hour < 12) {
-      return 'Good morning!';
+      return 'Good morning';
     } else if (hour < 17) {
-      return 'Good afternoon!';
+      return 'Good afternoon';
     } else {
-      return 'Good evening!';
+      return 'Good evening';
     }
   }
 
@@ -117,7 +117,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Hi, ${data.firstName}!",
+                      "Hi, ${data.firstName}",
                       style: TextStyle(
                         fontFamily: 'GeneralSans',
                         fontSize: 24,
@@ -140,45 +140,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ),
               ),
 
-              // Padding(
-              //   padding: const EdgeInsets.symmetric(horizontal: 16),
-              //   child: HealthCardWidget(
-              //     statusText: data.aiData.status,
-              //     descriptionText: data.aiData.message,
-              //     rating: data.aiData.ratings.toDouble(),
-              //   ),
-              // ),
-              // const Gap(24),
-              // _buildSectionTitle(
-              //   title: 'To-dos',
-              //   actionText: 'Hide',
-              //   actionColor: AppColors.error,
-              //   onactionTap: () {},
-              // ),
-              // const Gap(16),
-              // SingleChildScrollView(
-              //   padding: const EdgeInsets.symmetric(horizontal: 16),
-              //   scrollDirection: Axis.horizontal,
-              //   child: Row(
-              //     spacing: 12,
-              //     mainAxisSize: MainAxisSize.min,
-              //     children: [
-              //       if (!data.kyc.nin || !data.kyc.bvn)
-              //         _buildTodoItem(
-              //           title: 'Verify your identity',
-              //           iconPath: AppIcons.scanFaceIcon,
-              //           ctaText: 'VERIFY',
-              //           onTap: () =>
-              //               context.pushNamed(NinVerificationScreen.path),
-              //         ),
-              //       _buildTodoItem(
-              //         title: 'Enable FaceID/fingerprint',
-              //         iconPath: AppIcons.scanFaceIcon,
-              //         ctaText: 'ENABLE',
-              //       ),
-              //     ],
-              //   ),
-              // ),
               const Gap(24),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -209,73 +170,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
               const Gap(24),
 
-              // _buildSectionTitle(
-              //   title: 'My tools',
-              //   actionText: 'View all',
-              //   actionColor: AppColors.primary,
-              //   onactionTap: () {},
-              // ),
-              // const Gap(16),
-              // SingleChildScrollView(
-              //   padding: const EdgeInsets.symmetric(horizontal: 16),
-              //   scrollDirection: Axis.horizontal,
-              //   child: Row(
-              //     spacing: 12,
-              //     mainAxisSize: MainAxisSize.min,
-              //     children: [
-              //       _buildToolCard(
-              //         title: 'My budgets',
-              //         subtitle:
-              //             'Create smart budgets, track spending, and get personalized insights.',
-              //         superscript: 'EDIT BUDGET',
-              //         color: AppColors.primary,
-              //         onTap: () => context.pushNamed(BudgetScreen.path),
-              //       ),
-              //       _buildToolCard(
-              //         title: 'My goals',
-              //         subtitle:
-              //             'Set goals, get AI-powered suggestions, and track your progress.',
-              //         superscript: 'EDIT GOAL',
-              //         color: AppColors.success,
-              //         onTap: () => context.pushNamed(GoalsScreen.path),
-              //       ),
-              //     ],
-              //   ),
-              // ),
-              // const Gap(24),
               const Gap(24),
 
-              // LearnAndGrowSection(
-              //   cards: [
-              //     LearnCard(
-              //       imagePath: 'assets/images/other/learn-one.jpg', // Your asset path
-              //       title: 'Savings 101',
-              //       description:
-              //           'Create smart budgets, track spending, and get personalized insights.',
-              //       onTap: () {
-              //         () => context.pushNamed(LessonHomeScreen.path, extra: course),
-              //       },
-              //     ),
-              //     LearnCard(
-              //       imagePath: 'assets/images/other/learn-two.jpg', // Your asset path
-              //       title: 'Budgeting Basics',
-              //       description:
-              //           'Create smart budgets, track spending, and get personalized insights.',
-              //       onTap: () {
-              //         () => context.pushNamed(LessonHomeScreen.path, extra: course),
-              //       },
-              //     ),
-              //     LearnCard(
-              //       imagePath: 'assets/images/other/learn-three.jpg', // Your asset path
-              //       title: 'Numeracy',
-              //       description:
-              //           'Create smart budgets, track spending, and get personalized insights.',
-              //       onTap: () {
-              //         () => context.pushNamed(LessonHomeScreen.path, extra: course),
-              //       },
-              //     ),
-              //   ],
-              // ),
               coursesAsync.when(
                 data: (courses) {
                   return Column(
@@ -416,130 +312,10 @@ If you answered “yes” to all these questions, you’re ready to take the nex
                   ),
                 ],
               ),
-              // Padding(
-              //   padding: const EdgeInsets.symmetric(horizontal: 16),
-              //   child: SectionTitleWidget(title: 'Recent insights'),
-              // ),
-              // const Gap(16),
-              // SingleChildScrollView(
-              //   padding: const EdgeInsets.symmetric(horizontal: 16),
-              //   scrollDirection: Axis.horizontal,
-              //   child: Row(
-              //     spacing: 12,
-              //     mainAxisSize: MainAxisSize.min,
-              //     children: [
-              //       ArticleCard(
-              //         title: 'Should you save financially with your partner?',
-              //         subtitle: "Let's get financially intimate",
-              //         backgroundColor: AppColors.primary,
-              //         imagePath: recentInsightsImagePaths[0],
-              //         onTap: () {},
-              //       ),
-              //       ArticleCard(
-              //         title: 'Money lessons from afrobeats',
-              //         subtitle:
-              //             "Are you really listening to what they're saying?",
-              //         backgroundColor: AppColors.success,
-              //         imagePath: recentInsightsImagePaths[1],
-              //         onTap: () {},
-              //       ),
-              //     ],
-              //   ),
-              // ),
-              const Gap(24),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Text(
-                  'WAYS TO SAVE',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontFamily: 'GeneralSans',
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.grey,
-                    letterSpacing: 12 * 0.02,
-                  ),
-                ),
-              ),
-              const Gap(16),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: ActionPromptCard(
-                  title: 'Manage your bills and expenses',
-                  description:
-                      'Create smart budgets, track spending, and get personalized insights.',
-                  buttonText: 'Set up Categories',
-                  backgroundColor: AppColors.yellow, // Yellow color
-                  onButtonPressed: () {
-                    // Navigate to categories setup
-                    context.pushNamed(BudgetsScreen.path);
-                  },
-                ),
-              ),
-              const Gap(24),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: ActionPromptCard(
-                  title: 'Set your financial goals',
-                  description:
-                      'Create smart budgets, track spending, and get personalized insights.',
-                  buttonText: 'Start saving with Goals',
-                  backgroundColor: Colors.white, // Yellow color
-                  borderColor: Colors.black,
-                  onButtonPressed: () {
-                    // Navigate to categories setup
-                    context.pushNamed(GoalsScreen.path);
-                  },
-                ),
-              ),
-              const Gap(24),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: ActionPromptCard(
-                  title: 'Reduce your existing debt',
-                  description:
-                      'Create smart budgets, track spending, and get personalized insights.',
-                  buttonText: 'Manage your Debt',
-                  backgroundColor: AppColors.green, // Green color
-                  onButtonPressed: () {
-                    // Navigate to categories setup
-                    context.pushNamed(DebtScreen.path);
-                  },
-                ),
-              ),
               const Gap(24),
 
-              // Smart Recommendation Card
-              // if (_showRecommendation)
-              //   Padding(
-              //     padding: const EdgeInsets.symmetric(horizontal: 16),
-              //     child: SmartRecommendationCard(
-              //       title: 'SMART RECOMMENDATION',
-              //       description:
-              //           'Hey Danaerys, we detected you could save approximately ₦200k in the next 12 months using Goals.',
-              //       highlightedText: '\₦200k',
-              //       buttonText: 'Set a new Saving Goal',
-              //       onButtonPressed: () {
-              //         context.pushNamed(GoalsScreen.path);
-              //       },
-              //       onClose: () {
-              //         setState(() {
-              //           _showRecommendation = false;
-              //         });
-              //       },
-              //     ),
-              //   ),
               if (_showRecommendation) const Gap(24),
               _buildFeedbackSection(),
-              // Padding(
-              //   padding: const EdgeInsets.symmetric(horizontal: 16),
-              //   child: InfoCard(
-              //     title: 'Smart Recommendation',
-              //     description:
-              //         'Your expenses are high, consider a budget review this week.',
-              //     avatar: Illustrations.lunaAvatar,
-              //     borderRadius: 32,
-              //   ),
-              // ),
             ],
           ),
         );
@@ -666,44 +442,6 @@ If you answered “yes” to all these questions, you’re ready to take the nex
       ),
     );
   }
-
-  // Widget _buildCourseCard({
-  //   required Course course,
-  //   required Color color,
-  //   required String imagePath,
-  // }) {
-  //   final width = MediaQuery.sizeOf(context).width / 1.9;
-
-  //   return CustomCard(
-  //     onTap: () => context.pushNamed(LessonHomeScreen.path, extra: course),
-  //     bgColor: color.withValues(alpha: 0.25),
-  //     borderColor: color,
-  //     width: width,
-  //     child: Column(
-  //       crossAxisAlignment: CrossAxisAlignment.start,
-  //       mainAxisSize: MainAxisSize.min,
-  //       children: [
-  //         Row(
-  //           mainAxisAlignment: MainAxisAlignment.center,
-  //           children: [Image.asset(imagePath, height: 140, width: 140)],
-  //         ),
-  //         // const Gap(16),
-  //         Text(
-  //           course.courseTitle,
-  //           style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-  //         ),
-  //         const Gap(4),
-  //         Text(
-  //           course.courseDescription,
-  //           maxLines: 2,
-  //           overflow: TextOverflow.ellipsis,
-  //           style: TextStyle(fontSize: 10),
-  //         ),
-  //         const Gap(8),
-  //       ],
-  //     ),
-  //   );
-  // }
 
   Widget _buildToolCard({
     required String title,

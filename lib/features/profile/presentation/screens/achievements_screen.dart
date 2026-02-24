@@ -46,7 +46,8 @@ class AchievementsScreen extends ConsumerWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Image.asset(
-                      Assets.bumblebeeLeagueBadge, // ← add a nice empty illustration if you have one
+                      Assets
+                          .bumblebeeLeagueBadge, // ← add a nice empty illustration if you have one
                       width: 140,
                       height: 140,
                     ),
@@ -57,6 +58,7 @@ class AchievementsScreen extends ConsumerWidget {
                         fontFamily: 'GeneralSans',
                         fontSize: 20,
                         fontWeight: FontWeight.w600,
+                        letterSpacing: 20 * 0.02,
                       ),
                     ),
                     const Gap(12),
@@ -68,6 +70,7 @@ class AchievementsScreen extends ConsumerWidget {
                         fontSize: 14,
                         color: AppColors.textLight,
                         height: 1.4,
+                        letterSpacing: 14 * 0.02,
                       ),
                     ),
                   ],
@@ -86,8 +89,8 @@ class AchievementsScreen extends ConsumerWidget {
                 // Find matching badge asset
                 final index = Assets.leagueNames.indexWhere(
                   (name) => name.toLowerCase().contains(
-                        ach.name.toLowerCase().replaceAll(' league', ''),
-                      ),
+                    ach.name.toLowerCase().replaceAll(' league', ''),
+                  ),
                 );
 
                 final asset = index != -1
@@ -99,12 +102,7 @@ class AchievementsScreen extends ConsumerWidget {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      GameCard(
-                        child: Image.asset(
-                          asset,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
+                      GameCard(child: Image.asset(asset, fit: BoxFit.contain)),
                       const Gap(12),
                       Text(
                         ach.name,
@@ -114,6 +112,7 @@ class AchievementsScreen extends ConsumerWidget {
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
                           height: 1.2,
+                          letterSpacing: 14 * 0.02,
                         ),
                       ),
                       Text(
@@ -123,6 +122,7 @@ class AchievementsScreen extends ConsumerWidget {
                           fontSize: 12,
                           color: AppColors.textLight,
                           height: 1.2,
+                          letterSpacing: 12 * 0.02,
                         ),
                       ),
                     ],

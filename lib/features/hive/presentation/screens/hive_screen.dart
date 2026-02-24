@@ -82,11 +82,11 @@ class _HiveScreenState extends ConsumerState<HiveScreen> {
     final hour = DateTime.now().hour;
 
     if (hour < 12) {
-      return 'Good morning!';
+      return 'Good morning';
     } else if (hour < 17) {
-      return 'Good afternoon!';
+      return 'Good afternoon';
     } else {
-      return 'Good evening!';
+      return 'Good evening';
     }
   }
 
@@ -361,9 +361,9 @@ If you answered “yes” to all these questions, you’re ready to take the nex
     return AppBar(
       title: Text(
         homeDataAsync.when(
-          data: (data) => 'Hi ${data.data.firstName}!',
-          error: (error, stackTrace) => 'Hi User!',
-          loading: () => 'Hi User!',
+          data: (data) => 'Hi ${data.data.firstName}',
+          error: (error, stackTrace) => 'Hi User',
+          loading: () => 'Hi User',
         ),
         style: TextStyle(
           fontSize: 24,

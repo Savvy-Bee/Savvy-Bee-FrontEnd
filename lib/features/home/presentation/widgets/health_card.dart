@@ -6,12 +6,14 @@ class HealthCardWidget extends StatelessWidget {
   final String statusText;
   final String descriptionText;
   final double rating;
+  final GlobalKey? screenshotKey; // ← ADD THIS for screenshot capability
 
   const HealthCardWidget({
     super.key,
     required this.statusText,
     required this.descriptionText,
     required this.rating,
+    this.screenshotKey, // ← ADD THIS
   });
 
   @override
@@ -22,12 +24,23 @@ class HealthCardWidget extends StatelessWidget {
     // Get the appropriate image based on statusText
     final healthImage = _getHealthImage(statusText);
 
-    return Center(
+    // Wrap in RepaintBoundary for screenshot capability
+    final child = Center(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Image.asset(healthImage, width: width, fit: BoxFit.contain),
       ),
     );
+
+    // If screenshotKey is provided, wrap with RepaintBoundary
+    if (screenshotKey != null) {
+      return RepaintBoundary(
+        key: screenshotKey,
+        child: child,
+      );
+    }
+
+    return child;
   }
 
   /// Returns the appropriate health image based on the status text
@@ -46,7 +59,6 @@ class HealthCardWidget extends StatelessWidget {
       case 'building':
         return 'assets/images/illustrations/health/building.png';
       default:
-        // Fallback to stabilizing as default
         return 'assets/images/illustrations/health/stabilizing.png';
     }
   }

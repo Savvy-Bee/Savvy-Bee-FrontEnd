@@ -36,14 +36,23 @@ class _NextOfKinScreenState extends ConsumerState<NextOfKinScreen> {
               children: [
                 Text(
                   'Next of Kin (NOK)',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'GeneralSans',
+                    letterSpacing: 16 * 0.02,
+                  ),
                 ),
                 const Gap(8),
                 Text(
                   '''Your next of kin is the closest living relative to you. The next-of-kin relationship is important in determining inheritance rights if a person dies without a will and has no spouse and/or children.
           
 We will contact this person if we are unable to make contact with you after a long period of time.''',
-                  style: TextStyle(fontSize: 12),
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontFamily: 'GeneralSans',
+                    letterSpacing: 12 * 0.02,
+                  ),
                 ),
                 const Gap(16),
                 CustomTextFormField(

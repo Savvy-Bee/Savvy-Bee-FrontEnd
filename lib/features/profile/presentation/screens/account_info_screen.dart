@@ -156,6 +156,7 @@ class _AccountInfoScreenState extends ConsumerState<AccountInfoScreen> {
             fontFamily: 'General Sans',
             fontWeight: FontWeight.w600,
             fontSize: 16,
+            letterSpacing: 16 * 0.02,
           ),
         ),
       ),
@@ -239,7 +240,7 @@ class _AccountInfoScreenState extends ConsumerState<AccountInfoScreen> {
                   TextSpan(
                     text:
                         'To change your account details, please contact support at ',
-                    style: const TextStyle(),
+                    style: const TextStyle(fontFamily: 'GeneralSans'),
                     children: [
                       TextSpan(
                         text: 'contact@mysavvybee.com',
@@ -274,6 +275,7 @@ class _AccountInfoScreenState extends ConsumerState<AccountInfoScreen> {
               fontFamily: 'General Sans',
               fontWeight: FontWeight.w500,
               fontSize: 12,
+              letterSpacing: 12 * 0.02,
             ),
           ),
           Text(
@@ -282,6 +284,7 @@ class _AccountInfoScreenState extends ConsumerState<AccountInfoScreen> {
               fontFamily: 'General Sans',
               fontWeight: FontWeight.w500,
               fontSize: 14,
+              letterSpacing: 14 * 0.02,
             ),
           ),
         ],

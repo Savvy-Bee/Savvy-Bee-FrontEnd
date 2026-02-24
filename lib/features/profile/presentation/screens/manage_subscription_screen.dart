@@ -126,12 +126,14 @@ class _ManageSubscriptionScreenState
         children: [
           Text(
             'Everything you need in Bee+',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, fontFamily: 'GeneralSans',
+                         letterSpacing: 16 * 0.02),
           ),
           const Gap(4),
           Text(
             'Intelligence, automation, and zero financial anxiety',
-            style: TextStyle(fontSize: 16),
+            style: TextStyle(fontSize: 16, fontFamily: 'GeneralSans',
+                         letterSpacing: 16 * 0.02),
           ),
           const Gap(16),
           SingleChildScrollView(
@@ -167,7 +169,8 @@ class _ManageSubscriptionScreenState
       children: [
         Text(
           isFreePlan ? 'PLAN DETAILS' : 'NAHL USAGE',
-          style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+          style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, fontFamily: 'GeneralSans',
+                         letterSpacing: 12 * 0.02),
         ),
         CustomCard(
           borderColor: cardBorderColor,
@@ -180,12 +183,14 @@ class _ManageSubscriptionScreenState
               if (!isFreePlan) ...[
                 Text(
                   'Chats',
-                  style: TextStyle(fontSize: 10, fontWeight: FontWeight.w500),
+                  style: TextStyle(fontSize: 10, fontWeight: FontWeight.w500, fontFamily: 'GeneralSans',
+                         letterSpacing: 10 * 0.02),
                 ),
                 const Gap(8),
                 Text(
                   '5/50',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500, fontFamily: 'GeneralSans',
+                         letterSpacing: 24 * 0.02),
                 ),
                 const Gap(16),
                 LinearProgressIndicator(
@@ -227,12 +232,14 @@ class _ManageSubscriptionScreenState
           const Gap(8),
           Text(
             title,
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, fontFamily: 'GeneralSans',
+                         letterSpacing: 16 * 0.02),
           ),
           const Gap(4),
           Text(
             subtitle,
-            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, fontFamily: 'GeneralSans',
+                         letterSpacing: 12 * 0.02),
           ),
         ],
       ),
@@ -245,9 +252,11 @@ class _ManageSubscriptionScreenState
       children: [
         Text(
           title,
-          style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+          style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, fontFamily: 'GeneralSans',
+                         letterSpacing: 12 * 0.02),
         ),
-        Text(value, style: TextStyle(fontWeight: FontWeight.w500)),
+        Text(value, style: TextStyle(fontWeight: FontWeight.w500, fontFamily: 'GeneralSans',
+                         )),
       ],
     );
   }

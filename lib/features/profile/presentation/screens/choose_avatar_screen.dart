@@ -144,7 +144,12 @@ class _ChooseAvatarScreenState extends ConsumerState<ChooseAvatarScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Text(
         title,
-        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          fontFamily: 'GeneralSans',
+          letterSpacing: 20 * 0.02,
+        ),
       ),
     );
   }

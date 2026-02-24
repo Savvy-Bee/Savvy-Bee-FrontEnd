@@ -82,6 +82,7 @@ class _CompleteProfileScreenState extends ConsumerState<CompleteProfileScreen> {
                   style: TextStyle(
                     color: isComplete ? AppColors.grey : null,
                     decoration: isComplete ? TextDecoration.lineThrough : null,
+                    fontFamily: 'GeneralSans',
                   ),
                 ),
               ],

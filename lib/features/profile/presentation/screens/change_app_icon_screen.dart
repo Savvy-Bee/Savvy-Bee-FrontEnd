@@ -23,12 +23,21 @@ class _ChangeAppIconScreenState extends ConsumerState<ChangeAppIconScreen> {
         children: [
           Text(
             'Change App Icon',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'GeneralSans',
+              letterSpacing: 20 * 0.02,
+            ),
           ),
           const Gap(8),
           Text(
             'Tap any image below to change your Savvy Bee App icon',
-            style: TextStyle(fontSize: 12),
+            style: TextStyle(
+              fontSize: 12,
+              fontFamily: 'GeneralSans',
+              letterSpacing: 12 * 0.02,
+            ),
           ),
           const Gap(24),
           Wrap(

@@ -169,6 +169,8 @@ class _BvnVerificationScreenState extends ConsumerState<BvnVerificationScreen> {
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
+                        fontFamily: 'GeneralSans',
+                        letterSpacing: 14 * 0.02,
                       ),
                     ),
                   ),
@@ -222,7 +224,12 @@ class _BvnVerificationScreenState extends ConsumerState<BvnVerificationScreen> {
             const Gap(16),
             const Text(
               'Verification Successful!',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'GeneralSans',
+                letterSpacing: 20 * 0.02,
+              ),
             ),
           ],
         ),
@@ -232,7 +239,11 @@ class _BvnVerificationScreenState extends ConsumerState<BvnVerificationScreen> {
             const Text(
               'Your BVN has been verified successfully.',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 14),
+              style: TextStyle(
+                fontSize: 14,
+                fontFamily: 'GeneralSans',
+                letterSpacing: 14 * 0.02,
+              ),
             ),
             const Gap(16),
             if (response.data.validation.selfie.confidenceRating > 0)
@@ -256,6 +267,7 @@ class _BvnVerificationScreenState extends ConsumerState<BvnVerificationScreen> {
                       style: TextStyle(
                         color: AppColors.success,
                         fontWeight: FontWeight.w600,
+                        fontFamily: 'GeneralSans',
                       ),
                     ),
                   ],
@@ -284,6 +296,8 @@ class _BvnVerificationScreenState extends ConsumerState<BvnVerificationScreen> {
                   color: Colors.white,
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
+                  fontFamily: 'GeneralSans',
+                  letterSpacing: 16 * 0.02,
                 ),
               ),
             ),
@@ -316,7 +330,14 @@ class _BvnVerificationScreenState extends ConsumerState<BvnVerificationScreen> {
           children: [
             Icon(Icons.error_outline, color: AppColors.error, size: 28),
             const Gap(12),
-            const Text('Verification Failed', style: TextStyle(fontSize: 18)),
+            const Text(
+              'Verification Failed',
+              style: TextStyle(
+                fontSize: 18,
+                fontFamily: 'GeneralSans',
+                letterSpacing: 18 * 0.02,
+              ),
+            ),
           ],
         ),
         content: Column(
@@ -325,7 +346,10 @@ class _BvnVerificationScreenState extends ConsumerState<BvnVerificationScreen> {
           children: [
             const Text(
               'The following issues were found:',
-              style: TextStyle(fontWeight: FontWeight.w600),
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontFamily: 'GeneralSans',
+              ),
             ),
             const Gap(12),
             ...errors.map(
@@ -366,6 +390,7 @@ class _BvnVerificationScreenState extends ConsumerState<BvnVerificationScreen> {
             fontSize: 16,
             fontFamily: 'GeneralSans',
             fontWeight: FontWeight.w500,
+            letterSpacing: 16 * 0.02,
           ),
         ),
         centerTitle: true,
@@ -400,6 +425,7 @@ class _BvnVerificationScreenState extends ConsumerState<BvnVerificationScreen> {
               fontFamily: 'GeneralSans',
               fontWeight: FontWeight.w500,
               color: Colors.black,
+              letterSpacing: 32 * 0.02,
             ),
           ),
           const Gap(12),
@@ -411,6 +437,7 @@ class _BvnVerificationScreenState extends ConsumerState<BvnVerificationScreen> {
               fontWeight: FontWeight.w400,
               color: Color(0xFF666666),
               height: 1.4,
+              letterSpacing: 16 * 0.02,
             ),
           ),
           const Spacer(),
@@ -482,6 +509,7 @@ class _BvnVerificationScreenState extends ConsumerState<BvnVerificationScreen> {
                     fontSize: 16,
                     fontFamily: 'GeneralSans',
                     color: Color(0xFF666666),
+                    letterSpacing: 16 * 0.02,
                   ),
                 ),
               ],
@@ -502,6 +530,7 @@ class _BvnVerificationScreenState extends ConsumerState<BvnVerificationScreen> {
                     fontSize: 16,
                     fontFamily: 'GeneralSans',
                     fontWeight: FontWeight.w500,
+                    letterSpacing: 16 * 0.02,
                   ),
                 ),
               ),
@@ -537,6 +566,7 @@ class _BvnVerificationScreenState extends ConsumerState<BvnVerificationScreen> {
                   fontSize: 16,
                   fontFamily: 'GeneralSans',
                   fontWeight: FontWeight.w700,
+                  letterSpacing: 16 * 0.02,
                 ),
               ),
             ),
@@ -565,6 +595,7 @@ class _BvnVerificationScreenState extends ConsumerState<BvnVerificationScreen> {
                 fontFamily: 'GeneralSans',
                 fontWeight: FontWeight.w500,
                 color: Colors.black,
+                letterSpacing: 32 * 0.02,
               ),
             ),
             const Gap(12),
@@ -575,6 +606,7 @@ class _BvnVerificationScreenState extends ConsumerState<BvnVerificationScreen> {
                 fontFamily: 'GeneralSans',
                 color: Color(0xFF666666),
                 height: 1.4,
+                letterSpacing: 16 * 0.02,
               ),
             ),
             const Gap(32),
@@ -590,6 +622,7 @@ class _BvnVerificationScreenState extends ConsumerState<BvnVerificationScreen> {
                     fontFamily: 'GeneralSans',
                     color: Colors.black,
                     fontWeight: FontWeight.w500,
+                    letterSpacing: 14 * 0.02,
                   ),
                 ),
                 const Gap(8),
@@ -600,14 +633,14 @@ class _BvnVerificationScreenState extends ConsumerState<BvnVerificationScreen> {
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
-                    letterSpacing: 1.2,
+                    fontFamily: 'GeneralSans',
+                    letterSpacing: 16 * 0.02,
                   ),
                   decoration: InputDecoration(
                     hintText: '11-digit BVN',
                     hintStyle: TextStyle(
                       color: Colors.grey.shade300,
                       fontFamily: 'GeneralSans',
-                      letterSpacing: 1.2,
                     ),
                     counterText: '',
                     filled: true,
@@ -685,6 +718,8 @@ class _BvnVerificationScreenState extends ConsumerState<BvnVerificationScreen> {
                           color: hasInput ? Colors.white : Colors.grey.shade500,
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
+                          fontFamily: 'GeneralSans',
+                          letterSpacing: 16 * 0.02,
                         ),
                       ),
               ),

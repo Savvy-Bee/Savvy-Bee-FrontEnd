@@ -25,7 +25,8 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
         children: [
           Text(
             'Learn a few things about Savvy Bee. more content will be published here soon.',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, fontFamily: 'GeneralSans',
+                         letterSpacing: 16 * 0.02),
           ),
           const Gap(16),
           GameCard(

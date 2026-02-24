@@ -161,6 +161,8 @@ class _NinVerificationScreenState extends ConsumerState<NinVerificationScreen> {
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
+                        fontFamily: 'GeneralSans',
+                        letterSpacing: 14 * 0.02,
                       ),
                     ),
                   ),
@@ -214,7 +216,12 @@ class _NinVerificationScreenState extends ConsumerState<NinVerificationScreen> {
             const Gap(16),
             const Text(
               'Verification Successful!',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'GeneralSans',
+                letterSpacing: 20 * 0.02,
+              ),
             ),
           ],
         ),
@@ -224,7 +231,11 @@ class _NinVerificationScreenState extends ConsumerState<NinVerificationScreen> {
             const Text(
               'Your NIN has been verified successfully.',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 14),
+              style: TextStyle(
+                fontSize: 14,
+                fontFamily: 'GeneralSans',
+                letterSpacing: 14 * 0.02,
+              ),
             ),
             const Gap(16),
             if (response.data.validation.selfie.confidenceRating > 0)
@@ -248,6 +259,7 @@ class _NinVerificationScreenState extends ConsumerState<NinVerificationScreen> {
                       style: TextStyle(
                         color: AppColors.success,
                         fontWeight: FontWeight.w600,
+                        fontFamily: 'GeneralSans',
                       ),
                     ),
                   ],
@@ -282,6 +294,8 @@ class _NinVerificationScreenState extends ConsumerState<NinVerificationScreen> {
                   color: Colors.white,
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
+                  fontFamily: 'GeneralSans',
+                  letterSpacing: 16 * 0.02,
                 ),
               ),
             ),
@@ -314,7 +328,14 @@ class _NinVerificationScreenState extends ConsumerState<NinVerificationScreen> {
           children: [
             Icon(Icons.error_outline, color: AppColors.error, size: 28),
             const Gap(12),
-            const Text('Verification Failed', style: TextStyle(fontSize: 18)),
+            const Text(
+              'Verification Failed',
+              style: TextStyle(
+                fontSize: 18,
+                fontFamily: 'GeneralSans',
+                letterSpacing: 18 * 0.02,
+              ),
+            ),
           ],
         ),
         content: Column(
@@ -323,7 +344,10 @@ class _NinVerificationScreenState extends ConsumerState<NinVerificationScreen> {
           children: [
             const Text(
               'The following issues were found:',
-              style: TextStyle(fontWeight: FontWeight.w600),
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontFamily: 'GeneralSans',
+              ),
             ),
             const Gap(12),
             ...errors.map(
@@ -364,6 +388,7 @@ class _NinVerificationScreenState extends ConsumerState<NinVerificationScreen> {
             fontSize: 16,
             fontFamily: 'GeneralSans',
             fontWeight: FontWeight.w500,
+            letterSpacing: 16 * 0.02,
           ),
         ),
         centerTitle: true,
@@ -398,6 +423,7 @@ class _NinVerificationScreenState extends ConsumerState<NinVerificationScreen> {
               fontFamily: 'GeneralSans',
               fontWeight: FontWeight.w500,
               color: Colors.black,
+              letterSpacing: 32 * 0.02,
             ),
           ),
           const Gap(12),
@@ -409,6 +435,7 @@ class _NinVerificationScreenState extends ConsumerState<NinVerificationScreen> {
               fontWeight: FontWeight.w400,
               color: Color(0xFF666666),
               height: 1.4,
+              letterSpacing: 16 * 0.02,
             ),
           ),
           const Spacer(),
@@ -481,6 +508,7 @@ class _NinVerificationScreenState extends ConsumerState<NinVerificationScreen> {
                     fontFamily: 'GeneralSans',
                     fontWeight: FontWeight.w400,
                     color: Color(0xFF666666),
+                    letterSpacing: 16 * 0.02,
                   ),
                 ),
               ],
@@ -501,6 +529,7 @@ class _NinVerificationScreenState extends ConsumerState<NinVerificationScreen> {
                     fontSize: 16,
                     fontFamily: 'GeneralSans',
                     fontWeight: FontWeight.w500,
+                    letterSpacing: 16 * 0.02,
                   ),
                 ),
               ),
@@ -535,6 +564,7 @@ class _NinVerificationScreenState extends ConsumerState<NinVerificationScreen> {
                   fontSize: 16,
                   fontFamily: 'GeneralSans',
                   fontWeight: FontWeight.w700,
+                  letterSpacing: 16 * 0.02,
                 ),
               ),
             ),
@@ -563,6 +593,7 @@ class _NinVerificationScreenState extends ConsumerState<NinVerificationScreen> {
                 fontFamily: 'GeneralSans',
                 fontWeight: FontWeight.w500,
                 color: Colors.black,
+                letterSpacing: 32 * 0.02,
               ),
             ),
             const Gap(12),
@@ -574,6 +605,7 @@ class _NinVerificationScreenState extends ConsumerState<NinVerificationScreen> {
                 fontWeight: FontWeight.w400,
                 color: Color(0xFF666666),
                 height: 1.4,
+                letterSpacing: 16 * 0.02,
               ),
             ),
             const Gap(32),
@@ -589,6 +621,7 @@ class _NinVerificationScreenState extends ConsumerState<NinVerificationScreen> {
                     fontFamily: 'GeneralSans',
                     color: Colors.black,
                     fontWeight: FontWeight.w500,
+                    letterSpacing: 14 * 0.02,
                   ),
                 ),
                 const Gap(8),
@@ -599,7 +632,8 @@ class _NinVerificationScreenState extends ConsumerState<NinVerificationScreen> {
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
-                    letterSpacing: 1.2,
+                    letterSpacing: 16 * 0.02,
+                    fontFamily: 'GeneralSans',
                   ),
                   decoration: InputDecoration(
                     hintText: '11-digit NIN',
@@ -608,7 +642,7 @@ class _NinVerificationScreenState extends ConsumerState<NinVerificationScreen> {
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
                       color: Colors.grey.shade300,
-                      letterSpacing: 1.2,
+                      letterSpacing: 16 * 0.02,
                     ),
                     counterText: '',
                     filled: true,
@@ -686,6 +720,8 @@ class _NinVerificationScreenState extends ConsumerState<NinVerificationScreen> {
                           color: hasInput ? Colors.white : Colors.grey.shade500,
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
+                          fontFamily: 'GeneralSans',
+                          letterSpacing: 16 * 0.02,
                         ),
                       ),
               ),
