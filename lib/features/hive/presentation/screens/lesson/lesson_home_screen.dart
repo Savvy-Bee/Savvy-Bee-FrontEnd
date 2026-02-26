@@ -72,17 +72,29 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
                     canAccess = prevCompleted == prevTotal && prevTotal > 0;
                   }
 
+                  // Get lesson-specific image based on course and lesson number
+                  final lessonNum =
+                      int.tryParse(
+                        lesson.lessonNumber.replaceAll(RegExp(r'[^0-9]'), ''),
+                      ) ??
+                      (index + 1);
+
+                  final illustrationAsset = Illustrations.getLessonImage(
+                    widget.course.courseTitle,
+                    lessonNum,
+                  );
+
                   return GestureDetector(
                     onTap: canAccess
                         ? () {
                             context.pushNamed(LevelsScreen.path, extra: lesson);
                           }
-                        : null, // No action if locked
+                        : null,
                     child: _buildLessonCard(
                       status: lesson.lessonNumber,
                       points: 0,
                       lesson: lesson,
-                      illustrationAsset: Illustrations.lesson1,
+                      illustrationAsset: illustrationAsset,
                       title: lesson.lessonTitle,
                       description: lesson.lessonDescription,
                       lessonIndex: index,
@@ -93,6 +105,102 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
               ),
             ),
           ),
+          // Expanded(
+          //   child: SingleChildScrollView(
+          //     padding: const EdgeInsets.symmetric(horizontal: 16),
+          //     scrollDirection: Axis.horizontal,
+          //     child: Row(
+          //       spacing: 12,
+          //       children: List.generate(widget.course.lessons.length, (index) {
+          //         final lesson = widget.course.lessons[index];
+
+          //         // Check if this lesson is accessible
+          //         final tracker = ref.watch(quizProgressProvider);
+          //         final isFirstLesson = index == 0;
+          //         bool canAccess = isFirstLesson;
+
+          //         if (!isFirstLesson) {
+          //           final previousLesson = widget.course.lessons[index - 1];
+          //           final prevCompleted = tracker.getCompletedLevelsForLesson(
+          //             previousLesson.lessonNumber,
+          //           );
+          //           final prevTotal = previousLesson.levels.length;
+          //           canAccess = prevCompleted == prevTotal && prevTotal > 0;
+          //         }
+
+          //         // ── GET LESSON-SPECIFIC IMAGE ──
+          //         // Parse lesson number from lessonNumber string (e.g., "1" from "Lesson 1")
+          //         final lessonNum =
+          //             int.tryParse(
+          //               lesson.lessonNumber.replaceAll(RegExp(r'[^0-9]'), ''),
+          //             ) ??
+          //             (index + 1);
+
+          //         final illustrationAsset = Illustrations.getLessonImage(
+          //           widget.course.courseTitle,
+          //           lessonNum,
+          //         );
+
+          //         return GestureDetector(
+          //           onTap: canAccess
+          //               ? () {
+          //                   context.pushNamed(LevelsScreen.path, extra: lesson);
+          //                 }
+          //               : null,
+          //           child: _buildLessonCard(
+          //             status: lesson.lessonNumber,
+          //             points: 0,
+          //             lesson: lesson,
+          //             illustrationAsset:
+          //                 illustrationAsset, // ← Use dynamic image
+          //             title: lesson.lessonTitle,
+          //             description: lesson.lessonDescription,
+          //             lessonIndex: index,
+          //             totalLessons: widget.course.lessons.length,
+          //           ),
+          //         );
+          //       }),
+          //     ),
+          //     // child: Row(
+          //     //   spacing: 12,
+          //     //   children: List.generate(widget.course.lessons.length, (index) {
+          //     //     final lesson = widget.course.lessons[index];
+
+          //     //     // Check if this lesson is accessible
+          //     //     final tracker = ref.watch(quizProgressProvider);
+          //     //     final isFirstLesson = index == 0;
+          //     //     bool canAccess = isFirstLesson;
+
+          //     //     if (!isFirstLesson) {
+          //     //       final previousLesson = widget.course.lessons[index - 1];
+          //     //       final prevCompleted = tracker.getCompletedLevelsForLesson(
+          //     //         previousLesson.lessonNumber,
+          //     //       );
+          //     //       final prevTotal = previousLesson.levels.length;
+          //     //       canAccess = prevCompleted == prevTotal && prevTotal > 0;
+          //     //     }
+
+          //     //     return GestureDetector(
+          //     //       onTap: canAccess
+          //     //           ? () {
+          //     //               context.pushNamed(LevelsScreen.path, extra: lesson);
+          //     //             }
+          //     //           : null, // No action if locked
+          //     //       child: _buildLessonCard(
+          //     //         status: lesson.lessonNumber,
+          //     //         points: 0,
+          //     //         lesson: lesson,
+          //     //         illustrationAsset: Illustrations.lesson1,
+          //     //         title: lesson.lessonTitle,
+          //     //         description: lesson.lessonDescription,
+          //     //         lessonIndex: index,
+          //     //         totalLessons: widget.course.lessons.length,
+          //     //       ),
+          //     //     );
+          //     //   }),
+          //     // ),
+          //   ),
+          // ),
           Padding(
             padding: const EdgeInsets.all(16).copyWith(bottom: 32),
             child: CustomElevatedButton(
@@ -461,10 +569,18 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
                 ),
 
                 // Illustration
+                // Image.asset(
+                //   illustrationAsset,
+                //   scale: 1.3,
+                //   color: isLocked ? AppColors.greyDark : null,
+                //   fit: BoxFit.contain,
+                // ),
                 Image.asset(
-                  illustrationAsset,
+                  illustrationAsset, // This is now the lesson-specific image
                   scale: 1.3,
-                  color: isLocked ? AppColors.greyDark : null,
+                  color: isLocked
+                      ? AppColors.greyDark
+                      : null, // ← Grey for locked
                   fit: BoxFit.contain,
                 ),
 

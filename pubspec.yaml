@@ -113,6 +113,51 @@ flutter:
     - assets/images/Financial_Health/JARS/HIVE BAR STABILISING.png
     - assets/images/Financial_Health/JARS/HIVE BAR SURVIVING.png
     - assets/images/Financial_Health/JARS/HIVE BAR THRIVING.png
+    - assets/images/lessons/BUDGETING/L2 BUDGETING.png
+    - assets/images/lessons/BUDGETING/L3 BUDGETING.png
+    - assets/images/lessons/BUDGETING/L4 BUDGETING.png
+    - assets/images/lessons/BUDGETING/L5 BUDGETING.png
+    - assets/images/lessons/BUDGETING/LV1 BUDGETING.png
+    - assets/images/lessons/NUMERACY_/L1 NUMERACY.png
+    - assets/images/lessons/NUMERACY_/L2 NUMERACY.png
+    - assets/images/lessons/NUMERACY_/L4 NUMERACY.png
+    - assets/images/lessons/NUMERACY_/L5 NUMERACY.png
+    - assets/images/lessons/NUMERACY_/LV3 NUMERACY.png
+    - assets/images/lessons/SAVINGS_/L1 SAVINGS.png
+    - assets/images/lessons/SAVINGS_/L3 SAVINGS.png
+    - assets/images/lessons/SAVINGS_/L4 SAVINGS.png
+    - assets/images/lessons/SAVINGS_/L5 SAVINGS.png
+    - assets/images/lessons/SAVINGS_/LV2 SAVINGS.png
+    - assets/images/other/BLUE FLOWER - Flight Boost.png
+    - assets/images/acheivements/7 DAY STREAK.png
+    - assets/images/acheivements/BUSY BEE BADGE.png
+    - assets/images/acheivements/BUZZING BEGINNER.png
+    - assets/images/acheivements/POLLEN PRO.png
+    - assets/images/acheivements/SUSU FIRST FLIGHT.png
+    - assets/images/icons/bottomtab/dashboard.png
+    - assets/images/icons/bottomtab/hive.png
+    - assets/images/icons/bottomtab/home.png
+    - assets/images/icons/bottomtab/tools.png
+    - assets/images/walk_through/home_arrow.png
+    - assets/images/walk_through/home_welcome.png
+    - assets/images/walk_through/home_cheerful.png
+    - assets/images/walk_through/home_budget.png
+    - assets/images/walk_through/dashboard.png
+    - assets/images/walk_through/boo.png
+    - assets/images/walk_through/debts.png
+    - assets/images/walk_through/debts_welcome.png
+    - assets/images/walk_through/goals.png
+    - assets/images/walk_through/taxes.png
+    - assets/images/walk_through/tools_welcome.png
+    - assets/images/other/PINK FLOWER - CURRENCY.png
+    - assets/images/other/SUN.png
+    - assets/images/icons/LEAGUE ICONS/BUMBLE LEAGUE.png
+    - assets/images/icons/LEAGUE ICONS/HONEY LEAGUE.png
+    - assets/images/icons/LEAGUE ICONS/MASON LEAGUE.png
+    - assets/images/icons/LEAGUE ICONS/ORCHID LEAGUE.png
+    - assets/images/icons/LEAGUE ICONS/QUEEN BEE.png
+    - assets/images/icons/LEAGUE ICONS/QUEENSGUARD.png
+    - assets/images/icons/LEAGUE ICONS/ROYAL LEAGUE.png
 
   fonts:
     - family: Excon

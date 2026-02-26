@@ -214,17 +214,20 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                               _buildStatItem(
                                 'Day streak',
                                 hiveStats.streak.toString(),
-                                AppIcon(
-                                  AppIcons.checkIcon,
-                                  color: AppColors.primary,
-                                  useOriginal: true,
-                                  size: 28,
+                                Image.asset(
+                                  'assets/images/other/SUN.png',
+                                  width: 28,
+                                  height: 28,
                                 ),
                               ),
                               _buildStatItem(
                                 'Flowers',
                                 hiveStats.flowers.toString(),
-                                Image.asset(Illustrations.hiveFlower),
+                                Image.asset(
+                                  'assets/images/other/PINK FLOWER - CURRENCY.png',
+                                  width: 28,
+                                  height: 28,
+                                ),
                               ),
                             ],
                           ),
