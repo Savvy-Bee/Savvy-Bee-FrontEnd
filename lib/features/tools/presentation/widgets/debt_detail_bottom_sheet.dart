@@ -153,7 +153,7 @@ class _DebtDetailBottomSheetContentState
                       const Gap(24),
 
                       // Progress (remaining + paid + coloured bar)
-                      // _ProgressSection(debt: debt),
+                      _ProgressSection(debt: debt),
                       const Gap(24),
 
                       // Stats grid
@@ -315,9 +315,11 @@ class _StatusChip extends StatelessWidget {
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Progress section
-// Remaining = debt.balance (what's still owed)
-// Already paid = debt.owed - debt.balance
-// Progress = already_paid / debt.owed
+// debt.balance  = amount already PAID
+// debt.owed     = total original debt
+// Remaining     = debt.owed - debt.balance
+// Already paid  = debt.balance
+// Progress      = debt.balance / debt.owed
 // ─────────────────────────────────────────────────────────────────────────────
 
 class _ProgressSection extends StatelessWidget {
@@ -326,8 +328,9 @@ class _ProgressSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final alreadyPaid = (debt.owed - debt.balance).clamp(0.0, debt.owed);
-    final remaining   = debt.balance.clamp(0.0, debt.owed);
+    // balance = amount already paid; owed = total original debt
+    final alreadyPaid = debt.balance.clamp(0.0, debt.owed);
+    final remaining   = (debt.owed - debt.balance).clamp(0.0, debt.owed);
     final progress    = debt.owed > 0
         ? (alreadyPaid / debt.owed).clamp(0.0, 1.0)
         : 0.0;

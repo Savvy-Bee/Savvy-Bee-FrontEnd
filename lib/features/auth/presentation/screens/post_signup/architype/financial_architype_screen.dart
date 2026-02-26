@@ -11,6 +11,7 @@ import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/icon_text_row_widget.dart';
 import 'package:savvy_bee_mobile/core/widgets/intro_text.dart';
 import 'package:savvy_bee_mobile/features/auth/domain/models/financial_architype_items.dart';
+import 'package:savvy_bee_mobile/features/auth/presentation/screens/login_screen.dart';
 import 'package:savvy_bee_mobile/features/auth/presentation/screens/post_signup/architype/pages/financial_architype_page_five.dart';
 import 'package:savvy_bee_mobile/features/auth/presentation/screens/post_signup/architype/pages/financial_architype_page_four.dart';
 import 'package:savvy_bee_mobile/features/auth/presentation/screens/post_signup/architype/pages/financial_architype_page_one.dart';
@@ -153,7 +154,7 @@ class _FinancialArchitypeScreenState
         _clearAllSelections();
 
         // Onboarding complete — go to home
-        context.goNamed(HomeScreen.path);
+        context.goNamed(LoginScreen.path);
       } else {
         final errorMsg = ref.read(authProvider).errorMessage;
         CustomSnackbar.show(

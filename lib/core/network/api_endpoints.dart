@@ -54,7 +54,7 @@ class ApiEndpoints {
   static const String debtHome = '/tools/debt/home';
   static String createDebtStep(String stepNumber) =>
       '/tools/debt/create/$stepNumber';
-  static String manualFundDebt(String debtId) => '/tools/debt/fund/$debtId';
+  static String manualFundDebt(String debtId) => '/tools/debt/update/manual/$debtId';
 static const String createManualDebt = '/tools/debt/create/manual';
 
   /// Bills Endpoints

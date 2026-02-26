@@ -55,20 +55,10 @@ const List<Map<String, String>> _kLocalPersonalities = [
   },
 ];
 
-/// Resolves an API [Persona] to its matching local entry.
-///
-/// Matching priority:
-///   1. API `ID` (e.g. "Nurturing_Guide") normalised to snake_case vs local `id`
-///   2. API `Name` (e.g. "Boo") case-insensitive vs local `name`
-///
-/// Falls back to Boo if nothing matches.
 Map<String, String> _resolveLocalPersonality({
   required String apiId,
   required String apiName,
 }) {
-  print(apiId);
-  print(apiName);
-  // Normalise the API id: lowercase + replace spaces/hyphens with underscores
   final normId = apiId.toLowerCase().replaceAll(RegExp(r'[\s\-]+'), '_');
   final normName = apiName.toLowerCase().trim();
 
@@ -87,28 +77,7 @@ Map<String, String> _resolveLocalPersonality({
 // Walkthrough steps
 // ─────────────────────────────────────────────────────────────────────────────
 
-enum _ToolsWalkthroughStep {
-  /// "tools_welcome" image, no arrow, bottom-left
-  welcome,
-
-  /// "boo" image, no arrow, bottom-left
-  boo,
-
-  /// "home_budget" image, arrow below Budgets row, bottom-right
-  budget,
-
-  /// "goals" image, arrow below Goals row, bottom-left
-  goals,
-
-  /// "debts" image, arrow below Debt Tracker row, bottom-right
-  debts,
-
-  /// "taxes" image, arrow below Tax row, bottom-right
-  taxes,
-
-  /// Walkthrough finished — nothing rendered
-  done,
-}
+enum _ToolsWalkthroughStep { welcome, boo, budget, goals, debts, taxes, done }
 
 const _kToolsWalkthroughKey = 'tools_walkthrough_completed';
 
@@ -130,7 +99,6 @@ class _ToolsScreenState extends ConsumerState<ToolsScreen> {
   _ToolsWalkthroughStep _step = _ToolsWalkthroughStep.done;
   bool _walkthroughChecked = false;
 
-  // GlobalKeys – one per tool-list item that needs an arrow
   final GlobalKey _budgetItemKey = GlobalKey();
   final GlobalKey _goalsItemKey = GlobalKey();
   final GlobalKey _debtsItemKey = GlobalKey();
@@ -145,22 +113,10 @@ class _ToolsScreenState extends ConsumerState<ToolsScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.invalidate(homeDataProvider);
-
-      // ── Refresh persona every time Tools screen is opened ────────────────
       ref.invalidate(myPersonaProvider);
-
       _checkWalkthrough();
     });
   }
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   WidgetsBinding.instance.addPostFrameCallback((_) {
-  //     ref.invalidate(homeDataProvider);
-  //     _checkWalkthrough();
-  //   });
-  // }
 
   // ─────────────────────────────────────────────────────────────────────────
   // Walkthrough helpers
@@ -208,7 +164,6 @@ class _ToolsScreenState extends ConsumerState<ToolsScreen> {
 
   bool get _isWalkthroughActive => _step != _ToolsWalkthroughStep.done;
 
-  /// Returns the bounding [Rect] of a widget in global (screen) coordinates.
   Rect? _globalRect(GlobalKey key) {
     final ctx = key.currentContext;
     if (ctx == null) return null;
@@ -217,7 +172,6 @@ class _ToolsScreenState extends ConsumerState<ToolsScreen> {
     return box.localToGlobal(Offset.zero) & box.size;
   }
 
-  /// Which key (if any) is the current spotlight target?
   GlobalKey? get _currentHighlightKey {
     switch (_step) {
       case _ToolsWalkthroughStep.budget:
@@ -312,13 +266,12 @@ class _ToolsScreenState extends ConsumerState<ToolsScreen> {
   @override
   Widget build(BuildContext context) {
     final homeDataAsync = ref.watch(homeDataProvider);
-    final personaAsync = ref.watch(myPersonaProvider); // ← added
+    final personaAsync = ref.watch(myPersonaProvider);
     final firstName = homeDataAsync.valueOrNull?.data?.firstName ?? '';
     final isLoading = homeDataAsync.isLoading && !homeDataAsync.hasValue;
     final hasError = homeDataAsync.hasError;
     final statusText = homeDataAsync.valueOrNull?.data?.aiData?.status ?? '';
 
-    // Resolve highlight rect for the current step (may be null if key not yet laid out)
     final highlightRect = _currentHighlightKey != null
         ? _globalRect(_currentHighlightKey!)
         : null;
@@ -382,8 +335,6 @@ class _ToolsScreenState extends ConsumerState<ToolsScreen> {
                         child: ListView(
                           padding: const EdgeInsets.fromLTRB(24, 0, 24, 12),
                           children: [
-                            // Each item wrapped in KeyedSubtree so the
-                            // GlobalKey attaches to a real widget node.
                             KeyedSubtree(
                               key: _budgetItemKey,
                               child: _buildToolItem(
@@ -454,17 +405,7 @@ class _ToolsScreenState extends ConsumerState<ToolsScreen> {
                     ),
                   ),
                 ),
-
-              // ── Error overlay ───────────────────────────────────────────
-              if (hasError)
-                CustomErrorWidget(
-                  icon: Icons.person_outline,
-                  title: 'Unable to Load User Info',
-                  subtitle:
-                      'We couldn\'t fetch your account data. Please check your connection and try again.',
-                  actionButtonText: 'Retry',
-                  onActionPressed: () => ref.invalidate(homeDataProvider),
-                ),
+              // NOTE: Error widget removed from here — moved to outermost Stack below
             ],
           ),
         ),
@@ -475,6 +416,25 @@ class _ToolsScreenState extends ConsumerState<ToolsScreen> {
             step: _step,
             highlightRect: highlightRect,
             onTap: _advanceWalkthrough,
+          ),
+
+        // ── Error overlay – topmost layer, covers AppBar + FAB + walkthrough ──
+        // Solid white background so nothing beneath bleeds through.
+        if (hasError)
+          Positioned.fill(
+            child: Material(
+              color: Colors.white,
+              child: SafeArea(
+                child: CustomErrorWidget(
+                  icon: Icons.person_outline,
+                  title: 'Unable to Load User Info',
+                  subtitle:
+                      'We couldn\'t fetch your account data. Please check your connection and try again.',
+                  actionButtonText: 'Retry',
+                  onActionPressed: () => ref.invalidate(homeDataProvider),
+                ),
+              ),
+            ),
           ),
       ],
     );
@@ -679,101 +639,6 @@ class _ToolsScreenState extends ConsumerState<ToolsScreen> {
     );
   }
 
-  // AppBar _buildAppBar(String firstName, BuildContext context) {
-  //   return AppBar(
-  //     elevation: 0,
-  //     backgroundColor: Colors.transparent,
-  //     flexibleSpace: Container(
-  //       decoration: const BoxDecoration(
-  //         gradient: LinearGradient(
-  //           begin: Alignment.topLeft,
-  //           end: Alignment.topRight,
-  //           colors: [Color(0xFFFFEFB5), Color(0xFFFFC300)],
-  //         ),
-  //       ),
-  //     ),
-  //     title: Row(
-  //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //       children: [
-  //         Row(
-  //           mainAxisSize: MainAxisSize.min,
-  //           children: [
-  //             InkWell(
-  //               onTap: () => context.pushNamed(ChatScreen.path),
-  //               child: Row(
-  //                 mainAxisSize: MainAxisSize.min,
-  //                 children: [
-  //                   Container(
-  //                     width: 32,
-  //                     height: 32,
-  //                     decoration: BoxDecoration(
-  //                       shape: BoxShape.circle,
-  //                       border: Border.all(color: AppColors.primary),
-  //                     ),
-  //                     child: Center(
-  //                       child: Image.asset(
-  //                         'assets/images/topbar/nav-left-icon.png',
-  //                         width: 32,
-  //                         height: 32,
-  //                       ),
-  //                     ),
-  //                   ),
-  //                   const SizedBox(width: 6),
-  //                   const Text(
-  //                     'Chat with Nahl',
-  //                     style: TextStyle(
-  //                       fontFamily: 'GeneralSans',
-  //                       fontSize: 12,
-  //                       fontWeight: FontWeight.w500,
-  //                       color: Colors.black,
-  //                     ),
-  //                   ),
-  //                 ],
-  //               ),
-  //             ),
-  //             const SizedBox(width: 25),
-  //             Image.asset(
-  //               'assets/images/topbar/nav-center-icon.png',
-  //               width: 30,
-  //               height: 32,
-  //               fit: BoxFit.contain,
-  //             ),
-  //           ],
-  //         ),
-  //         GestureDetector(
-  //           onTap: () => context.pushNamed(ProfileScreen.path),
-  //           child: Container(
-  //             width: 32,
-  //             height: 32,
-  //             decoration: BoxDecoration(
-  //               color: Colors.white,
-  //               shape: BoxShape.circle,
-  //               border: Border.all(color: Colors.black, width: 1),
-  //             ),
-  //             child: Center(
-  //               child: Text(
-  //                 firstName.isNotEmpty
-  //                     ? (firstName.length > 1
-  //                           ? firstName.substring(0, 2).toUpperCase()
-  //                           : firstName[0].toUpperCase())
-  //                     : 'Me',
-  //                 style: const TextStyle(
-  //                   fontFamily: 'GeneralSans',
-  //                   fontWeight: FontWeight.w500,
-  //                   fontSize: 16,
-  //                   color: Colors.black,
-  //                 ),
-  //               ),
-  //             ),
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //     centerTitle: false,
-  //     automaticallyImplyLeading: false,
-  //   );
-  // }
-
   // ─────────────────────────────────────────────────────────────────────────
   // FAB (unchanged)
   // ─────────────────────────────────────────────────────────────────────────
@@ -804,14 +669,13 @@ class _ToolsScreenState extends ConsumerState<ToolsScreen> {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// _ToolsWalkthroughOverlay
+// _ToolsWalkthroughOverlay (unchanged)
 // ─────────────────────────────────────────────────────────────────────────────
 
-/// Immutable config for each walkthrough step.
 class _StepConfig {
   const _StepConfig({
     required this.imagePath,
-    required this.imageAlignment, // which corner the character sits in
+    required this.imageAlignment,
     this.hasArrow = false,
   });
 
@@ -820,7 +684,6 @@ class _StepConfig {
   final bool hasArrow;
 }
 
-// Map every step to its visual config.
 const Map<_ToolsWalkthroughStep, _StepConfig> _kStepConfigs = {
   _ToolsWalkthroughStep.welcome: _StepConfig(
     imagePath: 'assets/images/walk_through/tools_welcome.png',
@@ -861,12 +724,8 @@ class _ToolsWalkthroughOverlay extends StatelessWidget {
 
   final _ToolsWalkthroughStep step;
   final VoidCallback onTap;
-
-  /// Bounding rect (global coords) of the item to spotlight.
-  /// Null when no arrow/highlight is active.
   final Rect? highlightRect;
 
-  // Padding inflated around the spotlight target.
   static const double _hPad = 16.0;
   static const double _vPad = -2.5;
 
@@ -877,7 +736,6 @@ class _ToolsWalkthroughOverlay extends StatelessWidget {
 
     final size = MediaQuery.of(context).size;
 
-    // Inflate the highlight rect so a white background visually bleeds out.
     final Rect? paddedRect = (config.hasArrow && highlightRect != null)
         ? Rect.fromLTRB(
             highlightRect!.left - _hPad,
@@ -891,13 +749,10 @@ class _ToolsWalkthroughOverlay extends StatelessWidget {
       onTap: onTap,
       child: Stack(
         children: [
-          // ── Cut-out backdrop ──────────────────────────────────────────
           CustomPaint(
             size: size,
             painter: _CutOutOverlayPainter(cutOut: paddedRect),
           ),
-
-          // ── White spotlight behind the target row ──────────────────────
           if (paddedRect != null)
             Positioned(
               left: paddedRect.left,
@@ -913,8 +768,6 @@ class _ToolsWalkthroughOverlay extends StatelessWidget {
                 ),
               ),
             ),
-
-          // ── Arrow below the spotlight ──────────────────────────────────
           if (paddedRect != null)
             Positioned(
               left: paddedRect.left + 8,
@@ -929,13 +782,9 @@ class _ToolsWalkthroughOverlay extends StatelessWidget {
                 ),
               ),
             ),
-
-          // ── Character image ────────────────────────────────────────────
           Align(
             alignment: config.imageAlignment,
             child: IgnorePointer(
-              // The GestureDetector on the whole overlay handles the tap;
-              // we IgnorePointer here so it bubbles up correctly.
               ignoring: false,
               child: Image.asset(
                 config.imagePath,
@@ -951,11 +800,7 @@ class _ToolsWalkthroughOverlay extends StatelessWidget {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// _CutOutOverlayPainter
-//
-// Draws a full-screen semi-transparent dark layer, then "punches out" a
-// rounded rectangle at [cutOut] using the even-odd fill rule so that region
-// stays fully transparent.
+// _CutOutOverlayPainter (unchanged)
 // ─────────────────────────────────────────────────────────────────────────────
 
 class _CutOutOverlayPainter extends CustomPainter {
@@ -973,8 +818,6 @@ class _CutOutOverlayPainter extends CustomPainter {
       return;
     }
 
-    // Even-odd rule: where the two shapes overlap the fill is removed,
-    // leaving the cutOut region transparent.
     final path = Path()
       ..fillType = PathFillType.evenOdd
       ..addRect(fullRect)

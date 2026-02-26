@@ -22,7 +22,7 @@ class StorageService {
       await _secureStorage.write(key: authTokenKey, value: token);
 
       // Save expiry timestamp
-      final expiryTime = DateTime.now().add(const Duration(days: 30));
+      final expiryTime = DateTime.now().add(const Duration(hours: 24));
       await _secureStorage.write(
         key: tokenExpiryKey,
         value: expiryTime.toIso8601String(),

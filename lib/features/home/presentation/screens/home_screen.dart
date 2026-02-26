@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:savvy_bee_mobile/features/chat/presentation/providers/chat_providers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/app_icons.dart';
@@ -41,78 +40,6 @@ import '../../../hive/presentation/providers/course_providers.dart';
 import '../../../hive/presentation/screens/lesson/lesson_home_screen.dart';
 import '../widgets/health_card.dart';
 
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Local personality catalogue used to resolve API persona → image + name
-// ─────────────────────────────────────────────────────────────────────────────
-
-const List<Map<String, String>> _kLocalPersonalities = [
-  {
-    'id': 'loan_pro',
-    'name': 'Dash',
-    'imagePath': 'assets/images/icons/dash.png',
-  },
-  {
-    'id': 'budgeting_bee',
-    'name': 'Penny',
-    'imagePath': 'assets/images/icons/penny.png',
-  },
-  {
-    'id': 'saving_star',
-    'name': 'Bloom',
-    'imagePath': 'assets/images/icons/bloom.png',
-  },
-  {
-    'id': 'big_dreamer',
-    'name': 'Susu',
-    'imagePath': 'assets/images/icons/susu.png',
-  },
-  {
-    'id': 'matching_bee',
-    'name': 'Luna',
-    'imagePath': 'assets/images/icons/luna.png',
-  },
-  {
-    'id': 'quiz_bee',
-    'name': 'Boo',
-    'imagePath': 'assets/images/icons/boo.png',
-  },
-  {
-    'id': 'scam_spotter',
-    'name': 'Loki',
-    'imagePath': 'assets/images/icons/loki.png',
-  },
-];
-
-/// Resolves an API [Persona] to its matching local entry.
-///
-/// Matching priority:
-///   1. API `ID` (e.g. "Nurturing_Guide") normalised to snake_case vs local `id`
-///   2. API `Name` (e.g. "Boo") case-insensitive vs local `name`
-///
-/// Falls back to Boo if nothing matches.
-Map<String, String> _resolveLocalPersonality({
-  required String apiId,
-  required String apiName,
-}) {
-  print(apiId);
-  print(apiName);
-  // Normalise the API id: lowercase + replace spaces/hyphens with underscores
-  final normId   = apiId.toLowerCase().replaceAll(RegExp(r'[\s\-]+'), '_');
-  final normName = apiName.toLowerCase().trim();
-
-  return _kLocalPersonalities.firstWhere(
-    (p) =>
-        p['id']!.toLowerCase() == normId ||
-        p['name']!.toLowerCase() == normName,
-    orElse: () => _kLocalPersonalities.firstWhere(
-      (p) => p['name']! == 'Boo',
-      orElse: () => _kLocalPersonalities.first,
-    ),
-  );
-}
-
-
 // ─────────────────────────────────────────────────────────────────────────────
 // Walkthrough step enum
 // ─────────────────────────────────────────────────────────────────────────────
@@ -134,8 +61,7 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   // ── Walkthrough state ─────────────────────────────────────────────────────
-  _WalkthroughStep _walkthroughStep =
-      _WalkthroughStep.done; // hidden until checked
+  _WalkthroughStep _walkthroughStep = _WalkthroughStep.done; // hidden until checked
   bool _walkthroughChecked = false;
 
   // ── Budget item key (used to position the arrow) ──────────────────────────
@@ -158,18 +84,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   // ─────────────────────────────────────────────────────────────────────────
   // Lifecycle
   // ─────────────────────────────────────────────────────────────────────────
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _showRecommendation = true;
-
-  //   WidgetsBinding.instance.addPostFrameCallback((_) {
-  //     ref.invalidate(homeDataProvider);
-  //     ref.invalidate(allCoursesProvider);
-  //     _checkWalkthrough();
-  //   });
-  // }
-
   @override
   void initState() {
     super.initState();
@@ -178,10 +92,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.invalidate(homeDataProvider);
       ref.invalidate(allCoursesProvider);
-
-      // ── Important: refresh persona every time home is opened ────────
-      ref.invalidate(myPersonaProvider);
-
       _checkWalkthrough();
     });
   }
@@ -361,155 +271,147 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           floatingActionButton: _buildHealthJarFAB(statusText),
           body: Stack(
             children: [
-              // ── Main content ──────────────────────────────────────────────────
-              ListView(
-                children: [
-                  const Gap(6),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Hi, $firstName",
-                          style: const TextStyle(
-                            fontFamily: 'GeneralSans',
-                            fontSize: 24,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black,
-                            letterSpacing: 0.48,
-                          ),
-                        ),
-                        Text(
-                          _getTimeBasedGreeting(),
-                          style: const TextStyle(
-                            fontFamily: 'GeneralSans',
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black,
-                            letterSpacing: 0.24,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const Gap(24),
-
-                  // ── Complete Setup card – firstItemKey measures the budget row ──
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: CompleteSetupCard(
-                      completedCount: 0,
-                      totalCount: 3,
-                      firstItemKey:
-                          _budgetItemKey, // ← attaches to the first _SetupItemTile widget
-                      items: [
-                        SetupItem(
-                          icon: 'assets/icons/Calculator.png',
-                          title: 'Set up Budgeting',
-                          subtitle: 'Take control of your spending',
-                          onTap: () => context.pushNamed(BudgetsScreen.path),
-                        ),
-                        SetupItem(
-                          icon: 'assets/icons/Square-Check.png',
-                          title: 'Start saving with Goals',
-                          subtitle: 'Start a new goal',
-                          onTap: () => context.pushNamed(GoalsScreen.path),
-                        ),
-                        SetupItem(
-                          icon: 'assets/icons/BookOpen.png',
-                          title: 'Reduce your Debt',
-                          subtitle: 'A smarter way to track existing debt',
-                          onTap: () => context.pushNamed(DebtScreen.path),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const Gap(24),
-
-                  // ── Courses ───────────────────────────────────────────────────
-                  coursesAsync.when(
-                    data: (courses) => Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Text(
-                            'LEARN & GROW',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontFamily: 'GeneralSans',
-                              fontWeight: FontWeight.w500,
-                              color: AppColors.grey,
-                              letterSpacing: 0.24,
-                            ),
-                          ),
-                        ),
-                        const Gap(16),
-                        SingleChildScrollView(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            spacing: 12,
-                            mainAxisSize: MainAxisSize.min,
-                            children: courses
-                                .map(
-                                  (course) => _buildCourseCard(
-                                    course: course,
-                                    color: AppColors.primary,
-                                    imagePath:
-                                        courseImagePaths[courses.indexOf(
-                                          course,
-                                        )],
-                                  ),
-                                )
-                                .toList(),
-                          ),
-                        ),
-                      ],
-                    ),
-                    error: (_, __) => const SizedBox.shrink(),
-                    loading: () => Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 32,
+          // ── Main content ──────────────────────────────────────────────────
+          ListView(
+            children: [
+              const Gap(6),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Hi, $firstName",
+                      style: const TextStyle(
+                        fontFamily: 'GeneralSans',
+                        fontSize: 24,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
+                        letterSpacing: 0.48,
                       ),
-                      child: Center(
-                        child: SizedBox(
-                          width: 32,
-                          height: 32,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2.5,
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              AppColors.primary.withOpacity(0.7),
-                            ),
-                          ),
+                    ),
+                    Text(
+                      _getTimeBasedGreeting(),
+                      style: const TextStyle(
+                        fontFamily: 'GeneralSans',
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
+                        letterSpacing: 0.24,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Gap(24),
+
+              // ── Complete Setup card – firstItemKey measures the budget row ──
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: CompleteSetupCard(
+                  completedCount: 0,
+                  totalCount: 3,
+                  firstItemKey: _budgetItemKey, // ← attaches to the first _SetupItemTile widget
+                  items: [
+                    SetupItem(
+                      icon: 'assets/icons/Calculator.png',
+                      title: 'Set up Budgeting',
+                      subtitle: 'Take control of your spending',
+                      onTap: () => context.pushNamed(BudgetsScreen.path),
+                    ),
+                    SetupItem(
+                      icon: 'assets/icons/Square-Check.png',
+                      title: 'Start saving with Goals',
+                      subtitle: 'Start a new goal',
+                      onTap: () => context.pushNamed(GoalsScreen.path),
+                    ),
+                    SetupItem(
+                      icon: 'assets/icons/BookOpen.png',
+                      title: 'Reduce your Debt',
+                      subtitle: 'A smarter way to track existing debt',
+                      onTap: () => context.pushNamed(DebtScreen.path),
+                    ),
+                  ],
+                ),
+              ),
+              const Gap(24),
+
+              // ── Courses ───────────────────────────────────────────────────
+              coursesAsync.when(
+                data: (courses) => Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Text(
+                        'LEARN & GROW',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'GeneralSans',
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.grey,
+                          letterSpacing: 0.24,
+                        ),
+                      ),
+                    ),
+                    const Gap(16),
+                    SingleChildScrollView(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        spacing: 12,
+                        mainAxisSize: MainAxisSize.min,
+                        children: courses
+                            .map(
+                              (course) => _buildCourseCard(
+                                course: course,
+                                color: AppColors.primary,
+                                imagePath: courseImagePaths[courses.indexOf(course)],
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    ),
+                  ],
+                ),
+                error: (_, __) => const SizedBox.shrink(),
+                loading: () => Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+                  child: Center(
+                    child: SizedBox(
+                      width: 32,
+                      height: 32,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2.5,
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          AppColors.primary.withOpacity(0.7),
                         ),
                       ),
                     ),
                   ),
+                ),
+              ),
 
-                  const Gap(24),
+              const Gap(24),
 
-                  InsightsSection(
-                    cards: [
-                      LearnCard(
-                        imagePath: 'assets/images/other/insights-one.jpg',
-                        title: 'The art of credit scoring in Nigeria',
-                        description: '📖 3 min story',
-                        onTap: () {
-                          showBlogPostBottomSheet(
-                            context,
-                            BlogPost(
-                              category: 'FROM SAVVY BLOG',
-                              title: 'The Art of Credit Scoring in Nigeria',
-                              subtitle:
-                                  'Are you really listening to what they\'re saying',
-                              date: 'January, 2026',
-                              imagePath: 'assets/images/other/insights-one.jpg',
-                              readTimeMinutes: 3,
-                              content:
-                                  '''Credit scoring isn't just an "abroad" thing, it's already shaping financial lives in Nigeria. Every time you apply for a loan, buy a phone on credit, or even use some fintech apps, your credit score is being checked. Yet, many Nigerians still think it's a foreign concept.
+              InsightsSection(
+                cards: [
+                  LearnCard(
+                    imagePath: 'assets/images/other/insights-one.jpg',
+                    title: 'The art of credit scoring in Nigeria',
+                    description: '📖 3 min story',
+                    onTap: () {
+                      showBlogPostBottomSheet(
+                        context,
+                        BlogPost(
+                          category: 'FROM SAVVY BLOG',
+                          title: 'The Art of Credit Scoring in Nigeria',
+                          subtitle: 'Are you really listening to what they\'re saying',
+                          date: 'January, 2026',
+                          imagePath: 'assets/images/other/insights-one.jpg',
+                          readTimeMinutes: 3,
+                          content:
+                              '''Credit scoring isn't just an "abroad" thing, it's already shaping financial lives in Nigeria. Every time you apply for a loan, buy a phone on credit, or even use some fintech apps, your credit score is being checked. Yet, many Nigerians still think it's a foreign concept.
 The truth? Your financial reputation is now a digital score, and it can open doors or close them. Understanding how it works here, in our own system, is the first step to using it to your advantage.
 Ask yourself:
 ●	Do I know my credit score is being tracked right now?
@@ -517,27 +419,26 @@ Ask yourself:
 ●	Am I building a score that will help me or hold me back?
 Your credit score is not just a number, it's your financial CV in today's Nigeria.
 ''',
-                            ),
-                          );
-                        },
-                      ),
-                      LearnCard(
-                        imagePath: 'assets/images/other/insights-two.jpg',
-                        title: 'How to build an emergency fund on a...',
-                        description: '📖 3 min story',
-                        onTap: () {
-                          showBlogPostBottomSheet(
-                            context,
-                            BlogPost(
-                              category: 'FROM SAVVY BLOG',
-                              title:
-                                  'How to build an emergency fund on a tight budget',
-                              subtitle: 'Small steps, big security',
-                              date: 'January, 2026',
-                              imagePath: 'assets/images/other/insights-two.jpg',
-                              readTimeMinutes: 3,
-                              content:
-                                  '''An emergency fund isn't a luxury, it's your financial seatbelt. Life doesn't wait for you to be ready, and having a safety net can mean the difference between a setback and a crisis. But when money is tight, building one can feel impossible.
+                        ),
+                      );
+                    },
+                  ),
+                  LearnCard(
+                    imagePath: 'assets/images/other/insights-two.jpg',
+                    title: 'How to build an emergency fund on a...',
+                    description: '📖 3 min story',
+                    onTap: () {
+                      showBlogPostBottomSheet(
+                        context,
+                        BlogPost(
+                          category: 'FROM SAVVY BLOG',
+                          title: 'How to build an emergency fund on a tight budget',
+                          subtitle: 'Small steps, big security',
+                          date: 'January, 2026',
+                          imagePath: 'assets/images/other/insights-two.jpg',
+                          readTimeMinutes: 3,
+                          content:
+                              '''An emergency fund isn't a luxury, it's your financial seatbelt. Life doesn't wait for you to be ready, and having a safety net can mean the difference between a setback and a crisis. But when money is tight, building one can feel impossible.
 
 The good news? You don't need to save thousands overnight. The key is starting small, staying consistent, and making your money move without you even noticing.
 
@@ -549,28 +450,26 @@ Ask yourself these three starter questions:
 
 If you answered "yes," you're already on your way. The hardest part is simply beginning. Need a plan? We've got you covered.
 ''',
-                            ),
-                          );
-                        },
-                      ),
-                      LearnCard(
-                        imagePath: 'assets/images/other/insights-three.jpg',
-                        title: 'Should i save financially with my partner?',
-                        description: '📖 3 min story',
-                        onTap: () {
-                          showBlogPostBottomSheet(
-                            context,
-                            BlogPost(
-                              category: 'FROM SAVVY BLOG',
-                              title:
-                                  'Should you save financially with your partner?',
-                              subtitle: 'Let\'s get financially intimate',
-                              date: 'January, 2026',
-                              imagePath:
-                                  'assets/images/other/insights-three.jpg',
-                              readTimeMinutes: 3,
-                              content:
-                                  '''Saving as a couple is about more than just pooling funds, it's a powerful way to build trust, strengthen communication, and bring your shared dreams to life. But before you open a joint account, it's important to pause and reflect.
+                        ),
+                      );
+                    },
+                  ),
+                  LearnCard(
+                    imagePath: 'assets/images/other/insights-three.jpg',
+                    title: 'Should i save financially with my partner?',
+                    description: '📖 3 min story',
+                    onTap: () {
+                      showBlogPostBottomSheet(
+                        context,
+                        BlogPost(
+                          category: 'FROM SAVVY BLOG',
+                          title: 'Should you save financially with your partner?',
+                          subtitle: 'Let\'s get financially intimate',
+                          date: 'January, 2026',
+                          imagePath: 'assets/images/other/insights-three.jpg',
+                          readTimeMinutes: 3,
+                          content:
+                              '''Saving as a couple is about more than just pooling funds, it's a powerful way to build trust, strengthen communication, and bring your shared dreams to life. But before you open a joint account, it's important to pause and reflect.
 
 Not every couple is ready to save together, and that's okay. The key is honesty and alignment. Start by asking yourselves three important questions:
 
@@ -581,26 +480,46 @@ Are we both committed to contributing regularly?
 Can we talk about money openly?
 If you answered "yes" to all these questions, you're ready to take the next step toward building a stronger financial future together. Still not sure?
 ''',
-                            ),
-                          );
-                        },
-                      ),
-                    ],
+                        ),
+                      );
+                    },
                   ),
-                  const Gap(24),
-
-                  if (_showRecommendation) const Gap(24),
-                  _buildFeedbackSection(),
                 ],
               ),
+              const Gap(24),
 
-              // ── Error overlay ─────────────────────────────────────────────────
-              if (hasError)
-                CustomErrorWidget(
+              if (_showRecommendation) const Gap(24),
+              _buildFeedbackSection(),
+            ],
+          ),
+
+        ],
+      ),
+        ), // end Scaffold
+
+        // ── Walkthrough overlay – sits above the entire Scaffold (AppBar + FAB included) ──
+        if (_walkthroughChecked && _isWalkthroughActive)
+          _WalkthroughOverlay(
+            step: _walkthroughStep,
+            currentImage: _currentWalkthroughImage!,
+            budgetArrowY: _walkthroughStep == _WalkthroughStep.budget
+                ? _getBudgetItemArrowY()
+                : null,
+            onTap: _advanceWalkthrough,
+          ),
+
+        // ── Error overlay – topmost layer, covers AppBar + FAB + walkthrough ──
+        // Uses a white full-screen background so nothing beneath bleeds through.
+        if (hasError)
+          Positioned.fill(
+            child: Material(
+              color: Colors.white,
+              child: SafeArea(
+                child: CustomErrorWidget(
                   icon: Icons.person_outline,
                   title: 'Unable to Load User Info',
                   subtitle:
-                      'We couldn`t fetch your account data. Please check your connection and try again.',
+                      'We couldn\'t fetch your account data. Please check your connection and try again.',
                   actionButtonText: 'Retry',
                   onActionPressed: () {
                     ref.invalidate(homeDataProvider);
@@ -613,18 +532,8 @@ If you answered "yes" to all these questions, you're ready to take the next step
                   },
                   logoutButtonText: 'Logout',
                 ),
-            ],
-          ),
-        ), // end Scaffold
-        // ── Walkthrough overlay – sits above the entire Scaffold (AppBar + FAB included) ──
-        if (_walkthroughChecked && _isWalkthroughActive)
-          _WalkthroughOverlay(
-            step: _walkthroughStep,
-            currentImage: _currentWalkthroughImage!,
-            budgetArrowY: _walkthroughStep == _WalkthroughStep.budget
-                ? _getBudgetItemArrowY()
-                : null,
-            onTap: _advanceWalkthrough,
+              ),
+            ),
           ),
       ],
     );
@@ -635,8 +544,6 @@ If you answered "yes" to all these questions, you're ready to take the next step
   // ─────────────────────────────────────────────────────────────────────────
 
   AppBar _buildAppBar(String firstName, BuildContext context, bool isEnabled) {
-    final personaAsync = ref.watch(myPersonaProvider);
-
     return AppBar(
       backgroundColor: Colors.white,
       elevation: 0,
@@ -652,13 +559,11 @@ If you answered "yes" to all these questions, you're ready to take the next step
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // ── This is the part we want to make dynamic ──
                   InkWell(
                     onTap: () => context.pushNamed(ChatScreen.path),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        // Dynamic persona avatar
                         Container(
                           width: 32,
                           height: 32,
@@ -666,36 +571,11 @@ If you answered "yes" to all these questions, you're ready to take the next step
                             shape: BoxShape.circle,
                             border: Border.all(color: AppColors.primary),
                           ),
-                          child: ClipOval(
-                            child: personaAsync.when(
-                              data: (persona) {
-                                if (persona == null) {
-                                  return _defaultChatIcon();
-                                }
-                                final local = _resolveLocalPersonality(
-                                  apiId: persona.id,
-                                  apiName: persona.name,
-                                );
-                                return Image.asset(
-                                  local['imagePath']!,
-                                  width: 32,
-                                  height: 32,
-                                  fit: BoxFit.cover,
-                                  errorBuilder: (_, __, ___) =>
-                                      _defaultChatIcon(),
-                                );
-                              },
-                              loading: () => Center(
-                                child: SizedBox(
-                                  width: 20,
-                                  height: 20,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2.5,
-                                    color: AppColors.primary,
-                                  ),
-                                ),
-                              ),
-                              error: (_, __) => _defaultChatIcon(),
+                          child: Center(
+                            child: Image.asset(
+                              'assets/images/topbar/nav-left-icon.png',
+                              width: 32,
+                              height: 32,
                             ),
                           ),
                         ),
@@ -712,7 +592,6 @@ If you answered "yes" to all these questions, you're ready to take the next step
                       ],
                     ),
                   ),
-
                   Image.asset(
                     'assets/images/topbar/nav-center-icon.png',
                     width: 30,
@@ -723,8 +602,6 @@ If you answered "yes" to all these questions, you're ready to take the next step
               ),
             ),
           ),
-
-          // Right side (profile avatar) unchanged
           Expanded(
             flex: 23,
             child: Padding(
@@ -736,8 +613,7 @@ If you answered "yes" to all these questions, you're ready to take the next step
                     opacity: isEnabled ? 1.0 : 0.5,
                     child: GestureDetector(
                       onTap: isEnabled
-                          ? () =>
-                                context.pushNamed(ProfileScreen.path, extra: '')
+                          ? () => context.pushNamed(ProfileScreen.path, extra: '')
                           : null,
                       child: Container(
                         width: 32,
@@ -774,120 +650,6 @@ If you answered "yes" to all these questions, you're ready to take the next step
     );
   }
 
-  // Small helper widget for fallback/default icon
-  Widget _defaultChatIcon() {
-    return const Center(
-      child: Icon(Icons.smart_toy, size: 20, color: AppColors.primary),
-    );
-  }
-
-  // AppBar _buildAppBar(String firstName, BuildContext context, bool isEnabled) {
-  //   return AppBar(
-  //     backgroundColor: Colors.white,
-  //     elevation: 0,
-  //     automaticallyImplyLeading: false,
-  //     toolbarHeight: 56,
-  //     titleSpacing: 0,
-  //     title: Row(
-  //       children: [
-  //         Expanded(
-  //           flex: 27,
-  //           child: Padding(
-  //             padding: const EdgeInsets.only(left: 16),
-  //             child: Row(
-  //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //               children: [
-  //                 InkWell(
-  //                   onTap: () => context.pushNamed(ChatScreen.path),
-  //                   child: Row(
-  //                     mainAxisSize: MainAxisSize.min,
-  //                     children: [
-  //                       Container(
-  //                         width: 32,
-  //                         height: 32,
-  //                         decoration: BoxDecoration(
-  //                           shape: BoxShape.circle,
-  //                           border: Border.all(color: AppColors.primary),
-  //                         ),
-  //                         child: Center(
-  //                           child: Image.asset(
-  //                             'assets/images/topbar/nav-left-icon.png',
-  //                             width: 32,
-  //                             height: 32,
-  //                           ),
-  //                         ),
-  //                       ),
-  //                       const SizedBox(width: 6),
-  //                       const Text(
-  //                         'Chat with Nahl',
-  //                         style: TextStyle(
-  //                           fontFamily: 'GeneralSans',
-  //                           fontSize: 12,
-  //                           fontWeight: FontWeight.w500,
-  //                           color: Colors.black,
-  //                         ),
-  //                       ),
-  //                     ],
-  //                   ),
-  //                 ),
-  //                 Image.asset(
-  //                   'assets/images/topbar/nav-center-icon.png',
-  //                   width: 30,
-  //                   height: 32,
-  //                   fit: BoxFit.contain,
-  //                 ),
-  //               ],
-  //             ),
-  //           ),
-  //         ),
-  //         Expanded(
-  //           flex: 23,
-  //           child: Padding(
-  //             padding: const EdgeInsets.only(right: 16),
-  //             child: Row(
-  //               mainAxisAlignment: MainAxisAlignment.end,
-  //               children: [
-  //                 Opacity(
-  //                   opacity: isEnabled ? 1.0 : 0.5,
-  //                   child: GestureDetector(
-  //                     onTap: isEnabled
-  //                         ? () => context.pushNamed(ProfileScreen.path, extra: '')
-  //                         : null,
-  //                     child: Container(
-  //                       width: 32,
-  //                       height: 32,
-  //                       decoration: BoxDecoration(
-  //                         color: Colors.white,
-  //                         shape: BoxShape.circle,
-  //                         border: Border.all(color: Colors.black, width: 1),
-  //                       ),
-  //                       child: Center(
-  //                         child: Text(
-  //                           firstName.isNotEmpty
-  //                               ? (firstName.length > 1
-  //                                     ? firstName.substring(0, 2).toUpperCase()
-  //                                     : firstName[0].toUpperCase())
-  //                               : 'Me',
-  //                           style: const TextStyle(
-  //                             fontFamily: 'GeneralSans',
-  //                             fontWeight: FontWeight.w500,
-  //                             fontSize: 16,
-  //                             color: Colors.black,
-  //                           ),
-  //                         ),
-  //                       ),
-  //                     ),
-  //                   ),
-  //                 ),
-  //               ],
-  //             ),
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
-
   // ─────────────────────────────────────────────────────────────────────────
   // FAB (unchanged)
   // ─────────────────────────────────────────────────────────────────────────
@@ -907,12 +669,7 @@ If you answered "yes" to all these questions, you're ready to take the next step
           color: const Color(0xFFFFEFB5),
           border: Border.all(color: const Color(0xFFFFC300), width: 1),
         ),
-        child: Image.asset(
-          healthImage,
-          fit: BoxFit.contain,
-          width: 40,
-          height: 40,
-        ),
+        child: Image.asset(healthImage, fit: BoxFit.contain, width: 40, height: 40),
       ),
     );
   }
@@ -950,12 +707,7 @@ If you answered "yes" to all these questions, you're ready to take the next step
             Center(
               child: ClipRRect(
                 borderRadius: const BorderRadius.all(Radius.circular(32)),
-                child: Image.asset(
-                  imagePath,
-                  width: 230,
-                  height: 230,
-                  fit: BoxFit.cover,
-                ),
+                child: Image.asset(imagePath, width: 230, height: 230, fit: BoxFit.cover),
               ),
             ),
             Padding(
@@ -1017,11 +769,7 @@ If you answered "yes" to all these questions, you're ready to take the next step
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            _buildFeedbackIcon(
-              'very_sad',
-              '😞',
-              _selectedFeedback == 'very_sad',
-            ),
+            _buildFeedbackIcon('very_sad', '😞', _selectedFeedback == 'very_sad'),
             _buildFeedbackIcon('sad', '😕', _selectedFeedback == 'sad'),
             _buildFeedbackIcon('neutral', '😊', _selectedFeedback == 'neutral'),
             _buildFeedbackIcon('happy', '😃', _selectedFeedback == 'happy'),
@@ -1065,9 +813,7 @@ If you answered "yes" to all these questions, you're ready to take the next step
           color: isSelected ? AppColors.success.withOpacity(0.2) : Colors.white,
           shape: BoxShape.circle,
           border: Border.all(
-            color: isSelected
-                ? AppColors.success
-                : Colors.black.withOpacity(0.2),
+            color: isSelected ? AppColors.success : Colors.black.withOpacity(0.2),
             width: isSelected ? 2 : 1,
           ),
         ),
@@ -1117,13 +863,13 @@ class _WalkthroughOverlay extends StatelessWidget {
           // ── Arrow (only on the budget step) ──────────────────────────────
           if (step == _WalkthroughStep.budget && budgetArrowY != null)
             Positioned(
-              top: budgetArrowY! - 20, // 4 px gap below the row
+              top: budgetArrowY! + 4,  // 4 px gap below the row
               left: 24,
               child: IgnorePointer(
                 child: Image.asset(
                   'assets/images/walk_through/home_arrow.png',
                   width: 80,
-                  height: 80,
+                  height: 48,
                   fit: BoxFit.contain,
                 ),
               ),
@@ -1135,7 +881,7 @@ class _WalkthroughOverlay extends StatelessWidget {
             right: 0,
             child: Image.asset(
               currentImage,
-              width: screenSize.width * 0.65, // ~65% of screen width
+              width: screenSize.width * 0.65,  // ~65% of screen width
               fit: BoxFit.contain,
             ),
           ),
