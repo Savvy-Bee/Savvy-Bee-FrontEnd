@@ -1,7 +1,7 @@
 name: savvy_bee_mobile
 description: "An AI-powered financial literacy and management app"
 publish_to: 'none'
-version: 1.0.0+8
+version: 1.0.0+9
 
 environment:
   sdk: ^3.8.1
@@ -158,6 +158,13 @@ flutter:
     - assets/images/icons/LEAGUE ICONS/QUEEN BEE.png
     - assets/images/icons/LEAGUE ICONS/QUEENSGUARD.png
     - assets/images/icons/LEAGUE ICONS/ROYAL LEAGUE.png
+    - assets/images/icons/loki.png
+    - assets/images/icons/dash.png
+    - assets/images/icons/penny.png
+    - assets/images/icons/bloom.png
+    - assets/images/icons/susu.png
+    - assets/images/icons/luna.png
+    - assets/images/icons/boo.png
 
   fonts:
     - family: Excon

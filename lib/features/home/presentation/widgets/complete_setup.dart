@@ -25,7 +25,8 @@ class CompleteSetupCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'COMPLETE SETUP ($completedCount/$totalCount)',
+          // 'COMPLETE SETUP ($completedCount/$totalCount)',
+          'COMPLETE SETUP',
           style: TextStyle(
             fontSize: 10,
             fontFamily: 'GeneralSans',

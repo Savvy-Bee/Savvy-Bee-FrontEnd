@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:savvy_bee_mobile/features/chat/presentation/providers/chat_providers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/app_icons.dart';
@@ -15,6 +16,72 @@ import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/budg
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/debt/debt_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/goals/goals_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/taxation_dashboard_screen.dart';
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Local personality catalogue used to resolve API persona → image + name
+// ─────────────────────────────────────────────────────────────────────────────
+
+const List<Map<String, String>> _kLocalPersonalities = [
+  {
+    'id': 'loan_pro',
+    'name': 'Dash',
+    'imagePath': 'assets/images/icons/dash.png',
+  },
+  {
+    'id': 'budgeting_bee',
+    'name': 'Penny',
+    'imagePath': 'assets/images/icons/penny.png',
+  },
+  {
+    'id': 'saving_star',
+    'name': 'Bloom',
+    'imagePath': 'assets/images/icons/bloom.png',
+  },
+  {
+    'id': 'big_dreamer',
+    'name': 'Susu',
+    'imagePath': 'assets/images/icons/susu.png',
+  },
+  {
+    'id': 'matching_bee',
+    'name': 'Luna',
+    'imagePath': 'assets/images/icons/luna.png',
+  },
+  {'id': 'quiz_bee', 'name': 'Boo', 'imagePath': 'assets/images/icons/boo.png'},
+  {
+    'id': 'scam_spotter',
+    'name': 'Loki',
+    'imagePath': 'assets/images/icons/loki.png',
+  },
+];
+
+/// Resolves an API [Persona] to its matching local entry.
+///
+/// Matching priority:
+///   1. API `ID` (e.g. "Nurturing_Guide") normalised to snake_case vs local `id`
+///   2. API `Name` (e.g. "Boo") case-insensitive vs local `name`
+///
+/// Falls back to Boo if nothing matches.
+Map<String, String> _resolveLocalPersonality({
+  required String apiId,
+  required String apiName,
+}) {
+  print(apiId);
+  print(apiName);
+  // Normalise the API id: lowercase + replace spaces/hyphens with underscores
+  final normId = apiId.toLowerCase().replaceAll(RegExp(r'[\s\-]+'), '_');
+  final normName = apiName.toLowerCase().trim();
+
+  return _kLocalPersonalities.firstWhere(
+    (p) =>
+        p['id']!.toLowerCase() == normId ||
+        p['name']!.toLowerCase() == normName,
+    orElse: () => _kLocalPersonalities.firstWhere(
+      (p) => p['name']! == 'Boo',
+      orElse: () => _kLocalPersonalities.first,
+    ),
+  );
+}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Walkthrough steps
@@ -64,10 +131,10 @@ class _ToolsScreenState extends ConsumerState<ToolsScreen> {
   bool _walkthroughChecked = false;
 
   // GlobalKeys – one per tool-list item that needs an arrow
-  final GlobalKey _budgetItemKey  = GlobalKey();
-  final GlobalKey _goalsItemKey   = GlobalKey();
-  final GlobalKey _debtsItemKey   = GlobalKey();
-  final GlobalKey _taxItemKey     = GlobalKey();
+  final GlobalKey _budgetItemKey = GlobalKey();
+  final GlobalKey _goalsItemKey = GlobalKey();
+  final GlobalKey _debtsItemKey = GlobalKey();
+  final GlobalKey _taxItemKey = GlobalKey();
 
   // ─────────────────────────────────────────────────────────────────────────
   // Lifecycle
@@ -78,9 +145,22 @@ class _ToolsScreenState extends ConsumerState<ToolsScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.invalidate(homeDataProvider);
+
+      // ── Refresh persona every time Tools screen is opened ────────────────
+      ref.invalidate(myPersonaProvider);
+
       _checkWalkthrough();
     });
   }
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   WidgetsBinding.instance.addPostFrameCallback((_) {
+  //     ref.invalidate(homeDataProvider);
+  //     _checkWalkthrough();
+  //   });
+  // }
 
   // ─────────────────────────────────────────────────────────────────────────
   // Walkthrough helpers
@@ -140,11 +220,16 @@ class _ToolsScreenState extends ConsumerState<ToolsScreen> {
   /// Which key (if any) is the current spotlight target?
   GlobalKey? get _currentHighlightKey {
     switch (_step) {
-      case _ToolsWalkthroughStep.budget: return _budgetItemKey;
-      case _ToolsWalkthroughStep.goals:  return _goalsItemKey;
-      case _ToolsWalkthroughStep.debts:  return _debtsItemKey;
-      case _ToolsWalkthroughStep.taxes:  return _taxItemKey;
-      default:                           return null;
+      case _ToolsWalkthroughStep.budget:
+        return _budgetItemKey;
+      case _ToolsWalkthroughStep.goals:
+        return _goalsItemKey;
+      case _ToolsWalkthroughStep.debts:
+        return _debtsItemKey;
+      case _ToolsWalkthroughStep.taxes:
+        return _taxItemKey;
+      default:
+        return null;
     }
   }
 
@@ -154,23 +239,35 @@ class _ToolsScreenState extends ConsumerState<ToolsScreen> {
 
   String _getHealthImage(String status) {
     switch (status.toLowerCase().trim()) {
-      case 'stabilizing': return 'assets/images/Financial_Health/JARS/HIVE BAR STABILISING.png';
-      case 'surviving':   return 'assets/images/Financial_Health/JARS/HIVE BAR SURVIVING.png';
-      case 'flourishing': return 'assets/images/Financial_Health/JARS/HIVE BAR FLOURISHING.png';
-      case 'thriving':    return 'assets/images/Financial_Health/JARS/HIVE BAR THRIVING.png';
-      case 'building':    return 'assets/images/Financial_Health/JARS/HIVE BAR BUILDING.png';
-      default:            return 'assets/images/Financial_Health/JARS/HIVE BAR EMPTY.png';
+      case 'stabilizing':
+        return 'assets/images/Financial_Health/JARS/HIVE BAR STABILISING.png';
+      case 'surviving':
+        return 'assets/images/Financial_Health/JARS/HIVE BAR SURVIVING.png';
+      case 'flourishing':
+        return 'assets/images/Financial_Health/JARS/HIVE BAR FLOURISHING.png';
+      case 'thriving':
+        return 'assets/images/Financial_Health/JARS/HIVE BAR THRIVING.png';
+      case 'building':
+        return 'assets/images/Financial_Health/JARS/HIVE BAR BUILDING.png';
+      default:
+        return 'assets/images/Financial_Health/JARS/HIVE BAR EMPTY.png';
     }
   }
 
   String _getPopUpImage(String status) {
     switch (status.toLowerCase().trim()) {
-      case 'stabilizing': return 'assets/images/illustrations/health/stabilizing.png';
-      case 'surviving':   return 'assets/images/illustrations/health/surviving.png';
-      case 'flourishing': return 'assets/images/illustrations/health/flourishing.png';
-      case 'thriving':    return 'assets/images/illustrations/health/thriving.png';
-      case 'building':    return 'assets/images/illustrations/health/building.png';
-      default:            return 'assets/images/illustrations/health/stabilizing.png';
+      case 'stabilizing':
+        return 'assets/images/illustrations/health/stabilizing.png';
+      case 'surviving':
+        return 'assets/images/illustrations/health/surviving.png';
+      case 'flourishing':
+        return 'assets/images/illustrations/health/flourishing.png';
+      case 'thriving':
+        return 'assets/images/illustrations/health/thriving.png';
+      case 'building':
+        return 'assets/images/illustrations/health/building.png';
+      default:
+        return 'assets/images/illustrations/health/stabilizing.png';
     }
   }
 
@@ -194,7 +291,10 @@ class _ToolsScreenState extends ConsumerState<ToolsScreen> {
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(16),
-                  child: Image.asset(_getPopUpImage(statusText), fit: BoxFit.contain),
+                  child: Image.asset(
+                    _getPopUpImage(statusText),
+                    fit: BoxFit.contain,
+                  ),
                 ),
               ),
               const SizedBox(height: 16),
@@ -212,10 +312,11 @@ class _ToolsScreenState extends ConsumerState<ToolsScreen> {
   @override
   Widget build(BuildContext context) {
     final homeDataAsync = ref.watch(homeDataProvider);
-    final firstName    = homeDataAsync.valueOrNull?.data?.firstName ?? '';
-    final isLoading    = homeDataAsync.isLoading && !homeDataAsync.hasValue;
-    final hasError     = homeDataAsync.hasError;
-    final statusText   = homeDataAsync.valueOrNull?.data?.aiData?.status ?? '';
+    final personaAsync = ref.watch(myPersonaProvider); // ← added
+    final firstName = homeDataAsync.valueOrNull?.data?.firstName ?? '';
+    final isLoading = homeDataAsync.isLoading && !homeDataAsync.hasValue;
+    final hasError = homeDataAsync.hasError;
+    final statusText = homeDataAsync.valueOrNull?.data?.aiData?.status ?? '';
 
     // Resolve highlight rect for the current step (may be null if key not yet laid out)
     final highlightRect = _currentHighlightKey != null
@@ -226,7 +327,7 @@ class _ToolsScreenState extends ConsumerState<ToolsScreen> {
       children: [
         // ── Main Scaffold ─────────────────────────────────────────────────
         Scaffold(
-          appBar: _buildAppBar(firstName, context),
+          appBar: _buildAppBar(firstName, context, personaAsync),
           floatingActionButton: _buildHealthJarFAB(statusText),
           body: Stack(
             children: [
@@ -290,7 +391,8 @@ class _ToolsScreenState extends ConsumerState<ToolsScreen> {
                                 subtitle:
                                     'Create smart budgets, track spending, and get personalized insights.',
                                 iconPath: 'assets/images/icons/budget_icon.png',
-                                onPressed: () => context.pushNamed(BudgetsScreen.path),
+                                onPressed: () =>
+                                    context.pushNamed(BudgetsScreen.path),
                               ),
                             ),
                             const Divider(color: AppColors.grey, height: 1),
@@ -301,7 +403,8 @@ class _ToolsScreenState extends ConsumerState<ToolsScreen> {
                                 subtitle:
                                     'Set goals, get AI-powered suggestions, and track your progress.',
                                 iconPath: 'assets/images/icons/goals_icon.png',
-                                onPressed: () => context.pushNamed(GoalsScreen.path),
+                                onPressed: () =>
+                                    context.pushNamed(GoalsScreen.path),
                               ),
                             ),
                             const Divider(color: AppColors.grey, height: 1),
@@ -312,7 +415,8 @@ class _ToolsScreenState extends ConsumerState<ToolsScreen> {
                                 subtitle:
                                     'Stay on top of your debts and plan your payoff with ease.',
                                 iconPath: 'assets/images/icons/debt_icon.png',
-                                onPressed: () => context.pushNamed(DebtScreen.path),
+                                onPressed: () =>
+                                    context.pushNamed(DebtScreen.path),
                               ),
                             ),
                             const Divider(color: AppColors.grey, height: 1),
@@ -323,8 +427,9 @@ class _ToolsScreenState extends ConsumerState<ToolsScreen> {
                                 subtitle:
                                     'Calculate your tax and track your earnings with ease.',
                                 iconPath: 'assets/images/icons/tax_icon.png',
-                                onPressed: () =>
-                                    context.pushNamed(TaxationDashboardScreen.path),
+                                onPressed: () => context.pushNamed(
+                                  TaxationDashboardScreen.path,
+                                ),
                               ),
                             ),
                           ],
@@ -345,8 +450,7 @@ class _ToolsScreenState extends ConsumerState<ToolsScreen> {
                     height: 24,
                     child: CircularProgressIndicator(
                       strokeWidth: 2.5,
-                      valueColor:
-                          AlwaysStoppedAnimation<Color>(Colors.black54),
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.black54),
                     ),
                   ),
                 ),
@@ -448,7 +552,11 @@ class _ToolsScreenState extends ConsumerState<ToolsScreen> {
   // AppBar (unchanged)
   // ─────────────────────────────────────────────────────────────────────────
 
-  AppBar _buildAppBar(String firstName, BuildContext context) {
+  AppBar _buildAppBar(
+    String firstName,
+    BuildContext context,
+    AsyncValue<dynamic> personaAsync,
+  ) {
     return AppBar(
       elevation: 0,
       backgroundColor: Colors.transparent,
@@ -479,11 +587,33 @@ class _ToolsScreenState extends ConsumerState<ToolsScreen> {
                         shape: BoxShape.circle,
                         border: Border.all(color: AppColors.primary),
                       ),
-                      child: Center(
-                        child: Image.asset(
-                          'assets/images/topbar/nav-left-icon.png',
-                          width: 32,
-                          height: 32,
+                      child: ClipOval(
+                        child: personaAsync.when(
+                          data: (persona) {
+                            if (persona == null) return _defaultChatIcon();
+                            final local = _resolveLocalPersonality(
+                              apiId: persona.id ?? '',
+                              apiName: persona.name ?? '',
+                            );
+                            return Image.asset(
+                              local['imagePath']!,
+                              width: 32,
+                              height: 32,
+                              fit: BoxFit.cover,
+                              errorBuilder: (_, __, ___) => _defaultChatIcon(),
+                            );
+                          },
+                          loading: () => const Center(
+                            child: SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2.5,
+                                color: AppColors.primary,
+                              ),
+                            ),
+                          ),
+                          error: (_, __) => _defaultChatIcon(),
                         ),
                       ),
                     ),
@@ -543,6 +673,107 @@ class _ToolsScreenState extends ConsumerState<ToolsScreen> {
     );
   }
 
+  Widget _defaultChatIcon() {
+    return const Center(
+      child: Icon(Icons.smart_toy, size: 20, color: AppColors.primary),
+    );
+  }
+
+  // AppBar _buildAppBar(String firstName, BuildContext context) {
+  //   return AppBar(
+  //     elevation: 0,
+  //     backgroundColor: Colors.transparent,
+  //     flexibleSpace: Container(
+  //       decoration: const BoxDecoration(
+  //         gradient: LinearGradient(
+  //           begin: Alignment.topLeft,
+  //           end: Alignment.topRight,
+  //           colors: [Color(0xFFFFEFB5), Color(0xFFFFC300)],
+  //         ),
+  //       ),
+  //     ),
+  //     title: Row(
+  //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //       children: [
+  //         Row(
+  //           mainAxisSize: MainAxisSize.min,
+  //           children: [
+  //             InkWell(
+  //               onTap: () => context.pushNamed(ChatScreen.path),
+  //               child: Row(
+  //                 mainAxisSize: MainAxisSize.min,
+  //                 children: [
+  //                   Container(
+  //                     width: 32,
+  //                     height: 32,
+  //                     decoration: BoxDecoration(
+  //                       shape: BoxShape.circle,
+  //                       border: Border.all(color: AppColors.primary),
+  //                     ),
+  //                     child: Center(
+  //                       child: Image.asset(
+  //                         'assets/images/topbar/nav-left-icon.png',
+  //                         width: 32,
+  //                         height: 32,
+  //                       ),
+  //                     ),
+  //                   ),
+  //                   const SizedBox(width: 6),
+  //                   const Text(
+  //                     'Chat with Nahl',
+  //                     style: TextStyle(
+  //                       fontFamily: 'GeneralSans',
+  //                       fontSize: 12,
+  //                       fontWeight: FontWeight.w500,
+  //                       color: Colors.black,
+  //                     ),
+  //                   ),
+  //                 ],
+  //               ),
+  //             ),
+  //             const SizedBox(width: 25),
+  //             Image.asset(
+  //               'assets/images/topbar/nav-center-icon.png',
+  //               width: 30,
+  //               height: 32,
+  //               fit: BoxFit.contain,
+  //             ),
+  //           ],
+  //         ),
+  //         GestureDetector(
+  //           onTap: () => context.pushNamed(ProfileScreen.path),
+  //           child: Container(
+  //             width: 32,
+  //             height: 32,
+  //             decoration: BoxDecoration(
+  //               color: Colors.white,
+  //               shape: BoxShape.circle,
+  //               border: Border.all(color: Colors.black, width: 1),
+  //             ),
+  //             child: Center(
+  //               child: Text(
+  //                 firstName.isNotEmpty
+  //                     ? (firstName.length > 1
+  //                           ? firstName.substring(0, 2).toUpperCase()
+  //                           : firstName[0].toUpperCase())
+  //                     : 'Me',
+  //                 style: const TextStyle(
+  //                   fontFamily: 'GeneralSans',
+  //                   fontWeight: FontWeight.w500,
+  //                   fontSize: 16,
+  //                   color: Colors.black,
+  //                 ),
+  //               ),
+  //             ),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //     centerTitle: false,
+  //     automaticallyImplyLeading: false,
+  //   );
+  // }
+
   // ─────────────────────────────────────────────────────────────────────────
   // FAB (unchanged)
   // ─────────────────────────────────────────────────────────────────────────
@@ -580,7 +811,7 @@ class _ToolsScreenState extends ConsumerState<ToolsScreen> {
 class _StepConfig {
   const _StepConfig({
     required this.imagePath,
-    required this.imageAlignment,  // which corner the character sits in
+    required this.imageAlignment, // which corner the character sits in
     this.hasArrow = false,
   });
 
@@ -637,7 +868,7 @@ class _ToolsWalkthroughOverlay extends StatelessWidget {
 
   // Padding inflated around the spotlight target.
   static const double _hPad = 16.0;
-  static const double _vPad = - 2.5;
+  static const double _vPad = -2.5;
 
   @override
   Widget build(BuildContext context) {
@@ -671,8 +902,8 @@ class _ToolsWalkthroughOverlay extends StatelessWidget {
             Positioned(
               left: paddedRect.left,
               top: paddedRect.top,
-              width: paddedRect.width ,
-              height: paddedRect.height, 
+              width: paddedRect.width,
+              height: paddedRect.height,
               child: IgnorePointer(
                 child: Container(
                   decoration: BoxDecoration(

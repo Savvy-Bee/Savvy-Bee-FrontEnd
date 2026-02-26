@@ -55,6 +55,7 @@ class ApiEndpoints {
   static String createDebtStep(String stepNumber) =>
       '/tools/debt/create/$stepNumber';
   static String manualFundDebt(String debtId) => '/tools/debt/fund/$debtId';
+static const String createManualDebt = '/tools/debt/create/manual';
 
   /// Bills Endpoints
   // Airtime
@@ -112,4 +113,7 @@ class ApiEndpoints {
   static const String taxationHome = '/tools/taxation/home';
   static const String taxationCalculator = '/tools/taxation/calculator';
   static const String taxationStrategies = '/tools/taxation/strategies';
+
+
+  static const String getMyPersona = '/auth/update/getmypersona';
 }

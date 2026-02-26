@@ -10,50 +10,111 @@ class DebtRepository {
 
   DebtRepository({required ApiClient apiClient}) : _apiClient = apiClient;
 
- Future<DebtListResponse> getDebtHomeData() async {
-  try {
-    final response = await _apiClient.get(ApiEndpoints.debtHome);
-    
-    // Safe access - check if list is not empty before accessing first
-    final dataList = response.data['data'] as List?;
-    if (dataList != null && dataList.isNotEmpty) {
-      final firstDebt = dataList.first as Map?;
-      if (firstDebt != null) {
-        print(
-          'Owed type: ${firstDebt['Owed']?.runtimeType} value: ${firstDebt['Owed']}',
-        );
-        print('interestRate type: ${firstDebt['interestRate']?.runtimeType}');
-        print('Day type: ${firstDebt['Day']?.runtimeType}');
-        print('minPayment type: ${firstDebt['minPayment']?.runtimeType}');
-      }
-    }
+  // ── List ──────────────────────────────────────────────────────────────────
 
-    if (response.data['success'] == true && response.data['data'] is List) {
-      return DebtListResponse.fromJson(response.data);
-    } else {
-      throw ApiException(
-        message: response.data['message'] ?? 'Failed to load debt data',
-        statusCode: response.statusCode,
-      );
+  Future<DebtListResponse> getDebtHomeData() async {
+    try {
+      final response = await _apiClient.get(ApiEndpoints.debtHome);
+
+      final dataList = response.data['data'] as List?;
+      if (dataList != null && dataList.isNotEmpty) {
+        final firstDebt = dataList.first as Map?;
+        if (firstDebt != null) {
+          log('Owed type: ${firstDebt['Owed']?.runtimeType} value: ${firstDebt['Owed']}');
+          log('interestRate type: ${firstDebt['interestRate']?.runtimeType}');
+          log('Day type: ${firstDebt['Day']?.runtimeType}');
+          log('minPayment type: ${firstDebt['minPayment']?.runtimeType}');
+        }
+      }
+
+      if (response.data['success'] == true && response.data['data'] is List) {
+        return DebtListResponse.fromJson(response.data);
+      } else {
+        throw ApiException(
+          message: response.data['message'] ?? 'Failed to load debt data',
+          statusCode: response.statusCode,
+        );
+      }
+    } on ApiException {
+      rethrow;
+    } catch (e) {
+      throw ApiException(message: 'An unexpected error occurred: $e');
     }
-  } on ApiException {
-    rethrow;
-  } catch (e) {
-    throw ApiException(message: 'An unexpected error occurred: $e');
   }
-}
+
+  // ── Create manual (POST /tools/debt/create/manual) ────────────────────────
+
+  Future<DebtCreationResponse> createManualDebt(
+    ManualDebtRequestModel debtData,
+  ) async {
+    try {
+      final formData = FormData.fromMap(debtData.toJson());
+
+      final response = await _apiClient.post(
+        ApiEndpoints.createManualDebt, // add this constant — see note below
+        data: formData,
+      );
+
+      log('createManualDebt response: ${response.data}');
+
+      if (response.data['success'] == true && response.data['data'] != null) {
+        return DebtCreationResponse.fromJson(response.data);
+      } else {
+        throw ApiException(
+          message: response.data['message'] ?? 'Failed to create debt',
+          statusCode: response.statusCode,
+        );
+      }
+    } on ApiException {
+      rethrow;
+    } catch (e) {
+      throw ApiException(message: 'An unexpected error occurred: $e');
+    }
+  }
+
+  // ── Manual repayment (PATCH /tools/debt/update/manual/:id) ───────────────
+
+  Future<Map<String, dynamic>> manualFundDebt(
+    String debtId,
+    String amount,
+  ) async {
+    try {
+      // API expects lowercase 'amount' in the form body
+      final formData = FormData.fromMap({'amount': amount});
+
+      final response = await _apiClient.patch(
+        ApiEndpoints.manualFundDebt(debtId),
+        data: formData,
+      );
+
+      log('manualFundDebt response: ${response.data}');
+
+      if (response.data['success'] == true && response.data['data'] != null) {
+        return response.data['data'] as Map<String, dynamic>;
+      } else {
+        throw ApiException(
+          message: response.data['message'] ?? 'Failed to make payment',
+          statusCode: response.statusCode,
+        );
+      }
+    } on ApiException {
+      rethrow;
+    } catch (e) {
+      throw ApiException(message: 'An unexpected error occurred: $e');
+    }
+  }
+
+  // ── Legacy step-based methods — kept so existing providers don't break ────
 
   Future<DebtCreationResponse> createDebtStep1(
     DebtRequestModel debtData,
   ) async {
     try {
       final formData = FormData.fromMap(debtData.toJson());
-
       final response = await _apiClient.post(
         ApiEndpoints.createDebtStep('1'),
         data: formData,
       );
-
       if (response.data['success'] == true && response.data['data'] != null) {
         log(response.toString());
         return DebtCreationResponse.fromJson(response.data);
@@ -75,12 +136,10 @@ class DebtRepository {
   }) async {
     try {
       final formData = FormData.fromMap(reqBody.toJson());
-
       final response = await _apiClient.post(
         ApiEndpoints.createDebtStep('2'),
         data: formData,
       );
-
       if (response.data['success'] == true && response.data['data'] != null) {
         return response.data['data'] as Map<String, dynamic>;
       } else {
@@ -95,31 +154,133 @@ class DebtRepository {
       throw ApiException(message: 'An unexpected error occurred: $e');
     }
   }
-
-  Future<Map<String, dynamic>> manualFundDebt(
-    String debtId,
-    String amount,
-  ) async {
-    try {
-      final formData = FormData.fromMap({'Amount': amount});
-
-      final response = await _apiClient.patch(
-        ApiEndpoints.manualFundDebt(debtId),
-        data: formData,
-      );
-
-      if (response.data['success'] == true && response.data['data'] != null) {
-        return response.data['data'] as Map<String, dynamic>;
-      } else {
-        throw ApiException(
-          message: response.data['message'] ?? 'Failed to make payment',
-          statusCode: response.statusCode,
-        );
-      }
-    } on ApiException {
-      rethrow;
-    } catch (e) {
-      throw ApiException(message: 'An unexpected error occurred: $e');
-    }
-  }
 }
+
+
+
+
+// import 'dart:developer';
+
+// import 'package:dio/dio.dart';
+// import 'package:savvy_bee_mobile/core/network/api_client.dart';
+// import 'package:savvy_bee_mobile/core/network/api_endpoints.dart';
+// import 'package:savvy_bee_mobile/features/tools/domain/models/debt.dart';
+
+// class DebtRepository {
+//   final ApiClient _apiClient;
+
+//   DebtRepository({required ApiClient apiClient}) : _apiClient = apiClient;
+
+//  Future<DebtListResponse> getDebtHomeData() async {
+//   try {
+//     final response = await _apiClient.get(ApiEndpoints.debtHome);
+    
+//     // Safe access - check if list is not empty before accessing first
+//     final dataList = response.data['data'] as List?;
+//     if (dataList != null && dataList.isNotEmpty) {
+//       final firstDebt = dataList.first as Map?;
+//       if (firstDebt != null) {
+//         print(
+//           'Owed type: ${firstDebt['Owed']?.runtimeType} value: ${firstDebt['Owed']}',
+//         );
+//         print('interestRate type: ${firstDebt['interestRate']?.runtimeType}');
+//         print('Day type: ${firstDebt['Day']?.runtimeType}');
+//         print('minPayment type: ${firstDebt['minPayment']?.runtimeType}');
+//       }
+//     }
+
+//     if (response.data['success'] == true && response.data['data'] is List) {
+//       return DebtListResponse.fromJson(response.data);
+//     } else {
+//       throw ApiException(
+//         message: response.data['message'] ?? 'Failed to load debt data',
+//         statusCode: response.statusCode,
+//       );
+//     }
+//   } on ApiException {
+//     rethrow;
+//   } catch (e) {
+//     throw ApiException(message: 'An unexpected error occurred: $e');
+//   }
+// }
+
+//   Future<DebtCreationResponse> createDebtStep1(
+//     DebtRequestModel debtData,
+//   ) async {
+//     try {
+//       final formData = FormData.fromMap(debtData.toJson());
+
+//       final response = await _apiClient.post(
+//         ApiEndpoints.createDebtStep('1'),
+//         data: formData,
+//       );
+
+//       if (response.data['success'] == true && response.data['data'] != null) {
+//         log(response.toString());
+//         return DebtCreationResponse.fromJson(response.data);
+//       } else {
+//         throw ApiException(
+//           message: response.data['message'] ?? 'Failed to create debt',
+//           statusCode: response.statusCode,
+//         );
+//       }
+//     } on ApiException {
+//       rethrow;
+//     } catch (e) {
+//       throw ApiException(message: 'An unexpected error occurred: $e');
+//     }
+//   }
+
+//   Future<Map<String, dynamic>> createDebtStep2({
+//     required DebtCreationStep2Request reqBody,
+//   }) async {
+//     try {
+//       final formData = FormData.fromMap(reqBody.toJson());
+
+//       final response = await _apiClient.post(
+//         ApiEndpoints.createDebtStep('2'),
+//         data: formData,
+//       );
+
+//       if (response.data['success'] == true && response.data['data'] != null) {
+//         return response.data['data'] as Map<String, dynamic>;
+//       } else {
+//         throw ApiException(
+//           message: response.data['message'] ?? 'Failed to complete debt step 2',
+//           statusCode: response.statusCode,
+//         );
+//       }
+//     } on ApiException {
+//       rethrow;
+//     } catch (e) {
+//       throw ApiException(message: 'An unexpected error occurred: $e');
+//     }
+//   }
+
+//   Future<Map<String, dynamic>> manualFundDebt(
+//     String debtId,
+//     String amount,
+//   ) async {
+//     try {
+//       final formData = FormData.fromMap({'Amount': amount});
+
+//       final response = await _apiClient.patch(
+//         ApiEndpoints.manualFundDebt(debtId),
+//         data: formData,
+//       );
+
+//       if (response.data['success'] == true && response.data['data'] != null) {
+//         return response.data['data'] as Map<String, dynamic>;
+//       } else {
+//         throw ApiException(
+//           message: response.data['message'] ?? 'Failed to make payment',
+//           statusCode: response.statusCode,
+//         );
+//       }
+//     } on ApiException {
+//       rethrow;
+//     } catch (e) {
+//       throw ApiException(message: 'An unexpected error occurred: $e');
+//     }
+//   }
+// }
