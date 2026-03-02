@@ -17,10 +17,13 @@ import 'package:savvy_bee_mobile/core/widgets/custom_error_widget.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_loading_widget.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_snackbar.dart';
+import 'package:savvy_bee_mobile/features/chat/data/services/nahl_consent_service.dart';
 import 'package:savvy_bee_mobile/features/chat/domain/models/chat_models.dart';
 import 'package:savvy_bee_mobile/features/chat/presentation/providers/chat_providers.dart';
-import 'package:savvy_bee_mobile/features/chat/presentation/widgets/chat_bubble_widget.dart';
 import 'package:savvy_bee_mobile/features/chat/presentation/screens/choose_personality_screen.dart';
+import 'package:savvy_bee_mobile/features/chat/presentation/widgets/chat_bubble_widget.dart';
+import 'package:savvy_bee_mobile/features/chat/presentation/widgets/nahl_consent_blocked_view.dart';
+import 'package:savvy_bee_mobile/features/chat/presentation/widgets/nahl_consent_dialog.dart';
 import 'package:savvy_bee_mobile/features/chat/presentation/widgets/picked_file_preview.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -53,11 +56,7 @@ const List<Map<String, String>> _kLocalPersonalities = [
     'name': 'Luna',
     'imagePath': 'assets/images/icons/luna.png',
   },
-  {
-    'id': 'quiz_bee',
-    'name': 'Boo',
-    'imagePath': 'assets/images/icons/boo.png',
-  },
+  {'id': 'quiz_bee', 'name': 'Boo', 'imagePath': 'assets/images/icons/boo.png'},
   {
     'id': 'scam_spotter',
     'name': 'Loki',
@@ -79,7 +78,7 @@ Map<String, String> _resolveLocalPersonality({
   print(apiId);
   print(apiName);
   // Normalise the API id: lowercase + replace spaces/hyphens with underscores
-  final normId   = apiId.toLowerCase().replaceAll(RegExp(r'[\s\-]+'), '_');
+  final normId = apiId.toLowerCase().replaceAll(RegExp(r'[\s\-]+'), '_');
   final normName = apiName.toLowerCase().trim();
 
   return _kLocalPersonalities.firstWhere(
@@ -129,6 +128,11 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   ChatViewMode _viewMode = ChatViewMode.newChat;
   bool _isInitialized = false;
 
+  /// null = consent check not yet complete
+  /// true  = user granted consent
+  /// false = user declined consent
+  bool? _consentGranted;
+
   // Constants
   static const Set<String> _quickActions = {
     'Heal me',
@@ -138,41 +142,40 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   };
 
   @override
-void initState() {
-  super.initState();
+  void initState() {
+    super.initState();
 
-  WidgetsBinding.instance.addPostFrameCallback((_) {
-    // ── Force re-fetch of persona every time screen is opened ────────
-    ref.invalidate(myPersonaProvider);
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      // ── 1. Resolve consent before doing anything else ──────────────────
+      final alreadyConsented = await NahlConsentService.hasConsent();
 
-    // Also useful: refresh current chat if needed
-    if (widget.chatId != null && widget.chatId!.isNotEmpty) {
-      _loadChatById(widget.chatId!);
-    } else {
-      // Optional: refresh current active chat too
-      ref.read(chatProvider.notifier).refresh();
-    }
+      if (alreadyConsented) {
+        // Previously granted — skip dialog entirely
+        setState(() => _consentGranted = true);
+      } else {
+        // First visit (or consent cleared) — show dialog, block until chosen
+        if (!mounted) return;
+        final agreed = await showNahlConsentDialog(context);
+        final granted = agreed == true;
+        await NahlConsentService.saveConsent(granted);
+        if (mounted) setState(() => _consentGranted = granted);
+      }
 
-    _isInitialized = true;
-  });
+      // ── 2. Only initialise chat data when consent is granted ───────────
+      if (_consentGranted == true) {
+        ref.invalidate(myPersonaProvider);
 
-  MixpanelService.trackFirstFeatureUsed('NAHL');
-}
+        if (widget.chatId != null && widget.chatId!.isNotEmpty) {
+          await _loadChatById(widget.chatId!);
+        } else {
+          ref.read(chatProvider.notifier).refresh();
+        }
+      }
 
-  // @override
-  // void initState() {
-  //   super.initState();
-
-  //   // Load specific chat if chatId is provided
-  //   WidgetsBinding.instance.addPostFrameCallback((_) {
-  //     if (widget.chatId != null && widget.chatId!.isNotEmpty) {
-  //       _loadChatById(widget.chatId!);
-  //     }
-  //     _isInitialized = true;
-  //   });
-
-  //   MixpanelService.trackFirstFeatureUsed('NAHL');
-  // }
+      _isInitialized = true;
+      MixpanelService.trackFirstFeatureUsed('NAHL');
+    });
+  }
 
   @override
   void dispose() {
@@ -267,6 +270,9 @@ void initState() {
   // ==================== Message Handling ====================
 
   Future<void> _sendMessage() async {
+    // Hard block: never transmit data without explicit consent
+    if (_consentGranted != true) return;
+
     final message = _messageController.text.trim();
 
     if (message.isEmpty && _pickedFile == null) return;
@@ -275,8 +281,10 @@ void initState() {
 
     final (image, document) = _categorizeFile();
 
-    final success = await ref.read(chatProvider.notifier).sendMessage(
-          message.isEmpty ? "Sending attachment" : message,
+    final success = await ref
+        .read(chatProvider.notifier)
+        .sendMessage(
+          message.isEmpty ? 'Sending attachment' : message,
           image: image,
           document: document,
         );
@@ -426,6 +434,26 @@ void initState() {
 
   @override
   Widget build(BuildContext context) {
+    // ── Consent check in progress — show neutral loader ──────────────────
+    if (_consentGranted == null) {
+      return const Scaffold(body: CustomLoadingWidget(text: 'Loading...'));
+    }
+
+    // ── User declined — show blocked state with re-accept path ───────────
+    if (_consentGranted == false) {
+      return Scaffold(
+        appBar: _buildAppBar(context, ChatState(), ChatViewMode.newChat),
+        body: NahlConsentBlockedView(
+          onConsentGranted: () {
+            setState(() => _consentGranted = true);
+            ref.invalidate(myPersonaProvider);
+            ref.read(chatProvider.notifier).refresh();
+          },
+        ),
+      );
+    }
+
+    // ── Consent granted — normal chat flow ────────────────────────────────
     final chatAsync = ref.watch(chatProvider);
 
     return chatAsync.when(
@@ -531,7 +559,9 @@ void initState() {
             personaAsync.when(
               // ── Loaded: resolve local image + name from API response ────
               data: (persona) {
-                if (persona == null) return _personaSelectorContent(null, 'Select AI');
+                if (persona == null) {
+                  return _personaSelectorContent(null, 'Select AI');
+                }
 
                 final local = _resolveLocalPersonality(
                   apiId: persona.id,
@@ -615,11 +645,7 @@ void initState() {
                   color: AppColors.primary,
                 ),
               )
-            : const Icon(
-                Icons.smart_toy,
-                size: 18,
-                color: AppColors.primary,
-              ),
+            : const Icon(Icons.smart_toy, size: 18, color: AppColors.primary),
       ),
     );
   }
@@ -688,7 +714,7 @@ void initState() {
   Widget _buildQuickActionItem(String label) {
     return CustomCard(
       onTap: () {
-        if (label.toLowerCase() == "scan receipt") {
+        if (label.toLowerCase() == 'scan receipt') {
           FileUtils.pickFile().then((value) {
             setState(() => _pickedFile = value);
           });
@@ -972,10 +998,12 @@ void initState() {
     final reversedIndex = chatState.messages.length - 1 - index;
     final message = chatState.messages[reversedIndex];
 
-    final isFirst = reversedIndex == 0 ||
+    final isFirst =
+        reversedIndex == 0 ||
         chatState.messages[reversedIndex - 1].from != message.from;
 
-    final isLast = reversedIndex == chatState.messages.length - 1 ||
+    final isLast =
+        reversedIndex == chatState.messages.length - 1 ||
         (reversedIndex + 1 < chatState.messages.length &&
             chatState.messages[reversedIndex + 1].from != message.from);
 
@@ -1131,8 +1159,8 @@ void initState() {
       onPressed: chatState.isSending
           ? null
           : () => FileUtils.pickFile().then((value) {
-                setState(() => _pickedFile = value);
-              }),
+              setState(() => _pickedFile = value);
+            }),
       style: IconButton.styleFrom(
         foregroundColor: AppColors.primary,
         disabledBackgroundColor: AppColors.primary.withValues(alpha: 0.1),
@@ -1165,10 +1193,6 @@ void initState() {
   }
 }
 
-
-
-
-
 // import 'dart:io';
 
 // import 'package:flutter/material.dart';
@@ -1193,6 +1217,78 @@ void initState() {
 // import 'package:savvy_bee_mobile/features/chat/presentation/widgets/chat_bubble_widget.dart';
 // import 'package:savvy_bee_mobile/features/chat/presentation/screens/choose_personality_screen.dart';
 // import 'package:savvy_bee_mobile/features/chat/presentation/widgets/picked_file_preview.dart';
+
+// // ─────────────────────────────────────────────────────────────────────────────
+// // Local personality catalogue used to resolve API persona → image + name
+// // ─────────────────────────────────────────────────────────────────────────────
+
+// const List<Map<String, String>> _kLocalPersonalities = [
+//   {
+//     'id': 'loan_pro',
+//     'name': 'Dash',
+//     'imagePath': 'assets/images/icons/dash.png',
+//   },
+//   {
+//     'id': 'budgeting_bee',
+//     'name': 'Penny',
+//     'imagePath': 'assets/images/icons/penny.png',
+//   },
+//   {
+//     'id': 'saving_star',
+//     'name': 'Bloom',
+//     'imagePath': 'assets/images/icons/bloom.png',
+//   },
+//   {
+//     'id': 'big_dreamer',
+//     'name': 'Susu',
+//     'imagePath': 'assets/images/icons/susu.png',
+//   },
+//   {
+//     'id': 'matching_bee',
+//     'name': 'Luna',
+//     'imagePath': 'assets/images/icons/luna.png',
+//   },
+//   {
+//     'id': 'quiz_bee',
+//     'name': 'Boo',
+//     'imagePath': 'assets/images/icons/boo.png',
+//   },
+//   {
+//     'id': 'scam_spotter',
+//     'name': 'Loki',
+//     'imagePath': 'assets/images/icons/loki.png',
+//   },
+// ];
+
+// /// Resolves an API [Persona] to its matching local entry.
+// ///
+// /// Matching priority:
+// ///   1. API `ID` (e.g. "Nurturing_Guide") normalised to snake_case vs local `id`
+// ///   2. API `Name` (e.g. "Boo") case-insensitive vs local `name`
+// ///
+// /// Falls back to Boo if nothing matches.
+// Map<String, String> _resolveLocalPersonality({
+//   required String apiId,
+//   required String apiName,
+// }) {
+//   print(apiId);
+//   print(apiName);
+//   // Normalise the API id: lowercase + replace spaces/hyphens with underscores
+//   final normId   = apiId.toLowerCase().replaceAll(RegExp(r'[\s\-]+'), '_');
+//   final normName = apiName.toLowerCase().trim();
+
+//   return _kLocalPersonalities.firstWhere(
+//     (p) =>
+//         p['id']!.toLowerCase() == normId ||
+//         p['name']!.toLowerCase() == normName,
+//     orElse: () => _kLocalPersonalities.firstWhere(
+//       (p) => p['name']! == 'Boo',
+//       orElse: () => _kLocalPersonalities.first,
+//     ),
+//   );
+// }
+
+// // ─────────────────────────────────────────────────────────────────────────────
 
 // /// Represents the current view mode of the chat screen
 // enum ChatViewMode {
@@ -1237,19 +1333,41 @@ void initState() {
 //   };
 
 //   @override
-//   void initState() {
-//     super.initState();
+// void initState() {
+//   super.initState();
 
-//     // Load specific chat if chatId is provided
-//     WidgetsBinding.instance.addPostFrameCallback((_) {
-//       if (widget.chatId != null && widget.chatId!.isNotEmpty) {
-//         _loadChatById(widget.chatId!);
-//       }
-//       _isInitialized = true;
-//     });
+//   WidgetsBinding.instance.addPostFrameCallback((_) {
+//     // ── Force re-fetch of persona every time screen is opened ────────
+//     ref.invalidate(myPersonaProvider);
+
+//     // Also useful: refresh current chat if needed
+//     if (widget.chatId != null && widget.chatId!.isNotEmpty) {
+//       _loadChatById(widget.chatId!);
+//     } else {
+//       // Optional: refresh current active chat too
+//       ref.read(chatProvider.notifier).refresh();
+//     }
+
+//     _isInitialized = true;
+//   });
 
 //   MixpanelService.trackFirstFeatureUsed('NAHL');
-//   }
+// }
+
+//   // @override
+//   // void initState() {
+//   //   super.initState();
+
+//   //   // Load specific chat if chatId is provided
+//   //   WidgetsBinding.instance.addPostFrameCallback((_) {
+//   //     if (widget.chatId != null && widget.chatId!.isNotEmpty) {
+//   //       _loadChatById(widget.chatId!);
+//   //     }
+//   //     _isInitialized = true;
+//   //   });
+
+//   //   MixpanelService.trackFirstFeatureUsed('NAHL');
+//   // }
 
 //   @override
 //   void dispose() {
@@ -1260,7 +1378,6 @@ void initState() {
 
 //   // ==================== State Management ====================
 
-//   /// Load a specific chat by its ID
 //   Future<void> _loadChatById(String chatId) async {
 //     try {
 //       await ref.read(chatProvider.notifier).loadChatById(chatId);
@@ -1276,8 +1393,6 @@ void initState() {
 //             'Session expired. Please login again.',
 //             type: SnackbarType.error,
 //           );
-//           // Navigate to login screen
-//           // context.go('/login');
 //         }
 //         return;
 //       }
@@ -1293,7 +1408,6 @@ void initState() {
 //         return;
 //       }
 
-//       // Update state to show active chat if messages were loaded
 //       if (chatState.messages.isNotEmpty && mounted) {
 //         setState(() {
 //           _viewMode = ChatViewMode.activeChat;
@@ -1311,48 +1425,36 @@ void initState() {
 //     }
 //   }
 
-//   /// Determine the appropriate view mode based on chat state
 //   ChatViewMode _determineViewMode(ChatState chatState) {
-//     // If explicitly in history mode
 //     if (_viewMode == ChatViewMode.chatHistory) {
 //       return ChatViewMode.chatHistory;
 //     }
-
-//     // If there are messages, show active chat
 //     if (chatState.messages.isNotEmpty) {
 //       return ChatViewMode.activeChat;
 //     }
-
-//     // Otherwise, show new chat welcome screen
 //     return ChatViewMode.newChat;
 //   }
 
-//   /// Switch to chat history view
 //   void _showChatHistory() {
 //     setState(() {
 //       _viewMode = ChatViewMode.chatHistory;
 //     });
-//     // Refresh chat history when showing it
 //     ref.read(chatProvider.notifier).fetchChatHistory();
 //   }
 
-//   /// Start a new chat (from history view or anywhere else)
 //   void _startNewChat() {
 //     setState(() {
 //       _viewMode = ChatViewMode.newChat;
 //     });
-//     // Clear current chat
 //     ref.read(chatProvider.notifier).clearCurrentChat();
 //   }
 
-//   /// Return to active chat from history
 //   void _returnToActiveChat() {
 //     setState(() {
 //       _viewMode = ChatViewMode.activeChat;
 //     });
 //   }
 
-//   /// Handle loading a chat room from history
 //   void _loadChatRoom(RoomData room) {
 //     _loadChatById(room.id);
 //   }
@@ -1364,14 +1466,11 @@ void initState() {
 
 //     if (message.isEmpty && _pickedFile == null) return;
 
-//     // Clear input immediately for better UX
 //     _messageController.clear();
 
 //     final (image, document) = _categorizeFile();
 
-//     final success = await ref
-//         .read(chatProvider.notifier)
-//         .sendMessage(
+//     final success = await ref.read(chatProvider.notifier).sendMessage(
 //           message.isEmpty ? "Sending attachment" : message,
 //           image: image,
 //           document: document,
@@ -1380,7 +1479,6 @@ void initState() {
 //     if (success) {
 //       setState(() {
 //         _pickedFile = null;
-//         // Switch to active chat mode after first message
 //         if (_viewMode == ChatViewMode.newChat) {
 //           _viewMode = ChatViewMode.activeChat;
 //         }
@@ -1400,7 +1498,6 @@ void initState() {
 
 //   (File?, File?) _categorizeFile() {
 //     if (_pickedFile == null) return (null, null);
-
 //     final isImage = FileUtils.isImageFile(_pickedFile!.path.toLowerCase());
 //     return isImage ? (_pickedFile, null) : (null, _pickedFile);
 //   }
@@ -1426,19 +1523,15 @@ void initState() {
 
 //   void _handleBudgetAction(ChatMessage message) {
 //     final budgetData = ChatWidgetDataParser.parseBudgetData(message.otherData);
-
 //     if (budgetData != null && budgetData.isNotEmpty) {
 //       // Navigate to budget adjustment screen with data
-//       // context.push('/budget/adjust', extra: budgetData);
 //     }
 //   }
 
 //   void _handleGoalAction(ChatMessage message) {
 //     final goalData = ChatWidgetDataParser.parseGoalData(message.otherData);
-
 //     if (goalData != null) {
 //       // Navigate to goal creation screen with pre-filled data
-//       // context.push('/goals/create', extra: goalData);
 //     }
 //   }
 
@@ -1469,8 +1562,10 @@ void initState() {
 //                 ),
 //               );
 //             },
-//             child: const Text('Clear', style: TextStyle(color: Colors.red, fontFamily: 'GeneralSans',
-//                     )),
+//             child: const Text(
+//               'Clear',
+//               style: TextStyle(color: Colors.red, fontFamily: 'GeneralSans'),
+//             ),
 //           ),
 //         ],
 //       ),
@@ -1491,8 +1586,6 @@ void initState() {
 //           TextButton(
 //             onPressed: () {
 //               context.pop();
-//               // TODO: Implement delete chat room API call
-//               // ref.read(chatProvider.notifier).deleteRoom(room.id);
 //               ScaffoldMessenger.of(context).showSnackBar(
 //                 const SnackBar(
 //                   content: Text('Chat deleted'),
@@ -1500,8 +1593,10 @@ void initState() {
 //                 ),
 //               );
 //             },
-//             child: const Text('Delete', style: TextStyle(color: Colors.red, fontFamily: 'GeneralSans',
-//                     )),
+//             child: const Text(
+//               'Delete',
+//               style: TextStyle(color: Colors.red, fontFamily: 'GeneralSans'),
+//             ),
 //           ),
 //         ],
 //       ),
@@ -1530,7 +1625,6 @@ void initState() {
 
 //     return chatAsync.when(
 //       data: (chatState) {
-//         // Determine current view mode
 //         final currentMode = _determineViewMode(chatState);
 
 //         return Scaffold(
@@ -1554,14 +1648,9 @@ void initState() {
 //   Widget _buildChatView(ChatState chatState, ChatViewMode mode) {
 //     return Column(
 //       children: [
-//         // Quick actions always visible at top
 //         _buildQuickActions(),
 //         const Gap(16),
-
-//         // Main content area
 //         Expanded(child: _buildMainContent(chatState, mode)),
-
-//         // Message input (only in new chat or active chat modes)
 //         if (mode != ChatViewMode.chatHistory)
 //           _buildMessageInputArea(chatState, mode),
 //       ],
@@ -1572,10 +1661,8 @@ void initState() {
 //     switch (mode) {
 //       case ChatViewMode.chatHistory:
 //         return _buildChatHistoryView(chatState);
-
 //       case ChatViewMode.activeChat:
 //         return _buildActiveChatView(chatState);
-
 //       case ChatViewMode.newChat:
 //         return _buildNewChatView();
 //     }
@@ -1596,7 +1683,6 @@ void initState() {
 //           child: Row(
 //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
 //             children: [
-//               // Back button or close button based on mode
 //               if (mode == ChatViewMode.chatHistory)
 //                 IconButton(
 //                   icon: const Icon(Icons.close),
@@ -1607,10 +1693,9 @@ void initState() {
 //               else
 //                 const BackButton(),
 
-//               // Persona selector
-//               _buildPersonaSelector(chatState.persona?.name ?? 'Select AI'),
+//               // ── Persona selector — fetches from API, resolves local image ──
+//               _buildPersonaSelector(),
 
-//               // Menu
 //               _buildMenuButton(mode),
 //             ],
 //           ),
@@ -1619,37 +1704,122 @@ void initState() {
 //     );
 //   }
 
-//   Widget _buildPersonaSelector(String personaName) {
+//   // ─────────────────────────────────────────────────────────────────────────
+//   // Persona selector
+//   //
+//   // Watches [myPersonaProvider] → GET /auth/update/getmypersona
+//   // The returned Persona.id / Persona.name is matched against
+//   // [_kLocalPersonalities] so the correct character image and name are shown.
+//   // ─────────────────────────────────────────────────────────────────────────
+
+//   Widget _buildPersonaSelector() {
+//     final personaAsync = ref.watch(myPersonaProvider);
+
 //     return InkWell(
 //       onTap: () => context.pushNamed(ChoosePersonalityScreen.path),
-//       // onTap: () {},
-//       child: Row(
-//         mainAxisSize: MainAxisSize.min,
-//         children: [
-//           Container(
-//             width: 32,
-//             height: 32,
-//             decoration: BoxDecoration(
-//               shape: BoxShape.circle,
-//               color: AppColors.primary.withValues(alpha: 0.1),
-//               border: Border.all(color: AppColors.primary),
+//       borderRadius: BorderRadius.circular(20),
+//       child: Padding(
+//         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+//         child: Row(
+//           mainAxisSize: MainAxisSize.min,
+//           children: [
+//             personaAsync.when(
+//               // ── Loaded: resolve local image + name from API response ────
+//               data: (persona) {
+//                 if (persona == null) return _personaSelectorContent(null, 'Select AI');
+
+//                 final local = _resolveLocalPersonality(
+//                   apiId: persona.id,
+//                   apiName: persona.name,
+//                 );
+
+//                 return _personaSelectorContent(
+//                   local['imagePath'],
+//                   local['name']!,
+//                 );
+//               },
+
+//               // ── Loading: slim skeleton ──────────────────────────────────
+//               loading: () => Row(
+//                 mainAxisSize: MainAxisSize.min,
+//                 children: [
+//                   _personaAvatar(null),
+//                   const Gap(8),
+//                   Container(
+//                     width: 48,
+//                     height: 10,
+//                     decoration: BoxDecoration(
+//                       color: Colors.grey.shade300,
+//                       borderRadius: BorderRadius.circular(5),
+//                     ),
+//                   ),
+//                 ],
+//               ),
+
+//               // ── Error: fallback icon + tap-to-select label ──────────────
+//               error: (_, __) => _personaSelectorContent(null, 'Select AI'),
 //             ),
-//             child: const Icon(
-//               Icons.smart_toy,
-//               size: 18,
-//               color: AppColors.primary,
-//             ),
-//           ),
-//           const Gap(8),
-//           Text(
-//             personaName,
-//             style: const TextStyle(fontSize: 12.0, fontWeight: FontWeight.w500, fontFamily: 'GeneralSans',
-//                     letterSpacing: 12 * 0.02,),
-//           ),
-//         ],
+//           ],
+//         ),
 //       ),
 //     );
 //   }
+
+//   /// Builds the inner [avatar + name] row used in the loaded & error states.
+//   Widget _personaSelectorContent(String? imagePath, String name) {
+//     return Row(
+//       mainAxisSize: MainAxisSize.min,
+//       children: [
+//         _personaAvatar(imagePath),
+//         const Gap(8),
+//         Text(
+//           name,
+//           style: const TextStyle(
+//             fontSize: 12.0,
+//             fontWeight: FontWeight.w500,
+//             fontFamily: 'GeneralSans',
+//             letterSpacing: 12 * 0.02,
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+
+//   /// Circular avatar — shows the character image when [imagePath] is non-null,
+//   /// otherwise falls back to the bot icon.
+//   Widget _personaAvatar(String? imagePath) {
+//     return Container(
+//       width: 32,
+//       height: 32,
+//       decoration: BoxDecoration(
+//         shape: BoxShape.circle,
+//         color: AppColors.primary.withValues(alpha: 0.1),
+//         border: Border.all(color: AppColors.primary),
+//       ),
+//       child: ClipOval(
+//         child: imagePath != null
+//             ? Image.asset(
+//                 imagePath,
+//                 width: 32,
+//                 height: 32,
+//                 fit: BoxFit.cover,
+//                 // If the asset is missing for any reason, fall back to icon
+//                 errorBuilder: (_, __, ___) => const Icon(
+//                   Icons.smart_toy,
+//                   size: 18,
+//                   color: AppColors.primary,
+//                 ),
+//               )
+//             : const Icon(
+//                 Icons.smart_toy,
+//                 size: 18,
+//                 color: AppColors.primary,
+//               ),
+//       ),
+//     );
+//   }
+
+//   // ==================== Menu ====================
 
 //   Widget _buildMenuButton(ChatViewMode mode) {
 //     return PopupMenuButton<String>(
@@ -1744,7 +1914,7 @@ void initState() {
 //                 fontSize: 12.0,
 //                 fontWeight: FontWeight.w500,
 //                 fontFamily: 'GeneralSans',
-//                     letterSpacing: 12 * 0.02,
+//                 letterSpacing: 12 * 0.02,
 //               ),
 //             ),
 //           ],
@@ -1757,12 +1927,12 @@ void initState() {
 
 //   Widget _buildChatHistoryView(ChatState chatState) {
 //     final rooms = chatState.allRooms;
-//     final maxChats = 50;
+//     const maxChats = 50;
 
 //     return RefreshIndicator(
 //       onRefresh: () => ref.read(chatProvider.notifier).fetchChatHistory(),
 //       child: SingleChildScrollView(
-//         physics: const AlwaysScrollableScrollPhysics(), // Required for refresh
+//         physics: const AlwaysScrollableScrollPhysics(),
 //         padding: const EdgeInsets.symmetric(horizontal: 16.0),
 //         child: Column(
 //           children: [
@@ -1777,25 +1947,6 @@ void initState() {
 //       ),
 //     );
 //   }
-
-//   // Widget _buildChatHistoryView(ChatState chatState) {
-//   //   final rooms = chatState.allRooms;
-//   //   final maxChats = 50; // This could come from API or config
-
-//   //   return SingleChildScrollView(
-//   //     padding: const EdgeInsets.symmetric(horizontal: 16.0),
-//   //     child: Column(
-//   //       children: [
-//   //         _buildChatHistoryHeader(rooms.length, maxChats),
-//   //         const Gap(16),
-//   //         rooms.isEmpty
-//   //             ? _buildEmptyChatHistory()
-//   //             : _buildChatHistoryList(rooms),
-//   //         const Gap(24),
-//   //       ],
-//   //     ),
-//   //   );
-//   // }
 
 //   Widget _buildChatHistoryHeader(int currentCount, int maxCount) {
 //     return Row(
@@ -1814,7 +1965,7 @@ void initState() {
 //               fontWeight: FontWeight.w500,
 //               decoration: TextDecoration.underline,
 //               fontFamily: 'GeneralSans',
-//                     letterSpacing: 12 * 0.02,
+//               letterSpacing: 12 * 0.02,
 //             ),
 //           ),
 //         ),
@@ -1852,15 +2003,19 @@ void initState() {
 //               fontWeight: FontWeight.w500,
 //               color: AppColors.grey,
 //               fontFamily: 'GeneralSans',
-//                     letterSpacing: 16 * 0.02,
+//               letterSpacing: 16 * 0.02,
 //             ),
 //           ),
 //           const Gap(8),
 //           const Text(
 //             'Start a conversation to see your chats here',
 //             textAlign: TextAlign.center,
-//             style: TextStyle(fontSize: 14, color: AppColors.grey, fontFamily: 'GeneralSans',
-//                     letterSpacing: 14 * 0.02,),
+//             style: TextStyle(
+//               fontSize: 14,
+//               color: AppColors.grey,
+//               fontFamily: 'GeneralSans',
+//               letterSpacing: 14 * 0.02,
+//             ),
 //           ),
 //         ],
 //       ),
@@ -1884,11 +2039,9 @@ void initState() {
 //       child: Column(
 //         mainAxisSize: MainAxisSize.min,
 //         children: rooms.asMap().entries.map((entry) {
-//           final index = entry.key;
-//           final room = entry.value;
 //           return _buildChatHistoryItem(
-//             room: room,
-//             isLast: index == rooms.length - 1,
+//             room: entry.value,
+//             isLast: entry.key == rooms.length - 1,
 //           );
 //         }).toList(),
 //       ),
@@ -1926,7 +2079,7 @@ void initState() {
 //                       fontSize: 16,
 //                       fontWeight: FontWeight.w500,
 //                       fontFamily: 'GeneralSans',
-//                     letterSpacing: 16 * 0.02,
+//                       letterSpacing: 16 * 0.02,
 //                     ),
 //                     maxLines: 2,
 //                     overflow: TextOverflow.ellipsis,
@@ -1938,7 +2091,7 @@ void initState() {
 //                       fontWeight: FontWeight.w500,
 //                       color: AppColors.grey,
 //                       fontFamily: 'GeneralSans',
-//                     letterSpacing: 12 * 0.02,
+//                       letterSpacing: 12 * 0.02,
 //                     ),
 //                   ),
 //                 ],
@@ -1955,6 +2108,7 @@ void initState() {
 //               },
 //               itemBuilder: (context) => [
 //                 const PopupMenuItem(
+//                   value: 'open',
 //                   child: Row(
 //                     children: [
 //                       Icon(Icons.open_in_new, size: 20),
@@ -1969,8 +2123,13 @@ void initState() {
 //                     children: [
 //                       Icon(Icons.delete_outline, size: 20, color: Colors.red),
 //                       Gap(12.0),
-//                       Text('Delete', style: TextStyle(color: Colors.red, fontFamily: 'GeneralSans',
-//               )),
+//                       Text(
+//                         'Delete',
+//                         style: TextStyle(
+//                           color: Colors.red,
+//                           fontFamily: 'GeneralSans',
+//                         ),
+//                       ),
 //                     ],
 //                   ),
 //                 ),
@@ -2008,12 +2167,10 @@ void initState() {
 //     final reversedIndex = chatState.messages.length - 1 - index;
 //     final message = chatState.messages[reversedIndex];
 
-//     final isFirst =
-//         reversedIndex == 0 ||
+//     final isFirst = reversedIndex == 0 ||
 //         chatState.messages[reversedIndex - 1].from != message.from;
 
-//     final isLast =
-//         reversedIndex == chatState.messages.length - 1 ||
+//     final isLast = reversedIndex == chatState.messages.length - 1 ||
 //         (reversedIndex + 1 < chatState.messages.length &&
 //             chatState.messages[reversedIndex + 1].from != message.from);
 
@@ -2044,8 +2201,12 @@ void initState() {
 //           ),
 //           const Text(
 //             'Thinking...',
-//             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, fontFamily: 'GeneralSans',
-//                     letterSpacing: 16 * 0.02,),
+//             style: TextStyle(
+//               fontSize: 16,
+//               fontWeight: FontWeight.w500,
+//               fontFamily: 'GeneralSans',
+//               letterSpacing: 16 * 0.02,
+//             ),
 //           ),
 //         ],
 //       ),
@@ -2065,15 +2226,22 @@ void initState() {
 //             const Gap(24.0),
 //             const Text(
 //               'Nahl Chat',
-//               style: TextStyle(fontSize: 28, fontWeight: FontWeight.w500, fontFamily: 'GeneralSans',
-//                     letterSpacing: 28 * 0.02,),
+//               style: TextStyle(
+//                 fontSize: 28,
+//                 fontWeight: FontWeight.w500,
+//                 fontFamily: 'GeneralSans',
+//                 letterSpacing: 28 * 0.02,
+//               ),
 //             ),
 //             const Gap(16),
 //             const Text(
 //               'Start a conversation to see your Nahl chat history',
 //               textAlign: TextAlign.center,
-//               style: TextStyle(fontSize: 16, fontFamily: 'GeneralSans',
-//                     letterSpacing: 16 * 0.02,),
+//               style: TextStyle(
+//                 fontSize: 16,
+//                 fontFamily: 'GeneralSans',
+//                 letterSpacing: 16 * 0.02,
+//               ),
 //             ),
 //             const Gap(24),
 //             CustomElevatedButton(
@@ -2158,8 +2326,8 @@ void initState() {
 //       onPressed: chatState.isSending
 //           ? null
 //           : () => FileUtils.pickFile().then((value) {
-//               setState(() => _pickedFile = value);
-//             }),
+//                 setState(() => _pickedFile = value);
+//               }),
 //       style: IconButton.styleFrom(
 //         foregroundColor: AppColors.primary,
 //         disabledBackgroundColor: AppColors.primary.withValues(alpha: 0.1),
@@ -2176,7 +2344,6 @@ void initState() {
 
 //     return IconButton(
 //       icon: Icon(
-//         // hasContent ? Icons.send_rounded : Icons.multitrack_audio_rounded,
 //         Icons.send_rounded,
 //         color: hasContent
 //             ? AppColors.primary
@@ -2187,8 +2354,6 @@ void initState() {
 //           : () {
 //               if (hasContent) {
 //                 _sendMessage();
-//               } else {
-//                 // Future: Add voice input functionality
 //               }
 //             },
 //     );
