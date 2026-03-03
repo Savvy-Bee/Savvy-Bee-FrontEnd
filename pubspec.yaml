@@ -165,6 +165,17 @@ flutter:
     - assets/images/icons/susu.png
     - assets/images/icons/luna.png
     - assets/images/icons/boo.png
+    - assets/images/icons/budget categories/Auto & Transport.png
+    - assets/images/icons/budget categories/Childcare & Education.png
+    - assets/images/icons/budget categories/Drinks & Dining.png
+    - assets/images/icons/budget categories/Entertainment.png
+    - assets/images/icons/budget categories/Financial.png
+    - assets/images/icons/budget categories/Groceries.png
+    - assets/images/icons/budget categories/Healthcare.png
+    - assets/images/icons/budget categories/Household.png
+    - assets/images/icons/budget categories/Other.png
+    - assets/images/icons/budget categories/Personal Care.png
+    - assets/images/icons/budget categories/Shopping.png
 
   fonts:
     - family: Excon
