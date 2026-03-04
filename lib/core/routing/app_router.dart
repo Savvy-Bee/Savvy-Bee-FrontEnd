@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:savvy_bee_mobile/core/widgets/tax_filing/filing_routes.dart';
 import 'package:savvy_bee_mobile/features/auth/presentation/screens/post_signup/architype/financial_architype_screen.dart';
 import 'package:savvy_bee_mobile/features/auth/presentation/screens/post_signup/bottom_sheets/referrer_screen.dart';
 import 'package:savvy_bee_mobile/features/auth/presentation/screens/post_signup/select_priority_screen.dart';
@@ -83,6 +84,13 @@ import 'package:savvy_bee_mobile/features/tools/presentation/screens/goals/goal_
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/goals/goal_finalyzing_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/goals/goal_recommendations_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/goals/goal_success_screen.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/tax_filing/filing_record_screen.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/tax_filing/filing_step1.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/tax_filing/filing_step2.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/tax_filing/filing_step3.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/tax_filing/filing_step4.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/tax_filing/filing_step5.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/tax_filing/filing_step6.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/tools_screen.dart';
 import '../../features/hive/presentation/screens/games/game_settings_screen.dart';
 import '../../features/hive/presentation/screens/games/game_terrain_screen.dart';
@@ -622,25 +630,23 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: SpendingScreen.path,
       name: SpendingScreen.path,
-       builder: (BuildContext context, GoRouterState state) {
+      builder: (BuildContext context, GoRouterState state) {
         return SpendingScreen();
       },
     ),
     GoRoute(
-  path: '/goal-finalizing',
-  builder: (context, state) {
-    final data = state.extra as Map<String, dynamic>?;
-    print('🔍 Route data: $data');
-    
-    if (data == null) {
-      return Scaffold(
-        body: Center(child: Text('Error: No data provided')),
-      );
-    }
-    
-    return GoalFinalizingScreen(goalData: data);
-  },
-),
+      path: '/goal-finalizing',
+      builder: (context, state) {
+        final data = state.extra as Map<String, dynamic>?;
+        print('🔍 Route data: $data');
+
+        if (data == null) {
+          return Scaffold(body: Center(child: Text('Error: No data provided')));
+        }
+
+        return GoalFinalizingScreen(goalData: data);
+      },
+    ),
     GoRoute(
       path: GoalSuccessScreen.path,
       name: GoalSuccessScreen.path,
@@ -696,6 +702,41 @@ final GoRouter appRouter = GoRouter(
       builder: (BuildContext context, GoRouterState state) {
         return const TaxStatsScreen();
       },
+    ),
+    GoRoute(
+      path: '/filing/step-1',
+      name: FilingRoutes.step1,
+      builder: (context, state) => const FilingStep1Screen(),
+    ),
+    GoRoute(
+      path: '/filing/step-2',
+      name: FilingRoutes.step2,
+      builder: (context, state) => const FilingStep2Screen(),
+    ),
+    GoRoute(
+      path: '/filing/step-3',
+      name: FilingRoutes.step3,
+      builder: (context, state) => const FilingStep3Screen(),
+    ),
+    GoRoute(
+      path: '/filing/step-4',
+      name: FilingRoutes.step4,
+      builder: (context, state) => const FilingStep4Screen(),
+    ),
+    GoRoute(
+      path: '/filing/step-5',
+      name: FilingRoutes.step5,
+      builder: (context, state) => const FilingStep5Screen(),
+    ),
+    GoRoute(
+      path: '/filing/step-6',
+      name: FilingRoutes.step6,
+      builder: (context, state) => const FilingStep6Screen(),
+    ),
+    GoRoute(
+      path: '/filing/record',
+      name: FilingRoutes.filingRecord,
+      builder: (context, state) => const FilingRecordScreen(),
     ),
 
     // Hive Routes
