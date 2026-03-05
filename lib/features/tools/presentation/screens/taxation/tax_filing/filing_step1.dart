@@ -1,219 +1,261 @@
+// lib/features/tools/presentation/screens/taxation/filing/filing_step1_screen.dart
+
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
+import 'package:savvy_bee_mobile/core/utils/num_extensions.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_error_widget.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_loading_widget.dart';
 import 'package:savvy_bee_mobile/core/widgets/tax_filing/filing_routes.dart';
+import 'package:savvy_bee_mobile/features/tools/domain/models/filing_home_data.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/providers/filing_home_provider.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/widgets/tax_filing/bottom_action_button.dart';
 
-class FilingStep1Screen extends StatelessWidget {
+class FilingStep1Screen extends ConsumerWidget {
   static const String path = FilingRoutes.step1;
 
   const FilingStep1Screen({super.key});
 
-  // ── Hardcoded summary data (replace with model/provider as needed) ──────
-  static const _items = [
-    _SummaryItem(label: 'Total income tracked this year', value: '₦9,600,000'),
-    _SummaryItem(label: 'Amount classified as taxable', value: '₦8,400,000'),
-    _SummaryItem(label: 'Amount saved in your Tax Pot', value: '₦121,000'),
-    _SummaryItem(label: 'Estimated tax liability', value: '₦118,400'),
-  ];
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final dataAsync = ref.watch(filingHomeProvider);
+
     return Scaffold(
       appBar: AppBar(
         leading: const BackButton(),
         title: const Text('Filing Summary'),
         centerTitle: false,
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView(
-              padding: const EdgeInsets.fromLTRB(16, 20, 16, 0),
-              children: [
-                // ── Step badge ──────────────────────────────────────────
-                _StepBadge(label: 'STEP 1 OF 6 · READINESS CHECK'),
-                const Gap(16),
+      body: dataAsync.when(
+        loading: () =>
+            const CustomLoadingWidget(text: 'Preparing your filing summary…'),
+        error: (error, _) => Center(
+          child: CustomErrorWidget.error(
+            subtitle: error.toString(),
+            onRetry: () => ref.read(filingHomeProvider.notifier).refresh(),
+          ),
+        ),
+        data: (data) => _Step1Body(data: data),
+      ),
+    );
+  }
+}
 
-                // ── Headline ────────────────────────────────────────────
-                Text(
-                  "Here's everything we already know.",
-                  style: _headline(context),
-                ),
-                const Gap(8),
-                Text(
-                  'Before any decisions are made, here\'s a clean summary of what Savvy Bee has prepared for your 2025 filing.',
-                  style: _body(context),
-                ),
-                const Gap(24),
+// ── Body (rendered only after data loads) ─────────────────────────────────────
 
-                // // ── Summary items ───────────────────────────────────────
-                // ..._items.map((item) => _CheckRow(item: item)),
-                // const Gap(16),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: Colors.grey.shade200),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.04),
-                        blurRadius: 12,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 24, 20, 20),
-                    child: Column(
-                      children: _items.asMap().entries.map((entry) {
-                        final index = entry.key;
-                        final item = entry.value;
-                        return Column(
-                          children: [
-                            _CheckRow(item: item),
-                            if (index < _items.length - 1)
-                              const Divider(
-                                height: 28,
-                                color: Color(0xFFF0F0F0),
-                              ),
-                          ],
-                        );
-                      }).toList(),
+class _Step1Body extends StatelessWidget {
+  final FilingHomeData data;
+
+  const _Step1Body({required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    final items = [
+      _SummaryItem(
+        label: 'Total income tracked this year',
+        value: data.totalEarnings.formatCurrency(decimalDigits: 0),
+      ),
+      _SummaryItem(
+        label: 'Amount classified as taxable',
+        value: data.taxableIncome.formatCurrency(decimalDigits: 0),
+      ),
+      _SummaryItem(
+        label: 'Amount saved in your Tax Pot',
+        value: data.taxPot.formatCurrency(decimalDigits: 0),
+      ),
+      _SummaryItem(
+        label: 'Estimated tax liability',
+        value: data.estimatedTax.formatCurrency(decimalDigits: 0),
+      ),
+    ];
+
+    return Column(
+      children: [
+        Expanded(
+          child: ListView(
+            padding: const EdgeInsets.fromLTRB(16, 20, 16, 0),
+            children: [
+              // ── Step badge ────────────────────────────────────────────
+              const _StepBadge(label: 'STEP 1 OF 6 · READINESS CHECK'),
+              const Gap(16),
+
+              // ── Headline ──────────────────────────────────────────────
+              Text(
+                "Here's everything we already know.",
+                style: _headline(context),
+              ),
+              const Gap(8),
+              Text(
+                'Before any decisions are made, here\'s a clean summary of what Savvy Bee has prepared for your 2025 filing.',
+                style: _body(context),
+              ),
+              const Gap(24),
+
+              // ── Summary items card ────────────────────────────────────
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: Colors.grey.shade200),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.04),
+                      blurRadius: 12,
+                      offset: const Offset(0, 4),
                     ),
-                  ),
+                  ],
                 ),
-                const Gap(24),
-
-                // ── Info note ───────────────────────────────────────────
-                Container(
-                  padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(
-                    color: Color(0xFFe8ebff).withOpacity(0.5),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    spacing: 10,
-                    children: [
-                      Container(
-                        width: 28,
-                        height: 28,
-                        decoration: BoxDecoration(
-                          color: Color(0xFFe0e7ff),
-                          shape: BoxShape.circle,
-                          border: Border.all(color: Color(0xFFe8ebff)),
-                        ),
-                        child: const Icon(
-                          Icons.access_time,
-                          size: 15,
-                          color: Color(0xFF4948ab),
-                        ),
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Savvy Bee has been preparing this since March.',
-                              style: const TextStyle(
-                                fontFamily: 'GeneralSans',
-                                fontSize: 13,
-                                fontWeight: FontWeight.w500,
-                                color: Color(0xFF4948ab),
-                              ),
-                            ),
-                            const Gap(2),
-                            Text(
-                              'All figures are sourced from your connected accounts and transactions.',
-                              style: TextStyle(
-                                fontFamily: 'GeneralSans',
-                                fontSize: 12,
-                                color: Color(0xFF4948ab),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const Gap(24),
-
-                // ── Estimated payable dark card ─────────────────────────────
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 18,
-                    horizontal: 20,
-                  ),
-                  decoration: BoxDecoration(
-                    // shape: BoxShape.circle,
-                    color: const Color(0xFF1A1A1A),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 24, 20, 20),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Estimated payable for 2025',
-                        style: const TextStyle(
-                          fontFamily: 'GeneralSans',
-                          fontSize: 12,
-                          color: Colors.white60,
-                        ),
-                      ),
-                      const Gap(4),
-                      Text(
-                        '₦118,400',
-                        style: const TextStyle(
-                          fontFamily: 'GeneralSans',
-                          fontSize: 28,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                          letterSpacing: 28 * 0.02,
-                        ),
-                      ),
-                      const Gap(6),
-                      Row(
-                        spacing: 6,
+                    children: items.asMap().entries.map((entry) {
+                      final index = entry.key;
+                      final item = entry.value;
+                      return Column(
                         children: [
-                          const Icon(
-                            Icons.check_circle,
-                            color: Color(0xFFF5C842),
-                            size: 14,
-                          ),
+                          _CheckRow(item: item),
+                          if (index < items.length - 1)
+                            const Divider(height: 28, color: Color(0xFFF0F0F0)),
+                        ],
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
+              const Gap(24),
+
+              // ── Info note ─────────────────────────────────────────────
+              Container(
+                padding: const EdgeInsets.all(14),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFe8ebff).withOpacity(0.5),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: 10,
+                  children: [
+                    Container(
+                      width: 28,
+                      height: 28,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFe0e7ff),
+                        shape: BoxShape.circle,
+                        border: Border.all(color: const Color(0xFFe8ebff)),
+                      ),
+                      child: const Icon(
+                        Icons.access_time,
+                        size: 15,
+                        color: Color(0xFF4948ab),
+                      ),
+                    ),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
                           Text(
-                            'Your Tax Pot of ₦121,000 fully covers this',
+                            'Savvy Bee has been preparing this since March.',
+                            style: TextStyle(
+                              fontFamily: 'GeneralSans',
+                              fontSize: 13,
+                              fontWeight: FontWeight.w500,
+                              color: Color(0xFF4948ab),
+                            ),
+                          ),
+                          Gap(2),
+                          Text(
+                            'All figures are sourced from your connected accounts and transactions.',
+                            style: TextStyle(
+                              fontFamily: 'GeneralSans',
+                              fontSize: 12,
+                              color: Color(0xFF4948ab),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Gap(24),
+
+              // ── Estimated payable dark card ───────────────────────────
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(
+                  vertical: 18,
+                  horizontal: 20,
+                ),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF1A1A1A),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Estimated payable for 2025',
+                      style: TextStyle(
+                        fontFamily: 'GeneralSans',
+                        fontSize: 12,
+                        color: Colors.white60,
+                      ),
+                    ),
+                    const Gap(4),
+                    Text(
+                      data.estimatedTax.formatCurrency(decimalDigits: 0),
+                      style: const TextStyle(
+                        fontFamily: 'GeneralSans',
+                        fontSize: 28,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                        letterSpacing: 28 * 0.02,
+                      ),
+                    ),
+                    const Gap(6),
+                    Row(
+                      spacing: 6,
+                      children: [
+                        const Icon(
+                          Icons.check_circle,
+                          color: Color(0xFFF5C842),
+                          size: 14,
+                        ),
+                        Expanded(
+                          child: Text(
+                            data.taxPotCoversLiability
+                                ? 'Your Tax Pot of ${data.taxPot.formatCurrency(decimalDigits: 0)} fully covers this'
+                                : 'Your Tax Pot: ${data.taxPot.formatCurrency(decimalDigits: 0)}',
                             style: const TextStyle(
                               fontFamily: 'GeneralSans',
                               fontSize: 12,
                               color: Colors.white70,
                             ),
                           ),
-                        ],
-                      ),
-                    ],
-                  ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-                const Gap(24),
-              ],
-            ),
+              ),
+              const Gap(24),
+            ],
           ),
+        ),
 
-          // ── CTA button ──────────────────────────────────────────────
-          BottomActionButton(
-            label: 'Looks good — choose my filing plan',
-            onTap: () => context.pushNamed(FilingRoutes.step2),
-          ),
-        ],
-      ),
+        // ── CTA button ────────────────────────────────────────────────
+        BottomActionButton(
+          label: 'Looks good — choose my filing plan',
+          onTap: () => context.pushNamed(FilingRoutes.step2),
+        ),
+      ],
     );
   }
 }
 
-// ── Private helpers ──────────────────────────────────────────────────────────
+// ── Helpers ───────────────────────────────────────────────────────────────────
 
 TextStyle _headline(BuildContext context) => const TextStyle(
   fontFamily: 'GeneralSans',
@@ -243,11 +285,9 @@ class _CheckRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        vertical: 6,
-      ), // ← softer vertical spacing
+      padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center, // better alignment
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
             width: 24,
