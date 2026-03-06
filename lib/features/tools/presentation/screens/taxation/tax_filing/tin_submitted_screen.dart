@@ -5,6 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/widgets/tax_filing/filing_routes.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/taxation_dashboard_screen.dart';
 
 class TinSubmittedScreen extends StatelessWidget {
   static const String path = FilingRoutes.tinSubmitted;
@@ -212,46 +213,47 @@ class TinSubmittedScreen extends StatelessWidget {
                   const Gap(28),
 
                   // ── Preview filing flow button ─────────────────────────────
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton.icon(
-                      onPressed: () => context.pushNamed(FilingRoutes.step1),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: _yellow,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50),
-                        ),
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        elevation: 0,
-                      ),
-                      icon: const SizedBox.shrink(),
-                      label: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            'Preview filing flow',
-                            style: _gs(
-                              15,
-                              weight: FontWeight.w600,
-                              color: Colors.black,
-                            ),
-                          ),
-                          const SizedBox(width: 6),
-                          const Icon(
-                            Icons.chevron_right,
-                            size: 18,
-                            color: Colors.black,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const Gap(12),
+                  // SizedBox(
+                  //   width: double.infinity,
+                  //   child: ElevatedButton.icon(
+                  //     onPressed: () => context.pushNamed(FilingRoutes.step1),
+                  //     style: ElevatedButton.styleFrom(
+                  //       backgroundColor: _yellow,
+                  //       shape: RoundedRectangleBorder(
+                  //         borderRadius: BorderRadius.circular(50),
+                  //       ),
+                  //       padding: const EdgeInsets.symmetric(vertical: 16),
+                  //       elevation: 0,
+                  //     ),
+                  //     icon: const SizedBox.shrink(),
+                  //     label: Row(
+                  //       mainAxisSize: MainAxisSize.min,
+                  //       children: [
+                  //         Text(
+                  //           'Preview filing flow',
+                  //           style: _gs(
+                  //             15,
+                  //             weight: FontWeight.w600,
+                  //             color: Colors.black,
+                  //           ),
+                  //         ),
+                  //         const SizedBox(width: 6),
+                  //         const Icon(
+                  //           Icons.chevron_right,
+                  //           size: 18,
+                  //           color: Colors.black,
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
+                  // const Gap(12),
 
                   // ── Back to home link ─────────────────────────────────────
                   Center(
                     child: TextButton.icon(
-                      onPressed: () => context.pop(),
+                      onPressed: () =>
+                          context.pushNamed(TaxationDashboardScreen.path),
                       icon: const Icon(
                         Icons.home_outlined,
                         size: 16,
