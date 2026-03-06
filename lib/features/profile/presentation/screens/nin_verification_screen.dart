@@ -449,16 +449,26 @@ class _NinVerificationScreenState extends ConsumerState<NinVerificationScreen> {
                   children: [
                     Container(
                       width: 240,
-                      height: 240,
+                      height: 290,
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.black, width: 2),
                         color: Colors.black,
                       ),
                       child: _selfieImage != null
-                          ? Image.file(
-                              File(_selfieImage!.path),
-                              fit: BoxFit.cover,
+                          ? Transform(
+                              alignment: Alignment.center,
+                              transform: Matrix4.rotationY(
+                                3.14159,
+                              ), // ≈ π radians → horizontal flip
+                              child: Image.file(
+                                File(_selfieImage!.path),
+                                fit: BoxFit.cover,
+                              ),
                             )
+                          // ? Image.file(
+                          //     File(_selfieImage!.path),
+                          //     fit: BoxFit.cover,
+                          //   )
                           : _isCameraInitialized && _cameraController != null
                           ? ClipRect(
                               child: OverflowBox(
@@ -468,7 +478,7 @@ class _NinVerificationScreenState extends ConsumerState<NinVerificationScreen> {
                                   child: SizedBox(
                                     width: 280,
                                     height:
-                                        280 /
+                                        330 /
                                         _cameraController!.value.aspectRatio,
                                     child: CameraPreview(_cameraController!),
                                   ),

@@ -32,17 +32,17 @@ class TaxCalculatorStages {
   /// All non-zero stages as label → value pairs for display.
   List<MapEntry<String, double>> get nonZeroEntries {
     final labels = [
-      'First ₦300,000 @ 7%',
-      'Next ₦300,000 @ 11%',
-      'Next ₦500,000 @ 15%',
-      'Next ₦500,000 @ 19%',
-      'Balance @ 21%–24%',
-      'Additional',
+      'First ₦800,000 @ 0%',
+      'Next ₦2,200,000 @ 15%',
+      'Next ₦9,000,000 @ 18%',
+      'Next ₦13,000,000 @ 21%',
+      'Next ₦25,000,000 @ 23%',
+      'Next ₦50,000,000 @ 25%',
     ];
     final values = [stage1, stage2, stage3, stage4, stage5, stage6];
     return [
       for (int i = 0; i < 6; i++)
-        if (values[i] != 0) MapEntry(labels[i], values[i]),
+        if (i != 0 && values[i] != 0) MapEntry(labels[i], values[i]),
     ];
   }
 

@@ -35,6 +35,9 @@ class TaxCalculatorRepository {
   }) async {
     final otherExemptions = nhf + nhis + pension + loanInterest + lifeInsurance;
 
+    print('Calculating tax with earnings: $earnings, rent: $rent, '
+        'otherExemptions: $otherExemptions');
+
     final uri = Uri.parse('$_baseUrl/tools/taxation/calculator').replace(
       queryParameters: {
         'earnings': earnings.toStringAsFixed(0),
@@ -50,6 +53,8 @@ class TaxCalculatorRepository {
         'Content-Type': 'application/json',
       },
     );
+
+    print('Tax Calculator API response: ${response.statusCode} ${response.body}');
 
     if (response.statusCode != 200) {
       throw Exception(

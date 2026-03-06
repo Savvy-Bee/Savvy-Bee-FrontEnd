@@ -55,7 +55,7 @@ class TaxCalculatorNotifier extends StateNotifier<TaxCalculatorState> {
     state = state.copyWith(isLoading: true, error: null);
     try {
       final result = await _repo.calculate(
-        earnings: earnings,
+        earnings: earnings / 12,
         rent: rent,
         nhf: nhf,
         nhis: nhis,

@@ -91,6 +91,11 @@ import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/ta
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/tax_filing/filing_step4.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/tax_filing/filing_step5.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/tax_filing/filing_step6.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/tax_filing/taxpayer_id_Screen.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/tax_filing/tin_reg_screen1.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/tax_filing/tin_submitted_screen.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/tax_filing/tin_validation_screen1.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/tax_filing/tin_validation_screen2.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/tools_screen.dart';
 import '../../features/hive/presentation/screens/games/game_settings_screen.dart';
 import '../../features/hive/presentation/screens/games/game_terrain_screen.dart';
@@ -738,7 +743,41 @@ final GoRouter appRouter = GoRouter(
       name: FilingRoutes.filingRecord,
       builder: (context, state) => const FilingRecordScreen(),
     ),
-
+    GoRoute(
+      path: FilingRoutes.taxpayerId,
+      name: FilingRoutes.taxpayerId,
+      builder: (_, __) => const TaxpayerIdScreen(),
+    ),
+    GoRoute(
+      path: FilingRoutes.tinValidation1,
+      name: FilingRoutes.tinValidation1,
+      builder: (_, __) => const TinValidationScreen1(),
+    ),
+    GoRoute(
+      path: FilingRoutes.tinValidation2,
+      name: FilingRoutes.tinValidation2,
+      builder: (_, __) => const TinValidationScreen2(),
+    ),
+    GoRoute(
+      path: FilingRoutes.tinReg1,
+      name: FilingRoutes.tinReg1,
+      builder: (_, __) => const TinRegScreen1(),
+    ),
+    GoRoute(
+      path: FilingRoutes.tinReg2,
+      name: FilingRoutes.tinReg2,
+      builder: (_, __) => const TinRegScreen2(),
+    ),
+    GoRoute(
+      path: FilingRoutes.tinReg3,
+      name: FilingRoutes.tinReg3,
+      builder: (_, __) => const TinRegScreen3(),
+    ),
+    GoRoute(
+      path: FilingRoutes.tinSubmitted,
+      name: FilingRoutes.tinSubmitted,
+      builder: (_, __) => const TinSubmittedScreen(),
+    ),
     // Hive Routes
     GoRoute(
       path: LessonHomeScreen.path,
