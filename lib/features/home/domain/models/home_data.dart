@@ -149,7 +149,7 @@ class HomeData {
   final String language;
   final String profilePhoto;
   final String aiPersonality;
-  final String dob;
+  // final String dob;
   final Kyc kyc;
   final AIData aiData;
   final HiveData hive;
@@ -164,7 +164,7 @@ class HomeData {
     required this.language,
     required this.profilePhoto,
     required this.aiPersonality,
-    required this.dob,
+    // required this.dob,
     required this.kyc,
     required this.aiData,
     required this.hive,
@@ -181,7 +181,7 @@ class HomeData {
       language: json['Language'] as String,
       profilePhoto: json['ProfilePhoto'] as String,
       aiPersonality: json['AIPersonality'] as String,
-      dob: json['DOB'] as String,
+      // dob: json['DOB'] as String,
       kyc: Kyc.fromJson(json['Kyc'] as Map<String, dynamic>),
       aiData: AIData.fromJson(json['AIData'] as Map<String, dynamic>),
       hive: HiveData.fromJson(json['Hive'] as Map<String, dynamic>),
@@ -199,7 +199,7 @@ class HomeData {
       'Language': language,
       'ProfilePhoto': profilePhoto,
       'AIPersonality': aiPersonality,
-      'DOB': dob,
+      // 'DOB': dob,
       'Kyc': kyc.toJson(),
       'AIData': aiData.toJson(),
       'Hive': hive.toJson(),

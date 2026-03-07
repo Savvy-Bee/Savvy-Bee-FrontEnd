@@ -156,6 +156,8 @@ class AuthRepository {
         data: {'email': email, 'password': password, 'deviceID': deviceID},
       );
 
+      print('Response: ${response.data}'); 
+
       // Parse the login response with nested token structure
       final loginResponse = ApiResponse<LoginData>.fromJson(
         response.data,

@@ -43,10 +43,10 @@ class SignupItems {
           ? 'We sent a code to $email'
           : 'We sent a code to your email',
     ),
-    const SignupItems(
-      title: 'What is your date of\nbirth?',
-      staticDescription: 'You must be 16 or older to use Savvy Bee',
-    ),
+    // const SignupItems(
+    //   title: 'What is your date of\nbirth?',
+    //   staticDescription: 'You must be 16 or older to use Savvy Bee',
+    // ),
     const SignupItems(
       title: 'What country do\nyou live in?',
       staticDescription: 'Regulations may vary depending on where you live',

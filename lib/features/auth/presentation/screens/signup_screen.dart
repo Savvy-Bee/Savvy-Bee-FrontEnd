@@ -53,7 +53,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   final _emailFormKey = GlobalKey<FormState>();
   final _usernameFormKey = GlobalKey<FormState>();
   final _passwordFormKey = GlobalKey<FormState>();
-  final _dobFormKey = GlobalKey<FormState>();
+  // final _dobFormKey = GlobalKey<FormState>();
   final _countryFormKey = GlobalKey<FormState>();
   final _languageFormKey = GlobalKey<FormState>();
   final _currencyFormKey = GlobalKey<FormState>();
@@ -65,13 +65,13 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _otpController = TextEditingController();
-  final _dobController = TextEditingController();
+  // final _dobController = TextEditingController();
   final _countryController = TextEditingController();
   final _languageController = TextEditingController();
   final _currencyController = TextEditingController();
 
   int _currentPage = 0;
-  static const int _dotCount = 9;
+  static const int _dotCount = 8;
   bool _showPassword = false;
 
   final ScrollController _scrollController = ScrollController();
@@ -154,7 +154,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
     _usernameController.dispose();
     _passwordController.dispose();
     _otpController.dispose();
-    _dobController.dispose();
+    // _dobController.dispose();
     _countryController.dispose();
     _languageController.dispose();
     _currencyController.dispose();
@@ -291,22 +291,22 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
           break;
 
         // ── Page 5: Date of birth ─────────────────────────────────────────────
-        case 5:
-          if (_dobFormKey.currentState!.validate()) _goToNextPage();
-          break;
+        // case 5:
+        //   if (_dobFormKey.currentState!.validate()) _goToNextPage();
+        //   break;
 
         // ── Page 6: Country ───────────────────────────────────────────────────
-        case 6:
+        case 5:
           if (_countryFormKey.currentState!.validate()) _goToNextPage();
-          break;
+          break; 
 
         // ── Page 7: Language ──────────────────────────────────────────────────
-        case 7:
+        case 6:
           if (_languageFormKey.currentState!.validate()) _goToNextPage();
           break;
 
         // ── Page 8: Currency + register other details ─────────────────────────
-        case 8:
+        case 7:
           if (!_currencyFormKey.currentState!.validate()) return;
 
           final success = await ref
@@ -314,7 +314,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
               .registerOtherDetails(
                 RegisterOtherDetailsRequest(
                   email: _emailController.text.trim(),
-                  dob: _dobController.text,
+                  // dob: _dobController.text,
                   country: _countryController.text,
                   currency: _currencyController.text,
                   language: _languageController.text,
@@ -410,7 +410,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                           _usernameView(),
                           _passwordView(),
                           _otpView(),
-                          _dobView(),
+                          // _dobView(),
                           _countryView(),
                           _languageView(),
                           _currencyView(),
@@ -582,33 +582,33 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
     );
   }
 
-  Widget _dobView() {
-    return Form(
-      key: _dobFormKey,
-      child: CustomTextFormField(
-        hint: 'Date of birth (DD/MM/YYYY)',
-        controller: _dobController,
-        readOnly: true,
-        onTap: () async {
-          final initialDate = DateTime.now().subtract(
-            const Duration(days: 365 * 16),
-          );
-          final date = await DateTimeUtils.pickDate(
-            context,
-            initialDate: initialDate,
-            firstDate: DateTime(1900),
-            lastDate: initialDate,
-            helpText: 'Select Date of Birth',
-          );
-          if (date != null) {
-            setState(() => _dobController.text = date.formatDateForRequest());
-          }
-        },
-        validator: (v) => InputValidator.validateRequired(v, 'Date of birth'),
-        suffixIcon: const Icon(Icons.calendar_today_outlined),
-      ),
-    );
-  }
+  // Widget _dobView() {
+  //   return Form(
+  //     key: _dobFormKey,
+  //     child: CustomTextFormField(
+  //       hint: 'Date of birth (DD/MM/YYYY)',
+  //       controller: _dobController,
+  //       readOnly: true,
+  //       onTap: () async {
+  //         final initialDate = DateTime.now().subtract(
+  //           const Duration(days: 365 * 16),
+  //         );
+  //         final date = await DateTimeUtils.pickDate(
+  //           context,
+  //           initialDate: initialDate,
+  //           firstDate: DateTime(1900),
+  //           lastDate: initialDate,
+  //           helpText: 'Select Date of Birth',
+  //         );
+  //         if (date != null) {
+  //           setState(() => _dobController.text = date.formatDateForRequest());
+  //         }
+  //       },
+  //       validator: (v) => InputValidator.validateRequired(v, 'Date of birth'),
+  //       suffixIcon: const Icon(Icons.calendar_today_outlined),
+  //     ),
+  //   );
+  // }
 
   Widget _countryView() {
     return Form(
