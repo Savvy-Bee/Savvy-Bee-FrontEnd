@@ -160,7 +160,7 @@ class _PinBottomSheetState extends State<PinBottomSheet> {
               return Container(
                 margin: const EdgeInsets.symmetric(horizontal: 8),
                 width: 58,
-                height: 60,
+                height: 50,
                 decoration: BoxDecoration(
                   color: const Color(0xFFF8F8F8),
                   borderRadius: BorderRadius.circular(12),

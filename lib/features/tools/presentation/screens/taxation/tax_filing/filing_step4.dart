@@ -56,7 +56,7 @@ class _FilingStep4ScreenState extends ConsumerState<FilingStep4Screen> {
     });
   }
 
-  Future<void> _onPayFee(double filingFee, bool isCustomQuote) async {
+  Future<void> _onPayFee(double filingFee, bool isCustomQuote, String filingId) async {
     if (_isPaying) return;
 
     final pin = await PinBottomSheet.show(
@@ -73,10 +73,10 @@ class _FilingStep4ScreenState extends ConsumerState<FilingStep4Screen> {
     setState(() => _isPaying = true);
     try {
       final repo = ref.read(filingPaymentRepositoryProvider);
-      await repo.payFillingFee(pin: pin);
+      await repo.payFillingFee(pin: pin, Id: filingId);
 
       if (mounted) {
-        setState(() => _isPaying = false);
+        setState(() => _isPaying = false); 
         AppNotification.show(
           context,
           message:
@@ -104,6 +104,7 @@ class _FilingStep4ScreenState extends ConsumerState<FilingStep4Screen> {
   Widget build(BuildContext context) {
     final selectedPlan = ref.watch(selectedFilingPlanProvider);
     final taxDue = ref.watch(filingTaxDueProvider);
+    final filingId = ref.watch(filingIDProvider);
     final filingData = ref.watch(filingHomeProvider).value;
 
     final filingFee = _planFees[selectedPlan] ?? 0.0;
@@ -341,7 +342,7 @@ class _FilingStep4ScreenState extends ConsumerState<FilingStep4Screen> {
                   : 'Pay filing fee — ${filingFee.formatCurrency(decimalDigits: 0)}',
               onTap: _isPaying
                   ? null
-                  : () => _onPayFee(filingFee, isCustomQuote),
+                  : () => _onPayFee(filingFee, isCustomQuote, filingId),
             ),
           ],
         ),

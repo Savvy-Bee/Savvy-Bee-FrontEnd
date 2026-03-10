@@ -1,7 +1,6 @@
 class ApiEndpoints {
   /// Base URL
-  static const String baseUrl =
-      'https://api.mysavvybee.com';
+  static const String baseUrl = 'https://api.mysavvybee.com';
   // static const String baseUrl =
   //     'https://savvy-bee-backend-nodejs-express-mongodb.onrender.com';
   // static const String baseUrl =
@@ -36,6 +35,7 @@ class ApiEndpoints {
   static const unlinkAccount = '/wallet/mono/linkaccount/unlink';
   static const dashboardData = '/wallet/mono/details/dashboard';
   static const String linkedAccounts = '/wallet/mono/details/alluserbanks';
+  static const String reauthorizeAccount = '/wallet/mono/linkaccount/reauth/1';
 
   /// Account Creation endpoints
   static const String createNairaAccount = '/wallet/accountcreation/ng';
@@ -54,8 +54,9 @@ class ApiEndpoints {
   static const String debtHome = '/tools/debt/home';
   static String createDebtStep(String stepNumber) =>
       '/tools/debt/create/$stepNumber';
-  static String manualFundDebt(String debtId) => '/tools/debt/update/manual/$debtId';
-static const String createManualDebt = '/tools/debt/create/manual';
+  static String manualFundDebt(String debtId) =>
+      '/tools/debt/update/manual/$debtId';
+  static const String createManualDebt = '/tools/debt/create/manual';
 
   /// Bills Endpoints
   // Airtime
@@ -113,7 +114,6 @@ static const String createManualDebt = '/tools/debt/create/manual';
   static const String taxationHome = '/tools/taxation/home';
   static const String taxationCalculator = '/tools/taxation/calculator';
   static const String taxationStrategies = '/tools/taxation/strategies';
-
 
   static const String getMyPersona = '/auth/update/getmypersona';
 }

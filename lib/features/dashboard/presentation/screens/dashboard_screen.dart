@@ -4,7 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:savvy_bee_mobile/features/dashboard/domain/models/linked_account.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/app_icons.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/illustrations.dart';
@@ -24,6 +26,9 @@ import 'package:savvy_bee_mobile/features/tools/presentation/screens/goals/goals
 
 const _kDashboardWalkthroughKey = 'dashboard_walkthrough_completed';
 
+// Matches the exact error message from the backend
+const _kReauthErrorSubstring = 'Accts require Reauths';
+
 class DashboardScreen extends ConsumerStatefulWidget {
   static const String path = '/dashboard';
 
@@ -42,6 +47,9 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
 
   // ── Reload button loading state ───────────────────────────────────────────
   bool _isReloading = false;
+
+  // ── Reauth loading state ──────────────────────────────────────────────────
+  bool _isReauthing = false;
 
   // ─────────────────────────────────────────────────────────────────────────
   // Lifecycle
@@ -86,7 +94,6 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     try {
       ref.invalidate(dashboardDataProvider);
       ref.invalidate(homeDataProvider);
-      // Wait for both providers to settle
       await Future.wait([
         ref.read(dashboardDataProvider('all').future).catchError((_) => null),
         ref.read(homeDataProvider.future).catchError((_) => null),
@@ -97,11 +104,156 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   }
 
   // ─────────────────────────────────────────────────────────────────────────
+  // Reauth flow
+  // ─────────────────────────────────────────────────────────────────────────
+
+  /// Checks whether a given error string is a reauth error.
+  bool _isReauthError(Object error) {
+    return error.toString().contains(_kReauthErrorSubstring);
+  }
+
+  /// Fetches linked accounts, picks the first one, calls the reauth
+  /// endpoint, launches the Mono URL, then waits for the user to return
+  /// before refreshing the dashboard.
+  Future<void> _handleReauth() async {
+    if (_isReauthing) return;
+    setState(() => _isReauthing = true);
+
+    try {
+      // 1️⃣ Await the linked accounts future directly — avoids the
+      //    race condition where valueOrNull is null while the
+      //    AutoDispose provider is still loading.
+      final linkedAccounts = await ref
+          .read(linkedAccountsProvider.future)
+          .catchError((_) => <LinkedAccount>[]);
+
+      if (linkedAccounts.isEmpty) {
+        _showSnackBar('No linked accounts found. Please link a bank account.');
+        return;
+      }
+
+      // print('Linked Accounts: $linkedAccounts');
+
+      final accountId = linkedAccounts.first.monoLinkedAcctId;
+
+      // 2️⃣ Call the reauth endpoint
+      final reauthUrl = await ref
+          .read(linkedAccountsProvider.notifier)
+          .reauthorizeAccount(accountId);
+
+      if (reauthUrl == null || reauthUrl.isEmpty) {
+        _showSnackBar('Could not get reauthorization link. Please try again.');
+        return;
+      }
+
+      // 3️⃣ Launch the Mono reauth URL
+      final uri = Uri.parse(reauthUrl);
+      final launched = await launchUrl(
+        uri,
+        mode: LaunchMode.externalApplication,
+      );
+
+      if (!launched) {
+        _showSnackBar('Could not open reauthorization link.');
+        return;
+      }
+
+      // 4️⃣ Tell user to come back after finishing reauth in browser
+      if (mounted) {
+        await showDialog<void>(
+          context: context,
+          barrierDismissible: false,
+          builder: (ctx) => AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            title: const Text(
+              'Complete Reauthorization',
+              style: TextStyle(
+                fontFamily: 'GeneralSans',
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            content: const Text(
+              'Please complete the reauthorization in your browser, then tap "Done" to refresh your dashboard.',
+              style: TextStyle(fontFamily: 'GeneralSans'),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(),
+                child: const Text(
+                  'Done',
+                  style: TextStyle(
+                    fontFamily: 'GeneralSans',
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.primary,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      }
+
+      // 5️⃣ Refresh dashboard after user confirms reauth complete
+      await _handleReload();
+    } catch (e) {
+      _showSnackBar(
+        'Reauthorization failed: ${e.toString().replaceFirst('Exception: ', '')}',
+      );
+    } finally {
+      if (mounted) setState(() => _isReauthing = false);
+    }
+  }
+
+  void _showSnackBar(String message) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          message,
+          style: const TextStyle(fontFamily: 'GeneralSans'),
+        ),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      ),
+    );
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────
   // Build
   // ─────────────────────────────────────────────────────────────────────────
 
   String formatMoney(double amount) {
     return '₦${NumberFormat('#,###.00').format(amount)}';
+  }
+
+  /// Builds the correct error widget depending on whether this is a
+  /// reauth error or a generic load failure.
+  Widget _buildDashboardError(Object error) {
+    final isReauth = _isReauthError(error);
+
+    if (isReauth) {
+      return CustomErrorWidget(
+        icon: Icons.lock_reset_rounded,
+        title: 'Reauthorization Required',
+        subtitle:
+            'Your bank account needs to be reauthorized before we can load your dashboard.',
+        actionButtonText: 'Reauthorize Account',
+        isActionLoading: _isReauthing,
+        onActionPressed: _isReauthing ? null : _handleReauth,
+      );
+    }
+
+    return CustomErrorWidget(
+      icon: Icons.dashboard_outlined,
+      title: 'Unable to Load Dashboard',
+      subtitle:
+          'We couldn\'t fetch your dashboard data. Please check your connection and try again.',
+      actionButtonText: 'Reload',
+      isActionLoading: _isReloading,
+      onActionPressed: _isReloading ? null : _handleReload,
+    );
   }
 
   @override
@@ -199,45 +351,25 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                   loading: () => const CustomLoadingWidget(
                     text: 'Loading your dashboard...',
                   ),
-                  error: (error, stack) => CustomErrorWidget(
-                    icon: Icons.dashboard_outlined,
-                    title: 'Unable to Load Dashboard',
-                    subtitle:
-                        'We couldn\'t fetch your dashboard data. Please check your connection and try again.',
-                    actionButtonText: 'Reload',
-                    isActionLoading: _isReloading,
-                    onActionPressed: _isReloading ? null : _handleReload,
-                  ),
+                  // ✅ Use the smart error builder here
+                  error: (error, stack) => _buildDashboardError(error),
                 ),
               ),
             );
           },
-          error: (error, stack) => Scaffold(
-            body: CustomErrorWidget(
-              icon: Icons.dashboard_outlined,
-              title: 'Unable to Load Dashboard',
-              subtitle:
-                  'We couldn\'t fetch your dashboard data. Please check your connection and try again.',
-              actionButtonText: 'Reload',
-              isActionLoading: _isReloading,
-              onActionPressed: _isReloading ? null : _handleReload,
-            ),
-          ),
+          error: (error, stack) => Scaffold(body: _buildDashboardError(error)),
           loading: () => const Scaffold(
             body: CustomLoadingWidget(text: 'Loading your dashboard...'),
           ),
         ),
 
         // ── Walkthrough overlay (above AppBar + body) ─────────────────────
-        // Shown only on the first visit when there is no linked account.
         if (_showWalkthrough)
           GestureDetector(
             onTap: _dismissWalkthrough,
             child: Stack(
               children: [
-                // Full-screen dark backdrop
                 Container(color: Colors.black.withOpacity(0.55)),
-                // Character image anchored to bottom-right
                 Align(
                   alignment: Alignment.bottomRight,
                   child: Image.asset(
@@ -254,7 +386,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   }
 
   // ─────────────────────────────────────────────────────────────────────────
-  // AppBar (unchanged)
+  // AppBar
   // ─────────────────────────────────────────────────────────────────────────
 
   AppBar _buildAppBar(String firstName, BuildContext context) {
@@ -1338,12 +1470,17 @@ class AllTransactionsBottomSheet extends StatelessWidget {
       '₦${NumberFormat('#,###.00').format(amount)}';
 }
 
+
+
+
+
 // import 'package:fl_chart/fl_chart.dart';
 // import 'package:flutter/material.dart';
 // import 'package:flutter_riverpod/flutter_riverpod.dart';
 // import 'package:gap/gap.dart';
 // import 'package:go_router/go_router.dart';
 // import 'package:intl/intl.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 // import 'package:savvy_bee_mobile/core/utils/assets/app_icons.dart';
 // import 'package:savvy_bee_mobile/core/utils/assets/illustrations.dart';
@@ -1361,6 +1498,8 @@ class AllTransactionsBottomSheet extends StatelessWidget {
 // import 'package:savvy_bee_mobile/features/profile/presentation/screens/profile_screen.dart';
 // import 'package:savvy_bee_mobile/features/tools/presentation/screens/goals/goals_screen.dart';
 
+// const _kDashboardWalkthroughKey = 'dashboard_walkthrough_completed';
+
 // class DashboardScreen extends ConsumerStatefulWidget {
 //   static const String path = '/dashboard';
 
@@ -1374,11 +1513,68 @@ class AllTransactionsBottomSheet extends StatelessWidget {
 //   final PageController _pageController = PageController();
 //   int _currentPage = 0;
 
+//   // ── Walkthrough ───────────────────────────────────────────────────────────
+//   bool _showWalkthrough = false;
+
+//   // ── Reload button loading state ───────────────────────────────────────────
+//   bool _isReloading = false;
+
+//   // ─────────────────────────────────────────────────────────────────────────
+//   // Lifecycle
+//   // ─────────────────────────────────────────────────────────────────────────
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     WidgetsBinding.instance.addPostFrameCallback((_) => _checkWalkthrough());
+//   }
+
 //   @override
 //   void dispose() {
 //     _pageController.dispose();
 //     super.dispose();
 //   }
+
+//   // ─────────────────────────────────────────────────────────────────────────
+//   // Walkthrough helpers
+//   // ─────────────────────────────────────────────────────────────────────────
+
+//   Future<void> _checkWalkthrough() async {
+//     final prefs = await SharedPreferences.getInstance();
+//     final completed = prefs.getBool(_kDashboardWalkthroughKey) ?? false;
+//     if (!completed && mounted) {
+//       setState(() => _showWalkthrough = true);
+//     }
+//   }
+
+//   Future<void> _dismissWalkthrough() async {
+//     final prefs = await SharedPreferences.getInstance();
+//     await prefs.setBool(_kDashboardWalkthroughKey, true);
+//     if (mounted) setState(() => _showWalkthrough = false);
+//   }
+
+//   // ─────────────────────────────────────────────────────────────────────────
+//   // Reload with loading state
+//   // ─────────────────────────────────────────────────────────────────────────
+
+//   Future<void> _handleReload() async {
+//     setState(() => _isReloading = true);
+//     try {
+//       ref.invalidate(dashboardDataProvider);
+//       ref.invalidate(homeDataProvider);
+//       // Wait for both providers to settle
+//       await Future.wait([
+//         ref.read(dashboardDataProvider('all').future).catchError((_) => null),
+//         ref.read(homeDataProvider.future).catchError((_) => null),
+//       ]);
+//     } finally {
+//       if (mounted) setState(() => _isReloading = false);
+//     }
+//   }
+
+//   // ─────────────────────────────────────────────────────────────────────────
+//   // Build
+//   // ─────────────────────────────────────────────────────────────────────────
 
 //   String formatMoney(double amount) {
 //     return '₦${NumberFormat('#,###.00').format(amount)}';
@@ -1387,149 +1583,166 @@ class AllTransactionsBottomSheet extends StatelessWidget {
 //   @override
 //   Widget build(BuildContext context) {
 //     final dashboardDataAsync = ref.watch(dashboardDataProvider('all'));
-
 //     final homeData = ref.watch(homeDataProvider);
 
-//     return homeData.when(
-//       skipLoadingOnRefresh: true, // Changed to true to show cached data
+//     return Stack(
+//       children: [
+//         // ── Main Scaffold ─────────────────────────────────────────────────
+//         homeData.when(
+//           skipLoadingOnRefresh: true,
+//           data: (value) {
+//             final data = value.data;
 
-//       data: (value) {
-//         final data = value.data;
-
-//         return Scaffold(
-//           appBar: _buildAppBar(data.firstName, context),
-//           body: SafeArea(
-//             child: dashboardDataAsync.when(
-//               skipLoadingOnRefresh: true, // Changed to true to show cached data
-//               data: (dashboardData) {
-//                 if (dashboardData == null) {
-//                   return CustomErrorWidget(
-//                     icon: Icons.link_off_rounded,
-//                     title: 'No linked account',
-//                     subtitle: 'Link your account to keep track of your money',
-//                     actionButtonText: 'Link account',
-//                     onActionPressed: () {
-//                       ConnectBankIntroBottomSheet.show(context);
-//                     },
-//                   );
-//                 }
-//                 return RefreshIndicator(
-//                   onRefresh: () =>
-//                       ref.read(dashboardDataProvider('all').notifier).refresh(),
-//                   child: SingleChildScrollView(
-//                     physics:
-//                         const AlwaysScrollableScrollPhysics(), // Ensures pull to refresh always works
-//                     child: Padding(
-//                       padding: const EdgeInsets.all(16.0),
-//                       child: Column(
-//                         crossAxisAlignment: CrossAxisAlignment.start,
-//                         children: [
-//                           SizedBox(
-//                             height: 420,
-//                             child: PageView(
-//                               controller: _pageController,
-//                               onPageChanged: (index) {
-//                                 setState(() {
-//                                   _currentPage = index;
-//                                 });
-//                               },
-//                               children: [
-//                                 SpendCard(dashboardData: dashboardData),
-//                                 NetWorthCard(dashboardData: dashboardData),
-//                                 FinancialHealthCard(
-//                                   healthData:
-//                                       dashboardData.widgets.financialHealth,
+//             return Scaffold(
+//               appBar: _buildAppBar(data.firstName, context),
+//               body: SafeArea(
+//                 child: dashboardDataAsync.when(
+//                   skipLoadingOnRefresh: true,
+//                   data: (dashboardData) {
+//                     if (dashboardData == null) {
+//                       return CustomErrorWidget(
+//                         icon: Icons.link_off_rounded,
+//                         title: 'No linked account',
+//                         subtitle:
+//                             'Link your account to keep track of your money',
+//                         actionButtonText: 'Link account',
+//                         onActionPressed: () {
+//                           ConnectBankIntroBottomSheet.show(context);
+//                         },
+//                       );
+//                     }
+//                     return RefreshIndicator(
+//                       onRefresh: () => ref
+//                           .read(dashboardDataProvider('all').notifier)
+//                           .refresh(),
+//                       child: SingleChildScrollView(
+//                         physics: const AlwaysScrollableScrollPhysics(),
+//                         child: Padding(
+//                           padding: const EdgeInsets.all(16.0),
+//                           child: Column(
+//                             crossAxisAlignment: CrossAxisAlignment.start,
+//                             children: [
+//                               SizedBox(
+//                                 height: 420,
+//                                 child: PageView(
+//                                   controller: _pageController,
+//                                   onPageChanged: (index) {
+//                                     setState(() => _currentPage = index);
+//                                   },
+//                                   children: [
+//                                     SpendCard(dashboardData: dashboardData),
+//                                     NetWorthCard(dashboardData: dashboardData),
+//                                     FinancialHealthCard(
+//                                       healthData:
+//                                           dashboardData.widgets.financialHealth,
+//                                     ),
+//                                   ],
 //                                 ),
-//                               ],
-//                             ),
+//                               ),
+//                               const Gap(8),
+//                               Row(
+//                                 mainAxisAlignment: MainAxisAlignment.center,
+//                                 children: List.generate(3, (index) {
+//                                   return Container(
+//                                     margin: const EdgeInsets.symmetric(
+//                                       horizontal: 4,
+//                                     ),
+//                                     width: _currentPage == index ? 16 : 8,
+//                                     height: 8,
+//                                     decoration: BoxDecoration(
+//                                       color: _currentPage == index
+//                                           ? AppColors.yellow
+//                                           : AppColors.greyLight,
+//                                       borderRadius: BorderRadius.circular(4),
+//                                     ),
+//                                   );
+//                                 }),
+//                               ),
+//                               const Gap(16),
+//                               AccountsSection(dashboardData: dashboardData),
+//                               const Gap(16),
+//                               RecentTransactionsSection(
+//                                 transactions: dashboardData.accounts.isNotEmpty
+//                                     ? dashboardData.accounts[0].history12Months
+//                                     : [],
+//                               ),
+//                             ],
 //                           ),
-//                           const Gap(8),
-//                           Row(
-//                             mainAxisAlignment: MainAxisAlignment.center,
-//                             children: List.generate(3, (index) {
-//                               return Container(
-//                                 margin: const EdgeInsets.symmetric(
-//                                   horizontal: 4,
-//                                 ),
-//                                 width: _currentPage == index ? 16 : 8,
-//                                 height: 8,
-//                                 decoration: BoxDecoration(
-//                                   color: _currentPage == index
-//                                       ? AppColors.yellow
-//                                       : AppColors.greyLight,
-//                                   borderRadius: BorderRadius.circular(4),
-//                                 ),
-//                               );
-//                             }),
-//                           ),
-//                           const Gap(16),
-//                           AccountsSection(dashboardData: dashboardData),
-//                           // const Gap(16),
-//                           // FinancialGoalsSection(savings: dashboardData.savings),
-//                           const Gap(16),
-//                           RecentTransactionsSection(
-//                             transactions: dashboardData.accounts.isNotEmpty
-//                                 ? dashboardData.accounts[0].history12Months
-//                                 : [],
-//                           ),
-//                         ],
+//                         ),
 //                       ),
-//                     ),
+//                     );
+//                   },
+//                   loading: () => const CustomLoadingWidget(
+//                     text: 'Loading your dashboard...',
 //                   ),
-//                 );
-//               },
-//               loading: () =>
-//                   const CustomLoadingWidget(text: 'Loading your dashboard...'),
-//               error: (error, stack) => CustomErrorWidget(
-//                 icon: Icons.dashboard_outlined,
-//                 title: 'Unable to Load Dashboard',
-//                 subtitle:
-//                     'We couldn\'t fetch your dashboard data. Please check your connection and try again.',
-//                 onActionPressed: () {
-//                   ref.invalidate(dashboardDataProvider);
-//                 },
-//                 actionButtonText: 'Reload',
+//                   error: (error, stack) => CustomErrorWidget(
+//                     icon: Icons.dashboard_outlined,
+//                     title: 'Unable to Load Dashboard',
+//                     subtitle:
+//                         'We couldn\'t fetch your dashboard data. Please check your connection and try again.',
+//                     actionButtonText: 'Reload',
+//                     isActionLoading: _isReloading,
+//                     onActionPressed: _isReloading ? null : _handleReload,
+//                   ),
+//                 ),
 //               ),
+//             );
+//           },
+//           error: (error, stack) => Scaffold(
+//             body: CustomErrorWidget(
+//               icon: Icons.dashboard_outlined,
+//               title: 'Unable to Load Dashboard',
+//               subtitle:
+//                   'We couldn\'t fetch your dashboard data. Please check your connection and try again.',
+//               actionButtonText: 'Reload',
+//               isActionLoading: _isReloading,
+//               onActionPressed: _isReloading ? null : _handleReload,
 //             ),
 //           ),
-//         );
-//       },
-//       error: (error, stack) => CustomErrorWidget(
-//         icon: Icons.dashboard_outlined,
-//         title: 'Unable to Load Dashboard',
-//         subtitle:
-//             'We couldn\'t fetch your dashboard data. Please check your connection and try again.',
-//         onActionPressed: () {
-//           ref.invalidate(dashboardDataProvider);
-//           ref.invalidate(homeDataProvider);
-//         },
-//       ),
-//       loading: () =>
-//           const CustomLoadingWidget(text: 'Loading your dashboard...'),
+//           loading: () => const Scaffold(
+//             body: CustomLoadingWidget(text: 'Loading your dashboard...'),
+//           ),
+//         ),
+
+//         // ── Walkthrough overlay (above AppBar + body) ─────────────────────
+//         // Shown only on the first visit when there is no linked account.
+//         if (_showWalkthrough)
+//           GestureDetector(
+//             onTap: _dismissWalkthrough,
+//             child: Stack(
+//               children: [
+//                 // Full-screen dark backdrop
+//                 Container(color: Colors.black.withOpacity(0.55)),
+//                 // Character image anchored to bottom-right
+//                 Align(
+//                   alignment: Alignment.bottomRight,
+//                   child: Image.asset(
+//                     'assets/images/walk_through/dashboard.png',
+//                     width: MediaQuery.of(context).size.width * 0.65,
+//                     fit: BoxFit.contain,
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           ),
+//       ],
 //     );
 //   }
+
+//   // ─────────────────────────────────────────────────────────────────────────
+//   // AppBar (unchanged)
+//   // ─────────────────────────────────────────────────────────────────────────
 
 //   AppBar _buildAppBar(String firstName, BuildContext context) {
 //     return AppBar(
 //       elevation: 0,
-//       backgroundColor: Colors.transparent, // important
-//       flexibleSpace: Container(
-//         decoration: const BoxDecoration(
-//           // gradient: LinearGradient(
-//           //   begin: Alignment.topLeft,
-//           //   end: Alignment.topRight, // left → right
-//           //   colors: [Color(0xFFFFEFB5), Color(0xFFFFC300)],
-//           // ),
-//         ),
-//       ),
+//       backgroundColor: Colors.transparent,
+//       flexibleSpace: Container(decoration: const BoxDecoration()),
 //       title: Row(
 //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
 //         children: [
-//           // LEFT
 //           GestureDetector(
-//             onTap: () {
-//               // Navigator.push(...)
-//             },
+//             onTap: () {},
 //             child: Row(
 //               mainAxisSize: MainAxisSize.min,
 //               children: [
@@ -1567,9 +1780,7 @@ class AllTransactionsBottomSheet extends StatelessWidget {
 //                     ],
 //                   ),
 //                 ),
-
 //                 const SizedBox(width: 25),
-
 //                 Image.asset(
 //                   'assets/images/topbar/nav-center-icon.png',
 //                   width: 30,
@@ -1579,8 +1790,6 @@ class AllTransactionsBottomSheet extends StatelessWidget {
 //               ],
 //             ),
 //           ),
-
-//           // RIGHT
 //           GestureDetector(
 //             onTap: () => context.pushNamed(ProfileScreen.path),
 //             child: Container(
@@ -1617,12 +1826,13 @@ class AllTransactionsBottomSheet extends StatelessWidget {
 //   }
 // }
 
-// // FIXED: Spend Card widget with dynamic time range comparisons
+// // ─────────────────────────────────────────────────────────────────────────────
+// // All widgets below are unchanged from the original
+// // ─────────────────────────────────────────────────────────────────────────────
+
 // class SpendCard extends StatefulWidget {
 //   final DashboardData dashboardData;
-
 //   const SpendCard({super.key, required this.dashboardData});
-
 //   @override
 //   State<SpendCard> createState() => _SpendCardState();
 // }
@@ -1635,7 +1845,6 @@ class AllTransactionsBottomSheet extends StatelessWidget {
 //     final now = DateTime.now();
 //     final cutoff = now.subtract(range.duration);
 //     double spend = 0;
-
 //     for (var account in widget.dashboardData.accounts) {
 //       for (var tx in account.history12Months) {
 //         if (tx.date.isAfter(cutoff) && tx.type == 'debit') {
@@ -1651,7 +1860,6 @@ class AllTransactionsBottomSheet extends StatelessWidget {
 //     final currentPeriodStart = now.subtract(range.duration);
 //     final previousPeriodStart = currentPeriodStart.subtract(range.duration);
 //     double spend = 0;
-
 //     for (var account in widget.dashboardData.accounts) {
 //       for (var tx in account.history12Months) {
 //         if (tx.date.isAfter(previousPeriodStart) &&
@@ -1701,8 +1909,6 @@ class AllTransactionsBottomSheet extends StatelessWidget {
 //   List<ChartDataPoint> getSpendChartData() {
 //     final now = DateTime.now();
 //     final cutoff = now.subtract(_selectedRange.duration);
-
-//     // Collect debit transactions within the selected range
 //     List<Transaction> debits = [];
 //     for (var account in widget.dashboardData.accounts) {
 //       debits.addAll(
@@ -1711,22 +1917,13 @@ class AllTransactionsBottomSheet extends StatelessWidget {
 //         ),
 //       );
 //     }
-
-//     if (debits.isEmpty) {
-//       return [];
-//     }
-
-//     // Sort by date
+//     if (debits.isEmpty) return [];
 //     debits.sort((a, b) => a.date.compareTo(b.date));
-
-//     // Group by day and sum amounts
 //     Map<DateTime, double> dailySpend = {};
 //     for (var tx in debits) {
 //       final dateOnly = DateTime(tx.date.year, tx.date.month, tx.date.day);
 //       dailySpend[dateOnly] = (dailySpend[dateOnly] ?? 0) + (tx.amount / 100);
 //     }
-
-//     // Convert to chart data points
 //     final sortedDates = dailySpend.keys.toList()..sort();
 //     return sortedDates
 //         .map(
@@ -1761,7 +1958,6 @@ class AllTransactionsBottomSheet extends StatelessWidget {
 //                     letterSpacing: 12 * 0.02,
 //                   ),
 //                 ),
-
 //                 const Gap(4),
 //                 if (previousSpend > 0)
 //                   Expanded(
@@ -1794,7 +1990,6 @@ class AllTransactionsBottomSheet extends StatelessWidget {
 //                   ),
 //               ],
 //             ),
-
 //             const Gap(8),
 //             Text(
 //               formatMoney(currentSpend),
@@ -1817,11 +2012,8 @@ class AllTransactionsBottomSheet extends StatelessWidget {
 //                                 timestamp: DateTime.now(),
 //                               ),
 //                             ],
-//                       onRangeChanged: (range) {
-//                         setState(() {
-//                           _selectedRange = range;
-//                         });
-//                       },
+//                       onRangeChanged: (range) =>
+//                           setState(() => _selectedRange = range),
 //                     )
 //                   : Center(
 //                       child: Column(
@@ -1844,11 +2036,8 @@ class AllTransactionsBottomSheet extends StatelessWidget {
 //                           ),
 //                           const Gap(16),
 //                           OutlinedButton.icon(
-//                             onPressed: () {
-//                               setState(() {
-//                                 _forceShowChart = true;
-//                               });
-//                             },
+//                             onPressed: () =>
+//                                 setState(() => _forceShowChart = true),
 //                             icon: const Icon(Icons.show_chart, size: 16),
 //                             label: const Text('Show chart anyway'),
 //                             style: OutlinedButton.styleFrom(
@@ -1872,14 +2061,13 @@ class AllTransactionsBottomSheet extends StatelessWidget {
 //               ),
 //               child: Row(
 //                 children: [
-//                   // Icon(Icons.receipt_long, size: 16),
 //                   Image.asset(
 //                     'assets/images/icons/Wallet.png',
 //                     width: 16,
 //                     height: 16,
 //                   ),
-//                   Gap(4),
-//                   Text(
+//                   const Gap(4),
+//                   const Text(
 //                     'View Spending',
 //                     style: TextStyle(
 //                       color: Colors.black,
@@ -1889,9 +2077,12 @@ class AllTransactionsBottomSheet extends StatelessWidget {
 //                       fontSize: 14,
 //                     ),
 //                   ),
-//                   // Gap(4),
-//                   Spacer(),
-//                   Icon(Icons.chevron_right, size: 16, color: Colors.black),
+//                   const Spacer(),
+//                   const Icon(
+//                     Icons.chevron_right,
+//                     size: 16,
+//                     color: Colors.black,
+//                   ),
 //                 ],
 //               ),
 //             ),
@@ -1901,17 +2092,13 @@ class AllTransactionsBottomSheet extends StatelessWidget {
 //     );
 //   }
 
-//   String formatMoney(double amount) {
-//     return '₦${NumberFormat('#,###.##').format(amount.abs())}';
-//   }
+//   String formatMoney(double amount) =>
+//       '₦${NumberFormat('#,###.##').format(amount.abs())}';
 // }
 
-// // FIXED: Net Worth Card with dynamic time range comparisons
 // class NetWorthCard extends StatefulWidget {
 //   final DashboardData dashboardData;
-
 //   const NetWorthCard({super.key, required this.dashboardData});
-
 //   @override
 //   State<NetWorthCard> createState() => _NetWorthCardState();
 // }
@@ -1921,18 +2108,14 @@ class AllTransactionsBottomSheet extends StatelessWidget {
 //   bool _forceShowChart = false;
 
 //   double getNetWorth() {
-//     // Sum all account balances (already in naira from API)
 //     double accountBalances = widget.dashboardData.accounts.fold(
 //       0.0,
-//       (sum, account) => sum + account.details.balance,
+//       (sum, a) => sum + a.details.balance,
 //     );
-
-//     // Sum all savings balances
 //     double savingsBalance = widget.dashboardData.savings.fold(
 //       0.0,
-//       (sum, goal) => sum + goal.balance,
+//       (sum, g) => sum + g.balance,
 //     );
-
 //     return accountBalances + savingsBalance;
 //   }
 
@@ -1941,19 +2124,16 @@ class AllTransactionsBottomSheet extends StatelessWidget {
 //     final cutoff = now.subtract(range.duration);
 //     double income = 0;
 //     double expenses = 0;
-
 //     for (var account in widget.dashboardData.accounts) {
 //       for (var tx in account.history12Months) {
 //         if (tx.date.isAfter(cutoff)) {
-//           if (tx.type == 'credit') {
+//           if (tx.type == 'credit')
 //             income += tx.amount / 100;
-//           } else if (tx.type == 'debit') {
+//           else if (tx.type == 'debit')
 //             expenses += tx.amount / 100;
-//           }
 //         }
 //       }
 //     }
-
 //     return income - expenses;
 //   }
 
@@ -1977,35 +2157,21 @@ class AllTransactionsBottomSheet extends StatelessWidget {
 //   List<ChartDataPoint> getNetWorthChartData() {
 //     final now = DateTime.now();
 //     final cutoff = now.subtract(_selectedRange.duration);
-
-//     // Collect ALL transactions within the selected range
 //     List<Transaction> allTxs = [];
 //     for (var account in widget.dashboardData.accounts) {
 //       allTxs.addAll(
 //         account.history12Months.where((tx) => tx.date.isAfter(cutoff)),
 //       );
 //     }
-
-//     if (allTxs.isEmpty) {
-//       return [];
-//     }
-
-//     // Sort by date
+//     if (allTxs.isEmpty) return [];
 //     allTxs.sort((a, b) => a.date.compareTo(b.date));
-
-//     // Calculate cumulative balance over time
 //     double runningBalance = getNetWorth();
 //     List<ChartDataPoint> data = [];
-
-//     // Work backwards from current balance
 //     for (var tx in allTxs.reversed) {
-//       // Reverse the transaction effect
-//       if (tx.type == 'credit') {
+//       if (tx.type == 'credit')
 //         runningBalance -= (tx.amount / 100);
-//       } else if (tx.type == 'debit') {
+//       else if (tx.type == 'debit')
 //         runningBalance += (tx.amount / 100);
-//       }
-
 //       data.insert(
 //         0,
 //         ChartDataPoint(
@@ -2014,12 +2180,9 @@ class AllTransactionsBottomSheet extends StatelessWidget {
 //         ),
 //       );
 //     }
-
-//     // Add current balance as the last point
 //     if (data.isNotEmpty) {
 //       data.add(ChartDataPoint(value: getNetWorth(), timestamp: now));
 //     }
-
 //     return data;
 //   }
 
@@ -2092,11 +2255,8 @@ class AllTransactionsBottomSheet extends StatelessWidget {
 //                                 timestamp: DateTime.now(),
 //                               ),
 //                             ],
-//                       onRangeChanged: (range) {
-//                         setState(() {
-//                           _selectedRange = range;
-//                         });
-//                       },
+//                       onRangeChanged: (range) =>
+//                           setState(() => _selectedRange = range),
 //                     )
 //                   : Center(
 //                       child: Column(
@@ -2119,11 +2279,8 @@ class AllTransactionsBottomSheet extends StatelessWidget {
 //                           ),
 //                           const Gap(16),
 //                           OutlinedButton.icon(
-//                             onPressed: () {
-//                               setState(() {
-//                                 _forceShowChart = true;
-//                               });
-//                             },
+//                             onPressed: () =>
+//                                 setState(() => _forceShowChart = true),
 //                             icon: const Icon(Icons.show_chart, size: 16),
 //                             label: const Text('Show chart anyway'),
 //                             style: OutlinedButton.styleFrom(
@@ -2143,17 +2300,13 @@ class AllTransactionsBottomSheet extends StatelessWidget {
 //     );
 //   }
 
-//   String formatMoney(double amount) {
-//     return '₦${NumberFormat('#,###.##').format(amount.abs())}';
-//   }
+//   String formatMoney(double amount) =>
+//       '₦${NumberFormat('#,###.##').format(amount.abs())}';
 // }
 
-// // Rest of the widgets remain the same...
 // class AccountsSection extends StatefulWidget {
 //   final DashboardData dashboardData;
-
 //   const AccountsSection({super.key, required this.dashboardData});
-
 //   @override
 //   State<AccountsSection> createState() => _AccountsSectionState();
 // }
@@ -2165,14 +2318,12 @@ class AllTransactionsBottomSheet extends StatelessWidget {
 //   Widget build(BuildContext context) {
 //     double netCash = widget.dashboardData.accounts.fold(
 //       0.0,
-//       (sum, account) => sum + account.details.balance,
+//       (sum, a) => sum + a.details.balance,
 //     );
-
 //     double savingsBalance = widget.dashboardData.savings.fold(
 //       0.0,
-//       (sum, goal) => sum + goal.balance,
+//       (sum, g) => sum + g.balance,
 //     );
-
 //     final displayedGoals = _isSavingsExpanded
 //         ? widget.dashboardData.savings
 //         : widget.dashboardData.savings.take(2).toList();
@@ -2184,11 +2335,10 @@ class AllTransactionsBottomSheet extends StatelessWidget {
 //         child: Column(
 //           crossAxisAlignment: CrossAxisAlignment.start,
 //           children: [
-//             // HEADER
-//             Row(
+//             const Row(
 //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
 //               children: [
-//                 const Text(
+//                 Text(
 //                   'ACCOUNTS',
 //                   style: TextStyle(
 //                     fontSize: 12,
@@ -2197,21 +2347,9 @@ class AllTransactionsBottomSheet extends StatelessWidget {
 //                     letterSpacing: 12 * 0.02,
 //                   ),
 //                 ),
-//                 // TextButton(
-//                 //   onPressed: () {},
-//                 //   style: TextButton.styleFrom(
-//                 //     padding: EdgeInsets.zero,
-//                 //     minimumSize: Size.zero,
-//                 //     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-//                 //   ),
-//                 //   child: const Text('Add account'),
-//                 // ),
 //               ],
 //             ),
-
 //             const Gap(8),
-
-//             // NET CASH
 //             ListTile(
 //               contentPadding: EdgeInsets.zero,
 //               leading: const Icon(Icons.account_balance_wallet_outlined),
@@ -2235,8 +2373,6 @@ class AllTransactionsBottomSheet extends StatelessWidget {
 //                 ],
 //               ),
 //             ),
-
-//             // SAVINGS (CLICK TO EXPAND)
 //             ListTile(
 //               contentPadding: EdgeInsets.zero,
 //               leading: const Icon(Icons.savings_outlined),
@@ -2260,21 +2396,15 @@ class AllTransactionsBottomSheet extends StatelessWidget {
 //                   ),
 //                 ],
 //               ),
-//               onTap: () {
-//                 setState(() {
-//                   _isSavingsExpanded = !_isSavingsExpanded;
-//                 });
-//               },
+//               onTap: () =>
+//                   setState(() => _isSavingsExpanded = !_isSavingsExpanded),
 //             ),
-
-//             // FINANCIAL GOALS (COLLAPSED UNDER SAVINGS)
 //             if (_isSavingsExpanded) ...[
 //               const Gap(8),
-
 //               if (widget.dashboardData.savings.isEmpty)
-//                 Center(
+//                 const Center(
 //                   child: Column(
-//                     children: const [
+//                     children: [
 //                       Icon(
 //                         Icons.flag_outlined,
 //                         size: 48,
@@ -2331,9 +2461,7 @@ class AllTransactionsBottomSheet extends StatelessWidget {
 //                     ),
 //                   ),
 //                 ),
-
 //               if (widget.dashboardData.savings.length > 2) const Gap(8),
-
 //               SizedBox(
 //                 width: double.infinity,
 //                 child: OutlinedButton.icon(
@@ -2352,9 +2480,8 @@ class AllTransactionsBottomSheet extends StatelessWidget {
 //     );
 //   }
 
-//   String formatMoney(double amount) {
-//     return '₦${NumberFormat('#,###.00').format(amount)}';
-//   }
+//   String formatMoney(double amount) =>
+//       '₦${NumberFormat('#,###.00').format(amount)}';
 
 //   IconData _getIconForGoal(String name) {
 //     final lower = name.toLowerCase();
@@ -2370,7 +2497,6 @@ class AllTransactionsBottomSheet extends StatelessWidget {
 
 // class RecentTransactionsSection extends StatelessWidget {
 //   final List<Transaction> transactions;
-
 //   const RecentTransactionsSection({super.key, required this.transactions});
 
 //   void _showAllTransactions(BuildContext context) {
@@ -2385,7 +2511,6 @@ class AllTransactionsBottomSheet extends StatelessWidget {
 
 //   @override
 //   Widget build(BuildContext context) {
-//     // Show recent transactions of all types, not just debits
 //     final recent = transactions.take(5).toList();
 
 //     return Card(
@@ -2419,11 +2544,11 @@ class AllTransactionsBottomSheet extends StatelessWidget {
 //             ),
 //             const Gap(8),
 //             if (recent.isEmpty)
-//               Padding(
-//                 padding: const EdgeInsets.symmetric(vertical: 16.0),
+//               const Padding(
+//                 padding: EdgeInsets.symmetric(vertical: 16.0),
 //                 child: Center(
 //                   child: Column(
-//                     children: const [
+//                     children: [
 //                       Icon(
 //                         Icons.receipt_long_outlined,
 //                         size: 48,
@@ -2488,13 +2613,12 @@ class AllTransactionsBottomSheet extends StatelessWidget {
 //   String _formatDate(DateTime date) {
 //     final day = date.day;
 //     String suffix = 'th';
-//     if (day == 1 || day == 21 || day == 31) {
+//     if (day == 1 || day == 21 || day == 31)
 //       suffix = 'st';
-//     } else if (day == 2 || day == 22) {
+//     else if (day == 2 || day == 22)
 //       suffix = 'nd';
-//     } else if (day == 3 || day == 23) {
+//     else if (day == 3 || day == 23)
 //       suffix = 'rd';
-//     }
 //     return '${DateFormat('MMMM').format(date)} $day$suffix';
 //   }
 
@@ -2529,15 +2653,12 @@ class AllTransactionsBottomSheet extends StatelessWidget {
 //     return Icons.payment;
 //   }
 
-//   String formatMoney(double amount) {
-//     return '₦${NumberFormat('#,###.00').format(amount)}';
-//   }
+//   String formatMoney(double amount) =>
+//       '₦${NumberFormat('#,###.00').format(amount)}';
 // }
 
-// // NEW: Bottom sheet to show all transactions
 // class AllTransactionsBottomSheet extends StatelessWidget {
 //   final List<Transaction> transactions;
-
 //   const AllTransactionsBottomSheet({super.key, required this.transactions});
 
 //   @override
@@ -2554,7 +2675,6 @@ class AllTransactionsBottomSheet extends StatelessWidget {
 //           ),
 //           child: Column(
 //             children: [
-//               // Header
 //               Padding(
 //                 padding: const EdgeInsets.all(16),
 //                 child: Row(
@@ -2577,14 +2697,12 @@ class AllTransactionsBottomSheet extends StatelessWidget {
 //                 ),
 //               ),
 //               const Divider(height: 1),
-
-//               // Transaction list
 //               Expanded(
 //                 child: transactions.isEmpty
-//                     ? Center(
+//                     ? const Center(
 //                         child: Column(
 //                           mainAxisAlignment: MainAxisAlignment.center,
-//                           children: const [
+//                           children: [
 //                             Icon(
 //                               Icons.receipt_long_outlined,
 //                               size: 64,
@@ -2652,13 +2770,12 @@ class AllTransactionsBottomSheet extends StatelessWidget {
 //   String _formatDate(DateTime date) {
 //     final day = date.day;
 //     String suffix = 'th';
-//     if (day == 1 || day == 21 || day == 31) {
+//     if (day == 1 || day == 21 || day == 31)
 //       suffix = 'st';
-//     } else if (day == 2 || day == 22) {
+//     else if (day == 2 || day == 22)
 //       suffix = 'nd';
-//     } else if (day == 3 || day == 23) {
+//     else if (day == 3 || day == 23)
 //       suffix = 'rd';
-//     }
 //     return '${DateFormat('MMMM').format(date)} $day$suffix';
 //   }
 
@@ -2693,7 +2810,6 @@ class AllTransactionsBottomSheet extends StatelessWidget {
 //     return Icons.payment;
 //   }
 
-//   String _formatMoney(double amount) {
-//     return '₦${NumberFormat('#,###.00').format(amount)}';
-//   }
+//   String _formatMoney(double amount) =>
+//       '₦${NumberFormat('#,###.00').format(amount)}';
 // }

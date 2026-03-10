@@ -93,6 +93,7 @@ import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/ta
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/tax_filing/filing_step6.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/tax_filing/taxpayer_id_Screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/tax_filing/tin_reg_screen1.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/tax_filing/tin_reg_screens.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/tax_filing/tin_submitted_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/tax_filing/tin_validation_screen1.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/tax_filing/tin_validation_screen2.dart';
@@ -758,21 +759,77 @@ final GoRouter appRouter = GoRouter(
       name: FilingRoutes.tinValidation2,
       builder: (_, __) => const TinValidationScreen2(),
     ),
+    // GoRoute(
+    //   path: FilingRoutes.tinReg1,
+    //   name: FilingRoutes.tinReg1,
+    //   builder: (_, __) => const TinRegScreen1(),
+    // ),
+    // GoRoute(
+    //   path: FilingRoutes.tinReg2,
+    //   name: FilingRoutes.tinReg2,
+    //   builder: (_, __) => const TinRegScreen2(),
+    // ),
+    // GoRoute(
+    //   path: FilingRoutes.tinReg3,
+    //   name: FilingRoutes.tinReg3,
+    //   builder: (_, __) => const TinRegScreen3(),
+    // ),
+    // GoRoute(
+    //   path: FilingRoutes.tinSubmitted,
+    //   name: FilingRoutes.tinSubmitted,
+    //   builder: (_, __) => const TinSubmittedScreen(),
+    // ),
     GoRoute(
       path: FilingRoutes.tinReg1,
       name: FilingRoutes.tinReg1,
       builder: (_, __) => const TinRegScreen1(),
     ),
+
+    // ── Personal path ─────────────────────────────────────────────────────────────
     GoRoute(
-      path: FilingRoutes.tinReg2,
-      name: FilingRoutes.tinReg2,
-      builder: (_, __) => const TinRegScreen2(),
+      path: FilingRoutes.tinRegPersonal2,
+      name: FilingRoutes.tinRegPersonal2,
+      builder: (_, __) => const TinRegPersonalScreen2(),
     ),
     GoRoute(
-      path: FilingRoutes.tinReg3,
-      name: FilingRoutes.tinReg3,
-      builder: (_, __) => const TinRegScreen3(),
+      path: FilingRoutes.tinRegPersonal3,
+      name: FilingRoutes.tinRegPersonal3,
+      builder: (_, __) => const TinRegPersonalScreen3(),
     ),
+    GoRoute(
+      path: FilingRoutes.tinRegPersonal4,
+      name: FilingRoutes.tinRegPersonal4,
+      builder: (_, __) => const TinRegPersonalScreen4(),
+    ),
+    GoRoute(
+      path: FilingRoutes.tinRegPersonal5,
+      name: FilingRoutes.tinRegPersonal5,
+      builder: (_, __) => const TinRegPersonalScreen5(),
+    ),
+
+    // ── Business path ─────────────────────────────────────────────────────────────
+    GoRoute(
+      path: FilingRoutes.tinRegBusiness2,
+      name: FilingRoutes.tinRegBusiness2,
+      builder: (_, __) => const TinRegBusinessScreen2(),
+    ),
+    GoRoute(
+      path: FilingRoutes.tinRegBusiness3,
+      name: FilingRoutes.tinRegBusiness3,
+      builder: (_, __) => const TinRegBusinessScreen3(),
+    ),
+    GoRoute(
+      path: FilingRoutes.tinRegBusiness4,
+      name: FilingRoutes.tinRegBusiness4,
+      builder: (_, __) => const TinRegBusinessScreen4(),
+    ),
+    GoRoute(
+      path: FilingRoutes.tinRegBusiness5,
+      name: FilingRoutes.tinRegBusiness5,
+      builder: (_, __) => const TinRegBusinessScreen5(),
+    ),
+
+    // ── Shared submitted screen ───────────────────────────────────────────────────
     GoRoute(
       path: FilingRoutes.tinSubmitted,
       name: FilingRoutes.tinSubmitted,

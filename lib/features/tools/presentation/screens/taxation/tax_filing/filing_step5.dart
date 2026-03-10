@@ -46,7 +46,7 @@ class _FilingStep5ScreenState extends ConsumerState<FilingStep5Screen> {
     });
   }
 
-  Future<void> _onConfirmPayment(double taxDue) async {
+  Future<void> _onConfirmPayment(double taxDue, String filingId) async {
     if (_isPaying) return;
 
     final pin = await PinBottomSheet.show(
@@ -62,7 +62,7 @@ class _FilingStep5ScreenState extends ConsumerState<FilingStep5Screen> {
     setState(() => _isPaying = true);
     try {
       final repo = ref.read(filingPaymentRepositoryProvider);
-      final result = await repo.payLiabilityFee(pin: pin);
+      final result = await repo.payLiabilityFee(pin: pin, Id: filingId);
 
       // Store for Step 6
       ref.read(filingLiabilityResultProvider.notifier).state = result;
@@ -96,6 +96,7 @@ class _FilingStep5ScreenState extends ConsumerState<FilingStep5Screen> {
   Widget build(BuildContext context) {
     final taxDue = ref.watch(filingTaxDueProvider);
     final filingData = ref.watch(filingHomeProvider).value;
+    final filingId = ref.watch(filingIDProvider);
     final taxPot = filingData?.taxPot ?? 0.0;
     final taxPotCovers = taxPot >= taxDue;
     final remainder = taxPot - taxDue;
@@ -341,8 +342,8 @@ class _FilingStep5ScreenState extends ConsumerState<FilingStep5Screen> {
                         ? 'Balance: ${filingData.taxPot.formatCurrency(decimalDigits: 0)}'
                         : 'Loading...',
                     isSelected: _selectedPaymentIndex == 1,
-                    isDisabled: true,
-                    onTap: () {},
+                    isDisabled: false,
+                    onTap: () => setState(() => _selectedPaymentIndex = 1),
                   ),
                   const Gap(10),
                   _PaymentMethodTile(
@@ -350,10 +351,10 @@ class _FilingStep5ScreenState extends ConsumerState<FilingStep5Screen> {
                     title: 'Bank Transfer to FIRS',
                     subtitle: 'Account details pre-filled',
                     isSelected: _selectedPaymentIndex == 2,
-                    isDisabled: false,
+                    isDisabled: true,
                     onTap: () => setState(() => _selectedPaymentIndex = 2),
                   ),
-                  const Gap(16),
+                  const Gap(16), 
 
                   Container(
                     padding: const EdgeInsets.all(12),
@@ -389,7 +390,7 @@ class _FilingStep5ScreenState extends ConsumerState<FilingStep5Screen> {
               label: _isPaying
                   ? 'Processing…'
                   : 'Confirm tax payment — ${taxDue.formatCurrency(decimalDigits: 0)}',
-              onTap: _isPaying ? null : () => _onConfirmPayment(taxDue),
+              onTap: _isPaying ? null : () => _onConfirmPayment(taxDue, filingId),
             ),
           ],
         ),
