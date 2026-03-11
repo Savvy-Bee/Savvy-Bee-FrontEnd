@@ -5,8 +5,10 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/widgets/tax_filing/filing_routes.dart';
+import 'package:savvy_bee_mobile/core/widgets/notifications/app_notification.dart';
 
-class TaxpayerIdScreen extends StatelessWidget {
+
+class TaxpayerIdScreen extends StatefulWidget {
   static const String path = FilingRoutes.taxpayerId;
 
   const TaxpayerIdScreen({super.key});
@@ -26,11 +28,23 @@ class TaxpayerIdScreen extends StatelessWidget {
   );
 
   @override
+  State<TaxpayerIdScreen> createState() => _TaxpayerIdScreenState();
+}
+
+class _TaxpayerIdScreenState extends State<TaxpayerIdScreen> {
+   void _onRemindLater() {
+    AppNotification.show(
+      context,
+      message: "Coming soon.",
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: const BackButton(),
-        title: Text('Taxpayer ID', style: _gs(16, weight: FontWeight.w600)),
+        title: Text('Taxpayer ID', style: TaxpayerIdScreen._gs(16, weight: FontWeight.w600)),
         centerTitle: false,
         elevation: 0,
         backgroundColor: Colors.white,
@@ -50,12 +64,12 @@ class TaxpayerIdScreen extends StatelessWidget {
               // ── Headline ──────────────────────────────────────────────
               Text(
                 'Have you filed taxes\nbefore?',
-                style: _gs(26, weight: FontWeight.w700),
+                style: TaxpayerIdScreen._gs(26, weight: FontWeight.w700),
               ),
               const Gap(10),
               Text(
                 'This helps us get you to the right place — whether\nyou already have a TIN or you\'re registering for the\nfirst time.',
-                style: _gs(13, color: AppColors.greyDark),
+                style: TaxpayerIdScreen._gs(13, color: AppColors.greyDark),
               ),
               const Gap(24),
 
@@ -77,7 +91,8 @@ class TaxpayerIdScreen extends StatelessWidget {
                 title: 'No, I\'m filing for the\nfirst time',
                 subtitle:
                     'New taxpayer — I\'ll register to get\nmy TIN from FIRS',
-                onTap: () => context.pushNamed(FilingRoutes.tinReg1),
+                // onTap: () => context.pushNamed(FilingRoutes.tinReg1),
+                onTap: () => _onRemindLater(),
               ),
               const Gap(20),
 
@@ -104,7 +119,7 @@ class TaxpayerIdScreen extends StatelessWidget {
                     Expanded(
                       child: Text(
                         'A Tax Identification Number (TIN) is required by FIRS for all Nigerian taxpayers. If you\'re unsure, check your payslip or contact your employer\'s HR department.',
-                        style: _gs(12, color: const Color(0xFF856404)),
+                        style: TaxpayerIdScreen._gs(12, color: const Color(0xFF856404)),
                       ),
                     ),
                   ],
@@ -120,7 +135,7 @@ class TaxpayerIdScreen extends StatelessWidget {
                   children: [
                     Text(
                       'Powered by JTB Portal',
-                      style: _gs(12, color: AppColors.greyDark),
+                      style: TaxpayerIdScreen._gs(12, color: AppColors.greyDark),
                     ),
                     const SizedBox(width: 8),
                     Container(
@@ -134,7 +149,7 @@ class TaxpayerIdScreen extends StatelessWidget {
                       ),
                       child: Text(
                         'JTB',
-                        style: _gs(
+                        style: TaxpayerIdScreen._gs(
                           11,
                           weight: FontWeight.w700,
                           color: Colors.white,

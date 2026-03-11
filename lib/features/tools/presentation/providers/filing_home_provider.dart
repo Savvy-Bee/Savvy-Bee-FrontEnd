@@ -95,8 +95,14 @@ final selectedFilingPlanProvider = StateProvider<String>((ref) => 'Freelancer');
 /// Steps 4, 5, 6 read this as the authoritative tax liability.
 final filingTaxDueProvider = StateProvider<double>((ref) => 0.0);
 
-
+/// Written by Step 3 after payment/init succeeds.
+/// Passed to payFillingFee and payLiabilityFee as the filing process ID.
 final filingIDProvider = StateProvider<String>((ref) => '');
+
+/// Wallet balance returned by the payment/init response (field: "Wallet").
+/// Written by Step 3, read by Steps 4 and 5 to show the user's spendable
+/// balance without needing a separate wallet API call on those screens.
+final filingWalletBalanceProvider = StateProvider<double>((ref) => 0.0);
 
 // ── Filing process state ──────────────────────────────────────────────────────
 
@@ -132,7 +138,9 @@ String? resumeRouteFor(FillingProcess? process) {
   }
 }
 
-// // lib/features/tools/presentation/providers/filing_providers.dart
+
+
+// // lib/features/tools/presentation/providers/filing_home_providers.dart
 // //
 // // Single barrel file for every filing-flow provider.
 // // Import this instead of the individual old files.
@@ -150,8 +158,9 @@ String? resumeRouteFor(FillingProcess? process) {
 //   return FilingHomeRepository(bearerToken: token);
 // });
 
-// final filingPaymentRepositoryProvider =
-//     Provider<FilingPaymentRepository>((ref) {
+// final filingPaymentRepositoryProvider = Provider<FilingPaymentRepository>((
+//   ref,
+// ) {
 //   final token = ref.watch(authRepositoryProvider).getAuthToken() ?? '';
 //   return FilingPaymentRepository(bearerToken: token);
 // });
@@ -160,8 +169,8 @@ String? resumeRouteFor(FillingProcess? process) {
 
 // final filingHomeProvider =
 //     AsyncNotifierProvider<FilingHomeNotifier, FilingHomeData>(
-//   FilingHomeNotifier.new,
-// );
+//       FilingHomeNotifier.new,
+//     );
 
 // class FilingHomeNotifier extends AsyncNotifier<FilingHomeData> {
 //   @override
@@ -182,11 +191,45 @@ String? resumeRouteFor(FillingProcess? process) {
 // /// Step 3 reads this when building the payment/init request.
 // final filingTinProvider = StateProvider<String>((ref) => '');
 
+// // ── Taxpayer identity providers (new — set during TIN reg / validation) ────────
+
+// /// "Individual" or "Coperate" — matches API enum exactly.
+// /// Written by the TIN Registration flow (Screen 1 classification choice)
+// /// or by TIN Validation screen when the validated result comes back.
+// final filingClassificationProvider = StateProvider<String>(
+//   (ref) => 'Individual',
+// );
+
+// /// Full legal name of the taxpayer or registered business name.
+// final filingNameProvider = StateProvider<String>((ref) => '');
+
+// /// CAC registration number — only relevant for Corporate filers.
+// /// Leave empty ('') for Individual filers.
+// final filingCacNumberProvider = StateProvider<String>((ref) => '');
+
+// /// Contact details collected during TIN registration (Screen 3).
+// /// Stored as a simple record so it can be passed directly to payment/init.
+// final filingContactProvider = StateProvider<FilingContactRecord>(
+//   (ref) => const FilingContactRecord(phoneNo: '', address: '', email: ''),
+// );
+
+// /// Lightweight value object for contact info (no dependency on repository).
+// class FilingContactRecord {
+//   final String phoneNo;
+//   final String address;
+//   final String email;
+
+//   const FilingContactRecord({
+//     required this.phoneNo,
+//     required this.address,
+//     required this.email,
+//   });
+// }
+
 // // ── Selected plan ─────────────────────────────────────────────────────────────
 
 // /// Plan title written by Step 2, read by Steps 3–6.
-// final selectedFilingPlanProvider =
-//     StateProvider<String>((ref) => 'Freelancer');
+// final selectedFilingPlanProvider = StateProvider<String>((ref) => 'Freelancer');
 
 // // ── Tax due ───────────────────────────────────────────────────────────────────
 
@@ -194,12 +237,16 @@ String? resumeRouteFor(FillingProcess? process) {
 // /// Steps 4, 5, 6 read this as the authoritative tax liability.
 // final filingTaxDueProvider = StateProvider<double>((ref) => 0.0);
 
+
+// final filingIDProvider = StateProvider<String>((ref) => '');
+
 // // ── Filing process state ──────────────────────────────────────────────────────
 
 // /// After payment/liabilityfee succeeds, Step 5 writes the result here
 // /// so Step 6 (and FilingRecord) can read the final status.
-// final filingLiabilityResultProvider =
-//     StateProvider<LiabilityFeeResult?>((ref) => null);
+// final filingLiabilityResultProvider = StateProvider<LiabilityFeeResult?>(
+//   (ref) => null,
+// );
 
 // // ── Resume routing helper ─────────────────────────────────────────────────────
 

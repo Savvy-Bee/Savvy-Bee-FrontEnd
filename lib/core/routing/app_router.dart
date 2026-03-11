@@ -84,7 +84,8 @@ import 'package:savvy_bee_mobile/features/tools/presentation/screens/goals/goal_
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/goals/goal_finalyzing_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/goals/goal_recommendations_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/goals/goal_success_screen.dart';
-import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/tax_filing/filing_record_screen.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/tax_filing/filing_details_screen.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/tax_filing/filing_history_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/tax_filing/filing_step1.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/tax_filing/filing_step2.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/tax_filing/filing_step3.dart';
@@ -740,9 +741,16 @@ final GoRouter appRouter = GoRouter(
       builder: (context, state) => const FilingStep6Screen(),
     ),
     GoRoute(
-      path: '/filing/record',
+      path: FilingRoutes.filingRecord,
       name: FilingRoutes.filingRecord,
-      builder: (context, state) => const FilingRecordScreen(),
+      builder: (context, state) => const FilingHistoryScreen(),
+    ),
+
+    GoRoute(
+      path: FilingRoutes.filingDetails, // '/filing/details/:id'
+      name: FilingRoutes.filingDetails,
+      builder: (context, state) =>
+          FilingDetailsScreen(filingId: state.pathParameters['id']!),
     ),
     GoRoute(
       path: FilingRoutes.taxpayerId,

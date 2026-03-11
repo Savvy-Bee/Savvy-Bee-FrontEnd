@@ -43,10 +43,14 @@ class FilingStep6Screen extends ConsumerWidget {
 
     // Determine current status
     final liabilityResult = ref.watch(filingLiabilityResultProvider);
+    print(liabilityResult?.status);
     final filingData = ref.watch(filingHomeProvider).value;
-    final FillingStatus status = liabilityResult?.status ??
-        filingData?.fillingProcess?.status ??
-        FillingStatus.validatingTax;
+    print('Liability result status: ${filingData?.fillingProcess?.status}');
+    final FillingStatus status =
+    (liabilityResult?.status != filingData?.fillingProcess?.status
+        ? filingData?.fillingProcess?.status
+        : liabilityResult?.status) ??
+    FillingStatus.validatingTax;
 
     final _StatusConfig cfg = _StatusConfig.from(status);
 
@@ -128,17 +132,17 @@ class FilingStep6Screen extends ConsumerWidget {
                         _RecordRow(label: 'Filing fee', value: filingFee > 0 ? filingFee.formatCurrency(decimalDigits: 0) : 'Custom quote'),
                         _RecordRow(label: 'Reference', value: refNo),
                         _RecordRow(label: 'Status', value: status.displayLabel),
-                        const Gap(12),
-                        OutlinedButton.icon(
-                          onPressed: () => _downloadProof(context, taxYear: taxYear, selectedPlan: selectedPlan, taxDue: taxDue, filingFee: filingFee, refNo: refNo, status: status),
-                          style: OutlinedButton.styleFrom(
-                            side: const BorderSide(color: Color(0xFF43A047)),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                          ),
-                          icon: const Icon(Icons.download_outlined, size: 16, color: Color(0xFF43A047)),
-                          label: const Text('Download proof of filing', style: TextStyle(fontFamily: 'GeneralSans', fontSize: 13, fontWeight: FontWeight.w500, color: Color(0xFF43A047), letterSpacing: 13 * 0.02)),
-                        ),
+                        // const Gap(12),
+                        // OutlinedButton.icon(
+                        //   onPressed: () => _downloadProof(context, taxYear: taxYear, selectedPlan: selectedPlan, taxDue: taxDue, filingFee: filingFee, refNo: refNo, status: status),
+                        //   style: OutlinedButton.styleFrom(
+                        //     side: const BorderSide(color: Color(0xFF43A047)),
+                        //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                        //     padding: const EdgeInsets.symmetric(vertical: 12),
+                        //   ),
+                        //   icon: const Icon(Icons.download_outlined, size: 16, color: Color(0xFF43A047)),
+                        //   label: const Text('Download proof of filing', style: TextStyle(fontFamily: 'GeneralSans', fontSize: 13, fontWeight: FontWeight.w500, color: Color(0xFF43A047), letterSpacing: 13 * 0.02)),
+                        // ),
                       ]),
                     ),
                     const Gap(24),
@@ -240,16 +244,16 @@ class _ProgressTimeline extends StatelessWidget {
     final isCompleted = status == FillingStatus.completed;
 
     return Column(children: [
-      _TimelineStep(label: 'Reviewed', sublabel: 'Return confirmed by you', stepStatus: _StepStatus.done, isLast: false),
+      _TimelineStep(label: 'Submitted', sublabel: 'Filing Submitted', stepStatus: _StepStatus.done, isLast: false),
       _TimelineStep(
-        label: 'Validated',
+        label: 'Validating',
         sublabel: isRejected ? 'Rejected by tax authority' : isCompleted ? 'Approved by partner' : 'Partner reviewing — 24–48 hrs',
         stepStatus: isRejected ? _StepStatus.rejected : isCompleted ? _StepStatus.done : _StepStatus.inProgress,
         badge: isRejected ? 'REJECTED' : isCompleted ? null : 'IN PROGRESS',
         isLast: false,
       ),
       _TimelineStep(
-        label: 'Submitted',
+        label: 'Confirmed',
         sublabel: isCompleted ? 'Filed with FIRS' : 'Pending submission',
         stepStatus: isCompleted ? _StepStatus.done : _StepStatus.pending,
         isLast: true,

@@ -40,6 +40,7 @@ abstract class FilingRoutes {
   static const step5        = '/filing/step-5';
   static const step6        = '/filing/step-6';
   static const filingRecord = '/filing/record';
+  static const String filingDetails = '/filing/details/:id';
 }
 
 

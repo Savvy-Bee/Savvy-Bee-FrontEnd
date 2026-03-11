@@ -1,7 +1,9 @@
 // lib/features/tools/presentation/screens/taxation/filing/filing_step3_screen.dart
 //
 // CHANGES vs previous version:
-//   • _onProceed() now calls payment/init endpoint instead of just writing to provider
+//   • _onProceed() calls payment/init and writes filingIDProvider,
+//     filingTaxDueProvider, and filingWalletBalanceProvider (from result.walletBalance)
+//   • Gross income for Recalculate uses sum of incomes (matches Income Summary display)
 //   • TIN read from filingTinProvider
 //   • NoneTaxableRevenues built from the 5 deduction fields (fixed order)
 //   • Keyboard dismiss via GestureDetector on root
@@ -72,7 +74,6 @@ class _FilingStep3ScreenState extends ConsumerState<FilingStep3Screen> {
     if (_deductionsInitialized) return;
     _deductionsInitialized = true;
 
-    // If there's an existing process, pre-fill from its finance details
     final process = data.fillingProcess;
     if (process != null) {
       final fd = process.financeDetails;
@@ -107,10 +108,18 @@ class _FilingStep3ScreenState extends ConsumerState<FilingStep3Screen> {
 
   Future<void> _recalculate(FilingHomeData filingData) async {
     FocusScope.of(context).unfocus();
+
+    // Gross income = sum of all income sources, matching the Income Summary
+    // display. Keeps recalculation consistent with the figure shown on screen.
+    final grossIncome = filingData.incomes.fold(
+      0.0,
+      (sum, i) => sum + i.amount,
+    );
+
     await ref
         .read(taxCalculatorProvider.notifier)
         .calculate(
-          earnings: filingData.totalEarnings,
+          earnings: grossIncome,
           rent: _parseField(_rentCtrl),
           nhf: _parseField(_nhfCtrl),
           nhis: _parseField(_nhisCtrl),
@@ -141,38 +150,26 @@ class _FilingStep3ScreenState extends ConsumerState<FilingStep3Screen> {
       final tin = ref.read(filingTinProvider);
       final plan = ref.read(selectedFilingPlanProvider);
       final classification = ref.read(filingClassificationProvider);
-      final name = ref.read(filingNameProvider);
-      final cacNumber = ref.read(filingCacNumberProvider);
       final contactRecord = ref.read(filingContactProvider);
       final calcState = ref.read(taxCalculatorProvider);
 
-      // ── Use TIN-validated contact details when available ─────────────────────
+      // ── Contact: prefer TIN-validated values, fall back to registration data ─
       String phoneNo = contactRecord.phoneNo;
       String email = contactRecord.email;
       String address = contactRecord.address;
 
       if (tinResult != null) {
-        // Override with TIN result values if they exist and are non-empty
         if (tinResult.phoneNumber?.isNotEmpty ?? false) {
           phoneNo = tinResult.phoneNumber!;
-        } else if (tinResult.phoneNumber?.isNotEmpty ?? false) {
-          phoneNo = tinResult.phoneNumber!; // in case field name is phoneNo
         }
-
         if (tinResult.email?.isNotEmpty ?? false) {
           email = tinResult.email!;
         }
-
         if (tinResult.address?.isNotEmpty ?? false) {
           address = tinResult.address!;
-        } else if (tinResult.address?.isNotEmpty ?? false) {
-          address = tinResult.address!; // common alternative name
         }
-        // Optional: combine fields if address is split
-        // address = '${tinResult.street ?? ''} ${tinResult.city ?? ''} ${tinResult.state ?? ''}'.trim();
       }
 
-      // Debug print to confirm what will be sent
       print(
         'Final contact for API → Phone: $phoneNo | Email: $email | Address: $address',
       );
@@ -183,7 +180,6 @@ class _FilingStep3ScreenState extends ConsumerState<FilingStep3Screen> {
         email: email,
       );
 
-      // ── Rest of your code remains unchanged ─────────────────────────────────
       final revenues = filingData?.incomes ?? [];
 
       final noneTaxable = [
@@ -191,6 +187,10 @@ class _FilingStep3ScreenState extends ConsumerState<FilingStep3Screen> {
         FilingIncomeSource(
           source: 'NHF Contribution',
           amount: _parseField(_nhfCtrl),
+        ),
+        FilingIncomeSource(
+          source: 'NHIS Contribution',
+          amount: _parseField(_nhisCtrl),
         ),
         FilingIncomeSource(
           source: 'Pension Contribution',
@@ -206,41 +206,47 @@ class _FilingStep3ScreenState extends ConsumerState<FilingStep3Screen> {
         ),
       ];
 
-      final cacNo;
-      if (tinResult!.cacRegNumber?.isNotEmpty ?? false) {
-        cacNo = tinResult!.cacRegNumber;
-      } else {
-        cacNo = tin;
-      }
+      // CAC number: prefer TIN result's value, fall back to registration data
+      final cacNumber = ref.read(filingCacNumberProvider);
+      final cacNo = (tinResult?.cacRegNumber?.isNotEmpty ?? false)
+          ? tinResult!.cacRegNumber!
+          : cacNumber;
+
+      // Name: prefer TIN result, fall back to registration data
+      final name = (tinResult?.taxpayerName.isNotEmpty ?? false)
+          ? tinResult!.taxpayerName
+          : ref.read(filingNameProvider);
 
       final repo = ref.read(filingPaymentRepositoryProvider);
       final result = await repo.initPayment(
         plan: plan,
         tin: tin,
         classification: classification,
-        name: tinResult!.taxpayerName,
+        name: name,
         cacNumber: cacNo,
         contact: contact,
         revenues: revenues,
         noneTaxableRevenues: noneTaxable,
       );
 
+      // Tax due: authoritative API value, fall back to local calculation
       final taxDue = result.financeDetails.taxAmount > 0
           ? result.financeDetails.taxAmount
           : (calcState.result?.finalTaxDue ?? filingData?.estimatedTax ?? 0.0);
-      // final taxDue = result.financeDetails.taxAmount;
-      // final double taxDue = calcState.result?.finalTaxDue ?? 0.0;
-      // final taxDue = filingData?.estimatedTax ?? 0.0;
 
-      print('Yayy hee');
-      print('TaxAmount: $result.financeDetails.taxAmount');
-      print('Final Tax Due: $calcState.result?.finalTaxDue');
-      print('Estimated Tax: $filingData?.estimatedTax');
+      print('TaxAmount: ${result.financeDetails.taxAmount}');
+      print('Final Tax Due (calc): ${calcState.result?.finalTaxDue}');
+      print('Wallet Balance: ${result.walletBalance}');
 
-          final ID = result.id;
+      final ID = result.id;
+
+      print('This is the ID Sent: $result'); 
 
       ref.read(filingTaxDueProvider.notifier).state = taxDue;
       ref.read(filingIDProvider.notifier).state = ID;
+      // ── Store wallet balance from init response for Steps 4 & 5 ────────────
+      ref.read(filingWalletBalanceProvider.notifier).state =
+          result.walletBalance;
 
       if (mounted) {
         setState(() => _isProceeding = false);
@@ -259,101 +265,13 @@ class _FilingStep3ScreenState extends ConsumerState<FilingStep3Screen> {
     }
   }
 
-  // Future<void> _onProceed(
-  //   FilingHomeData? filingData,
-  //   TinValidationResult? tinResult,
-  // ) async {
-  //   if (_isProceeding) return;
-  //   FocusScope.of(context).unfocus();
-  //   setState(() => _isProceeding = true);
-  //   print(
-  //     'Email: $tinResult[email], Phone: $tinResult[phoneNumber], Address: $tinResult[address]',
-  //   );
-
-  //   try {
-  //     final tin = ref.read(filingTinProvider);
-  //     final plan = ref.read(selectedFilingPlanProvider);
-  //     final classification = ref.read(filingClassificationProvider);
-  //     final name = ref.read(filingNameProvider);
-  //     final cacNumber = ref.read(filingCacNumberProvider);
-  //     final contactRecord = ref.read(filingContactProvider);
-  //     final calcState = ref.read(taxCalculatorProvider);
-
-  //     // print('Contact Record: $contactRecord');
-
-  //     // Build income list from filing data
-  //     final revenues = filingData?.incomes ?? [];
-
-  //     // Build the 5 deduction items in exact API order
-  //     final noneTaxable = [
-  //       FilingIncomeSource(source: 'Rent', amount: _parseField(_rentCtrl)),
-  //       FilingIncomeSource(
-  //         source: 'NHF Contribution',
-  //         amount: _parseField(_nhfCtrl),
-  //       ),
-  //       FilingIncomeSource(
-  //         source: 'Pension Contribution',
-  //         amount: _parseField(_pensionCtrl),
-  //       ),
-  //       FilingIncomeSource(
-  //         source: 'Interest on Loan for Owner Occupied House',
-  //         amount: _parseField(_loanCtrl),
-  //       ),
-  //       FilingIncomeSource(
-  //         source: 'Life Insurance Premium (You & Spouse)',
-  //         amount: _parseField(_lifeCtrl),
-  //       ),
-  //     ];
-
-  //     final contact = FilingContactInfo(
-  //       phoneNo: contactRecord.phoneNo,
-  //       address: contactRecord.address,
-  //       email: contactRecord.email,
-  //     );
-
-  //     final repo = ref.read(filingPaymentRepositoryProvider);
-  //     final result = await repo.initPayment(
-  //       plan: plan,
-  //       tin: tin,
-  //       classification: classification,
-  //       name: name,
-  //       cacNumber: cacNumber,
-  //       contact: contact,
-  //       revenues: revenues,
-  //       noneTaxableRevenues: noneTaxable,
-  //     );
-
-  //     // Use the TaxAmount returned by the API as the authoritative figure
-  //     final taxDue = result.financeDetails.taxAmount > 0
-  //         ? result.financeDetails.taxAmount
-  //         : (calcState.result?.finalTaxDue ?? filingData?.estimatedTax ?? 0.0);
-
-  //     ref.read(filingTaxDueProvider.notifier).state = taxDue;
-
-  //     if (mounted) {
-  //       setState(() => _isProceeding = false);
-  //       context.pushNamed(FilingRoutes.step4);
-  //     }
-  //   } catch (e) {
-  //     setState(() => _isProceeding = false);
-  //     if (mounted) {
-  //       AppNotification.show(
-  //         context,
-  //         message: e.toString().replaceFirst('Exception: ', ''),
-  //         icon: Icons.error_outline,
-  //         iconColor: Colors.redAccent,
-  //       );
-  //     }
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     final filingAsync = ref.watch(filingHomeProvider);
     final profileAsync = ref.watch(homeDataProvider);
     final selectedPlan = ref.watch(selectedFilingPlanProvider);
     final calcState = ref.watch(taxCalculatorProvider);
-    final result = ref.watch(tinValidationResultProvider);
+    final tinResult = ref.watch(tinValidationResultProvider);
 
     final filingData = filingAsync.value;
     if (filingData != null) _initDeductions(filingData);
@@ -397,11 +315,9 @@ class _FilingStep3ScreenState extends ConsumerState<FilingStep3Screen> {
                   ),
                   const Gap(20),
 
-                  // ── Identity card ──────────────────────────────────
                   profileAsync.when(
                     data: (home) {
                       final user = home.data;
-                      // print('user: $user');
                       final initials = '${user.firstName[0]}${user.lastName[0]}'
                           .toUpperCase();
                       return _IdentityCard(
@@ -481,7 +397,10 @@ class _FilingStep3ScreenState extends ConsumerState<FilingStep3Screen> {
                     onToggle: () => _toggle(_Section.taxComputation),
                     child: filingData != null
                         ? _TaxComputationContent(
-                            grossIncome: filingData.totalEarnings,
+                            grossIncome: filingData.incomes.fold(
+                              0.0,
+                              (s, i) => s + i.amount,
+                            ),
                             calcResult: calcState.result,
                             fallbackTaxableIncome: filingData.taxableIncome,
                             fallbackStages: filingData.stages,
@@ -530,7 +449,7 @@ class _FilingStep3ScreenState extends ConsumerState<FilingStep3Screen> {
                   : 'This looks right — proceed to payment',
               onTap: _isProceeding
                   ? null
-                  : () => _onProceed(filingData, result),
+                  : () => _onProceed(filingData, tinResult),
             ),
           ],
         ),
@@ -543,7 +462,7 @@ class _FilingStep3ScreenState extends ConsumerState<FilingStep3Screen> {
 
 enum _Section { personalInfo, incomeSummary, deductionsReliefs, taxComputation }
 
-// ── Widgets (unchanged from previous version) ─────────────────────────────────
+// ── Widgets ───────────────────────────────────────────────────────────────────
 
 class _IdentityCard extends StatelessWidget {
   final String initials;
@@ -1148,10 +1067,13 @@ class _StepBadge extends StatelessWidget {
 // import 'package:savvy_bee_mobile/core/widgets/notifications/app_notification.dart';
 // import 'package:savvy_bee_mobile/core/widgets/tax_filing/filing_routes.dart';
 // import 'package:savvy_bee_mobile/features/home/presentation/providers/home_data_provider.dart';
+// import 'package:savvy_bee_mobile/features/tools/data/repositories/filing_payment_repository.dart';
+// import 'package:savvy_bee_mobile/features/tools/data/repositories/tin_validation_repository.dart';
 // import 'package:savvy_bee_mobile/features/tools/domain/models/filing_home_data.dart';
 // import 'package:savvy_bee_mobile/features/tools/domain/models/tax_calculator_result.dart';
 // import 'package:savvy_bee_mobile/features/tools/presentation/providers/filing_home_provider.dart';
 // import 'package:savvy_bee_mobile/features/tools/presentation/providers/tax_calculator_provider.dart';
+// import 'package:savvy_bee_mobile/features/tools/presentation/providers/tin_validation_provider.dart';
 // import 'package:savvy_bee_mobile/features/tools/presentation/widgets/tax_filing/bottom_action_button.dart';
 
 // class FilingStep3Screen extends ConsumerStatefulWidget {
@@ -1257,7 +1179,10 @@ class _StepBadge extends StatelessWidget {
 //     }
 //   }
 
-//   Future<void> _onProceed(FilingHomeData? filingData) async {
+//   Future<void> _onProceed(
+//     FilingHomeData? filingData,
+//     TinValidationResult? tinResult,
+//   ) async {
 //     if (_isProceeding) return;
 //     FocusScope.of(context).unfocus();
 //     setState(() => _isProceeding = true);
@@ -1265,17 +1190,61 @@ class _StepBadge extends StatelessWidget {
 //     try {
 //       final tin = ref.read(filingTinProvider);
 //       final plan = ref.read(selectedFilingPlanProvider);
+//       final classification = ref.read(filingClassificationProvider);
+//       final name = ref.read(filingNameProvider);
+//       final cacNumber = ref.read(filingCacNumberProvider);
+//       final contactRecord = ref.read(filingContactProvider);
 //       final calcState = ref.read(taxCalculatorProvider);
 
-//       // Build income list from filing data
+//       // ── Use TIN-validated contact details when available ─────────────────────
+//       String phoneNo = contactRecord.phoneNo;
+//       String email = contactRecord.email;
+//       String address = contactRecord.address;
+
+//       if (tinResult != null) {
+//         // Override with TIN result values if they exist and are non-empty
+//         if (tinResult.phoneNumber?.isNotEmpty ?? false) {
+//           phoneNo = tinResult.phoneNumber!;
+//         } else if (tinResult.phoneNumber?.isNotEmpty ?? false) {
+//           phoneNo = tinResult.phoneNumber!; // in case field name is phoneNo
+//         }
+
+//         if (tinResult.email?.isNotEmpty ?? false) {
+//           email = tinResult.email!;
+//         }
+
+//         if (tinResult.address?.isNotEmpty ?? false) {
+//           address = tinResult.address!;
+//         } else if (tinResult.address?.isNotEmpty ?? false) {
+//           address = tinResult.address!; // common alternative name
+//         }
+//         // Optional: combine fields if address is split
+//         // address = '${tinResult.street ?? ''} ${tinResult.city ?? ''} ${tinResult.state ?? ''}'.trim();
+//       }
+
+//       // Debug print to confirm what will be sent
+//       print(
+//         'Final contact for API → Phone: $phoneNo | Email: $email | Address: $address',
+//       );
+
+//       final contact = FilingContactInfo(
+//         phoneNo: phoneNo,
+//         address: address,
+//         email: email,
+//       );
+
+//       // ── Rest of your code remains unchanged ─────────────────────────────────
 //       final revenues = filingData?.incomes ?? [];
 
-//       // Build the 5 deduction items in exact API order
 //       final noneTaxable = [
 //         FilingIncomeSource(source: 'Rent', amount: _parseField(_rentCtrl)),
 //         FilingIncomeSource(
 //           source: 'NHF Contribution',
 //           amount: _parseField(_nhfCtrl),
+//         ),
+//         FilingIncomeSource(
+//           source: 'NHIS Contribution',
+//           amount: _parseField(_nhisCtrl),
 //         ),
 //         FilingIncomeSource(
 //           source: 'Pension Contribution',
@@ -1291,20 +1260,41 @@ class _StepBadge extends StatelessWidget {
 //         ),
 //       ];
 
+//       final cacNo;
+//       if (tinResult!.cacRegNumber?.isNotEmpty ?? false) {
+//         cacNo = tinResult!.cacRegNumber;
+//       } else {
+//         cacNo = tin;
+//       }
+
 //       final repo = ref.read(filingPaymentRepositoryProvider);
 //       final result = await repo.initPayment(
 //         plan: plan,
 //         tin: tin,
+//         classification: classification,
+//         name: tinResult!.taxpayerName,
+//         cacNumber: cacNo,
+//         contact: contact,
 //         revenues: revenues,
 //         noneTaxableRevenues: noneTaxable,
 //       );
 
-//       // Use the TaxAmount returned by the API as the authoritative figure
 //       final taxDue = result.financeDetails.taxAmount > 0
 //           ? result.financeDetails.taxAmount
 //           : (calcState.result?.finalTaxDue ?? filingData?.estimatedTax ?? 0.0);
+//       // final taxDue = result.financeDetails.taxAmount;
+//       // final double taxDue = calcState.result?.finalTaxDue ?? 0.0;
+//       // final taxDue = filingData?.estimatedTax ?? 0.0;
+
+//       print('Yayy hee');
+//       print('TaxAmount: $result.financeDetails.taxAmount');
+//       print('Final Tax Due: $calcState.result?.finalTaxDue');
+//       print('Estimated Tax: $filingData?.estimatedTax');
+
+//           final ID = result.id;
 
 //       ref.read(filingTaxDueProvider.notifier).state = taxDue;
+//       ref.read(filingIDProvider.notifier).state = ID;
 
 //       if (mounted) {
 //         setState(() => _isProceeding = false);
@@ -1315,7 +1305,7 @@ class _StepBadge extends StatelessWidget {
 //       if (mounted) {
 //         AppNotification.show(
 //           context,
-//           message: 'Could not initialise payment: ${e.toString()}',
+//           message: e.toString().replaceFirst('Exception: ', ''),
 //           icon: Icons.error_outline,
 //           iconColor: Colors.redAccent,
 //         );
@@ -1323,12 +1313,101 @@ class _StepBadge extends StatelessWidget {
 //     }
 //   }
 
+//   // Future<void> _onProceed(
+//   //   FilingHomeData? filingData,
+//   //   TinValidationResult? tinResult,
+//   // ) async {
+//   //   if (_isProceeding) return;
+//   //   FocusScope.of(context).unfocus();
+//   //   setState(() => _isProceeding = true);
+//   //   print(
+//   //     'Email: $tinResult[email], Phone: $tinResult[phoneNumber], Address: $tinResult[address]',
+//   //   );
+
+//   //   try {
+//   //     final tin = ref.read(filingTinProvider);
+//   //     final plan = ref.read(selectedFilingPlanProvider);
+//   //     final classification = ref.read(filingClassificationProvider);
+//   //     final name = ref.read(filingNameProvider);
+//   //     final cacNumber = ref.read(filingCacNumberProvider);
+//   //     final contactRecord = ref.read(filingContactProvider);
+//   //     final calcState = ref.read(taxCalculatorProvider);
+
+//   //     // print('Contact Record: $contactRecord');
+
+//   //     // Build income list from filing data
+//   //     final revenues = filingData?.incomes ?? [];
+
+//   //     // Build the 5 deduction items in exact API order
+//   //     final noneTaxable = [
+//   //       FilingIncomeSource(source: 'Rent', amount: _parseField(_rentCtrl)),
+//   //       FilingIncomeSource(
+//   //         source: 'NHF Contribution',
+//   //         amount: _parseField(_nhfCtrl),
+//   //       ),
+//   //       FilingIncomeSource(
+//   //         source: 'Pension Contribution',
+//   //         amount: _parseField(_pensionCtrl),
+//   //       ),
+//   //       FilingIncomeSource(
+//   //         source: 'Interest on Loan for Owner Occupied House',
+//   //         amount: _parseField(_loanCtrl),
+//   //       ),
+//   //       FilingIncomeSource(
+//   //         source: 'Life Insurance Premium (You & Spouse)',
+//   //         amount: _parseField(_lifeCtrl),
+//   //       ),
+//   //     ];
+
+//   //     final contact = FilingContactInfo(
+//   //       phoneNo: contactRecord.phoneNo,
+//   //       address: contactRecord.address,
+//   //       email: contactRecord.email,
+//   //     );
+
+//   //     final repo = ref.read(filingPaymentRepositoryProvider);
+//   //     final result = await repo.initPayment(
+//   //       plan: plan,
+//   //       tin: tin,
+//   //       classification: classification,
+//   //       name: name,
+//   //       cacNumber: cacNumber,
+//   //       contact: contact,
+//   //       revenues: revenues,
+//   //       noneTaxableRevenues: noneTaxable,
+//   //     );
+
+//   //     // Use the TaxAmount returned by the API as the authoritative figure
+//   //     final taxDue = result.financeDetails.taxAmount > 0
+//   //         ? result.financeDetails.taxAmount
+//   //         : (calcState.result?.finalTaxDue ?? filingData?.estimatedTax ?? 0.0);
+
+//   //     ref.read(filingTaxDueProvider.notifier).state = taxDue;
+
+//   //     if (mounted) {
+//   //       setState(() => _isProceeding = false);
+//   //       context.pushNamed(FilingRoutes.step4);
+//   //     }
+//   //   } catch (e) {
+//   //     setState(() => _isProceeding = false);
+//   //     if (mounted) {
+//   //       AppNotification.show(
+//   //         context,
+//   //         message: e.toString().replaceFirst('Exception: ', ''),
+//   //         icon: Icons.error_outline,
+//   //         iconColor: Colors.redAccent,
+//   //       );
+//   //     }
+//   //   }
+//   // }
+
 //   @override
 //   Widget build(BuildContext context) {
 //     final filingAsync = ref.watch(filingHomeProvider);
 //     final profileAsync = ref.watch(homeDataProvider);
 //     final selectedPlan = ref.watch(selectedFilingPlanProvider);
 //     final calcState = ref.watch(taxCalculatorProvider);
+//     final result = ref.watch(tinValidationResultProvider);
 
 //     final filingData = filingAsync.value;
 //     if (filingData != null) _initDeductions(filingData);
@@ -1376,6 +1455,7 @@ class _StepBadge extends StatelessWidget {
 //                   profileAsync.when(
 //                     data: (home) {
 //                       final user = home.data;
+//                       // print('user: $user');
 //                       final initials = '${user.firstName[0]}${user.lastName[0]}'
 //                           .toUpperCase();
 //                       return _IdentityCard(
@@ -1502,7 +1582,9 @@ class _StepBadge extends StatelessWidget {
 //               label: _isProceeding
 //                   ? 'Initialising…'
 //                   : 'This looks right — proceed to payment',
-//               onTap: _isProceeding ? null : () => _onProceed(filingData),
+//               onTap: _isProceeding
+//                   ? null
+//                   : () => _onProceed(filingData, result),
 //             ),
 //           ],
 //         ),
