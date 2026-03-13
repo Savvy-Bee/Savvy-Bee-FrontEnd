@@ -202,7 +202,7 @@ class _StatusConfig {
           iconColor: Colors.white,
           icon: Icons.check,
           title: 'Filing complete!',
-          subtitle: 'Your return has been successfully filed with FIRS.',
+          subtitle: 'Your return has been successfully filed with NRS.',
         );
       case FillingStatus.rejected:
         return _StatusConfig(
@@ -254,7 +254,7 @@ class _ProgressTimeline extends StatelessWidget {
       ),
       _TimelineStep(
         label: 'Confirmed',
-        sublabel: isCompleted ? 'Filed with FIRS' : 'Pending submission',
+        sublabel: isCompleted ? 'Filed with NRS' : 'Pending submission',
         stepStatus: isCompleted ? _StepStatus.done : _StepStatus.pending,
         isLast: true,
       ),
@@ -593,7 +593,7 @@ class _RecordRow extends StatelessWidget {
 //         ),
 //         _TimelineStep(
 //           label: 'Submitted',
-//           sublabel: 'Filed with FIRS',
+//           sublabel: 'Filed with NRS',
 //           status: _StepStatus.pending,
 //           isLast: true,
 //         ),

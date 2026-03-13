@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyDW0Cjh4un10waDwIHwmkY3Ey3PqOlUuGY</string>
+	<key>GCM_SENDER_ID</key>
+	<string>1077803852058</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.savvybee.app</string>
+	<key>PROJECT_ID</key>
+	<string>savvybee-3c86c</string>
+	<key>STORAGE_BUCKET</key>
+	<string>savvybee-3c86c.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:1077803852058:ios:09b9e94b614999c7334ca3</string>
+</dict>
+</plist>

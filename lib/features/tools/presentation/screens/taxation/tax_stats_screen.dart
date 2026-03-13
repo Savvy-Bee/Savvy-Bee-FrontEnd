@@ -343,7 +343,7 @@ class _TaxStatsScreenState extends ConsumerState<TaxStatsScreen> {
                       ),
                     ),
                     Text(
-                      'Generate an institutional-grade certified audit report for HR, LIRS, or FIRS compliance',
+                      'Generate an institutional-grade certified audit report for HR, LIRS, or NRS compliance',
                       style: TextStyle(color: AppColors.white),
                     ),
                   ],

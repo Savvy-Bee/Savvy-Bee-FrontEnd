@@ -353,7 +353,7 @@ class _FilingStep5ScreenState extends ConsumerState<FilingStep5Screen> {
                   const Gap(10),
                   _PaymentMethodTile(
                     icon: Icons.account_balance_outlined,
-                    title: 'Bank Transfer to FIRS',
+                    title: 'Bank Transfer to NRS',
                     subtitle: 'Account details pre-filled',
                     isSelected: _selectedPaymentIndex == 2,
                     isDisabled: true,
@@ -937,7 +937,7 @@ class _StepBadge extends StatelessWidget {
 //                   const Gap(10),
 //                   _PaymentMethodTile(
 //                     icon: Icons.account_balance_outlined,
-//                     title: 'Bank Transfer to FIRS',
+//                     title: 'Bank Transfer to NRS',
 //                     subtitle: 'Account details pre-filled',
 //                     isSelected: _selectedPaymentIndex == 2,
 //                     isDisabled: true,

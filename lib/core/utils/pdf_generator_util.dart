@@ -460,7 +460,7 @@ class PdfGeneratorUtil {
 
                 // Footer
                 pw.Text(
-                  'This is a certified audit report for HR, LIRS, or FIRS compliance. All income sources tracked, tax shields & reliefs consolidated.',
+                  'This is a certified audit report for HR, LIRS, or NRS compliance. All income sources tracked, tax shields & reliefs consolidated.',
                   style: const pw.TextStyle(
                     fontSize: 10,
                     color: PdfColors.grey600,

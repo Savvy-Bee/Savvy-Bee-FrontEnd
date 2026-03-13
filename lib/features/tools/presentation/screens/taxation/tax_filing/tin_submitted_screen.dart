@@ -71,7 +71,7 @@ class TinSubmittedScreen extends StatelessWidget {
                   const Gap(10),
                   Center(
                     child: Text(
-                      'Your information has been sent to FIRS for\nTIN generation. We\'ll notify you as soon\nas your TIN is ready.',
+                      'Your information has been sent to NRS for\nTIN generation. We\'ll notify you as soon\nas your TIN is ready.',
                       style: _gs(13, color: AppColors.greyDark),
                       textAlign: TextAlign.center,
                     ),
@@ -124,7 +124,7 @@ class TinSubmittedScreen extends StatelessWidget {
                           icon: Icons.circle,
                           iconBg: const Color(0xFFEEEEEE),
                           iconColor: const Color(0xFFEEEEEE),
-                          label: 'TIN issued by FIRS',
+                          label: 'TIN issued by NRS',
                           sublabel: 'Pending approval',
                           lineColor: const Color(0xFFEEEEEE),
                           isLast: false,
@@ -197,7 +197,7 @@ class TinSubmittedScreen extends StatelessWidget {
                   _NextStep(
                     icon: Icons.search,
                     text:
-                        'FIRS verifies your BVN and NIN against national databases',
+                        'NRS verifies your BVN and NIN against national databases',
                   ),
                   const Gap(10),
                   _NextStep(

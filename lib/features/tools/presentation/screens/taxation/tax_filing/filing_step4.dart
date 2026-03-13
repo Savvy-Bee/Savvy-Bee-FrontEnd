@@ -173,7 +173,7 @@ class _FilingStep4ScreenState extends ConsumerState<FilingStep4Screen> {
                         child: _PaymentTypeCard(
                           label: 'TAX LIABILITY',
                           amount: taxDue.formatCurrency(decimalDigits: 0),
-                          subtitle: 'Paid to FIRS',
+                          subtitle: 'Paid to NRS',
                           isActive: false,
                           actionLabel: 'Next step',
                         ),
@@ -759,7 +759,7 @@ class _StepBadge extends StatelessWidget {
 //                         child: _PaymentTypeCard(
 //                           label: 'TAX LIABILITY',
 //                           amount: taxDue.formatCurrency(decimalDigits: 0),
-//                           subtitle: 'Paid to FIRS',
+//                           subtitle: 'Paid to NRS',
 //                           isActive: false,
 //                           actionLabel: 'Next step',
 //                         ),

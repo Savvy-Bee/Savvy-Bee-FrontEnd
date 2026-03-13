@@ -501,7 +501,7 @@ class _ProgressBar extends StatelessWidget implements PreferredSizeWidget {
 //                   ),
 //                   const Gap(6),
 //                   Text(
-//                     'Required by FIRS for TIN generation.',
+//                     'Required by NRS for TIN generation.',
 //                     style: _gs(13, color: AppColors.greyDark),
 //                   ),
 //                   const Gap(28),
@@ -660,7 +660,7 @@ class _ProgressBar extends StatelessWidget implements PreferredSizeWidget {
 //   // State → tax authority mapping
 //   String _taxAuthority(String? state) {
 //     if (state == null) return '';
-//     if (state == 'FCT') return 'FIRS';
+//     if (state == 'FCT') return 'NRS';
 //     if (state == 'Lagos') return 'LIRS';
 //     return '${state.toUpperCase().substring(0, 3)}IRS';
 //   }

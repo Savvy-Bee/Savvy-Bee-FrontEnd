@@ -213,7 +213,7 @@ class _TinValidationScreen1State extends ConsumerState<TinValidationScreen1> {
                 const Gap(8),
 
                 Text(
-                  '$_digitCount digits · Find your TIN on your FIRS certificate or payslip',
+                  '$_digitCount digits · Find your TIN on your NRS certificate or payslip',
                   style: _gs(12, color: AppColors.greyDark),
                 ),
 
@@ -503,7 +503,7 @@ class _StepBadge extends StatelessWidget {
 //                 const Gap(8),
 
 //                 Text(
-//                   '$_digitCount digits · Find your TIN on your FIRS certificate or payslip',
+//                   '$_digitCount digits · Find your TIN on your NRS certificate or payslip',
 //                   style: _gs(12, color: AppColors.greyDark),
 //                 ),
 
