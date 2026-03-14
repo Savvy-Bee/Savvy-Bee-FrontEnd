@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+// import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 // import 'package:savvy_bee_mobile/core/services/push_notification_service.dart';
@@ -19,7 +19,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
    // Required for flutter_inappwebview on Android & iOS
-  await InAppWebViewController.setWebContentsDebuggingEnabled(false);
+  // await InAppWebViewController.setWebContentsDebuggingEnabled(false);
 
   // Future<void> printFCMToken() async {
   //   final token = await FirebaseMessaging.instance.getToken();

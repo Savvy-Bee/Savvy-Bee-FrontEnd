@@ -1,11 +1,11 @@
 // lib/features/tools/presentation/screens/taxation/filing/taxpayer_id_screen.dart
 
 import 'package:flutter/material.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/widgets/tax_filing/filing_routes.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class TaxpayerIdScreen extends StatefulWidget {
   static const String path = FilingRoutes.taxpayerId;
@@ -31,8 +31,8 @@ class TaxpayerIdScreen extends StatefulWidget {
 }
 
 class _TaxpayerIdScreenState extends State<TaxpayerIdScreen> {
-  /// Shows the NRS redirect confirmation sheet, then opens the WebView.
-  /// When the WebView is closed the user lands back here automatically.
+  static const _nrsUrl = 'https://taxid.nrs.gov.ng/';
+
   void _onFirstTimeFiler() {
     showModalBottomSheet(
       context: context,
@@ -50,11 +50,9 @@ class _TaxpayerIdScreenState extends State<TaxpayerIdScreen> {
           scrollController: scrollController,
           onContinue: () async {
             Navigator.pop(sheetCtx);
-            await Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const NrsTinWebViewScreen(),
-              ),
+            await launchUrl(
+              Uri.parse(_nrsUrl),
+              mode: LaunchMode.externalApplication,
             );
           },
           onCancel: () => Navigator.pop(sheetCtx),
@@ -144,7 +142,7 @@ class _TaxpayerIdScreenState extends State<TaxpayerIdScreen> {
                     const SizedBox(width: 10),
                     Expanded(
                       child: Text(
-                        'A Tax Identification Number (TIN) is required by NRS for all Nigerian taxpayers. If you\'re unsure, check your payslip or contact your employer\'s HR department.',
+                        'A Tax Identification Number (TIN) is required by FIRS for all Nigerian taxpayers. If you\'re unsure, check your payslip or contact your employer\'s HR department.',
                         style: TaxpayerIdScreen._gs(
                           12,
                           color: const Color(0xFF856404),
@@ -396,194 +394,6 @@ class _StepRow extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-// ── NRS WebView screen ────────────────────────────────────────────────────────
-
-class NrsTinWebViewScreen extends StatefulWidget {
-  const NrsTinWebViewScreen({super.key});
-
-  static TextStyle _gs(
-    double size, {
-    FontWeight weight = FontWeight.w400,
-    Color color = Colors.black87,
-  }) => TextStyle(
-    fontFamily: 'GeneralSans',
-    fontSize: size,
-    fontWeight: weight,
-    color: color,
-    letterSpacing: size * 0.02,
-  );
-
-  @override
-  State<NrsTinWebViewScreen> createState() => _NrsTinWebViewScreenState();
-}
-
-class _NrsTinWebViewScreenState extends State<NrsTinWebViewScreen> {
-  InAppWebViewController? _webViewController;
-  bool _isLoading = true;
-  bool _hasError = false;
-
-  static const _nrsUrl = 'https://taxid.nrs.gov.ng/';
-
-  final _settings = InAppWebViewSettings(
-    javaScriptEnabled: true,
-    // Sends a real Chrome user-agent so the site doesn't block the request
-    userAgent:
-        'Mozilla/5.0 (Linux; Android 13; Pixel 7) '
-        'AppleWebKit/537.36 (KHTML, like Gecko) '
-        'Chrome/124.0.0.0 Mobile Safari/537.36',
-    // Required for the NRS site to render correctly
-    domStorageEnabled: true,
-    databaseEnabled: true,
-    cacheEnabled: true,
-    // iOS: allow inline media
-    allowsInlineMediaPlayback: true,
-  );
-
-  void _reload() {
-    setState(() { _hasError = false; _isLoading = true; });
-    _webViewController?.loadUrl(
-      urlRequest: URLRequest(url: WebUri(_nrsUrl)),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black87,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.close),
-          tooltip: 'Back to app',
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: Text(
-          'NRS TIN Registration',
-          style: NrsTinWebViewScreen._gs(16, weight: FontWeight.w600),
-        ),
-        centerTitle: false,
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(1),
-          child: Divider(
-            height: 1,
-            color: Colors.black.withValues(alpha: 0.08),
-          ),
-        ),
-      ),
-      body: Stack(
-        children: [
-          InAppWebView(
-            initialUrlRequest: URLRequest(
-              url: WebUri(_nrsUrl),
-              headers: {
-                'Accept':
-                    'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-                'Accept-Language': 'en-US,en;q=0.9',
-              },
-            ),
-            initialSettings: _settings,
-            onWebViewCreated: (controller) {
-              _webViewController = controller;
-            },
-            onLoadStart: (_, __) {
-              if (mounted) setState(() { _isLoading = true; _hasError = false; });
-            },
-            onLoadStop: (_, __) {
-              if (mounted) setState(() => _isLoading = false);
-            },
-            onReceivedError: (_, request, error) {
-              debugPrint('NRS error [main=${request.isForMainFrame}]: ${error.description}');
-              if (request.isForMainFrame!) {
-                if (mounted) setState(() { _isLoading = false; _hasError = true; });
-              }
-            },
-            // ── SSL bypass for Android + iOS ──────────────────────────
-            // The NRS government portal has a certificate chain not in
-            // Android/iOS system trust stores. We proceed only for the
-            // known NRS domain; all other SSL errors are rejected.
-            onReceivedServerTrustAuthRequest: (_, challenge) async {
-              final host = challenge.protectionSpace.host;
-              if (host.contains('nrs.gov.ng')) {
-                return ServerTrustAuthResponse(
-                  action: ServerTrustAuthResponseAction.PROCEED,
-                );
-              }
-              return ServerTrustAuthResponse(
-                action: ServerTrustAuthResponseAction.CANCEL,
-              );
-            },
-          ),
-
-          if (_isLoading)
-            const Center(
-              child: CircularProgressIndicator(color: AppColors.primary),
-            ),
-
-          if (_hasError && !_isLoading)
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.all(32),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(
-                      Icons.wifi_off_outlined,
-                      size: 48,
-                      color: Colors.black38,
-                    ),
-                    const Gap(16),
-                    Text(
-                      'Could not load the NRS portal',
-                      style: NrsTinWebViewScreen._gs(
-                        16,
-                        weight: FontWeight.w600,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const Gap(8),
-                    Text(
-                      'Check your internet connection and try again.',
-                      style: NrsTinWebViewScreen._gs(
-                        13,
-                        color: const Color(0xFF888888),
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const Gap(24),
-                    ElevatedButton(
-                      onPressed: _reload,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFF5C842),
-                        foregroundColor: Colors.black,
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 14,
-                          horizontal: 32,
-                        ),
-                      ),
-                      child: Text(
-                        'Retry',
-                        style: NrsTinWebViewScreen._gs(
-                          14,
-                          weight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-        ],
-      ),
     );
   }
 }
