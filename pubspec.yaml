@@ -1,7 +1,7 @@
 name: savvy_bee_mobile
 description: "An AI-powered financial literacy and management app"
 publish_to: 'none'
-version: 1.0.0+19
+version: 1.0.0+20
 
 environment:
   sdk: ^3.8.1
@@ -60,9 +60,9 @@ dependencies:
   screenshot: ^3.0.0  # For capturing widget as image
   # webview_flutter_android: ^4.3.0  # usually included transitively with webview_flutter
   # webview_flutter_wkwebview: ^3.14.0
-  firebase_core: ^4.5.0
-  firebase_messaging: ^16.1.2
-  flutter_local_notifications: ^17.0.0
+  # firebase_core: ^4.5.0
+  # firebase_messaging: ^16.1.2
+  # flutter_local_notifications: ^17.0.0
   flutter_inappwebview: ^6.1.5
  
 dev_dependencies:

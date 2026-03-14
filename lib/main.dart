@@ -1,12 +1,12 @@
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+// import 'package:firebase_core/firebase_core.dart';
+// import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
-import 'package:savvy_bee_mobile/core/services/push_notification_service.dart';
+// import 'package:savvy_bee_mobile/core/services/push_notification_service.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/tracking/minxpanel_tracking.dart';
 import 'core/theme/app_theme.dart';
@@ -21,10 +21,10 @@ void main() async {
    // Required for flutter_inappwebview on Android & iOS
   await InAppWebViewController.setWebContentsDebuggingEnabled(false);
 
-  Future<void> printFCMToken() async {
-    final token = await FirebaseMessaging.instance.getToken();
-    print("FCM TOKEN: $token");
-  }
+  // Future<void> printFCMToken() async {
+  //   final token = await FirebaseMessaging.instance.getToken();
+  //   print("FCM TOKEN: $token");
+  // }
 
   // await Firebase.initializeApp();
   // await printFCMToken();
