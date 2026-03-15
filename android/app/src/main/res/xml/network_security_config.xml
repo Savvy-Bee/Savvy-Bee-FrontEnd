@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Place this file at:
+  android/app/src/main/res/xml/network_security_config.xml
+
+  Then reference it in android/app/src/main/AndroidManifest.xml:
+    <application
+        android:networkSecurityConfig="@xml/network_security_config"
+        ...>
+-->
+<network-security-config>
+
+  <!-- Trust user + system CAs for all domains (default) -->
+  <base-config cleartextTrafficPermitted="false">
+    <trust-anchors>
+      <certificates src="system" />
+    </trust-anchors>
+  </base-config>
+
+  <!--
+    NRS TIN portal — uses a certificate whose CA Android WebView
+    rejects (net_error -202 / ERR_CERT_AUTHORITY_INVALID).
+    We also trust user-installed CAs for this domain so the WebView
+    accepts the cert the same way Chrome does.
+  -->
+  <domain-config cleartextTrafficPermitted="false">
+    <domain includeSubdomains="true">taxid.nrs.gov.ng</domain>
+    <domain includeSubdomains="true">nrs.gov.ng</domain>
+    <trust-anchors>
+      <certificates src="system" />
+      <certificates src="user" />
+    </trust-anchors>
+  </domain-config>
+
+</network-security-config>

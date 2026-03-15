@@ -1,4 +1,4 @@
-package com.example.savvy_bee_mobile
+package com.mysavvybee.app
 
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine

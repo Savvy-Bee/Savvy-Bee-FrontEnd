@@ -15,7 +15,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace = "com.example.savvy_bee_mobile"
+    namespace = "com.mysavvybee.app"
     compileSdk = 36
     ndkVersion = "27.0.12077973"
 
