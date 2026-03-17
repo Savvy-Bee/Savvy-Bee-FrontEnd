@@ -10,6 +10,7 @@ class StorageService {
   static const String tokenExpiryKey = 'token_expiry';
   static const String refreshTokenKey = 'refresh_token';
   static const String userDataKey = 'user_data';
+  static const String fcmTokenKey = 'fcm_token';
 
   StorageService() : _secureStorage = const FlutterSecureStorage();
 
@@ -111,6 +112,28 @@ class StorageService {
   Future<bool> hasValidSession() async {
     final token = await getAuthToken();
     return token != null && token.isNotEmpty;
+  }
+
+  // ------------------- FCM TOKEN -------------------
+
+  Future<void> saveFcmToken(String token) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(fcmTokenKey, token);
+      log('✓ FCM token saved');
+    } catch (e) {
+      log('✗ Error saving FCM token: $e');
+    }
+  }
+
+  Future<String?> getFcmToken() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      return prefs.getString(fcmTokenKey);
+    } catch (e) {
+      log('✗ Error reading FCM token: $e');
+      return null;
+    }
   }
 
   // ------------------- GENERAL SHARED PREFERENCES DATA -------------------

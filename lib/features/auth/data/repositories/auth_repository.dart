@@ -149,17 +149,16 @@ class AuthRepository {
     String email,
     String password,
     String deviceID,
-    // String? fcmToken,
+    String? fcmToken,
   ) async {
     try {
       final response = await _apiClient.post(
         ApiEndpoints.login,
-        // data: {'email': email, 'password': password, 'deviceID': deviceID},
         data: {
           'email': email,
           'password': password,
           'deviceID': deviceID,
-          // 'fcmToken': fcmToken,
+          'fcmToken': fcmToken,
         },
       );
 

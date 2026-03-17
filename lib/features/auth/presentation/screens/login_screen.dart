@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/services/device_info_service.dart';
-import 'package:savvy_bee_mobile/core/services/push_notification_service.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/logos.dart';
 import 'package:savvy_bee_mobile/core/utils/input_validator.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
@@ -126,14 +125,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     final email = _emailController.text.toLowerCase().trim();
 
-    // final fcmToken = await PushNotificationService.getToken();
-
     final response = await ref
         .read(authProvider.notifier)
         .login(email, _passwordController.text.trim(), _deviceID!);
-    // final response = await ref
-    //     .read(authProvider.notifier)
-    //     .login(email, _passwordController.text.trim(), _deviceID!, fcmToken);
 
     if (!mounted) return;
 

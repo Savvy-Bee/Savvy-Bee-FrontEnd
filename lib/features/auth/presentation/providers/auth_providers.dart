@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:savvy_bee_mobile/core/services/push_notification_service.dart';
 import 'package:savvy_bee_mobile/core/services/service_locator.dart';
 import 'package:savvy_bee_mobile/core/services/storage_service.dart';
 import 'package:savvy_bee_mobile/core/tracking/minxpanel_tracking.dart';
@@ -304,16 +305,19 @@ class AuthNotifier extends StateNotifier<AuthState> {
     String email,
     String password,
     String deviceID,
-    // String? fcmToken,
   ) async {
     state = state.copyWith(isLoading: true, clearError: true);
 
     try {
+      // Retrieve the stored FCM token, or fetch it from Firebase if not cached.
+      final fcmToken =
+          await PushNotificationService.instance.getStoredOrFetchToken();
+
       final response = await _authRepository.login(
         email,
         password,
         deviceID,
-        // fcmToken,
+        fcmToken,
       );
 
       if (response != null && response.success && response.data != null) {

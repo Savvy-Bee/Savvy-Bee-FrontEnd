@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyDW0Cjh4un10waDwIHwmkY3Ey3PqOlUuGY</string>
+	<string>AIzaSyA-GE1V9dP-orP_govO9qKdq0s_cg6H7dQ</string>
 	<key>GCM_SENDER_ID</key>
-	<string>1077803852058</string>
+	<string>244595176641</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.savvybee.app</string>
+	<string>com.mysavvybee.app</string>
 	<key>PROJECT_ID</key>
-	<string>savvybee-3c86c</string>
+	<string>savvy-bee-852ba</string>
 	<key>STORAGE_BUCKET</key>
-	<string>savvybee-3c86c.firebasestorage.app</string>
+	<string>savvy-bee-852ba.firebasestorage.app</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:1077803852058:ios:09b9e94b614999c7334ca3</string>
+	<string>1:244595176641:ios:b01ae42660617d26a4d040</string>
 </dict>
 </plist>
