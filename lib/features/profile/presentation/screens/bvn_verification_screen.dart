@@ -2,7 +2,9 @@
 
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:camera/camera.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
@@ -49,10 +51,13 @@ class _BvnVerificationScreenState extends ConsumerState<BvnVerificationScreen> {
   }
 
   Future<void> _initializeCamera() async {
+    if (kIsWeb) {
+      // Camera KYC is not supported on web; the UI will show a fallback.
+      return;
+    }
     try {
       _cameras = await availableCameras();
       if (_cameras!.isNotEmpty) {
-        // Use front camera for selfie
         final frontCamera = _cameras!.firstWhere(
           (camera) => camera.lensDirection == CameraLensDirection.front,
           orElse: () => _cameras!.first,
@@ -66,9 +71,7 @@ class _BvnVerificationScreenState extends ConsumerState<BvnVerificationScreen> {
 
         await _cameraController!.initialize();
         if (mounted) {
-          setState(() {
-            _isCameraInitialized = true;
-          });
+          setState(() => _isCameraInitialized = true);
         }
       }
     } catch (e) {
@@ -128,19 +131,11 @@ class _BvnVerificationScreenState extends ConsumerState<BvnVerificationScreen> {
     });
 
     try {
-      final file = File(_selfieImage!.path);
-
-      // log file info
-      print('Selfie path: ${file.path}');
-      print('Selfie size: ${await file.length()} bytes');
-
-      // Get repository
+      // _selfieImage is already an XFile (from camera.takePicture())
       final repository = ref.read(verificationRepositoryProvider);
-
-      // Call the API
       final response = await repository.verifyBvn(
         bvn: _bvnController.text.trim(),
-        selfieFile: file,
+        selfieFile: _selfieImage!,
       );
 
       if (mounted) {

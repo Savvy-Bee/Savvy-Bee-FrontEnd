@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart'; // XFile
 
 import '../../../../core/services/service_locator.dart';
 import '../../data/repositories/taxation_repository.dart';
@@ -45,10 +46,10 @@ class TaxCalculatorNotifier extends AsyncNotifier<TaxCalculatorResponse?> {
   }
 
   /// Upload bank statement for automatic tax calculation
-  Future<void> uploadBankStatement(String filePath) async {
+  Future<void> uploadBankStatement(XFile xfile) async {
     state = const AsyncLoading();
     try {
-      final response = await _repository.uploadBankStatement(filePath);
+      final response = await _repository.uploadBankStatement(xfile);
       state = AsyncData(response);
     } catch (e, st) {
       state = AsyncError(e, st);

@@ -1,6 +1,7 @@
 import 'dart:developer';
-import 'dart:io';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart'; // XFile
 
 import 'package:savvy_bee_mobile/core/services/service_locator.dart';
 import 'package:savvy_bee_mobile/features/chat/domain/models/chat_models.dart';
@@ -212,8 +213,8 @@ class ChatNotifier extends AsyncNotifier<ChatState> {
 
   Future<bool> sendMessage(
     String message, {
-    File? image,
-    File? document,
+    XFile? image,
+    XFile? document,
   }) async {
     if (message.trim().isEmpty && image == null && document == null) {
       return false;

@@ -516,6 +516,21 @@ If you answered "yes" to all these questions, you're ready to take the next step
                   ),
                   const Gap(24),
 
+                  // AI Budget Insight
+                  if (homeDataAsync.valueOrNull?.data?.insightAdvice?.budgetInsight.isNotEmpty == true) ...[
+                    const Gap(24),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: SmartRecommendationCard(
+                        title: 'BUDGET INSIGHT',
+                        description: homeDataAsync.valueOrNull!.data!.insightAdvice!.budgetInsight,
+                        buttonText: 'View Spending',
+                        showFeedback: false,
+                        onButtonPressed: () => context.pushNamed(BudgetsScreen.path),
+                      ),
+                    ),
+                  ],
+
                   if (_showRecommendation) const Gap(24),
                   _buildFeedbackSection(),
                 ],

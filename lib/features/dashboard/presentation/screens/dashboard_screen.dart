@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -230,7 +232,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
 
   /// Builds the correct error widget depending on whether this is a
   /// reauth error or a generic load failure.
-  Widget _buildDashboardError(Object error) {
+  Widget _buildDashboardError(Object error, [StackTrace? stack]) {
+    log('[Dashboard] UI Error caught\nError: $error\nStack: $stack');
     final isReauth = _isReauthError(error);
 
     if (isReauth) {
@@ -352,12 +355,12 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                     text: 'Loading your dashboard...',
                   ),
                   // ✅ Use the smart error builder here
-                  error: (error, stack) => _buildDashboardError(error),
+                  error: (error, stack) => _buildDashboardError(error, stack),
                 ),
               ),
             );
           },
-          error: (error, stack) => Scaffold(body: _buildDashboardError(error)),
+          error: (error, stack) => Scaffold(body: _buildDashboardError(error, stack)),
           loading: () => const Scaffold(
             body: CustomLoadingWidget(text: 'Loading your dashboard...'),
           ),

@@ -1,7 +1,6 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart'; // XFile
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -124,7 +123,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   final TextEditingController _messageController = TextEditingController();
 
   // Local state
-  File? _pickedFile;
+  XFile? _pickedFile;
   ChatViewMode _viewMode = ChatViewMode.newChat;
   bool _isInitialized = false;
 
@@ -309,9 +308,10 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     }
   }
 
-  (File?, File?) _categorizeFile() {
+  (XFile?, XFile?) _categorizeFile() {
     if (_pickedFile == null) return (null, null);
-    final isImage = FileUtils.isImageFile(_pickedFile!.path.toLowerCase());
+    // Use the filename (not the full path) for reliable extension checking on web
+    final isImage = FileUtils.isImageXFile(_pickedFile!);
     return isImage ? (_pickedFile, null) : (null, _pickedFile);
   }
 

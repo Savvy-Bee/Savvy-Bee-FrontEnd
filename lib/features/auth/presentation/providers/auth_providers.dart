@@ -529,6 +529,12 @@ final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
   return AuthNotifier(authRepository, storageService);
 });
 
+/// Temporarily holds signup credentials so the app can auto-login after
+/// the user completes registration. Cleared after the login attempt.
+final signupCredentialsProvider = StateProvider<({String email, String password})?>(
+  (_) => null,
+);
+
 // Convenience providers for common auth checks
 final isAuthenticatedProvider = Provider<bool>((ref) {
   return ref.watch(authProvider).isAuthenticated;

@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:camera/camera.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
@@ -30,7 +32,7 @@ class _LivePhotoScreenState extends ConsumerState<LivePhotoScreen>
   CameraController? _cameraController;
   List<CameraDescription>? _cameras;
   bool _isCameraInitialized = false;
-  File? _profileImageFile;
+  XFile? _profileImageFile;
   bool _isCapturing = false;
 
   @override
@@ -63,6 +65,7 @@ class _LivePhotoScreenState extends ConsumerState<LivePhotoScreen>
   }
 
   Future<void> _initializeCamera() async {
+    if (kIsWeb) return;
     try {
       _cameras = await availableCameras();
       if (_cameras == null || _cameras!.isEmpty) {
@@ -139,7 +142,7 @@ class _LivePhotoScreenState extends ConsumerState<LivePhotoScreen>
     try {
       final XFile photo = await _cameraController!.takePicture();
       setState(() {
-        _profileImageFile = File(photo.path);
+        _profileImageFile = photo;
         _isCapturing = false;
       });
     } catch (e) {
@@ -222,7 +225,9 @@ class _LivePhotoScreenState extends ConsumerState<LivePhotoScreen>
   Widget _buildPhotoPreview() {
     return ClipRRect(
       borderRadius: BorderRadius.circular(16),
-      child: Image.file(_profileImageFile!, fit: BoxFit.cover),
+      child: kIsWeb
+          ? Image.network(_profileImageFile!.path, fit: BoxFit.cover)
+          : Image.file(File(_profileImageFile!.path), fit: BoxFit.cover),
     );
   }
 

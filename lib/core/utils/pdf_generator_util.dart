@@ -1,19 +1,22 @@
 import 'dart:io';
+
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:permission_handler/permission_handler.dart';
+import 'package:savvy_bee_mobile/core/utils/web_download.dart';
 import 'package:savvy_bee_mobile/features/tools/domain/models/taxation.dart';
-import 'package:share_plus/share_plus.dart'; // Add this package
+import 'package:share_plus/share_plus.dart';
 
 class PdfGeneratorUtil {
   static Future<String?> generateTaxSummaryPdf(
     TaxCalculatorData taxData,
   ) async {
     try {
-      // Request storage permission for Android only
-      if (Platform.isAndroid) {
+      // Request storage permission for Android only (not needed on web)
+      if (!kIsWeb && Platform.isAndroid) {
         if (await _requestStoragePermission() == false) {
           throw Exception('Storage permission denied');
         }
@@ -168,18 +171,20 @@ class PdfGeneratorUtil {
         ),
       );
 
-      // Get the appropriate directory based on platform
-      final directory = await _getStorageDirectory();
-
-      // Generate filename with timestamp
+      final pdfBytes = await pdf.save();
       final timestamp = DateTime.now().millisecondsSinceEpoch;
       final fileName = 'tax_summary_$timestamp.pdf';
+
+      if (kIsWeb) {
+        // On web: trigger browser download directly — no filesystem access needed
+        await triggerBrowserDownload(pdfBytes, fileName, 'application/pdf');
+        return fileName; // Return filename as a signal of success
+      }
+
+      // Mobile: save to device storage and return the path
+      final directory = await _getStorageDirectory();
       final filePath = '${directory.path}/$fileName';
-
-      // Save the PDF file
-      final file = File(filePath);
-      await file.writeAsBytes(await pdf.save());
-
+      await File(filePath).writeAsBytes(pdfBytes);
       return filePath;
     } catch (e) {
       print('Error generating PDF: $e');
@@ -282,8 +287,7 @@ class PdfGeneratorUtil {
 
   static Future<String?> generateTaxStatsPdf(TaxationHomeData taxData) async {
     try {
-      // Request storage permission for Android only
-      if (Platform.isAndroid) {
+      if (!kIsWeb && Platform.isAndroid) {
         if (await _requestStoragePermission() == false) {
           throw Exception('Storage permission denied');
         }
@@ -472,17 +476,18 @@ class PdfGeneratorUtil {
         ),
       );
 
-      // Get the directory to save the file
-      final directory = await _getStorageDirectory();
-
-      // Generate filename with timestamp
+      final pdfBytes = await pdf.save();
       final timestamp = DateTime.now().millisecondsSinceEpoch;
-      final filePath = '${directory.path}/tax_health_report_$timestamp.pdf';
+      final fileName = 'tax_health_report_$timestamp.pdf';
 
-      // Save the PDF file
-      final file = File(filePath);
-      await file.writeAsBytes(await pdf.save());
+      if (kIsWeb) {
+        await triggerBrowserDownload(pdfBytes, fileName, 'application/pdf');
+        return fileName;
+      }
 
+      final directory = await _getStorageDirectory();
+      final filePath = '${directory.path}/$fileName';
+      await File(filePath).writeAsBytes(pdfBytes);
       return filePath;
     } catch (e) {
       print('Error generating PDF: $e');

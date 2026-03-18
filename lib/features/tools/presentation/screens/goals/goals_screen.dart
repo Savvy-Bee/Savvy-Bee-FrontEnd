@@ -6,6 +6,8 @@ import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/num_extensions.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_error_widget.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_loading_widget.dart';
+import 'package:savvy_bee_mobile/features/home/presentation/providers/home_data_provider.dart';
+import 'package:savvy_bee_mobile/features/home/presentation/widgets/smart_recommendations.dart';
 import 'package:savvy_bee_mobile/features/tools/domain/models/savings.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/providers/goals_provider.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/goals/create_goal_onboarding_screen.dart';
@@ -85,6 +87,7 @@ class _GoalsScreenState extends ConsumerState<GoalsScreen> {
   @override
   Widget build(BuildContext context) {
     final goalsAsync = ref.watch(savingsGoalsProvider);
+    final insightAdvice = ref.watch(homeDataProvider).valueOrNull?.data?.insightAdvice;
 
     return Stack(
       children: [
@@ -198,6 +201,20 @@ class _GoalsScreenState extends ConsumerState<GoalsScreen> {
                         ),
                       ),
                     ),
+
+                    // AI Savings Advice
+                    if (insightAdvice?.goalSavingsAdvice.isNotEmpty == true)
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                        child: SmartRecommendationCard(
+                          title: 'SAVINGS ADVICE',
+                          description: insightAdvice!.goalSavingsAdvice,
+                          buttonText: 'Got it',
+                          showFeedback: false,
+                          backgroundColor: const Color(0xFFE8F5E9),
+                          onButtonPressed: () {},
+                        ),
+                      ),
 
                     // ── Goals list / empty state ───────────────────────────
                     Expanded(

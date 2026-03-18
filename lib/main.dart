@@ -1,9 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-// import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:savvy_bee_mobile/core/services/push_notification_service.dart';
@@ -19,43 +19,49 @@ import 'firebase_options.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Required for flutter_inappwebview on Android & iOS
-  // await InAppWebViewController.setWebContentsDebuggingEnabled(false);
+  // Portrait lock and system UI overlay only apply on mobile
+  if (!kIsWeb) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
 
-  // await dotenv.load(fileName: ".env");
-
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]);
-
-  SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.dark,
-      systemNavigationBarColor: Colors.transparent,
-      systemNavigationBarIconBrightness: Brightness.dark,
-    ),
-  );
-
-  try {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark,
+        systemNavigationBarColor: Colors.transparent,
+        systemNavigationBarIconBrightness: Brightness.dark,
+      ),
     );
-    await PushNotificationService.instance.initialize();
-    String? token = await FirebaseMessaging.instance.getToken();
-    print("FCM TOKEN: $token");
+  }
+
+  // Firebase: web requires a web-specific config in firebase_options.dart
+  try {
+    final firebaseOptions = DefaultFirebaseOptions.currentPlatform;
+    if (firebaseOptions != null) {
+      await Firebase.initializeApp(options: firebaseOptions);
+      if (!kIsWeb) {
+        // FCM background handler uses @pragma('vm:entry-point') which is
+        // not supported on web; skip notification init on web.
+        await PushNotificationService.instance.initialize();
+      }
+      final token = await FirebaseMessaging.instance.getToken();
+      debugPrint("FCM TOKEN: $token");
+    }
   } catch (error, stackTrace) {
-    debugPrint('Firebase Messaging init failed: $error');
+    debugPrint('Firebase init failed: $error');
     debugPrintStack(stackTrace: stackTrace);
   }
 
-  try {
-    await dotenv.load(fileName: ".env");
-
-    final apiKey = dotenv.env[Constants.revenueCatApiKey]!;
-    await Purchases.configure(PurchasesConfiguration(apiKey));
-  } catch (_) {}
+  // RevenueCat (purchases_flutter) is not supported on web
+  if (!kIsWeb) {
+    try {
+      await dotenv.load(fileName: ".env");
+      final apiKey = dotenv.env[Constants.revenueCatApiKey]!;
+      await Purchases.configure(PurchasesConfiguration(apiKey));
+    } catch (_) {}
+  }
 
   // Initialize Mixpanel BEFORE runApp()
   await MixpanelService.initialize('0b9bfa95112c6154772de9e7adfde75b');

@@ -11,7 +11,9 @@
 //   • GestureDetector on root to dismiss keyboard
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -39,7 +41,7 @@ class FilingDetailsScreen extends ConsumerStatefulWidget {
 class _FilingDetailsScreenState extends ConsumerState<FilingDetailsScreen> {
   final _commentCtrl = TextEditingController();
   final _scrollCtrl = ScrollController();
-  final List<String> _pendingPaths = [];
+  final List<XFile> _pendingFiles = [];
   bool _isSending = false;
   bool _breakdownExpanded = false;
 
@@ -59,22 +61,27 @@ class _FilingDetailsScreenState extends ConsumerState<FilingDetailsScreen> {
       allowMultiple: true,
       type: FileType.custom,
       allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx'],
+      withData: kIsWeb,
     );
     if (result == null || result.files.isEmpty) return;
     setState(() {
-      _pendingPaths.addAll(
-        result.files.where((f) => f.path != null).map((f) => f.path!),
-      );
+      for (final f in result.files) {
+        if (kIsWeb && f.bytes != null) {
+          _pendingFiles.add(XFile.fromData(f.bytes!, name: f.name));
+        } else if (!kIsWeb && f.path != null) {
+          _pendingFiles.add(XFile(f.path!));
+        }
+      }
     });
   }
 
-  void _removePending(int i) => setState(() => _pendingPaths.removeAt(i));
+  void _removePending(int i) => setState(() => _pendingFiles.removeAt(i));
 
   // ── Send reply ──────────────────────────────────────────────────────────────
 
   Future<void> _sendReply() async {
     final comment = _commentCtrl.text.trim();
-    if (comment.isEmpty && _pendingPaths.isEmpty) return;
+    if (comment.isEmpty && _pendingFiles.isEmpty) return;
     if (_isSending) return;
     FocusScope.of(context).unfocus();
     setState(() => _isSending = true);
@@ -87,11 +94,11 @@ class _FilingDetailsScreenState extends ConsumerState<FilingDetailsScreen> {
       await repo.uploadReview(
         filingId: widget.filingId,
         comment: comment,
-        filePaths: List.from(_pendingPaths),
+        files: List.from(_pendingFiles),
       );
 
       _commentCtrl.clear();
-      setState(() => _pendingPaths.clear());
+      setState(() => _pendingFiles.clear());
 
       // Refresh to get server-confirmed review list
       await ref.read(filingDetailProvider(widget.filingId).notifier).refresh();
@@ -522,14 +529,14 @@ class _FilingDetailsScreenState extends ConsumerState<FilingDetailsScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Pending attachments
-        if (_pendingPaths.isNotEmpty) ...[
+        if (_pendingFiles.isNotEmpty) ...[
           Wrap(
             spacing: 8,
             runSpacing: 6,
             children: [
-              for (int i = 0; i < _pendingPaths.length; i++)
+              for (int i = 0; i < _pendingFiles.length; i++)
                 _AttachmentChip(
-                  path: _pendingPaths[i],
+                  name: _pendingFiles[i].name,
                   onRemove: () => _removePending(i),
                 ),
             ],
@@ -869,14 +876,9 @@ class _DocumentChip extends StatelessWidget {
 // ── Pending attachment chip ───────────────────────────────────────────────────
 
 class _AttachmentChip extends StatelessWidget {
-  final String path;
+  final String name;
   final VoidCallback onRemove;
-  const _AttachmentChip({required this.path, required this.onRemove});
-
-  String get _name {
-    final parts = path.split('/');
-    return parts.isNotEmpty ? parts.last : path;
-  }
+  const _AttachmentChip({required this.name, required this.onRemove});
 
   @override
   Widget build(BuildContext context) => Container(
@@ -894,7 +896,7 @@ class _AttachmentChip extends StatelessWidget {
         ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 110),
           child: Text(
-            _name,
+            name,
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(
               fontFamily: 'GeneralSans',

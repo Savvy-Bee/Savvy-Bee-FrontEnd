@@ -13,34 +13,15 @@ class DashboardDataNotifier
     extends AutoDisposeFamilyAsyncNotifier<DashboardData?, String> {
   @override
   Future<DashboardData?> build(String bankId) async {
-    print('🔄 DashboardDataNotifier.build called with bankId: $bankId');
-
-    final repository = ref.read(dashboardRepositoryProvider);
-    final response = await repository.fetchDashboardData(bankId);
-
-    print('🔄 Response success: ${response.success}');
-    print('🔄 Response message: ${response.message}');
-    print('🔄 Response data null: ${response.data == null}');
-
-    if (response.data != null) {
-      print('✅ Dashboard data exists');
-      print('✅ Accounts: ${response.data!.accounts.length}');
-      print('✅ Savings: ${response.data!.savings.length}');
-
-      if (response.data!.accounts.isNotEmpty) {
-        print(
-          '✅ First account balance: ${response.data!.accounts[0].details.balance}',
-        );
-        print(
-          '✅ First account transactions: ${response.data!.accounts[0].history12Months.length}',
-        );
-      }
-    } else {
-      print('⚠️ Dashboard data is null');
+    try {
+      final repository = ref.read(dashboardRepositoryProvider);
+      final response = await repository.fetchDashboardData(bankId);
+      log('[Dashboard] Provider received response\nsuccess: ${response.success}\nmessage: ${response.message}\ndata null: ${response.data == null}');
+      return response.data;
+    } catch (e, stack) {
+      log('[Dashboard] Provider build error\nBankId: $bankId\nError: $e\nStack: $stack');
+      rethrow;
     }
-
-    // Return the data directly (it's already DashboardData, not wrapped)
-    return response.data;
   }
 
   Future<void> refresh() async {

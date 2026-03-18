@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'package:image_picker/image_picker.dart'; // XFile (cross-platform file)
 
 /// Chat message model with widget support
 class ChatMessage {
@@ -229,8 +229,8 @@ class ChatWidgetDataParser {
 /// Send chat request model
 class SendChatRequest {
   final String message;
-  final File? image;
-  final File? document;
+  final XFile? image;
+  final XFile? document;
 
   SendChatRequest({required this.message, this.image, this.document});
 

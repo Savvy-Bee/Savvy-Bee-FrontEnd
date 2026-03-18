@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
+
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -47,17 +49,27 @@ class _FinancialHealthScreenState extends ConsumerState<FinancialHealthScreen> {
         throw Exception('Failed to capture screenshot');
       }
 
-      // Save to temporary file
-      final tempDir = await getTemporaryDirectory();
-      final file = File('${tempDir.path}/financial_health.png');
-      await file.writeAsBytes(imageBytes);
-
-      // Share the image with text
       final homeData = ref.read(homeDataProvider).value;
       final status = homeData?.data.aiData.status ?? 'Financial Health';
 
+      XFile shareFile;
+      if (kIsWeb) {
+        // On web, share directly from bytes — no filesystem access available
+        shareFile = XFile.fromData(
+          imageBytes,
+          name: 'financial_health.png',
+          mimeType: 'image/png',
+        );
+      } else {
+        // On mobile, write to a temp file first (required by share_plus on iOS)
+        final tempDir = await getTemporaryDirectory();
+        final file = File('${tempDir.path}/financial_health.png');
+        await file.writeAsBytes(imageBytes);
+        shareFile = XFile(file.path);
+      }
+
       await Share.shareXFiles(
-        [XFile(file.path)],
+        [shareFile],
         text:
             '''
 🐝 My Financial Health with SavvyBee!

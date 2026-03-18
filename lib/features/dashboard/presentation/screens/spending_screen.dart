@@ -9,6 +9,8 @@ import 'package:savvy_bee_mobile/features/dashboard/domain/models/dashboard_data
 import 'package:savvy_bee_mobile/features/dashboard/presentation/providers/dashboard_data_provider.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_loading_widget.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_error_widget.dart';
+import 'package:savvy_bee_mobile/features/home/presentation/providers/home_data_provider.dart';
+import 'package:savvy_bee_mobile/features/home/presentation/widgets/smart_recommendations.dart';
 
 class SpendingScreen extends ConsumerStatefulWidget {
   static const String path = '/spending';
@@ -30,6 +32,7 @@ class _SpendingScreenState extends ConsumerState<SpendingScreen> {
   @override
   Widget build(BuildContext context) {
     final dashboardDataAsync = ref.watch(dashboardDataProvider('all'));
+    final insightAdvice = ref.watch(homeDataProvider).valueOrNull?.data?.insightAdvice;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -80,6 +83,18 @@ class _SpendingScreenState extends ConsumerState<SpendingScreen> {
                   // Budget section
                   _buildBudgetSection(dashboardData),
                   const Gap(24),
+
+                  // AI Budget Advice
+                  if (insightAdvice?.budgetAdvice.isNotEmpty == true) ...[
+                    SmartRecommendationCard(
+                      title: 'BUDGET ADVICE',
+                      description: insightAdvice!.budgetAdvice,
+                      buttonText: 'Got it',
+                      showFeedback: false,
+                      onButtonPressed: () {},
+                    ),
+                    const Gap(24),
+                  ],
 
                   // Breakdown section
                   _buildBreakdownSection(dashboardData),

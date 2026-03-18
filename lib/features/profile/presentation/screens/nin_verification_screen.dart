@@ -2,7 +2,9 @@
 
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:camera/camera.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
@@ -50,10 +52,10 @@ class _NinVerificationScreenState extends ConsumerState<NinVerificationScreen> {
   }
 
   Future<void> _initializeCamera() async {
+    if (kIsWeb) return; // Camera KYC is not available on web
     try {
       _cameras = await availableCameras();
       if (_cameras!.isNotEmpty) {
-        // Use front camera for selfie
         final frontCamera = _cameras!.firstWhere(
           (camera) => camera.lensDirection == CameraLensDirection.front,
           orElse: () => _cameras!.first,
@@ -67,9 +69,7 @@ class _NinVerificationScreenState extends ConsumerState<NinVerificationScreen> {
 
         await _cameraController!.initialize();
         if (mounted) {
-          setState(() {
-            _isCameraInitialized = true;
-          });
+          setState(() => _isCameraInitialized = true);
         }
       }
     } catch (e) {
@@ -127,16 +127,11 @@ class _NinVerificationScreenState extends ConsumerState<NinVerificationScreen> {
     });
 
     try {
-      final file = File(_selfieImage!.path);
-
-      print('Selfie path: ${file.path}');
-      print('Selfie size: ${await file.length()} bytes');
-
+      // _selfieImage is already an XFile — pass directly to repository
       final repository = ref.read(verificationRepositoryProvider);
-
       final response = await repository.verifyNin(
         nin: _ninController.text.trim(),
-        selfieFile: file,
+        selfieFile: _selfieImage!,
       );
 
       if (mounted) {
@@ -457,18 +452,19 @@ class _NinVerificationScreenState extends ConsumerState<NinVerificationScreen> {
                       child: _selfieImage != null
                           ? Transform(
                               alignment: Alignment.center,
-                              transform: Matrix4.rotationY(
-                                3.14159,
-                              ), // ≈ π radians → horizontal flip
-                              child: Image.file(
-                                File(_selfieImage!.path),
-                                fit: BoxFit.cover,
-                              ),
+                              transform: Matrix4.rotationY(3.14159),
+                              child: kIsWeb
+                                  // On web: path is a blob URL — use Image.network
+                                  ? Image.network(
+                                      _selfieImage!.path,
+                                      fit: BoxFit.cover,
+                                    )
+                                  // On mobile: use the file path directly
+                                  : Image.file(
+                                      File(_selfieImage!.path),
+                                      fit: BoxFit.cover,
+                                    ),
                             )
-                          // ? Image.file(
-                          //     File(_selfieImage!.path),
-                          //     fit: BoxFit.cover,
-                          //   )
                           : _isCameraInitialized && _cameraController != null
                           ? ClipRect(
                               child: OverflowBox(

@@ -194,7 +194,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               Expanded(
                 child: CustomElevatedButton(
                   text: 'Get started',
-                  onPressed: () => context.pushNamed(WeHelpScreen.path),
+                  // onPressed: () => context.pushNamed(WeHelpScreen.path),
+                  onPressed: () => context.pushNamed(SignupScreen.path),
                 ),
               ),
             ],

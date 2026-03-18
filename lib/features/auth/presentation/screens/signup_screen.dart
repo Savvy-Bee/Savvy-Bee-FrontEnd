@@ -54,9 +54,9 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   final _usernameFormKey = GlobalKey<FormState>();
   final _passwordFormKey = GlobalKey<FormState>();
   // final _dobFormKey = GlobalKey<FormState>();
-  final _countryFormKey = GlobalKey<FormState>();
-  final _languageFormKey = GlobalKey<FormState>();
-  final _currencyFormKey = GlobalKey<FormState>();
+  // final _countryFormKey = GlobalKey<FormState>();
+  // final _languageFormKey = GlobalKey<FormState>();
+  // final _currencyFormKey = GlobalKey<FormState>();
 
   // Controllers
   final _firstNameController = TextEditingController();
@@ -66,9 +66,9 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   final _passwordController = TextEditingController();
   final _otpController = TextEditingController();
   // final _dobController = TextEditingController();
-  final _countryController = TextEditingController();
-  final _languageController = TextEditingController();
-  final _currencyController = TextEditingController();
+  // final _countryController = TextEditingController();
+  // final _languageController = TextEditingController();
+  // final _currencyController = TextEditingController();
 
   int _currentPage = 0;
   static const int _dotCount = 8;
@@ -155,9 +155,9 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
     _passwordController.dispose();
     _otpController.dispose();
     // _dobController.dispose();
-    _countryController.dispose();
-    _languageController.dispose();
-    _currencyController.dispose();
+    // _countryController.dispose();
+    // _languageController.dispose();
+    // _currencyController.dispose();
     _pageController.dispose();
     _scrollController.dispose();
     _focusNode.dispose();
@@ -282,7 +282,36 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
               );
 
           if (success) {
-            _goToNextPage();
+            // _goToNextPage();
+            final success = await ref
+                .read(authProvider.notifier)
+                .registerOtherDetails(
+                  RegisterOtherDetailsRequest(
+                    email: _emailController.text.trim(),
+                    // dob: _dobController.text,
+                    country: 'Nigeria',
+                    currency: 'Nigerian Naira (NGN)',
+                    language: 'English',
+                  ),
+                );
+
+            if (success) {
+              if (mounted) {
+                // Store credentials for auto-login after onboarding completes.
+                ref.read(signupCredentialsProvider.notifier).state = (
+                  email: _emailController.text.trim().toLowerCase(),
+                  password: _passwordController.text.trim(),
+                );
+                // After other details are saved the user still needs to complete
+                // the post-onboarding questionnaire.
+                context.pushReplacementNamed(FinancialArchitypeScreen.path);
+              }
+            } else {
+              _showError(
+                ref.read(authProvider).errorMessage ??
+                    'Failed to save your details',
+              );
+            }
           } else {
             _showError(
               ref.read(authProvider).errorMessage ?? 'Verification failed',
@@ -296,44 +325,44 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
         //   break;
 
         // ── Page 6: Country ───────────────────────────────────────────────────
-        case 5:
-          if (_countryFormKey.currentState!.validate()) _goToNextPage();
-          break; 
+        // case 5:
+        //   if (_countryFormKey.currentState!.validate()) _goToNextPage();
+        //   break;
 
         // ── Page 7: Language ──────────────────────────────────────────────────
-        case 6:
-          if (_languageFormKey.currentState!.validate()) _goToNextPage();
-          break;
+        // case 6:
+        //   if (_languageFormKey.currentState!.validate()) _goToNextPage();
+        //   break;
 
         // ── Page 8: Currency + register other details ─────────────────────────
-        case 7:
-          if (!_currencyFormKey.currentState!.validate()) return;
+        // case 7:
+        //   if (!_currencyFormKey.currentState!.validate()) return;
 
-          final success = await ref
-              .read(authProvider.notifier)
-              .registerOtherDetails(
-                RegisterOtherDetailsRequest(
-                  email: _emailController.text.trim(),
-                  // dob: _dobController.text,
-                  country: _countryController.text,
-                  currency: _currencyController.text,
-                  language: _languageController.text,
-                ),
-              );
+        // final success = await ref
+        //     .read(authProvider.notifier)
+        //     .registerOtherDetails(
+        //       RegisterOtherDetailsRequest(
+        //         email: _emailController.text.trim(),
+        //         // dob: _dobController.text,
+        //         country: _countryController.text,
+        //         currency: _currencyController.text,
+        //         language: _languageController.text,
+        //       ),
+        //     );
 
-          if (success) {
-            if (mounted) {
-              // After other details are saved the user still needs to complete
-              // the post-onboarding questionnaire.
-              context.pushReplacementNamed(FinancialArchitypeScreen.path);
-            }
-          } else {
-            _showError(
-              ref.read(authProvider).errorMessage ??
-                  'Failed to save your details',
-            );
-          }
-          break;
+        // if (success) {
+        //   if (mounted) {
+        //     // After other details are saved the user still needs to complete
+        //     // the post-onboarding questionnaire.
+        //     context.pushReplacementNamed(FinancialArchitypeScreen.path);
+        //   }
+        // } else {
+        //   _showError(
+        //     ref.read(authProvider).errorMessage ??
+        //         'Failed to save your details',
+        //   );
+        // }
+        // break;
 
         default:
           break;
@@ -411,9 +440,9 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                           _passwordView(),
                           _otpView(),
                           // _dobView(),
-                          _countryView(),
-                          _languageView(),
-                          _currencyView(),
+                          // _countryView(),
+                          // _languageView(),
+                          // _currencyView(),
                         ],
                       ),
                     ),
@@ -610,55 +639,59 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   //   );
   // }
 
-  Widget _countryView() {
-    return Form(
-      key: _countryFormKey,
-      child: CustomDropdownButton(
-        hint: 'Country of residence',
-        items: [
-          'Nigeria',
-          'United States of America',
-          'United Kingdom',
-          'Canada',
-        ],
-        onChanged: (v) => setState(() => _countryController.text = v ?? ''),
-      ),
-    );
-  }
+  // Widget _countryView() {
+  //   return Form(
+  //     key: _countryFormKey,
+  //     child: CustomDropdownButton(
+  //       hint: 'Country of residence',
+  //       items: [
+  //         'Nigeria',
+  //         'United States of America',
+  //         'United Kingdom',
+  //         'Canada',
+  //       ],
+  //       onChanged: (v) => setState(() => _countryController.text = v ?? ''),
+  //     ),
+  //   );
+  // }
 
-  Widget _languageView() {
-    return Form(
-      key: _languageFormKey,
-      child: CustomDropdownButton(
-        hint: 'Preferred language',
-        items: ['English', 'Español', 'Français', 'Deutsch', 'Português'],
-        onChanged: (v) => setState(() => _languageController.text = v ?? ''),
-      ),
-    );
-  }
+  // Widget _languageView() {
+  //   return Form(
+  //     key: _languageFormKey,
+  //     child: CustomDropdownButton(
+  //       hint: 'Preferred language',
+  //       items: ['English', 'Español', 'Français', 'Deutsch', 'Português'],
+  //       onChanged: (v) => setState(() => _languageController.text = v ?? ''),
+  //     ),
+  //   );
+  // }
 
-  Widget _currencyView() {
-    return Form(
-      key: _currencyFormKey,
-      child: CustomDropdownButton(
-        hint: 'Preferred currency',
-        items: [
-          'Nigerian Naira (NGN)',
-          'US Dollar (USD)',
-          'Euro (EUR)',
-          'British Pound (GBP)',
-          'Japanese Yen (JPY)',
-          'Canadian Dollar (CAD)',
-          'Australian Dollar (AUD)',
-          'Swiss Franc (CHF)',
-          'Chinese Yuan (CNY)',
-          'Indian Rupee (INR)',
-        ],
-        onChanged: (v) => setState(() => _currencyController.text = v ?? ''),
-      ),
-    );
-  }
+  // Widget _currencyView() {
+  //   return Form(
+  //     key: _currencyFormKey,
+  //     child: CustomDropdownButton(
+  //       hint: 'Preferred currency',
+  //       items: [
+  //         'Nigerian Naira (NGN)',
+  //         'US Dollar (USD)',
+  //         'Euro (EUR)',
+  //         'British Pound (GBP)',
+  //         'Japanese Yen (JPY)',
+  //         'Canadian Dollar (CAD)',
+  //         'Australian Dollar (AUD)',
+  //         'Swiss Franc (CHF)',
+  //         'Chinese Yuan (CNY)',
+  //         'Indian Rupee (INR)',
+  //       ],
+  //       onChanged: (v) => setState(() => _currencyController.text = v ?? ''),
+  //     ),
+  //   );
+  // }
 }
+
+
+
+
 
 // import 'dart:developer';
 

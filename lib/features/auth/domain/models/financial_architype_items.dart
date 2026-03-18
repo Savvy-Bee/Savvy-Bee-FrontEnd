@@ -12,12 +12,12 @@ class FinancialArchitypeItems {
 
   static List<FinancialArchitypeItems> items = [
     const FinancialArchitypeItems(
-      title: 'What personal finance\narchetype(s) best align\nwith you?',
+      title: 'What personal finance\narchetype best align\nwith you?',
       description:
-          'Purpose: Tailor content and features (e.g., saving tips for savers, investing modules for investors).',
+          'Purpose: Tailor content and features (e.g., saving tips for savers).',
     ),
     const FinancialArchitypeItems(
-      title: "What are your top financial\npriorities?",
+      title: "What is your top financial\npriority?",
       description:
           "Purpose: Helps in suggesting modules, challenges, and expert advice.",
     ),
@@ -27,13 +27,13 @@ class FinancialArchitypeItems {
           "Purpose: Provides insight into current behaviours\nto recommend habit-forming strategies",
     ),
     const FinancialArchitypeItems(
-      title: 'Which topics do you find\nconfusing or\nneed more help with?',
+      title: 'Which topic do you find\nconfusing or\nneed more help with?',
       description:
           'Purpose: Allows personalized content curation and\npriority suggestions.',
     ),
     const FinancialArchitypeItems(
       title:
-          'Which habits or challenges\nresonate most with you?\n(Select all that apply)',
+          'Which habit or challenge\nresonate most with you?',
       description:
           'Purpose: Identifies psychological barriers to improve engagement with habit-building features.',
     ),

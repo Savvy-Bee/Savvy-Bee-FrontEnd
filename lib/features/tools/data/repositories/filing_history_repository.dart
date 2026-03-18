@@ -10,6 +10,7 @@
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 import 'package:savvy_bee_mobile/core/network/api_endpoints.dart';
 import 'package:savvy_bee_mobile/features/tools/domain/models/filing_home_data.dart';
 
@@ -278,11 +279,11 @@ class FilingHistoryRepository {
   // ── PUT upload review response ─────────────────────────────────────────────
 
   /// [comment]   → form field "Comment"
-  /// [filePaths] → local file paths attached as "documents" (multipart)
+  /// [files]     → XFile attachments for "documents" (multipart)
   Future<FilingReview> uploadReview({
     required String filingId,
     required String comment,
-    List<String> filePaths = const [],
+    List<XFile> files = const [],
   }) async {
     final req = http.MultipartRequest(
       'PUT',
@@ -293,8 +294,11 @@ class FilingHistoryRepository {
 
     req.fields['Comment'] = comment;
 
-    for (final path in filePaths) {
-      req.files.add(await http.MultipartFile.fromPath('documents', path));
+    for (final xfile in files) {
+      final bytes = await xfile.readAsBytes();
+      req.files.add(
+        http.MultipartFile.fromBytes('documents', bytes, filename: xfile.name),
+      );
     }
 
     final streamed = await req.send();

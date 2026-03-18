@@ -3,7 +3,7 @@ import 'package:savvy_bee_mobile/core/utils/assets/app_icons.dart';
 enum UserArchetype {
   saver,
   spender,
-  investor,
+  // investor,
   indifferent,
   notSure;
 
@@ -13,8 +13,8 @@ enum UserArchetype {
         return 'The saver';
       case UserArchetype.spender:
         return 'The spender';
-      case UserArchetype.investor:
-        return 'The investor';
+      // case UserArchetype.investor:
+      //   return 'The investor';
       case UserArchetype.indifferent:
         return 'The indifferent';
       case UserArchetype.notSure:
@@ -28,8 +28,8 @@ enum UserArchetype {
         return AppIcons.goalIcon;
       case UserArchetype.spender:
         return AppIcons.walletIcon;
-      case UserArchetype.investor:
-        return AppIcons.sparklesIcon;
+      // case UserArchetype.investor:
+      //   return AppIcons.sparklesIcon;
       case UserArchetype.indifferent:
         return AppIcons.pieChartIcon;
       case UserArchetype.notSure:
@@ -42,7 +42,7 @@ enum FinancialPriority {
   emergencyFund,
   majorPurchase,
   payOffDebt,
-  investing,
+  // investing,
   retirement,
   other;
 
@@ -54,8 +54,8 @@ enum FinancialPriority {
         return 'Saving for a major purchase';
       case FinancialPriority.payOffDebt:
         return 'Paying off debt';
-      case FinancialPriority.investing:
-        return 'Investing for the future';
+      // case FinancialPriority.investing:
+      //   return 'Investing for the future';
       case FinancialPriority.retirement:
         return 'Retirement Planning';
       case FinancialPriority.other:
@@ -71,8 +71,8 @@ enum FinancialPriority {
         return AppIcons.walletIcon;
       case FinancialPriority.payOffDebt:
         return AppIcons.sparklesIcon;
-      case FinancialPriority.investing:
-        return AppIcons.pieChartIcon;
+      // case FinancialPriority.investing:
+      //   return AppIcons.pieChartIcon;
       case FinancialPriority.retirement:
         return AppIcons.lifeBuoyIcon;
       case FinancialPriority.other:
@@ -107,8 +107,8 @@ enum FinanceManagement {
 enum ConfusingTopic {
   budgetingAndSavings,
   debtManagement,
-  investing,
-  earlyStageInvestments,
+  // investing,
+  // earlyStageInvestments,
   homeownership,
   other;
 
@@ -118,10 +118,10 @@ enum ConfusingTopic {
         return 'Budgeting and Savings';
       case ConfusingTopic.debtManagement:
         return 'Debt Management';
-      case ConfusingTopic.investing:
-        return 'Investing';
-      case ConfusingTopic.earlyStageInvestments:
-        return 'Early-Stage Investments';
+      // case ConfusingTopic.investing:
+      //   return 'Investing';
+      // case ConfusingTopic.earlyStageInvestments:
+      //   return 'Early-Stage Investments';
       case ConfusingTopic.homeownership:
         return 'Homeownership';
       case ConfusingTopic.other:

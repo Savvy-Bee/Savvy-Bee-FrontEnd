@@ -21,6 +21,7 @@ import 'package:savvy_bee_mobile/features/auth/presentation/screens/post_signup/
 import 'package:savvy_bee_mobile/features/home/presentation/screens/home_screen.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
+import '../../../../../../core/services/device_info_service.dart';
 import '../../../../../../core/utils/constants.dart';
 import '../../../../../../core/widgets/custom_snackbar.dart';
 import '../../../../domain/models/auth_models.dart';
@@ -153,8 +154,29 @@ class _FinancialArchitypeScreenState
         // Clear all selections
         _clearAllSelections();
 
-        // Onboarding complete — go to home
-        context.goNamed(LoginScreen.path);
+        // Auto-login using the credentials saved during signup.
+        final credentials = ref.read(signupCredentialsProvider);
+        ref.read(signupCredentialsProvider.notifier).state = null; // clear immediately
+
+        if (credentials != null) {
+          try {
+            final deviceId = await DeviceInfoService.getDeviceId();
+            if (!mounted) return;
+            final loginResponse = await ref.read(authProvider.notifier).login(
+              credentials.email,
+              credentials.password,
+              deviceId,
+            );
+            if (!mounted) return;
+            if (loginResponse != null && loginResponse.success) {
+              context.goNamed(HomeScreen.path);
+              return;
+            }
+          } catch (_) {}
+        }
+
+        // Auto-login failed or no credentials — fall back to login screen.
+        if (mounted) context.goNamed(LoginScreen.path);
       } else {
         final errorMsg = ref.read(authProvider).errorMessage;
         CustomSnackbar.show(

@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:savvy_bee_mobile/core/tracking/minxpanel_tracking.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 
@@ -17,11 +19,15 @@ class _ArcadeWebViewScreenState extends State<ArcadeWebViewScreen> {
   bool _isLoading = true;
   bool _gameCompletedOrRedirected = false;
 
+  static const _gameUrl = 'https://savvybee.vercel.app/';
+
   @override
   void initState() {
     super.initState();
 
     MixpanelService.trackFirstFeatureUsed('Game');
+
+    if (kIsWeb) return;
 
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
@@ -77,7 +83,7 @@ class _ArcadeWebViewScreenState extends State<ArcadeWebViewScreen> {
           },
         ),
       )
-      ..loadRequest(Uri.parse('https://savvybee.vercel.app/'));
+      ..loadRequest(Uri.parse(_gameUrl));
   }
 
   @override
@@ -96,7 +102,7 @@ class _ArcadeWebViewScreenState extends State<ArcadeWebViewScreen> {
         foregroundColor: Colors.black,
         elevation: 0,
       ),
-      body: Stack(
+      body: kIsWeb ? _buildWebFallback() : Stack(
         children: [
           WebViewWidget(controller: _controller),
           if (_isLoading)
@@ -104,6 +110,46 @@ class _ArcadeWebViewScreenState extends State<ArcadeWebViewScreen> {
               child: CircularProgressIndicator(color: AppColors.primary),
             ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildWebFallback() {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.sports_esports, size: 64, color: AppColors.primary),
+            const SizedBox(height: 16),
+            const Text(
+              'Arcade',
+              style: TextStyle(
+                fontFamily: 'GeneralSans',
+                fontSize: 22,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              'Open the arcade in a new tab to play.',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontFamily: 'GeneralSans', fontSize: 14),
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton.icon(
+              onPressed: () async {
+                final uri = Uri.parse(_gameUrl);
+                if (await canLaunchUrl(uri)) {
+                  await launchUrl(uri, mode: LaunchMode.externalApplication);
+                }
+              },
+              icon: const Icon(Icons.open_in_new),
+              label: const Text('Open Arcade'),
+            ),
+          ],
+        ),
       ),
     );
   }

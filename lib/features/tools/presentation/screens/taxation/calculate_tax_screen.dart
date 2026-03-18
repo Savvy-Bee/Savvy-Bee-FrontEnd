@@ -1,9 +1,8 @@
-import 'dart:io'; // Add this import
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:open_file/open_file.dart';
 import 'package:savvy_bee_mobile/core/tracking/minxpanel_tracking.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:savvy_bee_mobile/core/utils/file_picker_util.dart';
@@ -159,23 +158,29 @@ class _CalculateTaxScreenState extends ConsumerState<CalculateTaxScreen> {
 
                     if (filePath != null && mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('PDF generated successfully!'),
+                        SnackBar(
+                          content: Text(
+                            kIsWeb
+                                ? 'PDF downloaded!'
+                                : 'PDF generated successfully!',
+                          ),
                           backgroundColor: Colors.green,
-                          duration: Duration(seconds: 2),
+                          duration: const Duration(seconds: 2),
                         ),
                       );
 
-                      // Automatically open share dialog
-                      await Future.delayed(const Duration(milliseconds: 500));
-
-                      if (mounted) {
-                        await Share.shareXFiles(
-                          [XFile(filePath)],
-                          subject: 'Tax Summary Report',
-                          text: 'Here is my tax calculation summary',
-                        );
+                      // On mobile, open the native share dialog
+                      if (!kIsWeb) {
+                        await Future.delayed(const Duration(milliseconds: 500));
+                        if (mounted) {
+                          await Share.shareXFiles(
+                            [XFile(filePath)],
+                            subject: 'Tax Summary Report',
+                            text: 'Here is my tax calculation summary',
+                          );
+                        }
                       }
+                      // On web, the PDF was already downloaded via browser
                     } else if (mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
@@ -463,15 +468,13 @@ class _CalculateTaxScreenState extends ConsumerState<CalculateTaxScreen> {
   Widget _buildUploadCard() {
     return CustomCard(
       onTap: () async {
-        final file = await FileUtils.pickFile();
-        if (file == null) return;
+        final xfile = await FileUtils.pickFile();
+        if (xfile == null) return;
 
-        // Show loading state
         if (mounted) {
-          // Upload the file and calculate tax
           ref
               .read(taxCalculatorNotifierProvider.notifier)
-              .uploadBankStatement(file.path);
+              .uploadBankStatement(xfile);
         }
       },
       padding: const EdgeInsets.symmetric(vertical: 100),

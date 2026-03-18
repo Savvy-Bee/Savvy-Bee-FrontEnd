@@ -1,11 +1,11 @@
 // lib/features/spend/presentation/providers/verification_provider.dart
 
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart'; // XFile
 import 'package:savvy_bee_mobile/core/services/service_locator.dart';
 import 'package:savvy_bee_mobile/features/profile/data/models/verification_models.dart';
 import 'package:savvy_bee_mobile/features/profile/data/repositories/verification_repository.dart';
-import 'dart:io';
-import 'package:dio/dio.dart';
 
 final verificationRepositoryProvider = Provider<VerificationRepository>((ref) {
   final apiClient = ref.watch(apiClientProvider);
@@ -15,7 +15,7 @@ final verificationRepositoryProvider = Provider<VerificationRepository>((ref) {
 final verifyNinProvider =
     FutureProvider.family<
       VerificationResponse,
-      ({String nin, File selfieFile})
+      ({String nin, XFile selfieFile})
     >((
       ref,
       params,
@@ -30,7 +30,7 @@ final verifyNinProvider =
 final verifyBvnProvider =
     FutureProvider.family<
       VerificationResponse,
-      ({String bvn, File selfieFile})
+      ({String bvn, XFile selfieFile})
     >((ref, params) async {
       final repository = ref.watch(verificationRepositoryProvider);
 

@@ -13,8 +13,11 @@ import 'package:savvy_bee_mobile/features/auth/presentation/screens/password_res
 import 'package:savvy_bee_mobile/features/auth/presentation/screens/signup_screen.dart';
 import 'package:savvy_bee_mobile/features/home/presentation/screens/home_screen.dart';
 import 'package:savvy_bee_mobile/features/auth/presentation/screens/post_signup/architype/financial_architype_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/widgets/custom_snackbar.dart';
+
+const _kSavedEmailKey = 'last_login_email';
 
 class LoginScreen extends ConsumerStatefulWidget {
   static const String path = '/login';
@@ -34,11 +37,26 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   bool _showPassword = false;
 
   String? _deviceID;
+  String? _savedEmail;
 
   @override
   void initState() {
     super.initState();
-    _getDeviceId(); // ← ADD THIS
+    _getDeviceId();
+    _loadSavedEmail();
+  }
+
+  Future<void> _loadSavedEmail() async {
+    final prefs = await SharedPreferences.getInstance();
+    final email = prefs.getString(_kSavedEmailKey);
+    if (email != null && mounted) {
+      setState(() => _savedEmail = email);
+    }
+  }
+
+  Future<void> _saveEmail(String email) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_kSavedEmailKey, email);
   }
 
   void dispose() {
@@ -161,7 +179,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         );
         return;
       }
-      // Fully set-up account — go home.
+      // Fully set-up account — save email and go home.
+      await _saveEmail(email);
       context.goNamed(HomeScreen.path);
     } else {
       // ── Failed login ────────────────────────────────────────────────────────
@@ -229,6 +248,42 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     validator: (v) => InputValidator.validateEmail(v),
                     onChanged: (_) => setState(() {}),
                   ),
+
+                  // Saved email suggestion
+                  if (_savedEmail != null && _emailController.text.isEmpty) ...[
+                    const Gap(8),
+                    GestureDetector(
+                      onTap: () {
+                        _emailController.text = _savedEmail!;
+                        setState(() {});
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 8,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade100,
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: Colors.grey.shade300),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(Icons.person_outline, size: 16),
+                            const Gap(8),
+                            Text(
+                              _savedEmail!,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontFamily: 'GeneralSans',
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                   const Gap(8.0),
 
                   // Password

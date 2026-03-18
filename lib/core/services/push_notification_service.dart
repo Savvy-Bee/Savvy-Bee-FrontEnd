@@ -6,6 +6,10 @@ import 'package:flutter/foundation.dart';
 import 'package:savvy_bee_mobile/firebase_options.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// Background handler must be a top-level function AND is only registered on
+// non-web platforms because FirebaseMessaging.onBackgroundMessage is not
+// supported on web.
+
 typedef NotificationHandler = FutureOr<void> Function(RemoteMessage message);
 
 @pragma('vm:entry-point')
@@ -59,16 +63,22 @@ class PushNotificationService {
 
     await _messaging.setAutoInitEnabled(true);
     await _requestPermissions();
-    await FirebaseMessaging.instance
-        .setForegroundNotificationPresentationOptions(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
+    // setForegroundNotificationPresentationOptions is not supported on web
+    if (!kIsWeb) {
+      await FirebaseMessaging.instance
+          .setForegroundNotificationPresentationOptions(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
+    }
 
     FirebaseMessaging.onMessage.listen(_handleForegroundMessage);
     FirebaseMessaging.onMessageOpenedApp.listen(_handleNotificationTap);
-    FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+    // onBackgroundMessage uses @pragma('vm:entry-point') — not supported on web
+    if (!kIsWeb) {
+      FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+    }
 
     await _handleInitialMessage();
 

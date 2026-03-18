@@ -17,6 +17,7 @@ class DashboardRepository {
   Future<ApiResponse<List<MonoInstitution>>> fetchInstitutions() async {
     try {
       final response = await _apiClient.get(ApiEndpoints.fetchInstitutions);
+      log("[Dashboard] fetchInstitutions SUCCESS\nEndpoint: ${ApiEndpoints.fetchInstitutions}\nResponse: ${response.data}");
 
       final data = ApiResponse.fromJson(
         response.data,
@@ -25,7 +26,7 @@ class DashboardRepository {
       );
       return data;
     } catch (e) {
-      log("Error fetching institutions: $e");
+      log("[Dashboard] fetchInstitutions ERROR\nEndpoint: ${ApiEndpoints.fetchInstitutions}\nError: $e");
       rethrow;
     }
   }
@@ -34,6 +35,7 @@ class DashboardRepository {
   Future<ApiResponse<MonoInputData>> fetchMonoInputData() async {
     try {
       final response = await _apiClient.get(ApiEndpoints.fetchMonoInputData);
+      log("[Dashboard] fetchMonoInputData SUCCESS\nEndpoint: ${ApiEndpoints.fetchMonoInputData}\nResponse: ${response.data}");
 
       final data = ApiResponse.fromJson(
         response.data,
@@ -41,7 +43,7 @@ class DashboardRepository {
       );
       return data;
     } catch (e) {
-      log("Error fetching mono input data: $e");
+      log("[Dashboard] fetchMonoInputData ERROR\nEndpoint: ${ApiEndpoints.fetchMonoInputData}\nError: $e");
       rethrow;
     }
   }
@@ -57,6 +59,7 @@ class DashboardRepository {
         ApiEndpoints.linkAccount,
         data: formData,
       );
+      log("[Dashboard] linkAccount SUCCESS\nEndpoint: ${ApiEndpoints.linkAccount}\nResponse: ${response.data}");
 
       final data = ApiResponse.fromJson(
         response.data,
@@ -64,7 +67,7 @@ class DashboardRepository {
       );
       return data;
     } catch (e) {
-      log("Error linking account: $e");
+      log("[Dashboard] linkAccount ERROR\nEndpoint: ${ApiEndpoints.linkAccount}\nError: $e");
       rethrow;
     }
   }
@@ -82,11 +85,12 @@ class DashboardRepository {
         '${ApiEndpoints.unlinkAccount}/$accountId',
         data: formData,
       );
+      log("[Dashboard] unlinkAccount SUCCESS\nEndpoint: ${ApiEndpoints.unlinkAccount}/$accountId\nResponse: ${response.data}");
 
       final data = ApiResponse.fromJson(response.data, (data) => null);
       return data;
     } catch (e) {
-      log("Error unlinking account: $e");
+      log("[Dashboard] unlinkAccount ERROR\nEndpoint: ${ApiEndpoints.unlinkAccount}/$accountId\nError: $e");
       rethrow;
     }
   }
@@ -95,6 +99,7 @@ class DashboardRepository {
   Future<ApiResponse<List<LinkedAccount>>> fetchLinkedAccounts() async {
     try {
       final response = await _apiClient.get(ApiEndpoints.linkedAccounts);
+      log("[Dashboard] fetchLinkedAccounts SUCCESS\nEndpoint: ${ApiEndpoints.linkedAccounts}\nResponse: ${response.data}");
 
       final data = ApiResponse.fromJson(
         response.data,
@@ -102,7 +107,7 @@ class DashboardRepository {
       );
       return data;
     } catch (e) {
-      log("Error fetching linked accounts: $e");
+      log("[Dashboard] fetchLinkedAccounts ERROR\nEndpoint: ${ApiEndpoints.linkedAccounts}\nError: $e");
       rethrow;
     }
   }
@@ -130,55 +135,29 @@ class DashboardRepository {
           ? '${ApiEndpoints.dashboardData}/id'
           : '${ApiEndpoints.dashboardData}/$bankId';
 
-      print('🌐 API Call: $endpoint');
+      log("[Dashboard] fetchDashboardData calling\nEndpoint: $endpoint");
 
       final response = await _apiClient.get(endpoint);
-
-      print('🌐 Response received');
-      print('🌐 Response data type: ${response.data?.runtimeType}');
-
-      // The ApiClient already wraps the response in ApiResponse structure
-      // response.data = {success: true, message: "...", data: {...}}
+      log("[Dashboard] fetchDashboardData SUCCESS\nEndpoint: $endpoint\nResponse: ${response.data}");
 
       final data = ApiResponse.fromJson(response.data, (json) {
-        if (json == null) {
-          print('⚠️ JSON is null');
-          return null;
-        }
-
-        print('📦 Parsing dashboard data...');
-        print('📦 JSON keys: ${(json as Map).keys.toList()}');
-
-        // Parse the "data" field directly as DashboardData
-        // NOT as DashboardDataResponse
+        if (json == null) return null;
         return DashboardData.fromJson(json as Map<String, dynamic>);
       });
 
-      print('✅ Dashboard data parsed');
-      print('✅ Has data: ${data.data != null}');
-      if (data.data != null) {
-        print('✅ Accounts: ${data.data!.accounts.length}');
-        if (data.data!.accounts.isNotEmpty) {
-          print(
-            '✅ First account transactions: ${data.data!.accounts[0].history12Months.length}',
-          );
-        }
-      }
-
       return data;
     } catch (e, stackTrace) {
-      log("Error fetching dashboard data: $e");
-      log("Stack trace: $stackTrace");
+      log("[Dashboard] fetchDashboardData ERROR\nError: $e\nStack trace: $stackTrace");
       rethrow;
     }
   }
 
   /// Fetch Reauth URL for an account
   Future<ApiResponse<String>> reauthorizeAccount(String accountId) async {
+    final endpoint = '${ApiEndpoints.reauthorizeAccount}/$accountId';
     try {
-      final response = await _apiClient.get(
-        '${ApiEndpoints.reauthorizeAccount}/$accountId',
-      );
+      final response = await _apiClient.get(endpoint);
+      log("[Dashboard] reauthorizeAccount SUCCESS\nEndpoint: $endpoint\nResponse: ${response.data}");
 
       final data = ApiResponse.fromJson(response.data, (json) {
         final innerData =
@@ -188,7 +167,7 @@ class DashboardRepository {
 
       return data;
     } catch (e) {
-      log("Error fetching reauth URL: $e");
+      log("[Dashboard] reauthorizeAccount ERROR\nEndpoint: $endpoint\nError: $e");
       rethrow;
     }
   }

@@ -3,12 +3,25 @@ import 'package:flutter/foundation.dart'
     show TargetPlatform, defaultTargetPlatform, kIsWeb;
 
 /// Holds the Firebase configuration for each supported platform.
+///
+/// Returns `null` for web (Firebase web config not yet set up) and for
+/// unsupported desktop targets. Callers should guard on null before calling
+/// [Firebase.initializeApp].
 class DefaultFirebaseOptions {
-  static FirebaseOptions get currentPlatform {
+  static FirebaseOptions? get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'Firebase options have not been configured for web.',
-      );
+      // TODO: Add web Firebase config here once you register the web app in
+      // the Firebase Console and run `flutterfire configure`.
+      // Example:
+      // return const FirebaseOptions(
+      //   apiKey: 'AIza...',
+      //   authDomain: 'savvy-bee-852ba.firebaseapp.com',
+      //   projectId: 'savvy-bee-852ba',
+      //   storageBucket: 'savvy-bee-852ba.firebasestorage.app',
+      //   messagingSenderId: '244595176641',
+      //   appId: '1:244595176641:web:xxxxxxxxxxxx',
+      // );
+      return null; // Firebase not configured for web yet
     }
 
     switch (defaultTargetPlatform) {
@@ -17,9 +30,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       default:
-        throw UnsupportedError(
-          'Firebase options are not configured for ${defaultTargetPlatform.name}.',
-        );
+        return null; // Desktop targets not configured
     }
   }
 

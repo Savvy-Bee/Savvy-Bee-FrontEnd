@@ -34,7 +34,14 @@ class DeviceInfoService {
   /// Get detailed device information (optional, for debugging)
   static Future<Map<String, dynamic>> getDeviceInfo() async {
     try {
-      if (Platform.isAndroid) {
+      if (kIsWeb) {
+        final webInfo = await _deviceInfo.webBrowserInfo;
+        return {
+          'platform': 'web',
+          'browser': webInfo.browserName.name,
+          'userAgent': webInfo.userAgent ?? 'unknown',
+        };
+      } else if (Platform.isAndroid) {
         final androidInfo = await _deviceInfo.androidInfo;
         return {
           'platform': 'Android',

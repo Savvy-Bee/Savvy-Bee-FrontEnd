@@ -1,6 +1,5 @@
-import 'dart:io';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart'; // XFile
 
 import 'package:savvy_bee_mobile/core/network/api_client.dart';
 import 'package:savvy_bee_mobile/core/services/service_locator.dart';
@@ -19,7 +18,7 @@ class KycNotifier extends AsyncNotifier<KycData?> {
   Future<void> verifyIdentity({
     required String encryptedNin,
     required String encryptedBvn,
-    required File profileImageFile,
+    required XFile profileImageFile,
   }) async {
     // Set state to loading
     state = const AsyncLoading<KycData?>().copyWithPrevious(state);

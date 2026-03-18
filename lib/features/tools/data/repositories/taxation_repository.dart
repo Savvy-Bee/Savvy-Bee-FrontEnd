@@ -1,5 +1,7 @@
 import 'dart:developer';
+
 import 'package:dio/dio.dart';
+import 'package:image_picker/image_picker.dart'; // XFile
 
 import '../../../../core/network/api_client.dart';
 import '../../../../core/network/api_endpoints.dart';
@@ -60,14 +62,14 @@ class TaxationRepository {
     }
   }
 
-  /// Upload bank statement for tax calculation
-  Future<TaxCalculatorResponse> uploadBankStatement(String filePath) async {
+  /// Upload bank statement for tax calculation.
+  /// Accepts an [XFile] so it works on both mobile (file path) and web (bytes).
+  Future<TaxCalculatorResponse> uploadBankStatement(XFile xfile) async {
     try {
-      // Create form data with the document
       final formData = FormData.fromMap({
-        'document': await MultipartFile.fromFile(
-          filePath,
-          filename: filePath.split('/').last,
+        'document': MultipartFile.fromBytes(
+          await xfile.readAsBytes(),
+          filename: xfile.name,
         ),
       });
 

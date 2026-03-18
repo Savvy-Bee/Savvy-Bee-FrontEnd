@@ -2,6 +2,7 @@
 
 import 'dart:io';
 import 'package:camera/camera.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -32,6 +33,7 @@ class _SelfieCaptureScreenState extends State<SelfieCaptureScreen> {
   }
 
   Future<void> _initializeCamera() async {
+    if (kIsWeb) return;
     try {
       _cameras = await availableCameras();
 
@@ -227,7 +229,9 @@ class _SelfieCaptureScreenState extends State<SelfieCaptureScreen> {
       children: [
         // Image preview
         Positioned.fill(
-          child: Image.file(File(_capturedImage!.path), fit: BoxFit.cover),
+          child: kIsWeb
+              ? Image.network(_capturedImage!.path, fit: BoxFit.cover)
+              : Image.file(File(_capturedImage!.path), fit: BoxFit.cover),
         ),
 
         // Bottom action buttons

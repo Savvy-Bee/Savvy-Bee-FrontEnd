@@ -96,9 +96,9 @@ class ChatRepository {
         if (request.image != null) {
           formData.files.add(MapEntry(
             'image',
-            await MultipartFile.fromFile(
-              request.image!.path,
-              filename: request.image!.path.split('/').last,
+            MultipartFile.fromBytes(
+              await request.image!.readAsBytes(),
+              filename: request.image!.name,
             ),
           ));
         }
@@ -106,9 +106,9 @@ class ChatRepository {
         if (request.document != null) {
           formData.files.add(MapEntry(
             'document',
-            await MultipartFile.fromFile(
-              request.document!.path,
-              filename: request.document!.path.split('/').last,
+            MultipartFile.fromBytes(
+              await request.document!.readAsBytes(),
+              filename: request.document!.name,
             ),
           ));
         }

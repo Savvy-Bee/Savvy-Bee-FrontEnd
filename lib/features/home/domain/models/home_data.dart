@@ -1,3 +1,23 @@
+class InsightAdvice {
+  final String budgetInsight;
+  final String budgetAdvice;
+  final String goalSavingsAdvice;
+
+  InsightAdvice({
+    required this.budgetInsight,
+    required this.budgetAdvice,
+    required this.goalSavingsAdvice,
+  });
+
+  factory InsightAdvice.fromJson(Map<String, dynamic> json) {
+    return InsightAdvice(
+      budgetInsight: json['BudgetInsight'] as String? ?? '',
+      budgetAdvice: json['BudgetAdvice'] as String? ?? '',
+      goalSavingsAdvice: json['GoalSavingsAdvice'] as String? ?? '',
+    );
+  }
+}
+
 class Kyc {
   final bool nin;
   final bool bvn;
@@ -153,6 +173,7 @@ class HomeData {
   final Kyc kyc;
   final AIData aiData;
   final HiveData hive;
+  final InsightAdvice? insightAdvice;
 
   HomeData({
     required this.firstName,
@@ -168,6 +189,7 @@ class HomeData {
     required this.kyc,
     required this.aiData,
     required this.hive,
+    this.insightAdvice,
   });
 
   factory HomeData.fromJson(Map<String, dynamic> json) {
@@ -185,6 +207,11 @@ class HomeData {
       kyc: Kyc.fromJson(json['Kyc'] as Map<String, dynamic>),
       aiData: AIData.fromJson(json['AIData'] as Map<String, dynamic>),
       hive: HiveData.fromJson(json['Hive'] as Map<String, dynamic>),
+      insightAdvice: json['Insight_Advice'] != null
+          ? InsightAdvice.fromJson(
+              json['Insight_Advice'] as Map<String, dynamic>,
+            )
+          : null,
     );
   }
 

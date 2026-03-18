@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
@@ -36,24 +36,23 @@ class _TaxStatsScreenState extends ConsumerState<TaxStatsScreen> {
       final filePath = await PdfGeneratorUtil.generateTaxStatsPdf(taxData);
 
       if (filePath != null && mounted) {
-        // Show success message
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('PDF generated successfully!'),
+          SnackBar(
+            content: Text(kIsWeb ? 'PDF downloaded!' : 'PDF generated successfully!'),
             backgroundColor: Colors.green,
-            duration: Duration(seconds: 2),
+            duration: const Duration(seconds: 2),
           ),
         );
 
-        // Automatically open share dialog
-        await Future.delayed(const Duration(milliseconds: 500));
-
-        if (mounted) {
-          await Share.shareXFiles(
-            [XFile(filePath)],
-            subject: 'Tax Health Report',
-            text: 'Here is my tax health report',
-          );
+        if (!kIsWeb) {
+          await Future.delayed(const Duration(milliseconds: 500));
+          if (mounted) {
+            await Share.shareXFiles(
+              [XFile(filePath)],
+              subject: 'Tax Health Report',
+              text: 'Here is my tax health report',
+            );
+          }
         }
       } else if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -83,24 +82,23 @@ class _TaxStatsScreenState extends ConsumerState<TaxStatsScreen> {
       final filePath = await CsvGeneratorUtil.generateTaxHistoryCsv(taxData);
 
       if (filePath != null && mounted) {
-        // Show success message
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('CSV generated successfully!'),
+          SnackBar(
+            content: Text(kIsWeb ? 'CSV downloaded!' : 'CSV generated successfully!'),
             backgroundColor: Colors.green,
-            duration: Duration(seconds: 2),
+            duration: const Duration(seconds: 2),
           ),
         );
 
-        // Automatically open share dialog
-        await Future.delayed(const Duration(milliseconds: 500));
-
-        if (mounted) {
-          await Share.shareXFiles(
-            [XFile(filePath)],
-            subject: 'Tax History CSV',
-            text: 'Here is my tax transaction history',
-          );
+        if (!kIsWeb) {
+          await Future.delayed(const Duration(milliseconds: 500));
+          if (mounted) {
+            await Share.shareXFiles(
+              [XFile(filePath)],
+              subject: 'Tax History CSV',
+              text: 'Here is my tax transaction history',
+            );
+          }
         }
       } else if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

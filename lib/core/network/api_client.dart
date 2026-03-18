@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -204,7 +203,12 @@ class ApiClient {
         message = 'Certificate verification failed.';
         break;
       case DioExceptionType.unknown:
-        if (error.error is SocketException) {
+        // Check for network-related errors without relying on dart:io SocketException
+        final errorStr = error.error?.toString() ?? '';
+        if (errorStr.contains('SocketException') ||
+            errorStr.contains('Connection refused') ||
+            errorStr.contains('Network is unreachable') ||
+            errorStr.contains('Failed host lookup')) {
           message = 'No internet connection.';
         } else {
           message = 'An unexpected error occurred.';

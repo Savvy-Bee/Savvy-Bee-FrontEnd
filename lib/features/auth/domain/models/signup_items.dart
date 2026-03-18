@@ -47,18 +47,18 @@ class SignupItems {
     //   title: 'What is your date of\nbirth?',
     //   staticDescription: 'You must be 16 or older to use Savvy Bee',
     // ),
-    const SignupItems(
-      title: 'What country do\nyou live in?',
-      staticDescription: 'Regulations may vary depending on where you live',
-    ),
-    const SignupItems(
-      title: 'What language do\nyou prefer?',
-      staticDescription: "Choose the language you're most comfortable with.",
-    ),
-    const SignupItems(
-      title: "What's your\npreferred currency?",
-      staticDescription:
-          "Choose the currency you'd like to see your balances and transactions in.",
-    ),
+    // const SignupItems(
+    //   title: 'What country do\nyou live in?',
+    //   staticDescription: 'Regulations may vary depending on where you live',
+    // ),
+    // const SignupItems(
+    //   title: 'What language do\nyou prefer?',
+    //   staticDescription: "Choose the language you're most comfortable with.",
+    // ),
+    // const SignupItems(
+    //   title: "What's your\npreferred currency?",
+    //   staticDescription:
+    //       "Choose the currency you'd like to see your balances and transactions in.",
+    // ),
   ];
 }
