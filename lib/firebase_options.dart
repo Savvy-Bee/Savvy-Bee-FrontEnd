@@ -44,10 +44,10 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyA-GE1V9dP-orP_govO9qKdq0s_cg6H7dQ',
-    appId: '1:244595176641:ios:b01ae42660617d26a4d040',
+    appId: '1:244595176641:ios:ade48c78cee4bafca4d040',
     messagingSenderId: '244595176641',
     projectId: 'savvy-bee-852ba',
     storageBucket: 'savvy-bee-852ba.firebasestorage.app',
-    iosBundleId: 'com.mysavvybee.app',
+    iosBundleId: 'com.savvybee.app',
   );
 }

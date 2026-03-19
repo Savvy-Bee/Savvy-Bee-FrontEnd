@@ -92,6 +92,12 @@
     <true/>
   </dict>
 
+  <key>UIBackgroundModes</key>
+  <array>
+    <string>remote-notification</string>
+    <string>fetch</string>
+  </array>
+
   <!-- Encryption declaration -->
   <key>ITSAppUsesNonExemptEncryption</key>
   <false/>
