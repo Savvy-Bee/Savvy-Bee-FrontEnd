@@ -1,12 +1,12 @@
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+// import 'package:firebase_core/firebase_core.dart';
+// import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
-import 'package:savvy_bee_mobile/core/services/push_notification_service.dart';
+// import 'package:savvy_bee_mobile/core/services/push_notification_service.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/tracking/minxpanel_tracking.dart';
 import 'core/theme/app_theme.dart';
@@ -14,7 +14,7 @@ import 'core/routing/app_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'core/utils/constants.dart';
-import 'firebase_options.dart';
+// import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,23 +36,21 @@ void main() async {
     );
   }
 
-  // Firebase: web requires a web-specific config in firebase_options.dart
-  try {
-    final firebaseOptions = DefaultFirebaseOptions.currentPlatform;
-    if (firebaseOptions != null) {
-      await Firebase.initializeApp(options: firebaseOptions);
-      if (!kIsWeb) {
-        // FCM background handler uses @pragma('vm:entry-point') which is
-        // not supported on web; skip notification init on web.
-        await PushNotificationService.instance.initialize();
-      }
-      final token = await FirebaseMessaging.instance.getToken();
-      debugPrint("FCM TOKEN: $token");
-    }
-  } catch (error, stackTrace) {
-    debugPrint('Firebase init failed: $error');
-    debugPrintStack(stackTrace: stackTrace);
-  }
+  // Firebase: temporarily disabled
+  // try {
+  //   final firebaseOptions = DefaultFirebaseOptions.currentPlatform;
+  //   if (firebaseOptions != null) {
+  //     await Firebase.initializeApp(options: firebaseOptions);
+  //     if (!kIsWeb) {
+  //       await PushNotificationService.instance.initialize();
+  //     }
+  //     final token = await FirebaseMessaging.instance.getToken();
+  //     debugPrint("FCM TOKEN: $token");
+  //   }
+  // } catch (error, stackTrace) {
+  //   debugPrint('Firebase init failed: $error');
+  //   debugPrintStack(stackTrace: stackTrace);
+  // }
 
   // RevenueCat (purchases_flutter) is not supported on web
   if (!kIsWeb) {
