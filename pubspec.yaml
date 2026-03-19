@@ -1,7 +1,7 @@
 name: savvy_bee_mobile
 description: "An AI-powered financial literacy and management app"
 publish_to: 'none'
-version: 1.0.1+25
+version: 1.0.1+26
 
 environment:
   sdk: ^3.8.1
