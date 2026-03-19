@@ -1,4 +1,4 @@
-import Firebase
+// import Firebase  // Firebase temporarily disabled
 import Flutter
 import UIKit
 import UserNotifications
@@ -15,15 +15,16 @@ import UserNotifications
     // Unity setup - TEMPORARILY DISABLED
     // InitUnityIntegrationWithOptions(argc: CommandLine.argc, argv: CommandLine.unsafeArgv, launchOptions)
 
-    if FirebaseApp.app() == nil {
-      FirebaseApp.configure()
-    }
+    // Firebase temporarily disabled
+    // if FirebaseApp.app() == nil {
+    //   FirebaseApp.configure()
+    // }
 
-    if #available(iOS 10.0, *) {
-      UNUserNotificationCenter.current().delegate = self
-    }
+    // if #available(iOS 10.0, *) {
+    //   UNUserNotificationCenter.current().delegate = self
+    // }
 
-    application.registerForRemoteNotifications()
+    // application.registerForRemoteNotifications()
     GeneratedPluginRegistrant.register(with: self)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
