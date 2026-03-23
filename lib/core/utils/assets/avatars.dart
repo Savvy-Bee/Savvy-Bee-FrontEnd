@@ -126,7 +126,7 @@ class Avatars {
       case 'susu2':
         return susu2;
       default:
-        throw ArgumentError('Unknown avatar name: $name');
+        return bloom1;
     }
   }
 }

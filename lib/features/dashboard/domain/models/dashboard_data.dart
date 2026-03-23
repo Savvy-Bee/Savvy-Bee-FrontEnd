@@ -309,7 +309,7 @@ class FinancialHealth {
 
   factory FinancialHealth.fromJson(Map<String, dynamic> json) {
     return FinancialHealth(
-      rate: json['rate'] ?? 0,
+      rate: (json['rate'] as num?)?.toInt() ?? 0,
       insight: json['insight'] ?? '',
     );
   }

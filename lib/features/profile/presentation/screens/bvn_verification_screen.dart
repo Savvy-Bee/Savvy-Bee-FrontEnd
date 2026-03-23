@@ -11,7 +11,6 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
-import 'package:savvy_bee_mobile/features/home/presentation/providers/home_data_provider.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/providers/verification_provider.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/widgets/custom_text_field.dart';
@@ -141,48 +140,14 @@ class _BvnVerificationScreenState extends ConsumerState<BvnVerificationScreen> {
       if (mounted) {
         // Check validation results
         final validation = response.data.validation;
+        final isValid = response.success ||
+            (validation.selfie.match &&
+                validation.firstName.match &&
+                validation.lastName.match);
 
-        if (validation.selfie.match &&
-            validation.firstName.match &&
-            validation.lastName.match) {
-          // Show success dialog
-          // _showSuccessDialog(response);
-
-          // Refresh home data to update KYC status
-          ref.invalidate(homeDataProvider);
-
-          // Show success message
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Row(
-                children: [
-                  Icon(Icons.check_circle, color: Colors.white),
-                  SizedBox(width: 12),
-                  Expanded(
-                    child: Text(
-                      'BVN Verified Successfully!',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: 'GeneralSans',
-                        letterSpacing: 14 * 0.02,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              backgroundColor: Color(0xFF00C853),
-              duration: Duration(seconds: 3),
-              behavior: SnackBarBehavior.floating,
-            ),
-          );
-
-          // Small delay to show SnackBar, then navigate back
-          await Future.delayed(const Duration(milliseconds: 500));
-
+        if (isValid) {
           if (mounted) {
-            context.pop(); // Go back to ProfileScreen
-            // context.go(ProfileScreen.path, extra: 'nin_verified');
+            context.pop(true); // Return success to ProfileScreen
           }
         } else {
           // Show validation errors
@@ -548,12 +513,12 @@ class _BvnVerificationScreenState extends ConsumerState<BvnVerificationScreen> {
             width: double.infinity,
             child: ElevatedButton(
               onPressed: _selfieImage != null
-                  ? () {
-                      // Dispose camera before moving to next step
-                      _cameraController?.dispose();
+                  ? () async {
+                      // Await disposal so native camera resources are fully
+                      // released before the next screen opens its own session.
+                      await _cameraController?.dispose();
                       _cameraController = null;
-                      print('here');
-                      setState(() => _currentStep = 1);
+                      if (mounted) setState(() => _currentStep = 1);
                     }
                   : _captureSelfie,
               style: ElevatedButton.styleFrom(

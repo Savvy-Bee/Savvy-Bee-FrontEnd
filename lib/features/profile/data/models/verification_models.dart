@@ -97,16 +97,18 @@ class Validation {
 
   factory Validation.fromJson(Map<String, dynamic> json) {
     return Validation(
-      firstName: ValidationField.fromJson(
-        json['first_name'] as Map<String, dynamic>,
-      ),
-      lastName: ValidationField.fromJson(
-        json['last_name'] as Map<String, dynamic>,
-      ),
-      dateOfBirth: ValidationField.fromJson(
-        json['date_of_birth'] as Map<String, dynamic>,
-      ),
-      selfie: SelfieValidation.fromJson(json['selfie'] as Map<String, dynamic>),
+      firstName: json['first_name'] is Map<String, dynamic>
+          ? ValidationField.fromJson(json['first_name'] as Map<String, dynamic>)
+          : ValidationField(value: '', match: false),
+      lastName: json['last_name'] is Map<String, dynamic>
+          ? ValidationField.fromJson(json['last_name'] as Map<String, dynamic>)
+          : ValidationField(value: '', match: false),
+      dateOfBirth: json['date_of_birth'] is Map<String, dynamic>
+          ? ValidationField.fromJson(json['date_of_birth'] as Map<String, dynamic>)
+          : ValidationField(value: '', match: false),
+      selfie: json['selfie'] is Map<String, dynamic>
+          ? SelfieValidation.fromJson(json['selfie'] as Map<String, dynamic>)
+          : SelfieValidation(value: '', match: false, confidenceRating: 0.0),
     );
   }
 }
@@ -162,7 +164,9 @@ class VerificationData {
       middleName: json['middle_name'] as String? ?? '',
       dateOfBirth: json['date_of_birth'] as String? ?? '',
       phoneNumber: json['phone_number'] as String? ?? '',
-      address: Address.fromJson(json['address'] as Map<String, dynamic>),
+      address: json['address'] is Map<String, dynamic>
+          ? Address.fromJson(json['address'] as Map<String, dynamic>)
+          : Address(town: '', lga: '', state: '', street: ''),
       email: json['email'] as String? ?? '',
       birthState: json['birth_state'] as String? ?? '',
       birthLga: json['birth_lga'] as String? ?? '',
@@ -170,9 +174,14 @@ class VerificationData {
       nextOfKinState: json['next_of_kin_state'] as String? ?? '',
       religion: json['religion'] as String? ?? '',
       gender: json['gender'] as String? ?? '',
-      validation: Validation.fromJson(
-        json['validation'] as Map<String, dynamic>,
-      ),
+      validation: json['validation'] is Map<String, dynamic>
+          ? Validation.fromJson(json['validation'] as Map<String, dynamic>)
+          : Validation(
+              firstName: ValidationField(value: '', match: false),
+              lastName: ValidationField(value: '', match: false),
+              dateOfBirth: ValidationField(value: '', match: false),
+              selfie: SelfieValidation(value: '', match: false, confidenceRating: 0.0),
+            ),
       requestedBy: json['requested_by'] as String? ?? '',
     );
   }
@@ -191,9 +200,24 @@ class VerificationResponse {
 
   factory VerificationResponse.fromJson(Map<String, dynamic> json) {
     return VerificationResponse(
-      success: json['success'] as bool,
-      message: json['message'] as String,
-      data: VerificationData.fromJson(json['data'] as Map<String, dynamic>),
+      success: json['success'] as bool? ?? false,
+      message: json['message'] as String? ?? '',
+      data: json['data'] is Map<String, dynamic>
+          ? VerificationData.fromJson(json['data'] as Map<String, dynamic>)
+          : VerificationData(
+              reference: '', id: '', idType: '', firstName: '', lastName: '',
+              middleName: '', dateOfBirth: '', phoneNumber: '',
+              address: Address(town: '', lga: '', state: '', street: ''),
+              email: '', birthState: '', birthLga: '', birthCountry: '',
+              nextOfKinState: '', religion: '', gender: '',
+              validation: Validation(
+                firstName: ValidationField(value: '', match: false),
+                lastName: ValidationField(value: '', match: false),
+                dateOfBirth: ValidationField(value: '', match: false),
+                selfie: SelfieValidation(value: '', match: false, confidenceRating: 0.0),
+              ),
+              requestedBy: '',
+            ),
     );
   }
 }

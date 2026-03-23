@@ -38,7 +38,11 @@ class VerificationRepository {
         options: Options(contentType: 'multipart/form-data'),
       );
 
-      return VerificationResponse.fromJson(response.data);
+      final responseData = response.data;
+      if (responseData is! Map<String, dynamic>) {
+        throw Exception('Unexpected NIN response format');
+      }
+      return VerificationResponse.fromJson(responseData);
     } catch (e) {
       debugPrintVerificationError('NIN', e);
       rethrow;
@@ -69,7 +73,11 @@ class VerificationRepository {
         options: Options(contentType: 'multipart/form-data'),
       );
 
-      return VerificationResponse.fromJson(response.data);
+      final responseData = response.data;
+      if (responseData is! Map<String, dynamic>) {
+        throw Exception('Unexpected BVN response format');
+      }
+      return VerificationResponse.fromJson(responseData);
     } catch (e) {
       debugPrintVerificationError('BVN', e);
       rethrow;

@@ -136,10 +136,12 @@ class _NinVerificationScreenState extends ConsumerState<NinVerificationScreen> {
 
       if (mounted) {
         final validation = response.data.validation;
+        final isValid = response.success ||
+            (validation.selfie.match &&
+                validation.firstName.match &&
+                validation.lastName.match);
 
-        if (validation.selfie.match &&
-            validation.firstName.match &&
-            validation.lastName.match) {
+        if (isValid) {
           // Invalidate data to refresh ProfileScreen
           ref.invalidate(homeDataProvider);
 
@@ -548,11 +550,12 @@ class _NinVerificationScreenState extends ConsumerState<NinVerificationScreen> {
             width: double.infinity,
             child: ElevatedButton(
               onPressed: _selfieImage != null
-                  ? () {
-                      // Dispose camera before moving to next step
-                      _cameraController?.dispose();
+                  ? () async {
+                      // Await disposal so native camera resources are fully
+                      // released before the widget rebuilds to step 1.
+                      await _cameraController?.dispose();
                       _cameraController = null;
-                      setState(() => _currentStep = 1);
+                      if (mounted) setState(() => _currentStep = 1);
                     }
                   : _captureSelfie,
               style: ElevatedButton.styleFrom(

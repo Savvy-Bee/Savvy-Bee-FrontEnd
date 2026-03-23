@@ -360,9 +360,38 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                         )
                                       : null,
                                   onTap: !data.kyc.bvn
-                                      ? () => context.pushNamed(
-                                          BvnVerificationScreen.path,
-                                        )
+                                      ? () async {
+                                          final verified = await context.pushNamed<bool>(
+                                            BvnVerificationScreen.path,
+                                          );
+                                          if (verified == true && mounted) {
+                                            ref.invalidate(homeDataProvider);
+                                            ScaffoldMessenger.of(context).showSnackBar(
+                                              const SnackBar(
+                                                content: Row(
+                                                  children: [
+                                                    Icon(Icons.check_circle, color: Colors.white),
+                                                    SizedBox(width: 12),
+                                                    Expanded(
+                                                      child: Text(
+                                                        'BVN Verified Successfully!',
+                                                        style: TextStyle(
+                                                          fontSize: 14,
+                                                          fontWeight: FontWeight.w600,
+                                                          fontFamily: 'GeneralSans',
+                                                          letterSpacing: 14 * 0.02,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                backgroundColor: Color(0xFF00C853),
+                                                duration: Duration(seconds: 3),
+                                                behavior: SnackBarBehavior.floating,
+                                              ),
+                                            );
+                                          }
+                                        }
                                       : () {},
                                   useDefaultTrailing: !data.kyc.bvn,
                                 ),

@@ -25,7 +25,7 @@ class Kyc {
   Kyc({required this.nin, required this.bvn});
 
   factory Kyc.fromJson(Map<String, dynamic> json) {
-    return Kyc(nin: json['NIN'] as bool, bvn: json['BVN'] as bool);
+    return Kyc(nin: json['NIN'] as bool? ?? false, bvn: json['BVN'] as bool? ?? false);
   }
 
   Map<String, dynamic> toJson() {
@@ -42,9 +42,9 @@ class AIData {
 
   factory AIData.fromJson(Map<String, dynamic> json) {
     return AIData(
-      message: json['message'] as String,
-      ratings: json['Ratings'] as num,
-      status: json['Status'] as String,
+      message: json['message'] as String? ?? '',
+      ratings: json['Ratings'] as num? ?? 0,
+      status: json['Status'] as String? ?? '',
     );
   }
 
@@ -74,13 +74,13 @@ class HiveStats {
 
   factory HiveStats.fromJson(Map<String, dynamic> json) {
     return HiveStats(
-      id: json['id'] as String,
-      streak: json['Streak'] as int,
-      flowers: json['Flowers'] as int,
-      honeyDrop: json['HoneyDrop'] as int,
-      createdAt: json['createdAt'] as String,
-      updatedAt: json['updatedAt'] as String,
-      totalFlower: json['TotalFlower'] as int,
+      id: json['id'] as String? ?? '',
+      streak: (json['Streak'] as num?)?.toInt() ?? 0,
+      flowers: (json['Flowers'] as num?)?.toInt() ?? 0,
+      honeyDrop: (json['HoneyDrop'] as num?)?.toInt() ?? 0,
+      createdAt: json['createdAt'] as String? ?? '',
+      updatedAt: json['updatedAt'] as String? ?? '',
+      totalFlower: (json['TotalFlower'] as num?)?.toInt() ?? 0,
     );
   }
 
@@ -112,10 +112,10 @@ class Achievement {
 
   factory Achievement.fromJson(Map<String, dynamic> json) {
     return Achievement(
-      id: json['id'] as String,
-      name: json['Name'] as String,
-      createdAt: json['createdAt'] as String,
-      updatedAt: json['updatedAt'] as String,
+      id: json['id'] as String? ?? '',
+      name: json['Name'] as String? ?? '',
+      createdAt: json['createdAt'] as String? ?? '',
+      updatedAt: json['updatedAt'] as String? ?? '',
     );
   }
 
@@ -142,11 +142,11 @@ class HiveData {
 
   factory HiveData.fromJson(Map<String, dynamic> json) {
     return HiveData(
-      stats: HiveStats.fromJson(json['hive'] as Map<String, dynamic>),
-      achievement: (json['Achievement'] as List<dynamic>)
+      stats: HiveStats.fromJson((json['hive'] as Map<String, dynamic>?) ?? {}),
+      achievement: ((json['Achievement'] as List<dynamic>?) ?? [])
           .map((e) => Achievement.fromJson(e as Map<String, dynamic>))
           .toList(),
-      league: json['League'] as String,
+      league: json['League'] as String? ?? '',
     );
   }
 
@@ -194,19 +194,19 @@ class HomeData {
 
   factory HomeData.fromJson(Map<String, dynamic> json) {
     return HomeData(
-      firstName: json['FirstName'] as String,
-      lastName: json['LastName'] as String,
-      username: json['Username'] as String,
-      email: json['Email'] as String,
-      country: json['Country'] as String,
-      currency: json['Currency'] as String,
-      language: json['Language'] as String,
-      profilePhoto: json['ProfilePhoto'] as String,
-      aiPersonality: json['AIPersonality'] as String,
+      firstName: json['FirstName'] as String? ?? '',
+      lastName: json['LastName'] as String? ?? '',
+      username: json['Username'] as String? ?? '',
+      email: json['Email'] as String? ?? '',
+      country: json['Country'] as String? ?? '',
+      currency: json['Currency'] as String? ?? '',
+      language: json['Language'] as String? ?? '',
+      profilePhoto: json['ProfilePhoto'] as String? ?? '',
+      aiPersonality: json['AIPersonality'] as String? ?? '',
       // dob: json['DOB'] as String,
-      kyc: Kyc.fromJson(json['Kyc'] as Map<String, dynamic>),
-      aiData: AIData.fromJson(json['AIData'] as Map<String, dynamic>),
-      hive: HiveData.fromJson(json['Hive'] as Map<String, dynamic>),
+      kyc: Kyc.fromJson((json['Kyc'] as Map<String, dynamic>?) ?? {}),
+      aiData: AIData.fromJson((json['AIData'] as Map<String, dynamic>?) ?? {}),
+      hive: HiveData.fromJson((json['Hive'] as Map<String, dynamic>?) ?? {}),
       insightAdvice: json['Insight_Advice'] != null
           ? InsightAdvice.fromJson(
               json['Insight_Advice'] as Map<String, dynamic>,
