@@ -285,7 +285,7 @@ Join me on my financial literacy journey!
   // ----------------------------
   @override
   Widget build(BuildContext context) {
-    final double screenWidth = MediaQuery.sizeOf(context).width;
+    final double screenWidth = MediaQuery.sizeOf(context).width.clamp(0.0, 480.0);
     const double spacingValue = 5.0;
     const double horizontalPadding = 16.0;
 
@@ -601,7 +601,7 @@ Join me on my financial literacy journey!
 //   // ----------------------------
 //   @override
 //   Widget build(BuildContext context) {
-//     final double screenWidth = MediaQuery.sizeOf(context).width;
+//     final double screenWidth = MediaQuery.sizeOf(context).width.clamp(0.0, 480.0);
 //     const double spacingValue = 5.0;
 //     const double horizontalPadding = 16.0;
 

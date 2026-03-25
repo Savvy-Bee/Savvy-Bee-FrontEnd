@@ -416,9 +416,11 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
     required int totalLessons,
   }) {
     final size = MediaQuery.sizeOf(context);
+    final appWidth = size.width.clamp(0.0, 480.0);
+    final appHeight = size.height.clamp(0.0, 874.0);
 
-    final width = size.width * 0.8;
-    final height = size.height * 0.6;
+    final width = appWidth * 0.85;
+    final height = (appHeight * 0.6).clamp(0.0, 520.0);
     final tracker = ref.watch(quizProgressProvider);
     final completedLevels = tracker.getCompletedLevelsForLesson(
       lesson.lessonNumber,
@@ -575,13 +577,13 @@ class _LessonHomeScreenState extends ConsumerState<LessonHomeScreen> {
                 //   color: isLocked ? AppColors.greyDark : null,
                 //   fit: BoxFit.contain,
                 // ),
-                Image.asset(
-                  illustrationAsset, // This is now the lesson-specific image
-                  scale: 1.3,
-                  color: isLocked
-                      ? AppColors.greyDark
-                      : null, // ← Grey for locked
-                  fit: BoxFit.contain,
+                SizedBox(
+                  height: 180,
+                  child: Image.asset(
+                    illustrationAsset,
+                    color: isLocked ? AppColors.greyDark : null,
+                    fit: BoxFit.contain,
+                  ),
                 ),
 
                 // Title and description section

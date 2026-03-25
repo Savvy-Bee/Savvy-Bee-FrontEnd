@@ -429,7 +429,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                     ),
                     const Gap(20.0),
                     SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.4,
+                      height: (MediaQuery.of(context).size.height * 0.4).clamp(340.0, double.infinity),
                       child: PageView(
                         controller: _pageController,
                         physics: const NeverScrollableScrollPhysics(),

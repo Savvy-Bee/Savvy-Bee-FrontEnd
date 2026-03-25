@@ -249,6 +249,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       ),
     );
 
+    // Invalidate stale data so they don't re-trigger logout on the next login.
+    ref.invalidate(homeDataProvider);
+    ref.invalidate(allCoursesProvider);
+
     ref.read(authProvider.notifier).logout();
     ref.read(bottomNavIndexProvider.notifier).state = 0;
 
@@ -586,13 +590,15 @@ If you answered "yes" to all these questions, you're ready to take the next step
 
         // Walkthrough overlay
         if (_walkthroughChecked && _isWalkthroughActive)
-          _WalkthroughOverlay(
-            step: _walkthroughStep,
-            currentImage: _currentWalkthroughImage!,
-            budgetArrowY: _walkthroughStep == _WalkthroughStep.budget
-                ? _getBudgetItemArrowY()
-                : null,
-            onTap: _advanceWalkthrough,
+          Positioned.fill(
+            child: _WalkthroughOverlay(
+              step: _walkthroughStep,
+              currentImage: _currentWalkthroughImage!,
+              budgetArrowY: _walkthroughStep == _WalkthroughStep.budget
+                  ? _getBudgetItemArrowY()
+                  : null,
+              onTap: _advanceWalkthrough,
+            ),
           ),
       ],
     );
@@ -908,41 +914,43 @@ class _WalkthroughOverlay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final appWidth = constraints.maxWidth;
 
-    return GestureDetector(
-      onTap: onTap,
-      child: Stack(
-        children: [
-          Container(
-            width: screenSize.width,
-            height: screenSize.height,
-            color: Colors.black.withOpacity(0.55),
-          ),
-          if (step == _WalkthroughStep.budget && budgetArrowY != null)
-            Positioned(
-              top: budgetArrowY! + 4,
-              left: 24,
-              child: IgnorePointer(
+        return GestureDetector(
+          onTap: onTap,
+          behavior: HitTestBehavior.opaque,
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              ColoredBox(color: Colors.black.withOpacity(0.55)),
+              if (step == _WalkthroughStep.budget && budgetArrowY != null)
+                Positioned(
+                  top: budgetArrowY! + 4,
+                  left: 24,
+                  child: IgnorePointer(
+                    child: Image.asset(
+                      'assets/images/walk_through/home_arrow.png',
+                      width: 80,
+                      height: 48,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                ),
+              Positioned(
+                bottom: 0,
+                right: 0,
                 child: Image.asset(
-                  'assets/images/walk_through/home_arrow.png',
-                  width: 80,
-                  height: 48,
+                  currentImage,
+                  width: appWidth * 0.65,
                   fit: BoxFit.contain,
                 ),
               ),
-            ),
-          Positioned(
-            bottom: 0,
-            right: 0,
-            child: Image.asset(
-              currentImage,
-              width: screenSize.width * 0.65,
-              fit: BoxFit.contain,
-            ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

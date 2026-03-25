@@ -11,6 +11,7 @@ import 'package:savvy_bee_mobile/core/widgets/intro_text.dart';
 import 'package:savvy_bee_mobile/features/auth/presentation/providers/auth_providers.dart';
 import 'package:savvy_bee_mobile/features/auth/presentation/screens/password_reset/password_reset_screen.dart';
 import 'package:savvy_bee_mobile/features/auth/presentation/screens/signup_screen.dart';
+import 'package:savvy_bee_mobile/features/home/presentation/providers/home_data_provider.dart';
 import 'package:savvy_bee_mobile/features/home/presentation/screens/home_screen.dart';
 import 'package:savvy_bee_mobile/features/auth/presentation/screens/post_signup/architype/financial_architype_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -181,6 +182,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       }
       // Fully set-up account — save email and go home.
       await _saveEmail(email);
+      ref.invalidate(homeDataProvider);
+      if (!mounted) return;
       context.goNamed(HomeScreen.path);
     } else {
       // ── Failed login ────────────────────────────────────────────────────────
