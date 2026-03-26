@@ -53,6 +53,9 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   // ── Reauth loading state ──────────────────────────────────────────────────
   bool _isReauthing = false;
 
+  // ── Link account prompt (shown once per session) ──────────────────────────
+  bool _hasShownLinkAccountPrompt = false;
+
   // ─────────────────────────────────────────────────────────────────────────
   // Lifecycle
   // ─────────────────────────────────────────────────────────────────────────
@@ -230,6 +233,31 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     return '₦${NumberFormat('#,###.00').format(amount)}';
   }
 
+  // ─────────────────────────────────────────────────────────────────────────
+  // Link account prompt (auto-shown when no account is linked)
+  // ─────────────────────────────────────────────────────────────────────────
+
+  void _showLinkAccountPrompt(BuildContext scaffoldContext) {
+    if (_hasShownLinkAccountPrompt) return;
+    _hasShownLinkAccountPrompt = true;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      showModalBottomSheet<void>(
+        context: scaffoldContext,
+        isScrollControlled: true,
+        useSafeArea: true,
+        useRootNavigator: true,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        ),
+        builder: (_) => _LinkAccountSafetySheet(
+          onLinkTapped: () => ConnectBankIntroBottomSheet.show(scaffoldContext),
+        ),
+      );
+    });
+  }
+
   /// Builds the correct error widget depending on whether this is a
   /// reauth error or a generic load failure.
   Widget _buildDashboardError(Object error, [StackTrace? stack]) {
@@ -279,6 +307,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                   skipLoadingOnRefresh: true,
                   data: (dashboardData) {
                     if (dashboardData == null) {
+                      _showLinkAccountPrompt(context);
                       return CustomErrorWidget(
                         icon: Icons.link_off_rounded,
                         title: 'No linked account',
@@ -481,6 +510,205 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
       ),
       centerTitle: false,
       automaticallyImplyLeading: false,
+    );
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Link Account Safety Bottom Sheet
+// ─────────────────────────────────────────────────────────────────────────────
+
+class _LinkAccountSafetySheet extends StatelessWidget {
+  final VoidCallback onLinkTapped;
+
+  const _LinkAccountSafetySheet({required this.onLinkTapped});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Handle bar
+          Center(
+            child: Container(
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: Colors.grey.shade300,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+          ),
+          const Gap(24),
+          // Shield icon
+          Center(
+            child: Container(
+              width: 64,
+              height: 64,
+              decoration: BoxDecoration(
+                color: AppColors.primary.withOpacity(0.12),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.shield_outlined,
+                color: AppColors.primary,
+                size: 32,
+              ),
+            ),
+          ),
+          const Gap(16),
+          const Text(
+            'Your info is safe',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'GeneralSans',
+              height: 1.1,
+              letterSpacing: 24 * 0.02,
+            ),
+          ),
+          const Gap(8),
+          const Text(
+            'Connect your bank to get a complete picture of your finances. Here\'s why you can trust us.',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 14,
+              fontFamily: 'GeneralSans',
+              color: Color(0xFF666666),
+              height: 1.4,
+              letterSpacing: 14 * 0.02,
+            ),
+          ),
+          const Gap(24),
+          _SafetyPoint(
+            icon: Icons.lock_outline,
+            title: 'Bank-level encryption',
+            subtitle:
+                'All data is encrypted in transit and at rest using 256-bit SSL.',
+          ),
+          const Gap(12),
+          _SafetyPoint(
+            icon: Icons.visibility_off_outlined,
+            title: 'We never see your password',
+            subtitle:
+                'Mono handles the connection — Savvy Bee never stores your login credentials.',
+          ),
+          const Gap(12),
+          _SafetyPoint(
+            icon: Icons.block_outlined,
+            title: 'Read-only access',
+            subtitle:
+                'We can only read your transactions and balances. We cannot move your money.',
+          ),
+          const Gap(12),
+          _SafetyPoint(
+            icon: Icons.cancel_outlined,
+            title: 'Disconnect any time',
+            subtitle:
+                'You are in full control — unlink your bank account whenever you want.',
+          ),
+          const Gap(28),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              onLinkTapped();
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.black,
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              elevation: 0,
+            ),
+            child: const Text(
+              'Link my account',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                fontFamily: 'GeneralSans',
+                letterSpacing: 16 * 0.02,
+              ),
+            ),
+          ),
+          const Gap(8),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text(
+              'Maybe later',
+              style: TextStyle(
+                fontSize: 14,
+                fontFamily: 'GeneralSans',
+                color: Color(0xFF666666),
+                letterSpacing: 14 * 0.02,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SafetyPoint extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String subtitle;
+
+  const _SafetyPoint({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: 40,
+          height: 40,
+          decoration: BoxDecoration(
+            color: const Color(0xFFF5F5F5),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Icon(icon, size: 20, color: Colors.black87),
+        ),
+        const Gap(12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'GeneralSans',
+                  letterSpacing: 14 * 0.02,
+                ),
+              ),
+              const Gap(2),
+              Text(
+                subtitle,
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontFamily: 'GeneralSans',
+                  color: Color(0xFF666666),
+                  height: 1.4,
+                  letterSpacing: 12 * 0.02,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

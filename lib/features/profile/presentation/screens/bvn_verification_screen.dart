@@ -11,6 +11,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
+import 'package:savvy_bee_mobile/features/home/presentation/providers/home_data_provider.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/providers/verification_provider.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/widgets/custom_text_field.dart';
@@ -146,8 +147,40 @@ class _BvnVerificationScreenState extends ConsumerState<BvnVerificationScreen> {
                 validation.lastName.match);
 
         if (isValid) {
+          // Invalidate data to refresh ProfileScreen
+          ref.invalidate(homeDataProvider);
+
+          // Show success message
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Row(
+                children: [
+                  Icon(Icons.check_circle, color: Colors.white),
+                  SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      'BVN Verified Successfully!',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'GeneralSans',
+                        letterSpacing: 14 * 0.02,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              backgroundColor: Color(0xFF00C853),
+              duration: Duration(seconds: 3),
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+
+          // Small delay to show SnackBar, then navigate back
+          await Future.delayed(const Duration(milliseconds: 500));
+
           if (mounted) {
-            context.pop(true); // Return success to ProfileScreen
+            context.pop(); // Go back to ProfileScreen
           }
         } else {
           // Show validation errors
