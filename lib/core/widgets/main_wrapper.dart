@@ -7,7 +7,8 @@ import 'package:savvy_bee_mobile/core/widgets/app_bar_builder.dart';
 import 'package:savvy_bee_mobile/features/chat/presentation/screens/chat_screen.dart';
 import 'package:savvy_bee_mobile/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:savvy_bee_mobile/features/hive/presentation/screens/hive_screen.dart';
-import 'package:savvy_bee_mobile/features/premium/presentation/screens/premium_screen.dart';
+// import 'package:savvy_bee_mobile/features/premium/presentation/screens/premium_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/spend_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/tools_screen.dart';
 
 import '../../features/home/presentation/screens/home_screen.dart';
@@ -58,8 +59,11 @@ class MainWrapper extends ConsumerWidget {
           case 3:
             context.goNamed(HiveScreen.path);
             break;
+          // case 4:
+          //   context.pushNamed(PremiumScreen.path);
+          //   break;
           case 4:
-            context.pushNamed(PremiumScreen.path);
+            context.pushNamed(SpendScreen.path);
             break;
           default:
             break;
@@ -149,6 +153,21 @@ class MainWrapper extends ConsumerWidget {
           ),
           label: 'Hive',
         ),
+        // BottomNavigationBarItem(
+        //   activeIcon: Image.asset(
+        //     'assets/images/icons/bottomtab/hive.png',
+        //     width: 24,
+        //     height: 24,
+        //     // color: AppColors.black,
+        //   ),
+        //   icon: Image.asset(
+        //     'assets/images/icons/bottomtab/hive.png',
+        //     width: 24,
+        //     height: 24,
+        //     color: AppColors.grey,
+        //   ),
+        //   label: 'Wallet',
+        // ),
       ],
     );
   }

@@ -14,6 +14,7 @@ import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/num_extensions.dart';
 import 'package:savvy_bee_mobile/core/widgets/notifications/app_notification.dart';
 import 'package:savvy_bee_mobile/core/widgets/tax_filing/filing_routes.dart';
+import 'package:savvy_bee_mobile/features/tools/data/repositories/wallet_dashboard_repository.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/providers/filing_home_provider.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/widgets/tax_filing/bottom_action_button.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/widgets/tax_filing/pin_bottom_sheet.dart';
@@ -36,12 +37,37 @@ class _FilingStep5ScreenState extends ConsumerState<FilingStep5Screen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
       final filingData = ref.read(filingHomeProvider).value;
       final process = filingData?.fillingProcess;
-      if (process != null && ref.read(filingTaxDueProvider) == 0.0) {
-        ref.read(filingTaxDueProvider.notifier).state =
-            process.financeDetails.taxAmount;
-        ref.read(selectedFilingPlanProvider.notifier).state = process.plan;
+      if (process != null) {
+        if (ref.read(filingTaxDueProvider) == 0.0) {
+          ref.read(filingTaxDueProvider.notifier).state =
+              process.financeDetails.taxAmount;
+          ref.read(selectedFilingPlanProvider.notifier).state = process.plan;
+        }
+        if (ref.read(filingIDProvider).isEmpty) {
+          ref.read(filingIDProvider.notifier).state = process.id;
+        }
+      }
+
+      // Wallet balance — seed from wallet dashboard if not yet set by Step 3.
+      // Do NOT call refresh() — just read (auto-starts) and listen for data.
+      if (ref.read(filingWalletBalanceProvider) == 0.0) {
+        final current = ref.read(walletDashboardProvider);
+        if (current.value != null) {
+          ref.read(filingWalletBalanceProvider.notifier).state =
+              current.value!.account.balanceNaira;
+        } else {
+          ref.listenManual(walletDashboardProvider, (_, next) {
+            if (next.value != null &&
+                mounted &&
+                ref.read(filingWalletBalanceProvider) == 0.0) {
+              ref.read(filingWalletBalanceProvider.notifier).state =
+                  next.value!.account.balanceNaira;
+            }
+          });
+        }
       }
     });
   }
@@ -102,8 +128,13 @@ class _FilingStep5ScreenState extends ConsumerState<FilingStep5Screen> {
     final taxPotCovers = taxPot >= taxDue;
     final remainder = taxPot - taxDue;
 
-    // Wallet balance from payment/init response — shown in the Savvy Bee Wallet tile
-    final walletBalance = ref.watch(filingWalletBalanceProvider);
+    // Wallet balance: prefer value from Step 3 / complex PAYE init.
+    // On resume fall back to the wallet dashboard live value.
+    final storedWallet = ref.watch(filingWalletBalanceProvider);
+    final walletDashAsync = ref.watch(walletDashboardProvider);
+    final walletBalance = storedWallet > 0
+        ? storedWallet
+        : (walletDashAsync.value?.account.balanceNaira ?? 0.0);
 
     final taxYear = DateTime.now().year - 1;
 

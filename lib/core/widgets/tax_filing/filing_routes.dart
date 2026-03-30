@@ -41,6 +41,11 @@ abstract class FilingRoutes {
   static const step6        = '/filing/step-6';
   static const filingRecord = '/filing/record';
   static const String filingDetails = '/filing/details/:id';
+
+  // ── Complex / Pro PAYE ────────────────────────────────────────────────────
+  static const complexPayeForm    = '/filing/complex-paye-form';
+  static const complexPayeHistory = '/filing/complex-paye-history';
+  static const complexPayeDetails = '/filing/complex-paye/:id';
 }
 
 

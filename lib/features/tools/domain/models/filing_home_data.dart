@@ -33,7 +33,7 @@ class FilingStages {
   });
 
   factory FilingStages.fromJson(Map<String, dynamic> json) {
-    double p(String k) => ((json[k] as num)).toDouble();
+    double p(String k) => double.tryParse(json[k]?.toString() ?? '0') ?? 0.0;
     return FilingStages(
       stage1: p('stage1'),
       stage2: p('stage2'),
@@ -89,6 +89,10 @@ class FillingFinanceDetails {
   final double effectiveTaxRate;
   final double taxAmount;
 
+  /// Filing fee assigned by the platform (field: "PayePrice").
+  /// Present on the payment/init response and on in-progress filing records.
+  final double payePrice;
+
   const FillingFinanceDetails({
     required this.revenues,
     required this.annualRevenue,
@@ -97,10 +101,11 @@ class FillingFinanceDetails {
     required this.taxableIncome,
     required this.effectiveTaxRate,
     required this.taxAmount,
+    this.payePrice = 0.0,
   });
 
   factory FillingFinanceDetails.fromJson(Map<String, dynamic> json) {
-    double p(String k) => ((json[k] as num? ?? 0)).toDouble();
+    double p(String k) => double.tryParse(json[k]?.toString() ?? '0') ?? 0.0;
     return FillingFinanceDetails(
       revenues: (json['Revenues'] as List? ?? [])
           .map((e) => FilingIncomeSource.fromJson(e as Map<String, dynamic>))
@@ -113,6 +118,7 @@ class FillingFinanceDetails {
       taxableIncome: p('TaxableIncome'),
       effectiveTaxRate: p('EffectiveTaxRate'),
       taxAmount: p('TaxAmount'),
+      payePrice: double.tryParse(json['PayePrice']?.toString() ?? '0') ?? 0.0,
     );
   }
 
@@ -178,7 +184,7 @@ class FilingHomeData {
   });
 
   factory FilingHomeData.fromJson(Map<String, dynamic> json) {
-    double p(String k) => ((json[k] as num)).toDouble();
+    double p(String k) => double.tryParse(json[k]?.toString() ?? '0') ?? 0.0;
 
     FillingProcess? process;
     final raw = json['FillingProcess'];
@@ -191,7 +197,7 @@ class FilingHomeData {
       taxableIncome: p('TaxableIncome'),
       estimatedTax: p('EstimatedTax'),
       estimatedPAYE: p('EstimatedPAYE'),
-      taxRate: (json['TaxRate'] as num).toDouble(),
+      taxRate: double.tryParse(json['TaxRate']?.toString() ?? '0') ?? 0.0,
       taxPot: p('TaxPot'),
       incomes: (json['Incomes'] as List)
           .map((e) => FilingIncomeSource.fromJson(e as Map<String, dynamic>))

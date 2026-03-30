@@ -84,6 +84,9 @@ import 'package:savvy_bee_mobile/features/tools/presentation/screens/goals/goal_
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/goals/goal_finalyzing_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/goals/goal_recommendations_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/goals/goal_success_screen.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/tax_filing/complex_paye_details_screen.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/tax_filing/complex_paye_form_screen.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/tax_filing/complex_paye_history_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/tax_filing/filing_details_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/tax_filing/filing_history_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/tax_filing/filing_step1.dart';
@@ -751,6 +754,22 @@ final GoRouter appRouter = GoRouter(
       name: FilingRoutes.filingDetails,
       builder: (context, state) =>
           FilingDetailsScreen(filingId: state.pathParameters['id']!),
+    ),
+    GoRoute(
+      path: FilingRoutes.complexPayeForm,
+      name: FilingRoutes.complexPayeForm,
+      builder: (_, __) => const ComplexPayeFormScreen(),
+    ),
+    GoRoute(
+      path: FilingRoutes.complexPayeHistory,
+      name: FilingRoutes.complexPayeHistory,
+      builder: (_, __) => const ComplexPayeHistoryScreen(),
+    ),
+    GoRoute(
+      path: FilingRoutes.complexPayeDetails, // '/filing/complex-paye/:id'
+      name: FilingRoutes.complexPayeDetails,
+      builder: (context, state) =>
+          ComplexPayeDetailsScreen(filingId: state.pathParameters['id']!),
     ),
     GoRoute(
       path: FilingRoutes.taxpayerId,

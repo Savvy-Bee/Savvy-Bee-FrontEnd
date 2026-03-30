@@ -23,6 +23,7 @@ import 'package:savvy_bee_mobile/features/tools/data/repositories/filing_payment
 import 'package:savvy_bee_mobile/features/tools/data/repositories/tin_validation_repository.dart';
 import 'package:savvy_bee_mobile/features/tools/domain/models/filing_home_data.dart';
 import 'package:savvy_bee_mobile/features/tools/domain/models/tax_calculator_result.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/providers/complex_paye_provider.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/providers/filing_home_provider.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/providers/tax_calculator_provider.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/providers/tin_validation_provider.dart';
@@ -247,6 +248,9 @@ class _FilingStep3ScreenState extends ConsumerState<FilingStep3Screen> {
       // ── Store wallet balance from init response for Steps 4 & 5 ────────────
       ref.read(filingWalletBalanceProvider.notifier).state =
           result.walletBalance;
+      // Reset complex PAYE fee so Step 4 doesn't use a stale value from a
+      // previous Complex PAYE filing when coming through the regular flow.
+      ref.read(complexPayeFilingFeeProvider.notifier).state = 0.0;
 
       if (mounted) {
         setState(() => _isProceeding = false);

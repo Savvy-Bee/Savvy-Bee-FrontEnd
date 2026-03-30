@@ -14,6 +14,8 @@ import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/num_extensions.dart';
 import 'package:savvy_bee_mobile/core/widgets/notifications/app_notification.dart';
 import 'package:savvy_bee_mobile/core/widgets/tax_filing/filing_routes.dart';
+import 'package:savvy_bee_mobile/features/tools/data/repositories/wallet_dashboard_repository.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/providers/complex_paye_provider.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/providers/filing_home_provider.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/widgets/tax_filing/bottom_action_button.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/widgets/tax_filing/pin_bottom_sheet.dart';
@@ -45,12 +47,44 @@ class _FilingStep4ScreenState extends ConsumerState<FilingStep4Screen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
       final filingData = ref.read(filingHomeProvider).value;
       final process = filingData?.fillingProcess;
-      if (process != null && ref.read(filingTaxDueProvider) == 0.0) {
-        ref.read(filingTaxDueProvider.notifier).state =
-            process.financeDetails.taxAmount;
-        ref.read(selectedFilingPlanProvider.notifier).state = process.plan;
+      if (process != null) {
+        // Tax due and plan — seed if not already set by the normal flow
+        if (ref.read(filingTaxDueProvider) == 0.0) {
+          ref.read(filingTaxDueProvider.notifier).state =
+              process.financeDetails.taxAmount;
+          ref.read(selectedFilingPlanProvider.notifier).state = process.plan;
+        }
+        // Filing ID — always seed from the in-progress process if empty
+        if (ref.read(filingIDProvider).isEmpty) {
+          ref.read(filingIDProvider.notifier).state = process.id;
+        }
+        // Filing fee — use PayePrice from FinanceDetails when available
+        if (ref.read(complexPayeFilingFeeProvider) == 0.0 &&
+            process.financeDetails.payePrice > 0) {
+          ref.read(complexPayeFilingFeeProvider.notifier).state =
+              process.financeDetails.payePrice;
+        }
+      }
+      // Wallet balance — seed from wallet dashboard if not yet set by Step 3.
+      // Do NOT call refresh() — just read (auto-starts) and listen for data.
+      if (ref.read(filingWalletBalanceProvider) == 0.0) {
+        final current = ref.read(walletDashboardProvider);
+        if (current.value != null) {
+          ref.read(filingWalletBalanceProvider.notifier).state =
+              current.value!.account.balanceNaira;
+        } else {
+          ref.listenManual(walletDashboardProvider, (_, next) {
+            if (next.value != null &&
+                mounted &&
+                ref.read(filingWalletBalanceProvider) == 0.0) {
+              ref.read(filingWalletBalanceProvider.notifier).state =
+                  next.value!.account.balanceNaira;
+            }
+          });
+        }
       }
     });
   }
@@ -110,12 +144,28 @@ class _FilingStep4ScreenState extends ConsumerState<FilingStep4Screen> {
 
     print('IDDD: $filingId'); 
 
-    // Wallet balance written by Step 3 from payment/init response ("Wallet" field)
-    final walletBalance = ref.watch(filingWalletBalanceProvider);
+    // Wallet balance: prefer the value written by Step 3 / complex PAYE init.
+    // On resume (Step 3 skipped) fall back to the wallet dashboard live value.
+    final storedWallet = ref.watch(filingWalletBalanceProvider);
+    final walletDashAsync = ref.watch(walletDashboardProvider);
+    final walletBalance = storedWallet > 0
+        ? storedWallet
+        : (walletDashAsync.value?.account.balanceNaira ?? 0.0);
 
-    final filingFee = _planFees[selectedPlan] ?? 0.0;
+    // complexPayeFilingFeeProvider is > 0 when coming from the Complex PAYE flow.
+    // In that case use the actual PayePrice returned by init; otherwise fall
+    // back to the fixed plan-fee table (regular flow).
+    final complexPayeFee = ref.watch(complexPayeFilingFeeProvider);
+    final isComplexPaye =
+        (selectedPlan == 'Pro / Complex' || selectedPlan == 'Pro Complex') &&
+            complexPayeFee > 0;
+    final filingFee = isComplexPaye
+        ? complexPayeFee
+        : (_planFees[selectedPlan] ?? 0.0);
+    // isCustomQuote = true only for regular Pro/Complex where no fee is known yet
     final isCustomQuote =
-        selectedPlan == 'Pro / Complex' || selectedPlan == 'Pro Complex';
+        (selectedPlan == 'Pro / Complex' || selectedPlan == 'Pro Complex') &&
+            complexPayeFee == 0;
     final walletSufficient = walletBalance >= filingFee;
 
     return GestureDetector(

@@ -12,7 +12,6 @@ import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/widgets/notifications/app_notification.dart';
 import 'package:savvy_bee_mobile/core/widgets/tax_filing/filing_routes.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/providers/filing_home_provider.dart';
-import 'package:savvy_bee_mobile/features/tools/presentation/providers/selected_filing_plan_provider.dart' hide selectedFilingPlanProvider;
 import 'package:savvy_bee_mobile/features/tools/presentation/widgets/tax_filing/bottom_action_button.dart';
 
 // ── Data model ───────────────────────────────────────────────────────────────
@@ -136,10 +135,23 @@ class _FilingStep2ScreenState extends ConsumerState<FilingStep2Screen> {
   }
 
   void _onSelectPlan() {
-    // ── Save the selected plan title so Step 3 can read it ───────────
-    if (_selectedIndex >= 0) {
-      ref.read(selectedFilingPlanProvider.notifier).state =
-          _plans[_selectedIndex].title;
+    if (_selectedIndex < 0) return;
+
+    final plan = _plans[_selectedIndex];
+    ref.read(selectedFilingPlanProvider.notifier).state = plan.title;
+
+    // Pro / Complex goes to its own dedicated form instead of step 3
+    if (plan.isCustomQuote) {
+      AppNotification.show(
+        context,
+        message:
+            'Pro / Complex selected. Fill in your business details to get started.',
+        icon: Icons.edit_document,
+      );
+      Future.delayed(const Duration(milliseconds: 800), () {
+        if (mounted) context.pushNamed(FilingRoutes.complexPayeForm);
+      });
+      return;
     }
 
     AppNotification.show(
