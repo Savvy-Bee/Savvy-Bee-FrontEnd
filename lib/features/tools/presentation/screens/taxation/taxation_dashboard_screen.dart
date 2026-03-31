@@ -74,13 +74,13 @@ class _TaxationDashboardScreenState
               padding: const EdgeInsets.all(16),
               children: [
                 // ── Ready-to-file card (top) ─────────────────────────────
-                TaxReadyToFileCard(
-                  estimatedTaxPayable:
-                      data.data.tax.yearly, // uses yearly tax as estimate
-                  onFileTap: _onFileTap,
-                  onRemindLaterTap: _onRemindLater,
-                ),
-                const Gap(18),
+                // TaxReadyToFileCard(
+                //   estimatedTaxPayable:
+                //       data.data.tax.yearly, // uses yearly tax as estimate
+                //   onFileTap: _onFileTap,
+                //   onRemindLaterTap: _onRemindLater,
+                // ),
+                // const Gap(18),
 
                 // ── Main tax summary card ────────────────────────────────
                 TaxDashboardCard(taxationData: data.data),
