@@ -11,6 +11,13 @@ class StorageService {
   static const String refreshTokenKey = 'refresh_token';
   static const String userDataKey = 'user_data';
   static const String fcmTokenKey = 'fcm_token';
+  static const Set<String> _preservedDeviceScopedKeys = {
+    'home_walkthrough_completed',
+    'tools_walkthrough_completed',
+    'dashboard_walkthrough_completed',
+    'budget_walkthrough_completed',
+    'debt_walkthrough_completed',
+  };
 
   StorageService() : _secureStorage = const FlutterSecureStorage();
 
@@ -208,12 +215,40 @@ class StorageService {
   Future<void> clearAll() async {
     try {
       final prefs = await SharedPreferences.getInstance();
+      final preservedValues = <String, Object>{};
+
+      for (final key in _preservedDeviceScopedKeys) {
+        final value = prefs.get(key);
+        if (value != null) {
+          preservedValues[key] = value;
+        }
+      }
+
       await prefs.clear();
+
+      for (final entry in preservedValues.entries) {
+        final key = entry.key;
+        final value = entry.value;
+
+        if (value is bool) {
+          await prefs.setBool(key, value);
+        } else if (value is int) {
+          await prefs.setInt(key, value);
+        } else if (value is double) {
+          await prefs.setDouble(key, value);
+        } else if (value is String) {
+          await prefs.setString(key, value);
+        } else if (value is List<String>) {
+          await prefs.setStringList(key, value);
+        }
+      }
+
       await _secureStorage.deleteAll();
-      log('✓ All storage cleared');
+      log('Storage cleared (device walkthrough state preserved)');
     } catch (e) {
-      log('✗ Error clearing all storage: $e');
+      log('Error clearing all storage: $e');
       rethrow;
     }
   }
 }
+
