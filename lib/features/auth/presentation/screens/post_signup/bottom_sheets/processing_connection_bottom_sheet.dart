@@ -14,6 +14,7 @@ import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/features/auth/presentation/screens/post_signup/bottom_sheets/bank_connection_status_bottom_sheet.dart';
 import 'package:savvy_bee_mobile/features/dashboard/presentation/providers/dashboard_data_provider.dart';
 import 'package:savvy_bee_mobile/features/profile/data/services/encryption_service.dart';
+import 'package:savvy_bee_mobile/features/profile/presentation/screens/profile_screen.dart';
 
 import '../../../../../spend/domain/models/mono_institution.dart';
 
@@ -55,7 +56,6 @@ class ProcessingConnectionBottomSheet extends ConsumerStatefulWidget {
 
 class _ProcessingConnectionBottomSheetState
     extends ConsumerState<ProcessingConnectionBottomSheet> {
-  // Retry configuration
   static const int maxRetries = 4;
   int currentRetryAttempt = 0;
   String statusMessage = 'Syncing your information. Please wait...';
@@ -63,15 +63,15 @@ class _ProcessingConnectionBottomSheetState
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       try {
-        ConnectConfiguration configuration = await _connectionConfig();
+        final configuration = await _connectionConfig();
 
         if (mounted) {
           MonoConnect.launch(context, config: configuration, showLogs: true);
         }
       } catch (e) {
-        log('❌ Error in initState: $e');
+        log('Error in initState: $e');
         if (mounted) {
           _showErrorMessage('Configuration error: ${e.toString()}');
           await Future.delayed(const Duration(seconds: 2));
@@ -86,15 +86,12 @@ class _ProcessingConnectionBottomSheetState
   Future<ConnectConfiguration> _connectionConfig() async {
     final customer = widget.inputData;
 
-    // Decrypt BVN with error handling
     String? decryptedBvn;
     try {
       if (customer.identity != null && customer.identity!.isNotEmpty) {
         decryptedBvn = EncryptionService.decryptData(customer.identity!);
-        log('✅ BVN decrypted successfully');
       }
     } catch (e) {
-      log('❌ Failed to decrypt BVN: $e');
       throw Exception(
         'Failed to decrypt your identity information. Please try again.',
       );
@@ -103,15 +100,9 @@ class _ProcessingConnectionBottomSheetState
     final isExistingCustomer =
         customer.monoCustomerId != null && customer.monoCustomerId!.isNotEmpty;
 
-    log('🔧 Configuring Mono Connect:');
-    log('   - Customer: ${customer.name}');
-    log('   - Email: ${customer.email}');
-    log('   - Institution: ${widget.institution.institution}');
-
     return ConnectConfiguration(
       publicKey: Constants.monoPublic,
       onSuccess: (code) async {
-        log('✅ Mono Connect Success with code: $code');
         await _handleLinkAccountWithRetry(code);
       },
       customer: MonoCustomer(
@@ -133,10 +124,9 @@ class _ProcessingConnectionBottomSheetState
         authMethod: ConnectAuthMethod.mobileBanking,
       ),
       onEvent: (event) {
-        log('📱 Mono Event: $event');
+        log('Mono Event: $event');
       },
       onClose: () {
-        log('❌ Mono Connect closed by user');
         if (mounted) {
           context.pop();
         }
@@ -144,16 +134,12 @@ class _ProcessingConnectionBottomSheetState
     );
   }
 
-  /// Handle link account with automatic retry logic
   Future<void> _handleLinkAccountWithRetry(String code) async {
     currentRetryAttempt = 0;
 
     while (currentRetryAttempt < maxRetries) {
       currentRetryAttempt++;
 
-      log('🔄 Link attempt $currentRetryAttempt/$maxRetries');
-
-      // Update UI with retry status
       if (mounted && currentRetryAttempt > 1) {
         setState(() {
           statusMessage =
@@ -169,56 +155,92 @@ class _ProcessingConnectionBottomSheetState
         if (!mounted) return;
 
         if (success) {
-          log('✅ Account linked successfully on attempt $currentRetryAttempt');
           context.pop();
-
           BankConnectionStatusBottomSheet.show(
             context,
             bankName: widget.institution.displayName,
           );
-          return; // ✅ Success - exit retry loop
-        } else {
-          log(
-            '❌ Failed on attempt $currentRetryAttempt - success flag: $success',
-          );
-
-          // If this was the last attempt, show error
-          if (currentRetryAttempt >= maxRetries) {
-            _showFinalError(
-              'We couldn\'t link your ${widget.institution.displayName} account after $maxRetries attempts. Please try again later.',
-            );
-            return;
-          }
-
-          // Wait before retrying (exponential backoff)
-          await _waitBeforeRetry(currentRetryAttempt);
+          return;
         }
-      } catch (e) {
-        log('❌ Error on attempt $currentRetryAttempt: $e');
 
-        // If this was the last attempt, show error
+        if (currentRetryAttempt >= maxRetries) {
+          _showFinalError(
+            'We couldn\'t link your ${widget.institution.displayName} account after $maxRetries attempts. Please try again later.',
+          );
+          return;
+        }
+
+        await _waitBeforeRetry(currentRetryAttempt);
+      } catch (e) {
+        if (_isVerificationRequiredError(e.toString())) {
+          if (!mounted) return;
+          await _showVerificationRequiredDialog();
+          return;
+        }
+
         if (currentRetryAttempt >= maxRetries) {
           if (!mounted) return;
 
-          String errorMessage = _extractErrorMessage(e.toString());
+          final errorMessage = _extractErrorMessage(e.toString());
           _showFinalError('$errorMessage (Failed after $maxRetries attempts)');
           return;
         }
 
-        // Wait before retrying (exponential backoff)
         await _waitBeforeRetry(currentRetryAttempt);
       }
     }
   }
 
-  /// Wait before next retry with exponential backoff
-  /// Attempt 1 -> wait 1 second
-  /// Attempt 2 -> wait 2 seconds
-  /// Attempt 3 -> wait 3 seconds
-  /// Attempt 4 -> wait 4 seconds
+  bool _isVerificationRequiredError(String error) {
+    final normalized = error.toLowerCase();
+    return normalized.contains('bvn not verified') ||
+        normalized.contains('bvn not verified yet') ||
+        normalized.contains('nin not verified') ||
+        (normalized.contains('verify') && normalized.contains('bvn')) ||
+        (normalized.contains('verify') && normalized.contains('nin'));
+  }
+
+  Future<void> _showVerificationRequiredDialog() async {
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Text(
+          'Verification Required',
+          style: TextStyle(
+            fontFamily: 'GeneralSans',
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        content: const Text(
+          'Please verify your NIN and BVN in your profile before linking a bank account.',
+          style: TextStyle(fontFamily: 'GeneralSans'),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(dialogContext).pop();
+              if (!mounted) return;
+              context.pop();
+              context.goNamed(ProfileScreen.path);
+            },
+            child: const Text(
+              'Go to profile',
+              style: TextStyle(
+                fontFamily: 'GeneralSans',
+                fontWeight: FontWeight.w600,
+                color: AppColors.primary,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Future<void> _waitBeforeRetry(int attemptNumber) async {
-    final waitSeconds = attemptNumber; // Simple linear backoff
-    log('⏳ Waiting $waitSeconds seconds before retry...');
+    final waitSeconds = attemptNumber;
 
     if (mounted) {
       setState(() {
@@ -229,15 +251,11 @@ class _ProcessingConnectionBottomSheetState
     await Future.delayed(Duration(seconds: waitSeconds));
   }
 
-  /// Show final error after all retries exhausted
   void _showFinalError(String message) {
     if (!mounted) return;
 
-    log('🛑 All retry attempts exhausted. Showing final error.');
-
     _showErrorMessage(message);
 
-    // Close bottom sheet after user sees the error
     Future.delayed(const Duration(seconds: 3), () {
       if (mounted) {
         context.pop();
@@ -245,31 +263,31 @@ class _ProcessingConnectionBottomSheetState
     });
   }
 
-  /// Extract a user-friendly error message from exception
   String _extractErrorMessage(String error) {
-    if (error.contains('400')) {
+    final normalized = error.toLowerCase();
+
+    if (normalized.contains('400')) {
       return 'Issue on our end. Please try again in a moment.';
     }
-    if (error.contains('401') || error.contains('unauthorized')) {
+    if (normalized.contains('401') || normalized.contains('unauthorized')) {
       return 'Authentication failed. Please check your credentials.';
     }
-    if (error.contains('404')) {
+    if (normalized.contains('404')) {
       return 'Service not found. Please contact support.';
     }
-    if (error.contains('500') || error.contains('internal')) {
+    if (normalized.contains('500') || normalized.contains('internal')) {
       return 'Server error. We\'re working on it!';
     }
-    if (error.contains('network') || error.contains('connection')) {
+    if (normalized.contains('network') || normalized.contains('connection')) {
       return 'Network error. Check your connection and try again.';
     }
-    if (error.contains('timeout')) {
+    if (normalized.contains('timeout')) {
       return 'Request timed out. Please try again.';
     }
 
     return 'Unable to link your account. Please try again later.';
   }
 
-  /// Show error message to user via SnackBar
   void _showErrorMessage(String message) {
     if (!mounted) return;
 
@@ -286,7 +304,7 @@ class _ProcessingConnectionBottomSheetState
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                   fontFamily: 'GeneralSans',
-                    letterSpacing: 14 * 0.02,
+                  letterSpacing: 14 * 0.02,
                 ),
               ),
             ),
@@ -352,8 +370,12 @@ class _ProcessingConnectionBottomSheetState
           Text(
             'Connecting to ${widget.institution.institution}',
             textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold, fontFamily: 'GeneralSans',
-                    letterSpacing: 32 * 0.02,),
+            style: const TextStyle(
+              fontSize: 32,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'GeneralSans',
+              letterSpacing: 32 * 0.02,
+            ),
           ),
           const Gap(32),
           Stack(
@@ -364,12 +386,14 @@ class _ProcessingConnectionBottomSheetState
             ],
           ),
           const Gap(32),
-          // ✅ Dynamic status message showing retry progress
           Text(
             statusMessage,
             textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 14, fontFamily: 'GeneralSans',
-                    letterSpacing: 14 * 0.02,),
+            style: const TextStyle(
+              fontSize: 14,
+              fontFamily: 'GeneralSans',
+              letterSpacing: 14 * 0.02,
+            ),
           ),
           if (currentRetryAttempt > 0)
             Padding(
@@ -381,7 +405,7 @@ class _ProcessingConnectionBottomSheetState
                   color: Colors.grey.shade600,
                   fontWeight: FontWeight.w500,
                   fontFamily: 'GeneralSans',
-                    letterSpacing: 12 * 0.02,
+                  letterSpacing: 12 * 0.02,
                 ),
               ),
             ),
@@ -391,201 +415,3 @@ class _ProcessingConnectionBottomSheetState
     );
   }
 }
-
-// import 'dart:developer';
-
-// import 'package:flutter/material.dart';
-// import 'package:flutter_dotenv/flutter_dotenv.dart';
-// import 'package:flutter_riverpod/flutter_riverpod.dart';
-// import 'package:gap/gap.dart';
-// import 'package:go_router/go_router.dart';
-// import 'package:mono_connect/mono_connect.dart';
-// import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
-// import 'package:savvy_bee_mobile/core/utils/assets/app_icons.dart';
-// import 'package:savvy_bee_mobile/core/utils/assets/logos.dart';
-// import 'package:savvy_bee_mobile/core/utils/constants.dart';
-// import 'package:savvy_bee_mobile/core/utils/string_extensions.dart';
-// import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
-// import 'package:savvy_bee_mobile/features/auth/presentation/screens/post_signup/bottom_sheets/bank_connection_status_bottom_sheet.dart';
-// import 'package:savvy_bee_mobile/features/dashboard/presentation/providers/dashboard_data_provider.dart';
-// import 'package:savvy_bee_mobile/features/profile/data/services/encryption_service.dart';
-
-// import '../../../../../spend/domain/models/mono_institution.dart';
-
-// class ProcessingConnectionBottomSheet extends ConsumerStatefulWidget {
-//   final MonoInputData inputData;
-//   final MonoInstitution institution;
-
-//   const ProcessingConnectionBottomSheet({
-//     super.key,
-//     required this.inputData,
-//     required this.institution,
-//   });
-
-//   @override
-//   ConsumerState<ConsumerStatefulWidget> createState() =>
-//       _ProcessingConnectionBottomSheetState();
-
-//   static void show(
-//     BuildContext context, {
-//     required MonoInputData inputData,
-//     required MonoInstitution institution,
-//   }) {
-//     showModalBottomSheet(
-//       context: context,
-//       isScrollControlled: true,
-//       useSafeArea: true,
-//       isDismissible: false,
-//       enableDrag: false,
-//       shape: RoundedRectangleBorder(
-//         borderRadius: BorderRadiusGeometry.vertical(top: Radius.circular(16)),
-//       ),
-//       builder: (context) => ProcessingConnectionBottomSheet(
-//         inputData: inputData,
-//         institution: institution,
-//       ),
-//     );
-//   }
-// }
-
-// class _ProcessingConnectionBottomSheetState
-//     extends ConsumerState<ProcessingConnectionBottomSheet> {
-//   @override
-//   void initState() {
-//     super.initState();
-//     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-//       ConnectConfiguration configuration = await _connectionConfig();
-
-//       if (mounted) {
-//         MonoConnect.launch(context, config: configuration, showLogs: true);
-//       }
-//     });
-//   }
-
-//   Future<ConnectConfiguration> _connectionConfig() async {
-//     final customer = widget.inputData;
-
-//     // Decrypt BVN
-//     final decryptedBvn = EncryptionService.decryptData(customer.identity);
-
-//     final isExistingCustomer =
-//         customer.monoCustomerId != null && customer.monoCustomerId!.isNotEmpty;
-
-//     return ConnectConfiguration(
-//       publicKey: Constants.monoPublic,
-//       onSuccess: (code) async {
-//         log('Success with code: $code');
-
-//         await _handleLinkAccount(code);
-//       },
-//       customer: MonoCustomer(
-//         newCustomer: isExistingCustomer
-//             ? null
-//             : MonoNewCustomer(
-//                 name: customer.name,
-//                 email: customer.email,
-//                 identity: MonoCustomerIdentity(
-//                   type: 'bvn',
-//                   number: decryptedBvn ?? '2323233239',
-//                 ),
-//               ),
-
-//         // If the user has a mono id, they're an existing customer
-//         existingCustomer: isExistingCustomer
-//             ? MonoExistingCustomer(id: customer.monoCustomerId!)
-//             : null,
-//       ),
-//       selectedInstitution: ConnectInstitution(
-//         id: widget.institution.id,
-//         authMethod: ConnectAuthMethod.mobileBanking,
-//       ),
-//       onEvent: (event) {
-//         log('***************** Event: $event *****************');
-//       },
-//       onClose: () {
-//         context.pop();
-//       },
-//     );
-//   }
-
-//   Future<void> _handleLinkAccount(String code) async {
-//     try {
-//       final success = await ref
-//           .read(linkedAccountsProvider.notifier)
-//           .linkAccount(code);
-
-//       if (success && mounted) {
-//         context.pop();
-
-//         BankConnectionStatusBottomSheet.show(
-//           context,
-//           bankName: widget.institution.displayName,
-//         );
-//       }
-//     } catch (e) {
-//       log('Error linking account: $e');
-//     }
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Padding(
-//       padding: const EdgeInsets.all(16),
-//       child: Column(
-//         mainAxisSize: MainAxisSize.min,
-//         children: [
-//           Row(
-//             mainAxisAlignment: MainAxisAlignment.end,
-//             children: [
-//               IconButton(
-//                 onPressed: () => context.pop(),
-//                 style: Constants.collapsedButtonStyle,
-//                 icon: Icon(Icons.close),
-//               ),
-//             ],
-//           ),
-//           const Gap(32),
-//           Row(
-//             mainAxisSize: MainAxisSize.min,
-//             children: [
-//               CustomCard(
-//                 padding: const EdgeInsets.all(20),
-//                 borderRadius: 8,
-//                 child: Image.asset(Logos.logo, scale: 4),
-//               ),
-//               SizedBox(width: 37, child: const Divider()),
-//               CustomCard(
-//                 padding: const EdgeInsets.symmetric(
-//                   vertical: 24,
-//                   horizontal: 16,
-//                 ),
-//                 borderRadius: 8,
-//                 child: Text(
-//                   widget.institution.institution.truncate(20),
-//                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-//                 ),
-//               ),
-//             ],
-//           ),
-//           const Gap(32),
-//           Text(
-//             'Connecting to ${widget.institution.institution}',
-//             textAlign: TextAlign.center,
-//             style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-//           ),
-//           const Gap(32),
-//           Stack(
-//             alignment: Alignment.center,
-//             children: [
-//               SizedBox(width: 55, child: LinearProgressIndicator()),
-//               AppIcon(AppIcons.progressIcon, color: AppColors.primary),
-//             ],
-//           ),
-//           const Gap(32),
-//           Text('Syncing your information. Please wait...'),
-//           const Gap(32),
-//         ],
-//       ),
-//     );
-//   }
-// }

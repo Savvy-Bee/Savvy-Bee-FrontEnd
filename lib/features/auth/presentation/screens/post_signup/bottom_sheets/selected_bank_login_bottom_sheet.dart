@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_snackbar.dart';
+import 'package:savvy_bee_mobile/features/profile/presentation/screens/profile_screen.dart';
 
 import '../../../../../../core/theme/app_colors.dart';
 import '../../../../../../core/utils/assets/app_icons.dart';
@@ -46,6 +47,50 @@ class _SelectedBankLoginBottomSheetState
     extends ConsumerState<SelectedBankLoginBottomSheet> {
   bool isLoadingData = false;
 
+  bool _isBvnNotVerifiedError(String error) {
+    final normalized = error.toLowerCase();
+    return normalized.contains('bvn not verified') ||
+        normalized.contains('bvn not verified yet');
+  }
+
+  Future<void> _showBvnVerificationDialog() async {
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Text(
+          'Verification Required',
+          style: TextStyle(
+            fontFamily: 'GeneralSans',
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        content: const Text(
+          'Please verify your NIN and BVN in your profile before connecting your account.',
+          style: TextStyle(fontFamily: 'GeneralSans'),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(dialogContext).pop();
+              if (!mounted) return;
+              context.pop();
+              context.goNamed(ProfileScreen.path);
+            },
+            child: const Text(
+              'Go to profile',
+              style: TextStyle(
+                fontFamily: 'GeneralSans',
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   void _fetchUserData() async {
     // ProcessingConnectionBottomSheet.show(
     //   context,
@@ -75,6 +120,12 @@ class _SelectedBankLoginBottomSheetState
       }
     } catch (e) {
       if (mounted) {
+        if (_isBvnNotVerifiedError(e.toString())) {
+          await _showBvnVerificationDialog();
+          setState(() => isLoadingData = false);
+          return;
+        }
+
         CustomSnackbar.show(
           context,
           e.toString(),
@@ -91,11 +142,11 @@ class _SelectedBankLoginBottomSheetState
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: MediaQuery.heightOf(context) / 1.7,
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Padding(
+    return FractionallySizedBox(
+      heightFactor: 0.75,
+      child: Material(
+        color: Colors.transparent,
+        child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
           child: Column(
             mainAxisSize: MainAxisSize.min,

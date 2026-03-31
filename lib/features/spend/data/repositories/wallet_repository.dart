@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:savvy_bee_mobile/core/network/models/api_response_model.dart';
 import 'package:savvy_bee_mobile/features/spend/domain/models/wallet.dart';
 import '../../../../core/network/api_client.dart';
@@ -45,7 +47,14 @@ class WalletRepository {
 
       return ApiResponse.fromJson(
         response.data,
-        (data) => WalletDashboardData.fromJson(data),
+        (data) {
+          try {
+            return WalletDashboardData.fromJson(data);
+          } catch (e, stack) {
+            log('[WalletRepo] fetchDashboardData parse error: $e\nData: $data\n$stack');
+            rethrow;
+          }
+        },
       );
     } catch (e) {
       rethrow;
@@ -76,7 +85,22 @@ class WalletRepository {
 
       return ApiResponse.fromJson(
         response.data,
-        (data) => WalletTransactionsResponse.fromJson(response.data),
+        (data) {
+          final list = data as List<dynamic>;
+          return WalletTransactionsResponse(
+            transactions: list
+                .map((e) => WalletTransaction.fromJson(e as Map<String, dynamic>))
+                .toList(),
+            pagination: Pagination(
+              total: list.length,
+              page: page,
+              limit: limit,
+              totalPages: 1,
+              hasNextPage: false,
+              hasPrevPage: false,
+            ),
+          );
+        },
       );
     } catch (e) {
       rethrow;

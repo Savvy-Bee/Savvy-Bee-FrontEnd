@@ -186,6 +186,7 @@ flutter:
     - assets/images/icons/budget categories/Shopping.png
     - assets/images/referral/referral_txt.png
     - assets/images/referral/referral_bg.png
+    - assets/images/other/sad_flower.png
 
   fonts:
     - family: Excon

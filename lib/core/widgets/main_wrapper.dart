@@ -25,8 +25,8 @@ class MainWrapper extends ConsumerWidget {
     final index = ref.watch(bottomNavIndexProvider);
 
     return Scaffold(
-      appBar: index == 0 || index == 3 || index == 2 || index == 1 
-          ? null 
+      appBar: index == 0 || index == 3 || index == 2 || index == 1
+          ? null
           : buildAppBar(context),
       body: child,
       bottomNavigationBar: _buildBottomNavigationBar(
@@ -54,17 +54,20 @@ class MainWrapper extends ConsumerWidget {
             context.goNamed(DashboardScreen.path);
             break;
           case 2:
-            context.goNamed(ToolsScreen.path);
+            context.pushNamed(SpendScreen.path);
             break;
           case 3:
+            context.goNamed(ToolsScreen.path);
+            break;
+          case 4:
             context.goNamed(HiveScreen.path);
             break;
           // case 4:
           //   context.pushNamed(PremiumScreen.path);
           //   break;
-          case 4:
-            context.pushNamed(SpendScreen.path);
-            break;
+          // case 4:
+          //   context.pushNamed(SpendScreen.path);
+          //   break;
           default:
             break;
         }
@@ -102,7 +105,7 @@ class MainWrapper extends ConsumerWidget {
           ),
           label: 'Home',
         ),
-        
+
         // Dashboard
         BottomNavigationBarItem(
           activeIcon: Image.asset(
@@ -119,7 +122,13 @@ class MainWrapper extends ConsumerWidget {
           ),
           label: 'Dashboard',
         ),
-        
+
+        BottomNavigationBarItem(
+          activeIcon: AppIcon(AppIcons.spendIcon, size: 20),
+          icon: AppIcon(AppIcons.spendIcon, size: 20, color: AppColors.grey),
+          label: 'Wallet',
+        ),
+
         // Tools
         BottomNavigationBarItem(
           activeIcon: Image.asset(
@@ -136,7 +145,7 @@ class MainWrapper extends ConsumerWidget {
           ),
           label: 'Tools',
         ),
-        
+
         // Hive
         BottomNavigationBarItem(
           activeIcon: Image.asset(
@@ -316,11 +325,11 @@ class MainWrapper extends ConsumerWidget {
 //           icon: AppIcon(AppIcons.dashIcon, size: 20, color: AppColors.grey),
 //           label: 'Dashboard',
 //         ),
-//         // BottomNavigationBarItem(
-//         //   activeIcon: AppIcon(AppIcons.spendIcon, size: 20),
-//         //   icon: AppIcon(AppIcons.spendIcon, size: 20, color: AppColors.grey),
-//         //   label: 'Wallet',
-//         // ),
+        // BottomNavigationBarItem(
+        //   activeIcon: AppIcon(AppIcons.spendIcon, size: 20),
+        //   icon: AppIcon(AppIcons.spendIcon, size: 20, color: AppColors.grey),
+        //   label: 'Wallet',
+        // ),
 //         BottomNavigationBarItem(
 //           activeIcon: AppIcon(AppIcons.budgetIcon, size: 20),
 //           icon: AppIcon(AppIcons.budgetIcon, size: 20, color: AppColors.grey),

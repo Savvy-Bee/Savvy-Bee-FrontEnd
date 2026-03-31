@@ -8,9 +8,11 @@ import 'package:savvy_bee_mobile/core/utils/num_extensions.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_error_widget.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_loading_widget.dart';
+import 'package:savvy_bee_mobile/core/widgets/no_linked_account.dart';
 import 'package:savvy_bee_mobile/core/widgets/notifications/app_notification.dart';
 import 'package:savvy_bee_mobile/core/widgets/tax_filing/filing_routes.dart';
 import 'package:savvy_bee_mobile/features/chat/presentation/screens/chat_screen.dart';
+import 'package:savvy_bee_mobile/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/domain/models/taxation.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/providers/taxation_provider.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/calculate_tax_screen.dart';
@@ -32,6 +34,14 @@ class TaxationDashboardScreen extends ConsumerStatefulWidget {
 
 class _TaxationDashboardScreenState
     extends ConsumerState<TaxationDashboardScreen> {
+  bool _isNoLinkedAccountError(Object error) {
+    final errorMessage = error.toString().toLowerCase();
+
+    return errorMessage.contains('no linked account find') ||
+        errorMessage.contains('no linked account found') ||
+        errorMessage.contains('no linked account');
+  }
+
   // ── Remind-me-later snackbar ──────────────────────────────────────────────
 
   void _onRemindLater() {
@@ -96,13 +106,28 @@ class _TaxationDashboardScreenState
         },
         loading: () =>
             const CustomLoadingWidget(text: 'Loading tax dashboard...'),
-        error: (error, stack) => Center(
-          child: CustomErrorWidget.error(
-            subtitle: error.toString(),
-            onRetry: () =>
-                ref.read(taxationHomeNotifierProvider.notifier).refresh(),
-          ),
-        ),
+        error: (error, stack) {
+          if (_isNoLinkedAccountError(error)) {
+            return SafeArea(
+              child: EmptyStateWidget(
+                imagePath: 'assets/images/other/sad_flower.png',
+                title: 'Oops, no account linked',
+                subtitle:
+                    "We can't calculate your taxes without your transaction data. Connect your bank to continue.",
+                buttonText: 'Link bank account',
+                onButtonPressed: () => context.goNamed(DashboardScreen.path),
+              ),
+            );
+          }
+
+          return Center(
+            child: CustomErrorWidget.error(
+              subtitle: error.toString(),
+              onRetry: () =>
+                  ref.read(taxationHomeNotifierProvider.notifier).refresh(),
+            ),
+          );
+        },
       ),
     );
   }

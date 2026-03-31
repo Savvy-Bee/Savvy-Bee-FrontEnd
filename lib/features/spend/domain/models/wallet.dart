@@ -91,9 +91,9 @@ class WalletAccount {
 
   factory WalletAccount.fromJson(Map<String, dynamic> json) {
     return WalletAccount(
-      id: json['_id'] ?? '',
+      id: (json['id'] ?? json['_id'] ?? '').toString(),
       userId: json['UserID'] ?? '',
-      balance: (json['Balance'] ?? 0).toDouble(),
+      balance: double.tryParse(json['Balance']?.toString() ?? '0') ?? 0.0,
       createdAt: DateTime.parse(
         json['createdAt'] ?? DateTime.now().toIso8601String(),
       ),
@@ -233,10 +233,10 @@ class WalletTransaction {
 
   factory WalletTransaction.fromJson(Map<String, dynamic> json) {
     return WalletTransaction(
-      id: json['_id'] ?? '',
+      id: json['id'] ?? json['_id'] ?? '',
       userId: json['UserID'] ?? '',
-      amount: (json['Amount'] ?? 0).toDouble(),
-      charges: (json['Charges'] ?? 0).toDouble(),
+      amount: double.tryParse(json['Amount']?.toString() ?? '0') ?? 0.0,
+      charges: double.tryParse(json['Charges']?.toString() ?? '0') ?? 0.0,
       type: WalletTransactionType.fromString(json['Type'] ?? 'Credit'),
       status: WalletTransactionStatus.fromString(json['Status'] ?? 'Pending'),
       transactionFor: json['For'] ?? '',

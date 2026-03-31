@@ -173,7 +173,7 @@ class LinkedAccountsNotifier
     } catch (e) {
       // ❌ Other errors
       log('❌ Unexpected error in linkAccount: $e');
-      throw Exception('Issue on our end. Please try again.');
+      rethrow;
     }
   }
 
