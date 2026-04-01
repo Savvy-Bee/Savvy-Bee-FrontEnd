@@ -74,16 +74,16 @@ class TransactionListNotifier
   int get currentPage => _currentPage;
 
   Future<void> loadTransactions() async {
-    if (mounted) {
-      state = const AsyncValue.loading();
-      state = await AsyncValue.guard(() async {
-        final repository = _ref.read(walletRepositoryProvider);
-        return await repository.fetchTransactions(
-          page: _currentPage,
-          limit: _limit,
-        );
-      });
-    }
+    if (!mounted) return;
+    state = const AsyncValue.loading();
+    final result = await AsyncValue.guard(() async {
+      final repository = _ref.read(walletRepositoryProvider);
+      return await repository.fetchTransactions(
+        page: _currentPage,
+        limit: _limit,
+      );
+    });
+    if (mounted) state = result;
   }
 
   Future<void> nextPage() async {
@@ -119,3 +119,6 @@ final transactionListProvider =
       TransactionListNotifier,
       AsyncValue<ApiResponse<WalletTransactionsResponse>>
     >((ref) => TransactionListNotifier(ref));
+
+/// Controls whether the wallet balance is hidden (privacy mode)
+final balancePrivacyProvider = StateProvider<bool>((ref) => false);

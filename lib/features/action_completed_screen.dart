@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 
 import '../core/utils/assets/assets.dart';
 import '../core/widgets/custom_button.dart';
@@ -11,10 +12,15 @@ class ActionInfo {
   final String message;
   final String actionText;
 
+  /// When set, "Okay" navigates to this route via [context.go].
+  /// When null, "Okay" pops back to the previous screen.
+  final String? redirectPath;
+
   ActionInfo({
     required this.title,
     required this.message,
     required this.actionText,
+    this.redirectPath,
   });
 }
 
@@ -33,6 +39,8 @@ class ActionCompletedScreen extends ConsumerStatefulWidget {
 class _ActionCompletedScreenState extends ConsumerState<ActionCompletedScreen> {
   @override
   Widget build(BuildContext context) {
+    final info = widget.actionInfo;
+
     return Scaffold(
       appBar: AppBar(automaticallyImplyLeading: false),
       body: Column(
@@ -44,24 +52,31 @@ class _ActionCompletedScreenState extends ConsumerState<ActionCompletedScreen> {
               SvgPicture.asset(Assets.successSvg),
               const Gap(16),
               Text(
-                'Updated!',
+                info.title,
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const Gap(8),
               Text(
-                'Your next of kin information has been updated.',
+                info.message,
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 12),
+                style: const TextStyle(fontSize: 12),
               ),
             ],
           ),
           Padding(
             padding: const EdgeInsets.all(16),
             child: CustomElevatedButton(
-              text: 'Okay',
+              text: info.actionText,
               onPressed: () {
-                Navigator.of(context).popUntil((route) => route.isFirst);
+                if (info.redirectPath != null) {
+                  context.go(info.redirectPath!);
+                } else {
+                  context.pop();
+                }
               },
             ),
           ),

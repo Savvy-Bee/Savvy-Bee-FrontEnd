@@ -11,6 +11,7 @@ import 'package:savvy_bee_mobile/core/widgets/custom_snackbar.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/features/action_completed_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/providers/kyc_provider.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/spend_screen.dart';
 
 import '../../../../../core/widgets/custom_button.dart';
 import 'nin_verification_screen.dart';
@@ -258,6 +259,7 @@ class _LivePhotoScreenState extends ConsumerState<LivePhotoScreen>
               title: 'Wallet Created',
               message: 'Your wallet has been created successfully',
               actionText: 'Okay',
+              redirectPath: SpendScreen.path,
             ),
           );
         }

@@ -25,7 +25,7 @@ class MainWrapper extends ConsumerWidget {
     final index = ref.watch(bottomNavIndexProvider);
 
     return Scaffold(
-      appBar: index == 0 || index == 3 || index == 2 || index == 1
+      appBar: index == 0 || index == 1 || index == 2 || index == 3 || index == 4
           ? null
           : buildAppBar(context),
       body: child,
@@ -53,13 +53,13 @@ class MainWrapper extends ConsumerWidget {
           case 1:
             context.goNamed(DashboardScreen.path);
             break;
-          // case 2:
-          //   context.pushNamed(SpendScreen.path);
-          //   break;
           case 2:
-            context.goNamed(ToolsScreen.path);
+            context.pushNamed(SpendScreen.path);
             break;
           case 3:
+            context.goNamed(ToolsScreen.path);
+            break;
+          case 4:
             context.goNamed(HiveScreen.path);
             break;
           // case 4:
@@ -123,11 +123,11 @@ class MainWrapper extends ConsumerWidget {
           label: 'Dashboard',
         ),
 
-        // BottomNavigationBarItem(
-        //   activeIcon: AppIcon(AppIcons.spendIcon, size: 20),
-        //   icon: AppIcon(AppIcons.spendIcon, size: 20, color: AppColors.grey),
-        //   label: 'Wallet',
-        // ),
+        BottomNavigationBarItem(
+          activeIcon: AppIcon(AppIcons.spendIcon, size: 20),
+          icon: AppIcon(AppIcons.spendIcon, size: 20, color: AppColors.grey),
+          label: 'Wallet',
+        ),
 
         // Tools
         BottomNavigationBarItem(

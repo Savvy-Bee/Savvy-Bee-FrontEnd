@@ -397,7 +397,7 @@ final GoRouter appRouter = GoRouter(
       path: LivePhotoScreen.path,
       name: LivePhotoScreen.path,
       builder: (BuildContext context, GoRouterState state) {
-        return LivePhotoScreen(data: state.extra as Map<String, dynamic>);
+        return LivePhotoScreen(data: (state.extra as Map<String, dynamic>?) ?? {});
       },
     ),
 

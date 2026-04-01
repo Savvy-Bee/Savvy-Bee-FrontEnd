@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -21,6 +22,8 @@ import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/crea
 import '../../../../core/utils/assets/illustrations.dart';
 import '../../../chat/presentation/screens/chat_screen.dart';
 import '../../../dashboard/presentation/widgets/info_card.dart';
+import '../../../home/presentation/providers/home_data_provider.dart';
+import '../../../profile/presentation/screens/profile_screen.dart';
 
 class SpendScreen extends ConsumerStatefulWidget {
   static const String path = '/spend';
@@ -32,11 +35,95 @@ class SpendScreen extends ConsumerStatefulWidget {
 }
 
 class _SpendScreenState extends ConsumerState<SpendScreen> {
+  AppBar _buildAppBar(BuildContext context) {
+    final firstName =
+        ref.watch(homeDataProvider).valueOrNull?.data?.firstName ?? '';
+
+    return AppBar(
+      elevation: 0,
+      backgroundColor: Colors.white,
+      automaticallyImplyLeading: false,
+      centerTitle: false,
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          InkWell(
+            onTap: () => context.pushNamed(ChatScreen.path),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 32,
+                  height: 32,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: AppColors.primary),
+                  ),
+                  child: Center(
+                    child: Image.asset(
+                      'assets/images/topbar/nav-left-icon.png',
+                      width: 32,
+                      height: 32,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 6),
+                const Text(
+                  'Chat with Nahl',
+                  style: TextStyle(
+                    fontFamily: 'GeneralSans',
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Image.asset(
+            'assets/images/topbar/nav-center-icon.png',
+            width: 30,
+            height: 32,
+            fit: BoxFit.contain,
+          ),
+          GestureDetector(
+            onTap: () => context.pushNamed(ProfileScreen.path),
+            child: Container(
+              width: 32,
+              height: 32,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+                border: Border.all(color: Colors.black, width: 1),
+              ),
+              child: Center(
+                child: Text(
+                  firstName.isNotEmpty
+                      ? firstName
+                            .substring(0, firstName.length > 1 ? 2 : 1)
+                            .toUpperCase()
+                      : 'Me',
+                  style: const TextStyle(
+                    fontFamily: 'GeneralSans',
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final dashboardAsync = ref.watch(spendDashboardDataProvider);
 
     return Scaffold(
+      appBar: _buildAppBar(context),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
         child: dashboardAsync.when(
@@ -258,53 +345,95 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
                         horizontal: 16,
                       ),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(
-                                transaction.type.name == 'credit'
-                                    ? Icons.arrow_upward
-                                    : Icons.arrow_downward,
-                                color: transaction.type.name == 'credit'
-                                    ? AppColors.success
-                                    : AppColors.error,
-                              ),
-                              const Gap(16.0),
-                              Column(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    transaction.narration,
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                  Text(
-                                    '${transaction.createdAt.formatRelative()} ${transaction.createdAt.formatTime()}',
-                                    style: TextStyle(
-                                      fontSize: 10,
-                                      color: AppColors.textLight,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                          // Direction icon
+                          Container(
+                            width: 36,
+                            height: 36,
+                            decoration: BoxDecoration(
+                              color: transaction.isCredit
+                                  ? AppColors.success.withOpacity(0.1)
+                                  : AppColors.error.withOpacity(0.1),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              transaction.isCredit
+                                  ? Icons.arrow_downward
+                                  : Icons.arrow_upward,
+                              size: 16,
+                              color: transaction.isCredit
+                                  ? AppColors.success
+                                  : AppColors.error,
+                            ),
                           ),
+                          const Gap(12.0),
+                          // Narration + timestamp
+                          Expanded(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  transaction.narration.isNotEmpty
+                                      ? transaction.narration
+                                      : transaction.transactionFor,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                const Gap(2),
+                                Row(
+                                  children: [
+                                    Text(
+                                      '${transaction.createdAt.formatRelative()} · ${transaction.createdAt.formatTime()}',
+                                      style: TextStyle(
+                                        fontSize: 10,
+                                        color: AppColors.textLight,
+                                      ),
+                                    ),
+                                    if (!transaction.isSuccess) ...[
+                                      const Gap(6),
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 6,
+                                          vertical: 1,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: transaction.isPending
+                                              ? Colors.orange.withOpacity(0.15)
+                                              : AppColors.error.withOpacity(0.15),
+                                          borderRadius: BorderRadius.circular(4),
+                                        ),
+                                        child: Text(
+                                          transaction.status.value,
+                                          style: TextStyle(
+                                            fontSize: 9,
+                                            fontWeight: FontWeight.w600,
+                                            color: transaction.isPending
+                                                ? Colors.orange
+                                                : AppColors.error,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          const Gap(8),
+                          // Amount
                           Text(
-                            transaction.type.name == 'credit'
-                                ? transaction.amount.formatCurrency()
-                                : transaction.amount.formatCurrency(),
+                            '${transaction.isCredit ? '+' : '-'}${transaction.amount.formatCurrency()}',
                             style: TextStyle(
                               fontSize: 14,
-                              fontWeight: FontWeight.w500,
-
-                              color: transaction.type.name == 'credit'
+                              fontWeight: FontWeight.w600,
+                              color: transaction.isCredit
                                   ? AppColors.success
-                                  : null,
+                                  : AppColors.error,
                             ),
                           ),
                         ],
@@ -346,7 +475,16 @@ class WalletBalanceCard extends ConsumerWidget {
                   const Gap(8),
                   InkWell(
                     onTap: () {
-                      // Copy account number to clipboard
+                      final acctNo = primaryAccount.ngnAccount?.accountNumber ?? '';
+                      if (acctNo.isNotEmpty) {
+                        Clipboard.setData(ClipboardData(text: acctNo));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Account number copied'),
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
+                      }
                     },
                     child: Icon(
                       Icons.copy,
@@ -367,9 +505,14 @@ class WalletBalanceCard extends ConsumerWidget {
           ),
           Row(
             children: [
-              Text(
-                primaryAccount.balance.formatCurrency(),
-                style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
+              Consumer(
+                builder: (context, ref, _) {
+                  final isPrivate = ref.watch(balancePrivacyProvider);
+                  return Text(
+                    isPrivate ? '₦ ••••••' : primaryAccount.balance.formatCurrency(),
+                    style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
+                  );
+                },
               ),
             ],
           ),
@@ -446,12 +589,17 @@ class _OptionsBottomSheet extends StatelessWidget {
                   context.pop();
                 },
               ),
-              _buildOptionsTile(
-                title: 'Turn on privacy',
-                icon: Icons.visibility_off,
-                onTap: () {
-                  // TODO: Implement privacy toggle
-                  context.pop();
+              Consumer(
+                builder: (context, ref, _) {
+                  final isPrivate = ref.watch(balancePrivacyProvider);
+                  return _buildOptionsTile(
+                    title: isPrivate ? 'Turn off privacy' : 'Turn on privacy',
+                    icon: isPrivate ? Icons.visibility : Icons.visibility_off,
+                    onTap: () {
+                      ref.read(balancePrivacyProvider.notifier).state = !isPrivate;
+                      context.pop();
+                    },
+                  );
                 },
               ),
               _buildOptionsTile(
