@@ -63,6 +63,7 @@ import 'package:savvy_bee_mobile/features/spend/presentation/screens/spend_scree
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/transactions/account_statement_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/transactions/transaction_history_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/transfer/send_money_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/transfer/transfer_screen_one.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/add_money_screen.dart';
 // import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/bvn_verification_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/create_wallet_screen.dart';
@@ -523,6 +524,13 @@ final GoRouter appRouter = GoRouter(
     ),
 
     // Transfer Routes
+    GoRoute(
+      path: TransferScreenOne.path,
+      name: TransferScreenOne.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return const TransferScreenOne();
+      },
+    ),
     GoRoute(
       path: TransferScreen.path,
       name: TransferScreen.path,
