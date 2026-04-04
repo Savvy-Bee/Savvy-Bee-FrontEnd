@@ -109,7 +109,6 @@ class LiabilityFeeResult {
 // ── Repository ────────────────────────────────────────────────────────────────
 
 class FilingPaymentRepository {
-  static const _base = ApiEndpoints.baseUrl;
 
   final String bearerToken;
   const FilingPaymentRepository({required this.bearerToken});
@@ -154,7 +153,7 @@ class FilingPaymentRepository {
     print('Request Body: $body');
 
     final response = await http.post(
-      Uri.parse('$_base/tools/taxation/filling/payment/init'),
+      Uri.parse('${ApiEndpoints.baseUrl}${ApiEndpoints.filingPaymentInit}'),
       headers: _headers,
       body: jsonEncode(body),
     );
@@ -178,7 +177,7 @@ class FilingPaymentRepository {
     print('ID: $Id');
 
     final response = await http.post(
-      Uri.parse('$_base/tools/taxation/filling/payment/fillingfee/$Id'),
+      Uri.parse('${ApiEndpoints.baseUrl}${ApiEndpoints.filingFillingFee(Id)}'),
       headers: _headers,
       body: jsonEncode(body),
     );
@@ -204,7 +203,7 @@ class FilingPaymentRepository {
     print('ID: $Id');
 
     final response = await http.post(
-      Uri.parse('$_base/tools/taxation/filling/payment/liabilityfee/$Id'),
+      Uri.parse('${ApiEndpoints.baseUrl}${ApiEndpoints.filingLiabilityFee(Id)}'),
       headers: _headers,
       body: jsonEncode(body),
     );
@@ -402,7 +401,7 @@ class FilingPaymentRepository {
 //     if (cacNumber.isNotEmpty) body['CACNumber'] = cacNumber;
 
 //     final response = await http.post(
-//       Uri.parse('$_base/tools/taxation/filling/payment/init'),
+//       Uri.parse('${ApiEndpoints.baseUrl}${ApiEndpoints.filingPaymentInit}'),
 //       headers: _headers,
 //       body: jsonEncode(body),
 //     );
@@ -438,7 +437,7 @@ class FilingPaymentRepository {
 //     print('ID: $Id');
 
 //     final response = await http.post(
-//       Uri.parse('$_base/tools/taxation/filling/payment/fillingfee/$Id'),
+//       Uri.parse('${ApiEndpoints.baseUrl}${ApiEndpoints.filingFillingFee(Id)}'),
 //       headers: _headers,
 //       body: jsonEncode(body),
 //     );
@@ -475,7 +474,7 @@ class FilingPaymentRepository {
 //     print('ID: $Id');
 
 //     final response = await http.post(
-//       Uri.parse('$_base/tools/taxation/filling/payment/liabilityfee/$Id'),
+//       Uri.parse('${ApiEndpoints.baseUrl}${ApiEndpoints.filingLiabilityFee(Id)}'),
 //       headers: _headers,
 //       body: jsonEncode(body),
 //     );

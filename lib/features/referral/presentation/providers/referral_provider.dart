@@ -7,10 +7,9 @@ import 'package:savvy_bee_mobile/features/referral/domain/models/referral_model.
 
 final referralProvider = FutureProvider<ReferralData>((ref) async {
   final token = ref.watch(authRepositoryProvider).getAuthToken();
-  final url = ApiEndpoints.baseUrl;
   final response = await http.get(
     Uri.parse(
-      '$url/auth/profile/referral/dashboard',
+      '${ApiEndpoints.baseUrl}${ApiEndpoints.referralDashboard}',
     ),
     headers: {
       'Authorization': 'Bearer $token',

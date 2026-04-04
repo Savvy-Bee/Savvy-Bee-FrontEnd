@@ -59,15 +59,13 @@ class TinValidationResult {
 // ── Repository ────────────────────────────────────────────────────────────────
 
 class TinValidationRepository {
-  static const _base = ApiEndpoints.baseUrl;
-
   final String bearerToken;
   const TinValidationRepository({required this.bearerToken});
 
   /// GET /tools/taxation/filling/fetchdata/tin/:id
   Future<TinValidationResult> validateTin(String tin) async {
     final uri =
-        Uri.parse('$_base/tools/taxation/filling/fetchdata/tin/$tin');
+        Uri.parse('${ApiEndpoints.baseUrl}${ApiEndpoints.filingTin(tin)}');
 
     final response = await http.get(
       uri,

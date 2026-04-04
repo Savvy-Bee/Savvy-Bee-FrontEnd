@@ -6,8 +6,6 @@ import 'package:savvy_bee_mobile/core/network/api_endpoints.dart';
 import 'package:savvy_bee_mobile/features/tools/domain/models/tax_calculator_result.dart';
 
 class TaxCalculatorRepository {
-  static const _baseUrl = ApiEndpoints.baseUrl;
-
   final String bearerToken;
 
   const TaxCalculatorRepository({required this.bearerToken});
@@ -38,7 +36,7 @@ class TaxCalculatorRepository {
     print('{earnings: $earnings, rent: $rent, '
         'otherExemptions: $otherExemptions}');
 
-    final uri = Uri.parse('$_baseUrl/tools/taxation/calculator').replace(
+    final uri = Uri.parse('${ApiEndpoints.baseUrl}${ApiEndpoints.taxationCalculator}').replace(
       queryParameters: {
         'earnings': earnings.toStringAsFixed(0),
         'rent': rent.toStringAsFixed(0),

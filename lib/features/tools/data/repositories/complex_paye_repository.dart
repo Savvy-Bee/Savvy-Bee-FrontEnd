@@ -7,7 +7,6 @@ import 'package:savvy_bee_mobile/core/network/api_endpoints.dart';
 import 'package:savvy_bee_mobile/features/tools/domain/models/complex_paye_models.dart';
 
 class ComplexPayeRepository {
-  static const _base = ApiEndpoints.baseUrl;
 
   final String bearerToken;
   const ComplexPayeRepository({required this.bearerToken});
@@ -53,7 +52,7 @@ class ComplexPayeRepository {
     print('ComplexPAYE submit body: $body');
 
     final response = await http.post(
-      Uri.parse('$_base/tools/taxation/filling/payment/tempfilling/complexpaye'),
+      Uri.parse('${ApiEndpoints.baseUrl}${ApiEndpoints.complexPayeTempFiling}'),
       headers: _jsonHeaders,
       body: jsonEncode(body),
     );
@@ -72,7 +71,7 @@ class ComplexPayeRepository {
   /// PUT /tools/taxation/filling/payment/init/complexpayee/:id
   Future<ComplexPayeInitPaymentResult> initPayment(String id) async {
     final response = await http.put(
-      Uri.parse('$_base/tools/taxation/filling/payment/init/complexpayee/$id'),
+      Uri.parse('${ApiEndpoints.baseUrl}${ApiEndpoints.complexPayePaymentInit(id)}'),
       headers: _jsonHeaders,
       body: jsonEncode(<String, dynamic>{}),
     );
@@ -92,7 +91,7 @@ class ComplexPayeRepository {
   /// GET /tools/taxation/filling/fetchdata/temp/complexpaye/history
   Future<List<ComplexPayeHistoryItem>> fetchHistory() async {
     final response = await http.get(
-      Uri.parse('$_base/tools/taxation/filling/fetchdata/temp/complexpaye/history'),
+      Uri.parse('${ApiEndpoints.baseUrl}${ApiEndpoints.complexPayeTempHistory}'),
       headers: _authHeader,
     );
 
@@ -110,7 +109,7 @@ class ComplexPayeRepository {
   /// GET /tools/taxation/filling/fetchdata/temp/complexpaye/:id
   Future<ComplexPayeDetailRecord> fetchDetail(String id) async {
     final response = await http.get(
-      Uri.parse('$_base/tools/taxation/filling/fetchdata/temp/complexpaye/$id'),
+      Uri.parse('${ApiEndpoints.baseUrl}${ApiEndpoints.complexPayeTempById(id)}'),
       headers: _authHeader,
     );
 
@@ -132,7 +131,7 @@ class ComplexPayeRepository {
   }) async {
     final req = http.MultipartRequest(
       'PUT',
-      Uri.parse('$_base/tools/taxation/filling/operation/tempfilling/review-response/$id'),
+      Uri.parse('${ApiEndpoints.baseUrl}${ApiEndpoints.complexPayeReviewResponse(id)}'),
     )..headers['Authorization'] = 'Bearer $bearerToken';
 
     req.fields['Comment'] = comment;

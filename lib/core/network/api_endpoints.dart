@@ -116,4 +116,39 @@ class ApiEndpoints {
   static const String taxationStrategies = '/tools/taxation/strategies';
 
   static const String getMyPersona = '/auth/update/getmypersona';
+
+  /// Referral Endpoints
+  static const String referralDashboard = '/auth/profile/referral/dashboard';
+
+  /// Wallet Dashboard
+  static const String walletDashboard = '/wallet/details/dashboard';
+
+  /// Filing Endpoints
+  static const String filingHome = '/tools/taxation/filling/fetchdata/home';
+  static String filingTin(String tin) =>
+      '/tools/taxation/filling/fetchdata/tin/$tin';
+  static const String filingPaymentInit =
+      '/tools/taxation/filling/payment/init';
+  static String filingFillingFee(String id) =>
+      '/tools/taxation/filling/payment/fillingfee/$id';
+  static String filingLiabilityFee(String id) =>
+      '/tools/taxation/filling/payment/liabilityfee/$id';
+  static const String filingHistory =
+      '/tools/taxation/filling/fetchdata/history';
+  static String filingHistoryById(String id) =>
+      '/tools/taxation/filling/fetchdata/history/$id';
+  static String filingReviewResponse(String filingId) =>
+      '/tools/taxation/filling/operation/review-response/$filingId';
+
+  /// Complex PAYE Endpoints
+  static const String complexPayeTempFiling =
+      '/tools/taxation/filling/payment/tempfilling/complexpaye';
+  static String complexPayePaymentInit(String id) =>
+      '/tools/taxation/filling/payment/init/complexpayee/$id';
+  static const String complexPayeTempHistory =
+      '/tools/taxation/filling/fetchdata/temp/complexpaye/history';
+  static String complexPayeTempById(String id) =>
+      '/tools/taxation/filling/fetchdata/temp/complexpaye/$id';
+  static String complexPayeReviewResponse(String id) =>
+      '/tools/taxation/filling/operation/tempfilling/review-response/$id';
 }

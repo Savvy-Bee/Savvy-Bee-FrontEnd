@@ -238,7 +238,6 @@ class FilingDetailRecord {
 // ─────────────────────────────────────────────────────────────────────────────
 
 class FilingHistoryRepository {
-  static const _base = ApiEndpoints.baseUrl;
 
   final String bearerToken;
   const FilingHistoryRepository({required this.bearerToken});
@@ -251,7 +250,7 @@ class FilingHistoryRepository {
 
   Future<List<FilingHistoryItem>> fetchHistory() async {
     final response = await http.get(
-      Uri.parse('$_base/tools/taxation/filling/fetchdata/history'),
+      Uri.parse('${ApiEndpoints.baseUrl}${ApiEndpoints.filingHistory}'),
       headers: _authHeader,
     );
     _checkStatus(response, 'history');
@@ -267,7 +266,7 @@ class FilingHistoryRepository {
 
   Future<FilingDetailRecord> fetchDetail(String id) async {
     final response = await http.get(
-      Uri.parse('$_base/tools/taxation/filling/fetchdata/history/$id'),
+      Uri.parse('${ApiEndpoints.baseUrl}${ApiEndpoints.filingHistoryById(id)}'),
       headers: _authHeader,
     );
     _checkStatus(response, 'history/$id');
@@ -288,7 +287,7 @@ class FilingHistoryRepository {
     final req = http.MultipartRequest(
       'PUT',
       Uri.parse(
-        '$_base/tools/taxation/filling/operation/review-response/$filingId',
+        '${ApiEndpoints.baseUrl}${ApiEndpoints.filingReviewResponse(filingId)}',
       ),
     )..headers['Authorization'] = 'Bearer $bearerToken';
 

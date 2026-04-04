@@ -131,15 +131,13 @@ class WalletDashboardData {
 // ═════════════════════════════════════════════════════════════════════════════
 
 class WalletDashboardRepository {
-  static const _base = ApiEndpoints.baseUrl;
-
   final String bearerToken;
   const WalletDashboardRepository({required this.bearerToken});
 
   /// GET /wallet/details/dashboard
   Future<WalletDashboardData> fetchDashboard() async {
     final response = await http.get(
-      Uri.parse('$_base/wallet/details/dashboard'),
+      Uri.parse('${ApiEndpoints.baseUrl}${ApiEndpoints.walletDashboard}'),
       headers: {
         'Authorization': 'Bearer $bearerToken',
         'Content-Type': 'application/json',

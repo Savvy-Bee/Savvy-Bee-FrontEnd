@@ -7,14 +7,12 @@ import 'package:savvy_bee_mobile/core/network/api_endpoints.dart';
 import 'package:savvy_bee_mobile/features/tools/domain/models/filing_home_data.dart';
 
 class FilingHomeRepository {
-  static const _baseUrl = ApiEndpoints.baseUrl;
-
   final String bearerToken;
   const FilingHomeRepository({required this.bearerToken});
 
   Future<FilingHomeData> fetchHomeData() async {
     final uri =
-        Uri.parse('$_baseUrl/tools/taxation/filling/fetchdata/home');
+        Uri.parse('${ApiEndpoints.baseUrl}${ApiEndpoints.filingHome}');
 
     final response = await http.get(
       uri,
