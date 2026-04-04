@@ -61,10 +61,10 @@ class _Step1Body extends StatelessWidget {
         label: 'Amount classified as taxable',
         value: data.taxableIncome.formatCurrency(decimalDigits: 0),
       ),
-      _SummaryItem(
-        label: 'Amount saved in your Tax Pot',
-        value: data.taxPot.formatCurrency(decimalDigits: 0),
-      ),
+      // _SummaryItem(
+      //   label: 'Amount saved in your Tax Pot',
+      //   value: data.taxPot.formatCurrency(decimalDigits: 0),
+      // ),
       _SummaryItem(
         label: 'Estimated tax liability',
         value: data.estimatedTax.formatCurrency(decimalDigits: 0),
@@ -215,28 +215,28 @@ class _Step1Body extends StatelessWidget {
                       ),
                     ),
                     const Gap(6),
-                    Row(
-                      spacing: 6,
-                      children: [
-                        const Icon(
-                          Icons.check_circle,
-                          color: Color(0xFFF5C842),
-                          size: 14,
-                        ),
-                        Expanded(
-                          child: Text(
-                            data.taxPotCoversLiability
-                                ? 'Your Tax Pot of ${data.taxPot.formatCurrency(decimalDigits: 0)} fully covers this'
-                                : 'Your Tax Pot: ${data.taxPot.formatCurrency(decimalDigits: 0)}',
-                            style: const TextStyle(
-                              fontFamily: 'GeneralSans',
-                              fontSize: 12,
-                              color: Colors.white70,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                    // Row(
+                    //   spacing: 6,
+                    //   children: [
+                    //     const Icon(
+                    //       Icons.check_circle,
+                    //       color: Color(0xFFF5C842),
+                    //       size: 14,
+                    //     ),
+                    //     Expanded(
+                    //       child: Text(
+                    //         data.taxPotCoversLiability
+                    //             ? 'Your Tax Pot of ${data.taxPot.formatCurrency(decimalDigits: 0)} fully covers this'
+                    //             : 'Your Tax Pot: ${data.taxPot.formatCurrency(decimalDigits: 0)}',
+                    //         style: const TextStyle(
+                    //           fontFamily: 'GeneralSans',
+                    //           fontSize: 12,
+                    //           color: Colors.white70,
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
                   ],
                 ),
               ),

@@ -14,11 +14,12 @@ import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/num_extensions.dart';
 import 'package:savvy_bee_mobile/core/widgets/notifications/app_notification.dart';
 import 'package:savvy_bee_mobile/core/widgets/tax_filing/filing_routes.dart';
-import 'package:savvy_bee_mobile/features/tools/data/repositories/wallet_dashboard_repository.dart';
+// import 'package:savvy_bee_mobile/features/tools/data/repositories/wallet_dashboard_repository.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/providers/complex_paye_provider.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/providers/filing_home_provider.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/tax_filing/kora_payment_webview.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/widgets/tax_filing/bottom_action_button.dart';
-import 'package:savvy_bee_mobile/features/tools/presentation/widgets/tax_filing/pin_bottom_sheet.dart';
+// import 'package:savvy_bee_mobile/features/tools/presentation/widgets/tax_filing/pin_bottom_sheet.dart';
 
 const _planFees = <String, double>{
   'Basic PAYE': 7500,
@@ -38,7 +39,6 @@ class FilingStep4Screen extends ConsumerStatefulWidget {
 }
 
 class _FilingStep4ScreenState extends ConsumerState<FilingStep4Screen> {
-  int _selectedPaymentIndex = 0;
   bool _isPaying = false;
 
   static const _yellow = Color(0xFFF5C842);
@@ -51,73 +51,76 @@ class _FilingStep4ScreenState extends ConsumerState<FilingStep4Screen> {
       final filingData = ref.read(filingHomeProvider).value;
       final process = filingData?.fillingProcess;
       if (process != null) {
-        // Tax due and plan — seed if not already set by the normal flow
         if (ref.read(filingTaxDueProvider) == 0.0) {
           ref.read(filingTaxDueProvider.notifier).state =
               process.financeDetails.taxAmount;
           ref.read(selectedFilingPlanProvider.notifier).state = process.plan;
         }
-        // Filing ID — always seed from the in-progress process if empty
         if (ref.read(filingIDProvider).isEmpty) {
           ref.read(filingIDProvider.notifier).state = process.id;
         }
-        // Filing fee — use PayePrice from FinanceDetails when available
         if (ref.read(complexPayeFilingFeeProvider) == 0.0 &&
             process.financeDetails.payePrice > 0) {
           ref.read(complexPayeFilingFeeProvider.notifier).state =
               process.financeDetails.payePrice;
         }
       }
-      // Wallet balance — seed from wallet dashboard if not yet set by Step 3.
-      // Do NOT call refresh() — just read (auto-starts) and listen for data.
-      if (ref.read(filingWalletBalanceProvider) == 0.0) {
-        final current = ref.read(walletDashboardProvider);
-        if (current.value != null) {
-          ref.read(filingWalletBalanceProvider.notifier).state =
-              current.value!.account.balanceNaira;
-        } else {
-          ref.listenManual(walletDashboardProvider, (_, next) {
-            if (next.value != null &&
-                mounted &&
-                ref.read(filingWalletBalanceProvider) == 0.0) {
-              ref.read(filingWalletBalanceProvider.notifier).state =
-                  next.value!.account.balanceNaira;
-            }
-          });
-        }
-      }
     });
   }
 
-  Future<void> _onPayFee(
-      double filingFee, bool isCustomQuote, String filingId) async {
+  // ── Savvy Bee Wallet payment (commented out — use KoraPay instead) ────────────
+  // Future<void> _onPayFee(
+  //     double filingFee, bool isCustomQuote, String filingId) async {
+  //   if (_isPaying) return;
+  //   final pin = await PinBottomSheet.show(
+  //     context,
+  //     title: 'Authorise filing fee payment',
+  //     subtitle: isCustomQuote
+  //         ? 'Enter your 4-digit PIN to request a custom quote.'
+  //         : 'Enter your 4-digit PIN to pay the ₦${filingFee.formatCurrency(decimalDigits: 0).replaceAll('₦', '')} filing fee.',
+  //     confirmLabel: isCustomQuote ? 'Request quote' : 'Pay now',
+  //   );
+  //   if (pin == null || !mounted) return;
+  //   setState(() => _isPaying = true);
+  //   try {
+  //     final repo = ref.read(filingPaymentRepositoryProvider);
+  //     await repo.payFillingFee(pin: pin, Id: filingId);
+  //     if (mounted) {
+  //       setState(() => _isPaying = false);
+  //       AppNotification.show(context,
+  //           message: 'Filing fee received! Your partner is now assigned.',
+  //           icon: Icons.celebration_outlined, iconColor: _yellow);
+  //       await Future.delayed(const Duration(milliseconds: 800));
+  //       if (mounted) context.pushNamed(FilingRoutes.step5);
+  //     }
+  //   } catch (e) {
+  //     setState(() => _isPaying = false);
+  //     if (mounted) AppNotification.show(context,
+  //         message: e.toString().replaceFirst('Exception: ', ''),
+  //         icon: Icons.error_outline, iconColor: Colors.redAccent);
+  //   }
+  // }
+
+  Future<void> _onPayWithKora(String filingId) async {
     if (_isPaying) return;
-
-    print('Filing IDL: $filingId');
-
-    final pin = await PinBottomSheet.show(
-      context,
-      title: 'Authorise filing fee payment',
-      subtitle: isCustomQuote
-          ? 'Enter your 4-digit PIN to request a custom quote.'
-          : 'Enter your 4-digit PIN to pay the ₦${filingFee.formatCurrency(decimalDigits: 0).replaceAll('₦', '')} filing fee.',
-      confirmLabel: isCustomQuote ? 'Request quote' : 'Pay now',
-    );
-
-    if (pin == null || !mounted) return;
-
     setState(() => _isPaying = true);
     try {
       final repo = ref.read(filingPaymentRepositoryProvider);
-      await repo.payFillingFee(pin: pin, Id: filingId);
+      final result = await repo.getKoraFillingFeeUrl(filingId);
+      if (!mounted) return;
+      setState(() => _isPaying = false);
 
-      if (mounted) {
-        setState(() => _isPaying = false);
+      final paid = await KoraPaymentWebView.show(
+        context,
+        checkoutUrl: result.checkoutUrl,
+        title: 'Pay Filing Fee',
+      );
+
+      if (paid == true && mounted) {
         AppNotification.show(
           context,
-          message:
-              'Filing fee received! 🎉 Your partner is now assigned to your return.',
-          icon: Icons.celebration_outlined,
+          message: 'Filing fee paid! Your partner is now assigned to your return.',
+          icon: Icons.check_circle_outline,
           iconColor: _yellow,
         );
         await Future.delayed(const Duration(milliseconds: 800));
@@ -142,19 +145,9 @@ class _FilingStep4ScreenState extends ConsumerState<FilingStep4Screen> {
     final taxDue = ref.watch(filingTaxDueProvider);
     final filingId = ref.watch(filingIDProvider);
 
-    print('IDDD: $filingId'); 
-
-    // Wallet balance: prefer the value written by Step 3 / complex PAYE init.
-    // On resume (Step 3 skipped) fall back to the wallet dashboard live value.
-    final storedWallet = ref.watch(filingWalletBalanceProvider);
-    final walletDashAsync = ref.watch(walletDashboardProvider);
-    final walletBalance = storedWallet > 0
-        ? storedWallet
-        : (walletDashAsync.value?.account.balanceNaira ?? 0.0);
+    print('IDDD: $filingId');
 
     // complexPayeFilingFeeProvider is > 0 when coming from the Complex PAYE flow.
-    // In that case use the actual PayePrice returned by init; otherwise fall
-    // back to the fixed plan-fee table (regular flow).
     final complexPayeFee = ref.watch(complexPayeFilingFeeProvider);
     final isComplexPaye =
         (selectedPlan == 'Pro / Complex' || selectedPlan == 'Pro Complex') &&
@@ -162,11 +155,9 @@ class _FilingStep4ScreenState extends ConsumerState<FilingStep4Screen> {
     final filingFee = isComplexPaye
         ? complexPayeFee
         : (_planFees[selectedPlan] ?? 0.0);
-    // isCustomQuote = true only for regular Pro/Complex where no fee is known yet
     final isCustomQuote =
         (selectedPlan == 'Pro / Complex' || selectedPlan == 'Pro Complex') &&
             complexPayeFee == 0;
-    final walletSufficient = walletBalance >= filingFee;
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
@@ -232,83 +223,22 @@ class _FilingStep4ScreenState extends ConsumerState<FilingStep4Screen> {
                   ),
                   const Gap(20),
 
-                  // Wallet status row
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 12,
-                      horizontal: 14,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppColors.greyLight,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: const Icon(
-                            Icons.account_balance_wallet,
-                            size: 18,
-                            color: Colors.black87,
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        const Expanded(
-                          child: Text(
-                            'Savvy Bee Wallet',
-                            style: TextStyle(
-                              fontFamily: 'GeneralSans',
-                              fontSize: 13,
-                              fontWeight: FontWeight.w500,
-                              letterSpacing: 13 * 0.02,
-                            ),
-                          ),
-                        ),
-                        Text(
-                          walletBalance.formatCurrency(decimalDigits: 0),
-                          style: const TextStyle(
-                            fontFamily: 'GeneralSans',
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500,
-                            letterSpacing: 13 * 0.02,
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 3,
-                            horizontal: 8,
-                          ),
-                          decoration: BoxDecoration(
-                            color: walletSufficient
-                                ? const Color(0xFFE8F5E9)
-                                : const Color(0xFFFFEBEE),
-                            borderRadius: BorderRadius.circular(50),
-                          ),
-                          child: Text(
-                            walletSufficient ? '✓ Sufficient' : '✗ Insufficient',
-                            style: TextStyle(
-                              fontFamily: 'GeneralSans',
-                              fontSize: 10,
-                              fontWeight: FontWeight.w600,
-                              color: walletSufficient
-                                  ? const Color(0xFF43A047)
-                                  : Colors.red.shade600,
-                              letterSpacing: 10 * 0.02,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const Gap(20),
+                  // ── Savvy Bee Wallet status row (commented out) ──────────────
+                  // Container(
+                  //   padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 14),
+                  //   decoration: BoxDecoration(color: AppColors.greyLight, borderRadius: BorderRadius.circular(12)),
+                  //   child: Row(children: [
+                  //     Container(padding: const EdgeInsets.all(8), decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8)), child: const Icon(Icons.account_balance_wallet, size: 18, color: Colors.black87)),
+                  //     const SizedBox(width: 10),
+                  //     const Expanded(child: Text('Savvy Bee Wallet', style: TextStyle(fontFamily: 'GeneralSans', fontSize: 13, fontWeight: FontWeight.w500))),
+                  //     Text(walletBalance.formatCurrency(decimalDigits: 0), style: const TextStyle(fontFamily: 'GeneralSans', fontSize: 13, fontWeight: FontWeight.w500)),
+                  //   ]),
+                  // ),
+                  // const Gap(20),
 
+                  // ── Payment method (KoraPay only) ────────────────────────────
                   Text(
-                    'Choose payment method for filing fee:',
+                    'Payment method',
                     style: TextStyle(
                       fontFamily: 'GeneralSans',
                       fontSize: 13,
@@ -317,23 +247,31 @@ class _FilingStep4ScreenState extends ConsumerState<FilingStep4Screen> {
                     ),
                   ),
                   const Gap(12),
+                  // ── Savvy Bee Wallet tile (commented out) ────────────────────
+                  // _PaymentMethodTile(
+                  //   icon: Icons.account_balance_wallet_outlined,
+                  //   title: 'Savvy Bee Wallet',
+                  //   subtitle: 'Balance: ...',
+                  //   isSelected: true,
+                  //   onTap: () {},
+                  //   disabled: false,
+                  // ),
+                  // ── Debit/Credit Card tile (commented out) ───────────────────
+                  // _PaymentMethodTile(
+                  //   icon: Icons.credit_card,
+                  //   title: 'Debit/Credit Card',
+                  //   subtitle: 'Visa •••• 4521',
+                  //   isSelected: false,
+                  //   onTap: () {},
+                  //   disabled: true,
+                  // ),
                   _PaymentMethodTile(
-                    icon: Icons.account_balance_wallet_outlined,
-                    title: 'Savvy Bee Wallet',
-                    subtitle:
-                        'Balance: ${walletBalance.formatCurrency(decimalDigits: 0)}',
-                    isSelected: _selectedPaymentIndex == 0,
-                    onTap: () => setState(() => _selectedPaymentIndex = 0),
+                    icon: Icons.payment,
+                    title: 'KoraPay',
+                    subtitle: 'Secure card & bank payment via KoraPay',
+                    isSelected: true,
+                    onTap: () {},
                     disabled: false,
-                  ),
-                  const Gap(10),
-                  _PaymentMethodTile(
-                    icon: Icons.credit_card,
-                    title: 'Debit/Credit Card',
-                    subtitle: 'Visa •••• 4521',
-                    isSelected: _selectedPaymentIndex == 1,
-                    onTap: () => setState(() => _selectedPaymentIndex = 1),
-                    disabled: true,
                   ),
                   const Gap(20),
 
@@ -389,13 +327,11 @@ class _FilingStep4ScreenState extends ConsumerState<FilingStep4Screen> {
             ),
             BottomActionButton(
               label: _isPaying
-                  ? 'Processing…'
+                  ? 'Initialising payment…'
                   : isCustomQuote
-                  ? 'Request custom quote'
-                  : 'Pay filing fee — ${filingFee.formatCurrency(decimalDigits: 0)}',
-              onTap: _isPaying
-                  ? null
-                  : () => _onPayFee(filingFee, isCustomQuote, filingId),
+                  ? 'Pay filing fee via KoraPay'
+                  : 'Pay filing fee via KoraPay — ${filingFee.formatCurrency(decimalDigits: 0)}',
+              onTap: _isPaying ? null : () => _onPayWithKora(filingId),
             ),
           ],
         ),

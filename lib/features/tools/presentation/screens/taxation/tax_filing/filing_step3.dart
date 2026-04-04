@@ -53,6 +53,11 @@ class _FilingStep3ScreenState extends ConsumerState<FilingStep3Screen> {
   final _loanCtrl = TextEditingController();
   final _lifeCtrl = TextEditingController();
 
+  // Income source controllers — initialised once from filingData.incomes
+  final List<TextEditingController> _incomeControllers = [];
+  List<FilingIncomeSource> _incomeSourcesMeta = []; // holds source labels
+  bool _incomesInitialized = false;
+
   bool _deductionsInitialized = false;
   bool _isProceeding = false;
 
@@ -65,10 +70,22 @@ class _FilingStep3ScreenState extends ConsumerState<FilingStep3Screen> {
       _pensionCtrl,
       _loanCtrl,
       _lifeCtrl,
+      ..._incomeControllers,
     ]) {
       c.dispose();
     }
     super.dispose();
+  }
+
+  void _initIncomes(List<FilingIncomeSource> incomes) {
+    if (_incomesInitialized) return;
+    _incomesInitialized = true;
+    _incomeSourcesMeta = incomes;
+    for (final income in incomes) {
+      _incomeControllers.add(
+        TextEditingController(text: income.amount.toStringAsFixed(0)),
+      );
+    }
   }
 
   void _initDeductions(FilingHomeData data) {
@@ -110,12 +127,13 @@ class _FilingStep3ScreenState extends ConsumerState<FilingStep3Screen> {
   Future<void> _recalculate(FilingHomeData filingData) async {
     FocusScope.of(context).unfocus();
 
-    // Gross income = sum of all income sources, matching the Income Summary
-    // display. Keeps recalculation consistent with the figure shown on screen.
-    final grossIncome = filingData.incomes.fold(
-      0.0,
-      (sum, i) => sum + i.amount,
-    );
+    // Gross income = sum of edited income controller values (or original if not yet edited)
+    final grossIncome = _incomeControllers.isNotEmpty
+        ? _incomeControllers.fold(
+            0.0,
+            (sum, c) => sum + (double.tryParse(c.text.replaceAll(',', '')) ?? 0.0),
+          )
+        : filingData.incomes.fold(0.0, (sum, i) => sum + i.amount);
 
     await ref
         .read(taxCalculatorProvider.notifier)
@@ -181,7 +199,19 @@ class _FilingStep3ScreenState extends ConsumerState<FilingStep3Screen> {
         email: email,
       );
 
-      final revenues = filingData?.incomes ?? [];
+      // Use edited income values if controllers are initialised, otherwise fall back to API values
+      final revenues = _incomeControllers.isNotEmpty && _incomeSourcesMeta.isNotEmpty
+          ? List.generate(
+              _incomeSourcesMeta.length,
+              (i) => FilingIncomeSource(
+                source: _incomeSourcesMeta[i].source,
+                amount: double.tryParse(
+                      _incomeControllers[i].text.replaceAll(',', ''),
+                    ) ??
+                    _incomeSourcesMeta[i].amount,
+              ),
+            )
+          : (filingData?.incomes ?? []);
 
       final noneTaxable = [
         FilingIncomeSource(source: 'Rent', amount: _parseField(_rentCtrl)),
@@ -278,7 +308,10 @@ class _FilingStep3ScreenState extends ConsumerState<FilingStep3Screen> {
     final tinResult = ref.watch(tinValidationResultProvider);
 
     final filingData = filingAsync.value;
-    if (filingData != null) _initDeductions(filingData);
+    if (filingData != null) {
+      _initDeductions(filingData);
+      _initIncomes(filingData.incomes);
+    }
 
     final taxYear = DateTime.now().year - 1;
 
@@ -369,8 +402,12 @@ class _FilingStep3ScreenState extends ConsumerState<FilingStep3Screen> {
                     title: 'Income Summary',
                     isExpanded: _expanded.contains(_Section.incomeSummary),
                     onToggle: () => _toggle(_Section.incomeSummary),
-                    child: filingData != null
-                        ? _IncomeSummaryContent(incomes: filingData.incomes)
+                    child: filingData != null && _incomeControllers.isNotEmpty
+                        ? _IncomeSummaryContent(
+                            incomes: _incomeSourcesMeta,
+                            controllers: _incomeControllers,
+                            onChanged: () => setState(() {}),
+                          )
                         : const Center(child: CircularProgressIndicator()),
                   ),
                   const Gap(12),
@@ -395,16 +432,19 @@ class _FilingStep3ScreenState extends ConsumerState<FilingStep3Screen> {
                   ),
                   const Gap(12),
 
+                  // Recalculate gross income from edited controllers if available
                   _CollapsibleSection(
                     title: 'Tax Computation',
                     isExpanded: _expanded.contains(_Section.taxComputation),
                     onToggle: () => _toggle(_Section.taxComputation),
                     child: filingData != null
                         ? _TaxComputationContent(
-                            grossIncome: filingData.incomes.fold(
-                              0.0,
-                              (s, i) => s + i.amount,
-                            ),
+                            grossIncome: _incomeControllers.isNotEmpty
+                                ? _incomeControllers.fold(
+                                    0.0,
+                                    (s, c) => s + (double.tryParse(c.text.replaceAll(',', '')) ?? 0.0),
+                                  )
+                                : filingData.incomes.fold(0.0, (s, i) => s + i.amount),
                             calcResult: calcState.result,
                             fallbackTaxableIncome: filingData.taxableIncome,
                             fallbackStages: filingData.stages,
@@ -683,7 +723,12 @@ class _InfoRow extends StatelessWidget {
 class _EditableDeductionRow extends StatelessWidget {
   final String label;
   final TextEditingController controller;
-  const _EditableDeductionRow({required this.label, required this.controller});
+  final VoidCallback? onChanged;
+  const _EditableDeductionRow({
+    required this.label,
+    required this.controller,
+    this.onChanged,
+  });
 
   @override
   Widget build(BuildContext context) => Padding(
@@ -711,6 +756,7 @@ class _EditableDeductionRow extends StatelessWidget {
             keyboardType: TextInputType.number,
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             textAlign: TextAlign.right,
+            onChanged: (_) => onChanged?.call(),
             style: const TextStyle(
               fontFamily: 'GeneralSans',
               fontSize: 13,
@@ -785,25 +831,42 @@ class _PersonalInfoContent extends StatelessWidget {
   );
 }
 
-class _IncomeSummaryContent extends StatelessWidget {
+class _IncomeSummaryContent extends StatefulWidget {
   final List<FilingIncomeSource> incomes;
-  const _IncomeSummaryContent({required this.incomes});
+  final List<TextEditingController> controllers;
+  final VoidCallback onChanged;
+  const _IncomeSummaryContent({
+    required this.incomes,
+    required this.controllers,
+    required this.onChanged,
+  });
+  @override
+  State<_IncomeSummaryContent> createState() => _IncomeSummaryContentState();
+}
+
+class _IncomeSummaryContentState extends State<_IncomeSummaryContent> {
+  double get _total => widget.controllers.fold(
+        0.0,
+        (s, c) => s + (double.tryParse(c.text.replaceAll(',', '')) ?? 0.0),
+      );
+
   @override
   Widget build(BuildContext context) {
-    final total = incomes.fold(0.0, (s, i) => s + i.amount);
     return Column(
       children: [
-        ...incomes.map(
-          (i) => _InfoRow(
-            label: i.source,
-            value: i.amount.formatCurrency(decimalDigits: 0),
-            showTag: true,
+        for (int i = 0; i < widget.incomes.length; i++)
+          _EditableDeductionRow(
+            label: widget.incomes[i].source,
+            controller: widget.controllers[i],
+            onChanged: () {
+              setState(() {});
+              widget.onChanged();
+            },
           ),
-        ),
         const _SectionDivider(),
         _InfoRow(
           label: 'Gross Income',
-          value: total.formatCurrency(decimalDigits: 0),
+          value: _total.formatCurrency(decimalDigits: 0),
         ),
       ],
     );

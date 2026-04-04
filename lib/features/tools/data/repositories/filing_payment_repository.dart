@@ -106,6 +106,19 @@ class LiabilityFeeResult {
       );
 }
 
+class KoraPaymentResult {
+  final String reference;
+  final String checkoutUrl;
+
+  const KoraPaymentResult({required this.reference, required this.checkoutUrl});
+
+  factory KoraPaymentResult.fromJson(Map<String, dynamic> json) =>
+      KoraPaymentResult(
+        reference: (json['reference'] as String? ?? ''),
+        checkoutUrl: (json['checkout_url'] as String? ?? ''),
+      );
+}
+
 // ── Repository ────────────────────────────────────────────────────────────────
 
 class FilingPaymentRepository {
@@ -214,6 +227,32 @@ class FilingPaymentRepository {
     final json = jsonDecode(response.body) as Map<String, dynamic>;
     _checkSuccess(json, 'payment/liabilityfee');
     return LiabilityFeeResult.fromJson(json['data'] as Map<String, dynamic>);
+  }
+
+  /// GET /tools/taxation/filling/payment/kora/fillingfee/:id
+  Future<KoraPaymentResult> getKoraFillingFeeUrl(String id) async {
+    final response = await http.get(
+      Uri.parse('${ApiEndpoints.baseUrl}${ApiEndpoints.filingKoraFillingFee(id)}'),
+      headers: _headers,
+    );
+    print('kora/fillingfee → ${response.statusCode}: ${response.body}');
+    _checkStatus(response, 'kora/fillingfee');
+    final json = jsonDecode(response.body) as Map<String, dynamic>;
+    _checkSuccess(json, 'kora/fillingfee');
+    return KoraPaymentResult.fromJson(json['data'] as Map<String, dynamic>);
+  }
+
+  /// GET /tools/taxation/filling/payment/kora/liabilityfee/:id
+  Future<KoraPaymentResult> getKoraLiabilityFeeUrl(String id) async {
+    final response = await http.get(
+      Uri.parse('${ApiEndpoints.baseUrl}${ApiEndpoints.filingKoraLiabilityFee(id)}'),
+      headers: _headers,
+    );
+    print('kora/liabilityfee → ${response.statusCode}: ${response.body}');
+    _checkStatus(response, 'kora/liabilityfee');
+    final json = jsonDecode(response.body) as Map<String, dynamic>;
+    _checkSuccess(json, 'kora/liabilityfee');
+    return KoraPaymentResult.fromJson(json['data'] as Map<String, dynamic>);
   }
 
   void _checkStatus(http.Response resp, String ep) {

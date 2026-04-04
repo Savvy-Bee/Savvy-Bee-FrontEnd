@@ -14,10 +14,11 @@ import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/num_extensions.dart';
 import 'package:savvy_bee_mobile/core/widgets/notifications/app_notification.dart';
 import 'package:savvy_bee_mobile/core/widgets/tax_filing/filing_routes.dart';
-import 'package:savvy_bee_mobile/features/tools/data/repositories/wallet_dashboard_repository.dart';
+// import 'package:savvy_bee_mobile/features/tools/data/repositories/wallet_dashboard_repository.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/providers/filing_home_provider.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/tax_filing/kora_payment_webview.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/widgets/tax_filing/bottom_action_button.dart';
-import 'package:savvy_bee_mobile/features/tools/presentation/widgets/tax_filing/pin_bottom_sheet.dart';
+// import 'package:savvy_bee_mobile/features/tools/presentation/widgets/tax_filing/pin_bottom_sheet.dart';
 
 class FilingStep5Screen extends ConsumerStatefulWidget {
   static const String path = FilingRoutes.step5;
@@ -28,7 +29,6 @@ class FilingStep5Screen extends ConsumerStatefulWidget {
 }
 
 class _FilingStep5ScreenState extends ConsumerState<FilingStep5Screen> {
-  int _selectedPaymentIndex = 0;
   bool _isPaying = false;
 
   static const _yellow = Color(0xFFF5C842);
@@ -50,54 +50,56 @@ class _FilingStep5ScreenState extends ConsumerState<FilingStep5Screen> {
           ref.read(filingIDProvider.notifier).state = process.id;
         }
       }
-
-      // Wallet balance — seed from wallet dashboard if not yet set by Step 3.
-      // Do NOT call refresh() — just read (auto-starts) and listen for data.
-      if (ref.read(filingWalletBalanceProvider) == 0.0) {
-        final current = ref.read(walletDashboardProvider);
-        if (current.value != null) {
-          ref.read(filingWalletBalanceProvider.notifier).state =
-              current.value!.account.balanceNaira;
-        } else {
-          ref.listenManual(walletDashboardProvider, (_, next) {
-            if (next.value != null &&
-                mounted &&
-                ref.read(filingWalletBalanceProvider) == 0.0) {
-              ref.read(filingWalletBalanceProvider.notifier).state =
-                  next.value!.account.balanceNaira;
-            }
-          });
-        }
-      }
     });
   }
 
-  Future<void> _onConfirmPayment(double taxDue, String filingId) async {
+  // ── Savvy Bee Wallet / PIN payment (commented out — use KoraPay instead) ──────
+  // Future<void> _onConfirmPayment(double taxDue, String filingId) async {
+  //   if (_isPaying) return;
+  //   final pin = await PinBottomSheet.show(context,
+  //       title: 'Authorise tax payment',
+  //       subtitle: 'Enter your 4-digit PIN to pay your ${taxDue.formatCurrency(decimalDigits: 0)} tax liability.',
+  //       confirmLabel: 'Pay tax now');
+  //   if (pin == null || !mounted) return;
+  //   setState(() => _isPaying = true);
+  //   try {
+  //     final repo = ref.read(filingPaymentRepositoryProvider);
+  //     final result = await repo.payLiabilityFee(pin: pin, Id: filingId);
+  //     ref.read(filingLiabilityResultProvider.notifier).state = result;
+  //     if (mounted) {
+  //       setState(() => _isPaying = false);
+  //       AppNotification.show(context, message: 'Payment confirmed! Your return is ready for submission.',
+  //           icon: Icons.check_circle_outline, iconColor: const Color(0xFF43A047));
+  //       await Future.delayed(const Duration(milliseconds: 800));
+  //       if (mounted) context.pushNamed(FilingRoutes.step6);
+  //     }
+  //   } catch (e) {
+  //     setState(() => _isPaying = false);
+  //     if (mounted) AppNotification.show(context,
+  //         message: e.toString().replaceFirst('Exception: ', ''),
+  //         icon: Icons.error_outline, iconColor: Colors.redAccent);
+  //   }
+  // }
+
+  Future<void> _onPayWithKora(String filingId) async {
     if (_isPaying) return;
-
-    final pin = await PinBottomSheet.show(
-      context,
-      title: 'Authorise tax payment',
-      subtitle:
-          'Enter your 4-digit PIN to pay your ${taxDue.formatCurrency(decimalDigits: 0)} tax liability.',
-      confirmLabel: 'Pay tax now',
-    );
-
-    if (pin == null || !mounted) return;
-
     setState(() => _isPaying = true);
     try {
       final repo = ref.read(filingPaymentRepositoryProvider);
-      final result = await repo.payLiabilityFee(pin: pin, Id: filingId);
+      final result = await repo.getKoraLiabilityFeeUrl(filingId);
+      if (!mounted) return;
+      setState(() => _isPaying = false);
 
-      ref.read(filingLiabilityResultProvider.notifier).state = result;
+      final paid = await KoraPaymentWebView.show(
+        context,
+        checkoutUrl: result.checkoutUrl,
+        title: 'Pay Tax Liability',
+      );
 
-      if (mounted) {
-        setState(() => _isPaying = false);
+      if (paid == true && mounted) {
         AppNotification.show(
           context,
-          message:
-              'Payment confirmed! ✓ Your return is now ready for submission.',
+          message: 'Payment confirmed! Your return is now ready for submission.',
           icon: Icons.check_circle_outline,
           iconColor: const Color(0xFF43A047),
         );
@@ -120,21 +122,20 @@ class _FilingStep5ScreenState extends ConsumerState<FilingStep5Screen> {
   @override
   Widget build(BuildContext context) {
     final taxDue = ref.watch(filingTaxDueProvider);
-    final filingData = ref.watch(filingHomeProvider).value;
     final filingId = ref.watch(filingIDProvider);
 
-    // Tax Pot (savings pot) — drives coverage logic
-    final taxPot = filingData?.taxPot ?? 0.0;
-    final taxPotCovers = taxPot >= taxDue;
-    final remainder = taxPot - taxDue;
+    // Tax Pot coverage logic (commented out — taxPot not shown for now)
+    // final filingData = ref.watch(filingHomeProvider).value;
+    // final taxPot = filingData?.taxPot ?? 0.0;
+    // final taxPotCovers = taxPot >= taxDue;
+    // final remainder = taxPot - taxDue;
 
-    // Wallet balance: prefer value from Step 3 / complex PAYE init.
-    // On resume fall back to the wallet dashboard live value.
-    final storedWallet = ref.watch(filingWalletBalanceProvider);
-    final walletDashAsync = ref.watch(walletDashboardProvider);
-    final walletBalance = storedWallet > 0
-        ? storedWallet
-        : (walletDashAsync.value?.account.balanceNaira ?? 0.0);
+    // Wallet balance (commented out — KoraPay is now the only payment method)
+    // final storedWallet = ref.watch(filingWalletBalanceProvider);
+    // final walletDashAsync = ref.watch(walletDashboardProvider);
+    // final walletBalance = storedWallet > 0
+    //     ? storedWallet
+    //     : (walletDashAsync.value?.account.balanceNaira ?? 0.0);
 
     final taxYear = DateTime.now().year - 1;
 
@@ -205,149 +206,33 @@ class _FilingStep5ScreenState extends ConsumerState<FilingStep5Screen> {
                             letterSpacing: 32 * 0.02,
                           ),
                         ),
-                        const Gap(10),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 6,
-                            horizontal: 12,
-                          ),
-                          decoration: BoxDecoration(
-                            color: taxPotCovers
-                                ? const Color(0xFF43A047).withValues(alpha: 0.2)
-                                : Colors.redAccent.withValues(alpha: 0.2),
-                            borderRadius: BorderRadius.circular(50),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            spacing: 6,
-                            children: [
-                              Icon(
-                                taxPotCovers
-                                    ? Icons.check_circle
-                                    : Icons.warning_amber_rounded,
-                                size: 14,
-                                color: taxPotCovers
-                                    ? const Color(0xFF43A047)
-                                    : Colors.redAccent,
-                              ),
-                              Text(
-                                taxPotCovers
-                                    ? "Tax Pot: ${taxPot.formatCurrency(decimalDigits: 0)} — You're covered"
-                                    : "Tax Pot: ${taxPot.formatCurrency(decimalDigits: 0)} — Shortfall: ${(taxDue - taxPot).formatCurrency(decimalDigits: 0)}",
-                                style: TextStyle(
-                                  fontFamily: 'GeneralSans',
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w500,
-                                  color: taxPotCovers
-                                      ? const Color(0xFF81C784)
-                                      : Colors.redAccent.shade100,
-                                  letterSpacing: 11 * 0.02,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                        // Tax Pot coverage pill (commented out)
+                        // const Gap(10),
+                        // Container(
+                        //   padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+                        //   decoration: BoxDecoration(color: ..., borderRadius: BorderRadius.circular(50)),
+                        //   child: Row(children: [ Icon(...), Text("Tax Pot: ...") ]),
+                        // ),
                       ],
                     ),
                   ),
                   const Gap(16),
 
-                  // Info card
-                  Container(
-                    padding: const EdgeInsets.all(14),
-                    decoration: BoxDecoration(
-                      color: taxPotCovers
-                          ? const Color(0xFFF0FFF4)
-                          : const Color(0xFFFFF8F0),
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: taxPotCovers
-                            ? const Color(0xFF43A047).withValues(alpha: 0.3)
-                            : Colors.orange.withValues(alpha: 0.3),
-                      ),
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      spacing: 10,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: taxPotCovers
-                                ? const Color(0xFFE8F5E9)
-                                : const Color(0xFFFFF3E0),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Icon(
-                            Icons.savings_outlined,
-                            size: 18,
-                            color: taxPotCovers
-                                ? const Color(0xFF43A047)
-                                : Colors.orange,
-                          ),
-                        ),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Your Tax Pot has ${taxPot.formatCurrency(decimalDigits: 0)} saved.",
-                                style: const TextStyle(
-                                  fontFamily: 'GeneralSans',
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w600,
-                                  letterSpacing: 13 * 0.02,
-                                ),
-                              ),
-                              const Gap(4),
-                              Text(
-                                taxPotCovers
-                                    ? "You saved exactly for this. Pay directly from your Tax Pot — you're fully covered with ${remainder.formatCurrency(decimalDigits: 0)} to spare."
-                                    : "Your Tax Pot covers part of your liability. You'll need to top up ${(taxDue - taxPot).formatCurrency(decimalDigits: 0)} via another method.",
-                                style: TextStyle(
-                                  fontFamily: 'GeneralSans',
-                                  fontSize: 12,
-                                  color: AppColors.greyDark,
-                                  letterSpacing: 12 * 0.02,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const Gap(20),
+                  // Tax Pot info card (commented out)
+                  // Container(
+                  //   padding: const EdgeInsets.all(14),
+                  //   decoration: BoxDecoration(color: ..., borderRadius: BorderRadius.circular(12), border: Border.all(color: ...)),
+                  //   child: Row(children: [ Icon(Icons.savings_outlined), Column(children: [ Text("Your Tax Pot has ... saved."), Text("...") ]) ]),
+                  // ),
+                  // const Gap(20),
 
-                  // Breakdown
-                  const Text(
-                    'Breakdown',
-                    style: TextStyle(
-                      fontFamily: 'GeneralSans',
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 14 * 0.02,
-                    ),
-                  ),
-                  const Gap(12),
-                  _BreakdownRow(
-                    label: 'Tax payable',
-                    value: taxDue.formatCurrency(decimalDigits: 0),
-                  ),
-                  _BreakdownRow(
-                    label: 'Tax Pot balance',
-                    value: taxPot.formatCurrency(decimalDigits: 0),
-                  ),
-                  _BreakdownRow(
-                    label: taxPotCovers
-                        ? 'Remaining after payment'
-                        : 'Shortfall',
-                    value: remainder.abs().formatCurrency(decimalDigits: 0),
-                    valueColor: taxPotCovers
-                        ? const Color(0xFF43A047)
-                        : Colors.redAccent,
-                  ),
-                  const Gap(20),
+                  // Breakdown (Tax Pot) — commented out
+                  // const Text('Breakdown', ...),
+                  // const Gap(12),
+                  // _BreakdownRow(label: 'Tax payable', value: ...),
+                  // _BreakdownRow(label: 'Tax Pot balance', value: ...),
+                  // _BreakdownRow(label: 'Shortfall / Remaining', value: ...),
+                  // const Gap(20),
 
                   // Payment methods
                   const Text(
@@ -360,35 +245,21 @@ class _FilingStep5ScreenState extends ConsumerState<FilingStep5Screen> {
                     ),
                   ),
                   const Gap(12),
+                  // Tax Pot tile (commented out)
+                  // _PaymentMethodTile(icon: Icons.savings_outlined, title: 'Pay from Tax Pot', ...),
+                  // const Gap(10),
+                  // Savvy Bee Wallet tile (commented out)
+                  // _PaymentMethodTile(icon: Icons.account_balance_wallet_outlined, title: 'Savvy Bee Wallet', subtitle: 'Balance: ...', ...),
+                  // const Gap(10),
+                  // Bank Transfer tile (commented out)
+                  // _PaymentMethodTile(icon: Icons.account_balance_outlined, title: 'Bank Transfer to NRS', subtitle: 'Account details pre-filled', isDisabled: true, ...),
                   _PaymentMethodTile(
-                    icon: Icons.savings_outlined,
-                    title: 'Pay from Tax Pot',
-                    subtitle:
-                        'Balance: ${taxPot.formatCurrency(decimalDigits: 0)}${taxPotCovers ? " — you're fully covered" : ' — partial coverage'}',
-                    badge: 'Recommended',
-                    isSelected: _selectedPaymentIndex == 0,
-                    isDisabled: taxPot <= 0,
-                    onTap: () => setState(() => _selectedPaymentIndex = 0),
-                  ),
-                  const Gap(10),
-                  _PaymentMethodTile(
-                    icon: Icons.account_balance_wallet_outlined,
-                    title: 'Savvy Bee Wallet',
-                    // Live balance from payment/init response
-                    subtitle:
-                        'Balance: ${walletBalance.formatCurrency(decimalDigits: 0)}',
-                    isSelected: _selectedPaymentIndex == 1,
+                    icon: Icons.payment,
+                    title: 'KoraPay',
+                    subtitle: 'Secure card & bank payment via KoraPay',
+                    isSelected: true,
                     isDisabled: false,
-                    onTap: () => setState(() => _selectedPaymentIndex = 1),
-                  ),
-                  const Gap(10),
-                  _PaymentMethodTile(
-                    icon: Icons.account_balance_outlined,
-                    title: 'Bank Transfer to NRS',
-                    subtitle: 'Account details pre-filled',
-                    isSelected: _selectedPaymentIndex == 2,
-                    isDisabled: true,
-                    onTap: () => setState(() => _selectedPaymentIndex = 2),
+                    onTap: () {},
                   ),
                   const Gap(16),
 
@@ -424,11 +295,9 @@ class _FilingStep5ScreenState extends ConsumerState<FilingStep5Screen> {
             ),
             BottomActionButton(
               label: _isPaying
-                  ? 'Processing…'
-                  : 'Confirm tax payment — ${taxDue.formatCurrency(decimalDigits: 0)}',
-              onTap: _isPaying
-                  ? null
-                  : () => _onConfirmPayment(taxDue, filingId),
+                  ? 'Initialising payment…'
+                  : 'Pay tax via KoraPay — ${taxDue.formatCurrency(decimalDigits: 0)}',
+              onTap: _isPaying ? null : () => _onPayWithKora(filingId),
             ),
           ],
         ),

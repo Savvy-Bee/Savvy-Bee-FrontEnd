@@ -6,6 +6,8 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/widgets/tax_filing/filing_routes.dart';
+import 'package:savvy_bee_mobile/features/home/domain/models/home_data.dart';
+import 'package:savvy_bee_mobile/features/home/presentation/providers/home_data_provider.dart';
 import 'package:savvy_bee_mobile/features/tools/data/repositories/tin_validation_repository.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/providers/tin_validation_provider.dart';
 
@@ -31,6 +33,8 @@ class TinValidationScreen2 extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final result = ref.watch(tinValidationResultProvider);
+    final homeAsync = ref.watch(homeDataProvider);
+    final homeData = homeAsync.value?.data;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -90,7 +94,7 @@ class TinValidationScreen2 extends ConsumerWidget {
                               ),
                             ),
                           )
-                        : _ValidatedCardContent(result: result),
+                        : _ValidatedCardContent(result: result, profile: homeData),
                   ),
                   const Gap(16),
 
@@ -166,8 +170,9 @@ class TinValidationScreen2 extends ConsumerWidget {
 
 class _ValidatedCardContent extends StatelessWidget {
   final TinValidationResult result;
+  final HomeData? profile;
 
-  const _ValidatedCardContent({required this.result});
+  const _ValidatedCardContent({required this.result, this.profile});
 
   static TextStyle _gs(
     double size, {
@@ -183,9 +188,18 @@ class _ValidatedCardContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Derive a short tax authority label from the full office name
-    // e.g. "Lagos Internal Revenue Service" → "LIRS"
-    final taxAuthority = _shortAuthority(result.taxOffice);
+    // ── Resolve display values from profile (with TIN result as fallback) ──
+    final fullName = profile != null
+        ? '${profile!.firstName} ${profile!.lastName}'.trim()
+        : result.taxpayerName;
+
+    final displayEmail = profile?.email ?? '';
+    final displayPhone = profile?.phoneNumber ?? '';
+
+    // State-derived tax office / authority (only shown when state is known)
+    final state = profile?.state ?? '';
+    final taxOffice = state.isNotEmpty ? _taxOfficeFromState(state) : null;
+    final taxAuthority = state.isNotEmpty ? _taxAuthorityFromState(state) : null;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -237,36 +251,191 @@ class _ValidatedCardContent extends StatelessWidget {
         const Gap(14),
 
         // ── Data rows ────────────────────────────────────────────────
-        _DarkInfoRow(label: 'Full Name', value: result.taxpayerName),
+        _DarkInfoRow(label: 'Full Name', value: fullName),
         _DarkInfoRow(label: 'TIN', value: result.tin),
-        _DarkInfoRow(label: 'Tax Office', value: result.taxOffice),
-        _DarkInfoRow(label: 'Tax Authority', value: taxAuthority),
-        if (result.address.isNotEmpty)
-          _DarkInfoRow(label: 'Address', value: result.address),
-        if (result.phoneNumber.isNotEmpty)
-          _DarkInfoRow(label: 'Phone', value: result.phoneNumber),
-        if (result.email.isNotEmpty)
-          _DarkInfoRow(label: 'Email', value: result.email),
+        if (taxOffice != null)
+          _DarkInfoRow(label: 'Tax Office', value: taxOffice),
+        if (taxAuthority != null)
+          _DarkInfoRow(label: 'Tax Authority', value: taxAuthority),
+        if (displayPhone.isNotEmpty)
+          _DarkInfoRow(label: 'Phone', value: displayPhone),
+        if (displayEmail.isNotEmpty)
+          _DarkInfoRow(label: 'Email', value: displayEmail),
       ],
     );
   }
 
-  /// Converts a full tax office name to a short acronym.
-  /// Falls back to the first word if no known acronym matches.
-  String _shortAuthority(String office) {
-    final lower = office.toLowerCase();
-    if (lower.contains('lagos')) return 'LIRS';
-    if (lower.contains('abuja') || lower.contains('fct')) return 'FCIRS';
-    if (lower.contains('rivers')) return 'RIRS';
-    if (lower.contains('kano')) return 'KIRS';
-    if (lower.contains('ogun')) return 'OGIRS';
-    if (lower.contains('federal inland')) return 'NRS';
-    // Generic: take first letter of each word
-    final words = office.split(' ').where((w) => w.isNotEmpty).toList();
-    if (words.length >= 2) {
-      return words.map((w) => w[0].toUpperCase()).join();
+  /// Returns the full tax office name for a Nigerian state.
+  static String _taxOfficeFromState(String state) {
+    switch (state.trim().toLowerCase()) {
+      case 'lagos':
+        return 'Lagos State Internal Revenue Service';
+      case 'abuja':
+      case 'fct':
+      case 'federal capital territory':
+        return 'FCT Internal Revenue Service';
+      case 'rivers':
+        return 'Rivers State Internal Revenue Service';
+      case 'kano':
+        return 'Kano State Internal Revenue Service';
+      case 'ogun':
+        return 'Ogun State Internal Revenue Service';
+      case 'oyo':
+        return 'Oyo State Internal Revenue Service';
+      case 'delta':
+        return 'Delta State Board of Internal Revenue';
+      case 'anambra':
+        return 'Anambra State Internal Revenue Service';
+      case 'imo':
+        return 'Imo State Internal Revenue Service';
+      case 'enugu':
+        return 'Enugu State Revenue Service';
+      case 'kwara':
+        return 'Kwara State Internal Revenue Service';
+      case 'edo':
+        return 'Edo State Internal Revenue Service';
+      case 'cross river':
+        return 'Cross River State Internal Revenue Service';
+      case 'akwa ibom':
+        return 'Akwa Ibom State Internal Revenue Service';
+      case 'abia':
+        return 'Abia State Board of Internal Revenue';
+      case 'adamawa':
+        return 'Adamawa State Internal Revenue Service';
+      case 'bauchi':
+        return 'Bauchi State Internal Revenue Service';
+      case 'bayelsa':
+        return 'Bayelsa State Internal Revenue Service';
+      case 'benue':
+        return 'Benue State Internal Revenue Service';
+      case 'borno':
+        return 'Borno State Internal Revenue Service';
+      case 'ebonyi':
+        return 'Ebonyi State Internal Revenue Service';
+      case 'ekiti':
+        return 'Ekiti State Internal Revenue Service';
+      case 'gombe':
+        return 'Gombe State Internal Revenue Service';
+      case 'jigawa':
+        return 'Jigawa State Internal Revenue Service';
+      case 'kaduna':
+        return 'Kaduna State Internal Revenue Service';
+      case 'kebbi':
+        return 'Kebbi State Internal Revenue Service';
+      case 'kogi':
+        return 'Kogi State Internal Revenue Service';
+      case 'nasarawa':
+        return 'Nasarawa State Internal Revenue Service';
+      case 'niger':
+        return 'Niger State Internal Revenue Service';
+      case 'ondo':
+        return 'Ondo State Internal Revenue Service';
+      case 'osun':
+        return 'Osun State Internal Revenue Service';
+      case 'plateau':
+        return 'Plateau State Internal Revenue Service';
+      case 'sokoto':
+        return 'Sokoto State Internal Revenue Service';
+      case 'taraba':
+        return 'Taraba State Internal Revenue Service';
+      case 'yobe':
+        return 'Yobe State Internal Revenue Service';
+      case 'zamfara':
+        return 'Zamfara State Internal Revenue Service';
+      case 'katsina':
+        return 'Katsina State Internal Revenue Service';
+      default:
+        final words = state.trim().split(' ').where((w) => w.isNotEmpty);
+        final titleCase = words
+            .map((w) => w[0].toUpperCase() + w.substring(1).toLowerCase())
+            .join(' ');
+        return '$titleCase State Internal Revenue Service';
     }
-    return office;
+  }
+
+  /// Returns the short acronym for the tax authority of a Nigerian state.
+  static String _taxAuthorityFromState(String state) {
+    switch (state.trim().toLowerCase()) {
+      case 'lagos':
+        return 'LIRS';
+      case 'abuja':
+      case 'fct':
+      case 'federal capital territory':
+        return 'FCIRS';
+      case 'rivers':
+        return 'RIRS';
+      case 'kano':
+        return 'KIRS';
+      case 'ogun':
+        return 'OGIRS';
+      case 'oyo':
+        return 'OYIRS';
+      case 'delta':
+        return 'DBIR';
+      case 'anambra':
+        return 'AIRS';
+      case 'imo':
+        return 'IIRS';
+      case 'enugu':
+        return 'ESRS';
+      case 'kwara':
+        return 'KWIRS';
+      case 'edo':
+        return 'EIRS';
+      case 'cross river':
+        return 'CRSIRS';
+      case 'akwa ibom':
+        return 'AKSIRS';
+      case 'abia':
+        return 'ABIRS';
+      case 'adamawa':
+        return 'ADIRS';
+      case 'bauchi':
+        return 'BSIRS';
+      case 'bayelsa':
+        return 'BYIRS';
+      case 'benue':
+        return 'BIRS';
+      case 'borno':
+        return 'BNIRS';
+      case 'ebonyi':
+        return 'EBIRS';
+      case 'ekiti':
+        return 'EKIRS';
+      case 'gombe':
+        return 'GIRS';
+      case 'jigawa':
+        return 'JIRS';
+      case 'kaduna':
+        return 'KDIRS';
+      case 'kebbi':
+        return 'KBIRS';
+      case 'kogi':
+        return 'KGIRS';
+      case 'nasarawa':
+        return 'NASIRS';
+      case 'niger':
+        return 'NIRS';
+      case 'ondo':
+        return 'ODIRS';
+      case 'osun':
+        return 'OSIRS';
+      case 'plateau':
+        return 'PIRS';
+      case 'sokoto':
+        return 'SIRS';
+      case 'taraba':
+        return 'TIRS';
+      case 'yobe':
+        return 'YIRS';
+      case 'zamfara':
+        return 'ZIRS';
+      case 'katsina':
+        return 'KTIRS';
+      default:
+        final words = state.trim().split(' ').where((w) => w.isNotEmpty);
+        return words.map((w) => w[0].toUpperCase()).join() + 'IRS';
+    }
   }
 }
 

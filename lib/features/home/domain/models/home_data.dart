@@ -170,6 +170,8 @@ class HomeData {
   final String profilePhoto;
   final String aiPersonality;
   // final String dob;
+  final String? state;
+  final String? phoneNumber;
   final Kyc kyc;
   final AIData aiData;
   final HiveData hive;
@@ -186,6 +188,8 @@ class HomeData {
     required this.profilePhoto,
     required this.aiPersonality,
     // required this.dob,
+    this.state,
+    this.phoneNumber,
     required this.kyc,
     required this.aiData,
     required this.hive,
@@ -204,6 +208,8 @@ class HomeData {
       profilePhoto: json['ProfilePhoto'] as String? ?? '',
       aiPersonality: json['AIPersonality'] as String? ?? '',
       // dob: json['DOB'] as String,
+      state: json['State'] as String?,
+      phoneNumber: json['PhoneNumber'] as String?,
       kyc: Kyc.fromJson((json['Kyc'] as Map<String, dynamic>?) ?? {}),
       aiData: AIData.fromJson((json['AIData'] as Map<String, dynamic>?) ?? {}),
       hive: HiveData.fromJson((json['Hive'] as Map<String, dynamic>?) ?? {}),
@@ -227,6 +233,8 @@ class HomeData {
       'ProfilePhoto': profilePhoto,
       'AIPersonality': aiPersonality,
       // 'DOB': dob,
+      if (state != null) 'State': state,
+      if (phoneNumber != null) 'PhoneNumber': phoneNumber,
       'Kyc': kyc.toJson(),
       'AIData': aiData.toJson(),
       'Hive': hive.toJson(),

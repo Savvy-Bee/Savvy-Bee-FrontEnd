@@ -1,8 +1,8 @@
 class ApiEndpoints {
   /// Base URL
-  static const String baseUrl = 'https://api.mysavvybee.com';
-  // static const String baseUrl =
-  //     'https://savvy-bee-backend-nodejs-express-mongodb.onrender.com';
+  // static const String baseUrl = 'https://api.mysavvybee.com';
+  static const String baseUrl =
+      'https://savvy-bee-backend-nodejs-express-mongodb.onrender.com';
   // static const String baseUrl =
   //     'https://savvy-bee-backend-nodejs-express-mongodb-production.up.railway.app';
 
@@ -133,6 +133,10 @@ class ApiEndpoints {
       '/tools/taxation/filling/payment/fillingfee/$id';
   static String filingLiabilityFee(String id) =>
       '/tools/taxation/filling/payment/liabilityfee/$id';
+  static String filingKoraFillingFee(String id) =>
+      '/tools/taxation/filling/payment/kora/fillingfee/$id';
+  static String filingKoraLiabilityFee(String id) =>
+      '/tools/taxation/filling/payment/kora/liabilityfee/$id';
   static const String filingHistory =
       '/tools/taxation/filling/fetchdata/history';
   static String filingHistoryById(String id) =>
