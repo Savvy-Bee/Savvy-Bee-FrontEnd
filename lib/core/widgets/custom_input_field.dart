@@ -38,6 +38,8 @@ class CustomTextFormField extends StatelessWidget {
   final String? subText;
   final double? borderRadius;
   final LabelType labelType;
+  final bool labelBold;
+  final Color? focusBorderColor;
 
   const CustomTextFormField({
     super.key,
@@ -73,6 +75,8 @@ class CustomTextFormField extends StatelessWidget {
     this.subText,
     this.borderRadius,
     this.labelType = LabelType.standalone,
+    this.labelBold = false,
+    this.focusBorderColor,
   });
 
   @override
@@ -91,6 +95,7 @@ class CustomTextFormField extends StatelessWidget {
                   fontSize: 12,
                   fontFamily: 'GeneralSans',
                   letterSpacing: 12 * 0.02,
+                  fontWeight: labelBold ? FontWeight.w600 : FontWeight.normal,
                 ),
               ),
             if (endLabel != null && labelType == LabelType.standalone)
@@ -167,7 +172,9 @@ class CustomTextFormField extends StatelessWidget {
                 isRounded ? 24 : borderRadius ?? 8,
               ),
               borderSide: BorderSide(
-                color: showOutline ? AppColors.primary : Colors.transparent,
+                color: showOutline
+                    ? (focusBorderColor ?? AppColors.primary)
+                    : Colors.transparent,
                 width: 2,
               ),
             ),

@@ -1,10 +1,9 @@
 class ApiEndpoints {
   /// Base URL
-  static const String baseUrl = 'https://api.mysavvybee.com';
-  // static const String baseUrl =
-  //     'https://savvy-bee-backend-nodejs-express-mongodb.onrender.com';
-  // static const String baseUrl =
-  //     'https://savvy-bee-backend-nodejs-express-mongodb-production.up.railway.app';
+  /// To switch environments, change only this one value:
+  // static const String baseUrl = 'https://api.mysavvybee.com'; // production
+  static const String baseUrl =
+      'https://savvy-bee-backend-nodejs-express-mongodb.onrender.com'; // demo
 
   /// Auth endpoints
   static const String register = '/auth/register';

@@ -13,6 +13,9 @@ class CustomDropdownButton extends StatelessWidget {
   final bool enabled;
   final TextEditingController? controller;
   final bool enableSearch, enableFilter, requestFocusOnTap;
+  final bool labelBold;
+  final Color? focusBorderColor;
+  final double? inputBorderRadius;
 
   const CustomDropdownButton({
     super.key,
@@ -27,11 +30,14 @@ class CustomDropdownButton extends StatelessWidget {
     this.enableSearch = false,
     this.enableFilter = false,
     this.requestFocusOnTap = false,
+    this.labelBold = false,
+    this.focusBorderColor,
+    this.inputBorderRadius,
   });
 
   @override
   Widget build(BuildContext context) {
-    var borderRadius = BorderRadius.circular(24);
+    var borderRadius = BorderRadius.circular(inputBorderRadius ?? 24);
     var borderSide = BorderSide(color: AppColors.borderDark);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,6 +50,7 @@ class CustomDropdownButton extends StatelessWidget {
               fontSize: 12,
               fontFamily: 'GeneralSans',
               letterSpacing: 12 * 0.02,
+              fontWeight: labelBold ? FontWeight.w600 : FontWeight.normal,
             ),
           ),
         if (label != null) const Gap(4),
@@ -99,7 +106,10 @@ class CustomDropdownButton extends StatelessWidget {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: borderRadius,
-              borderSide: BorderSide(color: AppColors.primary, width: 2),
+              borderSide: BorderSide(
+                color: focusBorderColor ?? AppColors.primary,
+                width: 2,
+              ),
             ),
             errorBorder: OutlineInputBorder(borderRadius: borderRadius),
             focusedErrorBorder: OutlineInputBorder(borderRadius: borderRadius),
