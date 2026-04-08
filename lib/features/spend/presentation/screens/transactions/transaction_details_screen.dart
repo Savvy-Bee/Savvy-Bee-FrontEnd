@@ -1,6 +1,12 @@
+import 'dart:io';
+import 'dart:typed_data';
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:savvy_bee_mobile/core/utils/assets/logos.dart';
 import 'package:savvy_bee_mobile/core/utils/date_time_extension.dart';
 import 'package:savvy_bee_mobile/core/utils/num_extensions.dart';
 import 'package:savvy_bee_mobile/features/spend/domain/models/wallet.dart';
@@ -14,19 +20,399 @@ class TransactionDetailScreen extends StatelessWidget {
 
   const TransactionDetailScreen({super.key, required this.transaction});
 
-  void _shareTransaction() {
-    final direction = transaction.isCredit ? 'Received from' : 'Sent to';
-    final text = '''
-Savvy Bee Transaction Receipt
-━━━━━━━━━━━━━━━━━━━━━━━
-$direction: ${transaction.transactionFor}
-Amount: ${transaction.amount.formatCurrency()}
-${transaction.charges > 0 ? 'Fee: ${transaction.charges.formatCurrency()}\n' : ''}Status: ${transaction.status.value}
-Date: ${transaction.createdAt.formatDateTime()}
-${transaction.koraReferenceId.isNotEmpty ? 'Reference: ${transaction.koraReferenceId}' : ''}
-${transaction.narration.isNotEmpty ? 'Note: ${transaction.narration}' : ''}
-━━━━━━━━━━━━━━━━━━━━━━━'''.trim();
-    Share.share(text);
+  Future<void> _shareTransaction(BuildContext context) async {
+    try {
+      final imageBytes = await _buildReceiptImageBytes();
+      final tempDir = await getTemporaryDirectory();
+      final referenceForName = transaction.koraReferenceId.isNotEmpty
+          ? transaction.koraReferenceId
+          : transaction.id;
+      final safeReference = referenceForName.replaceAll(
+        RegExp(r'[^a-zA-Z0-9_-]'),
+        '_',
+      );
+      final outputFile = File(
+        '${tempDir.path}/savvy_bee_receipt_$safeReference.png',
+      );
+      await outputFile.writeAsBytes(imageBytes, flush: true);
+
+      await Share.shareXFiles(
+        [XFile(outputFile.path)],
+        subject: 'Savvy Bee Transaction Receipt',
+        text: 'Savvy Bee receipt for ${transaction.amount.formatCurrency()}',
+      );
+    } catch (_) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Unable to generate receipt image. Please try again.'),
+        ),
+      );
+    }
+  }
+
+  Future<ui.Image?> _loadLogoImage() async {
+    try {
+      final logoAsset = await rootBundle.load(Logos.logo);
+      final codec = await ui.instantiateImageCodec(
+        logoAsset.buffer.asUint8List(),
+      );
+      final frame = await codec.getNextFrame();
+      return frame.image;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  double _drawText(
+    Canvas canvas, {
+    required String text,
+    required double x,
+    required double y,
+    required double maxWidth,
+    required TextStyle style,
+    TextAlign textAlign = TextAlign.left,
+    int? maxLines,
+  }) {
+    final painter = TextPainter(
+      text: TextSpan(text: text, style: style),
+      textDirection: TextDirection.ltr,
+      textAlign: textAlign,
+      maxLines: maxLines,
+      ellipsis: maxLines == null ? null : '...',
+    )..layout(maxWidth: maxWidth);
+    painter.paint(canvas, Offset(x, y));
+    return painter.height;
+  }
+
+  double _drawReceiptRow(
+    Canvas canvas, {
+    required double x,
+    required double y,
+    required double width,
+    required String label,
+    required String value,
+    bool emphasizeValue = false,
+  }) {
+    const gap = 20.0;
+    final valueWidth = width * 0.55;
+    final labelWidth = width - valueWidth - gap;
+
+    final labelPainter = TextPainter(
+      text: TextSpan(
+        text: label,
+        style: const TextStyle(
+          color: Color(0xFF6B7280),
+          fontSize: 24,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+      textDirection: TextDirection.ltr,
+      maxLines: 2,
+      ellipsis: '...',
+    )..layout(maxWidth: labelWidth);
+
+    final valuePainter = TextPainter(
+      text: TextSpan(
+        text: value,
+        style: TextStyle(
+          color: const Color(0xFF111827),
+          fontSize: 24,
+          fontWeight: emphasizeValue ? FontWeight.w700 : FontWeight.w600,
+        ),
+      ),
+      textDirection: TextDirection.ltr,
+      textAlign: TextAlign.right,
+      maxLines: 3,
+      ellipsis: '...',
+    )..layout(maxWidth: valueWidth);
+
+    labelPainter.paint(canvas, Offset(x, y));
+    valuePainter.paint(canvas, Offset(x + labelWidth + gap, y));
+
+    return (labelPainter.height > valuePainter.height
+            ? labelPainter.height
+            : valuePainter.height) +
+        22;
+  }
+
+  void _drawDashedDivider(
+    Canvas canvas, {
+    required double y,
+    required double xStart,
+    required double xEnd,
+    double dashWidth = 14,
+    double dashGap = 10,
+  }) {
+    final paint = Paint()
+      ..color = const Color(0xFFD1D5DB)
+      ..strokeWidth = 2;
+    double currentX = xStart;
+    while (currentX < xEnd) {
+      final nextX = (currentX + dashWidth) > xEnd ? xEnd : currentX + dashWidth;
+      canvas.drawLine(Offset(currentX, y), Offset(nextX, y), paint);
+      currentX = nextX + dashGap;
+    }
+  }
+
+  Future<Uint8List> _buildReceiptImageBytes() async {
+    const canvasWidth = 1080.0;
+    const canvasHeight = 1600.0;
+    const cardPadding = 56.0;
+    const cardTop = 56.0;
+    const cardBottom = 56.0;
+    const contentPadding = 52.0;
+
+    final recorder = ui.PictureRecorder();
+    final canvas = Canvas(recorder);
+
+    canvas.drawRect(
+      const Rect.fromLTWH(0, 0, canvasWidth, canvasHeight),
+      Paint()..color = const Color(0xFFF3F4F6),
+    );
+
+    final cardRect = RRect.fromRectAndRadius(
+      const Rect.fromLTWH(
+        cardPadding,
+        cardTop,
+        canvasWidth - (cardPadding * 2),
+        canvasHeight - (cardTop + cardBottom),
+      ),
+      const Radius.circular(36),
+    );
+
+    canvas.drawRRect(
+      cardRect.shift(const Offset(0, 12)),
+      Paint()..color = const Color(0x1F111827),
+    );
+    canvas.drawRRect(cardRect, Paint()..color = Colors.white);
+
+    final headerRect = RRect.fromRectAndCorners(
+      Rect.fromLTWH(
+        cardPadding,
+        cardTop,
+        canvasWidth - (cardPadding * 2),
+        182,
+      ),
+      topLeft: const Radius.circular(36),
+      topRight: const Radius.circular(36),
+    );
+    canvas.drawRRect(headerRect, Paint()..color = const Color(0xFFFFE082));
+
+    final logo = await _loadLogoImage();
+    if (logo != null) {
+      const logoSize = 84.0;
+      final logoX = cardPadding + contentPadding;
+      final logoY = cardTop + 48.0;
+      final logoRect = Rect.fromLTWH(logoX, logoY, logoSize, logoSize);
+      canvas.drawImageRect(
+        logo,
+        Rect.fromLTWH(
+          0,
+          0,
+          logo.width.toDouble(),
+          logo.height.toDouble(),
+        ),
+        logoRect,
+        Paint(),
+      );
+    }
+
+    _drawText(
+      canvas,
+      text: 'Savvy Bee',
+      x: cardPadding + contentPadding + 104,
+      y: cardTop + 58,
+      maxWidth: 420,
+      style: const TextStyle(
+        color: Color(0xFF111827),
+        fontSize: 34,
+        fontWeight: FontWeight.w800,
+      ),
+    );
+
+    _drawText(
+      canvas,
+      text: 'Transaction Receipt',
+      x: cardPadding + contentPadding + 104,
+      y: cardTop + 106,
+      maxWidth: 420,
+      style: const TextStyle(
+        color: Color(0xFF374151),
+        fontSize: 25,
+        fontWeight: FontWeight.w500,
+      ),
+    );
+
+    final statusColor = transaction.isSuccess
+        ? const Color(0xFF166534)
+        : transaction.isPending
+        ? const Color(0xFF9A3412)
+        : const Color(0xFF991B1B);
+    final statusBgColor = transaction.isSuccess
+        ? const Color(0xFFDCFCE7)
+        : transaction.isPending
+        ? const Color(0xFFFFEDD5)
+        : const Color(0xFFFEE2E2);
+    final statusPillRect = RRect.fromRectAndRadius(
+      Rect.fromLTWH(canvasWidth - 320, cardTop + 68, 210, 62),
+      const Radius.circular(31),
+    );
+    canvas.drawRRect(statusPillRect, Paint()..color = statusBgColor);
+    _drawText(
+      canvas,
+      text: transaction.status.value,
+      x: canvasWidth - 320,
+      y: cardTop + 84,
+      maxWidth: 210,
+      textAlign: TextAlign.center,
+      style: TextStyle(
+        color: statusColor,
+        fontSize: 24,
+        fontWeight: FontWeight.w700,
+      ),
+    );
+
+    var currentY = cardTop + 224.0;
+    _drawText(
+      canvas,
+      text: transaction.isCredit ? 'Amount Received' : 'Amount Sent',
+      x: cardPadding + contentPadding,
+      y: currentY,
+      maxWidth: canvasWidth - ((cardPadding + contentPadding) * 2),
+      style: const TextStyle(
+        color: Color(0xFF6B7280),
+        fontSize: 24,
+        fontWeight: FontWeight.w500,
+      ),
+    );
+    currentY += 36;
+
+    currentY += _drawText(
+      canvas,
+      text: transaction.amount.formatCurrency(),
+      x: cardPadding + contentPadding,
+      y: currentY,
+      maxWidth: canvasWidth - ((cardPadding + contentPadding) * 2),
+      style: TextStyle(
+        color: transaction.isFailed
+            ? const Color(0xFF6B7280)
+            : const Color(0xFF111827),
+        fontSize: 64,
+        fontWeight: FontWeight.w800,
+        decoration: transaction.isFailed
+            ? TextDecoration.lineThrough
+            : TextDecoration.none,
+      ),
+    );
+
+    currentY += 24;
+    _drawDashedDivider(
+      canvas,
+      y: currentY,
+      xStart: cardPadding + contentPadding,
+      xEnd: canvasWidth - (cardPadding + contentPadding),
+    );
+
+    currentY += 34;
+    currentY += _drawReceiptRow(
+      canvas,
+      x: cardPadding + contentPadding,
+      y: currentY,
+      width: canvasWidth - ((cardPadding + contentPadding) * 2),
+      label: transaction.isCredit ? 'Received From' : 'Sent To',
+      value: transaction.transactionFor,
+      emphasizeValue: true,
+    );
+
+    if (transaction.charges > 0) {
+      currentY += _drawReceiptRow(
+        canvas,
+        x: cardPadding + contentPadding,
+        y: currentY,
+        width: canvasWidth - ((cardPadding + contentPadding) * 2),
+        label: 'Transfer Fee',
+        value: transaction.charges.formatCurrency(),
+      );
+    }
+
+    currentY += _drawReceiptRow(
+      canvas,
+      x: cardPadding + contentPadding,
+      y: currentY,
+      width: canvasWidth - ((cardPadding + contentPadding) * 2),
+      label: 'Date & Time',
+      value: transaction.createdAt.formatDateTime(),
+    );
+
+    if (transaction.koraReferenceId.isNotEmpty) {
+      currentY += _drawReceiptRow(
+        canvas,
+        x: cardPadding + contentPadding,
+        y: currentY,
+        width: canvasWidth - ((cardPadding + contentPadding) * 2),
+        label: 'Reference',
+        value: transaction.koraReferenceId,
+      );
+    }
+
+    if (transaction.narration.isNotEmpty) {
+      currentY += _drawReceiptRow(
+        canvas,
+        x: cardPadding + contentPadding,
+        y: currentY,
+        width: canvasWidth - ((cardPadding + contentPadding) * 2),
+        label: 'Narration',
+        value: transaction.narration,
+      );
+    }
+
+    currentY += 24;
+    _drawDashedDivider(
+      canvas,
+      y: currentY,
+      xStart: cardPadding + contentPadding,
+      xEnd: canvasWidth - (cardPadding + contentPadding),
+    );
+
+    currentY += 28;
+    _drawText(
+      canvas,
+      text: 'This receipt is generated by Savvy Bee.',
+      x: cardPadding + contentPadding,
+      y: currentY,
+      maxWidth: canvasWidth - ((cardPadding + contentPadding) * 2),
+      style: const TextStyle(
+        color: Color(0xFF6B7280),
+        fontSize: 22,
+        fontWeight: FontWeight.w400,
+      ),
+    );
+
+    currentY += 34;
+    _drawText(
+      canvas,
+      text: 'Generated on ${DateTime.now().formatDateTime()}',
+      x: cardPadding + contentPadding,
+      y: currentY,
+      maxWidth: canvasWidth - ((cardPadding + contentPadding) * 2),
+      style: const TextStyle(
+        color: Color(0xFF9CA3AF),
+        fontSize: 20,
+        fontWeight: FontWeight.w400,
+      ),
+    );
+
+    final picture = recorder.endRecording();
+    final image = await picture.toImage(
+      canvasWidth.toInt(),
+      canvasHeight.toInt(),
+    );
+    final bytes = await image.toByteData(format: ui.ImageByteFormat.png);
+    if (bytes == null) {
+      throw Exception('Failed to convert receipt image to bytes');
+    }
+    return bytes.buffer.asUint8List();
   }
 
   String _initials(String name) {
@@ -245,7 +631,7 @@ ${transaction.narration.isNotEmpty ? 'Note: ${transaction.narration}' : ''}
                     const SizedBox(width: 12),
                     Expanded(
                       child: OutlinedButton(
-                        onPressed: _shareTransaction,
+                        onPressed: () => _shareTransaction(context),
                         style: OutlinedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           side: const BorderSide(color: Colors.black26),
