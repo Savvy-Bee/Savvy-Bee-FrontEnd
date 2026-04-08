@@ -68,7 +68,13 @@ class TransferRepository {
         data: formData,
       );
 
-      return response.data as Map<String, dynamic>;
+      final data = response.data as Map<String, dynamic>;
+      if (data['success'] == false) {
+        throw ApiException(
+          message: data['message'] as String? ?? 'Failed to initialize transaction',
+        );
+      }
+      return data;
     } on ApiException {
       rethrow;
     } catch (e) {
@@ -94,9 +100,13 @@ class TransferRepository {
         data: formData,
       );
 
-      return TransactionResponse.fromJson(
+      final result = TransactionResponse.fromJson(
         response.data as Map<String, dynamic>,
       );
+      if (!result.success) {
+        throw ApiException(message: result.message.isNotEmpty ? result.message : 'Transaction failed');
+      }
+      return result;
     } on ApiException {
       rethrow;
     } catch (e) {
@@ -126,9 +136,13 @@ class TransferRepository {
         data: formData,
       );
 
-      return InternalTransferResponse.fromJson(
+      final result = InternalTransferResponse.fromJson(
         response.data as Map<String, dynamic>,
       );
+      if (!result.success) {
+        throw ApiException(message: result.message.isNotEmpty ? result.message : 'Transfer failed');
+      }
+      return result;
     } on ApiException {
       rethrow;
     } catch (e) {

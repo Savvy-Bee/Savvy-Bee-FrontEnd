@@ -322,7 +322,7 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
             child: _buildActionButton(
               icon: Icons.send_outlined,
               label: 'Send Money',
-              onTap: () => context.pushNamed(TransferScreenOne.path),
+              onTap: () => context.push(TransferScreenOne.path),
             ),
           ),
           const Gap(12),

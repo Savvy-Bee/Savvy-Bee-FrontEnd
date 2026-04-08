@@ -63,19 +63,21 @@ class TransactionData {
 class TransactionResponse {
   final bool success;
   final String message;
-  final TransactionData data;
+  final TransactionData? data;
 
   TransactionResponse({
     required this.success,
     required this.message,
-    required this.data,
+    this.data,
   });
 
   factory TransactionResponse.fromJson(Map<String, dynamic> json) {
     return TransactionResponse(
-      success: json['success'] as bool,
-      message: json['message'] as String,
-      data: TransactionData.fromJson(json['data'] as Map<String, dynamic>),
+      success: json['success'] as bool? ?? false,
+      message: json['message'] as String? ?? '',
+      data: json['data'] != null
+          ? TransactionData.fromJson(json['data'] as Map<String, dynamic>)
+          : null,
     );
   }
 }

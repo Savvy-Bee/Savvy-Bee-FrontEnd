@@ -123,8 +123,6 @@ class _BillConfirmationScreenState
 
       if (mounted) {
         setState(() => _isProcessing = false);
-
-        // Navigate to completion screen
         if (success) {
           context.pushReplacementNamed(
             BillCompletionScreen.path,
@@ -135,13 +133,6 @@ class _BillConfirmationScreenState
               'network': widget.confirmationData.network,
             },
           );
-        } else {
-          CustomSnackbar.show(
-            context,
-            'Transaction failed. Please check your pin and try again.',
-            type: SnackbarType.error,
-            position: SnackbarPosition.bottom,
-          );
         }
       }
     } catch (e) {
@@ -149,7 +140,7 @@ class _BillConfirmationScreenState
         setState(() => _isProcessing = false);
         CustomSnackbar.show(
           context,
-          'Transaction failed: ${e.toString()}',
+          e.toString(),
           type: SnackbarType.error,
           position: SnackbarPosition.bottom,
         );

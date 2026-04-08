@@ -57,19 +57,21 @@ class InternalTransferData {
 class InternalTransferResponse {
   final bool success;
   final String message;
-  final InternalTransferData data;
+  final InternalTransferData? data;
 
   InternalTransferResponse({
     required this.success,
     required this.message,
-    required this.data,
+    this.data,
   });
 
   factory InternalTransferResponse.fromJson(Map<String, dynamic> json) {
     return InternalTransferResponse(
-      success: json['success'] as bool,
-      message: json['message'] as String,
-      data: InternalTransferData.fromJson(json['data'] as Map<String, dynamic>),
+      success: json['success'] as bool? ?? false,
+      message: json['message'] as String? ?? '',
+      data: json['data'] != null
+          ? InternalTransferData.fromJson(json['data'] as Map<String, dynamic>)
+          : null,
     );
   }
 }

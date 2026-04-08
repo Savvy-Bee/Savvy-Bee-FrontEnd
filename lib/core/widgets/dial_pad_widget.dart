@@ -113,6 +113,8 @@ class EnterPinBottomSheet extends StatefulWidget {
       context: context,
       isDismissible: false,
       enableDrag: false,
+      isScrollControlled: true,
+      useSafeArea: true,
       builder: (context) => EnterPinBottomSheet(callback: callback),
     );
   }

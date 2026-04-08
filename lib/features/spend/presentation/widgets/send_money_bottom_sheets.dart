@@ -97,7 +97,7 @@ class _EnterAmountBottomSheetState
       if (!mounted) return;
       CustomSnackbar.show(
         context,
-        'Error: ${e.toString()}',
+        e.toString(),
         type: SnackbarType.error,
         position: SnackbarPosition.bottom,
       );
@@ -316,12 +316,26 @@ class _EnterPinBottomSheetState extends ConsumerState<EnterPinBottomSheet> {
         pin = '';
         _isProcessing = false;
       });
-      CustomSnackbar.show(
-        context,
-        'Transaction failed: ${e.toString()}',
-        type: SnackbarType.error,
-        position: SnackbarPosition.bottom,
-      );
+      // Capture messenger before popping so the snackbar shows on the
+      // underlying screen rather than behind the bottom sheet.
+      final messenger = ScaffoldMessenger.of(context);
+      final errorMessage = e.toString();
+      context.pop(); // close PIN sheet
+      context.pop(); // close amount sheet
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        messenger.hideCurrentSnackBar();
+        messenger.showSnackBar(
+          SnackBar(
+            content: CustomSnackbar(text: errorMessage, type: SnackbarType.error),
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            duration: const Duration(seconds: 4),
+            dismissDirection: DismissDirection.down,
+            margin: const EdgeInsets.only(left: 10, right: 10),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      });
     }
   }
 

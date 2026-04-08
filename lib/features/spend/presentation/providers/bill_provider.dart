@@ -286,9 +286,7 @@ class BillsNotifier
 
   /// Purchase airtime
   ///
-  /// Returns a boolean indicating whether the purchase was successful.
-  /// The response is stored locally to avoid race conditions when reading
-  /// from the state immediately after setting it (state updates are async).
+  /// Returns true on success, or throws with the API error message on failure.
   Future<bool> purchaseAirtime({
     required String phoneNo,
     required String provider,
@@ -298,40 +296,34 @@ class BillsNotifier
     state = const AsyncValue.loading();
     final repository = ref.read(billsRepositoryProvider);
 
-    // Store response locally instead of reading from state later
-    // This prevents race conditions since state updates are asynchronous
-    BillsResponse? airtimeResponse;
-
-    state = await AsyncValue.guard(() async {
-      // Initialize the airtime purchase
-      await repository.initializeAirtime(
+    try {
+      final initResponse = await repository.initializeAirtime(
         phoneNo: phoneNo,
         provider: provider,
         amount: amount,
       );
+      if (!initResponse.success) throw Exception(initResponse.message);
 
-      // Verify with PIN and store response locally
-      airtimeResponse = await repository.verifyAirtime(pin: pin);
+      final verifyResponse = await repository.verifyAirtime(pin: pin);
 
-      // Update state with the response
-      return {
-        'airtime': airtimeResponse,
+      state = AsyncValue.data({
+        'airtime': verifyResponse,
         'data': null,
         'tv': null,
         'electricity': null,
-      };
-    });
+      });
 
-    // Return success status from local variable, not from state
-    // Reading from state here would be unreliable due to async updates
-    return airtimeResponse?.success ?? false;
+      if (!verifyResponse.success) throw Exception(verifyResponse.message);
+      return true;
+    } catch (e, stack) {
+      state = AsyncValue.error(e, stack);
+      rethrow;
+    }
   }
 
   /// Purchase data
   ///
-  /// Returns a boolean indicating whether the purchase was successful.
-  /// The response is stored locally to avoid race conditions when reading
-  /// from the state immediately after setting it (state updates are async).
+  /// Returns true on success, or throws with the API error message on failure.
   Future<bool> purchaseData({
     required String phoneNo,
     required String provider,
@@ -341,40 +333,34 @@ class BillsNotifier
     state = const AsyncValue.loading();
     final repository = ref.read(billsRepositoryProvider);
 
-    // Store response locally instead of reading from state later
-    // This prevents race conditions since state updates are asynchronous
-    BillsResponse? dataResponse;
-
-    state = await AsyncValue.guard(() async {
-      // Initialize the data purchase
-      await repository.initializeData(
+    try {
+      final initResponse = await repository.initializeData(
         phoneNo: phoneNo,
         provider: provider,
         code: code,
       );
+      if (!initResponse.success) throw Exception(initResponse.message);
 
-      // Verify with PIN and store response locally
-      dataResponse = await repository.verifyData(pin: pin);
+      final verifyResponse = await repository.verifyData(pin: pin);
 
-      // Update state with the response
-      return {
+      state = AsyncValue.data({
         'airtime': null,
-        'data': dataResponse,
+        'data': verifyResponse,
         'tv': null,
         'electricity': null,
-      };
-    });
+      });
 
-    // Return success status from local variable, not from state
-    // Reading from state here would be unreliable due to async updates
-    return dataResponse?.success ?? false;
+      if (!verifyResponse.success) throw Exception(verifyResponse.message);
+      return true;
+    } catch (e, stack) {
+      state = AsyncValue.error(e, stack);
+      rethrow;
+    }
   }
 
   /// Subscribe to TV
   ///
-  /// Returns a boolean indicating whether the subscription was successful.
-  /// The response is stored locally to avoid race conditions when reading
-  /// from the state immediately after setting it (state updates are async).
+  /// Returns true on success, or throws with the API error message on failure.
   Future<bool> subscribeTv({
     required String phoneNo,
     required String provider,
@@ -384,40 +370,34 @@ class BillsNotifier
     state = const AsyncValue.loading();
     final repository = ref.read(billsRepositoryProvider);
 
-    // Store response locally instead of reading from state later
-    // This prevents race conditions since state updates are asynchronous
-    BillsResponse? tvResponse;
-
-    state = await AsyncValue.guard(() async {
-      // Initialize the TV subscription
-      await repository.initializeTv(
+    try {
+      final initResponse = await repository.initializeTv(
         phoneNo: phoneNo,
         provider: provider,
         code: code,
       );
+      if (!initResponse.success) throw Exception(initResponse.message);
 
-      // Verify with PIN and store response locally
-      tvResponse = await repository.verifyTv(pin: pin);
+      final verifyResponse = await repository.verifyTv(pin: pin);
 
-      // Update state with the response
-      return {
+      state = AsyncValue.data({
         'airtime': null,
         'data': null,
-        'tv': tvResponse,
+        'tv': verifyResponse,
         'electricity': null,
-      };
-    });
+      });
 
-    // Return success status from local variable, not from state
-    // Reading from state here would be unreliable due to async updates
-    return tvResponse?.success ?? false;
+      if (!verifyResponse.success) throw Exception(verifyResponse.message);
+      return true;
+    } catch (e, stack) {
+      state = AsyncValue.error(e, stack);
+      rethrow;
+    }
   }
 
   /// Pay electricity bill
   ///
-  /// Returns a boolean indicating whether the payment was successful.
-  /// The response is stored locally to avoid race conditions when reading
-  /// from the state immediately after setting it (state updates are async).
+  /// Returns true on success, or throws with the API error message on failure.
   Future<bool> payElectricity({
     required String phoneNo,
     required String provider,
@@ -429,34 +409,30 @@ class BillsNotifier
     state = const AsyncValue.loading();
     final repository = ref.read(billsRepositoryProvider);
 
-    // Store response locally instead of reading from state later
-    // This prevents race conditions since state updates are asynchronous
-    BillsResponse? electricityResponse;
-
-    state = await AsyncValue.guard(() async {
-      // Initialize the electricity payment
-      await repository.initializeElectricity(
+    try {
+      final initResponse = await repository.initializeElectricity(
         provider: provider,
         meterNumber: meterNumber,
         amount: amount,
         meterType: meterType.toUpperCase(),
       );
+      if (!initResponse.success) throw Exception(initResponse.message);
 
-      // Verify with PIN and store response locally
-      electricityResponse = await repository.verifyElectricity(pin: pin);
+      final verifyResponse = await repository.verifyElectricity(pin: pin);
 
-      // Update state with the response
-      return {
+      state = AsyncValue.data({
         'airtime': null,
         'data': null,
         'tv': null,
-        'electricity': electricityResponse,
-      };
-    });
+        'electricity': verifyResponse,
+      });
 
-    // Return success status from local variable, not from state
-    // Reading from state here would be unreliable due to async updates
-    return electricityResponse?.success ?? false;
+      if (!verifyResponse.success) throw Exception(verifyResponse.message);
+      return true;
+    } catch (e, stack) {
+      state = AsyncValue.error(e, stack);
+      rethrow;
+    }
   }
 
   /// Reset all states to initial null values

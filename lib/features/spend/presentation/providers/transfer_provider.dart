@@ -30,7 +30,7 @@ final verifyAccountProvider =
         accountNumber: params.accountNumber,
         bankName: params.bankName,
       );
-      return response.data;
+      return response.data!;
     });
 
 // State class for transfer operations
@@ -194,7 +194,7 @@ final verifyTransferProvider =
         transferFor: params.transferFor,
         narration: params.narration,
       );
-      return response.data;
+      return response.data!;
     });
 
 /// Internal transfer to another user
@@ -217,5 +217,5 @@ final internalTransferProvider =
         username: params.username,
         amount: params.amount,
       );
-      return response.data;
+      return response.data!;
     });
