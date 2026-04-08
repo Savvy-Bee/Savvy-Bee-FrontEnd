@@ -90,13 +90,15 @@ class _FilingStep5ScreenState extends ConsumerState<FilingStep5Screen> {
       if (!mounted) return;
       setState(() => _isPaying = false);
 
-      final paid = await KoraPaymentWebView.show(
+      await KoraPaymentWebView.show(
         context,
         checkoutUrl: result.checkoutUrl,
         title: 'Pay Tax Liability',
       );
 
-      if (paid == true && mounted) {
+      if (!mounted) return;
+      final confirmed = await _showPaymentConfirmationDialog();
+      if (confirmed && mounted) {
         AppNotification.show(
           context,
           message: 'Payment confirmed! Your return is now ready for submission.',
@@ -117,6 +119,38 @@ class _FilingStep5ScreenState extends ConsumerState<FilingStep5Screen> {
         );
       }
     }
+  }
+
+  Future<bool> _showPaymentConfirmationDialog() async {
+    final result = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => AlertDialog(
+        title: const Text(
+          'Payment Confirmation',
+          style: TextStyle(fontFamily: 'GeneralSans', fontWeight: FontWeight.w700),
+        ),
+        content: const Text(
+          'Have you completed your tax liability payment on KoraPay?',
+          style: TextStyle(fontFamily: 'GeneralSans'),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('No, try again'),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary),
+            child: const Text(
+              'Yes, I have',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ],
+      ),
+    );
+    return result ?? false;
   }
 
   @override

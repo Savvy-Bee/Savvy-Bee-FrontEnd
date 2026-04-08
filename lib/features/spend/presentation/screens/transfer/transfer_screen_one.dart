@@ -6,54 +6,25 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/utils/assets/assets.dart';
+import '../../../../../core/utils/date_time_extension.dart';
+import '../../../../../core/utils/num_extensions.dart';
 import '../../../../../core/widgets/custom_button.dart';
+import '../../providers/wallet_provider.dart';
+import 'internal_transfer_screen.dart';
 import 'send_money_screen.dart';
+import 'transfer_history_screen.dart';
 import 'transfer_screen.dart';
+import '../transactions/transaction_details_screen.dart';
 
 class TransferScreenOne extends ConsumerWidget {
   static const String path = '/transfer-screen-one';
 
   const TransferScreenOne({super.key});
 
-  // Mock data — replace with real providers
+  // Mock beneficiaries — replace with real data when API is available
   static const _beneficiaries = [
     ('AT', 'Aegon\nTargaryen', '0123456789', 'Access Bank', '044'),
     ('SS', 'Savvy Super\nMart', '0987654321', 'GTBank', '058'),
-  ];
-
-  static const _friends = [
-    ('SS', 'Savvy Super\nMart', '0987654321', 'GTBank', '058'),
-    ('TO', 'Tunwase\nOsinaike', '0234567890', 'Zenith Bank', '057'),
-    ('DC', 'Deborah\nCaulcrick', '0345678901', 'First Bank', '011'),
-    ('VA', 'Victor\nAdabra', '0456789012', 'UBA', '033'),
-    ('TI', 'Tamilon\nIdowu', '0567890123', 'Sterling Bank', '232'),
-  ];
-
-  static const _recentTx = [
-    (
-      'TO',
-      'Tunwase Osinaike',
-      'You sent ₦500,000 2 days ago',
-      '0234567890',
-      'Zenith Bank',
-      '057',
-    ),
-    (
-      'DC',
-      'Deborah Caulcrick',
-      'You sent ₦500,000 2 days ago',
-      '0345678901',
-      'First Bank',
-      '011',
-    ),
-    (
-      'SS',
-      'Savvy Super Mart',
-      'You sent ₦50,000 3 days ago',
-      '0987654321',
-      'GTBank',
-      '058',
-    ),
   ];
 
   void _showConfirmation(
@@ -78,8 +49,22 @@ class TransferScreenOne extends ConsumerWidget {
     );
   }
 
+  /// Returns up to 2 uppercase letters derived from the narration string.
+  String _initials(String narration) {
+    final words = narration.trim().split(RegExp(r'\s+'));
+    if (words.length >= 2) {
+      return '${words[0][0]}${words[1][0]}'.toUpperCase();
+    } else if (words.isNotEmpty && words[0].isNotEmpty) {
+      final w = words[0];
+      return w.substring(0, w.length >= 2 ? 2 : 1).toUpperCase();
+    }
+    return '?';
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final transactionsAsync = ref.watch(transactionListProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Send Money'),
@@ -113,7 +98,13 @@ class TransferScreenOne extends ConsumerWidget {
 
           // ── SEND TO ANY BANK ──────────────────────────────────
           _SendToBankTile(
-            onTap: () => context.pushNamed(TransferScreen.path),
+            onTap: () => context.push(TransferScreen.path),
+          ),
+          const Gap(12),
+
+          // ── SEND TO SAVVY BEE USER ────────────────────────────
+          _SendToSavvyBeeTile(
+            onTap: () => context.push(InternalTransferScreen.path),
           ),
           const Gap(24),
 
@@ -123,36 +114,16 @@ class TransferScreenOne extends ConsumerWidget {
             children: [
               _SectionLabel('SAVVY BEE FRIENDS'),
               TextButton(
-                onPressed: () {},
-                child: const Text(
+                onPressed: null,
+                child: Text(
                   'See all',
-                  style: TextStyle(fontSize: 12, color: AppColors.primary),
+                  style: TextStyle(fontSize: 12, color: Colors.grey.shade400),
                 ),
               ),
             ],
           ),
           const Gap(8),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              spacing: 20,
-              children: _friends
-                  .map(
-                    (f) => _AvatarChip(
-                      initials: f.$1,
-                      label: f.$2,
-                      onTap: () => _showConfirmation(
-                        context,
-                        accountName: f.$2.replaceAll('\n', ' '),
-                        accountNumber: f.$3,
-                        bankName: f.$4,
-                        bankCode: f.$5,
-                      ),
-                    ),
-                  )
-                  .toList(),
-            ),
-          ),
+          _SavvyBeeFriendsEmptyState(),
           const Gap(24),
 
           // ── RECENT TRANSACTIONS ───────────────────────────────
@@ -161,7 +132,7 @@ class TransferScreenOne extends ConsumerWidget {
             children: [
               _SectionLabel('RECENT TRANSACTIONS'),
               TextButton(
-                onPressed: () {},
+                onPressed: () => context.push(TransferHistoryScreen.path),
                 child: const Text(
                   'See all',
                   style: TextStyle(fontSize: 12, color: AppColors.primary),
@@ -170,19 +141,48 @@ class TransferScreenOne extends ConsumerWidget {
             ],
           ),
           const Gap(8),
-          ..._recentTx.map(
-            (tx) => _RecentTxTile(
-              initials: tx.$1,
-              name: tx.$2,
-              subtitle: tx.$3,
-              onTap: () => _showConfirmation(
-                context,
-                accountName: tx.$2,
-                accountNumber: tx.$4,
-                bankName: tx.$5,
-                bankCode: tx.$6,
-              ),
+          transactionsAsync.when(
+            data: (apiResponse) {
+              final recent =
+                  (apiResponse.data?.transactions ?? []).take(3).toList();
+              if (recent.isEmpty) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  child: Center(
+                    child: Text(
+                      'No recent transactions',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                  ),
+                );
+              }
+              return Column(
+                children: recent
+                    .map(
+                      (tx) => _RecentTxTile(
+                        initials: _initials(tx.narration),
+                        name: tx.narration,
+                        subtitle:
+                            '${tx.isCredit ? 'You received' : 'You sent'} '
+                            '${tx.amount.formatCurrency(decimalDigits: 0)} '
+                            '${tx.createdAt.formatRelative()}',
+                        onTap: () => context.pushNamed(
+                          TransactionDetailScreen.path,
+                          extra: tx,
+                        ),
+                      ),
+                    )
+                    .toList(),
+              );
+            },
+            loading: () => const Padding(
+              padding: EdgeInsets.symmetric(vertical: 16),
+              child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
             ),
+            error: (_, __) => const SizedBox.shrink(),
           ),
         ],
       ),
@@ -273,6 +273,44 @@ class _BeneficiaryConfirmationSheet extends StatelessWidget {
                 ),
               ),
             ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ── Savvy Bee Friends empty state ────────────────────────────────────────────
+
+class _SavvyBeeFriendsEmptyState extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade50,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.shade200),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.people_outline, size: 36, color: Colors.grey.shade400),
+          const Gap(8),
+          Text(
+            'No Savvy Bee friends yet',
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
+              color: AppColors.textSecondary,
+            ),
+          ),
+          const Gap(4),
+          Text(
+            'Friends who use Savvy Bee will appear here',
+            style: TextStyle(fontSize: 11, color: Colors.grey.shade400),
+            textAlign: TextAlign.center,
           ),
         ],
       ),
@@ -407,6 +445,62 @@ class _SendToBankTile extends StatelessWidget {
   }
 }
 
+class _SendToSavvyBeeTile extends StatelessWidget {
+  final VoidCallback onTap;
+  const _SendToSavvyBeeTile({required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey.shade200),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Row(
+            children: [
+              Icon(
+                Icons.people_alt_outlined,
+                size: 20,
+                color: AppColors.textSecondary,
+              ),
+              const Gap(14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    Text(
+                      'Send to Savvy Bee user',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    Gap(2),
+                    Text(
+                      'Send by Savvy Bee username',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Icon(Icons.chevron_right_rounded, size: 20),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _RecentTxTile extends StatelessWidget {
   final String initials;
   final String name;
@@ -446,6 +540,8 @@ class _RecentTxTile extends StatelessWidget {
           title: Text(
             name,
             style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
           subtitle: Text(
             subtitle,

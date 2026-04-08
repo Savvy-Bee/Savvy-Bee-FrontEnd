@@ -17,6 +17,7 @@ import 'package:savvy_bee_mobile/features/spend/presentation/widgets/mini_button
 import '../../../../core/utils/currency_input_formatter.dart';
 import '../../../../core/widgets/dial_pad_widget.dart';
 import '../../../../core/widgets/dot.dart';
+import '../../../../features/spend/domain/models/internal_transfer.dart';
 import '../providers/wallet_provider.dart';
 import '../providers/transfer_provider.dart';
 
@@ -618,6 +619,454 @@ class TransactionCompletionBottomSheet extends StatelessWidget {
                 onPressed: () {},
                 buttonColor: CustomButtonColor.black,
                 icon: Icon(Icons.file_upload_outlined),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// INTERNAL TRANSFER BOTTOM SHEETS
+// ─────────────────────────────────────────────────────────────────────────────
+
+// ── Enter Amount ─────────────────────────────────────────────────────────────
+
+class InternalEnterAmountBottomSheet extends ConsumerStatefulWidget {
+  final String username;
+
+  const InternalEnterAmountBottomSheet({super.key, required this.username});
+
+  @override
+  ConsumerState<InternalEnterAmountBottomSheet> createState() =>
+      _InternalEnterAmountBottomSheetState();
+
+  static void show(BuildContext context, {required String username}) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      useSafeArea: true,
+      context: context,
+      builder: (context) =>
+          InternalEnterAmountBottomSheet(username: username),
+    );
+  }
+}
+
+class _InternalEnterAmountBottomSheetState
+    extends ConsumerState<InternalEnterAmountBottomSheet> {
+  final _narrationController = TextEditingController();
+  final _amountController = TextEditingController();
+  final _formatter = CurrencyInputFormatter();
+
+  @override
+  void dispose() {
+    _narrationController.dispose();
+    _amountController.dispose();
+    super.dispose();
+  }
+
+  void _updateAmount(String newText) {
+    final oldValue = _amountController.value;
+    final newValue = oldValue.copyWith(
+      text: newText,
+      selection: TextSelection.collapsed(offset: newText.length),
+    );
+    setState(() {
+      _amountController.value = _formatter.formatEditUpdate(oldValue, newValue);
+    });
+  }
+
+  void _onNumberPressed(String number) =>
+      _updateAmount(_amountController.text + number);
+
+  void _onDecimalPressed() => _updateAmount('${_amountController.text}.');
+
+  void _onDeletePressed() {
+    final text = _amountController.text;
+    if (text.isNotEmpty) _updateAmount(text.substring(0, text.length - 1));
+  }
+
+  void _handleProceed() {
+    InternalEnterPinBottomSheet.show(
+      context,
+      username: widget.username,
+      amount: _amountController.text,
+      category: _narrationController.text,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final dashboardAsync = ref.watch(spendDashboardDataProvider);
+    final canProceed = _amountController.text.trim().isNotEmpty &&
+        _narrationController.text.trim().isNotEmpty;
+
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Gap(24),
+          Text(
+            '@${widget.username}',
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+          ),
+          const Gap(8),
+          if (dashboardAsync.hasValue)
+            CustomCard(
+              borderColor: AppColors.primary,
+              bgColor: AppColors.primaryFaint,
+              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 16),
+              child: Text(
+                'Savvy Wallet Balance: ${dashboardAsync.value?.data?.accounts.balance.formatCurrency(decimalDigits: 0)}',
+                style: const TextStyle(fontSize: 12),
+              ),
+            ),
+          const Gap(32),
+          CustomTextFormField(
+            controller: _amountController,
+            showOutline: false,
+            hint: 0.formatCurrency(decimalDigits: 0),
+            readOnly: true,
+            keyboardType: TextInputType.none,
+            onChanged: (_) => setState(() {}),
+            inputFormatters: [CurrencyInputFormatter()],
+          ),
+          const Gap(16),
+          Row(
+            children: [
+              Expanded(
+                child: CustomTextFormField(
+                  controller: _narrationController,
+                  showOutline: false,
+                  hint: 'Narration',
+                  prefixIcon: IconButton(
+                    onPressed: () async {
+                      final value =
+                          await BudgetCategoryBottomSheet.show(context);
+                      if (value != null) {
+                        _narrationController.text = value;
+                        setState(() {});
+                      }
+                    },
+                    icon: const Icon(Icons.pie_chart, color: AppColors.primary),
+                  ),
+                  onChanged: (_) => setState(() {}),
+                ),
+              ),
+              MiniButton(
+                onTap: canProceed ? _handleProceed : null,
+                child: Icon(
+                  Icons.send_outlined,
+                  size: 16,
+                  color: canProceed ? null : AppColors.buttonDisabled,
+                ),
+              ),
+            ],
+          ),
+          const Gap(32),
+          DialPad(
+            onNumberPressed: _onNumberPressed,
+            onDecimalPressed: _onDecimalPressed,
+            onDeletePressed: _onDeletePressed,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ── Enter PIN ─────────────────────────────────────────────────────────────────
+
+class InternalEnterPinBottomSheet extends ConsumerStatefulWidget {
+  final String username;
+  final String amount;
+  final String category;
+
+  const InternalEnterPinBottomSheet({
+    super.key,
+    required this.username,
+    required this.amount,
+    required this.category,
+  });
+
+  @override
+  ConsumerState<InternalEnterPinBottomSheet> createState() =>
+      _InternalEnterPinBottomSheetState();
+
+  static void show(
+    BuildContext context, {
+    required String username,
+    required String amount,
+    required String category,
+  }) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      useSafeArea: true,
+      isDismissible: false,
+      enableDrag: false,
+      context: context,
+      builder: (context) => InternalEnterPinBottomSheet(
+        username: username,
+        amount: amount,
+        category: category,
+      ),
+    );
+  }
+}
+
+class _InternalEnterPinBottomSheetState
+    extends ConsumerState<InternalEnterPinBottomSheet> {
+  String pin = '';
+  bool _isProcessing = false;
+
+  void _updatePin(String newPin) {
+    if (newPin.length <= 4) setState(() => pin = newPin);
+    if (pin.length == 4 && !_isProcessing) _processTransaction();
+  }
+
+  void _onNumberPressed(String number) {
+    if (pin.length < 4 && !_isProcessing) _updatePin(pin + number);
+  }
+
+  void _onDeletePressed() {
+    if (pin.isNotEmpty && !_isProcessing) {
+      _updatePin(pin.substring(0, pin.length - 1));
+    }
+  }
+
+  Future<void> _processTransaction() async {
+    setState(() => _isProcessing = true);
+
+    try {
+      final amount = double.parse(widget.amount.replaceAll(',', ''));
+
+      await ref
+          .read(transferNotifierProvider.notifier)
+          .sendMoneyInternally(
+            pin: pin,
+            transferFor: widget.category,
+            narration: widget.category,
+            username: widget.username,
+            amount: amount,
+          );
+
+      if (!mounted) return;
+
+      final transfer = ref.read(transferNotifierProvider).internalTransfer;
+
+      if (transfer != null) {
+        context.pop(); // close PIN sheet
+        context.pop(); // close amount sheet
+        InternalTransferCompletionBottomSheet.show(
+          context,
+          transfer: transfer,
+          recipientUsername: widget.username,
+        );
+      }
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        pin = '';
+        _isProcessing = false;
+      });
+      final messenger = ScaffoldMessenger.of(context);
+      final errorMessage = e.toString();
+      context.pop(); // close PIN sheet
+      context.pop(); // close amount sheet
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        messenger.hideCurrentSnackBar();
+        messenger.showSnackBar(
+          SnackBar(
+            content:
+                CustomSnackbar(text: errorMessage, type: SnackbarType.error),
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            duration: const Duration(seconds: 4),
+            dismissDirection: DismissDirection.down,
+            margin: const EdgeInsets.only(left: 10, right: 10),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
+                    onPressed: _isProcessing ? null : () => context.pop(),
+                    style: Constants.collapsedButtonStyle,
+                    icon: const Icon(Icons.close),
+                  ),
+                ],
+              ),
+              const Gap(16),
+              Text(
+                '@${widget.username}',
+                style: const TextStyle(fontWeight: FontWeight.w500),
+              ),
+              const Gap(16),
+              Text(
+                double.parse(
+                  widget.amount.split(',').join(),
+                ).formatCurrency(decimalDigits: 0),
+                style: const TextStyle(fontSize: 16),
+              ),
+              const Gap(24),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(Icons.lock_outline, size: 20, color: AppColors.primary),
+                  Gap(8),
+                  Text('Transaction PIN', style: TextStyle(fontSize: 12)),
+                ],
+              ),
+              const Gap(16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: _isProcessing
+                    ? [
+                        const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        ),
+                      ]
+                    : List.generate(4, (index) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: Dot(
+                            size: 16,
+                            color: index < pin.length
+                                ? AppColors.primary
+                                : AppColors.grey,
+                          ),
+                        );
+                      }),
+              ),
+              const Gap(24),
+              DialPad(
+                onNumberPressed:
+                    _isProcessing ? (_) {} : _onNumberPressed,
+                onDecimalPressed: () {},
+                onDeletePressed: _isProcessing ? () {} : _onDeletePressed,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// ── Completion ────────────────────────────────────────────────────────────────
+
+class InternalTransferCompletionBottomSheet extends StatelessWidget {
+  final InternalTransferData transfer;
+  final String recipientUsername;
+
+  const InternalTransferCompletionBottomSheet({
+    super.key,
+    required this.transfer,
+    required this.recipientUsername,
+  });
+
+  static void show(
+    BuildContext context, {
+    required InternalTransferData transfer,
+    required String recipientUsername,
+  }) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => InternalTransferCompletionBottomSheet(
+        transfer: transfer,
+        recipientUsername: recipientUsername,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isSuccess = transfer.status.toLowerCase() == 'success';
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const Gap(6),
+        Container(
+          width: 40,
+          padding: const EdgeInsets.all(2.5),
+          decoration: BoxDecoration(
+            color: AppColors.black,
+            borderRadius: BorderRadius.circular(20),
+          ),
+        ),
+        const Gap(16),
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SvgPicture.asset(
+                isSuccess ? Assets.successSvg : Assets.errorSvg,
+              ),
+              const Gap(16),
+              Text(
+                isSuccess ? 'Sent' : 'Failed',
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const Gap(4),
+              Text.rich(
+                textAlign: TextAlign.center,
+                TextSpan(
+                  text: transfer.amount.formatCurrency(decimalDigits: 0),
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  children: [
+                    TextSpan(
+                      text: isSuccess
+                          ? ' is on its way to\n'
+                          : ' transfer failed\n',
+                      style: const TextStyle(fontWeight: FontWeight.w400),
+                    ),
+                    if (isSuccess) TextSpan(text: '@$recipientUsername'),
+                  ],
+                ),
+              ),
+              const Gap(8),
+              Text(
+                'Reference: ${transfer.id}',
+                style: TextStyle(fontSize: 10, color: AppColors.grey),
+              ),
+              Text(
+                'Charges: ${transfer.charges.formatCurrency(decimalDigits: 0)}',
+                style: TextStyle(fontSize: 10, color: AppColors.grey),
+              ),
+              const Gap(24),
+              CustomElevatedButton(
+                text: 'Done',
+                onPressed: () => context.pop(),
+                buttonColor: CustomButtonColor.black,
               ),
             ],
           ),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
@@ -11,8 +10,8 @@ import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/features/spend/domain/models/wallet.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/transactions/account_statement_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/transactions/transaction_details_screen.dart';
 
-import '../../../../../core/utils/assets/assets.dart';
 import '../../../../../core/utils/date_time_extension.dart';
 import '../../providers/wallet_provider.dart';
 
@@ -225,7 +224,7 @@ class TransactionHistoryCard extends StatelessWidget {
             spacing: 16,
             mainAxisSize: MainAxisSize.min,
             children: transactions.map((transaction) {
-              return _buildTransactionItem(transaction);
+              return _buildTransactionItem(context, transaction);
             }).toList(),
           ),
         ),
@@ -233,7 +232,7 @@ class TransactionHistoryCard extends StatelessWidget {
     );
   }
 
-  Widget _buildTransactionItem(WalletTransaction transaction) {
+  Widget _buildTransactionItem(BuildContext context, WalletTransaction transaction) {
     // Determine title based on transaction type and purpose
     String title = transaction.narration;
 
@@ -261,14 +260,38 @@ class TransactionHistoryCard extends StatelessWidget {
       amountColor = AppColors.error;
     }
 
-    return Row(
+    return GestureDetector(
+      onTap: () => context.pushNamed(
+        TransactionDetailScreen.path,
+        extra: transaction,
+      ),
+      behavior: HitTestBehavior.opaque,
+      child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Expanded(
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              SvgPicture.asset(Assets.coinStackSvg),
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: transaction.isCredit
+                      ? const Color(0xFFE8F5E9)
+                      : const Color(0xFFFFEBEE),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  transaction.isCredit
+                      ? Icons.arrow_downward
+                      : Icons.arrow_upward,
+                  size: 20,
+                  color: transaction.isCredit
+                      ? const Color(0xFF4CAF50)
+                      : const Color(0xFFEF5350),
+                ),
+              ),
               const Gap(8),
               Expanded(
                 child: Column(
@@ -330,6 +353,7 @@ class TransactionHistoryCard extends StatelessWidget {
           style: TextStyle(fontWeight: FontWeight.w500, color: amountColor),
         ),
       ],
+    ),
     );
   }
 }

@@ -11,6 +11,7 @@ import 'package:savvy_bee_mobile/core/widgets/custom_loading_widget.dart';
 import 'package:savvy_bee_mobile/features/spend/domain/models/wallet.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/providers/wallet_provider.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/bills/pay_bills_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/transactions/transaction_details_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/transactions/transaction_history_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/transfer/transfer_screen_one.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/add_money_screen.dart';
@@ -415,7 +416,14 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
             final transaction = transactions[index];
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: _buildTransactionItem(transaction),
+              child: GestureDetector(
+                onTap: () => context.pushNamed(
+                  TransactionDetailScreen.path,
+                  extra: transaction,
+                ),
+                behavior: HitTestBehavior.opaque,
+                child: _buildTransactionItem(transaction),
+              ),
             );
           }, childCount: transactions.length),
         );
