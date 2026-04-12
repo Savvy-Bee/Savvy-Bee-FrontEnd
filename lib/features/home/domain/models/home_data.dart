@@ -21,11 +21,20 @@ class InsightAdvice {
 class Kyc {
   final bool nin;
   final bool bvn;
+  final bool address;
 
-  Kyc({required this.nin, required this.bvn});
+  Kyc({required this.nin, required this.bvn, this.address = false});
 
   factory Kyc.fromJson(Map<String, dynamic> json) {
-    return Kyc(nin: json['NIN'] as bool? ?? false, bvn: json['BVN'] as bool? ?? false);
+    // Address is considered set if the 'Address' field is a non-empty map
+    final addressField = json['Address'];
+    final hasAddress = addressField is Map &&
+        (addressField['addressLine_1'] as String? ?? '').isNotEmpty;
+    return Kyc(
+      nin: json['NIN'] as bool? ?? false,
+      bvn: json['BVN'] as bool? ?? false,
+      address: hasAddress,
+    );
   }
 
   Map<String, dynamic> toJson() {

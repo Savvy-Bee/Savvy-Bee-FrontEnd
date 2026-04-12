@@ -59,7 +59,7 @@ class NetWorthCard extends StatelessWidget {
                     ),
                     const Gap(4),
                     Text(
-                      '₦${dashboardData.netAnalysis.totalBalance.toStringAsFixed(2)} below last month',
+                      '₦${(dashboardData.netAnalysis.totalBalance / 100).toStringAsFixed(2)} below last month',
                       style: const TextStyle(
                         fontSize: 11,
                         color: AppColors.success,
@@ -75,7 +75,7 @@ class NetWorthCard extends StatelessWidget {
           ),
           const Gap(8),
           Text(
-            context.currencyFormat(dashboardData.netAnalysis.totalBalance),
+            context.currencyFormat(dashboardData.netAnalysis.totalBalance / 100),
             style: const TextStyle(
               fontSize: 32,
               fontWeight: FontWeight.bold,

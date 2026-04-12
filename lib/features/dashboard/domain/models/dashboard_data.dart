@@ -396,7 +396,7 @@ class SavingsGoal {
   }
 
   // Check if goal is completed
-  bool get isCompleted => balance >= targetAmount;
+  bool get isCompleted => targetAmount > 0 && balance >= targetAmount;
 }
 
 // Also fix the Debt class the same way
@@ -490,7 +490,7 @@ class Debt {
   double get remainingDebt => owed - balance;
 
   // Check if debt is paid off
-  bool get isPaidOff => balance >= owed;
+  bool get isPaidOff => owed > 0 && balance >= owed;
 
   // Calculate payoff progress percentage
   double get payoffPercentage {

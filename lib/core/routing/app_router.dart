@@ -32,6 +32,7 @@ import 'package:savvy_bee_mobile/features/onboarding/presentation/screens/satisf
 import 'package:savvy_bee_mobile/features/onboarding/presentation/screens/we_help_screen.dart';
 import 'package:savvy_bee_mobile/features/premium/presentation/screens/premium_screen.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/screens/account_info_screen.dart';
+import 'package:savvy_bee_mobile/features/profile/presentation/screens/address_screen.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/screens/achievements_screen.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/screens/bvn_verification_screen.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/screens/change_app_icon_screen.dart';
@@ -1062,6 +1063,13 @@ final GoRouter appRouter = GoRouter(
       name: NextOfKinScreen.path,
       builder: (BuildContext context, GoRouterState state) {
         return NextOfKinScreen();
+      },
+    ),
+    GoRoute(
+      path: AddressScreen.path,
+      name: AddressScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return const AddressScreen();
       },
     ),
     GoRoute(

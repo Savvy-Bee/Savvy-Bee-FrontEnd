@@ -369,6 +369,15 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                               const Gap(16),
                               AccountsSection(dashboardData: dashboardData),
                               const Gap(16),
+                              if (dashboardData.widgets.savingTargetInsight
+                                  .isNotEmpty)
+                                _SavingsInsightCard(
+                                  insight: dashboardData
+                                      .widgets.savingTargetInsight,
+                                ),
+                              if (dashboardData.widgets.savingTargetInsight
+                                  .isNotEmpty)
+                                const Gap(16),
                               RecentTransactionsSection(
                                 transactions: dashboardData.accounts.isNotEmpty
                                     ? dashboardData.accounts[0].history12Months
@@ -1191,6 +1200,60 @@ class _NetWorthCardState extends State<NetWorthCard> {
       '₦${NumberFormat('#,###.##').format(amount.abs())}';
 }
 
+class _SavingsInsightCard extends StatelessWidget {
+  final String insight;
+  const _SavingsInsightCard({required this.insight});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      color: AppColors.primaryFaint,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Icon(
+              Icons.savings_outlined,
+              color: AppColors.primaryDark,
+              size: 20,
+            ),
+            const Gap(12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Savings Insight',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'GeneralSans',
+                      color: AppColors.primaryDark,
+                      letterSpacing: 12 * 0.02,
+                    ),
+                  ),
+                  const Gap(4),
+                  Text(
+                    insight,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      fontFamily: 'GeneralSans',
+                      color: AppColors.textPrimary,
+                      letterSpacing: 13 * 0.02,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class AccountsSection extends StatefulWidget {
   final DashboardData dashboardData;
   const AccountsSection({super.key, required this.dashboardData});
@@ -1200,16 +1263,19 @@ class AccountsSection extends StatefulWidget {
 
 class _AccountsSectionState extends State<AccountsSection> {
   bool _isSavingsExpanded = false;
+  bool _isDebtsExpanded = false;
 
   @override
   Widget build(BuildContext context) {
-    double netCash = widget.dashboardData.accounts.fold(
-      0.0,
-      (sum, a) => sum + a.details.balance,
-    );
+    final double netCash =
+        widget.dashboardData.netAnalysis.totalBalance / 100;
     double savingsBalance = widget.dashboardData.savings.fold(
       0.0,
       (sum, g) => sum + g.balance,
+    );
+    double debtsTotal = widget.dashboardData.debts.fold(
+      0.0,
+      (sum, d) => sum + d.owed,
     );
     final displayedGoals = _isSavingsExpanded
         ? widget.dashboardData.savings
@@ -1310,43 +1376,91 @@ class _AccountsSectionState extends State<AccountsSection> {
                 )
               else
                 ...displayedGoals.map(
-                  (goal) => ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    visualDensity: VisualDensity.compact,
-                    leading: Icon(_getIconForGoal(goal.goalName)),
-                    title: Text(goal.goalName),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Gap(4),
-                        LinearProgressIndicator(
-                          value: goal.progressPercentage / 100,
-                          backgroundColor: AppColors.greyLight,
-                          valueColor: const AlwaysStoppedAnimation(
-                            AppColors.success,
+                  (goal) {
+                    final bool completed =
+                        goal.targetAmount > 0 && goal.isCompleted;
+                    final double progress = completed
+                        ? 1.0
+                        : (goal.targetAmount > 0
+                            ? goal.progressPercentage / 100
+                            : 0.0);
+                    return ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      visualDensity: VisualDensity.compact,
+                      leading: completed
+                          ? const Icon(
+                              Icons.check_circle,
+                              color: AppColors.success,
+                            )
+                          : Icon(_getIconForGoal(goal.goalName)),
+                      title: Text(goal.goalName),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Gap(4),
+                          LinearProgressIndicator(
+                            value: progress,
+                            backgroundColor: AppColors.greyLight,
+                            valueColor: AlwaysStoppedAnimation(
+                              completed
+                                  ? AppColors.success
+                                  : AppColors.primary,
+                            ),
+                            minHeight: 4,
+                            borderRadius: BorderRadius.circular(2),
                           ),
-                          minHeight: 4,
-                          borderRadius: BorderRadius.circular(2),
-                        ),
-                        const Gap(4),
-                        Text(
-                          goal.isCompleted ? 'Completed' : 'Ongoing',
-                          style: const TextStyle(
-                            fontSize: 11,
-                            fontFamily: 'GeneralSans',
-                            letterSpacing: 11 * 0.02,
+                          const Gap(4),
+                          Text(
+                            '${formatMoney(goal.balance)} of ${formatMoney(goal.targetAmount)}',
+                            style: const TextStyle(
+                              fontSize: 11,
+                              fontFamily: 'GeneralSans',
+                              letterSpacing: 11 * 0.02,
+                              color: AppColors.textSecondary,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    trailing: Text(
-                      formatMoney(goal.balance),
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontFamily: 'GeneralSans',
+                          Text(
+                            completed
+                                ? 'Completed'
+                                : '${goal.progressPercentage.toStringAsFixed(0)}% complete',
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontFamily: 'GeneralSans',
+                              letterSpacing: 11 * 0.02,
+                              color: completed
+                                  ? AppColors.success
+                                  : AppColors.textSecondary,
+                              fontWeight: completed
+                                  ? FontWeight.w600
+                                  : FontWeight.normal,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ),
+                      trailing: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            formatMoney(goal.balance),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontFamily: 'GeneralSans',
+                              fontSize: 13,
+                            ),
+                          ),
+                          Text(
+                            'of ${formatMoney(goal.targetAmount)}',
+                            style: const TextStyle(
+                              fontSize: 10,
+                              fontFamily: 'GeneralSans',
+                              color: AppColors.textSecondary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
                 ),
               if (widget.dashboardData.savings.length > 2) const Gap(8),
               SizedBox(
@@ -1360,6 +1474,143 @@ class _AccountsSectionState extends State<AccountsSection> {
                   ),
                 ),
               ),
+            ],
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: const Icon(Icons.credit_card_outlined),
+              title: const Text('Debts'),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    formatMoney(debtsTotal),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'GeneralSans',
+                    ),
+                  ),
+                  const Gap(8),
+                  Icon(
+                    _isDebtsExpanded
+                        ? Icons.keyboard_arrow_up
+                        : Icons.keyboard_arrow_down,
+                    size: 16,
+                  ),
+                ],
+              ),
+              onTap: () =>
+                  setState(() => _isDebtsExpanded = !_isDebtsExpanded),
+            ),
+            if (_isDebtsExpanded) ...[
+              const Gap(8),
+              if (widget.dashboardData.debts.isEmpty)
+                const Center(
+                  child: Column(
+                    children: [
+                      Icon(
+                        Icons.check_circle_outline,
+                        size: 48,
+                        color: AppColors.greyLight,
+                      ),
+                      Gap(8),
+                      Text(
+                        'No debts',
+                        style: TextStyle(
+                          color: AppColors.grey,
+                          fontFamily: 'GeneralSans',
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              else
+                ...widget.dashboardData.debts.map(
+                  (debt) {
+                    final bool paidOff =
+                        debt.owed > 0 && debt.isPaidOff;
+                    final double progress = paidOff
+                        ? 1.0
+                        : (debt.owed > 0
+                            ? debt.payoffPercentage / 100
+                            : 0.0);
+                    return ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      visualDensity: VisualDensity.compact,
+                      leading: paidOff
+                          ? const Icon(
+                              Icons.check_circle,
+                              color: AppColors.success,
+                            )
+                          : const Icon(Icons.credit_card),
+                      title: Text(debt.name),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Gap(4),
+                          LinearProgressIndicator(
+                            value: progress,
+                            backgroundColor: AppColors.greyLight,
+                            valueColor: AlwaysStoppedAnimation(
+                              paidOff
+                                  ? AppColors.success
+                                  : AppColors.error,
+                            ),
+                            minHeight: 4,
+                            borderRadius: BorderRadius.circular(2),
+                          ),
+                          const Gap(4),
+                          Text(
+                            '${formatMoney(debt.balance)} paid of ${formatMoney(debt.owed)}',
+                            style: const TextStyle(
+                              fontSize: 11,
+                              fontFamily: 'GeneralSans',
+                              letterSpacing: 11 * 0.02,
+                              color: AppColors.textSecondary,
+                            ),
+                          ),
+                          Text(
+                            paidOff
+                                ? 'Paid off'
+                                : '${debt.payoffPercentage.toStringAsFixed(0)}% paid',
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontFamily: 'GeneralSans',
+                              letterSpacing: 11 * 0.02,
+                              color: paidOff
+                                  ? AppColors.success
+                                  : AppColors.error,
+                              fontWeight: paidOff
+                                  ? FontWeight.w600
+                                  : FontWeight.normal,
+                            ),
+                          ),
+                        ],
+                      ),
+                      trailing: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            formatMoney(debt.owed),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontFamily: 'GeneralSans',
+                              fontSize: 13,
+                            ),
+                          ),
+                          Text(
+                            '${formatMoney(debt.balance)} paid',
+                            style: const TextStyle(
+                              fontSize: 10,
+                              fontFamily: 'GeneralSans',
+                              color: AppColors.textSecondary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
             ],
           ],
         ),

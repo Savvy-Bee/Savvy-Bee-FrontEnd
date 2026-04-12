@@ -157,6 +157,162 @@ class _FilingStep3ScreenState extends ConsumerState<FilingStep3Screen> {
     }
   }
 
+  /// Shows a dialog to collect missing PhoneNo and/or Address.
+  /// Returns a record (phone, address) on confirm, or null if dismissed.
+  Future<(String, String)?> _showMissingContactDialog({
+    required bool missingPhone,
+    required bool missingAddress,
+    required String existingPhone,
+    required String existingAddress,
+  }) async {
+    final phoneCtrl = TextEditingController(text: existingPhone);
+    final addressCtrl = TextEditingController(text: existingAddress);
+    final formKey = GlobalKey<FormState>();
+
+    final result = await showDialog<(String, String)>(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Text(
+          'Contact details required',
+          style: TextStyle(
+            fontFamily: 'GeneralSans',
+            fontWeight: FontWeight.w600,
+            fontSize: 16,
+          ),
+        ),
+        content: Form(
+          key: formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Please provide the following details to continue with your tax filing.',
+                style: TextStyle(
+                  fontFamily: 'GeneralSans',
+                  fontSize: 13,
+                  color: AppColors.textSecondary,
+                  height: 1.5,
+                ),
+              ),
+              const Gap(16),
+              if (missingPhone) ...[
+                const Text(
+                  'Phone Number *',
+                  style: TextStyle(
+                    fontFamily: 'GeneralSans',
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const Gap(6),
+                TextFormField(
+                  controller: phoneCtrl,
+                  keyboardType: TextInputType.phone,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(15),
+                  ],
+                  decoration: InputDecoration(
+                    hintText: 'e.g. 08012345678',
+                    hintStyle: const TextStyle(
+                      fontFamily: 'GeneralSans',
+                      fontSize: 13,
+                      color: AppColors.textSecondary,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 12,
+                    ),
+                  ),
+                  validator: (v) =>
+                      (v == null || v.trim().length < 7) ? 'Enter a valid phone number' : null,
+                ),
+                const Gap(16),
+              ],
+              if (missingAddress) ...[
+                const Text(
+                  'Residential Address *',
+                  style: TextStyle(
+                    fontFamily: 'GeneralSans',
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const Gap(6),
+                TextFormField(
+                  controller: addressCtrl,
+                  textCapitalization: TextCapitalization.sentences,
+                  maxLines: 2,
+                  decoration: InputDecoration(
+                    hintText: 'e.g. 12 Allen Avenue, Ikeja, Lagos',
+                    hintStyle: const TextStyle(
+                      fontFamily: 'GeneralSans',
+                      fontSize: 13,
+                      color: AppColors.textSecondary,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 12,
+                    ),
+                  ),
+                  validator: (v) =>
+                      (v == null || v.trim().isEmpty) ? 'Enter your address' : null,
+                ),
+              ],
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(null),
+            child: const Text(
+              'Cancel',
+              style: TextStyle(
+                fontFamily: 'GeneralSans',
+                color: AppColors.textSecondary,
+              ),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              final formState = formKey.currentState;
+              if (formState != null && formState.validate()) {
+                Navigator.of(ctx).pop((
+                  phoneCtrl.text.trim(),
+                  addressCtrl.text.trim(),
+                ));
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.black,
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            child: const Text(
+              'Continue',
+              style: TextStyle(fontFamily: 'GeneralSans', fontWeight: FontWeight.w600),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    phoneCtrl.dispose();
+    addressCtrl.dispose();
+    return result;
+  }
+
   Future<void> _onProceed(
     FilingHomeData? filingData,
     TinValidationResult? tinResult,
@@ -171,10 +327,15 @@ class _FilingStep3ScreenState extends ConsumerState<FilingStep3Screen> {
       final classification = ref.read(filingClassificationProvider);
       final contactRecord = ref.read(filingContactProvider);
       final calcState = ref.read(taxCalculatorProvider);
+      final profileData = ref.read(homeDataProvider).value?.data;
 
-      // ── Contact: prefer TIN-validated values, fall back to registration data ─
-      String phoneNo = contactRecord.phoneNo;
-      String email = contactRecord.email;
+      // ── Contact: profile data is the base, TIN result overrides when present ─
+      String phoneNo = profileData?.phoneNumber?.isNotEmpty == true
+          ? profileData!.phoneNumber!
+          : contactRecord.phoneNo;
+      String email = profileData?.email.isNotEmpty == true
+          ? profileData!.email
+          : contactRecord.email;
       String address = contactRecord.address;
 
       if (tinResult != null) {
@@ -187,6 +348,24 @@ class _FilingStep3ScreenState extends ConsumerState<FilingStep3Screen> {
         if (tinResult.address?.isNotEmpty ?? false) {
           address = tinResult.address!;
         }
+      }
+
+      // ── If phone or address is still missing, ask the user ───────────────────
+      if (phoneNo.isEmpty || address.isEmpty) {
+        final filled = await _showMissingContactDialog(
+          missingPhone: phoneNo.isEmpty,
+          missingAddress: address.isEmpty,
+          existingPhone: phoneNo,
+          existingAddress: address,
+        );
+        if (!mounted) return;
+        if (filled == null) {
+          // User dismissed — abort
+          setState(() => _isProceeding = false);
+          return;
+        }
+        if (phoneNo.isEmpty) phoneNo = filled.$1;
+        if (address.isEmpty) address = filled.$2;
       }
 
       print(
@@ -287,8 +466,8 @@ class _FilingStep3ScreenState extends ConsumerState<FilingStep3Screen> {
         context.pushNamed(FilingRoutes.step4);
       }
     } catch (e) {
-      setState(() => _isProceeding = false);
       if (mounted) {
+        setState(() => _isProceeding = false);
         AppNotification.show(
           context,
           message: e.toString().replaceFirst('Exception: ', ''),
@@ -355,11 +534,14 @@ class _FilingStep3ScreenState extends ConsumerState<FilingStep3Screen> {
                   profileAsync.when(
                     data: (home) {
                       final user = home.data;
-                      final initials = '${user.firstName[0]}${user.lastName[0]}'
-                          .toUpperCase();
+                      final fn = user.firstName;
+                      final ln = user.lastName;
+                      final initials =
+                          '${fn.isNotEmpty ? fn[0] : '?'}${ln.isNotEmpty ? ln[0] : '?'}'
+                              .toUpperCase();
                       return _IdentityCard(
                         initials: initials,
-                        fullName: '${user.firstName} ${user.lastName}',
+                        fullName: '${fn} ${ln}'.trim(),
                         taxYear: taxYear,
                       );
                     },
@@ -753,7 +935,10 @@ class _EditableDeductionRow extends StatelessWidget {
           height: 38,
           child: TextField(
             controller: controller,
-            keyboardType: TextInputType.number,
+            keyboardType: const TextInputType.numberWithOptions(
+              decimal: false,
+              signed: false,
+            ),
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             textAlign: TextAlign.right,
             onChanged: (_) => onChanged?.call(),
