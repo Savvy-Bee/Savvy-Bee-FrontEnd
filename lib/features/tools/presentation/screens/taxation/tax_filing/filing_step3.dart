@@ -26,6 +26,7 @@ import 'package:savvy_bee_mobile/features/tools/data/repositories/tin_validation
 import 'package:savvy_bee_mobile/features/tools/domain/models/filing_home_data.dart';
 import 'package:savvy_bee_mobile/features/tools/domain/models/tax_calculator_result.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/providers/complex_paye_provider.dart';
+import 'package:savvy_bee_mobile/features/tools/domain/models/other_country_tax_result.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/providers/filing_home_provider.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/providers/tax_calculator_provider.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/providers/tin_validation_provider.dart';
@@ -137,25 +138,47 @@ class _FilingStep3ScreenState extends ConsumerState<FilingStep3Screen> {
           )
         : filingData.incomes.fold(0.0, (sum, i) => sum + i.amount);
 
-    await ref
-        .read(taxCalculatorProvider.notifier)
-        .calculate(
-          earnings: grossIncome,
-          rent: _parseField(_rentCtrl),
-          nhf: _parseField(_nhfCtrl),
-          nhis: _parseField(_nhisCtrl),
-          pension: _parseField(_pensionCtrl),
-          loanInterest: _parseField(_loanCtrl),
-          lifeInsurance: _parseField(_lifeCtrl),
-        );
-    final calcState = ref.read(taxCalculatorProvider);
-    if (calcState.error != null && mounted) {
-      AppNotification.show(
-        context,
-        message: 'Recalculation failed. Please try again.',
-        icon: Icons.error_outline,
-        iconColor: Colors.redAccent,
+    final country = ref.read(filingCountryProvider);
+
+    if (country == 'ng') {
+      await ref.read(taxCalculatorProvider.notifier).calculate(
+        earnings: grossIncome,
+        rent: _parseField(_rentCtrl),
+        nhf: _parseField(_nhfCtrl),
+        nhis: _parseField(_nhisCtrl),
+        pension: _parseField(_pensionCtrl),
+        loanInterest: _parseField(_loanCtrl),
+        lifeInsurance: _parseField(_lifeCtrl),
       );
+      final calcState = ref.read(taxCalculatorProvider);
+      if (calcState.error != null && mounted) {
+        AppNotification.show(
+          context,
+          message: 'Recalculation failed. Please try again.',
+          icon: Icons.error_outline,
+          iconColor: Colors.redAccent,
+        );
+      }
+    } else {
+      await ref.read(otherCountryTaxProvider.notifier).calculate(
+        country: country,
+        annualIncome: grossIncome,
+        rent: _parseField(_rentCtrl),
+        nhf: _parseField(_nhfCtrl),
+        nhis: _parseField(_nhisCtrl),
+        pension: _parseField(_pensionCtrl),
+        loanInterest: _parseField(_loanCtrl),
+        lifeInsurance: _parseField(_lifeCtrl),
+      );
+      final otherState = ref.read(otherCountryTaxProvider);
+      if (otherState.error != null && mounted) {
+        AppNotification.show(
+          context,
+          message: 'Recalculation failed. Please try again.',
+          icon: Icons.error_outline,
+          iconColor: Colors.redAccent,
+        );
+      }
     }
   }
 
@@ -490,9 +513,14 @@ class _FilingStep3ScreenState extends ConsumerState<FilingStep3Screen> {
       );
 
       // Tax due: authoritative API value, fall back to local calculation
+      final filingCountry = ref.read(filingCountryProvider);
+      final otherCountryCalc = ref.read(otherCountryTaxProvider);
+      final localFallback = filingCountry == 'ng'
+          ? (calcState.result?.finalTaxDue ?? filingData?.estimatedTax ?? 0.0)
+          : (otherCountryCalc.result?.finalTaxDue ?? filingData?.estimatedTax ?? 0.0);
       final taxDue = result.financeDetails.taxAmount > 0
           ? result.financeDetails.taxAmount
-          : (calcState.result?.finalTaxDue ?? filingData?.estimatedTax ?? 0.0);
+          : localFallback;
 
       print('TaxAmount: ${result.financeDetails.taxAmount}');
       print('Final Tax Due (calc): ${calcState.result?.finalTaxDue}');
@@ -534,6 +562,8 @@ class _FilingStep3ScreenState extends ConsumerState<FilingStep3Screen> {
     final profileAsync = ref.watch(homeDataProvider);
     final selectedPlan = ref.watch(selectedFilingPlanProvider);
     final calcState = ref.watch(taxCalculatorProvider);
+    final otherCountryState = ref.watch(otherCountryTaxProvider);
+    final filingCountry = ref.watch(filingCountryProvider);
     final tinResult = ref.watch(tinValidationResultProvider);
 
     final filingData = filingAsync.value;
@@ -655,11 +685,15 @@ class _FilingStep3ScreenState extends ConsumerState<FilingStep3Screen> {
                       pensionCtrl: _pensionCtrl,
                       loanCtrl: _loanCtrl,
                       lifeCtrl: _lifeCtrl,
-                      isLoading: calcState.isLoading,
+                      isLoading: filingCountry == 'ng'
+                          ? calcState.isLoading
+                          : otherCountryState.isLoading,
                       onRecalculate: filingData != null
                           ? () => _recalculate(filingData)
                           : null,
-                      totalDeductions: calcState.result?.exemption ?? 0,
+                      totalDeductions: filingCountry == 'ng'
+                          ? (calcState.result?.exemption ?? 0)
+                          : 0,
                     ),
                   ),
                   const Gap(12),
@@ -670,18 +704,30 @@ class _FilingStep3ScreenState extends ConsumerState<FilingStep3Screen> {
                     isExpanded: _expanded.contains(_Section.taxComputation),
                     onToggle: () => _toggle(_Section.taxComputation),
                     child: filingData != null
-                        ? _TaxComputationContent(
-                            grossIncome: _incomeControllers.isNotEmpty
-                                ? _incomeControllers.fold(
-                                    0.0,
-                                    (s, c) => s + (double.tryParse(c.text.replaceAll(',', '')) ?? 0.0),
-                                  )
-                                : filingData.incomes.fold(0.0, (s, i) => s + i.amount),
-                            calcResult: calcState.result,
-                            fallbackTaxableIncome: filingData.taxableIncome,
-                            fallbackStages: filingData.stages,
-                            fallbackEstimatedTax: filingData.estimatedTax,
-                          )
+                        ? filingCountry == 'ng'
+                            ? _TaxComputationContent(
+                                grossIncome: _incomeControllers.isNotEmpty
+                                    ? _incomeControllers.fold(
+                                        0.0,
+                                        (s, c) => s + (double.tryParse(c.text.replaceAll(',', '')) ?? 0.0),
+                                      )
+                                    : filingData.incomes.fold(0.0, (s, i) => s + i.amount),
+                                calcResult: calcState.result,
+                                fallbackTaxableIncome: filingData.taxableIncome,
+                                fallbackStages: filingData.stages,
+                                fallbackEstimatedTax: filingData.estimatedTax,
+                              )
+                            : _OtherCountryTaxComputationContent(
+                                grossIncome: _incomeControllers.isNotEmpty
+                                    ? _incomeControllers.fold(
+                                        0.0,
+                                        (s, c) => s + (double.tryParse(c.text.replaceAll(',', '')) ?? 0.0),
+                                      )
+                                    : filingData.incomes.fold(0.0, (s, i) => s + i.amount),
+                                result: otherCountryState.result,
+                                isLoading: otherCountryState.isLoading,
+                                fallbackEstimatedTax: filingData.estimatedTax,
+                              )
                         : const Center(child: CircularProgressIndicator()),
                   ),
                   const Gap(16),
@@ -1307,6 +1353,109 @@ class _TaxComputationContent extends StatelessWidget {
             ),
             Text(
               finalTaxDue.formatCurrency(decimalDigits: 0),
+              style: const TextStyle(
+                fontFamily: 'GeneralSans',
+                fontSize: 14,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 14 * 0.02,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+// ── Other-country tax computation widget ──────────────────────────────────────
+
+class _OtherCountryTaxComputationContent extends StatelessWidget {
+  final double grossIncome;
+  final OtherCountryTaxResult? result;
+  final bool isLoading;
+  final double fallbackEstimatedTax;
+
+  const _OtherCountryTaxComputationContent({
+    required this.grossIncome,
+    required this.result,
+    required this.isLoading,
+    required this.fallbackEstimatedTax,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    if (isLoading) {
+      return const Padding(
+        padding: EdgeInsets.symmetric(vertical: 16),
+        child: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    if (result == null) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Text(
+          'Tap "Recalculate Tax" to compute your tax for this country.',
+          style: TextStyle(
+            fontFamily: 'GeneralSans',
+            fontSize: 13,
+            color: AppColors.textSecondary,
+          ),
+        ),
+      );
+    }
+
+    final currency = result!.currency;
+    final taxableIncome = result!.taxableIncome;
+    final deductions = grossIncome - taxableIncome;
+    final finalTaxDue = result!.finalTaxDue;
+    final effectivePct =
+        '${(result!.effectiveRate * 100).toStringAsFixed(1)}%';
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _InfoRow(
+          label: 'Gross Income',
+          value: '$currency ${grossIncome.toStringAsFixed(0)}',
+        ),
+        if (deductions > 0)
+          _InfoRow(
+            label: 'Allowances / Deductions',
+            value: '-$currency ${deductions.toStringAsFixed(0)}',
+            isNegative: true,
+          ),
+        _InfoRow(
+          label: 'Taxable Income',
+          value: '$currency ${taxableIncome.toStringAsFixed(0)}',
+        ),
+        const _SectionDivider(),
+        ...result!.breakdown.map(
+          (b) => _InfoRow(
+            label: b.label,
+            value: '$currency ${b.tax.toStringAsFixed(0)}',
+          ),
+        ),
+        const _SectionDivider(),
+        _InfoRow(
+          label: 'Effective Rate',
+          value: effectivePct,
+        ),
+        const Gap(4),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              'Final Tax Due',
+              style: TextStyle(
+                fontFamily: 'GeneralSans',
+                fontSize: 14,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 14 * 0.02,
+              ),
+            ),
+            Text(
+              '$currency ${finalTaxDue.toStringAsFixed(0)}',
               style: const TextStyle(
                 fontFamily: 'GeneralSans',
                 fontSize: 14,

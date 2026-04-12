@@ -43,6 +43,13 @@ class FilingHomeNotifier extends AsyncNotifier<FilingHomeData> {
   }
 }
 
+// ── Filing country provider ───────────────────────────────────────────────────
+
+/// The country code the user selected for filing.
+/// 'ng' = Nigeria (default, uses standard flow).
+/// Other supported values: 'uk', 'us', 'fr', 'ci', 'sn', 'cd', 'cm'.
+final filingCountryProvider = StateProvider<String>((ref) => 'ng');
+
 // ── TIN provider ──────────────────────────────────────────────────────────────
 
 /// Holds the TIN entered by the user on TIN Validation Screen 1.

@@ -1,9 +1,9 @@
 class ApiEndpoints {
   /// Base URL
   /// To switch environments, change only this one value:
-//   static const String baseUrl = 'https://api.mysavvybee.com'; // production
-  static const String baseUrl =
-      'https://savvy-bee-backend-nodejs-express-mongodb.onrender.com'; // demo
+  static const String baseUrl = 'https://api.mysavvybee.com'; // production
+  // static const String baseUrl =
+  //     'https://savvy-bee-backend-nodejs-express-mongodb.onrender.com'; // demo
 
   /// Auth endpoints
   static const String register = '/auth/register';
@@ -117,6 +117,8 @@ class ApiEndpoints {
   /// Taxation Endpoints
   static const String taxationHome = '/tools/taxation/home';
   static const String taxationCalculator = '/tools/taxation/calculator';
+  static String taxationCalculatorOtherCountry(String country) =>
+      '/tools/taxation/calculator/$country';
   static const String taxationStrategies = '/tools/taxation/strategies';
 
   static const String getMyPersona = '/auth/update/getmypersona';

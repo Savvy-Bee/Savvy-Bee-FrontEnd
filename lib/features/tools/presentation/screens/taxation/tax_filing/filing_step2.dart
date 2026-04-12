@@ -37,18 +37,18 @@ class _FilingPlan {
 }
 
 const _plans = [
-  _FilingPlan(
-    title: 'Basic PAYE',
-    subtitle: 'You earn a salary. Simple and fast.',
-    priceRange: '₦7,500',
-    priceMidpoint: 7500,
-    emoji: '🏦',
-    features: [
-      'Single employer income',
-      'PAYE auto-computed',
-      'Standard deductions',
-    ],
-  ),
+  // _FilingPlan(
+  //   title: 'Basic PAYE',
+  //   subtitle: 'You earn a salary. Simple and fast.',
+  //   priceRange: '₦7,500',
+  //   priceMidpoint: 7500,
+  //   emoji: '🏦',
+  //   features: [
+  //     'Single employer income',
+  //     'PAYE auto-computed',
+  //     'Standard deductions',
+  //   ],
+  // ),
   _FilingPlan(
     title: 'Freelancer',
     subtitle: 'You have mixed income sources.',

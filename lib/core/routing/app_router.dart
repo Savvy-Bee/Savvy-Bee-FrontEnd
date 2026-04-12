@@ -93,6 +93,7 @@ import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/ta
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/tax_filing/complex_paye_history_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/tax_filing/filing_details_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/tax_filing/filing_history_screen.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/tax_filing/filing_country_select.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/tax_filing/filing_step1.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/tax_filing/filing_step2.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/taxation/tax_filing/filing_step3.dart';
@@ -748,6 +749,11 @@ final GoRouter appRouter = GoRouter(
       builder: (BuildContext context, GoRouterState state) {
         return const TaxStatsScreen();
       },
+    ),
+    GoRoute(
+      path: '/filing/country-select',
+      name: FilingRoutes.filingCountrySelect,
+      builder: (context, state) => const FilingCountrySelectScreen(),
     ),
     GoRoute(
       path: '/filing/step-1',

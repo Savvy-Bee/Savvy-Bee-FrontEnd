@@ -135,7 +135,7 @@ class TinValidationScreen2 extends ConsumerWidget {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: result != null
-                          ? () => context.pushNamed(FilingRoutes.step1)
+                          ? () => context.pushNamed(FilingRoutes.filingCountrySelect)
                           : null,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: _yellow,

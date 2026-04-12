@@ -32,6 +32,9 @@ abstract class FilingRoutes {
   static const tinReg2 = tinRegPersonal2;
   static const tinReg3 = tinRegPersonal3;
 
+  // ── Country selection (runs before step 1) ───────────────────────────────
+  static const filingCountrySelect = '/filing/country-select';
+
   // ── Filing steps (unchanged) ──────────────────────────────────────────────
   static const step1        = '/filing/step-1';
   static const step2        = '/filing/step-2';
