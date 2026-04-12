@@ -9,6 +9,8 @@
 //   • Keyboard dismiss via GestureDetector on root
 //   • Errors shown via AppNotification
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -159,17 +161,20 @@ class _FilingStep3ScreenState extends ConsumerState<FilingStep3Screen> {
 
   /// Shows a dialog to collect missing PhoneNo and/or Address.
   /// Returns a record (phone, address) on confirm, or null if dismissed.
-  Future<(String, String)?> _showMissingContactDialog({
+  Future<(String, String, String)?> _showMissingContactDialog({
     required bool missingPhone,
     required bool missingAddress,
+    required bool missingCac,
+    required String classification,
     required String existingPhone,
     required String existingAddress,
   }) async {
     final phoneCtrl = TextEditingController(text: existingPhone);
     final addressCtrl = TextEditingController(text: existingAddress);
+    final cacCtrl = TextEditingController();
     final formKey = GlobalKey<FormState>();
 
-    final result = await showDialog<(String, String)>(
+    final result = await showDialog<(String, String, String)>(
       context: context,
       barrierDismissible: false,
       builder: (ctx) => AlertDialog(
@@ -268,6 +273,39 @@ class _FilingStep3ScreenState extends ConsumerState<FilingStep3Screen> {
                       (v == null || v.trim().isEmpty) ? 'Enter your address' : null,
                 ),
               ],
+              if (missingCac && classification == 'Corporate') ...[
+                const Gap(16),
+                const Text(
+                  'CAC Registration Number *',
+                  style: TextStyle(
+                    fontFamily: 'GeneralSans',
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const Gap(6),
+                TextFormField(
+                  controller: cacCtrl,
+                  textCapitalization: TextCapitalization.characters,
+                  decoration: InputDecoration(
+                    hintText: 'e.g. RC-1234567',
+                    hintStyle: const TextStyle(
+                      fontFamily: 'GeneralSans',
+                      fontSize: 13,
+                      color: AppColors.textSecondary,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 12,
+                    ),
+                  ),
+                  validator: (v) =>
+                      (v == null || v.trim().isEmpty) ? 'Enter your CAC number' : null,
+                ),
+              ],
             ],
           ),
         ),
@@ -289,6 +327,7 @@ class _FilingStep3ScreenState extends ConsumerState<FilingStep3Screen> {
                 Navigator.of(ctx).pop((
                   phoneCtrl.text.trim(),
                   addressCtrl.text.trim(),
+                  cacCtrl.text.trim(),
                 ));
               }
             },
@@ -308,8 +347,6 @@ class _FilingStep3ScreenState extends ConsumerState<FilingStep3Screen> {
       ),
     );
 
-    phoneCtrl.dispose();
-    addressCtrl.dispose();
     return result;
   }
 
@@ -350,11 +387,25 @@ class _FilingStep3ScreenState extends ConsumerState<FilingStep3Screen> {
         }
       }
 
-      // ── If phone or address is still missing, ask the user ───────────────────
-      if (phoneNo.isEmpty || address.isEmpty) {
+      // CAC number: prefer TIN result, then provider, then auto-generate for Individual
+      final cacNumber = ref.read(filingCacNumberProvider);
+      String cacNo = (tinResult?.cacRegNumber?.isNotEmpty ?? false)
+          ? tinResult!.cacRegNumber!
+          : cacNumber;
+      if (cacNo.isEmpty && classification != 'Corporate') {
+        // Individual filers don't have a CAC — generate a placeholder
+        final rng = Random();
+        cacNo = 'IND-${rng.nextInt(900000) + 100000}';
+      }
+
+      // ── If phone, address, or corporate CAC is missing, ask the user ─────────
+      final missingCac = cacNo.isEmpty && classification == 'Corporate';
+      if (phoneNo.isEmpty || address.isEmpty || missingCac) {
         final filled = await _showMissingContactDialog(
           missingPhone: phoneNo.isEmpty,
           missingAddress: address.isEmpty,
+          missingCac: missingCac,
+          classification: classification,
           existingPhone: phoneNo,
           existingAddress: address,
         );
@@ -366,6 +417,7 @@ class _FilingStep3ScreenState extends ConsumerState<FilingStep3Screen> {
         }
         if (phoneNo.isEmpty) phoneNo = filled.$1;
         if (address.isEmpty) address = filled.$2;
+        if (missingCac && filled.$3.isNotEmpty) cacNo = filled.$3;
       }
 
       print(
@@ -416,16 +468,14 @@ class _FilingStep3ScreenState extends ConsumerState<FilingStep3Screen> {
         ),
       ];
 
-      // CAC number: prefer TIN result's value, fall back to registration data
-      final cacNumber = ref.read(filingCacNumberProvider);
-      final cacNo = (tinResult?.cacRegNumber?.isNotEmpty ?? false)
-          ? tinResult!.cacRegNumber!
-          : cacNumber;
-
-      // Name: prefer TIN result, fall back to registration data
+      // Name: prefer TIN result, then profile full name, then registration data
+      final profileFullName =
+          '${profileData?.firstName ?? ''} ${profileData?.lastName ?? ''}'.trim();
       final name = (tinResult?.taxpayerName.isNotEmpty ?? false)
           ? tinResult!.taxpayerName
-          : ref.read(filingNameProvider);
+          : profileFullName.isNotEmpty
+              ? profileFullName
+              : ref.read(filingNameProvider);
 
       final repo = ref.read(filingPaymentRepositoryProvider);
       final result = await repo.initPayment(
