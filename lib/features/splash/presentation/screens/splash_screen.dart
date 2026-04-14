@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:savvy_bee_mobile/core/services/biometric_service.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/logos.dart';
-import 'package:savvy_bee_mobile/features/auth/presentation/providers/biometric_provider.dart';
 import 'package:savvy_bee_mobile/features/auth/presentation/screens/biometric_lock_screen.dart';
 import 'package:savvy_bee_mobile/features/home/presentation/screens/home_screen.dart';
 import 'package:savvy_bee_mobile/features/onboarding/presentation/screens/onboarding_screen.dart';
@@ -31,38 +31,46 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
 
     _hasNavigated = true;
 
-    Future.delayed(const Duration(seconds: 1), () async {
-      if (!mounted) return;
+    Future.delayed(const Duration(seconds: 1), () => _route());
+  }
 
-      if (!authState.isAuthenticated) {
-        context.goNamed(OnboardingScreen.path);
+  /// Determine destination. Reads storage/biometric directly to avoid the
+  /// async-init race condition in BiometricNotifier.
+  Future<void> _route() async {
+    if (!mounted) return;
+
+    final authState = ref.read(authProvider);
+
+    if (!authState.isAuthenticated) {
+      context.goNamed(OnboardingScreen.path);
+      return;
+    }
+
+    final storage = ref.read(storageServiceProvider);
+
+    // ── Biometric gate ────────────────────────────────────────────────────────
+    // Read enabled-flag and availability directly from their sources so we
+    // never hit the BiometricNotifier async-init race.
+    final biometricEnabled = await storage.getBiometricEnabled();
+    if (biometricEnabled) {
+      final availability =
+          await ref.read(biometricServiceProvider).checkAvailability();
+      if (availability == BiometricAvailability.available) {
+        if (mounted) context.goNamed(BiometricLockScreen.path);
         return;
       }
+    }
 
-      // ── Biometric gate (cold start) ────────────────────────────────────────
-      // If the user has biometrics enabled, send them to the lock screen
-      // instead of home — regardless of whether the token is still valid.
-      // The lock screen will handle token expiry / 30-day refresh internally.
-      final biometric = ref.read(biometricProvider);
-      if (biometric.isEnabled && biometric.isAvailable) {
-        context.goNamed(BiometricLockScreen.path);
-        return;
-      }
+    // ── No biometric gate — validate token ────────────────────────────────────
+    final hasSession = await storage.hasValidSession();
+    if (!mounted) return;
 
-      // No biometrics — check if session is still valid
-      final hasSession = await ref
-          .read(storageServiceProvider)
-          .hasValidSession();
-      if (!mounted) return;
-
-      if (hasSession) {
-        context.goNamed(HomeScreen.path);
-      } else {
-        // Token expired and no biometrics to re-auth — go to login
-        await ref.read(authProvider.notifier).logout();
-        if (mounted) context.goNamed(LoginScreen.path);
-      }
-    });
+    if (hasSession) {
+      context.goNamed(HomeScreen.path);
+    } else {
+      await ref.read(authProvider.notifier).logout();
+      if (mounted) context.goNamed(LoginScreen.path);
+    }
   }
 
   @override
@@ -71,7 +79,6 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
       if (next.isInitialized) _navigateAfterAuth();
     });
 
-    // Also check immediately in case auth was already initialized
     WidgetsBinding.instance.addPostFrameCallback((_) => _navigateAfterAuth());
 
     return Scaffold(body: Center(child: Image.asset(Logos.logo, scale: 1.5)));

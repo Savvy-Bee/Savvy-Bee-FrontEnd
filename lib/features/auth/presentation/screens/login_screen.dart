@@ -9,6 +9,7 @@ import 'package:savvy_bee_mobile/core/utils/input_validator.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';
 import 'package:savvy_bee_mobile/core/widgets/intro_text.dart';
+import 'package:savvy_bee_mobile/core/services/biometric_service.dart' show BiometricAvailability;
 import 'package:savvy_bee_mobile/core/services/service_locator.dart';
 import 'package:savvy_bee_mobile/features/auth/presentation/providers/auth_providers.dart';
 import 'package:savvy_bee_mobile/features/auth/presentation/providers/biometric_provider.dart';
@@ -54,8 +55,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   Future<void> _tryBiometricLogin() async {
-    final biometric = ref.read(biometricProvider);
-    if (!biometric.isEnabled || !biometric.isAvailable) return;
+    // Read from storage/service directly — BiometricNotifier may not have
+    // finished its async init yet when this is called from initState.
+    final storage = ref.read(storageServiceProvider);
+    final isEnabled = await storage.getBiometricEnabled();
+    if (!isEnabled) return;
+
+    final availability =
+        await ref.read(biometricServiceProvider).checkAvailability();
+    if (availability != BiometricAvailability.available) return;
 
     final result =
         await ref.read(biometricProvider.notifier).authenticateWithBiometrics();
@@ -184,18 +192,44 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     context.goNamed(HomeScreen.path);
   }
 
-  // ─── Biometric enrollment prompt ────────────────────────────────────────────
+  // ─── Auto-enable biometrics after successful password login ─────────────────
   //
-  // Shown once after every successful password login, as long as biometrics are
-  // available on the device but not yet enabled. If the user taps "Not Now" the
-  // sheet dismisses and they proceed to home — next login, the sheet appears
-  // again. Enrollment is triggered directly from the sheet so the OS prompt
-  // happens in context before the app navigates away.
+  // Biometric lock is enabled automatically after every successful password
+  // login if the device supports it. This guarantees the lock screen shows on
+  // the next cold-start regardless of whether the user has visited Settings.
+  // The user can disable biometrics at any time from Profile → Security.
 
-  Future<void> _maybePromptBiometricEnrollment(String email) async {
-    final biometric = ref.read(biometricProvider);
-    if (!biometric.isAvailable || biometric.isEnabled) return;
-    await BiometricEnrollmentSheet.show(context, email);
+  Future<void> _autoEnableBiometrics(String email) async {
+    final storage = ref.read(storageServiceProvider);
+
+    // If already enabled, nothing to do.
+    final alreadyEnabled = await storage.getBiometricEnabled();
+    if (alreadyEnabled) return;
+
+    // Check availability directly — never read from the BiometricNotifier
+    // state here, it may not have finished its async _initialize() yet.
+    final availability =
+        await ref.read(biometricServiceProvider).checkAvailability();
+    if (availability != BiometricAvailability.available) return;
+
+    // Enable silently — the user already authenticated with their password,
+    // that is sufficient proof of identity to activate the biometric gate.
+    await storage.setBiometricEnabled(true);
+    await storage.saveBiometricEmail(email);
+    await storage.clearBiometricFailureCount();
+
+    // Bring the in-memory provider state up to date so the rest of the
+    // session (e.g. the profile toggle) reflects the correct value.
+    await _initCompleterSafe(email);
+  }
+
+  /// Syncs the in-memory BiometricNotifier state after we have already written
+  /// the biometric prefs directly to storage (no OS prompt needed).
+  Future<void> _initCompleterSafe(String email) async {
+    // Wait for the notifier's own init to finish, then force a state refresh
+    // so it reflects the new pref values we just persisted.
+    await ref.read(biometricProvider.notifier).waitForInit();
+    ref.invalidate(biometricProvider);
   }
 
   // ─── Login handler ──────────────────────────────────────────────────────────
@@ -250,7 +284,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       await storage.saveBiometricLastFullLoginDate();
       ref.invalidate(homeDataProvider);
       if (!mounted) return;
-      await _maybePromptBiometricEnrollment(email);
+      await _autoEnableBiometrics(email);
       if (!mounted) return;
       context.goNamed(HomeScreen.path);
     } else {

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,12 +10,7 @@ import 'package:savvy_bee_mobile/features/auth/data/repositories/auth_repository
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
-/// Number of consecutive biometric failures before the lock is permanently
-/// removed and the user is forced back to password login.
 const _kMaxFailures = 5;
-
-/// Days since the last full (email + password) login before the user must
-/// authenticate with credentials again regardless of biometric state.
 const _kPasswordRefreshDays = 30;
 
 // ─── State ───────────────────────────────────────────────────────────────────
@@ -51,30 +47,13 @@ class BiometricState {
 // ─── Result enum ─────────────────────────────────────────────────────────────
 
 enum BiometricAuthResult {
-  /// OS prompt passed and a valid session is now active.
   success,
-
-  /// User dismissed the OS prompt without authenticating.
   cancelled,
-
-  /// OS prompt failed (non-lockout error).
   failed,
-
-  /// Too many consecutive failures – biometrics have been disabled automatically.
   permanentlyFailed,
-
-  /// Device is locked out temporarily or permanently.
   lockedOut,
-
-  /// Biometrics not available / not enabled.
   notAvailable,
-
-  /// Token expired AND silent re-login via stored credentials also failed.
-  /// Caller should redirect to the login screen.
   tokenExpired,
-
-  /// 30 days have passed since the last email+password login.
-  /// Caller must redirect to the login screen.
   passwordLoginRequired,
 }
 
@@ -85,6 +64,11 @@ class BiometricNotifier extends StateNotifier<BiometricState> {
   final StorageService _storageService;
   final AuthRepository _authRepository;
 
+  /// Completes once _initialize() has finished.
+  /// All public methods that depend on isAvailable/isEnabled await this first
+  /// so there is no race condition between provider creation and first use.
+  final Completer<void> _initCompleter = Completer<void>();
+
   BiometricNotifier(
     this._biometricService,
     this._storageService,
@@ -94,21 +78,24 @@ class BiometricNotifier extends StateNotifier<BiometricState> {
   }
 
   Future<void> _initialize() async {
-    final availability = await _biometricService.checkAvailability();
-    final isAvailable = availability == BiometricAvailability.available;
-    final isEnabled =
-        isAvailable && await _storageService.getBiometricEnabled();
-
-    state = state.copyWith(isAvailable: isAvailable, isEnabled: isEnabled);
-    log('→ BiometricNotifier init: available=$isAvailable, enabled=$isEnabled');
+    try {
+      final availability = await _biometricService.checkAvailability();
+      final isAvailable = availability == BiometricAvailability.available;
+      final isEnabled =
+          isAvailable && await _storageService.getBiometricEnabled();
+      state = state.copyWith(isAvailable: isAvailable, isEnabled: isEnabled);
+      log('→ BiometricNotifier init: available=$isAvailable, enabled=$isEnabled');
+    } finally {
+      _initCompleter.complete();
+    }
   }
 
   // ─── Enable / Disable ──────────────────────────────────────────────────────
 
-  /// Called from Security / Profile toggle.
-  /// [userEmail] is the currently logged-in email (credentials were already
-  /// saved to secure storage on login, so no password needed here).
   Future<bool> enableBiometrics(String userEmail) async {
+    // Always await init so isAvailable reflects real device state.
+    await _initCompleter.future;
+
     if (!state.isAvailable) {
       state = state.copyWith(
         errorMessage: 'Biometrics not available on this device.',
@@ -156,28 +143,19 @@ class BiometricNotifier extends StateNotifier<BiometricState> {
 
   Future<void> disableBiometrics() async {
     await _storageService.setBiometricEnabled(false);
-    // Keep stored credentials so re-enabling later still works until logout.
-    // Full credential wipe only happens on logout (clearAll).
     state = state.copyWith(isEnabled: false, clearError: true);
     log('✓ Biometric login disabled');
   }
 
   // ─── Authenticate ──────────────────────────────────────────────────────────
 
-  /// Called on the lock screen and login screen biometric button.
-  ///
-  /// Flow:
-  ///  1. Enforce 30-day password-refresh rule.
-  ///  2. Check consecutive failure count (auto-disable at [_kMaxFailures]).
-  ///  3. Show OS biometric prompt.
-  ///  4. On success, ensure a valid JWT exists — if expired, silently re-login
-  ///     using credentials stored at last password login.
   Future<BiometricAuthResult> authenticateWithBiometrics() async {
-    if (!state.isEnabled || !state.isAvailable) {
-      return BiometricAuthResult.notAvailable;
-    }
+    // Await init so state reflects actual device capabilities.
+    await _initCompleter.future;
 
-    // ── 30-day check ──────────────────────────────────────────────────────────
+    if (!state.isAvailable) return BiometricAuthResult.notAvailable;
+
+    // ── 30-day check ─────────────────────────────────────────────────────────
     final lastFullLogin = await _storageService.getBiometricLastFullLoginDate();
     if (lastFullLogin == null ||
         DateTime.now().difference(lastFullLogin).inDays >= _kPasswordRefreshDays) {
@@ -196,7 +174,6 @@ class BiometricNotifier extends StateNotifier<BiometricState> {
     state = state.copyWith(isAuthenticating: true, clearError: true);
 
     try {
-      // ── OS prompt ─────────────────────────────────────────────────────────
       final authenticated = await _biometricService.authenticate(
         reason: 'Unlock Savvy Bee',
       );
@@ -217,7 +194,6 @@ class BiometricNotifier extends StateNotifier<BiometricState> {
         return BiometricAuthResult.cancelled;
       }
 
-      // Success – reset failure count
       await _storageService.clearBiometricFailureCount();
 
       // ── Token check ───────────────────────────────────────────────────────
@@ -228,8 +204,8 @@ class BiometricNotifier extends StateNotifier<BiometricState> {
         return BiometricAuthResult.success;
       }
 
-      // ── Silent re-login ──────────────────────────────────────────────────
-      log('→ Token expired – attempting silent re-login with stored credentials');
+      // ── Silent re-login ───────────────────────────────────────────────────
+      log('→ Token expired – attempting silent re-login');
       final creds = await _storageService.getBiometricCredentials();
       if (creds == null) {
         state = state.copyWith(isAuthenticating: false);
@@ -241,18 +217,16 @@ class BiometricNotifier extends StateNotifier<BiometricState> {
         creds.email,
         creds.password,
         deviceId,
-        null, // FCM token not needed for silent re-login
+        null,
       );
 
       if (response != null && response.success) {
-        // Token renewed – also reset the 30-day clock
         await _storageService.saveBiometricLastFullLoginDate();
         state = state.copyWith(isAuthenticating: false);
         log('✓ Silent re-login succeeded');
         return BiometricAuthResult.success;
       }
 
-      // Stored credentials rejected (password changed server-side, etc.)
       log('✗ Silent re-login failed – forcing password login');
       await _forceDisableAndClear();
       state = state.copyWith(isAuthenticating: false);
@@ -275,7 +249,7 @@ class BiometricNotifier extends StateNotifier<BiometricState> {
     }
   }
 
-  // ─── Internal helpers ─────────────────────────────────────────────────────
+  // ─── Helpers ──────────────────────────────────────────────────────────────
 
   Future<void> _forceDisableAndClear() async {
     await _storageService.setBiometricEnabled(false);
@@ -285,6 +259,10 @@ class BiometricNotifier extends StateNotifier<BiometricState> {
   }
 
   void clearError() => state = state.copyWith(clearError: true);
+
+  /// Expose the init completer so callers can wait for the provider to finish
+  /// its async _initialize() before reading state.
+  Future<void> waitForInit() => _initCompleter.future;
 }
 
 // ─── Provider ────────────────────────────────────────────────────────────────
