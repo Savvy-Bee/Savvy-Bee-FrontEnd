@@ -31,7 +31,7 @@ android {
 
     defaultConfig {
         applicationId = "com.mysavvybee.app"
-        minSdk = flutter.minSdkVersion
+        minSdk = flutter.minSdkVersion // local_auth requires API 23+
         targetSdk = 35
         versionCode = flutter.versionCode
         versionName = flutter.versionName

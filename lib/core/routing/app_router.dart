@@ -125,6 +125,7 @@ import '../../features/spend/presentation/screens/transfer/internal_transfer_scr
 import '../../features/spend/presentation/screens/transfer/transfer_history_screen.dart';
 import '../../features/spend/presentation/screens/wallet/photo_verification_screen.dart';
 import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
+import '../../features/auth/presentation/screens/biometric_lock_screen.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/auth/presentation/screens/post_signup/signup_complete_screen.dart';
 import '../../features/auth/presentation/screens/signup_screen.dart';
@@ -191,6 +192,13 @@ final GoRouter appRouter = GoRouter(
       name: LoginScreen.path,
       builder: (BuildContext context, GoRouterState state) {
         return const LoginScreen();
+      },
+    ),
+    GoRoute(
+      path: BiometricLockScreen.path,
+      name: BiometricLockScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return const BiometricLockScreen();
       },
     ),
     GoRoute(

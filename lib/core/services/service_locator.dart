@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:savvy_bee_mobile/core/services/biometric_service.dart';
 import 'package:savvy_bee_mobile/features/hive/data/repositories/hive_repository.dart';
 import 'package:savvy_bee_mobile/features/home/data/repositories/home_repository.dart';
 import 'package:savvy_bee_mobile/features/spend/data/repositories/kyc_repository.dart';
@@ -20,6 +21,10 @@ import 'storage_service.dart';
 // Service locator providers
 final storageServiceProvider = Provider<StorageService>((ref) {
   return StorageService();
+});
+
+final biometricServiceProvider = Provider<BiometricService>((ref) {
+  return BiometricService();
 });
 
 final apiClientProvider = Provider<ApiClient>((ref) {

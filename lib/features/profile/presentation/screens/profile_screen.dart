@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/avatars.dart';
 import 'package:savvy_bee_mobile/core/widgets/main_wrapper.dart';
 import 'package:savvy_bee_mobile/features/auth/presentation/providers/auth_providers.dart';
+import 'package:savvy_bee_mobile/features/auth/presentation/providers/biometric_provider.dart';
 import 'package:savvy_bee_mobile/features/home/domain/models/home_data.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/providers/nok_provider.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/screens/address_screen.dart';
@@ -385,6 +386,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                   ),
                                 ),
                                 const Divider(),
+                                _BiometricTile(
+                                  email: data.email,
+                                ),
+                                const Divider(),
                                 ProfileListTile(
                                   title: 'Security',
                                   iconPath: AppIcons.homeSecureIcon,
@@ -534,9 +539,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     if (hasAvatar) completedCount++;
     if (hasAddress) completedCount++;
     // if (hasNok) completedCount++;
-    if (hasBiometric) completedCount++;
+    // if (hasBiometric) completedCount++;
     if (hasPIN) completedCount++;
-    const totalCount = 4;
+    const totalCount = 3;
 
     final List<Map<String, dynamic>> incompleteItems = [];
 
@@ -567,18 +572,18 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     //   });
     // }
 
-    if (!hasBiometric) {
-      incompleteItems.add({
-        'icon': Icons.fingerprint,
-        'title': 'Enable Biometric Login',
-        'subtitle': '',
-        'onTap': () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Biometric setup coming soon')),
-          );
-        },
-      });
-    }
+    // if (!hasBiometric) {
+    //   incompleteItems.add({
+    //     'icon': Icons.fingerprint,
+    //     'title': 'Enable Biometric Login',
+    //     'subtitle': '',
+    //     'onTap': () {
+    //       ScaffoldMessenger.of(context).showSnackBar(
+    //         const SnackBar(content: Text('Biometric setup coming soon')),
+    //       );
+    //     },
+    //   });
+    // }
 
     if (!hasPIN) {
       incompleteItems.add({
@@ -766,5 +771,76 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         ),
       ),
     );
+  }
+}
+
+// ─── Biometric toggle tile ────────────────────────────────────────────────────
+
+class _BiometricTile extends ConsumerWidget {
+  final String email;
+  const _BiometricTile({required this.email});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final biometric = ref.watch(biometricProvider);
+
+    return ProfileListTile(
+      title: 'Face ID / Fingerprint',
+      iconPath: AppIcons.homeSecureIcon,
+      useDefaultTrailing: false,
+      trailing: biometric.isAuthenticating
+          ? const SizedBox(
+              width: 24,
+              height: 24,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                color: AppColors.primary,
+              ),
+            )
+          : Transform.scale(
+              scale: 0.5,
+              child: Switch(
+                value: biometric.isEnabled,
+                onChanged: biometric.isAvailable
+                    ? (value) => _toggle(context, ref, value)
+                    : null,
+                activeThumbColor: AppColors.primary,
+                activeTrackColor: AppColors.primaryFaint,
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                padding: EdgeInsets.zero,
+              ),
+            ),
+      onTap: biometric.isAvailable
+          ? () => _toggle(context, ref, !biometric.isEnabled)
+          : null,
+    );
+  }
+
+  Future<void> _toggle(BuildContext context, WidgetRef ref, bool enable) async {
+    if (enable) {
+      final success =
+          await ref.read(biometricProvider.notifier).enableBiometrics(email);
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(success
+                ? 'Biometric login enabled'
+                : ref.read(biometricProvider).errorMessage ??
+                    'Could not enable biometrics'),
+            backgroundColor: success ? AppColors.success : AppColors.error,
+          ),
+        );
+      }
+    } else {
+      await ref.read(biometricProvider.notifier).disableBiometrics();
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Biometric login disabled'),
+            backgroundColor: AppColors.success,
+          ),
+        );
+      }
+    }
   }
 }

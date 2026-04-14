@@ -11,6 +11,11 @@ class StorageService {
   static const String refreshTokenKey = 'refresh_token';
   static const String userDataKey = 'user_data';
   static const String fcmTokenKey = 'fcm_token';
+  static const String biometricEnabledKey = 'biometric_enabled';
+  static const String biometricEmailKey = 'biometric_email';
+  static const String _biometricPasswordKey = 'biometric_password';
+  static const String _biometricLastFullLoginKey = 'biometric_last_full_login';
+  static const String _biometricFailureCountKey = 'biometric_failure_count';
   static const Set<String> _preservedDeviceScopedKeys = {
     'home_walkthrough_completed',
     'tools_walkthrough_completed',
@@ -140,6 +145,155 @@ class StorageService {
     } catch (e) {
       log('✗ Error reading FCM token: $e');
       return null;
+    }
+  }
+
+  // ------------------- BIOMETRIC PREFERENCES -------------------
+
+  Future<bool> getBiometricEnabled() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      return prefs.getBool(biometricEnabledKey) ?? false;
+    } catch (e) {
+      log('✗ Error reading biometric enabled: $e');
+      return false;
+    }
+  }
+
+  Future<void> setBiometricEnabled(bool enabled) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool(biometricEnabledKey, enabled);
+      log('✓ Biometric enabled set to: $enabled');
+    } catch (e) {
+      log('✗ Error saving biometric enabled: $e');
+      rethrow;
+    }
+  }
+
+  /// Store email in secure storage so the lock screen can show which account is locked
+  Future<void> saveBiometricEmail(String email) async {
+    try {
+      await _secureStorage.write(key: biometricEmailKey, value: email);
+      log('✓ Biometric email saved');
+    } catch (e) {
+      log('✗ Error saving biometric email: $e');
+      rethrow;
+    }
+  }
+
+  Future<String?> getBiometricEmail() async {
+    try {
+      return await _secureStorage.read(key: biometricEmailKey);
+    } catch (e) {
+      log('✗ Error reading biometric email: $e');
+      return null;
+    }
+  }
+
+  /// Save email + password to hardware-backed secure storage.
+  /// Called on every successful password login so silent re-auth is always
+  /// possible regardless of when biometrics are enabled.
+  Future<void> saveBiometricCredentials(String email, String password) async {
+    try {
+      await _secureStorage.write(key: biometricEmailKey, value: email);
+      await _secureStorage.write(key: _biometricPasswordKey, value: password);
+      log('✓ Biometric credentials saved');
+    } catch (e) {
+      log('✗ Error saving biometric credentials: $e');
+      rethrow;
+    }
+  }
+
+  /// Returns `{email, password}` if stored, otherwise null.
+  Future<({String email, String password})?> getBiometricCredentials() async {
+    try {
+      final email = await _secureStorage.read(key: biometricEmailKey);
+      final password = await _secureStorage.read(key: _biometricPasswordKey);
+      if (email == null || password == null) return null;
+      return (email: email, password: password);
+    } catch (e) {
+      log('✗ Error reading biometric credentials: $e');
+      return null;
+    }
+  }
+
+  Future<void> deleteBiometricCredentials() async {
+    try {
+      await _secureStorage.delete(key: biometricEmailKey);
+      await _secureStorage.delete(key: _biometricPasswordKey);
+      log('✓ Biometric credentials deleted');
+    } catch (e) {
+      log('✗ Error deleting biometric credentials: $e');
+    }
+  }
+
+  /// Records the timestamp of the last time the user authenticated with
+  /// their email + password (not biometrics). Used to enforce the 30-day limit.
+  Future<void> saveBiometricLastFullLoginDate() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(
+        _biometricLastFullLoginKey,
+        DateTime.now().toIso8601String(),
+      );
+      log('✓ Biometric last full login date saved');
+    } catch (e) {
+      log('✗ Error saving biometric last full login date: $e');
+    }
+  }
+
+  Future<DateTime?> getBiometricLastFullLoginDate() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final raw = prefs.getString(_biometricLastFullLoginKey);
+      if (raw == null) return null;
+      return DateTime.tryParse(raw);
+    } catch (e) {
+      log('✗ Error reading biometric last full login date: $e');
+      return null;
+    }
+  }
+
+  Future<int> getBiometricFailureCount() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      return prefs.getInt(_biometricFailureCountKey) ?? 0;
+    } catch (e) {
+      return 0;
+    }
+  }
+
+  Future<void> incrementBiometricFailureCount() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final current = prefs.getInt(_biometricFailureCountKey) ?? 0;
+      await prefs.setInt(_biometricFailureCountKey, current + 1);
+    } catch (e) {
+      log('✗ Error incrementing biometric failure count: $e');
+    }
+  }
+
+  Future<void> clearBiometricFailureCount() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove(_biometricFailureCountKey);
+    } catch (e) {
+      log('✗ Error clearing biometric failure count: $e');
+    }
+  }
+
+  Future<void> deleteBiometricData() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove(biometricEnabledKey);
+      await prefs.remove(_biometricLastFullLoginKey);
+      await prefs.remove(_biometricFailureCountKey);
+      await _secureStorage.delete(key: biometricEmailKey);
+      await _secureStorage.delete(key: _biometricPasswordKey);
+      log('✓ Biometric data cleared');
+    } catch (e) {
+      log('✗ Error clearing biometric data: $e');
     }
   }
 

@@ -3,12 +3,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/services/device_info_service.dart';
+import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/logos.dart';
 import 'package:savvy_bee_mobile/core/utils/input_validator.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_input_field.dart';
 import 'package:savvy_bee_mobile/core/widgets/intro_text.dart';
+import 'package:savvy_bee_mobile/core/services/service_locator.dart';
 import 'package:savvy_bee_mobile/features/auth/presentation/providers/auth_providers.dart';
+import 'package:savvy_bee_mobile/features/auth/presentation/providers/biometric_provider.dart';
+import 'package:savvy_bee_mobile/features/auth/presentation/widgets/biometric_enrollment_sheet.dart';
 import 'package:savvy_bee_mobile/features/auth/presentation/screens/password_reset/password_reset_screen.dart';
 import 'package:savvy_bee_mobile/features/auth/presentation/screens/signup_screen.dart';
 import 'package:savvy_bee_mobile/features/home/presentation/providers/home_data_provider.dart';
@@ -45,6 +49,49 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     super.initState();
     _getDeviceId();
     _loadSavedEmail();
+    // Trigger biometric auto-login on screen entry if enabled
+    WidgetsBinding.instance.addPostFrameCallback((_) => _tryBiometricLogin());
+  }
+
+  Future<void> _tryBiometricLogin() async {
+    final biometric = ref.read(biometricProvider);
+    if (!biometric.isEnabled || !biometric.isAvailable) return;
+
+    final result =
+        await ref.read(biometricProvider.notifier).authenticateWithBiometrics();
+
+    if (!mounted) return;
+
+    switch (result) {
+      case BiometricAuthResult.success:
+        ref.invalidate(homeDataProvider);
+        context.goNamed(HomeScreen.path);
+      case BiometricAuthResult.passwordLoginRequired:
+        CustomSnackbar.show(
+          context,
+          'Please log in with your password. This is required every 30 days.',
+          type: SnackbarType.neutral,
+        );
+      case BiometricAuthResult.permanentlyFailed:
+        CustomSnackbar.show(
+          context,
+          'Biometric login disabled after too many failed attempts.',
+          type: SnackbarType.error,
+        );
+      case BiometricAuthResult.tokenExpired:
+        CustomSnackbar.show(
+          context,
+          'Your session expired. Please log in again.',
+          type: SnackbarType.neutral,
+        );
+      case BiometricAuthResult.lockedOut:
+        final error = ref.read(biometricProvider).errorMessage;
+        if (error != null) {
+          CustomSnackbar.show(context, error, type: SnackbarType.error);
+        }
+      default:
+        break;
+    }
   }
 
   Future<void> _loadSavedEmail() async {
@@ -137,6 +184,20 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     context.goNamed(HomeScreen.path);
   }
 
+  // ─── Biometric enrollment prompt ────────────────────────────────────────────
+  //
+  // Shown once after every successful password login, as long as biometrics are
+  // available on the device but not yet enabled. If the user taps "Not Now" the
+  // sheet dismisses and they proceed to home — next login, the sheet appears
+  // again. Enrollment is triggered directly from the sheet so the OS prompt
+  // happens in context before the app navigates away.
+
+  Future<void> _maybePromptBiometricEnrollment(String email) async {
+    final biometric = ref.read(biometricProvider);
+    if (!biometric.isAvailable || biometric.isEnabled) return;
+    await BiometricEnrollmentSheet.show(context, email);
+  }
+
   // ─── Login handler ──────────────────────────────────────────────────────────
 
   Future<void> _handleLogin() async {
@@ -180,9 +241,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         );
         return;
       }
-      // Fully set-up account — save email and go home.
+      // Fully set-up account — persist credentials for silent biometric re-auth,
+      // then optionally prompt enrollment, then go home.
       await _saveEmail(email);
+      final storage = ref.read(storageServiceProvider);
+      await storage.saveBiometricCredentials(
+          email, _passwordController.text.trim());
+      await storage.saveBiometricLastFullLoginDate();
       ref.invalidate(homeDataProvider);
+      if (!mounted) return;
+      await _maybePromptBiometricEnrollment(email);
       if (!mounted) return;
       context.goNamed(HomeScreen.path);
     } else {
@@ -332,16 +400,59 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         padding: const EdgeInsets.symmetric(
           horizontal: 16,
         ).copyWith(bottom: 32.0),
-        child: CustomElevatedButton(
-          text: 'Continue',
-          isLoading: authState.isLoading,
-          onPressed:
-              // Disable while loading or if fields are empty.
-              authState.isLoading ||
-                  _emailController.text.trim().isEmpty ||
-                  _passwordController.text.trim().isEmpty
-              ? null
-              : _handleLogin,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Biometric quick-login (only shown when enabled)
+            if (ref.watch(biometricProvider).isEnabled &&
+                ref.watch(biometricProvider).isAvailable) ...[
+              OutlinedButton.icon(
+                onPressed: ref.watch(biometricProvider).isAuthenticating
+                    ? null
+                    : _tryBiometricLogin,
+                style: OutlinedButton.styleFrom(
+                  minimumSize: const Size(double.infinity, 52),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  side: const BorderSide(color: AppColors.primary),
+                ),
+                icon: ref.watch(biometricProvider).isAuthenticating
+                    ? const SizedBox(
+                        width: 18,
+                        height: 18,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: AppColors.primary,
+                        ),
+                      )
+                    : const Icon(Icons.fingerprint_rounded,
+                        color: AppColors.primary),
+                label: Text(
+                  ref.watch(biometricProvider).isAuthenticating
+                      ? 'Authenticating…'
+                      : 'Use Biometrics',
+                  style: const TextStyle(
+                    color: AppColors.primary,
+                    fontFamily: 'GeneralSans',
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              const Gap(12),
+            ],
+            CustomElevatedButton(
+              text: 'Continue',
+              isLoading: authState.isLoading,
+              onPressed:
+                  // Disable while loading or if fields are empty.
+                  authState.isLoading ||
+                      _emailController.text.trim().isEmpty ||
+                      _passwordController.text.trim().isEmpty
+                  ? null
+                  : _handleLogin,
+            ),
+          ],
         ),
       ),
     );

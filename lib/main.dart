@@ -9,11 +9,13 @@ import 'package:purchases_flutter/purchases_flutter.dart';
 // import 'package:savvy_bee_mobile/core/services/push_notification_service.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
 import 'package:savvy_bee_mobile/core/tracking/minxpanel_tracking.dart';
-import 'core/theme/app_theme.dart';
 import 'core/routing/app_router.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
+import 'core/theme/app_theme.dart';
 import 'core/utils/constants.dart';
+import 'features/auth/presentation/providers/auth_providers.dart';
+import 'features/auth/presentation/providers/biometric_provider.dart';
+import 'features/auth/presentation/screens/biometric_lock_screen.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 // import 'firebase_options.dart';
 
 void main() async {
@@ -74,8 +76,52 @@ void main() async {
   );
 }
 
-class SavvyBeeApp extends StatelessWidget {
+class SavvyBeeApp extends ConsumerStatefulWidget {
   const SavvyBeeApp({super.key});
+
+  @override
+  ConsumerState<SavvyBeeApp> createState() => _SavvyBeeAppState();
+}
+
+class _SavvyBeeAppState extends ConsumerState<SavvyBeeApp>
+    with WidgetsBindingObserver {
+  // Track lifecycle so we only show the lock when coming back FROM background
+  AppLifecycleState? _previousState;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed &&
+        _previousState == AppLifecycleState.paused) {
+      _onAppResumed();
+    }
+    _previousState = state;
+  }
+
+  void _onAppResumed() {
+    final isAuthenticated = ref.read(authProvider).isAuthenticated;
+    final biometric = ref.read(biometricProvider);
+
+    // Don't stack lock screens if already on one
+    final currentLocation =
+        appRouter.routerDelegate.currentConfiguration.uri.toString();
+    if (currentLocation == BiometricLockScreen.path) return;
+
+    if (isAuthenticated && biometric.isEnabled && biometric.isAvailable) {
+      appRouter.go(BiometricLockScreen.path);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +138,7 @@ class SavvyBeeApp extends StatelessWidget {
 
         if (screenWidth > maxWidth) {
           return Container(
-            color: AppColors.greyLight, // Background color for sides
+            color: AppColors.greyLight,
             child: Center(
               child: Container(
                 constraints: const BoxConstraints(maxWidth: maxWidth),
