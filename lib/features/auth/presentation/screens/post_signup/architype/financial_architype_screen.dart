@@ -200,9 +200,13 @@ class _FinancialArchitypeScreenState
         if (!mounted) return;
 
         if (widget.fromProfile) {
-          // Came from profile — go back and refresh.
+          // Came from profile — pop FinancialArchitypeScreen and
+          // SelectPriorityScreen to land back on the profile screen.
           ref.invalidate(homeDataProvider);
-          context.pop();
+          Navigator.of(context).pop();
+          if (Navigator.of(context).canPop()) {
+            Navigator.of(context).pop();
+          }
           CustomSnackbar.show(
             context,
             'Financial profile complete!',

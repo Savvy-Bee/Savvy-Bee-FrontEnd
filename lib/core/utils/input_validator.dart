@@ -24,8 +24,8 @@ class InputValidator {
     if (value.length < 6) {
       return 'Username must be at least 6 characters long.';
     }
-    if (value.length > 20) {
-      return 'Username must not exceed 20 characters.';
+    if (value.length > 25) {
+      return 'Username must not exceed 25 characters.';
     }
     if (value.contains(' ')) {
       return 'Username cannot contain whitespaces.';
@@ -47,12 +47,14 @@ class InputValidator {
     if (value == null || value.trim().isEmpty) {
       return '$fieldName cannot be empty.';
     }
-    // Regex for name validation (letters and spaces only)
+    if (value.trim().length > 15) {
+      return '$fieldName must not exceed 15 characters.';
+    }
     final nameRegex = RegExp(r'^[a-zA-Z\s]+$');
     if (!nameRegex.hasMatch(value)) {
       return '$fieldName must contain only letters and spaces.';
     }
-    return null; // Valid
+    return null;
   }
 
   // Email validation.
@@ -63,12 +65,33 @@ class InputValidator {
     if (email == null || email.isEmpty) {
       return null;
     }
-    // Simple regex for email validation
+    if (email.length > 40) {
+      return 'Email must not exceed 40 characters.';
+    }
     final emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
     if (!emailRegex.hasMatch(email)) {
       return 'Please enter a valid email address.';
     }
-    return null; // Valid
+    return null;
+  }
+
+  // Phone number validation.
+  static String? validatePhone(String? value, {bool isRequired = true}) {
+    if (isRequired && (value == null || value.trim().isEmpty)) {
+      return 'Phone number cannot be empty.';
+    }
+    if (value == null || value.trim().isEmpty) return null;
+    if (value.length > 13) {
+      return 'Phone number must not exceed 13 characters.';
+    }
+    // Allows optional leading + followed by digits only.
+    if (!RegExp(r'^\+?[0-9]+$').hasMatch(value)) {
+      return 'Phone number must contain digits only.';
+    }
+    if (value.replaceAll('+', '').length < 7) {
+      return 'Please enter a valid phone number.';
+    }
+    return null;
   }
 
   // Password validation: at least 8 characters, one uppercase, one lowercase, one digit.

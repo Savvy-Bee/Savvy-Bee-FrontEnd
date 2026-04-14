@@ -244,6 +244,13 @@ class MixpanelService {
     }
   }
 
+  /// Public variant used by [AnalyticsService] to send pre-enriched events.
+  /// Prefer calling [AnalyticsService] methods over this directly.
+  static Future<void> rawTrack(
+    String eventName,
+    Map<String, dynamic> properties,
+  ) => _track(eventName, properties);
+
   /// Bucket completion time into Fast/Medium/Slow.
   static String _getTimeBucket(int seconds) {
     if (seconds < 60) return 'Fast';

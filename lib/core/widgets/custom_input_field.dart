@@ -26,6 +26,7 @@ class CustomTextFormField extends StatelessWidget {
   final bool enabled;
   final int? maxLines;
   final int? minLines;
+  final int? maxLength;
   final TextCapitalization textCapitalization;
   final FocusNode? focusNode;
   final VoidCallback? onTap;
@@ -63,6 +64,7 @@ class CustomTextFormField extends StatelessWidget {
     this.enabled = true,
     this.maxLines = 1,
     this.minLines,
+    this.maxLength,
     this.textCapitalization = TextCapitalization.none,
     this.focusNode,
     this.onTap,
@@ -123,6 +125,10 @@ class CustomTextFormField extends StatelessWidget {
           enabled: enabled,
           maxLines: maxLines,
           minLines: minLines,
+          maxLength: maxLength,
+          maxLengthEnforcement: maxLength != null
+              ? MaxLengthEnforcement.enforced
+              : MaxLengthEnforcement.none,
           textCapitalization: textCapitalization,
           focusNode: focusNode,
           autofocus: autofocus,
@@ -147,6 +153,7 @@ class CustomTextFormField extends StatelessWidget {
             ),
             errorMaxLines: 2,
             errorText: errorText,
+            counterText: '', // hide the built-in "x/max" counter
             prefix: prefix,
             prefixIcon: prefixIcon,
             suffixIcon: suffixIcon,

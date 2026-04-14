@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 // import 'package:savvy_bee_mobile/core/services/push_notification_service.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
+import 'package:savvy_bee_mobile/core/tracking/analytics_service.dart';
 import 'package:savvy_bee_mobile/core/tracking/minxpanel_tracking.dart';
 import 'core/routing/app_router.dart';
 import 'core/theme/app_theme.dart';
@@ -65,6 +66,7 @@ void main() async {
 
   // Initialize Mixpanel BEFORE runApp()
   await MixpanelService.initialize('0b9bfa95112c6154772de9e7adfde75b');
+  await AnalyticsService.initialize();
 
   runApp(
     ScreenUtilInit(
@@ -88,10 +90,16 @@ class _SavvyBeeAppState extends ConsumerState<SavvyBeeApp>
   // Track lifecycle so we only show the lock when coming back FROM background
   AppLifecycleState? _previousState;
 
+  // ── Session timing ────────────────────────────────────────────────────────
+  DateTime? _sessionStart;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    // Cold-start counts as a session start.
+    _sessionStart = DateTime.now();
+    AnalyticsService.trackSessionStarted();
   }
 
   @override
@@ -102,9 +110,25 @@ class _SavvyBeeAppState extends ConsumerState<SavvyBeeApp>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed &&
-        _previousState == AppLifecycleState.paused) {
-      _onAppResumed();
+    switch (state) {
+      case AppLifecycleState.paused:
+        // App going to background — end the current session.
+        if (_sessionStart != null) {
+          final duration = DateTime.now().difference(_sessionStart!).inSeconds;
+          AnalyticsService.trackSessionEnded(duration);
+          _sessionStart = null;
+        }
+
+      case AppLifecycleState.resumed:
+        if (_previousState == AppLifecycleState.paused) {
+          // App returning from background — start a new session.
+          _sessionStart = DateTime.now();
+          AnalyticsService.trackSessionStarted();
+          _onAppResumed();
+        }
+
+      default:
+        break;
     }
     _previousState = state;
   }

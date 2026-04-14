@@ -477,6 +477,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
             hint: 'First Name',
             controller: _firstNameController,
             textInputAction: TextInputAction.next,
+            maxLength: 15,
             validator: (v) => InputValidator.validateName(v, 'First name'),
           ),
           const Gap(16.0),
@@ -485,6 +486,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
             hint: 'Last Name',
             controller: _lastNameController,
             textInputAction: TextInputAction.done,
+            maxLength: 15,
             validator: (v) => InputValidator.validateName(v, 'Last name'),
           ),
         ],
@@ -500,6 +502,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
         hint: 'Email address',
         controller: _emailController,
         keyboardType: TextInputType.emailAddress,
+        maxLength: 40,
         validator: (v) => InputValidator.validateEmail(v),
       ),
     );
@@ -514,6 +517,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
         hint: 'Username',
         controller: _usernameController,
         textInputAction: TextInputAction.done,
+        maxLength: 25,
         validator: (v) => InputValidator.validateUsername(v),
       ),
     );

@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // import 'package:savvy_bee_mobile/core/services/push_notification_service.dart';
 import 'package:savvy_bee_mobile/core/services/service_locator.dart';
 import 'package:savvy_bee_mobile/core/services/storage_service.dart';
+import 'package:savvy_bee_mobile/core/tracking/analytics_service.dart';
 import 'package:savvy_bee_mobile/core/tracking/minxpanel_tracking.dart';
 import 'package:savvy_bee_mobile/features/auth/data/repositories/auth_repository.dart';
 import 'package:savvy_bee_mobile/features/auth/domain/models/auth_models.dart';
@@ -333,18 +334,19 @@ class AuthNotifier extends StateNotifier<AuthState> {
         state = state.copyWith(user: user, isLoading: false);
         await _saveUserToStorage(user);
 
-        // ── Mixpanel tracking for successful login ──
+        // ── Analytics tracking for successful login ──
         try {
           await MixpanelService.identifyUser(
             userId: user.id,
             email: user.email,
-            signupDate: DateTime.now(), // Use createdAt if available
-            acquisitionSource: 'organic', // or from your source
+            signupDate: DateTime.now(),
+            acquisitionSource: 'organic',
           );
           await MixpanelService.trackLogin('organic');
-          log('✓ Mixpanel tracking completed for login');
+          AnalyticsService.setUserId(user.email); // use email as stable id
+          log('✓ Analytics tracking completed for login');
         } catch (e) {
-          log('✗ Mixpanel tracking failed: $e');
+          log('✗ Analytics tracking failed: $e');
         }
 
         log('✓ Login successful - Token valid for 24 hours');
@@ -507,10 +509,11 @@ class AuthNotifier extends StateNotifier<AuthState> {
       await _authRepository.logout();
       await _clearStorage();
       state = AuthState.initial().copyWith(isInitialized: true);
+      await AnalyticsService.trackLogout();
+      await AnalyticsService.reset();
       log('✓ User logged out successfully');
     } catch (e) {
       log('✗ Logout error: $e');
-      // Still reset state even if clearing storage fails
       state = AuthState.initial().copyWith(isInitialized: true);
     }
   }

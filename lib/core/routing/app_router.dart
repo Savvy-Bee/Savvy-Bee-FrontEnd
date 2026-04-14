@@ -137,6 +137,7 @@ import '../../features/tools/presentation/screens/taxation/taxation_dashboard_sc
 import '../../features/tools/presentation/screens/debt/add_debt_screen.dart';
 import '../../features/tools/presentation/screens/debt/debt_screen.dart';
 import '../../features/tools/presentation/screens/goals/goals_screen.dart';
+import '../tracking/analytics_observer.dart';
 import '../widgets/main_wrapper.dart';
 
 // Keys for navigating to specific tabs within MainWrapper
@@ -150,6 +151,7 @@ final GlobalKey<NavigatorState> _shellNavigatorKey = GlobalKey<NavigatorState>(
 final GoRouter appRouter = GoRouter(
   navigatorKey: _rootNavigatorKey,
   initialLocation: SplashScreen.path,
+  observers: [AppAnalyticsObserver()],
   routes: [
     // Auth Routes
     GoRoute(
