@@ -24,7 +24,9 @@ import '../../../../core/widgets/custom_loading_widget.dart';
 import '../../../../core/widgets/game_card.dart';
 import '../../../../core/widgets/icon_text_row_widget.dart';
 import '../../../../core/widgets/section_title_widget.dart';
+import '../../../auth/presentation/providers/post_onboarding_provider.dart';
 import '../../../auth/presentation/screens/login_screen.dart';
+import '../../../auth/presentation/screens/post_signup/select_priority_screen.dart';
 import '../../../home/presentation/providers/home_data_provider.dart';
 import 'account_info_screen.dart';
 import 'achievements_screen.dart';
@@ -158,9 +160,13 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 final data = response.data;
                 final hiveStats = data.hive.stats;
                 final hasNok = nokAsync.value != null;
+                final postOnboardingDone = ref.watch(postOnboardingProvider);
 
-                bool hasUnfinishedProfile =
-                    _hasUnfinishedProfile(data, hasNok: hasNok);
+                bool hasUnfinishedProfile = _hasUnfinishedProfile(
+                  data,
+                  hasNok: hasNok,
+                  postOnboardingDone: postOnboardingDone,
+                );
                 bool hasVerifiedNin = data.kyc.nin;
                 bool hasVerifiedBvn = data.kyc.bvn;
 
@@ -217,6 +223,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                               context,
                               data,
                               hasNok: hasNok,
+                              postOnboardingDone: postOnboardingDone,
                             ),
                             const Gap(24),
                           ],
@@ -445,6 +452,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                   iconPath: AppIcons.logOutIcon,
                                   onTap: () {
                                     ref.read(authProvider.notifier).logout();
+                                    ref.read(postOnboardingProvider.notifier).reset();
                                     ref
                                             .read(
                                               bottomNavIndexProvider.notifier,
@@ -529,19 +537,18 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     BuildContext context,
     HomeData data, {
     required bool hasNok,
+    required bool postOnboardingDone,
   }) {
     final hasAvatar = data.profilePhoto.isNotEmpty;
     final hasAddress = data.kyc.address;
-    const hasBiometric = false;
     const hasPIN = false;
 
     int completedCount = 0;
     if (hasAvatar) completedCount++;
     if (hasAddress) completedCount++;
-    // if (hasNok) completedCount++;
-    // if (hasBiometric) completedCount++;
+    if (postOnboardingDone) completedCount++;
     if (hasPIN) completedCount++;
-    const totalCount = 3;
+    const totalCount = 4;
 
     final List<Map<String, dynamic>> incompleteItems = [];
 
@@ -563,27 +570,17 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       });
     }
 
-    // if (!hasNok) {
-    //   incompleteItems.add({
-    //     'icon': Icons.people_outline,
-    //     'title': 'Add next of kin',
-    //     'subtitle': 'Emergency contact information',
-    //     'onTap': () => context.pushNamed(NextOfKinScreen.path),
-    //   });
-    // }
-
-    // if (!hasBiometric) {
-    //   incompleteItems.add({
-    //     'icon': Icons.fingerprint,
-    //     'title': 'Enable Biometric Login',
-    //     'subtitle': '',
-    //     'onTap': () {
-    //       ScaffoldMessenger.of(context).showSnackBar(
-    //         const SnackBar(content: Text('Biometric setup coming soon')),
-    //       );
-    //     },
-    //   });
-    // }
+    if (!postOnboardingDone) {
+      incompleteItems.add({
+        'icon': Icons.psychology_outlined,
+        'title': 'Complete your financial profile',
+        'subtitle': 'Help us personalise your experience',
+        'onTap': () => context.pushNamed(
+              SelectPriorityScreen.path,
+              extra: const SelectPriorityArgs(fromProfile: true),
+            ),
+      });
+    }
 
     if (!hasPIN) {
       incompleteItems.add({
@@ -602,7 +599,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'COMPLETE PROFILE SETUP ($completedCount/$totalCount)',
+          'COMPLETE YOUR PROFILE ($completedCount/$totalCount)',
           style: const TextStyle(
             fontSize: 12,
             fontFamily: 'GeneralSans',
@@ -700,13 +697,16 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     );
   }
 
-  bool _hasUnfinishedProfile(HomeData data, {bool hasNok = false}) {
+  bool _hasUnfinishedProfile(
+    HomeData data, {
+    bool hasNok = false,
+    bool postOnboardingDone = false,
+  }) {
     final hasAvatar = data.profilePhoto.isNotEmpty;
     final hasAddress = data.kyc.address;
-    const hasBiometric = false;
     const hasPIN = false;
 
-    return !hasAvatar || !hasAddress || !hasNok || !hasBiometric || !hasPIN;
+    return !hasAvatar || !hasAddress || !postOnboardingDone || !hasPIN;
   }
 
   Widget _buildAvatarSection(BuildContext context, {required String avatar}) {

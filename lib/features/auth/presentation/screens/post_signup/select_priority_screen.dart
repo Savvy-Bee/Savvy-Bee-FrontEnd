@@ -4,7 +4,6 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/app_icons.dart';
 import 'package:savvy_bee_mobile/core/utils/assets/logos.dart';
-import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/icon_text_row_widget.dart';
 import 'package:savvy_bee_mobile/core/widgets/intro_text.dart';
@@ -54,10 +53,19 @@ enum Priority {
   }
 }
 
+/// Args passed via go_router `extra`.
+class SelectPriorityArgs {
+  /// When true, "Back" and "Skip" navigate back to profile instead of home.
+  final bool fromProfile;
+  const SelectPriorityArgs({this.fromProfile = false});
+}
+
 class SelectPriorityScreen extends ConsumerStatefulWidget {
   static const String path = '/select-priority';
 
-  const SelectPriorityScreen({super.key});
+  final bool fromProfile;
+
+  const SelectPriorityScreen({super.key, this.fromProfile = false});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -66,6 +74,18 @@ class SelectPriorityScreen extends ConsumerStatefulWidget {
 
 class _SelectPriorityScreenState extends ConsumerState<SelectPriorityScreen> {
   Priority? _priority;
+
+  void _skip() {
+    if (widget.fromProfile) {
+      // Just dismiss back to profile — don't push into the questionnaire.
+      context.pop();
+    } else {
+      context.pushNamed(
+        FinancialArchitypeScreen.path,
+        extra: FinancialArchitypeArgs(fromProfile: false),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,9 +100,13 @@ class _SelectPriorityScreenState extends ConsumerState<SelectPriorityScreen> {
               'Skip',
               AppIcon(AppIcons.arrowRightIcon),
               reverse: true,
-              textStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'GeneralSans',
-                    letterSpacing: 12 * 0.02,),
-              onTap: () => context.pushNamed(FinancialArchitypeScreen.path),
+              textStyle: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'GeneralSans',
+                letterSpacing: 12 * 0.02,
+              ),
+              onTap: _skip,
             ),
           ),
         ],
@@ -95,9 +119,9 @@ class _SelectPriorityScreenState extends ConsumerState<SelectPriorityScreen> {
               child: ListView(
                 physics: const ClampingScrollPhysics(),
                 children: [
-                  IntroText(title: 'Welcome to\nSavvy Bee!'),
+                  const IntroText(title: 'Welcome to\nSavvy Bee!'),
                   const Gap(16),
-                  Text(
+                  const Text(
                     'Select what matters to you most right now',
                     textAlign: TextAlign.center,
                     style: TextStyle(height: 1.1, fontFamily: 'GeneralSans'),
@@ -114,9 +138,7 @@ class _SelectPriorityScreenState extends ConsumerState<SelectPriorityScreen> {
                         text: Priority.getText(Priority.values[index]),
                         isSelected: _priority == Priority.values[index],
                         onTap: () {
-                          setState(() {
-                            _priority = Priority.values[index];
-                          });
+                          setState(() => _priority = Priority.values[index]);
                         },
                       ),
                     ),
@@ -133,7 +155,10 @@ class _SelectPriorityScreenState extends ConsumerState<SelectPriorityScreen> {
                   : () {
                       context.pushNamed(
                         FinancialArchitypeScreen.path,
-                        extra: Priority.getText(_priority!),
+                        extra: FinancialArchitypeArgs(
+                          priority: Priority.getText(_priority!),
+                          fromProfile: widget.fromProfile,
+                        ),
                       );
                     },
             ),

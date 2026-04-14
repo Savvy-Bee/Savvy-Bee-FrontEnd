@@ -1,10 +1,10 @@
 class ApiEndpoints {
   /// Base URL
   /// To switch environments, change only this one value:
-  static const String baseUrl = 'https://api.mysavvybee.com'; // production
-  // static const String baseUrl =
-  //     'https://savvy-bee-backend-nodejs-express-mongodb.onrender.com'; // demo
-
+  // static const String baseUrl = 'https://api.mysavvybee.com'; // production
+  static const String baseUrl =
+      'https://savvy-bee-backend-nodejs-express-mongodb.onrender.com'; // demo
+ 
   /// Auth endpoints
   static const String register = '/auth/register';
   static const String resendOtp = '/auth/register/resendOtp';

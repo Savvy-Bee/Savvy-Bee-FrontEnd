@@ -260,7 +260,9 @@ final GoRouter appRouter = GoRouter(
       path: SelectPriorityScreen.path,
       name: SelectPriorityScreen.path,
       builder: (BuildContext context, GoRouterState state) {
-        return const SelectPriorityScreen();
+        final args = state.extra;
+        final fromProfile = args is SelectPriorityArgs ? args.fromProfile : false;
+        return SelectPriorityScreen(fromProfile: fromProfile);
       },
     ),
     GoRoute(
@@ -274,7 +276,15 @@ final GoRouter appRouter = GoRouter(
       path: FinancialArchitypeScreen.path,
       name: FinancialArchitypeScreen.path,
       builder: (BuildContext context, GoRouterState state) {
-        return FinancialArchitypeScreen(priority: state.extra as String?);
+        final args = state.extra;
+        if (args is FinancialArchitypeArgs) {
+          return FinancialArchitypeScreen(
+            priority: args.priority,
+            fromProfile: args.fromProfile,
+          );
+        }
+        // Legacy: extra was a bare String (priority only).
+        return FinancialArchitypeScreen(priority: args as String?);
       },
     ),
     GoRoute(
