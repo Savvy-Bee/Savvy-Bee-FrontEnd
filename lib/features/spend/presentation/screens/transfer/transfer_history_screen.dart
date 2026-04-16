@@ -52,84 +52,84 @@ class _TransferHistoryScreenState extends ConsumerState<TransferHistoryScreen> {
               ),
             ),
             const Gap(16),
-            Expanded(
-              child: transactionsAsync.when(
-                data: (apiResponse) {
-                  final all = apiResponse.data?.transactions ?? [];
+            // Expanded(
+            //   child: transactionsAsync.when(
+            //     data: (apiResponse) {
+            //       final all = apiResponse.data?.transactions ?? [];
 
-                  if (all.isEmpty) {
-                    return _EmptyState(
-                      icon: Icons.swap_horiz_rounded,
-                      message: 'No transfers yet',
-                    );
-                  }
+            //       if (all.isEmpty) {
+            //         return _EmptyState(
+            //           icon: Icons.swap_horiz_rounded,
+            //           message: 'No transfers yet',
+            //         );
+            //       }
 
-                  final filtered = _searchQuery.isEmpty
-                      ? all
-                      : all.where((tx) {
-                          return tx.narration
-                                  .toLowerCase()
-                                  .contains(_searchQuery) ||
-                              tx.transactionFor
-                                  .toLowerCase()
-                                  .contains(_searchQuery);
-                        }).toList();
+            //       final filtered = _searchQuery.isEmpty
+            //           ? all
+            //           : all.where((tx) {
+            //               return tx.narration
+            //                       .toLowerCase()
+            //                       .contains(_searchQuery) ||
+            //                   tx.transactionFor
+            //                       .toLowerCase()
+            //                       .contains(_searchQuery);
+            //             }).toList();
 
-                  if (filtered.isEmpty) {
-                    return _EmptyState(
-                      icon: Icons.search_off_rounded,
-                      message: 'No matching transactions',
-                    );
-                  }
+            //       if (filtered.isEmpty) {
+            //         return _EmptyState(
+            //           icon: Icons.search_off_rounded,
+            //           message: 'No matching transactions',
+            //         );
+            //       }
 
-                  final grouped = _groupByDate(filtered);
+            //       final grouped = _groupByDate(filtered);
 
-                  return RefreshIndicator(
-                    onRefresh: () async =>
-                        ref.read(transactionListProvider.notifier).refresh(),
-                    child: ListView.separated(
-                      itemCount: grouped.length,
-                      separatorBuilder: (_, __) => const Gap(16),
-                      itemBuilder: (_, index) {
-                        final entry = grouped.entries.elementAt(index);
-                        return TransactionHistoryCard(
-                          date: entry.key,
-                          transactions: entry.value,
-                        );
-                      },
-                    ),
-                  );
-                },
-                loading: () =>
-                    const Center(child: CircularProgressIndicator()),
-                error: (error, _) => Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.error_outline,
-                        size: 64,
-                        color: AppColors.error,
-                      ),
-                      const Gap(16),
-                      Text(
-                        'Failed to load transactions',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: AppColors.textSecondary,
-                        ),
-                      ),
-                      const Gap(8),
-                      TextButton(
-                        onPressed: () =>
-                            ref.read(transactionListProvider.notifier).refresh(),
-                        child: const Text('Retry'),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+            //       return RefreshIndicator(
+            //         onRefresh: () async =>
+            //             ref.read(transactionListProvider.notifier).refresh(),
+            //         child: ListView.separated(
+            //           itemCount: grouped.length,
+            //           separatorBuilder: (_, __) => const Gap(16),
+            //           itemBuilder: (_, index) {
+            //             final entry = grouped.entries.elementAt(index);
+            //             return TransactionHistoryCard(
+            //               date: entry.key,
+            //               transactions: entry.value,
+            //             );
+            //           },
+            //         ),
+            //       );
+            //     },
+            //     loading: () =>
+            //         const Center(child: CircularProgressIndicator()),
+            //     error: (error, _) => Center(
+            //       child: Column(
+            //         mainAxisAlignment: MainAxisAlignment.center,
+            //         children: [
+            //           Icon(
+            //             Icons.error_outline,
+            //             size: 64,
+            //             color: AppColors.error,
+            //           ),
+            //           const Gap(16),
+            //           Text(
+            //             'Failed to load transactions',
+            //             style: TextStyle(
+            //               fontSize: 16,
+            //               color: AppColors.textSecondary,
+            //             ),
+            //           ),
+            //           const Gap(8),
+            //           TextButton(
+            //             onPressed: () =>
+            //                 ref.read(transactionListProvider.notifier).refresh(),
+            //             child: const Text('Retry'),
+            //           ),
+            //         ],
+            //       ),
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),

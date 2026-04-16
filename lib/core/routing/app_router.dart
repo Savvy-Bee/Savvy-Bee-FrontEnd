@@ -74,6 +74,7 @@ import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/live
 // import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/nin_verification_screen.dart';
 import 'package:savvy_bee_mobile/features/auth/presentation/screens/password_reset/password_reset_complete.dart';
 import 'package:savvy_bee_mobile/features/auth/presentation/screens/password_reset/password_reset_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/quick_actions_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/budget_completion_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/budget_onboarding_screen.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/budget_screen.dart';
@@ -495,6 +496,13 @@ final GoRouter appRouter = GoRouter(
       name: NewCardScreen.path,
       builder: (BuildContext context, GoRouterState state) {
         return const NewCardScreen();
+      },
+    ),
+    GoRoute(
+      path: '/quick-actions',
+      name: QuickActionsScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return const QuickActionsScreen();
       },
     ),
     GoRoute(

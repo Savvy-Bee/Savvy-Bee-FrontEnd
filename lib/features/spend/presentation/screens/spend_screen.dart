@@ -19,6 +19,7 @@ import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/add_
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/create_wallet_screen.dart';
 import 'package:savvy_bee_mobile/features/home/presentation/providers/home_data_provider.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/screens/profile_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/quick_actions_screen.dart';
 
 class SpendScreen extends ConsumerStatefulWidget {
   static const String path = '/spend';
@@ -121,46 +122,46 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
                   const SliverGap(24),
 
                   // Transactions Section Header
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            'Transactions',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                              fontFamily: 'GeneralSans',
-                              color: Colors.black,
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () => context.pushNamed(
-                              TransactionHistoryScreen.path,
-                            ),
-                            child: const Text(
-                              'See All',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontFamily: 'GeneralSans',
-                                color: Color(0xFFE8A838),
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                  // SliverToBoxAdapter(
+                  //   child: Padding(
+                  //     padding: const EdgeInsets.symmetric(horizontal: 16),
+                  //     child: Row(
+                  //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //       children: [
+                  //         const Text(
+                  //           'Transactions',
+                  //           style: TextStyle(
+                  //             fontSize: 18,
+                  //             fontWeight: FontWeight.w600,
+                  //             fontFamily: 'GeneralSans',
+                  //             color: Colors.black,
+                  //           ),
+                  //         ),
+                  //         GestureDetector(
+                  //           onTap: () => context.pushNamed(
+                  //             TransactionHistoryScreen.path,
+                  //           ),
+                  //           child: const Text(
+                  //             'See All',
+                  //             style: TextStyle(
+                  //               fontSize: 14,
+                  //               fontFamily: 'GeneralSans',
+                  //               color: Color(0xFFE8A838),
+                  //               fontWeight: FontWeight.w500,
+                  //             ),
+                  //           ),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
 
-                  const SliverGap(12),
+                  // const SliverGap(12),
 
                   // Transactions List
-                  _buildTransactionsList(),
+                  // _buildTransactionsList(),
 
-                  const SliverGap(24),
+                  // const SliverGap(24),
                 ],
               ),
             );
@@ -202,18 +203,21 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
           // Notification Bell
           Stack(
             children: [
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.grey.shade200),
-                ),
-                child: const Icon(
-                  Icons.notifications_outlined,
-                  size: 22,
-                  color: Colors.black,
+              GestureDetector(
+                onTap: () => context.pushNamed(TransactionHistoryScreen.path),
+                child: Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.grey.shade200),
+                  ),
+                  child: const Icon(
+                    Icons.notifications_outlined,
+                    size: 22,
+                    color: Colors.black,
+                  ),
                 ),
               ),
               // Notification dot
@@ -649,7 +653,7 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
                 title: 'Quick Actions',
                 subtitle: 'Send & Pay',
                 color: const Color(0xFFF0F4FF),
-                onTap: () => context.push(TransferScreenOne.path),
+                onTap: () => context.push(QuickActionsScreen.path),
               ),
             ),
           ],
