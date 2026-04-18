@@ -62,10 +62,14 @@ import 'package:savvy_bee_mobile/features/spend/presentation/screens/fund/new_ca
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/fund/fund_by_transfer_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/spend_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/transactions/account_statement_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/domain/models/transaction.dart';
 import 'package:savvy_bee_mobile/features/spend/domain/models/wallet.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/transactions/transaction_details_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/transactions/transaction_history_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/transfer/enter_amount_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/transfer/review_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/transfer/send_money_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/transfer/success_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/transfer/transfer_screen_one.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/add_money_screen.dart';
 // import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/bvn_verification_screen.dart';
@@ -576,7 +580,34 @@ final GoRouter appRouter = GoRouter(
       path: InternalTransferScreen.path,
       name: InternalTransferScreen.path,
       builder: (BuildContext context, GoRouterState state) {
-        return const InternalTransferScreen();
+        return InternalTransferScreen(
+          initialUsername: state.extra as String?,
+        );
+      },
+    ),
+    GoRoute(
+      path: '/enter-amount',
+      name: EnterAmountScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return EnterAmountScreen(
+          recipientAccountInfo: state.extra as RecipientAccountInfo,
+        );
+      },
+    ),
+    GoRoute(
+      path: '/review',
+      name: ReviewScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return ReviewScreen(args: state.extra as TransferAmountArgs);
+      },
+    ),
+    GoRoute(
+      path: '/send-success',
+      name: SendSuccessScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return SendSuccessScreen(
+          transaction: state.extra as TransactionData?,
+        );
       },
     ),
     GoRoute(

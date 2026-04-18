@@ -18,6 +18,7 @@ import '../../../../core/utils/currency_input_formatter.dart';
 import '../../../../core/widgets/dial_pad_widget.dart';
 import '../../../../core/widgets/dot.dart';
 import '../../../../features/spend/domain/models/internal_transfer.dart';
+import '../../../../features/spend/domain/models/transaction.dart';
 import '../providers/wallet_provider.dart';
 import '../providers/transfer_provider.dart';
 
@@ -201,12 +202,14 @@ class EnterPinBottomSheet extends ConsumerStatefulWidget {
   final String amount;
   final String category;
   final RecipientAccountInfo recipientAccountInfo;
+  final void Function(TransactionData transaction)? onSuccess;
 
   const EnterPinBottomSheet({
     super.key,
     required this.amount,
     required this.category,
     required this.recipientAccountInfo,
+    this.onSuccess,
   });
 
   @override
@@ -218,6 +221,7 @@ class EnterPinBottomSheet extends ConsumerStatefulWidget {
     required String amount,
     required String category,
     required RecipientAccountInfo recipientAccountInfo,
+    void Function(TransactionData transaction)? onSuccess,
   }) {
     showModalBottomSheet(
       isScrollControlled: true,
@@ -229,6 +233,7 @@ class EnterPinBottomSheet extends ConsumerStatefulWidget {
         amount: amount,
         category: category,
         recipientAccountInfo: recipientAccountInfo,
+        onSuccess: onSuccess,
       ),
     );
   }
@@ -303,13 +308,25 @@ class _EnterPinBottomSheetState extends ConsumerState<EnterPinBottomSheet> {
       final transferState = ref.read(transferNotifierProvider);
 
       if (transferState.transaction != null) {
-        context.pop();
-        context.pop();
-        TransactionCompletionBottomSheet.show(
-          context,
-          transaction: transferState.transaction!,
-          recipientName: widget.recipientAccountInfo.accountName,
-        );
+        final transaction = transferState.transaction!;
+        if (widget.onSuccess != null) {
+          // Called from a screen — just close the PIN sheet and hand off.
+          context.pop();
+          widget.onSuccess!(transaction);
+        } else {
+          // Legacy path — called stacked on top of amount sheet.
+          final nav = Navigator.of(context);
+          final recipientName = widget.recipientAccountInfo.accountName;
+          context.pop();
+          context.pop();
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            TransactionCompletionBottomSheet.show(
+              nav.context,
+              transaction: transaction,
+              recipientName: recipientName,
+            );
+          });
+        }
       }
     } catch (e) {
       if (!mounted) return;
@@ -858,13 +875,18 @@ class _InternalEnterPinBottomSheetState
       final transfer = ref.read(transferNotifierProvider).internalTransfer;
 
       if (transfer != null) {
+        final nav = Navigator.of(context);
+        final completedTransfer = transfer;
+        final recipientUsername = widget.username;
         context.pop(); // close PIN sheet
         context.pop(); // close amount sheet
-        InternalTransferCompletionBottomSheet.show(
-          context,
-          transfer: transfer,
-          recipientUsername: widget.username,
-        );
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          InternalTransferCompletionBottomSheet.show(
+            nav.context,
+            transfer: completedTransfer,
+            recipientUsername: recipientUsername,
+          );
+        });
       }
     } catch (e) {
       if (!mounted) return;

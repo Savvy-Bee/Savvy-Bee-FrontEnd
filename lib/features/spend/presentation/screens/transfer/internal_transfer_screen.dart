@@ -9,7 +9,9 @@ import '../../widgets/send_money_bottom_sheets.dart';
 class InternalTransferScreen extends ConsumerStatefulWidget {
   static const String path = '/internal-transfer';
 
-  const InternalTransferScreen({super.key});
+  final String? initialUsername;
+
+  const InternalTransferScreen({super.key, this.initialUsername});
 
   @override
   ConsumerState<InternalTransferScreen> createState() =>
@@ -18,7 +20,9 @@ class InternalTransferScreen extends ConsumerStatefulWidget {
 
 class _InternalTransferScreenState
     extends ConsumerState<InternalTransferScreen> {
-  final _usernameController = TextEditingController();
+  late final _usernameController = TextEditingController(
+    text: widget.initialUsername,
+  );
 
   @override
   void dispose() {

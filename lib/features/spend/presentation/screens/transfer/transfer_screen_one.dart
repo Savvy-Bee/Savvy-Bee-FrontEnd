@@ -1,57 +1,19 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:savvy_bee_mobile/features/spend/domain/models/beneficiary.dart';
 import 'package:savvy_bee_mobile/features/spend/domain/models/wallet.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/utils/date_time_extension.dart';
 import '../../../../../core/utils/num_extensions.dart';
+import '../../providers/beneficiary_provider.dart';
 import '../../providers/wallet_provider.dart';
 import 'internal_transfer_screen.dart';
 import 'send_money_screen.dart';
 import 'transfer_history_screen.dart';
 import 'transfer_screen.dart';
 import '../transactions/transaction_details_screen.dart';
-
-class Beneficiary {
-  final String id;
-  final String name;
-  final String? username; // for Savvy Bee
-  final String? accountNumber;
-  final String? bankName;
-  final String? bankCode;
-
-  Beneficiary({
-    required this.id,
-    required this.name,
-    this.username,
-    this.accountNumber,
-    this.bankName,
-    this.bankCode,
-  });
-
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-        'username': username,
-        'accountNumber': accountNumber,
-        'bankName': bankName,
-        'bankCode': bankCode,
-      };
-
-  factory Beneficiary.fromJson(Map<String, dynamic> json) => Beneficiary(
-        id: json['id'],
-        name: json['name'],
-        username: json['username'],
-        accountNumber: json['accountNumber'],
-        bankName: json['bankName'],
-        bankCode: json['bankCode'],
-      );
-}
 
 class TransferScreenOne extends ConsumerStatefulWidget {
   static const String path = '/transfer-screen-one';
@@ -63,43 +25,17 @@ class TransferScreenOne extends ConsumerStatefulWidget {
 }
 
 class _TransferScreenOneState extends ConsumerState<TransferScreenOne> {
-  List<Beneficiary> _beneficiaries = [];
-  final List<String> _banks = ['Access Bank', 'GTBank', 'Zenith Bank', 'First Bank', 'UBA'];
-
-  @override
-  void initState() {
-    super.initState();
-    _loadBeneficiaries();
-  }
-
-  Future<void> _loadBeneficiaries() async {
-    final prefs = await SharedPreferences.getInstance();
-    final String? saved = prefs.getString('beneficiaries');
-    if (saved != null) {
-      final List<dynamic> list = jsonDecode(saved);
-      setState(() {
-        _beneficiaries = list.map((e) => Beneficiary.fromJson(e)).toList();
-      });
-    }
-  }
-
-  Future<void> _saveBeneficiaries() async {
-    final prefs = await SharedPreferences.getInstance();
-    final String encoded = jsonEncode(_beneficiaries.map((b) => b.toJson()).toList());
-    await prefs.setString('beneficiaries', encoded);
-  }
-
   void _showAddBeneficiarySheet() {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      useRootNavigator: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
       builder: (_) => _AddBeneficiarySheet(
-        banks: _banks,
-        onAdd: (beneficiary) {
-          setState(() => _beneficiaries.add(beneficiary));
-          _saveBeneficiaries();
-        },
+        onAdd: (beneficiary) =>
+            ref.read(beneficiaryProvider.notifier).add(beneficiary),
       ),
     );
   }
@@ -108,7 +44,10 @@ class _TransferScreenOneState extends ConsumerState<TransferScreenOne> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      useRootNavigator: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
       builder: (_) => _BeneficiaryConfirmationSheet(beneficiary: beneficiary),
     );
   }
@@ -121,6 +60,7 @@ class _TransferScreenOneState extends ConsumerState<TransferScreenOne> {
 
   @override
   Widget build(BuildContext context) {
+    final beneficiaries = ref.watch(beneficiaryProvider);
     final transactionsAsync = ref.watch(transactionListProvider);
 
     return Scaffold(
@@ -177,7 +117,7 @@ class _TransferScreenOneState extends ConsumerState<TransferScreenOne> {
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
-                      children: _beneficiaries.map((b) {
+                      children: beneficiaries.map((b) {
                         return Padding(
                           padding: const EdgeInsets.only(right: 16),
                           child: GestureDetector(
@@ -262,21 +202,33 @@ class _TransferScreenOneState extends ConsumerState<TransferScreenOne> {
 
 // ==================== ADD BENEFICIARY BOTTOM SHEET ====================
 class _AddBeneficiarySheet extends StatefulWidget {
-  final List<String> banks;
   final Function(Beneficiary) onAdd;
 
-  const _AddBeneficiarySheet({required this.banks, required this.onAdd});
+  const _AddBeneficiarySheet({required this.onAdd});
 
   @override
   State<_AddBeneficiarySheet> createState() => _AddBeneficiarySheetState();
 }
 
 class _AddBeneficiarySheetState extends State<_AddBeneficiarySheet> {
+  static const _banks = [
+    'Access Bank', 'First Bank', 'GTBank', 'Kuda Bank', 'Opay',
+    'PalmPay', 'Sterling Bank', 'UBA', 'Zenith Bank',
+  ];
+
   bool _isSavvyBee = true;
   final _usernameController = TextEditingController();
   final _accountNumberController = TextEditingController();
   final _accountNameController = TextEditingController();
   String? _selectedBank;
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _accountNumberController.dispose();
+    _accountNameController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -325,7 +277,9 @@ class _AddBeneficiarySheetState extends State<_AddBeneficiarySheet> {
               const Text('Select Bank'),
               DropdownButtonFormField<String>(
                 value: _selectedBank,
-                items: widget.banks.map((bank) => DropdownMenuItem(value: bank, child: Text(bank))).toList(),
+                items: _banks
+                    .map((bank) => DropdownMenuItem(value: bank, child: Text(bank)))
+                    .toList(),
                 onChanged: (val) => setState(() => _selectedBank = val),
                 hint: const Text('Choose bank'),
               ),
@@ -401,7 +355,7 @@ class _OptionButton extends StatelessWidget {
   }
 }
 
-// ==================== CONFIRMATION SHEET (kept from original) ====================
+// ==================== CONFIRMATION SHEET ====================
 class _BeneficiaryConfirmationSheet extends StatelessWidget {
   final Beneficiary beneficiary;
 
@@ -409,30 +363,63 @@ class _BeneficiaryConfirmationSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Reuse or adapt your original confirmation logic here
-    // For now, a simple version – you can expand it
+    final subtitle = beneficiary.isSavvyBee
+        ? '@${beneficiary.username}'
+        : '${beneficiary.accountNumber} · ${beneficiary.bankName}';
+
     return Padding(
       padding: const EdgeInsets.all(20),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text('Send to ${beneficiary.name}?'),
-          const Gap(20),
+          Text(
+            'Send to ${beneficiary.name}?',
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+          ),
+          const Gap(8),
+          Text(subtitle, style: const TextStyle(color: Colors.grey)),
+          const Gap(24),
           Row(
             children: [
-              Expanded(child: OutlinedButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel'))),
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('Cancel'),
+                ),
+              ),
               const Gap(12),
               Expanded(
                 child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
                   onPressed: () {
                     Navigator.pop(context);
-                    // Navigate to send money with this beneficiary
+                    if (beneficiary.isSavvyBee) {
+                      context.push(
+                        InternalTransferScreen.path,
+                        extra: beneficiary.username,
+                      );
+                    } else if (beneficiary.accountNumber != null &&
+                        beneficiary.bankName != null) {
+                      context.pushNamed(
+                        SendMoneyScreen.path,
+                        extra: RecipientAccountInfo(
+                          accountName: beneficiary.name,
+                          accountNumber: beneficiary.accountNumber!,
+                          bankName: beneficiary.bankName!,
+                          bankCode: beneficiary.bankCode ?? '',
+                        ),
+                      );
+                    }
                   },
-                  child: const Text('Confirm'),
+                  child: const Text(
+                    'Confirm',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
               ),
             ],
           ),
+          const Gap(8),
         ],
       ),
     );
