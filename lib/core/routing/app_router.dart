@@ -67,6 +67,9 @@ import 'package:savvy_bee_mobile/features/spend/domain/models/wallet.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/transactions/transaction_details_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/transactions/transaction_history_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/transfer/enter_amount_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/transfer/internal_enter_amount_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/transfer/internal_review_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/transfer/internal_success_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/transfer/review_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/transfer/send_money_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/transfer/success_screen.dart';
@@ -126,6 +129,7 @@ import '../../features/spend/presentation/screens/bills/cable_bill_screen.dart';
 import '../../features/spend/presentation/screens/bills/electricity_bill_screen.dart';
 import '../../features/spend/presentation/screens/fund/username_screen.dart';
 import '../../features/spend/presentation/screens/transfer/transfer_screen.dart';
+import '../../features/spend/domain/models/internal_transfer.dart';
 import '../../features/spend/presentation/screens/transfer/internal_transfer_screen.dart';
 import '../../features/spend/presentation/screens/transfer/transfer_history_screen.dart';
 import '../../features/spend/presentation/screens/wallet/photo_verification_screen.dart';
@@ -582,6 +586,29 @@ final GoRouter appRouter = GoRouter(
       builder: (BuildContext context, GoRouterState state) {
         return InternalTransferScreen(
           initialUsername: state.extra as String?,
+        );
+      },
+    ),
+    GoRoute(
+      path: InternalEnterAmountScreen.path,
+      name: InternalEnterAmountScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return InternalEnterAmountScreen(username: state.extra as String);
+      },
+    ),
+    GoRoute(
+      path: InternalReviewScreen.path,
+      name: InternalReviewScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return InternalReviewScreen(args: state.extra as InternalTransferArgs);
+      },
+    ),
+    GoRoute(
+      path: InternalSuccessScreen.path,
+      name: InternalSuccessScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return InternalSuccessScreen(
+          transfer: state.extra as InternalTransferData?,
         );
       },
     ),

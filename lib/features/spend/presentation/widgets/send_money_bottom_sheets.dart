@@ -801,12 +801,14 @@ class InternalEnterPinBottomSheet extends ConsumerStatefulWidget {
   final String username;
   final String amount;
   final String category;
+  final void Function(InternalTransferData transfer)? onSuccess;
 
   const InternalEnterPinBottomSheet({
     super.key,
     required this.username,
     required this.amount,
     required this.category,
+    this.onSuccess,
   });
 
   @override
@@ -818,6 +820,7 @@ class InternalEnterPinBottomSheet extends ConsumerStatefulWidget {
     required String username,
     required String amount,
     required String category,
+    void Function(InternalTransferData transfer)? onSuccess,
   }) {
     showModalBottomSheet(
       isScrollControlled: true,
@@ -829,6 +832,7 @@ class InternalEnterPinBottomSheet extends ConsumerStatefulWidget {
         username: username,
         amount: amount,
         category: category,
+        onSuccess: onSuccess,
       ),
     );
   }
@@ -875,18 +879,23 @@ class _InternalEnterPinBottomSheetState
       final transfer = ref.read(transferNotifierProvider).internalTransfer;
 
       if (transfer != null) {
-        final nav = Navigator.of(context);
-        final completedTransfer = transfer;
-        final recipientUsername = widget.username;
-        context.pop(); // close PIN sheet
-        context.pop(); // close amount sheet
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          InternalTransferCompletionBottomSheet.show(
-            nav.context,
-            transfer: completedTransfer,
-            recipientUsername: recipientUsername,
-          );
-        });
+        if (widget.onSuccess != null) {
+          context.pop();
+          widget.onSuccess!(transfer);
+        } else {
+          final nav = Navigator.of(context);
+          final completedTransfer = transfer;
+          final recipientUsername = widget.username;
+          context.pop();
+          context.pop();
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            InternalTransferCompletionBottomSheet.show(
+              nav.context,
+              transfer: completedTransfer,
+              recipientUsername: recipientUsername,
+            );
+          });
+        }
       }
     } catch (e) {
       if (!mounted) return;

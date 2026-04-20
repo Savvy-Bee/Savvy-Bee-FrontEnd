@@ -7,21 +7,34 @@ import 'package:savvy_bee_mobile/core/utils/num_extensions.dart';
 import 'package:savvy_bee_mobile/core/widgets/dial_pad_widget.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/providers/wallet_provider.dart';
 
-import 'review_screen.dart';
-import 'send_money_screen.dart';
+import 'internal_review_screen.dart';
 
-class EnterAmountScreen extends ConsumerStatefulWidget {
-  static const String path = '/enter-amount';
+class InternalTransferArgs {
+  final String username;
+  final String amount;
+  final String narration;
 
-  final RecipientAccountInfo recipientAccountInfo;
-
-  const EnterAmountScreen({super.key, required this.recipientAccountInfo});
-
-  @override
-  ConsumerState<EnterAmountScreen> createState() => _EnterAmountScreenState();
+  const InternalTransferArgs({
+    required this.username,
+    required this.amount,
+    required this.narration,
+  });
 }
 
-class _EnterAmountScreenState extends ConsumerState<EnterAmountScreen> {
+class InternalEnterAmountScreen extends ConsumerStatefulWidget {
+  static const String path = '/internal-enter-amount';
+
+  final String username;
+
+  const InternalEnterAmountScreen({super.key, required this.username});
+
+  @override
+  ConsumerState<InternalEnterAmountScreen> createState() =>
+      _InternalEnterAmountScreenState();
+}
+
+class _InternalEnterAmountScreenState
+    extends ConsumerState<InternalEnterAmountScreen> {
   final _amountController = TextEditingController();
   final _narrationController = TextEditingController();
   final _formatter = CurrencyInputFormatter();
@@ -60,9 +73,9 @@ class _EnterAmountScreenState extends ConsumerState<EnterAmountScreen> {
 
   void _onContinue() {
     context.pushNamed(
-      ReviewScreen.path,
-      extra: TransferAmountArgs(
-        recipientAccountInfo: widget.recipientAccountInfo,
+      InternalReviewScreen.path,
+      extra: InternalTransferArgs(
+        username: widget.username,
         amount: _amountController.text,
         narration: _narrationController.text.trim(),
       ),
@@ -99,7 +112,7 @@ class _EnterAmountScreenState extends ConsumerState<EnterAmountScreen> {
             children: [
               const Gap(20),
               Text(
-                'How much to ${widget.recipientAccountInfo.accountName}?',
+                'How much to @${widget.username}?',
                 style: const TextStyle(fontSize: 16, color: Colors.black87),
               ),
               const Spacer(),

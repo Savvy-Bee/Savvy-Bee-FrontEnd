@@ -18,6 +18,7 @@ import '../../../../../core/widgets/custom_button.dart';
 import '../../../../../core/widgets/custom_input_field.dart';
 import '../../../domain/models/bank.dart';
 import '../../providers/transfer_provider.dart';
+import 'enter_amount_screen.dart';
 import 'send_money_screen.dart';
 
 class TransferScreen extends ConsumerStatefulWidget {
@@ -379,7 +380,7 @@ class _AccountConfirmationBottomSheet extends ConsumerWidget {
                   onPressed: () {
                     context.pop();
                     context.pushNamed(
-                      SendMoneyScreen.path, // navigate to amount entry
+                      EnterAmountScreen.path,
                       extra: RecipientAccountInfo(
                         accountName: accountName,
                         accountNumber: accountNumber,

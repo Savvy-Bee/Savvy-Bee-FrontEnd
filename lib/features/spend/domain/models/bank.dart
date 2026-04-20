@@ -1,27 +1,33 @@
 class Bank {
   final String name;
-  final String slug;
   final String code;
-  final String country;
+  final String? id;
+  final String? slug;
+  final String? country;
   final String? nibssBankCode;
 
   Bank({
     required this.name,
-    required this.slug,
     required this.code,
-    required this.country,
+    this.id,
+    this.slug,
+    this.country,
     this.nibssBankCode,
   });
 
+  // Treat null country as Nigerian since the banks endpoint only returns Nigerian banks
   bool get isNigerianBank =>
-      country.toLowerCase() == 'nigeria' || country.toLowerCase() == 'ng';
+      country == null ||
+      country!.toLowerCase() == 'nigeria' ||
+      country!.toLowerCase() == 'ng';
 
   factory Bank.fromJson(Map<String, dynamic> json) {
     return Bank(
       name: json['name'] as String,
-      slug: json['slug'] as String,
       code: json['code'] as String,
-      country: json['country'] as String,
+      id: json['id'] as String?,
+      slug: json['slug'] as String?,
+      country: json['country'] as String?,
       nibssBankCode: json['nibss_bank_code'] as String?,
     );
   }
@@ -29,10 +35,11 @@ class Bank {
   Map<String, dynamic> toJson() {
     return {
       'name': name,
-      'slug': slug,
       'code': code,
-      'country': country,
-      'nibss_bank_code': nibssBankCode,
+      if (id != null) 'id': id,
+      if (slug != null) 'slug': slug,
+      if (country != null) 'country': country,
+      if (nibssBankCode != null) 'nibss_bank_code': nibssBankCode,
     };
   }
 }

@@ -12,11 +12,14 @@ class AccountVerificationData {
   });
 
   factory AccountVerificationData.fromJson(Map<String, dynamic> json) {
+    // Response shape: { id, type, attributes: { bank: { name, nipCode }, accountName, accountNumber } }
+    final attrs = json['attributes'] as Map<String, dynamic>? ?? json;
+    final bank = attrs['bank'] as Map<String, dynamic>? ?? {};
     return AccountVerificationData(
-      bankName: json['bank_name'] as String,
-      bankCode: json['bank_code'] as String,
-      accountNumber: json['account_number'] as String,
-      accountName: json['account_name'] as String,
+      bankName: bank['name'] as String? ?? json['bank_name'] as String? ?? '',
+      bankCode: (bank['nipCode'] ?? bank['id'] ?? json['bank_code'] ?? '').toString(),
+      accountNumber: (attrs['accountNumber'] ?? json['account_number'] ?? '').toString(),
+      accountName: (attrs['accountName'] ?? json['account_name'] ?? '').toString(),
     );
   }
 

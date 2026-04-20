@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/widgets/custom_input_field.dart';
-import '../../widgets/send_money_bottom_sheets.dart';
+import 'internal_enter_amount_screen.dart';
 
 class InternalTransferScreen extends ConsumerStatefulWidget {
   static const String path = '/internal-transfer';
@@ -34,9 +34,9 @@ class _InternalTransferScreenState
 
   void _onContinue() {
     if (!_canContinue) return;
-    InternalEnterAmountBottomSheet.show(
-      context,
-      username: _usernameController.text.trim(),
+    context.pushNamed(
+      InternalEnterAmountScreen.path,
+      extra: _usernameController.text.trim(),
     );
   }
 

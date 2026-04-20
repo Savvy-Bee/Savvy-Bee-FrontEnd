@@ -9,6 +9,7 @@ import '../../../../../core/utils/date_time_extension.dart';
 import '../../../../../core/utils/num_extensions.dart';
 import '../../providers/beneficiary_provider.dart';
 import '../../providers/wallet_provider.dart';
+import 'enter_amount_screen.dart';
 import 'internal_transfer_screen.dart';
 import 'send_money_screen.dart';
 import 'transfer_history_screen.dart';
@@ -401,7 +402,7 @@ class _BeneficiaryConfirmationSheet extends StatelessWidget {
                     } else if (beneficiary.accountNumber != null &&
                         beneficiary.bankName != null) {
                       context.pushNamed(
-                        SendMoneyScreen.path,
+                        EnterAmountScreen.path,
                         extra: RecipientAccountInfo(
                           accountName: beneficiary.name,
                           accountNumber: beneficiary.accountNumber!,
