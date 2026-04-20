@@ -1,13 +1,19 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:savvy_bee_mobile/features/spend/domain/models/bank.dart';
 import 'package:savvy_bee_mobile/features/spend/domain/models/beneficiary.dart';
 import 'package:savvy_bee_mobile/features/spend/domain/models/wallet.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/transactions/transaction_history_screen.dart';
 
 import '../../../../../core/utils/date_time_extension.dart';
 import '../../../../../core/utils/num_extensions.dart';
 import '../../providers/beneficiary_provider.dart';
+import '../../providers/transfer_provider.dart';
 import '../../providers/wallet_provider.dart';
 import 'enter_amount_screen.dart';
 import 'internal_transfer_screen.dart';
@@ -172,7 +178,7 @@ class _TransferScreenOneState extends ConsumerState<TransferScreenOne> {
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
               ),
               TextButton(
-                onPressed: () => context.push(TransferHistoryScreen.path),
+                onPressed: () => context.push(TransactionHistoryScreen.path),
                 child: const Text('See all'),
               ),
             ],
@@ -202,46 +208,142 @@ class _TransferScreenOneState extends ConsumerState<TransferScreenOne> {
 }
 
 // ==================== ADD BENEFICIARY BOTTOM SHEET ====================
-class _AddBeneficiarySheet extends StatefulWidget {
+class _AddBeneficiarySheet extends ConsumerStatefulWidget {
   final Function(Beneficiary) onAdd;
 
   const _AddBeneficiarySheet({required this.onAdd});
 
   @override
-  State<_AddBeneficiarySheet> createState() => _AddBeneficiarySheetState();
+  ConsumerState<_AddBeneficiarySheet> createState() =>
+      _AddBeneficiarySheetState();
 }
 
-class _AddBeneficiarySheetState extends State<_AddBeneficiarySheet> {
-  static const _banks = [
-    'Access Bank', 'First Bank', 'GTBank', 'Kuda Bank', 'Opay',
-    'PalmPay', 'Sterling Bank', 'UBA', 'Zenith Bank',
-  ];
-
+class _AddBeneficiarySheetState extends ConsumerState<_AddBeneficiarySheet> {
   bool _isSavvyBee = true;
+
+  // Savvy Bee tab
   final _usernameController = TextEditingController();
+
+  // Bank account tab
+  Bank? _selectedBank;
   final _accountNumberController = TextEditingController();
-  final _accountNameController = TextEditingController();
-  String? _selectedBank;
+  bool _isVerifying = false;
+  String? _verifiedName;
+  String? _verifyError;
+  Timer? _debounceTimer;
 
   @override
   void dispose() {
     _usernameController.dispose();
     _accountNumberController.dispose();
-    _accountNameController.dispose();
+    _debounceTimer?.cancel();
     super.dispose();
+  }
+
+  void _onAccountNumberChanged(String value) {
+    _debounceTimer?.cancel();
+    setState(() {
+      _verifiedName = null;
+      _verifyError = null;
+    });
+    if (value.length == 10 && _selectedBank != null) {
+      _debounceTimer = Timer(
+        const Duration(milliseconds: 600),
+        _verifyAccount,
+      );
+    }
+  }
+
+  void _onBankChanged(Bank? bank) {
+    setState(() {
+      _selectedBank = bank;
+      _verifiedName = null;
+      _verifyError = null;
+    });
+    if (_accountNumberController.text.length == 10 && bank != null) {
+      _debounceTimer?.cancel();
+      _debounceTimer = Timer(
+        const Duration(milliseconds: 300),
+        _verifyAccount,
+      );
+    }
+  }
+
+  Future<void> _verifyAccount() async {
+    if (!mounted) return;
+    setState(() {
+      _isVerifying = true;
+      _verifiedName = null;
+      _verifyError = null;
+    });
+    try {
+      final result = await ref.read(
+        verifyAccountProvider((
+          accountNumber: _accountNumberController.text,
+          bankName: _selectedBank!.name,
+        )).future,
+      );
+      if (mounted) {
+        setState(() {
+          _verifiedName = result.accountName;
+          _isVerifying = false;
+        });
+      }
+    } catch (_) {
+      if (mounted) {
+        setState(() {
+          _verifyError = 'Could not verify account';
+          _isVerifying = false;
+        });
+      }
+    }
+  }
+
+  bool get _canAdd {
+    if (_isSavvyBee) return _usernameController.text.trim().isNotEmpty;
+    return _selectedBank != null &&
+        _accountNumberController.text.length == 10 &&
+        _verifiedName != null;
+  }
+
+  void _submit() {
+    if (!_canAdd) return;
+    if (_isSavvyBee) {
+      widget.onAdd(Beneficiary(
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        name: _usernameController.text.trim(),
+        username: _usernameController.text.trim(),
+      ));
+    } else {
+      widget.onAdd(Beneficiary(
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        name: _verifiedName!,
+        accountNumber: _accountNumberController.text,
+        bankName: _selectedBank!.name,
+        bankCode: _selectedBank!.code,
+      ));
+    }
+    Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
+    final banksAsync = ref.watch(banksProvider);
+
     return Padding(
-      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context).viewInsets.bottom,
+      ),
       child: Container(
         padding: const EdgeInsets.all(20),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Add Beneficiary', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
+            const Text(
+              'Add Beneficiary',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+            ),
             const Gap(20),
 
             // Toggle
@@ -251,7 +353,9 @@ class _AddBeneficiarySheetState extends State<_AddBeneficiarySheet> {
                   child: _OptionButton(
                     text: 'Savvy Bee Friend',
                     isSelected: _isSavvyBee,
-                    onTap: () => setState(() => _isSavvyBee = true),
+                    onTap: () => setState(() {
+                      _isSavvyBee = true;
+                    }),
                   ),
                 ),
                 const Gap(12),
@@ -259,7 +363,9 @@ class _AddBeneficiarySheetState extends State<_AddBeneficiarySheet> {
                   child: _OptionButton(
                     text: 'Bank Account',
                     isSelected: !_isSavvyBee,
-                    onTap: () => setState(() => _isSavvyBee = false),
+                    onTap: () => setState(() {
+                      _isSavvyBee = false;
+                    }),
                   ),
                 ),
               ],
@@ -273,23 +379,122 @@ class _AddBeneficiarySheetState extends State<_AddBeneficiarySheet> {
               TextField(
                 controller: _usernameController,
                 decoration: const InputDecoration(hintText: '@username'),
+                onChanged: (_) => setState(() {}),
               ),
             ] else ...[
+              // Bank dropdown
               const Text('Select Bank'),
-              DropdownButtonFormField<String>(
-                value: _selectedBank,
-                items: _banks
-                    .map((bank) => DropdownMenuItem(value: bank, child: Text(bank)))
-                    .toList(),
-                onChanged: (val) => setState(() => _selectedBank = val),
-                hint: const Text('Choose bank'),
+              const Gap(8),
+              banksAsync.when(
+                data: (banks) {
+                  final list = banks
+                      .where((b) => b.isNigerianBank)
+                      .toList()
+                    ..sort((a, b) => a.name.compareTo(b.name));
+                  return DropdownButtonFormField<Bank>(
+                    value: _selectedBank,
+                    isExpanded: true,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 14,
+                      ),
+                    ),
+                    hint: const Text('Choose bank'),
+                    items: list
+                        .map((b) => DropdownMenuItem(
+                              value: b,
+                              child: Text(
+                                b.name,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ))
+                        .toList(),
+                    onChanged: _onBankChanged,
+                  );
+                },
+                loading: () => const LinearProgressIndicator(),
+                error: (_, __) => TextButton.icon(
+                  onPressed: () => ref.invalidate(banksProvider),
+                  icon: const Icon(Icons.refresh, size: 16),
+                  label: const Text('Retry loading banks'),
+                ),
               ),
+
               const Gap(16),
+
+              // Account number
               const Text('Account Number'),
-              TextField(controller: _accountNumberController, keyboardType: TextInputType.number),
-              const Gap(16),
-              const Text('Account Name'),
-              TextField(controller: _accountNameController),
+              const Gap(8),
+              TextField(
+                controller: _accountNumberController,
+                keyboardType: TextInputType.number,
+                maxLength: 10,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                ],
+                decoration: InputDecoration(
+                  hintText: '10-digit account number',
+                  counterText: '',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 14,
+                  ),
+                  suffixIcon: _isVerifying
+                      ? const Padding(
+                          padding: EdgeInsets.all(12),
+                          child: SizedBox(
+                            width: 16,
+                            height: 16,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          ),
+                        )
+                      : _verifiedName != null
+                          ? const Icon(Icons.check_circle, color: Colors.green)
+                          : null,
+                ),
+                onChanged: _onAccountNumberChanged,
+              ),
+
+              const Gap(12),
+
+              // Verified name / error
+              if (_verifiedName != null)
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 10,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.green.shade50,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.green.shade200),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.person, size: 16, color: Colors.green),
+                      const Gap(8),
+                      Text(
+                        _verifiedName!,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w600,
+                          color: Colors.green,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              else if (_verifyError != null)
+                Text(
+                  _verifyError!,
+                  style: const TextStyle(color: Colors.red, fontSize: 13),
+                ),
             ],
 
             const Gap(32),
@@ -297,27 +502,22 @@ class _AddBeneficiarySheetState extends State<_AddBeneficiarySheet> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {
-                  if (_isSavvyBee && _usernameController.text.isNotEmpty) {
-                    widget.onAdd(Beneficiary(
-                      id: DateTime.now().millisecondsSinceEpoch.toString(),
-                      name: _usernameController.text,
-                      username: _usernameController.text,
-                    ));
-                  } else if (!_isSavvyBee &&
-                      _selectedBank != null &&
-                      _accountNumberController.text.isNotEmpty &&
-                      _accountNameController.text.isNotEmpty) {
-                    widget.onAdd(Beneficiary(
-                      id: DateTime.now().millisecondsSinceEpoch.toString(),
-                      name: _accountNameController.text,
-                      accountNumber: _accountNumberController.text,
-                      bankName: _selectedBank,
-                    ));
-                  }
-                  Navigator.pop(context);
-                },
-                child: const Text('Add Beneficiary'),
+                onPressed: _canAdd ? _submit : null,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.black,
+                  disabledBackgroundColor: Colors.grey.shade200,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: Text(
+                  'Add Beneficiary',
+                  style: TextStyle(
+                    color: _canAdd ? Colors.white : Colors.grey.shade400,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
               ),
             ),
             const Gap(20),

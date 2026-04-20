@@ -92,22 +92,22 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
                   const SliverGap(16),
 
                   // Goal Alert Banner
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: _buildGoalAlertBanner(),
-                    ),
-                  ),
+                  // SliverToBoxAdapter(
+                  //   child: Padding(
+                  //     padding: const EdgeInsets.symmetric(horizontal: 16),
+                  //     child: _buildGoalAlertBanner(),
+                  //   ),
+                  // ),
 
-                  const SliverGap(24),
+                  // const SliverGap(24),
 
                   // Goals Section
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: _buildGoalsSection(context),
-                    ),
-                  ),
+                  // SliverToBoxAdapter(
+                  //   child: Padding(
+                  //     padding: const EdgeInsets.symmetric(horizontal: 16),
+                  //     child: _buildGoalsSection(context),
+                  //   ),
+                  // ),
 
                   const SliverGap(24),
 
@@ -244,6 +244,15 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
     final firstName =
         ref.watch(homeDataProvider).valueOrNull?.data?.firstName ?? 'User';
     final primaryAccount = dashboard.accounts;
+
+    final txAsync = ref.watch(transactionListProvider);
+    final transactions = txAsync.valueOrNull?.data?.transactions ?? [];
+    final totalIncome = transactions
+        .where((t) => t.isCredit)
+        .fold(0.0, (sum, t) => sum + t.amount);
+    final totalSpent = transactions
+        .where((t) => t.isDebit)
+        .fold(0.0, (sum, t) => sum + t.amount);
 
     // Derive greeting based on time
     final hour = DateTime.now().hour;
@@ -384,7 +393,9 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
                         ),
                         const Gap(6),
                         Text(
-                          '+₦200k', // TODO: replace with real income value
+                          txAsync.isLoading
+                              ? '...'
+                              : '+${totalIncome.formatCurrency(decimalDigits: 0)}',
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
@@ -439,7 +450,9 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
                         ),
                         const Gap(6),
                         Text(
-                          '-₦48k', // TODO: replace with real spent value
+                          txAsync.isLoading
+                              ? '...'
+                              : '-${totalSpent.formatCurrency(decimalDigits: 0)}',
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,

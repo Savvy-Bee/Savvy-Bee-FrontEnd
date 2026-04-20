@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/bills/pay_bills_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/transfer/send_money_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/transfer/transfer_screen_one.dart';
 
@@ -67,9 +68,7 @@ class QuickActionsScreen extends StatelessWidget {
                     iconColor: const Color(0xFF9C27B0),
                     title: 'Pay Bills',
                     subtitle: 'Airtime, data, utilities',
-                    onTap: () {
-                      // Navigate to Pay Bills
-                    },
+                    onTap: () => context.push(PayBillsScreen.path),
                   ),
                   _buildActionCard(
                     icon: Icons.emoji_events_outlined,
