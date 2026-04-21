@@ -20,6 +20,7 @@ import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/crea
 import 'package:savvy_bee_mobile/features/home/presentation/providers/home_data_provider.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/screens/profile_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/quick_actions_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/spending_flow/flow_screen.dart';
 
 class SpendScreen extends ConsumerStatefulWidget {
   static const String path = '/spend';
@@ -92,22 +93,22 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
                   const SliverGap(16),
 
                   // Goal Alert Banner
-                  // SliverToBoxAdapter(
-                  //   child: Padding(
-                  //     padding: const EdgeInsets.symmetric(horizontal: 16),
-                  //     child: _buildGoalAlertBanner(),
-                  //   ),
-                  // ),
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: _buildGoalAlertBanner(),
+                    ),
+                  ),
 
-                  // const SliverGap(24),
+                  const SliverGap(24),
 
                   // Goals Section
-                  // SliverToBoxAdapter(
-                  //   child: Padding(
-                  //     padding: const EdgeInsets.symmetric(horizontal: 16),
-                  //     child: _buildGoalsSection(context),
-                  //   ),
-                  // ),
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: _buildGoalsSection(context),
+                    ),
+                  ),
 
                   const SliverGap(24),
 
@@ -679,7 +680,7 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
                 title: 'Spending Flow',
                 subtitle: 'Track patterns',
                 color: const Color(0xFFF5F0FF),
-                onTap: () => context.pushNamed(TransactionHistoryScreen.path),
+                onTap: () => context.push(FlowScreen.path),
               ),
             ),
             const Gap(12),

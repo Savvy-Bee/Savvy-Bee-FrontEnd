@@ -52,6 +52,10 @@ import 'package:savvy_bee_mobile/features/profile/presentation/screens/security/
 import 'package:savvy_bee_mobile/features/profile/presentation/screens/selfie_capture_screen.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/screens/settings_screen.dart';
 import 'package:savvy_bee_mobile/features/referral/presentation/screens/referral_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/spending_flow/category_detail_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/spending_flow/emotional_patterns_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/spending_flow/flow_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/spending_flow_theme.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/bills/airtime_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/bills/bill_completion_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/bills/bill_confirmation_screen.dart';
@@ -563,6 +567,25 @@ final GoRouter appRouter = GoRouter(
       builder: (BuildContext context, GoRouterState state) {
         return const BillCompletionScreen();
       },
+    ),
+
+    // Spending Flow Routes
+    GoRoute(
+      path: FlowScreen.path,
+      name: FlowScreen.path,
+      builder: (context, state) => const FlowScreen(),
+    ),
+    GoRoute(
+      path: CategoryDetailScreen.path,
+      name: CategoryDetailScreen.path,
+      builder: (context, state) => CategoryDetailScreen(
+        category: state.extra as CategoryInfo,
+      ),
+    ),
+    GoRoute(
+      path: EmotionalPatternsScreen.path,
+      name: EmotionalPatternsScreen.path,
+      builder: (context, state) => const EmotionalPatternsScreen(),
     ),
 
     // Transfer Routes
