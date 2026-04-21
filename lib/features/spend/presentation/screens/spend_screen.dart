@@ -21,6 +21,7 @@ import 'package:savvy_bee_mobile/features/home/presentation/providers/home_data_
 import 'package:savvy_bee_mobile/features/profile/presentation/screens/profile_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/quick_actions_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/spending_flow/flow_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/profile/spend_profile_screen.dart';
 
 class SpendScreen extends ConsumerStatefulWidget {
   static const String path = '/spend';
@@ -689,7 +690,7 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
                 title: 'Profile',
                 subtitle: 'Settings & Accounts',
                 color: const Color(0xFFF0FFF4),
-                onTap: () => context.pushNamed(ProfileScreen.path),
+                onTap: () => context.push(SpendProfileScreen.path),
               ),
             ),
           ],

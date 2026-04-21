@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
-import '../theme/app_theme.dart';
-import '../widgets/back_button_widget.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/spending_flow_theme.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/widgets/spending_flow/back_button_widget.dart';
 
 class SpendNotificationsSettingsScreen extends StatefulWidget {
+  static const String path = '/spend/profile/settings';
+
   const SpendNotificationsSettingsScreen({super.key});
 
   @override
-  State<SpendNotificationsSettingsScreen> createState() => _SpendNotificationsSettingsScreenState();
+  State<SpendNotificationsSettingsScreen> createState() =>
+      _SpendNotificationsSettingsScreenState();
 }
 
-class _SpendNotificationsSettingsScreenState extends State<SpendNotificationsSettingsScreen> {
+class _SpendNotificationsSettingsScreenState
+    extends State<SpendNotificationsSettingsScreen> {
   bool _pushNotifications = true;
   bool _aiNudges = true;
   bool _transactionAlerts = true;
@@ -233,11 +237,10 @@ class _ToggleRow extends StatelessWidget {
               Switch.adaptive(
                 value: value,
                 onChanged: onChanged,
-                activeColor: Colors.white,
                 activeTrackColor: AppColors.foodAmber,
+                activeThumbColor: Colors.white,
                 inactiveThumbColor: Colors.white,
                 inactiveTrackColor: AppColors.progressBg,
-                thumbColor: WidgetStateProperty.all(Colors.white),
               ),
             ],
           ),

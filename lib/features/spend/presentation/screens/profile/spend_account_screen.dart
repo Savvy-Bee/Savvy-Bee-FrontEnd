@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import '../theme/app_theme.dart';
-import '../widgets/back_button_widget.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/spending_flow_theme.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/widgets/spending_flow/back_button_widget.dart';
 
 class SpendAccountsScreen extends StatelessWidget {
+  static const String path = '/spend/profile/accounts';
+
   const SpendAccountsScreen({super.key});
 
   @override
@@ -179,11 +181,11 @@ class _BankCard extends StatelessWidget {
               Container(
                 width: 28,
                 height: 28,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: AppColors.entertainmentGreenLight,
                   shape: BoxShape.circle,
                 ),
-                child: Icon(
+                child: const Icon(
                   Icons.check_rounded,
                   color: AppColors.entertainmentGreen,
                   size: 16,

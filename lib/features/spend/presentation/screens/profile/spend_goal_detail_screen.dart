@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import '../theme/app_theme.dart';
-import '../widgets/back_button_widget.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/spending_flow_theme.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/widgets/spending_flow/back_button_widget.dart';
 
 class SpendGoalDetailScreen extends StatelessWidget {
+  static const String path = '/spend/profile/goals/detail';
+
   const SpendGoalDetailScreen({super.key});
 
   @override
@@ -59,7 +61,7 @@ class SpendGoalDetailScreen extends StatelessWidget {
                                     color: AppColors.foodAmberLight,
                                     borderRadius: BorderRadius.circular(12),
                                   ),
-                                  child: Icon(
+                                  child: const Icon(
                                     Icons.trending_up_rounded,
                                     color: AppColors.foodAmber,
                                     size: 20,
@@ -146,7 +148,7 @@ class SpendGoalDetailScreen extends StatelessWidget {
                           children: [
                             Row(
                               children: [
-                                Icon(
+                                const Icon(
                                   Icons.calendar_today_rounded,
                                   size: 14,
                                   color: AppColors.foodAmber,

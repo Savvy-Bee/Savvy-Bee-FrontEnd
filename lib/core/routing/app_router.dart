@@ -52,6 +52,11 @@ import 'package:savvy_bee_mobile/features/profile/presentation/screens/security/
 import 'package:savvy_bee_mobile/features/profile/presentation/screens/selfie_capture_screen.dart';
 import 'package:savvy_bee_mobile/features/profile/presentation/screens/settings_screen.dart';
 import 'package:savvy_bee_mobile/features/referral/presentation/screens/referral_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/profile/spend_account_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/profile/spend_goal_detail_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/profile/spend_goals_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/profile/spend_notifications_settings_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/profile/spend_profile_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/spending_flow/category_detail_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/spending_flow/emotional_patterns_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/spending_flow/flow_screen.dart';
@@ -567,6 +572,33 @@ final GoRouter appRouter = GoRouter(
       builder: (BuildContext context, GoRouterState state) {
         return const BillCompletionScreen();
       },
+    ),
+
+    // Spend Profile Routes
+    GoRoute(
+      path: SpendProfileScreen.path,
+      name: SpendProfileScreen.path,
+      builder: (context, state) => const SpendProfileScreen(),
+    ),
+    GoRoute(
+      path: SpendAccountsScreen.path,
+      name: SpendAccountsScreen.path,
+      builder: (context, state) => const SpendAccountsScreen(),
+    ),
+    GoRoute(
+      path: SpendGoalsScreen.path,
+      name: SpendGoalsScreen.path,
+      builder: (context, state) => const SpendGoalsScreen(),
+    ),
+    GoRoute(
+      path: SpendGoalDetailScreen.path,
+      name: SpendGoalDetailScreen.path,
+      builder: (context, state) => const SpendGoalDetailScreen(),
+    ),
+    GoRoute(
+      path: SpendNotificationsSettingsScreen.path,
+      name: SpendNotificationsSettingsScreen.path,
+      builder: (context, state) => const SpendNotificationsSettingsScreen(),
     ),
 
     // Spending Flow Routes

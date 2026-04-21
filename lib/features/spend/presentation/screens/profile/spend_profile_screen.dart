@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
-import '../theme/app_theme.dart';
-import '../widgets/back_button_widget.dart';
-import 'accounts_screen.dart';
-import 'goals_screen.dart';
-import 'settings_screen.dart';
+import 'package:go_router/go_router.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/profile/spend_account_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/profile/spend_goals_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/profile/spend_notifications_settings_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/spending_flow_theme.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/widgets/spending_flow/back_button_widget.dart';
 
 class SpendProfileScreen extends StatelessWidget {
+  static const String path = '/spend/profile';
+
   const SpendProfileScreen({super.key});
 
   @override
@@ -21,14 +24,17 @@ class SpendProfileScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const SizedBox(height: 16),
-                const BackButtonWidget(),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: const BackButtonWidget(),
+                ),
                 const SizedBox(height: 28),
 
                 // Avatar
                 Container(
                   width: 80,
                   height: 80,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: AppColors.foodAmber,
                     shape: BoxShape.circle,
                   ),
@@ -46,10 +52,7 @@ class SpendProfileScreen extends StatelessWidget {
                   style: AppTextStyles.headingMedium.copyWith(fontSize: 20),
                 ),
                 const SizedBox(height: 4),
-                Text(
-                  'adebayo@example.com',
-                  style: AppTextStyles.bodySmall,
-                ),
+                Text('adebayo@example.com', style: AppTextStyles.bodySmall),
                 const SizedBox(height: 28),
 
                 // Total Balance card
@@ -88,7 +91,7 @@ class SpendProfileScreen extends StatelessWidget {
                         label: 'Connected Accounts',
                         subtitle: '2 accounts',
                         showDivider: true,
-                        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AccountsScreen())),
+                        onTap: () => context.push(SpendAccountsScreen.path),
                       ),
                       _MenuItem(
                         icon: Icons.flag_rounded,
@@ -97,7 +100,7 @@ class SpendProfileScreen extends StatelessWidget {
                         label: 'Goals & Capsules',
                         subtitle: '3 active',
                         showDivider: true,
-                        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const GoalsScreen())),
+                        onTap: () => context.push(SpendGoalsScreen.path),
                       ),
                       _MenuItem(
                         icon: Icons.notifications_rounded,
@@ -106,7 +109,8 @@ class SpendProfileScreen extends StatelessWidget {
                         label: 'Notifications',
                         subtitle: null,
                         showDivider: true,
-                        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const SettingsScreen())),
+                        onTap: () =>
+                            context.push(SpendNotificationsSettingsScreen.path),
                       ),
                       _MenuItem(
                         icon: Icons.lock_rounded,
@@ -115,7 +119,8 @@ class SpendProfileScreen extends StatelessWidget {
                         label: 'Security',
                         subtitle: null,
                         showDivider: false,
-                        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const SettingsScreen())),
+                        onTap: () =>
+                            context.push(SpendNotificationsSettingsScreen.path),
                       ),
                     ],
                   ),
@@ -123,8 +128,10 @@ class SpendProfileScreen extends StatelessWidget {
 
                 const SizedBox(height: 40),
                 Text(
-                  'SavvyBre v1.0.0',
-                  style: AppTextStyles.labelSmall.copyWith(color: AppColors.textMuted),
+                  'SavvyBee v1.0.0',
+                  style: AppTextStyles.labelSmall.copyWith(
+                    color: AppColors.textMuted,
+                  ),
                 ),
                 const SizedBox(height: 24),
               ],
@@ -188,13 +195,22 @@ class _MenuItem extends StatelessWidget {
                     ],
                   ),
                 ),
-                const Icon(Icons.chevron_right_rounded, size: 20, color: AppColors.textMuted),
+                const Icon(
+                  Icons.chevron_right_rounded,
+                  size: 20,
+                  color: AppColors.textMuted,
+                ),
               ],
             ),
           ),
         ),
         if (showDivider)
-          Divider(height: 1, indent: 72, endIndent: 18, color: AppColors.borderLight),
+          Divider(
+            height: 1,
+            indent: 72,
+            endIndent: 18,
+            color: AppColors.borderLight,
+          ),
       ],
     );
   }

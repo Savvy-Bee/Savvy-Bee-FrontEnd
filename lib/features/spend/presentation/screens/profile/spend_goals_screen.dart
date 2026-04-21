@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import '../theme/app_theme.dart';
-import '../widgets/back_button_widget.dart';
-import 'goal_detail_screen.dart';
+import 'package:go_router/go_router.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/profile/spend_goal_detail_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/spending_flow_theme.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/widgets/spending_flow/back_button_widget.dart';
 
 class SpendGoalsScreen extends StatelessWidget {
+  static const String path = '/spend/profile/goals';
+
   const SpendGoalsScreen({super.key});
 
   @override
@@ -73,7 +76,7 @@ class SpendGoalsScreen extends StatelessWidget {
                                 color: AppColors.entertainmentGreenLight,
                                 borderRadius: BorderRadius.circular(14),
                               ),
-                              child: Icon(
+                              child: const Icon(
                                 Icons.trending_up_rounded,
                                 color: AppColors.entertainmentGreen,
                                 size: 24,
@@ -92,12 +95,7 @@ class SpendGoalsScreen extends StatelessWidget {
                         progressColor: AppColors.foodAmber,
                         badgeColor: AppColors.foodAmber,
                         badgeLabel: null,
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const GoalDetailScreen(),
-                          ),
-                        ),
+                        onTap: () => context.push(SpendGoalDetailScreen.path),
                       ),
                       const SizedBox(height: 12),
 
@@ -108,7 +106,7 @@ class SpendGoalsScreen extends StatelessWidget {
                         progressColor: AppColors.transportBlue,
                         badgeColor: AppColors.transportBlue,
                         badgeLabel: '42%',
-                        onTap: () {},
+                        onTap: () => context.push(SpendGoalDetailScreen.path),
                       ),
                       const SizedBox(height: 12),
 
@@ -119,7 +117,7 @@ class SpendGoalsScreen extends StatelessWidget {
                         progressColor: AppColors.billsPurple,
                         badgeColor: AppColors.billsPurple,
                         badgeLabel: '67%',
-                        onTap: () {},
+                        onTap: () => context.push(SpendGoalDetailScreen.path),
                       ),
                       const SizedBox(height: 32),
                     ],
@@ -160,8 +158,9 @@ class _GoalCard extends StatelessWidget {
   });
 
   String _formatAmount(int n) {
-    if (n >= 1000)
+    if (n >= 1000) {
       return '₦${(n / 1000).toStringAsFixed(n % 1000 == 0 ? 0 : 1)}k';
+    }
     return '₦$n';
   }
 
@@ -190,7 +189,6 @@ class _GoalCard extends StatelessWidget {
                   label,
                   style: AppTextStyles.amountSmall.copyWith(fontSize: 16),
                 ),
-                // Badge
                 Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 10,
