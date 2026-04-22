@@ -1,18 +1,52 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:savvy_bee_mobile/core/utils/num_extensions.dart';
+import 'package:savvy_bee_mobile/features/auth/presentation/providers/auth_providers.dart';
+import 'package:savvy_bee_mobile/features/dashboard/presentation/providers/dashboard_data_provider.dart';
+import 'package:savvy_bee_mobile/features/home/presentation/providers/home_data_provider.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/providers/wallet_provider.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/profile/spend_account_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/profile/spend_goals_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/profile/spend_notifications_settings_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/spending_flow_theme.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/widgets/spending_flow/back_button_widget.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/providers/goals_provider.dart';
 
-class SpendProfileScreen extends StatelessWidget {
+class SpendProfileScreen extends ConsumerWidget {
   static const String path = '/spend/profile';
 
   const SpendProfileScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final homeDataAsync = ref.watch(homeDataProvider);
+    final dashboardAsync = ref.watch(spendDashboardDataProvider);
+    final linkedAccountsAsync = ref.watch(linkedAccountsProvider);
+    final goalsAsync = ref.watch(savingsGoalsProvider);
+
+    final fullName = homeDataAsync.maybeWhen(
+      data: (response) =>
+          '${response.data.firstName} ${response.data.lastName}'.trim(),
+      orElse: () => null,
+    );
+    final email = ref.watch(currentUserProvider)?.email ?? '';
+
+    final walletBalance = dashboardAsync.maybeWhen(
+      data: (response) => response.data?.accounts.balance,
+      orElse: () => null,
+    );
+
+    final connectedAccountsCount = linkedAccountsAsync.maybeWhen(
+      data: (accounts) => accounts.length,
+      orElse: () => null,
+    );
+
+    final activeGoalsCount = goalsAsync.maybeWhen(
+      data: (goals) => goals.where((g) => !g.isCompleted).length,
+      orElse: () => null,
+    );
+
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
@@ -48,11 +82,14 @@ class SpendProfileScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 14),
                 Text(
-                  'Adebayo Ogunleye',
+                  (fullName == null || fullName.isEmpty) ? '—' : fullName,
                   style: AppTextStyles.headingMedium.copyWith(fontSize: 20),
                 ),
                 const SizedBox(height: 4),
-                Text('adebayo@example.com', style: AppTextStyles.bodySmall),
+                Text(
+                  email.isEmpty ? '—' : email,
+                  style: AppTextStyles.bodySmall,
+                ),
                 const SizedBox(height: 28),
 
                 // Total Balance card
@@ -69,7 +106,12 @@ class SpendProfileScreen extends StatelessWidget {
                     children: [
                       Text('Total Balance', style: AppTextStyles.labelMedium),
                       const SizedBox(height: 8),
-                      Text('₦152,000', style: AppTextStyles.amountLarge),
+                      Text(
+                        walletBalance != null
+                            ? walletBalance.formatCurrency(decimalDigits: 0)
+                            : '—',
+                        style: AppTextStyles.amountLarge,
+                      ),
                     ],
                   ),
                 ),
@@ -89,7 +131,9 @@ class SpendProfileScreen extends StatelessWidget {
                         iconBg: AppColors.transportBlueLight,
                         iconColor: AppColors.transportBlue,
                         label: 'Connected Accounts',
-                        subtitle: '2 accounts',
+                        subtitle: connectedAccountsCount != null
+                            ? '$connectedAccountsCount ${connectedAccountsCount == 1 ? 'account' : 'accounts'}'
+                            : null,
                         showDivider: true,
                         onTap: () => context.push(SpendAccountsScreen.path),
                       ),
@@ -98,7 +142,9 @@ class SpendProfileScreen extends StatelessWidget {
                         iconBg: AppColors.entertainmentGreenLight,
                         iconColor: AppColors.entertainmentGreen,
                         label: 'Goals & Capsules',
-                        subtitle: '3 active',
+                        subtitle: activeGoalsCount != null
+                            ? '$activeGoalsCount active'
+                            : null,
                         showDivider: true,
                         onTap: () => context.push(SpendGoalsScreen.path),
                       ),

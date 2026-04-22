@@ -54,6 +54,7 @@ import 'package:savvy_bee_mobile/features/profile/presentation/screens/settings_
 import 'package:savvy_bee_mobile/features/referral/presentation/screens/referral_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/profile/spend_account_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/profile/spend_goal_detail_screen.dart';
+import 'package:savvy_bee_mobile/features/tools/domain/models/savings.dart' as tools_savings;
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/profile/spend_goals_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/profile/spend_notifications_settings_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/profile/spend_profile_screen.dart';
@@ -593,7 +594,8 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: SpendGoalDetailScreen.path,
       name: SpendGoalDetailScreen.path,
-      builder: (context, state) => const SpendGoalDetailScreen(),
+      builder: (context, state) =>
+          SpendGoalDetailScreen(goal: state.extra as tools_savings.SavingsGoal),
     ),
     GoRoute(
       path: SpendNotificationsSettingsScreen.path,

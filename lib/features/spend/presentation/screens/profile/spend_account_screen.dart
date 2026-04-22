@@ -1,98 +1,135 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:savvy_bee_mobile/core/utils/num_extensions.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_error_widget.dart';
+import 'package:savvy_bee_mobile/core/widgets/custom_loading_widget.dart';
+import 'package:savvy_bee_mobile/features/dashboard/domain/models/linked_account.dart';
+import 'package:savvy_bee_mobile/features/dashboard/presentation/providers/dashboard_data_provider.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/spending_flow_theme.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/widgets/spending_flow/back_button_widget.dart';
 
-class SpendAccountsScreen extends StatelessWidget {
+const _bankColorPalette = [
+  (bg: AppColors.stressRedLight, icon: AppColors.stressRed),
+  (bg: AppColors.foodAmberLight, icon: AppColors.foodAmber),
+  (bg: AppColors.transportBlueLight, icon: AppColors.transportBlue),
+  (bg: AppColors.entertainmentGreenLight, icon: AppColors.entertainmentGreen),
+  (bg: AppColors.billsPurpleLight, icon: AppColors.billsPurple),
+  (bg: AppColors.coralLight, icon: AppColors.coral),
+];
+
+class SpendAccountsScreen extends ConsumerWidget {
   static const String path = '/spend/profile/accounts';
 
   const SpendAccountsScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final accountsAsync = ref.watch(linkedAccountsProvider);
+
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 16),
-                      const BackButtonWidget(),
-                      const SizedBox(height: 20),
+        child: accountsAsync.when(
+          loading: () => const CustomLoadingWidget(),
+          error: (e, _) => CustomErrorWidget.error(
+            subtitle: e.toString(),
+            onRetry: () => ref.invalidate(linkedAccountsProvider),
+          ),
+          data: (accounts) {
+            final total = accounts.fold<double>(
+              0,
+              (sum, a) => sum + a.balance.available,
+            );
 
-                      // Header
-                      Text('Accounts', style: AppTextStyles.displayLarge),
-                      const SizedBox(height: 2),
-                      Text('Connected banks', style: AppTextStyles.bodySmall),
-                      const SizedBox(height: 24),
+            return Column(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 16),
+                          const BackButtonWidget(),
+                          const SizedBox(height: 20),
 
-                      // Total across accounts
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                          color: AppColors.cardWhite,
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: AppColors.borderLight),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Total Across Accounts',
-                              style: AppTextStyles.labelMedium,
+                          Text('Accounts', style: AppTextStyles.displayLarge),
+                          const SizedBox(height: 2),
+                          Text('Connected banks', style: AppTextStyles.bodySmall),
+                          const SizedBox(height: 24),
+
+                          // Total across accounts
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(20),
+                            decoration: BoxDecoration(
+                              color: AppColors.cardWhite,
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(color: AppColors.borderLight),
                             ),
-                            const SizedBox(height: 8),
-                            Text('₦152,000', style: AppTextStyles.amountLarge),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Total Across Accounts',
+                                  style: AppTextStyles.labelMedium,
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  total.formatCurrency(decimalDigits: 0),
+                                  style: AppTextStyles.amountLarge,
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 16),
 
-                      // Access Bank card
-                      _BankCard(
-                        bankName: 'Access Bank',
-                        isPrimary: true,
-                        accountNumber: '8123456789',
-                        balance: '₦120,000',
-                        iconColor: AppColors.stressRed,
-                        iconBg: AppColors.stressRedLight,
-                        icon: Icons.account_balance_rounded,
-                      ),
-                      const SizedBox(height: 12),
+                          if (accounts.isEmpty)
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 40),
+                              child: Center(
+                                child: Text(
+                                  'No connected accounts yet.',
+                                  style: AppTextStyles.bodySmall,
+                                ),
+                              ),
+                            )
+                          else
+                            ...accounts.asMap().entries.map((entry) {
+                              final i = entry.key;
+                              final account = entry.value;
+                              final colors =
+                                  _bankColorPalette[i % _bankColorPalette.length];
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: 12),
+                                child: _BankCard(
+                                  account: account,
+                                  isPrimary: i == 0,
+                                  iconBg: colors.bg,
+                                  iconColor: colors.icon,
+                                ),
+                              );
+                            }),
 
-                      // GTBank card
-                      _BankCard(
-                        bankName: 'GTBank',
-                        isPrimary: false,
-                        accountNumber: '9876543218',
-                        balance: '₦32,000',
-                        iconColor: AppColors.foodAmber,
-                        iconBg: AppColors.foodAmberLight,
-                        icon: Icons.account_balance_rounded,
+                          const SizedBox(height: 20),
+                        ],
                       ),
-                      const SizedBox(height: 32),
-                    ],
+                    ),
                   ),
                 ),
-              ),
-            ),
 
-            // Connect New Account CTA
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 28),
-              child: _PrimaryButton(
-                label: '+ Connect New Account',
-                onTap: () {},
-              ),
-            ),
-          ],
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 28),
+                  child: _PrimaryButton(
+                    label: '+ Connect New Account',
+                    onTap: () {},
+                  ),
+                ),
+              ],
+            );
+          },
         ),
       ),
     );
@@ -100,22 +137,16 @@ class SpendAccountsScreen extends StatelessWidget {
 }
 
 class _BankCard extends StatelessWidget {
-  final String bankName;
+  final LinkedAccount account;
   final bool isPrimary;
-  final String accountNumber;
-  final String balance;
-  final Color iconColor;
   final Color iconBg;
-  final IconData icon;
+  final Color iconColor;
 
   const _BankCard({
-    required this.bankName,
+    required this.account,
     required this.isPrimary,
-    required this.accountNumber,
-    required this.balance,
-    required this.iconColor,
     required this.iconBg,
-    required this.icon,
+    required this.iconColor,
   });
 
   @override
@@ -140,7 +171,11 @@ class _BankCard extends StatelessWidget {
                   color: iconBg,
                   borderRadius: BorderRadius.circular(13),
                 ),
-                child: Icon(icon, color: iconColor, size: 22),
+                child: Icon(
+                  Icons.account_balance_rounded,
+                  color: iconColor,
+                  size: 22,
+                ),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -149,7 +184,10 @@ class _BankCard extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Text(bankName, style: AppTextStyles.amountSmall),
+                        Text(
+                          account.institution.name,
+                          style: AppTextStyles.amountSmall,
+                        ),
                         if (isPrimary) ...[
                           const SizedBox(width: 6),
                           Container(
@@ -174,7 +212,10 @@ class _BankCard extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 2),
-                    Text(accountNumber, style: AppTextStyles.labelSmall),
+                    Text(
+                      account.details.accountNumber,
+                      style: AppTextStyles.labelSmall,
+                    ),
                   ],
                 ),
               ),
@@ -199,7 +240,7 @@ class _BankCard extends StatelessWidget {
           Text('Available Balance', style: AppTextStyles.labelSmall),
           const SizedBox(height: 5),
           Text(
-            balance,
+            account.balance.available.formatCurrency(decimalDigits: 0),
             style: AppTextStyles.amountLarge.copyWith(fontSize: 24),
           ),
         ],

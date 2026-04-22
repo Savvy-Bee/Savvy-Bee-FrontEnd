@@ -1,18 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:savvy_bee_mobile/core/utils/num_extensions.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/providers/wallet_provider.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/spending_flow/category_detail_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/spending_flow/emotional_patterns_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/spending_flow_theme.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/widgets/spending_flow/category_row.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/widgets/spending_flow/emotional_insight_banner.dart';
 
-class FlowScreen extends StatelessWidget {
+class FlowScreen extends ConsumerWidget {
   static const String path = '/spending-flow';
 
   const FlowScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final dashboardAsync = ref.watch(spendDashboardDataProvider);
+    final txAsync = ref.watch(transactionListProvider);
+
+    final balance = dashboardAsync.valueOrNull?.data?.accounts.balance ?? 0.0;
+
+    final now = DateTime.now();
+    final transactions = txAsync.valueOrNull?.data?.transactions ?? [];
+    final thisMonthTx = transactions.where((t) {
+      return t.createdAt.year == now.year && t.createdAt.month == now.month;
+    }).toList();
+
+    final totalIncome = thisMonthTx
+        .where((t) => t.isCredit)
+        .fold(0.0, (sum, t) => sum + t.amount);
+    final totalSpent = thisMonthTx
+        .where((t) => t.isDebit)
+        .fold(0.0, (sum, t) => sum + t.amount);
+
+    final isLoading = dashboardAsync.isLoading || txAsync.isLoading;
+
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
@@ -76,22 +99,30 @@ class FlowScreen extends StatelessWidget {
                     children: [
                       Text('This Month', style: AppTextStyles.labelMedium),
                       const SizedBox(height: 12),
-                      Text(
-                        '₦48k',
-                        style: AppTextStyles.amountLarge.copyWith(fontSize: 38),
-                      ),
+                      isLoading
+                          ? _shimmerAmount()
+                          : Text(
+                              balance.compactCurrency(),
+                              style: AppTextStyles.amountLarge.copyWith(
+                                fontSize: 38,
+                              ),
+                            ),
                       const SizedBox(height: 16),
                       Row(
                         children: [
                           _StatChip(
                             label: 'Income',
-                            value: '₦200k',
+                            value: isLoading
+                                ? '...'
+                                : totalIncome.compactCurrency(),
                             color: AppColors.entertainmentGreen,
                           ),
                           const SizedBox(width: 12),
                           _StatChip(
                             label: 'Spent',
-                            value: '₦152k',
+                            value: isLoading
+                                ? '...'
+                                : totalSpent.compactCurrency(),
                             color: AppColors.coral,
                           ),
                         ],
@@ -201,6 +232,17 @@ class FlowScreen extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _shimmerAmount() {
+    return Container(
+      width: 120,
+      height: 38,
+      decoration: BoxDecoration(
+        color: AppColors.progressBg,
+        borderRadius: BorderRadius.circular(8),
       ),
     );
   }
