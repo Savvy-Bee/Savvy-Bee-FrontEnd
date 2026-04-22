@@ -304,6 +304,111 @@ class WalletTransaction {
   double get totalAmount => amount + charges;
 }
 
+// ─── Transactions Budget models ──────────────────────────────────────────────
+
+class WeeklyBreakdownItem {
+  final String key;
+  final String label;
+  final num amountSpent;
+
+  WeeklyBreakdownItem({
+    required this.key,
+    required this.label,
+    required this.amountSpent,
+  });
+
+  factory WeeklyBreakdownItem.fromJson(Map<String, dynamic> json) {
+    return WeeklyBreakdownItem(
+      key: json['key'] ?? '',
+      label: json['label'] ?? '',
+      amountSpent:
+          num.tryParse(json['amountSpent']?.toString() ?? '0') ?? 0,
+    );
+  }
+}
+
+class BudgetSpendingSummary {
+  final String budgetId;
+  final num totalAmountSpentThisMonth;
+  final num totalAmountSpentLastMonth;
+  final bool spentLessThisMonth;
+  final num percentageChangeFromLastMonth;
+
+  BudgetSpendingSummary({
+    required this.budgetId,
+    required this.totalAmountSpentThisMonth,
+    required this.totalAmountSpentLastMonth,
+    required this.spentLessThisMonth,
+    required this.percentageChangeFromLastMonth,
+  });
+
+  factory BudgetSpendingSummary.fromJson(Map<String, dynamic> json) {
+    return BudgetSpendingSummary(
+      budgetId: json['budgetId'] ?? '',
+      totalAmountSpentThisMonth:
+          num.tryParse(json['totalAmountSpentThisMonth']?.toString() ?? '0') ?? 0,
+      totalAmountSpentLastMonth:
+          num.tryParse(json['totalAmountSpentLastMonth']?.toString() ?? '0') ?? 0,
+      spentLessThisMonth: json['spentLessThisMonth'] ?? false,
+      percentageChangeFromLastMonth:
+          num.tryParse(json['percentageChangeFromLastMonth']?.toString() ?? '0') ?? 0,
+    );
+  }
+}
+
+class TransactionsBudgetInfo {
+  final String name;
+  final num currentBudgetBalance;
+  final num targetAmountMonthly;
+
+  TransactionsBudgetInfo({
+    required this.name,
+    required this.currentBudgetBalance,
+    required this.targetAmountMonthly,
+  });
+
+  factory TransactionsBudgetInfo.fromJson(Map<String, dynamic> json) {
+    return TransactionsBudgetInfo(
+      name: json['name'] ?? '',
+      currentBudgetBalance:
+          num.tryParse(json['currentBudgetBalance']?.toString() ?? '0') ?? 0,
+      targetAmountMonthly:
+          num.tryParse(json['targetAmountMonthly']?.toString() ?? '0') ?? 0,
+    );
+  }
+}
+
+class TransactionsBudgetData {
+  final List<WalletTransaction> transactions;
+  final BudgetSpendingSummary summary;
+  final List<WeeklyBreakdownItem> weeklyBreakdown;
+  final TransactionsBudgetInfo budgetInfo;
+
+  TransactionsBudgetData({
+    required this.transactions,
+    required this.summary,
+    required this.weeklyBreakdown,
+    required this.budgetInfo,
+  });
+
+  factory TransactionsBudgetData.fromJson(Map<String, dynamic> json) {
+    return TransactionsBudgetData(
+      transactions: (json['transactions'] as List? ?? [])
+          .map((e) => WalletTransaction.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      summary: BudgetSpendingSummary.fromJson(
+        json['summary'] as Map<String, dynamic>? ?? {},
+      ),
+      weeklyBreakdown: (json['weeklyBreakdown'] as List? ?? [])
+          .map((e) => WeeklyBreakdownItem.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      budgetInfo: TransactionsBudgetInfo.fromJson(
+        json['budget'] as Map<String, dynamic>? ?? {},
+      ),
+    );
+  }
+}
+
 // Pagination Model
 class Pagination {
   final int total;

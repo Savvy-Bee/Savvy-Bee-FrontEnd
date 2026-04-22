@@ -37,8 +37,13 @@ class SpendProfileScreen extends ConsumerWidget {
       orElse: () => null,
     );
 
+    final walletAccountExists = dashboardAsync.maybeWhen(
+      data: (response) => response.data?.accounts != null,
+      orElse: () => false,
+    );
+
     final connectedAccountsCount = linkedAccountsAsync.maybeWhen(
-      data: (accounts) => accounts.length,
+      data: (accounts) => accounts.length + (walletAccountExists ? 1 : 0),
       orElse: () => null,
     );
 
@@ -50,9 +55,16 @@ class SpendProfileScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Padding(
+        child: RefreshIndicator(
+          onRefresh: () async {
+            ref.invalidate(homeDataProvider);
+            ref.invalidate(spendDashboardDataProvider);
+            ref.invalidate(linkedAccountsProvider);
+            ref.invalidate(savingsGoalsProvider);
+          },
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -185,6 +197,7 @@ class SpendProfileScreen extends ConsumerWidget {
           ),
         ),
       ),
+    ),
     );
   }
 }

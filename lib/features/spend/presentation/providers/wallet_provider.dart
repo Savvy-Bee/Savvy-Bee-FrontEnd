@@ -17,6 +17,18 @@ final spendDashboardDataProvider =
       return await repository.fetchDashboardData();
     });
 
+// Transactions Budget Provider — keyed by budgetId (the budget name)
+final budgetSummaryProvider = FutureProvider.autoDispose
+    .family<TransactionsBudgetData?, String>((ref, budgetId) async {
+      final repository = ref.watch(walletRepositoryProvider);
+      final response = await repository.fetchTransactionsBudget(
+        budgetId: budgetId,
+        page: 1,
+        limit: 10,
+      );
+      return response.data;
+    });
+
 // Transactions Provider with Pagination Parameters
 class TransactionParams {
   final int page;

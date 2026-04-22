@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:savvy_bee_mobile/core/network/api_endpoints.dart';
 import 'package:savvy_bee_mobile/core/network/models/api_response_model.dart';
 import 'package:savvy_bee_mobile/features/spend/domain/models/wallet.dart';
 import '../../../../core/network/api_client.dart';
@@ -103,6 +104,38 @@ class WalletRepository {
         },
       );
     } catch (e) {
+      rethrow;
+    }
+  }
+
+  /// Fetch transactions and spending analytics for a specific budget category.
+  ///
+  /// GET /wallet/details/transactions-budget?page=&limit=&budgetId=
+  Future<ApiResponse<TransactionsBudgetData>> fetchTransactionsBudget({
+    required String budgetId,
+    int page = 1,
+    int limit = 10,
+  }) async {
+    try {
+      final response = await _apiClient.get(
+        ApiEndpoints.transactionsBudget,
+        queryParameters: {
+          'page': page.toString(),
+          'limit': limit.toString(),
+          'budgetId': budgetId,
+        },
+      );
+
+      log('[WalletRepo] fetchTransactionsBudget $budgetId OK');
+
+      // The response wraps data at the top level alongside pagination,
+      // but ApiResponse reads json['data'], which is exactly what we need.
+      return ApiResponse.fromJson(
+        response.data,
+        (data) => TransactionsBudgetData.fromJson(data as Map<String, dynamic>),
+      );
+    } catch (e) {
+      log('[WalletRepo] fetchTransactionsBudget ERROR budgetId=$budgetId: $e');
       rethrow;
     }
   }

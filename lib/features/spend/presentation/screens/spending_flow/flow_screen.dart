@@ -8,6 +8,77 @@ import 'package:savvy_bee_mobile/features/spend/presentation/screens/spending_fl
 import 'package:savvy_bee_mobile/features/spend/presentation/spending_flow_theme.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/widgets/spending_flow/category_row.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/widgets/spending_flow/emotional_insight_banner.dart';
+import 'package:savvy_bee_mobile/features/tools/domain/models/budget.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/providers/budget_provider.dart';
+
+// Maps a budget name to its icon and color pair.
+({String icon, Color iconBgColor, Color progressColor}) _categoryStyle(
+  String name,
+) {
+  switch (name.toLowerCase()) {
+    case 'auto & transport':
+      return (
+        icon: '🚗',
+        iconBgColor: AppColors.transportBlueLight,
+        progressColor: AppColors.transportBlue,
+      );
+    case 'drinks & dining':
+    case 'groceries':
+      return (
+        icon: name.toLowerCase() == 'groceries' ? '🛒' : '🍔',
+        iconBgColor: AppColors.foodAmberLight,
+        progressColor: AppColors.foodAmber,
+      );
+    case 'entertainment':
+      return (
+        icon: '🎉',
+        iconBgColor: AppColors.entertainmentGreenLight,
+        progressColor: AppColors.entertainmentGreen,
+      );
+    case 'financial':
+      return (
+        icon: '💰',
+        iconBgColor: AppColors.billsPurpleLight,
+        progressColor: AppColors.billsPurple,
+      );
+    case 'healthcare':
+      return (
+        icon: '🏥',
+        iconBgColor: AppColors.stressRedLight,
+        progressColor: AppColors.stressRed,
+      );
+    case 'household':
+      return (
+        icon: '🏠',
+        iconBgColor: AppColors.billsPurpleLight,
+        progressColor: AppColors.billsPurple,
+      );
+    case 'personal care':
+      return (
+        icon: '💆',
+        iconBgColor: AppColors.coralLight,
+        progressColor: AppColors.coral,
+      );
+    case 'shopping':
+      return (
+        icon: '🛍️',
+        iconBgColor: AppColors.transportBlueLight,
+        progressColor: AppColors.transportBlue,
+      );
+    case 'childcare & education':
+      return (
+        icon: '📚',
+        iconBgColor: AppColors.foodAmberLight,
+        progressColor: AppColors.foodAmber,
+      );
+    default:
+      return (
+        icon: '📦',
+        iconBgColor: AppColors.coralLight,
+        progressColor: AppColors.coral,
+      );
+  }
+}
 
 class FlowScreen extends ConsumerWidget {
   static const String path = '/spending-flow';
@@ -18,6 +89,8 @@ class FlowScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final dashboardAsync = ref.watch(spendDashboardDataProvider);
     final txAsync = ref.watch(transactionListProvider);
+    final budgets = ref.watch(existingBudgetCategoriesProvider);
+    final budgetsAsync = ref.watch(budgetHomeNotifierProvider);
 
     final balance = dashboardAsync.valueOrNull?.data?.accounts.balance ?? 0.0;
 
@@ -35,13 +108,21 @@ class FlowScreen extends ConsumerWidget {
         .fold(0.0, (sum, t) => sum + t.amount);
 
     final isLoading = dashboardAsync.isLoading || txAsync.isLoading;
+    final isBudgetsLoading = budgetsAsync.isLoading;
 
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Padding(
+        child: RefreshIndicator(
+          onRefresh: () async {
+            ref.invalidate(spendDashboardDataProvider);
+            ref.invalidate(transactionListProvider);
+            ref.invalidate(budgetHomeNotifierProvider);
+            ref.invalidate(budgetSummaryProvider);
+          },
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -137,88 +218,27 @@ class FlowScreen extends ConsumerWidget {
                 Text('By Category', style: AppTextStyles.headingMedium),
                 const SizedBox(height: 14),
 
-                // Category rows
-                CategoryRow(
-                  icon: '🍔',
-                  iconBgColor: AppColors.foodAmberLight,
-                  label: 'Food',
-                  percentage: '30% of spending',
-                  amount: '₦18,000',
-                  progressColor: AppColors.foodAmber,
-                  progressValue: 0.30,
-                  onTap: () => context.push(
-                    CategoryDetailScreen.path,
-                    extra: const CategoryInfo(
-                      icon: '🍔',
-                      iconBgColor: AppColors.foodAmberLight,
-                      progressColor: AppColors.foodAmber,
-                      label: 'Food',
-                      amount: '₦18,000',
-                      percentage: '30% of spending',
+                if (isBudgetsLoading)
+                  ..._buildSkeletonRows()
+                else if (budgets.isEmpty)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 32),
+                    child: Center(
+                      child: Text(
+                        'No budgets set up yet.\nCreate budgets in Tools to see categories here.',
+                        textAlign: TextAlign.center,
+                        style: AppTextStyles.bodySmall,
+                      ),
                     ),
-                  ),
-                ),
-                CategoryRow(
-                  icon: '🚗',
-                  iconBgColor: AppColors.transportBlueLight,
-                  label: 'Transport',
-                  percentage: '25% of spending',
-                  amount: '₦12,000',
-                  progressColor: AppColors.transportBlue,
-                  progressValue: 0.25,
-                  onTap: () => context.push(
-                    CategoryDetailScreen.path,
-                    extra: const CategoryInfo(
-                      icon: '🚗',
-                      iconBgColor: AppColors.transportBlueLight,
-                      progressColor: AppColors.transportBlue,
-                      label: 'Transport',
-                      amount: '₦12,000',
-                      percentage: '25% of spending',
-                    ),
-                  ),
-                ),
-                CategoryRow(
-                  icon: '💡',
-                  iconBgColor: AppColors.billsPurpleLight,
-                  label: 'Bills',
-                  percentage: '21% of spending',
-                  amount: '₦10,000',
-                  progressColor: AppColors.billsPurple,
-                  progressValue: 0.21,
-                  onTap: () => context.push(
-                    CategoryDetailScreen.path,
-                    extra: const CategoryInfo(
-                      icon: '💡',
-                      iconBgColor: AppColors.billsPurpleLight,
-                      progressColor: AppColors.billsPurple,
-                      label: 'Bills',
-                      amount: '₦10,000',
-                      percentage: '21% of spending',
-                    ),
-                  ),
-                ),
-                CategoryRow(
-                  icon: '🎉',
-                  iconBgColor: AppColors.entertainmentGreenLight,
-                  label: 'Entertainment',
-                  percentage: '17% of spending',
-                  amount: '₦8,000',
-                  progressColor: AppColors.entertainmentGreen,
-                  progressValue: 0.17,
-                  showDivider: false,
-                  onTap: () => context.push(
-                    CategoryDetailScreen.path,
-                    extra: const CategoryInfo(
-                      icon: '🎉',
-                      iconBgColor: AppColors.entertainmentGreenLight,
-                      progressColor: AppColors.entertainmentGreen,
-                      label: 'Entertainment',
-                      amount: '₦8,000',
-                      percentage: '17% of spending',
-                    ),
-                  ),
-                ),
+                  )
+                else
+                  ...budgets.asMap().entries.map((entry) {
+                    final isLast = entry.key == budgets.length - 1;
+                    return _BudgetCategoryRow(
+                      budget: entry.value,
+                      showDivider: !isLast,
+                    );
+                  }),
 
                 const SizedBox(height: 20),
 
@@ -233,6 +253,7 @@ class FlowScreen extends ConsumerWidget {
           ),
         ),
       ),
+    ),
     );
   }
 
@@ -243,6 +264,141 @@ class FlowScreen extends ConsumerWidget {
       decoration: BoxDecoration(
         color: AppColors.progressBg,
         borderRadius: BorderRadius.circular(8),
+      ),
+    );
+  }
+
+  List<Widget> _buildSkeletonRows() {
+    return List.generate(3, (i) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 14),
+        child: Row(
+          children: [
+            Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                color: AppColors.progressBg,
+                borderRadius: BorderRadius.circular(13),
+              ),
+            ),
+            const SizedBox(width: 13),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    height: 12,
+                    width: 100,
+                    decoration: BoxDecoration(
+                      color: AppColors.progressBg,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Container(
+                    height: 6,
+                    decoration: BoxDecoration(
+                      color: AppColors.progressBg,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    });
+  }
+}
+
+class _BudgetCategoryRow extends ConsumerWidget {
+  final Budget budget;
+  final bool showDivider;
+
+  const _BudgetCategoryRow({
+    required this.budget,
+    required this.showDivider,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final summaryAsync = ref.watch(budgetSummaryProvider(budget.budgetName));
+    final style = _categoryStyle(budget.budgetName);
+
+    // targetAmountMonthly is where the user's budget goal is stored (via TotalBudget param)
+    final fallbackBudget = budget.targetAmountMonthly.toDouble();
+
+    return summaryAsync.when(
+      loading: () => _buildRow(
+        context,
+        style: style,
+        spent: 0,
+        budgetBalance: fallbackBudget,
+        showDivider: showDivider,
+      ),
+      error: (_, __) => _buildRow(
+        context,
+        style: style,
+        spent: 0,
+        budgetBalance: fallbackBudget,
+        showDivider: showDivider,
+      ),
+      data: (data) {
+        final spent =
+            data?.summary.totalAmountSpentThisMonth.toDouble() ?? 0.0;
+        final rawBalance =
+            data?.budgetInfo.currentBudgetBalance.toDouble() ?? 0.0;
+        final budgetBalance = rawBalance > 0 ? rawBalance : fallbackBudget;
+        return _buildRow(
+          context,
+          style: style,
+          spent: spent,
+          budgetBalance: budgetBalance,
+          showDivider: showDivider,
+          data: data,
+        );
+      },
+    );
+  }
+
+  Widget _buildRow(
+    BuildContext context, {
+    required ({String icon, Color iconBgColor, Color progressColor}) style,
+    required double spent,
+    required double budgetBalance,
+    required bool showDivider,
+    dynamic data,
+  }) {
+    final progress = budgetBalance > 0
+        ? (spent / budgetBalance).clamp(0.0, 1.0)
+        : 0.0;
+    final pct = (progress * 100).round();
+
+    final spentLabel = spent > 0
+        ? '${spent.formatCurrency(decimalDigits: 0)} spent · $pct%'
+        : '₦0 spent';
+
+    return CategoryRow(
+      icon: style.icon,
+      iconBgColor: style.iconBgColor,
+      label: budget.budgetName,
+      amount: budgetBalance.formatCurrency(decimalDigits: 0),
+      percentage: spentLabel,
+      progressColor: style.progressColor,
+      progressValue: progress,
+      showDivider: showDivider,
+      onTap: () => context.push(
+        CategoryDetailScreen.path,
+        extra: CategoryInfo(
+          icon: style.icon,
+          iconBgColor: style.iconBgColor,
+          progressColor: style.progressColor,
+          label: budget.budgetName,
+          amount: budgetBalance.formatCurrency(decimalDigits: 0),
+          percentage: spentLabel,
+        ),
       ),
     );
   }

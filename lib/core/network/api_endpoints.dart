@@ -129,6 +129,9 @@ class ApiEndpoints {
   /// Wallet Dashboard
   static const String walletDashboard = '/wallet/details/dashboard';
 
+  /// Transactions Budget
+  static const String transactionsBudget = '/wallet/details/transactions-budget';
+
   /// Filing Endpoints
   static const String filingHome = '/tools/taxation/filling/fetchdata/home';
   static String filingTin(String tin) =>

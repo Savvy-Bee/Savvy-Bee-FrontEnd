@@ -22,6 +22,8 @@ import 'package:savvy_bee_mobile/features/profile/presentation/screens/profile_s
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/wallet/quick_actions_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/spending_flow/flow_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/profile/spend_profile_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/profile/spend_goals_screen.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/providers/goals_provider.dart';
 
 class SpendScreen extends ConsumerStatefulWidget {
   static const String path = '/spend';
@@ -77,6 +79,7 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
               onRefresh: () async {
                 ref.invalidate(spendDashboardDataProvider);
                 ref.invalidate(transactionListProvider);
+                ref.invalidate(savingsGoalsProvider);
               },
               child: CustomScrollView(
                 slivers: [
@@ -475,48 +478,73 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
   }
 
   Widget _buildGoalAlertBanner() {
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: const Color(0xFFFFF8EC),
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: const Color(0xFFFFE9B0)),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Sun / star icon
-          Container(
-            width: 32,
-            height: 32,
-            decoration: BoxDecoration(
-              color: const Color(0xFFFFE9B0),
-              shape: BoxShape.circle,
-            ),
-            child: const Center(
-              child: Text('✨', style: TextStyle(fontSize: 16)),
-            ),
-          ),
-          const Gap(10),
+    final goalsAsync = ref.watch(savingsGoalsProvider);
 
-          // Text
-          const Expanded(
-            child: Text(
-              'Your rent goal is almost funded. Consider allocating ₦4,500 from your next income.',
-              style: TextStyle(
-                fontSize: 13,
-                fontFamily: 'GeneralSans',
-                color: Color(0xFF7A5C00),
-                height: 1.4,
-              ),
-            ),
+    return goalsAsync.when(
+      loading: () => const SizedBox.shrink(),
+      error: (_, __) => const SizedBox.shrink(),
+      data: (goals) {
+        final activeGoals = goals.where((g) => !g.isCompleted).toList();
+        if (activeGoals.isEmpty) return const SizedBox.shrink();
+
+        // Prefer goals that are >= 80% funded
+        final almostDone = activeGoals.where(
+          (g) => g.targetAmount > 0 && g.balance / g.targetAmount >= 0.8,
+        ).toList();
+
+        final goal = almostDone.isNotEmpty ? almostDone.first : activeGoals.first;
+        final remaining = (goal.targetAmount - goal.balance).clamp(0.0, double.infinity);
+        final isAlmostDone = almostDone.isNotEmpty;
+
+        final message = isAlmostDone
+            ? 'Your ${goal.goalName} goal is almost funded. Consider allocating ${remaining.formatCurrency(decimalDigits: 0)} to complete it!'
+            : 'You\'re ${(goal.targetAmount > 0 ? (goal.balance / goal.targetAmount * 100).round() : 0)}% toward your ${goal.goalName} goal. Keep saving!';
+
+        return Container(
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            color: const Color(0xFFFFF8EC),
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: const Color(0xFFFFE9B0)),
           ),
-        ],
-      ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 32,
+                height: 32,
+                decoration: const BoxDecoration(
+                  color: Color(0xFFFFE9B0),
+                  shape: BoxShape.circle,
+                ),
+                child: const Center(
+                  child: Text('✨', style: TextStyle(fontSize: 16)),
+                ),
+              ),
+              const Gap(10),
+              Expanded(
+                child: Text(
+                  message,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontFamily: 'GeneralSans',
+                    color: Color(0xFF7A5C00),
+                    height: 1.4,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
   Widget _buildGoalsSection(BuildContext context) {
+    final goalsAsync = ref.watch(savingsGoalsProvider);
+    final transactions =
+        ref.watch(transactionListProvider).valueOrNull?.data?.transactions ?? [];
+
     return Column(
       children: [
         // Header
@@ -533,9 +561,7 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
               ),
             ),
             GestureDetector(
-              onTap: () {
-                // TODO: navigate to goals screen
-              },
+              onTap: () => context.push(SpendGoalsScreen.path),
               child: const Text(
                 'See All',
                 style: TextStyle(
@@ -550,89 +576,218 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
         ),
         const Gap(12),
 
-        // Goal Card
-        Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: Colors.grey.shade100),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Goal name + arrow
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Rent',
+        goalsAsync.when(
+          loading: () => _buildGoalCardSkeleton(),
+          error: (_, __) => const SizedBox.shrink(),
+          data: (goals) {
+            final activeGoals =
+                goals.where((g) => !g.isCompleted).toList();
+
+            if (activeGoals.isEmpty) {
+              return Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(vertical: 28),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: Colors.grey.shade100),
+                ),
+                child: const Center(
+                  child: Text(
+                    'No active goals yet.\nTap "See All" to create one.',
+                    textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
+                      fontSize: 13,
                       fontFamily: 'GeneralSans',
-                      color: Colors.black,
+                      color: Color(0xFF9E9E9E),
+                      height: 1.5,
                     ),
                   ),
-                  Icon(Icons.chevron_right, color: Colors.grey.shade400),
-                ],
-              ),
-              const Gap(8),
+                ),
+              );
+            }
 
-              // Amount
-              RichText(
-                text: TextSpan(
+            // Rotate through goals daily
+            final goal = activeGoals[DateTime.now().day % activeGoals.length];
+
+            // Sum credit transactions whose narration/transactionFor
+            // references this goal name
+            final goalLower = goal.goalName.toLowerCase();
+            final txSaved = transactions
+                .where(
+                  (t) =>
+                      t.isCredit &&
+                      t.isSuccess &&
+                      (t.narration.toLowerCase().contains(goalLower) ||
+                          t.transactionFor.toLowerCase().contains(goalLower)),
+                )
+                .fold(0.0, (sum, t) => sum + t.amount);
+
+            final savedAmount = txSaved > 0 ? txSaved : goal.balance;
+            final targetAmount = goal.targetAmount;
+            final fraction = targetAmount > 0
+                ? (savedAmount / targetAmount).clamp(0.0, 1.0)
+                : 0.0;
+
+            String dueText = '';
+            if (goal.endDate.isNotEmpty) {
+              final due = DateTime.tryParse(goal.endDate);
+              if (due != null) {
+                final daysLeft = due.difference(DateTime.now()).inDays;
+                if (daysLeft > 0) {
+                  dueText =
+                      'Due in $daysLeft ${daysLeft == 1 ? 'day' : 'days'}';
+                } else if (daysLeft == 0) {
+                  dueText = 'Due today';
+                } else {
+                  dueText = 'Overdue';
+                }
+              }
+            }
+
+            return GestureDetector(
+              onTap: () => context.push(SpendGoalsScreen.path),
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: Colors.grey.shade100),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const TextSpan(
-                      text: '₦450,000 ',
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w700,
-                        fontFamily: 'GeneralSans',
-                        color: Colors.black,
-                        letterSpacing: -0.5,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            goal.goalName,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: 'GeneralSans',
+                              color: Colors.black,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        Icon(
+                          Icons.chevron_right,
+                          color: Colors.grey.shade400,
+                        ),
+                      ],
+                    ),
+                    const Gap(8),
+
+                    RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text:
+                                '${savedAmount.formatCurrency(decimalDigits: 0)} ',
+                            style: const TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.w700,
+                              fontFamily: 'GeneralSans',
+                              color: Colors.black,
+                              letterSpacing: -0.5,
+                            ),
+                          ),
+                          TextSpan(
+                            text:
+                                'of ${targetAmount.formatCurrency(decimalDigits: 0)}',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontFamily: 'GeneralSans',
+                              color: Colors.grey.shade500,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    TextSpan(
-                      text: 'of ₦500,000',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontFamily: 'GeneralSans',
-                        color: Colors.grey.shade500,
+                    const Gap(10),
+
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(4),
+                      child: LinearProgressIndicator(
+                        value: fraction,
+                        minHeight: 6,
+                        backgroundColor: Colors.grey.shade200,
+                        valueColor: const AlwaysStoppedAnimation<Color>(
+                          Color(0xFFE8A838),
+                        ),
                       ),
                     ),
+
+                    if (dueText.isNotEmpty) ...[
+                      const Gap(10),
+                      Text(
+                        dueText,
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'GeneralSans',
+                          color: Colors.grey.shade500,
+                        ),
+                      ),
+                    ],
                   ],
                 ),
               ),
-              const Gap(10),
-
-              // Progress Bar
-              ClipRRect(
-                borderRadius: BorderRadius.circular(4),
-                child: LinearProgressIndicator(
-                  value: 0.90, // 450k / 500k
-                  minHeight: 6,
-                  backgroundColor: Colors.grey.shade200,
-                  valueColor: const AlwaysStoppedAnimation<Color>(
-                    Color(0xFFE8A838),
-                  ),
-                ),
-              ),
-              const Gap(10),
-
-              // Due date
-              Text(
-                'Due in 12 days',
-                style: TextStyle(
-                  fontSize: 12,
-                  fontFamily: 'GeneralSans',
-                  color: Colors.grey.shade500,
-                ),
-              ),
-            ],
-          ),
+            );
+          },
         ),
       ],
+    );
+  }
+
+  Widget _buildGoalCardSkeleton() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.grey.shade100),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            height: 16,
+            width: 120,
+            decoration: BoxDecoration(
+              color: Colors.grey.shade200,
+              borderRadius: BorderRadius.circular(4),
+            ),
+          ),
+          const Gap(12),
+          Container(
+            height: 24,
+            width: 200,
+            decoration: BoxDecoration(
+              color: Colors.grey.shade200,
+              borderRadius: BorderRadius.circular(4),
+            ),
+          ),
+          const Gap(12),
+          Container(
+            height: 6,
+            decoration: BoxDecoration(
+              color: Colors.grey.shade200,
+              borderRadius: BorderRadius.circular(4),
+            ),
+          ),
+          const Gap(10),
+          Container(
+            height: 12,
+            width: 80,
+            decoration: BoxDecoration(
+              color: Colors.grey.shade200,
+              borderRadius: BorderRadius.circular(4),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
