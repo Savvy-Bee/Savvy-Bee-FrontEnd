@@ -45,12 +45,12 @@ class _TransactionHistoryScreenState
           icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
           onPressed: () => Navigator.pop(context),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.file_copy_outlined, color: Colors.black),
-            onPressed: () => context.pushNamed(AccountStatementScreen.path),
-          ),
-        ],
+        // actions: [
+        //   IconButton(
+        //     icon: const Icon(Icons.file_copy_outlined, color: Colors.black),
+        //     onPressed: () => context.pushNamed(AccountStatementScreen.path),
+        //   ),
+        // ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -62,6 +62,7 @@ class _TransactionHistoryScreenState
               decoration: BoxDecoration(
                 color: const Color(0xFFF5F5F5),
                 borderRadius: BorderRadius.circular(24),
+                // border: Border.all(color: const Color(0xFFE0E0E0)),
               ),
               child: TextField(
                 onChanged: (value) {
@@ -193,9 +194,9 @@ class _TransactionHistoryScreenState
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: const Color(0xFFFFF8E1), // Soft yellow like screenshot
+          // color: const Color(0xFFFFF8E1), // Soft yellow like screenshot
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: Colors.grey.shade200),
+          border: Border.all(color: const Color(0xFFFFF8E1)),
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,

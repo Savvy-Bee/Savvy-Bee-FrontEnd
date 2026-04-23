@@ -90,7 +90,9 @@ class _EnterAmountScreenState extends ConsumerState<EnterAmountScreen> {
 
                 // Amount input
                 Center(
-                  child: Column(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const Text(
                         '₦',
@@ -100,7 +102,6 @@ class _EnterAmountScreenState extends ConsumerState<EnterAmountScreen> {
                           color: Colors.black,
                         ),
                       ),
-                      const Gap(4),
                       IntrinsicWidth(
                         child: TextField(
                           controller: _amountController,
@@ -130,6 +131,8 @@ class _EnterAmountScreenState extends ConsumerState<EnterAmountScreen> {
                               letterSpacing: -2,
                             ),
                             border: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            focusedBorder: InputBorder.none,
                             isDense: true,
                             contentPadding: EdgeInsets.zero,
                           ),

@@ -103,7 +103,9 @@ class _InternalEnterAmountScreenState
 
                 // Amount input
                 Center(
-                  child: Column(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const Text(
                         '₦',
@@ -113,7 +115,6 @@ class _InternalEnterAmountScreenState
                           color: Colors.black,
                         ),
                       ),
-                      const Gap(4),
                       IntrinsicWidth(
                         child: TextField(
                           controller: _amountController,
@@ -129,7 +130,7 @@ class _InternalEnterAmountScreenState
                           ],
                           textAlign: TextAlign.center,
                           style: const TextStyle(
-                            fontSize: 72,
+                            fontSize: 48,
                             fontWeight: FontWeight.w400,
                             color: Colors.black,
                             letterSpacing: -2,
@@ -137,12 +138,14 @@ class _InternalEnterAmountScreenState
                           decoration: InputDecoration(
                             hintText: '0',
                             hintStyle: TextStyle(
-                              fontSize: 72,
+                              fontSize: 48,
                               fontWeight: FontWeight.w400,
                               color: Colors.grey.shade300,
                               letterSpacing: -2,
                             ),
                             border: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            focusedBorder: InputBorder.none,
                             isDense: true,
                             contentPadding: EdgeInsets.zero,
                           ),

@@ -9,6 +9,7 @@ import 'package:savvy_bee_mobile/features/spend/presentation/spending_flow_theme
 import 'package:savvy_bee_mobile/features/spend/presentation/widgets/spending_flow/back_button_widget.dart';
 import 'package:savvy_bee_mobile/features/tools/domain/models/savings.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/providers/goals_provider.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/goals/create_goal_onboarding_screen.dart';
 
 const _goalColorPalette = [
   AppColors.foodAmber,
@@ -132,7 +133,8 @@ class SpendGoalsScreen extends ConsumerWidget {
                               final i = entry.key;
                               final goal = entry.value;
                               final color =
-                                  _goalColorPalette[i % _goalColorPalette.length];
+                                  _goalColorPalette[i %
+                                      _goalColorPalette.length];
                               return Padding(
                                 padding: const EdgeInsets.only(bottom: 12),
                                 child: _GoalCard(
@@ -155,7 +157,11 @@ class SpendGoalsScreen extends ConsumerWidget {
 
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 0, 20, 28),
-                  child: _PrimaryButton(label: '+ Create New Goal', onTap: () {}),
+                  child: _PrimaryButton(
+                    label: '+ Create New Goal',
+                    onTap: () =>
+                        context.pushNamed(CreateGoalOnboardingScreen.path),
+                  ),
                 ),
               ],
             );
@@ -179,10 +185,11 @@ class _GoalCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fraction = (goal.targetAmount > 0
-            ? goal.balance / goal.targetAmount
-            : 0.0)
-        .clamp(0.0, 1.0);
+    final fraction =
+        (goal.targetAmount > 0 ? goal.balance / goal.targetAmount : 0.0).clamp(
+          0.0,
+          1.0,
+        );
     final percent = (fraction * 100).round();
 
     return GestureDetector(
@@ -223,9 +230,7 @@ class _GoalCard extends StatelessWidget {
                   child: Text(
                     goal.isCompleted ? '✓ Done' : '$percent%',
                     style: TextStyle(
-                      color: goal.isCompleted
-                          ? Colors.white
-                          : progressColor,
+                      color: goal.isCompleted ? Colors.white : progressColor,
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
                     ),

@@ -12,6 +12,7 @@ import 'package:savvy_bee_mobile/features/chat/presentation/screens/chat_screen.
 import 'package:savvy_bee_mobile/features/spend/domain/models/wallet.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/providers/wallet_provider.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/bills/pay_bills_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/profile/spend_goal_detail_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/transactions/transaction_details_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/transactions/transaction_history_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/transfer/transfer_screen_one.dart';
@@ -488,12 +489,19 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
         if (activeGoals.isEmpty) return const SizedBox.shrink();
 
         // Prefer goals that are >= 80% funded
-        final almostDone = activeGoals.where(
-          (g) => g.targetAmount > 0 && g.balance / g.targetAmount >= 0.8,
-        ).toList();
+        final almostDone = activeGoals
+            .where(
+              (g) => g.targetAmount > 0 && g.balance / g.targetAmount >= 0.8,
+            )
+            .toList();
 
-        final goal = almostDone.isNotEmpty ? almostDone.first : activeGoals.first;
-        final remaining = (goal.targetAmount - goal.balance).clamp(0.0, double.infinity);
+        final goal = almostDone.isNotEmpty
+            ? almostDone.first
+            : activeGoals.first;
+        final remaining = (goal.targetAmount - goal.balance).clamp(
+          0.0,
+          double.infinity,
+        );
         final isAlmostDone = almostDone.isNotEmpty;
 
         final message = isAlmostDone
@@ -543,7 +551,8 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
   Widget _buildGoalsSection(BuildContext context) {
     final goalsAsync = ref.watch(savingsGoalsProvider);
     final transactions =
-        ref.watch(transactionListProvider).valueOrNull?.data?.transactions ?? [];
+        ref.watch(transactionListProvider).valueOrNull?.data?.transactions ??
+        [];
 
     return Column(
       children: [
@@ -580,8 +589,7 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
           loading: () => _buildGoalCardSkeleton(),
           error: (_, __) => const SizedBox.shrink(),
           data: (goals) {
-            final activeGoals =
-                goals.where((g) => !g.isCompleted).toList();
+            final activeGoals = goals.where((g) => !g.isCompleted).toList();
 
             if (activeGoals.isEmpty) {
               return Container(
@@ -646,7 +654,9 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
             }
 
             return GestureDetector(
-              onTap: () => context.push(SpendGoalsScreen.path),
+              // onTap: () => context.push(SpendGoalsScreen.path),
+              onTap: () =>
+                  context.push(SpendGoalDetailScreen.path, extra: goal),
               child: Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
@@ -672,10 +682,7 @@ class _SpendScreenState extends ConsumerState<SpendScreen> {
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        Icon(
-                          Icons.chevron_right,
-                          color: Colors.grey.shade400,
-                        ),
+                        Icon(Icons.chevron_right, color: Colors.grey.shade400),
                       ],
                     ),
                     const Gap(8),

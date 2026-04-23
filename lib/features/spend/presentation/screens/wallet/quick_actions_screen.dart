@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/bills/pay_bills_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/transfer/send_money_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/transfer/transfer_screen_one.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/goals/create_goal_onboarding_screen.dart';
 
 class QuickActionsScreen extends StatelessWidget {
   static const String path = '/quick-actions';
@@ -75,10 +76,8 @@ class QuickActionsScreen extends StatelessWidget {
                     iconColor: const Color(0xFF4CAF50),
                     title: 'Add to Goal',
                     subtitle: 'Save toward a target',
-                    onTap: () {
-                      // Navigate to Goals
-                    },
-                  ),
+                    onTap: () => context.pushNamed(CreateGoalOnboardingScreen.path),
+                  ), 
                   _buildActionCard(
                     icon: Icons.call_split_rounded,
                     iconColor: const Color(0xFFFF9800),
