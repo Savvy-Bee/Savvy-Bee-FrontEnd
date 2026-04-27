@@ -297,14 +297,14 @@ class BillsNotifier
     final repository = ref.read(billsRepositoryProvider);
 
     try {
-      final initResponse = await repository.initializeAirtime(
-        phoneNo: phoneNo,
-        provider: provider,
-        amount: amount,
+      final verifyResponse = await _runInitializeThenVerify(
+        initialize: () => repository.initializeAirtime(
+          phoneNo: phoneNo,
+          provider: provider,
+          amount: amount,
+        ),
+        verify: () => repository.verifyAirtime(pin: pin),
       );
-      if (!initResponse.success) throw Exception(initResponse.message);
-
-      final verifyResponse = await repository.verifyAirtime(pin: pin);
 
       state = AsyncValue.data({
         'airtime': verifyResponse,
@@ -334,14 +334,14 @@ class BillsNotifier
     final repository = ref.read(billsRepositoryProvider);
 
     try {
-      final initResponse = await repository.initializeData(
-        phoneNo: phoneNo,
-        provider: provider,
-        code: code,
+      final verifyResponse = await _runInitializeThenVerify(
+        initialize: () => repository.initializeData(
+          phoneNo: phoneNo,
+          provider: provider,
+          code: code,
+        ),
+        verify: () => repository.verifyData(pin: pin),
       );
-      if (!initResponse.success) throw Exception(initResponse.message);
-
-      final verifyResponse = await repository.verifyData(pin: pin);
 
       state = AsyncValue.data({
         'airtime': null,
@@ -371,14 +371,14 @@ class BillsNotifier
     final repository = ref.read(billsRepositoryProvider);
 
     try {
-      final initResponse = await repository.initializeTv(
-        phoneNo: phoneNo,
-        provider: provider,
-        code: code,
+      final verifyResponse = await _runInitializeThenVerify(
+        initialize: () => repository.initializeTv(
+          phoneNo: phoneNo,
+          provider: provider,
+          code: code,
+        ),
+        verify: () => repository.verifyTv(pin: pin),
       );
-      if (!initResponse.success) throw Exception(initResponse.message);
-
-      final verifyResponse = await repository.verifyTv(pin: pin);
 
       state = AsyncValue.data({
         'airtime': null,
@@ -410,15 +410,15 @@ class BillsNotifier
     final repository = ref.read(billsRepositoryProvider);
 
     try {
-      final initResponse = await repository.initializeElectricity(
-        provider: provider,
-        meterNumber: meterNumber,
-        amount: amount,
-        meterType: meterType.toUpperCase(),
+      final verifyResponse = await _runInitializeThenVerify(
+        initialize: () => repository.initializeElectricity(
+          provider: provider,
+          meterNumber: meterNumber,
+          amount: amount,
+          meterType: meterType.toUpperCase(),
+        ),
+        verify: () => repository.verifyElectricity(pin: pin),
       );
-      if (!initResponse.success) throw Exception(initResponse.message);
-
-      final verifyResponse = await repository.verifyElectricity(pin: pin);
 
       state = AsyncValue.data({
         'airtime': null,
@@ -443,6 +443,21 @@ class BillsNotifier
       'tv': null,
       'electricity': null,
     });
+  }
+
+  Future<BillsResponse> _runInitializeThenVerify({
+    required Future<BillsResponse> Function() initialize,
+    required Future<BillsResponse> Function() verify,
+  }) async {
+    final initResponse = await initialize();
+    if (!initResponse.success) {
+      throw Exception(initResponse.message);
+    }
+
+    // Enforce strict sequencing: verify only runs after initialize
+    // completed and returned a success response.
+    final verifyResponse = await verify();
+    return verifyResponse;
   }
 }
 

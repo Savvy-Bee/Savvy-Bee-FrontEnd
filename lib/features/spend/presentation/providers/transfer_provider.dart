@@ -70,6 +70,7 @@ class TransferState {
 // State notifier for managing transfer flow with loading states
 class TransferNotifier extends StateNotifier<TransferState> {
   final TransferRepository _repository;
+  bool _hasSuccessfulInitialize = false;
 
   TransferNotifier(this._repository) : super(const TransferState());
 
@@ -96,18 +97,35 @@ class TransferNotifier extends StateNotifier<TransferState> {
     required String accountNumber,
     required String bankCode,
     required double amount,
+    required String accountName,
     required String pin,
     required String transferFor,
     required String narration,
   }) async {
     state = state.copyWith(isLoading: true, clearError: true);
+    _hasSuccessfulInitialize = false;
     try {
       // Step 1: Initialize transaction
-      await _repository.initializeTransaction(
+      final initializeResult = await _repository.initializeTransaction(
         accountNumber: accountNumber,
         bankCode: bankCode,
         amount: amount,
+        accountName: accountName,
       );
+      final initSucceeded = initializeResult['success'] == true;
+      if (!initSucceeded) {
+        throw Exception(
+          initializeResult['message']?.toString() ??
+              'Failed to initialize transaction',
+        );
+      }
+      _hasSuccessfulInitialize = true;
+
+      if (!_hasSuccessfulInitialize) {
+        throw Exception(
+          'Transaction verification blocked: initialize must complete successfully first.',
+        );
+      }
 
       // Step 2: Verify transaction with PIN
       final response = await _repository.verifyTransaction(
@@ -120,6 +138,8 @@ class TransferNotifier extends StateNotifier<TransferState> {
     } catch (e) {
       state = state.copyWith(isLoading: false, error: e.toString());
       rethrow;
+    } finally {
+      _hasSuccessfulInitialize = false;
     }
   }
 
@@ -172,13 +192,14 @@ final transferNotifierProvider =
 final initializeTransferProvider =
     FutureProvider.family<
       Map<String, dynamic>,
-      ({String accountNumber, String bankCode, double amount})
+      ({String accountNumber, String bankCode, double amount, String accountName})
     >((ref, params) async {
       final repository = ref.watch(transferRepositoryProvider);
       return await repository.initializeTransaction(
         accountNumber: params.accountNumber,
         bankCode: params.bankCode,
         amount: params.amount,
+        accountName: params.accountName,
       );
     });
 

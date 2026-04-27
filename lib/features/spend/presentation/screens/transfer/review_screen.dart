@@ -26,6 +26,7 @@ class ReviewScreen extends ConsumerWidget {
         accountNumber: args.recipientAccountInfo.accountNumber,
         bankCode: args.recipientAccountInfo.bankCode,
         amount: amountDouble,
+        accountName: args.recipientAccountInfo.accountName,
       )),
     );
 

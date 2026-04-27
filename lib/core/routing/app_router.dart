@@ -137,6 +137,11 @@ import '../../features/profile/presentation/screens/subscription/subscription_do
 import '../../features/profile/presentation/screens/subscription/subscription_feedback_screen.dart';
 import '../../features/spend/presentation/screens/bills/cable_bill_screen.dart';
 import '../../features/spend/presentation/screens/bills/electricity_bill_screen.dart';
+import '../../features/spend/domain/models/split_bill.dart';
+import '../../features/spend/presentation/screens/split_bill/split_bills_screen.dart';
+import '../../features/spend/presentation/screens/split_bill/find_people_screen.dart';
+import '../../features/spend/presentation/screens/split_bill/approval_status_screen.dart';
+import '../../features/spend/presentation/screens/split_bill/payment_to_screen.dart';
 import '../../features/spend/presentation/screens/fund/username_screen.dart';
 import '../../features/spend/presentation/screens/transfer/transfer_screen.dart';
 import '../../features/spend/domain/models/internal_transfer.dart';
@@ -572,6 +577,47 @@ final GoRouter appRouter = GoRouter(
       name: BillCompletionScreen.path,
       builder: (BuildContext context, GoRouterState state) {
         return const BillCompletionScreen();
+      },
+    ),
+
+    // Split Bill Routes
+    GoRoute(
+      path: SplitBillScreen.path,
+      name: SplitBillScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        final extra = state.extra as List<SplitPerson>?;
+        return SplitBillScreen(selectedPeople: extra ?? const []);
+      },
+    ),
+    GoRoute(
+      path: FindPeopleScreen.path,
+      name: FindPeopleScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        return const FindPeopleScreen();
+      },
+    ),
+    GoRoute(
+      path: ApprovalStatusScreen.path,
+      name: ApprovalStatusScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        final extra = state.extra as Map<String, dynamic>;
+        return ApprovalStatusScreen(
+          people: extra['people'] as List<SplitPerson>,
+          total: extra['total'] as double,
+          perPerson: extra['perPerson'] as double,
+        );
+      },
+    ),
+    GoRoute(
+      path: PaymentToScreen.path,
+      name: PaymentToScreen.path,
+      builder: (BuildContext context, GoRouterState state) {
+        final extra = state.extra as Map<String, dynamic>;
+        return PaymentToScreen(
+          people: extra['people'] as List<SplitPerson>,
+          total: extra['total'] as double,
+          perPerson: extra['perPerson'] as double,
+        );
       },
     ),
 

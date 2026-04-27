@@ -298,6 +298,7 @@ class _EnterPinBottomSheetState extends ConsumerState<EnterPinBottomSheet> {
             accountNumber: widget.recipientAccountInfo.accountNumber,
             bankCode: widget.recipientAccountInfo.bankCode,
             amount: amount,
+            accountName: widget.recipientAccountInfo.accountName,
             pin: pin,
             transferFor: widget.category,
             narration: widget.category,
@@ -377,6 +378,7 @@ class _EnterPinBottomSheetState extends ConsumerState<EnterPinBottomSheet> {
         accountNumber: widget.recipientAccountInfo.accountNumber,
         bankCode: widget.recipientAccountInfo.bankCode,
         amount: double.parse(widget.amount.replaceAll(',', '')),
+        accountName: widget.recipientAccountInfo.accountName,
       )),
     );
 

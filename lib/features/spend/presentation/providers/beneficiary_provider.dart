@@ -15,12 +15,26 @@ class BeneficiaryNotifier extends StateNotifier<List<Beneficiary>> {
   Future<void> _load() async {
     final prefs = await SharedPreferences.getInstance();
     final raw = prefs.getString(_prefsKey);
+    List<Beneficiary> list = [];
     if (raw != null) {
-      final list = (jsonDecode(raw) as List)
+      list = (jsonDecode(raw) as List)
           .map((e) => Beneficiary.fromJson(e as Map<String, dynamic>))
           .toList();
-      state = list;
     }
+    // TEST: always inject with latest hardcoded details (removes any stale persisted version)
+    const testAcctNumber = '8133092341';
+    list = list.where((b) => b.accountNumber != testAcctNumber).toList();
+    list = [
+      Beneficiary(
+        id: 'test_amaka_kolawole',
+        name: 'Amaka Kolawole',
+        accountNumber: testAcctNumber,
+        bankName: 'Opay',
+        bankCode: '100004',
+      ),
+      ...list,
+    ];
+    state = list;
   }
 
   Future<void> _persist() async {

@@ -65,8 +65,8 @@ void main() async {
   }
 
   // Initialize Mixpanel BEFORE runApp()
-  await MixpanelService.initialize('0b9bfa95112c6154772de9e7adfde75b');
-  await AnalyticsService.initialize();
+  // await MixpanelService.initialize('0b9bfa95112c6154772de9e7adfde75b');
+  // await AnalyticsService.initialize();
 
   runApp(
     ScreenUtilInit(

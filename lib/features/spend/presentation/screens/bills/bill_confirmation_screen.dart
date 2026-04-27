@@ -3,13 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/theme/app_colors.dart';
-import 'package:savvy_bee_mobile/core/utils/constants.dart';
 import 'package:savvy_bee_mobile/core/utils/num_extensions.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_card.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_button.dart';
 import 'package:savvy_bee_mobile/core/widgets/custom_snackbar.dart';
-import 'package:savvy_bee_mobile/core/widgets/dial_pad_widget.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/bills/bill_completion_screen.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/widgets/tax_filing/pin_bottom_sheet.dart';
 
 import '../../../../../core/utils/string_extensions.dart';
 import '../../providers/bill_provider.dart';
@@ -65,6 +64,17 @@ class _BillConfirmationScreenState
   }
 
   Future<void> _verifyTransaction(String pin) async {
+    final normalizedPin = pin.trim();
+    if (normalizedPin.length != 4) {
+      CustomSnackbar.show(
+        context,
+        'Please enter a valid 4-digit transaction PIN.',
+        type: SnackbarType.error,
+        position: SnackbarPosition.bottom,
+      );
+      return;
+    }
+
     setState(() => _isProcessing = true);
 
     final rawPhone = widget.confirmationData.phoneNumber;
@@ -81,7 +91,7 @@ class _BillConfirmationScreenState
           success = await ref
               .read(billsProvider.notifier)
               .purchaseAirtime(
-                pin: pin,
+                pin: normalizedPin,
                 phoneNo: phoneNumber,
                 provider: widget.confirmationData.provider,
                 amount: widget.confirmationData.amount.toString(),
@@ -91,7 +101,7 @@ class _BillConfirmationScreenState
           success = await ref
               .read(billsProvider.notifier)
               .purchaseData(
-                pin: pin,
+                pin: normalizedPin,
                 phoneNo: phoneNumber,
                 provider: widget.confirmationData.provider,
                 code: widget.confirmationData.planCode ?? '',
@@ -101,7 +111,7 @@ class _BillConfirmationScreenState
           success = await ref
               .read(billsProvider.notifier)
               .subscribeTv(
-                pin: pin,
+                pin: normalizedPin,
                 phoneNo: widget.confirmationData.phoneNumber,
                 provider: widget.confirmationData.provider,
                 code: widget.confirmationData.planCode ?? '',
@@ -111,7 +121,7 @@ class _BillConfirmationScreenState
           success = await ref
               .read(billsProvider.notifier)
               .payElectricity(
-                pin: pin,
+                pin: normalizedPin,
                 phoneNo: widget.confirmationData.phoneNumber,
                 provider: widget.confirmationData.provider,
                 meterNumber: widget.confirmationData.meterNumber ?? '',
@@ -269,10 +279,16 @@ class _BillConfirmationScreenState
               child: CustomElevatedButton(
                 onPressed: _isProcessing
                     ? null
-                    : () => EnterPinBottomSheet.show(context, (pin) {
-                        context.pop();
+                    : () async {
+                        final pin = await PinBottomSheet.show(
+                          context,
+                          title: 'Confirm Payment',
+                          confirmLabel: 'Proceed',
+                        );
+
+                        if (!mounted || pin == null) return;
                         _verifyTransaction(pin);
-                      }),
+                      },
                 // onPressed: _isProcessing ? null : _showPinDialog,
                 isLoading: _isProcessing,
                 text: 'Enter PIN to confirm',

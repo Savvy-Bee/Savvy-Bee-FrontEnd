@@ -45,20 +45,11 @@ class BillsRepository {
   ///
   /// [pin] - User's transaction PIN (e.g., "1234")
   Future<BillsResponse> verifyAirtime({required String pin}) async {
-    try {
-      final formData = FormData.fromMap({'Pin': pin});
-
-      final response = await _apiClient.post(
-        ApiEndpoints.verifyAirtimeTransaction,
-        data: formData,
-      );
-
-      return BillsResponse.fromJson(response.data);
-    } on ApiException {
-      rethrow;
-    } catch (e) {
-      throw ApiException(message: 'Failed to verify airtime: $e');
-    }
+    return _verifyBillTransaction(
+      endpoint: ApiEndpoints.verifyAirtimeTransaction,
+      pin: pin,
+      operationName: 'airtime',
+    );
   }
 
   // ==================== DATA ====================
@@ -123,20 +114,11 @@ class BillsRepository {
   ///
   /// [pin] - User's transaction PIN (e.g., "1234")
   Future<BillsResponse> verifyData({required String pin}) async {
-    try {
-      final formData = FormData.fromMap({'Pin': pin});
-
-      final response = await _apiClient.post(
-        ApiEndpoints.verifyDataTransaction,
-        data: formData,
-      );
-
-      return BillsResponse.fromJson(response.data);
-    } on ApiException {
-      rethrow;
-    } catch (e) {
-      throw ApiException(message: 'Failed to verify data: $e');
-    }
+    return _verifyBillTransaction(
+      endpoint: ApiEndpoints.verifyDataTransaction,
+      pin: pin,
+      operationName: 'data',
+    );
   }
 
   // ==================== TV BILLS ====================
@@ -222,20 +204,11 @@ class BillsRepository {
   ///
   /// [pin] - User's transaction PIN (e.g., "1234")
   Future<BillsResponse> verifyTv({required String pin}) async {
-    try {
-      final formData = FormData.fromMap({'Pin': pin});
-
-      final response = await _apiClient.post(
-        ApiEndpoints.verifyTVSubscription,
-        data: formData,
-      );
-
-      return BillsResponse.fromJson(response.data);
-    } on ApiException {
-      rethrow;
-    } catch (e) {
-      throw ApiException(message: 'Failed to verify TV subscription: $e');
-    }
+    return _verifyBillTransaction(
+      endpoint: ApiEndpoints.verifyTVSubscription,
+      pin: pin,
+      operationName: 'TV subscription',
+    );
   }
 
   // ==================== ELECTRICITY BILLS ====================
@@ -300,19 +273,35 @@ class BillsRepository {
   ///
   /// [pin] - User's transaction PIN (e.g., "1234")
   Future<BillsResponse> verifyElectricity({required String pin}) async {
+    return _verifyBillTransaction(
+      endpoint: ApiEndpoints.verifyElectricity,
+      pin: pin,
+      operationName: 'electricity bill',
+    );
+  }
+
+  Future<BillsResponse> _verifyBillTransaction({
+    required String endpoint,
+    required String pin,
+    required String operationName,
+  }) async {
+    final normalizedPin = pin.trim();
+    if (normalizedPin.length != 4 || int.tryParse(normalizedPin) == null) {
+      throw ApiException(message: 'Please enter a valid 4-digit transaction PIN.');
+    }
+
     try {
-      final formData = FormData.fromMap({'Pin': pin});
-
       final response = await _apiClient.post(
-        ApiEndpoints.verifyElectricity,
-        data: formData,
+        endpoint,
+        data: FormData.fromMap({'Pin': normalizedPin}),
       );
-
       return BillsResponse.fromJson(response.data);
     } on ApiException {
       rethrow;
+    } on DioException catch (e) {
+      throw ApiException(message: 'Failed to verify $operationName: ${e.message}');
     } catch (e) {
-      throw ApiException(message: 'Failed to verify electricity bill: $e');
+      throw ApiException(message: 'Failed to verify $operationName: $e');
     }
   }
 

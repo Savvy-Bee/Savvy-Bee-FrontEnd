@@ -1,6 +1,8 @@
 import 'dart:developer';
 
+import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
+import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:flutter/foundation.dart';
 
 /// Custom exception for API errors
@@ -17,6 +19,7 @@ class ApiException implements Exception {
 
 /// Enhanced API Client with better error handling, logging, and interceptors
 class ApiClient {
+  static final CookieJar _cookieJar = CookieJar();
   final Dio _dio;
   final String baseUrl;
   final int timeoutSeconds;
@@ -30,11 +33,11 @@ class ApiClient {
           sendTimeout: Duration(seconds: timeoutSeconds),
           responseType: ResponseType.json,
           headers: {
-            'Content-Type': 'application/json',
             'Accept': 'application/json',
           },
         ),
       ) {
+    _dio.interceptors.add(CookieManager(_cookieJar));
     _setupInterceptors();
   }
 
@@ -275,11 +278,12 @@ class ApiClient {
     ProgressCallback? onReceiveProgress,
   }) async {
     try {
+      final requestOptions = _resolveRequestOptions(data: data, options: options);
       final response = await _dio.post(
         path,
         data: data,
         queryParameters: queryParameters,
-        options: options,
+        options: requestOptions,
         cancelToken: cancelToken,
         onSendProgress: onSendProgress,
         onReceiveProgress: onReceiveProgress,
@@ -304,11 +308,12 @@ class ApiClient {
     ProgressCallback? onReceiveProgress,
   }) async {
     try {
+      final requestOptions = _resolveRequestOptions(data: data, options: options);
       final response = await _dio.put(
         path,
         data: data,
         queryParameters: queryParameters,
-        options: options,
+        options: requestOptions,
         cancelToken: cancelToken,
         onSendProgress: onSendProgress,
         onReceiveProgress: onReceiveProgress,
@@ -333,11 +338,12 @@ class ApiClient {
     ProgressCallback? onReceiveProgress,
   }) async {
     try {
+      final requestOptions = _resolveRequestOptions(data: data, options: options);
       final response = await _dio.patch(
         path,
         data: data,
         queryParameters: queryParameters,
-        options: options,
+        options: requestOptions,
         cancelToken: cancelToken,
         onSendProgress: onSendProgress,
         onReceiveProgress: onReceiveProgress,
@@ -420,4 +426,28 @@ class ApiClient {
 
   /// Get Dio instance for advanced usage
   Dio get dio => _dio;
+
+  Options? _resolveRequestOptions({dynamic data, Options? options}) {
+    if (data is FormData) {
+      final mergedHeaders = <String, dynamic>{
+        ...(options?.headers ?? const <String, dynamic>{}),
+      };
+      mergedHeaders.removeWhere(
+        (key, _) => key.toLowerCase() == 'content-type',
+      );
+
+      return (options ?? Options()).copyWith(
+        headers: mergedHeaders,
+        contentType: Headers.multipartFormDataContentType,
+      );
+    }
+
+    if (data is Map || data is List) {
+      return (options ?? Options()).copyWith(
+        contentType: Headers.jsonContentType,
+      );
+    }
+
+    return options;
+  }
 }

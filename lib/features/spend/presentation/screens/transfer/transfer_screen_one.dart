@@ -593,15 +593,16 @@ class _BeneficiaryConfirmationSheet extends StatelessWidget {
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
                   onPressed: () {
+                    final router = GoRouter.of(context);
                     Navigator.pop(context);
                     if (beneficiary.isSavvyBee) {
-                      context.push(
+                      router.push(
                         InternalTransferScreen.path,
                         extra: beneficiary.username,
                       );
                     } else if (beneficiary.accountNumber != null &&
                         beneficiary.bankName != null) {
-                      context.pushNamed(
+                      router.pushNamed(
                         EnterAmountScreen.path,
                         extra: RecipientAccountInfo(
                           accountName: beneficiary.name,

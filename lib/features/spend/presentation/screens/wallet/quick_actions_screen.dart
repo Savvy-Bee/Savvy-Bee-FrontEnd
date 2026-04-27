@@ -5,6 +5,7 @@ import 'package:savvy_bee_mobile/features/spend/presentation/screens/bills/pay_b
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/transfer/send_money_screen.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/screens/transfer/transfer_screen_one.dart';
 import 'package:savvy_bee_mobile/features/tools/presentation/screens/goals/create_goal_onboarding_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/split_bill/split_bills_screen.dart';
 
 class QuickActionsScreen extends StatelessWidget {
   static const String path = '/quick-actions';
@@ -83,9 +84,7 @@ class QuickActionsScreen extends StatelessWidget {
                     iconColor: const Color(0xFFFF9800),
                     title: 'Split Bill',
                     subtitle: 'Share with friends',
-                    onTap: () {
-                      // Navigate to Split Bill
-                    },
+                    onTap: () => context.push(SplitBillScreen.path),
                   ),
                 ],
               ),

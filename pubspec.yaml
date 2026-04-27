@@ -12,6 +12,8 @@ dependencies:
   crypto: ^3.0.7
   cupertino_icons: ^1.0.8
   dio: ^5.4.1
+  dio_cookie_manager: ^3.2.0
+  cookie_jar: ^4.0.8
   encrypt: ^5.0.3
   file_picker: ^10.3.3
   flutter:

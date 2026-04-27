@@ -55,12 +55,14 @@ class TransferRepository {
     required String accountNumber,
     required String bankCode,
     required double amount,
+    required String accountName,
   }) async {
     try {
       final formData = FormData.fromMap({
         'AcctNumber': accountNumber,
         'BankCode': bankCode,
-        'Amount': amount.toString(),
+        'Amount': amount.toStringAsFixed(0),
+        'AcctName': accountName,
       });
 
       final response = await _apiClient.post(
