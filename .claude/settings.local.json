@@ -3,7 +3,8 @@
     "allow": [
       "Bash(flutter analyze *)",
       "Bash(grep -E \"\\\\.\\(dart|json\\)$\")",
-      "Bash(xargs grep *)"
+      "Bash(xargs grep *)",
+      "PowerShell(Get-ChildItem \"C:\\\\Users\\\\DELL\\\\Documents\\\\Savvy Bee Repos\\\\Savvy-Bee-FrontEnd\\\\lib\\\\features\\\\spend\\\\presentation\" -Recurse | Where-Object {$_.Extension -eq \".dart\"} | Select-Object FullName)"
     ]
   }
 }

@@ -257,41 +257,54 @@ class _AirtimeScreenState extends State<AirtimeScreen> {
                           const Gap(8),
 
                           // Phone input row
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.phone_outlined,
-                                size: 18,
-                                color: Colors.grey.shade400,
-                              ),
-                              const Gap(10),
-                              Expanded(
-                                child: TextField(
-                                  controller: _phoneController,
-                                  keyboardType: TextInputType.phone,
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.digitsOnly,
-                                    LengthLimitingTextInputFormatter(11),
-                                  ],
-                                  style: const TextStyle(
-                                    fontSize: 15,
-                                    fontFamily: 'GeneralSans',
-                                    color: Colors.black,
-                                  ),
-                                  decoration: InputDecoration(
-                                    hintText: '080 1234 5678',
-                                    hintStyle: TextStyle(
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 10,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade100,
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: Colors.grey.shade200),
+                            ),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.phone_outlined,
+                                  size: 18,
+                                  color: Colors.grey.shade400,
+                                ),
+                                const Gap(10),
+                                Expanded(
+                                  child: TextField(
+                                    controller: _phoneController,
+                                    keyboardType: TextInputType.phone,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.digitsOnly,
+                                      LengthLimitingTextInputFormatter(11),
+                                    ],
+                                    style: const TextStyle(
                                       fontSize: 15,
                                       fontFamily: 'GeneralSans',
-                                      color: Colors.grey.shade400,
+                                      color: Colors.black,
                                     ),
-                                    border: InputBorder.none,
-                                    isDense: true,
-                                    contentPadding: EdgeInsets.zero,
+                                    decoration: InputDecoration(
+                                      hintText: '080 1234 5678',
+                                      hintStyle: TextStyle(
+                                        fontSize: 15,
+                                        fontFamily: 'GeneralSans',
+                                        color: Colors.grey.shade400,
+                                      ),
+                                      border: InputBorder.none,
+                                      enabledBorder: InputBorder.none,
+                                      focusedBorder: InputBorder.none,
+                                      isDense: true,
+                                      contentPadding: EdgeInsets.zero,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
 
                           const Gap(16),

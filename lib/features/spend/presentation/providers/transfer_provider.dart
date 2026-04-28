@@ -30,7 +30,7 @@ final verifyAccountProvider =
         accountNumber: params.accountNumber,
         bankName: params.bankName,
       );
-      return response.data!;
+      return response.data;
     });
 
 // State class for transfer operations
@@ -40,6 +40,8 @@ class TransferState {
   final AccountVerificationData? verifiedAccount;
   final TransactionData? transaction;
   final InternalTransferData? internalTransfer;
+  final bool isInitialized;
+  final Map<String, dynamic>? initializeResult;
 
   const TransferState({
     this.isLoading = false,
@@ -47,6 +49,8 @@ class TransferState {
     this.verifiedAccount,
     this.transaction,
     this.internalTransfer,
+    this.isInitialized = false,
+    this.initializeResult,
   });
 
   TransferState copyWith({
@@ -55,6 +59,8 @@ class TransferState {
     AccountVerificationData? verifiedAccount,
     TransactionData? transaction,
     InternalTransferData? internalTransfer,
+    bool? isInitialized,
+    Map<String, dynamic>? initializeResult,
     bool clearError = false,
   }) {
     return TransferState(
@@ -63,6 +69,8 @@ class TransferState {
       verifiedAccount: verifiedAccount ?? this.verifiedAccount,
       transaction: transaction ?? this.transaction,
       internalTransfer: internalTransfer ?? this.internalTransfer,
+      isInitialized: isInitialized ?? this.isInitialized,
+      initializeResult: initializeResult ?? this.initializeResult,
     );
   }
 }
@@ -70,7 +78,6 @@ class TransferState {
 // State notifier for managing transfer flow with loading states
 class TransferNotifier extends StateNotifier<TransferState> {
   final TransferRepository _repository;
-  bool _hasSuccessfulInitialize = false;
 
   TransferNotifier(this._repository) : super(const TransferState());
 
@@ -92,7 +99,67 @@ class TransferNotifier extends StateNotifier<TransferState> {
     }
   }
 
-  /// Initialize and complete external bank transfer
+  /// Step 1 — Initialize external bank transfer (NIP).
+  /// Call this first; only call [verifyExternalTransfer] after this succeeds.
+  Future<void> initializeExternalTransfer({
+    required String accountNumber,
+    required String bankCode,
+    required double amount,
+    required String accountName,
+  }) async {
+    state = state.copyWith(isLoading: true, clearError: true, isInitialized: false);
+    try {
+      final result = await _repository.initializeTransaction(
+        accountNumber: accountNumber,
+        bankCode: bankCode,
+        amount: amount,
+        accountName: accountName,
+      );
+      if (result['success'] != true) {
+        throw Exception(
+          result['message']?.toString() ?? 'Failed to initialize transaction',
+        );
+      }
+      state = state.copyWith(
+        isLoading: false,
+        isInitialized: true,
+        initializeResult: result,
+      );
+    } catch (e) {
+      state = state.copyWith(isLoading: false, error: e.toString());
+      rethrow;
+    }
+  }
+
+  /// Step 2 — Verify external bank transfer with PIN.
+  /// Must only be called after [initializeExternalTransfer] succeeds.
+  Future<void> verifyExternalTransfer({
+    required String pin,
+    required String transferFor,
+    required String narration,
+  }) async {
+    if (!state.isInitialized) {
+      throw Exception('Transaction not initialized. Please retry.');
+    }
+    state = state.copyWith(isLoading: true, clearError: true);
+    try {
+      final response = await _repository.verifyTransaction(
+        pin: pin,
+        transferFor: transferFor,
+        narration: narration,
+      );
+      state = state.copyWith(
+        isLoading: false,
+        transaction: response.data,
+        isInitialized: false,
+      );
+    } catch (e) {
+      state = state.copyWith(isLoading: false, error: e.toString());
+      rethrow;
+    }
+  }
+
+  /// Combined Initialize + Verify for flows that don't pre-initialize.
   Future<void> initiateExternalTransfer({
     required String accountNumber,
     required String bankCode,
@@ -102,45 +169,17 @@ class TransferNotifier extends StateNotifier<TransferState> {
     required String transferFor,
     required String narration,
   }) async {
-    state = state.copyWith(isLoading: true, clearError: true);
-    _hasSuccessfulInitialize = false;
-    try {
-      // Step 1: Initialize transaction
-      final initializeResult = await _repository.initializeTransaction(
-        accountNumber: accountNumber,
-        bankCode: bankCode,
-        amount: amount,
-        accountName: accountName,
-      );
-      final initSucceeded = initializeResult['success'] == true;
-      if (!initSucceeded) {
-        throw Exception(
-          initializeResult['message']?.toString() ??
-              'Failed to initialize transaction',
-        );
-      }
-      _hasSuccessfulInitialize = true;
-
-      if (!_hasSuccessfulInitialize) {
-        throw Exception(
-          'Transaction verification blocked: initialize must complete successfully first.',
-        );
-      }
-
-      // Step 2: Verify transaction with PIN
-      final response = await _repository.verifyTransaction(
-        pin: pin,
-        transferFor: transferFor,
-        narration: narration,
-      );
-
-      state = state.copyWith(isLoading: false, transaction: response.data);
-    } catch (e) {
-      state = state.copyWith(isLoading: false, error: e.toString());
-      rethrow;
-    } finally {
-      _hasSuccessfulInitialize = false;
-    }
+    await initializeExternalTransfer(
+      accountNumber: accountNumber,
+      bankCode: bankCode,
+      amount: amount,
+      accountName: accountName,
+    );
+    await verifyExternalTransfer(
+      pin: pin,
+      transferFor: transferFor,
+      narration: narration,
+    );
   }
 
   /// Send money to another user within the app

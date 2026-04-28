@@ -10,7 +10,7 @@ import 'package:savvy_bee_mobile/features/spend/presentation/widgets/send_money_
 import 'send_money_screen.dart';
 import 'success_screen.dart';
 
-class ReviewScreen extends ConsumerWidget {
+class ReviewScreen extends ConsumerStatefulWidget {
   static const String path = '/review';
 
   final TransferAmountArgs args;
@@ -18,19 +18,45 @@ class ReviewScreen extends ConsumerWidget {
   const ReviewScreen({super.key, required this.args});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final amountDouble = double.tryParse(args.amount.replaceAll(',', '')) ?? 0;
+  ConsumerState<ReviewScreen> createState() => _ReviewScreenState();
+}
 
-    final initAsync = ref.watch(
-      initializeTransferProvider((
-        accountNumber: args.recipientAccountInfo.accountNumber,
-        bankCode: args.recipientAccountInfo.bankCode,
-        amount: amountDouble,
-        accountName: args.recipientAccountInfo.accountName,
-      )),
-    );
+class _ReviewScreenState extends ConsumerState<ReviewScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _initialize();
+    });
+  }
 
+  Future<void> _initialize() async {
+    final amountDouble =
+        double.tryParse(widget.args.amount.replaceAll(',', '')) ?? 0;
+    ref.read(transferNotifierProvider.notifier).reset();
+    try {
+      await ref
+          .read(transferNotifierProvider.notifier)
+          .initializeExternalTransfer(
+            accountNumber: widget.args.recipientAccountInfo.accountNumber,
+            bankCode: widget.args.recipientAccountInfo.bankCode,
+            amount: amountDouble,
+            accountName: widget.args.recipientAccountInfo.accountName,
+          );
+    } catch (_) {
+      // Error is shown via transferState.error in build
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final transferState = ref.watch(transferNotifierProvider);
+    final amountDouble =
+        double.tryParse(widget.args.amount.replaceAll(',', '')) ?? 0;
     final dashboardAsync = ref.watch(spendDashboardDataProvider);
+
+    final bool isInitializing =
+        transferState.isLoading && !transferState.isInitialized;
 
     return Scaffold(
       appBar: AppBar(
@@ -76,15 +102,15 @@ class ReviewScreen extends ConsumerWidget {
                   _DetailRow(
                     label: 'To',
                     value:
-                        '${args.recipientAccountInfo.accountName} (${args.recipientAccountInfo.bankName})',
+                        '${widget.args.recipientAccountInfo.accountName} (${widget.args.recipientAccountInfo.bankName})',
                   ),
                   const Gap(12),
                   _DetailRow(
                     label: 'Account',
-                    value: args.recipientAccountInfo.accountNumber,
+                    value: widget.args.recipientAccountInfo.accountNumber,
                   ),
                   const Gap(12),
-                  _DetailRow(label: 'Narration', value: args.narration),
+                  _DetailRow(label: 'Narration', value: widget.args.narration),
                   const Gap(12),
                   _DetailRow(
                     label: 'From',
@@ -104,32 +130,46 @@ class ReviewScreen extends ConsumerWidget {
                         'Fee',
                         style: TextStyle(fontSize: 15, color: Colors.grey),
                       ),
-                      initAsync.when(
-                        data: (data) => Text(
+                      if (isInitializing)
+                        const SizedBox(
+                          width: 12,
+                          height: 12,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      else
+                        Text(
                           double.tryParse(
-                                    (data['fee'] ?? '10').toString(),
-                                  )?.formatCurrency(decimalDigits: 0) ??
+                                (transferState.initializeResult?['fee'] ?? '10')
+                                    .toString(),
+                              )?.formatCurrency(decimalDigits: 0) ??
                               '₦10',
                           style: const TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        loading: () => const SizedBox(
-                          width: 12,
-                          height: 12,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        ),
-                        error: (_, __) => const Text(
-                          '₦10',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
                     ],
                   ),
+                  if (transferState.error != null) ...[
+                    const Gap(12),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            transferState.error!,
+                            style: const TextStyle(
+                              color: Colors.red,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: isInitializing ? null : _initialize,
+                          child: const Text('Retry'),
+                        ),
+                      ],
+                    ),
+                  ],
                 ],
               ),
             ),
@@ -139,16 +179,20 @@ class ReviewScreen extends ConsumerWidget {
             SizedBox(
               width: double.infinity,
               child: FilledButton(
-                onPressed: () => EnterPinBottomSheet.show(
-                  context,
-                  amount: args.amount,
-                  category: args.narration,
-                  recipientAccountInfo: args.recipientAccountInfo,
-                  onSuccess: (transaction) => context.pushNamed(
-                    SendSuccessScreen.path,
-                    extra: transaction,
-                  ),
-                ),
+                onPressed:
+                    transferState.isInitialized && !transferState.isLoading
+                        ? () => EnterPinBottomSheet.show(
+                            context,
+                            amount: widget.args.amount,
+                            category: widget.args.narration,
+                            recipientAccountInfo:
+                                widget.args.recipientAccountInfo,
+                            onSuccess: (transaction) => context.pushNamed(
+                              SendSuccessScreen.path,
+                              extra: transaction,
+                            ),
+                          )
+                        : null,
                 style: FilledButton.styleFrom(
                   backgroundColor: Colors.black,
                   minimumSize: const Size.fromHeight(52),
@@ -156,14 +200,23 @@ class ReviewScreen extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: const Text(
-                  'Confirm & send',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+                child: isInitializing
+                    ? const SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      )
+                    : const Text(
+                        'Confirm & send',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
               ),
             ),
             const Gap(16),

@@ -82,28 +82,15 @@ class _EnterAmountBottomSheetState
   }
 
   Future<void> _handleProceed() async {
-    try {
-      // Parse amount (remove commas and convert to double)
-      // final amount = double.parse(_amountController.text.replaceAll(',', ''));
-
-      if (!mounted) return;
-
-      // Navigate to PIN entry
-      EnterPinBottomSheet.show(
-        context,
-        amount: _amountController.text,
-        category: _narrationController.text,
-        recipientAccountInfo: widget.recipientAccountInfo,
-      );
-    } catch (e) {
-      if (!mounted) return;
-      CustomSnackbar.show(
-        context,
-        e.toString(),
-        type: SnackbarType.error,
-        position: SnackbarPosition.bottom,
-      );
-    }
+    if (!mounted) return;
+    // Clear any previous transfer state so EnterPinBottomSheet initializes fresh
+    ref.read(transferNotifierProvider.notifier).reset();
+    EnterPinBottomSheet.show(
+      context,
+      amount: _amountController.text,
+      category: _narrationController.text,
+      recipientAccountInfo: widget.recipientAccountInfo,
+    );
   }
 
   @override
@@ -242,40 +229,51 @@ class EnterPinBottomSheet extends ConsumerStatefulWidget {
 class _EnterPinBottomSheetState extends ConsumerState<EnterPinBottomSheet> {
   String pin = '';
   bool _isProcessing = false;
-  // bool _isInitializing = true;
 
   @override
   void initState() {
     super.initState();
-
-    // _initializeTransaction();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Only initialize if not already done (e.g. ReviewScreen already ran it)
+      if (!ref.read(transferNotifierProvider).isInitialized) {
+        _initializeTransaction();
+      }
+    });
   }
 
-  // Future<void> _initializeTransaction() async {
-  //   try {
-  //     final amount = double.parse(widget.amount.replaceAll(',', ''));
-  //     // Initialize the transaction
-  //     await ref.read(
-  //       initializeTransferProvider((
-  //         accountNumber: widget.recipientAccountInfo.accountNumber,
-  //         bankCode: widget.recipientAccountInfo.bankCode,
-  //         amount: amount,
-  //       )).future,
-  //     );
-  //     if (mounted) {
-  //       setState(() => _isInitializing = false);
-  //     }
-  //   } catch (e) {
-  //     if (!mounted) return;
-  //     CustomSnackbar.show(
-  //       context,
-  //       'Initialization error: ${e.toString()}',
-  //       type: SnackbarType.error,
-  //       position: SnackbarPosition.bottom,
-  //     );
-  //     context.pop();
-  //   }
-  // }
+  Future<void> _initializeTransaction() async {
+    final amount = double.tryParse(widget.amount.replaceAll(',', '')) ?? 0;
+    try {
+      await ref
+          .read(transferNotifierProvider.notifier)
+          .initializeExternalTransfer(
+            accountNumber: widget.recipientAccountInfo.accountNumber,
+            bankCode: widget.recipientAccountInfo.bankCode,
+            amount: amount,
+            accountName: widget.recipientAccountInfo.accountName,
+          );
+    } catch (e) {
+      if (!mounted) return;
+      final messenger = ScaffoldMessenger.of(context);
+      context.pop();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        messenger.showSnackBar(
+          SnackBar(
+            content: CustomSnackbar(
+              text: e.toString(),
+              type: SnackbarType.error,
+            ),
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            duration: const Duration(seconds: 4),
+            dismissDirection: DismissDirection.down,
+            margin: const EdgeInsets.only(left: 10, right: 10),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      });
+    }
+  }
 
   void _updatePin(String newText) {
     if (newText.length <= 4) {
@@ -290,15 +288,10 @@ class _EnterPinBottomSheetState extends ConsumerState<EnterPinBottomSheet> {
     setState(() => _isProcessing = true);
 
     try {
-      final amount = double.parse(widget.amount.replaceAll(',', ''));
-
+      // Step 2: Verify — Initialize was already called (in ReviewScreen or initState above)
       await ref
           .read(transferNotifierProvider.notifier)
-          .initiateExternalTransfer(
-            accountNumber: widget.recipientAccountInfo.accountNumber,
-            bankCode: widget.recipientAccountInfo.bankCode,
-            amount: amount,
-            accountName: widget.recipientAccountInfo.accountName,
+          .verifyExternalTransfer(
             pin: pin,
             transferFor: widget.category,
             narration: widget.category,
@@ -311,11 +304,9 @@ class _EnterPinBottomSheetState extends ConsumerState<EnterPinBottomSheet> {
       if (transferState.transaction != null) {
         final transaction = transferState.transaction!;
         if (widget.onSuccess != null) {
-          // Called from a screen — just close the PIN sheet and hand off.
           context.pop();
           widget.onSuccess!(transaction);
         } else {
-          // Legacy path — called stacked on top of amount sheet.
           final nav = Navigator.of(context);
           final recipientName = widget.recipientAccountInfo.accountName;
           context.pop();
@@ -335,12 +326,10 @@ class _EnterPinBottomSheetState extends ConsumerState<EnterPinBottomSheet> {
         pin = '';
         _isProcessing = false;
       });
-      // Capture messenger before popping so the snackbar shows on the
-      // underlying screen rather than behind the bottom sheet.
       final messenger = ScaffoldMessenger.of(context);
       final errorMessage = e.toString();
-      context.pop(); // close PIN sheet
-      context.pop(); // close amount sheet
+      context.pop();
+      if (widget.onSuccess == null) context.pop(); // close amount sheet too
       WidgetsBinding.instance.addPostFrameCallback((_) {
         messenger.hideCurrentSnackBar();
         messenger.showSnackBar(
@@ -373,14 +362,11 @@ class _EnterPinBottomSheetState extends ConsumerState<EnterPinBottomSheet> {
   @override
   Widget build(BuildContext context) {
     final dashboardAsync = ref.watch(spendDashboardDataProvider);
-    final initAsync = ref.watch(
-      initializeTransferProvider((
-        accountNumber: widget.recipientAccountInfo.accountNumber,
-        bankCode: widget.recipientAccountInfo.bankCode,
-        amount: double.parse(widget.amount.replaceAll(',', '')),
-        accountName: widget.recipientAccountInfo.accountName,
-      )),
-    );
+    final transferState = ref.watch(transferNotifierProvider);
+
+    final bool isInitializing =
+        transferState.isLoading && !transferState.isInitialized;
+    final bool blocked = _isProcessing || isInitializing;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -395,9 +381,9 @@ class _EnterPinBottomSheetState extends ConsumerState<EnterPinBottomSheet> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   IconButton(
-                    onPressed: _isProcessing ? null : () => context.pop(),
+                    onPressed: blocked ? null : () => context.pop(),
                     style: Constants.collapsedButtonStyle,
-                    icon: Icon(Icons.close),
+                    icon: const Icon(Icons.close),
                   ),
                 ],
               ),
@@ -407,7 +393,7 @@ class _EnterPinBottomSheetState extends ConsumerState<EnterPinBottomSheet> {
                 children: [
                   Text(
                     '${widget.recipientAccountInfo.accountName} (${widget.recipientAccountInfo.bankName})',
-                    style: TextStyle(fontWeight: FontWeight.w500),
+                    style: const TextStyle(fontWeight: FontWeight.w500),
                   ),
                 ],
               ),
@@ -419,14 +405,14 @@ class _EnterPinBottomSheetState extends ConsumerState<EnterPinBottomSheet> {
                     double.parse(
                       widget.amount.split(',').join(),
                     ).formatCurrency(decimalDigits: 0),
-                    style: TextStyle(fontSize: 16),
+                    style: const TextStyle(fontSize: 16),
                   ),
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(widget.category, style: TextStyle(fontSize: 16)),
+                      Text(widget.category, style: const TextStyle(fontSize: 16)),
                       const Gap(8),
-                      Icon(Icons.pie_chart, color: AppColors.primary),
+                      const Icon(Icons.pie_chart, color: AppColors.primary),
                     ],
                   ),
                 ],
@@ -444,16 +430,16 @@ class _EnterPinBottomSheetState extends ConsumerState<EnterPinBottomSheet> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('From:', style: TextStyle(fontSize: 10)),
+                        const Text('From:', style: TextStyle(fontSize: 10)),
                         Text(
                           dashboardAsync.when(
                             data: (data) =>
                                 data.data?.accounts.ngnAccount?.accountNumber ??
                                 '',
                             loading: () => 'Loading...',
-                            error: (error, stackTrace) => 'Error: $error',
+                            error: (error, _) => '',
                           ),
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
                           ),
@@ -463,55 +449,48 @@ class _EnterPinBottomSheetState extends ConsumerState<EnterPinBottomSheet> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
+                        const Text(
                           'Transaction Fee:',
                           style: TextStyle(fontSize: 10),
                         ),
-                        initAsync.when(
-                          data: (data) {
-                            final fee = data['fee'] ?? '10';
-                            return Text(
-                              double.parse(
-                                fee.toString(),
-                              ).formatCurrency(decimalDigits: 0),
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            );
-                          },
-                          loading: () => Text(
+                        if (isInitializing)
+                          const Text(
                             'Loading...',
                             style: TextStyle(fontSize: 10),
-                          ),
-                          error: (error, _) => Text(
-                            10.formatCurrency(decimalDigits: 0),
-                            style: TextStyle(
+                          )
+                        else
+                          Text(
+                            double.tryParse(
+                                  (transferState.initializeResult?['fee'] ??
+                                          '10')
+                                      .toString(),
+                                )?.formatCurrency(decimalDigits: 0) ??
+                                10.formatCurrency(decimalDigits: 0),
+                            style: const TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                        ),
                       ],
                     ),
                   ],
                 ),
               ),
               const Gap(24),
-              Row(
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(Icons.lock_outline, size: 20, color: AppColors.primary),
-                  const Gap(8),
+                  Gap(8),
                   Text('Transaction PIN', style: TextStyle(fontSize: 12)),
                 ],
               ),
               const Gap(16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: _isProcessing
+                children: blocked
                     ? [
-                        SizedBox(
+                        const SizedBox(
                           width: 20,
                           height: 20,
                           child: CircularProgressIndicator(strokeWidth: 2),
@@ -531,11 +510,10 @@ class _EnterPinBottomSheetState extends ConsumerState<EnterPinBottomSheet> {
               ),
               const Gap(24),
               DialPad(
-                onNumberPressed: _isProcessing
-                    ? (_) {}
-                    : (number) => _onNumberPressed(number),
+                onNumberPressed:
+                    blocked ? (_) {} : (number) => _onNumberPressed(number),
                 onDecimalPressed: () {},
-                onDeletePressed: _isProcessing ? () {} : _onDeletePressed,
+                onDeletePressed: blocked ? () {} : _onDeletePressed,
               ),
             ],
           ),
