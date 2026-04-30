@@ -1,21 +1,3 @@
-class CustomerInfo {
-  final String email;
-
-  CustomerInfo({required this.email});
-
-  factory CustomerInfo.fromJson(Map<String, dynamic> json) {
-    return CustomerInfo(
-      email: json['email'] as String,
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'email': email,
-    };
-  }
-}
-
 class TransactionData {
   final String amount;
   final String fee;
@@ -23,7 +5,6 @@ class TransactionData {
   final String status;
   final String reference;
   final String message;
-  final CustomerInfo customer;
 
   TransactionData({
     required this.amount,
@@ -32,18 +13,23 @@ class TransactionData {
     required this.status,
     required this.reference,
     required this.message,
-    required this.customer,
   });
 
   factory TransactionData.fromJson(Map<String, dynamic> json) {
+    // API returns: { data: { id, type, attributes: { amount, currency, status, reference, ... } } }
+    final inner = json['data'] as Map<String, dynamic>?;
+    final attributes =
+        (inner?['attributes'] as Map<String, dynamic>?) ?? json;
+
     return TransactionData(
-      amount: json['amount'] as String,
-      fee: json['fee'] as String,
-      currency: json['currency'] as String,
-      status: json['status'] as String,
-      reference: json['reference'] as String,
-      message: json['message'] as String,
-      customer: CustomerInfo.fromJson(json['customer'] as Map<String, dynamic>),
+      amount: (attributes['amount'] ?? '').toString(),
+      fee: (attributes['fee'] ?? '0').toString(),
+      currency: attributes['currency'] as String? ?? '',
+      status: attributes['status'] as String? ?? '',
+      reference: attributes['reference'] as String? ?? '',
+      message: attributes['message'] as String? ??
+          json['message'] as String? ??
+          '',
     );
   }
 
@@ -55,7 +41,6 @@ class TransactionData {
       'status': status,
       'reference': reference,
       'message': message,
-      'customer': customer.toJson(),
     };
   }
 }

@@ -16,7 +16,8 @@ class SendSuccessScreen extends StatelessWidget {
 
   bool get _isSuccess =>
       transaction == null ||
-      transaction!.status.toLowerCase() == 'success';
+      transaction!.status.toLowerCase() == 'success' ||
+      transaction!.status.toLowerCase() == 'pending';
 
   @override
   Widget build(BuildContext context) {

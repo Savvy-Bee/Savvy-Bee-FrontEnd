@@ -28,11 +28,13 @@ class RecipientAccountInfo {
 class TransferAmountArgs {
   final RecipientAccountInfo recipientAccountInfo;
   final String amount;
+  final String transferFor;
   final String narration;
 
   const TransferAmountArgs({
     required this.recipientAccountInfo,
     required this.amount,
+    required this.transferFor,
     required this.narration,
   });
 }

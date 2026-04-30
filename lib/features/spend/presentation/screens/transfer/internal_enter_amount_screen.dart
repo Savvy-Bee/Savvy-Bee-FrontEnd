@@ -9,14 +9,61 @@ import 'package:savvy_bee_mobile/features/spend/presentation/providers/wallet_pr
 
 import 'internal_review_screen.dart';
 
+const List<String> _transferForCategories = [
+  'Auto & transport',
+  'Childcare & education',
+  'Drinks & dining',
+  'Entertainment',
+  'Financial',
+  'Groceries',
+  'Healthcare',
+  'Household',
+  'Other',
+  'Personal care',
+  'Shopping',
+  'Income',
+  'Bills & Utilities',
+];
+
+String _getCategoryIconPath(String categoryName) {
+  switch (categoryName.trim().toLowerCase()) {
+    case 'auto & transport':
+      return 'assets/images/icons/budget categories/Auto & Transport.png';
+    case 'childcare & education':
+      return 'assets/images/icons/budget categories/Childcare & Education.png';
+    case 'drinks & dining':
+      return 'assets/images/icons/budget categories/Drinks & Dining.png';
+    case 'entertainment':
+      return 'assets/images/icons/budget categories/Entertainment.png';
+    case 'financial':
+      return 'assets/images/icons/budget categories/Financial.png';
+    case 'groceries':
+      return 'assets/images/icons/budget categories/Groceries.png';
+    case 'healthcare':
+      return 'assets/images/icons/budget categories/Healthcare.png';
+    case 'household':
+      return 'assets/images/icons/budget categories/Household.png';
+    case 'other':
+      return 'assets/images/icons/budget categories/Other.png';
+    case 'personal care':
+      return 'assets/images/icons/budget categories/Personal Care.png';
+    case 'shopping':
+      return 'assets/images/icons/budget categories/Shopping.png';
+    default:
+      return 'assets/images/icons/budget_category.png';
+  }
+}
+
 class InternalTransferArgs {
   final String username;
   final String amount;
+  final String transferFor;
   final String narration;
 
   const InternalTransferArgs({
     required this.username,
     required this.amount,
+    required this.transferFor,
     required this.narration,
   });
 }
@@ -39,6 +86,7 @@ class _InternalEnterAmountScreenState
   final _narrationController = TextEditingController();
   final _amountFocus = FocusNode();
   final _narrationFocus = FocusNode();
+  String? _selectedFor;
 
   @override
   void dispose() {
@@ -51,6 +99,7 @@ class _InternalEnterAmountScreenState
 
   bool get _canContinue =>
       _amountController.text.trim().isNotEmpty &&
+      _selectedFor != null &&
       _narrationController.text.trim().isNotEmpty;
 
   void _onContinue() {
@@ -59,9 +108,26 @@ class _InternalEnterAmountScreenState
       extra: InternalTransferArgs(
         username: widget.username,
         amount: _amountController.text,
+        transferFor: _selectedFor!,
         narration: _narrationController.text.trim(),
       ),
     );
+  }
+
+  Future<void> _showForPicker() async {
+    FocusScope.of(context).unfocus();
+    final selected = await showModalBottomSheet<String>(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => _CategoryPickerSheet(selected: _selectedFor),
+    );
+    if (selected != null) {
+      setState(() => _selectedFor = selected);
+    }
   }
 
   @override
@@ -171,22 +237,73 @@ class _InternalEnterAmountScreenState
                   ),
                 ),
 
-                const Gap(16),
+                const Gap(20),
 
-                Center(
-                  child: TextField(
-                    controller: _narrationController,
-                    focusNode: _narrationFocus,
-                    maxLength: 21,
-                    textAlign: TextAlign.center,
-                    decoration: const InputDecoration(
-                      hintText: 'Enter description',
-                      border: InputBorder.none,
-                      counterText: '',
+                // For selector
+                GestureDetector(
+                  onTap: _showForPicker,
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 14,
                     ),
-                    style: const TextStyle(fontSize: 14, color: Colors.black87),
-                    onChanged: (_) => setState(() {}),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey.shade300),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            _selectedFor ?? 'What is this for?',
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: _selectedFor != null
+                                  ? Colors.black87
+                                  : Colors.grey.shade500,
+                            ),
+                          ),
+                        ),
+                        Icon(
+                          Icons.keyboard_arrow_down_rounded,
+                          color: Colors.grey.shade500,
+                        ),
+                      ],
+                    ),
                   ),
+                ),
+
+                const Gap(12),
+
+                // Narration input
+                TextField(
+                  controller: _narrationController,
+                  focusNode: _narrationFocus,
+                  maxLength: 100,
+                  decoration: InputDecoration(
+                    hintText: 'Add a narration',
+                    hintStyle: TextStyle(color: Colors.grey.shade500),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: Colors.grey.shade300),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: Colors.grey.shade300),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(color: Colors.black54),
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 14,
+                    ),
+                    counterText: '',
+                  ),
+                  style: const TextStyle(fontSize: 15, color: Colors.black87),
+                  onChanged: (_) => setState(() {}),
                 ),
 
                 const Spacer(),
@@ -220,6 +337,78 @@ class _InternalEnterAmountScreenState
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _CategoryPickerSheet extends StatelessWidget {
+  final String? selected;
+
+  const _CategoryPickerSheet({this.selected});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 20, bottom: 24),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'What is this for?',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                ),
+                IconButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  icon: const Icon(Icons.close),
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                ),
+              ],
+            ),
+          ),
+          const Gap(8),
+          const Divider(),
+          Flexible(
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: _transferForCategories.length,
+              itemBuilder: (context, index) {
+                final category = _transferForCategories[index];
+                final isSelected = category == selected;
+                return ListTile(
+                  leading: CircleAvatar(
+                    backgroundColor: Colors.grey.shade100,
+                    radius: 20,
+                    child: Image.asset(
+                      _getCategoryIconPath(category),
+                      width: 28,
+                      height: 28,
+                      errorBuilder: (_, __, ___) => const Icon(
+                        Icons.category_outlined,
+                        size: 20,
+                      ),
+                    ),
+                  ),
+                  title: Text(
+                    category,
+                    style: const TextStyle(fontSize: 15),
+                  ),
+                  trailing: isSelected
+                      ? const Icon(Icons.check_circle, color: Color(0xFFFFC107))
+                      : null,
+                  onTap: () => Navigator.of(context).pop(category),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

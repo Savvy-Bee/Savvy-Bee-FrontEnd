@@ -64,6 +64,8 @@ class InternalReviewScreen extends ConsumerWidget {
                   const Gap(24),
                   _DetailRow(label: 'To', value: '@${args.username}'),
                   const Gap(12),
+                  _DetailRow(label: 'For', value: args.transferFor),
+                  const Gap(12),
                   _DetailRow(label: 'Narration', value: args.narration),
                   const Gap(12),
                   _DetailRow(
@@ -91,7 +93,8 @@ class InternalReviewScreen extends ConsumerWidget {
                   context,
                   username: args.username,
                   amount: args.amount,
-                  category: args.narration,
+                  category: args.transferFor,
+                  narration: args.narration,
                   onSuccess: (transfer) => context.pushNamed(
                     InternalSuccessScreen.path,
                     extra: transfer,

@@ -89,6 +89,7 @@ class _EnterAmountBottomSheetState
       context,
       amount: _amountController.text,
       category: _narrationController.text,
+      narration: _narrationController.text,
       recipientAccountInfo: widget.recipientAccountInfo,
     );
   }
@@ -188,6 +189,7 @@ class _EnterAmountBottomSheetState
 class EnterPinBottomSheet extends ConsumerStatefulWidget {
   final String amount;
   final String category;
+  final String narration;
   final RecipientAccountInfo recipientAccountInfo;
   final void Function(TransactionData transaction)? onSuccess;
 
@@ -195,6 +197,7 @@ class EnterPinBottomSheet extends ConsumerStatefulWidget {
     super.key,
     required this.amount,
     required this.category,
+    required this.narration,
     required this.recipientAccountInfo,
     this.onSuccess,
   });
@@ -207,6 +210,7 @@ class EnterPinBottomSheet extends ConsumerStatefulWidget {
     BuildContext context, {
     required String amount,
     required String category,
+    required String narration,
     required RecipientAccountInfo recipientAccountInfo,
     void Function(TransactionData transaction)? onSuccess,
   }) {
@@ -219,6 +223,7 @@ class EnterPinBottomSheet extends ConsumerStatefulWidget {
       builder: (context) => EnterPinBottomSheet(
         amount: amount,
         category: category,
+        narration: narration,
         recipientAccountInfo: recipientAccountInfo,
         onSuccess: onSuccess,
       ),
@@ -294,7 +299,7 @@ class _EnterPinBottomSheetState extends ConsumerState<EnterPinBottomSheet> {
           .verifyExternalTransfer(
             pin: pin,
             transferFor: widget.category,
-            narration: widget.category,
+            narration: widget.narration,
           );
 
       if (!mounted) return;
@@ -691,6 +696,7 @@ class _InternalEnterAmountBottomSheetState
       username: widget.username,
       amount: _amountController.text,
       category: _narrationController.text,
+      narration: _narrationController.text,
     );
   }
 
@@ -781,6 +787,7 @@ class InternalEnterPinBottomSheet extends ConsumerStatefulWidget {
   final String username;
   final String amount;
   final String category;
+  final String narration;
   final void Function(InternalTransferData transfer)? onSuccess;
 
   const InternalEnterPinBottomSheet({
@@ -788,6 +795,7 @@ class InternalEnterPinBottomSheet extends ConsumerStatefulWidget {
     required this.username,
     required this.amount,
     required this.category,
+    required this.narration,
     this.onSuccess,
   });
 
@@ -800,6 +808,7 @@ class InternalEnterPinBottomSheet extends ConsumerStatefulWidget {
     required String username,
     required String amount,
     required String category,
+    required String narration,
     void Function(InternalTransferData transfer)? onSuccess,
   }) {
     showModalBottomSheet(
@@ -812,6 +821,7 @@ class InternalEnterPinBottomSheet extends ConsumerStatefulWidget {
         username: username,
         amount: amount,
         category: category,
+        narration: narration,
         onSuccess: onSuccess,
       ),
     );
@@ -849,7 +859,7 @@ class _InternalEnterPinBottomSheetState
           .sendMoneyInternally(
             pin: pin,
             transferFor: widget.category,
-            narration: widget.category,
+            narration: widget.narration,
             username: widget.username,
             amount: amount,
           );

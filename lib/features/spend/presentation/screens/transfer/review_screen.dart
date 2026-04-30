@@ -110,6 +110,8 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
                     value: widget.args.recipientAccountInfo.accountNumber,
                   ),
                   const Gap(12),
+                  _DetailRow(label: 'For', value: widget.args.transferFor),
+                  const Gap(12),
                   _DetailRow(label: 'Narration', value: widget.args.narration),
                   const Gap(12),
                   _DetailRow(
@@ -184,7 +186,8 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
                         ? () => EnterPinBottomSheet.show(
                             context,
                             amount: widget.args.amount,
-                            category: widget.args.narration,
+                            category: widget.args.transferFor,
+                            narration: widget.args.narration,
                             recipientAccountInfo:
                                 widget.args.recipientAccountInfo,
                             onSuccess: (transaction) => context.pushNamed(
