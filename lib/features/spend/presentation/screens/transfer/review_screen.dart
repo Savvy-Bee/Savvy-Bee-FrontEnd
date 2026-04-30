@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/utils/num_extensions.dart';
+import 'package:savvy_bee_mobile/features/spend/domain/models/wallet.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/providers/transfer_provider.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/providers/wallet_provider.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/widgets/send_money_bottom_sheets.dart';
@@ -141,7 +142,7 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
                       else
                         Text(
                           double.tryParse(
-                                (transferState.initializeResult?['fee'] ?? '10')
+                                (transferState.initializeResult?['fee'] ?? '0')
                                     .toString(),
                               )?.formatCurrency(decimalDigits: 0) ??
                               '₦10',
@@ -190,10 +191,11 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
                             narration: widget.args.narration,
                             recipientAccountInfo:
                                 widget.args.recipientAccountInfo,
-                            onSuccess: (transaction) => context.pushNamed(
-                              SendSuccessScreen.path,
-                              extra: transaction,
-                            ),
+                            onSuccess: (WalletTransaction transaction) =>
+                              context.pushNamed(
+                                SendSuccessScreen.path,
+                                extra: transaction,
+                              ),
                           )
                         : null,
                 style: FilledButton.styleFrom(

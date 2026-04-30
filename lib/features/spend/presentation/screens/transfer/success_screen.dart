@@ -3,21 +3,23 @@ import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/utils/num_extensions.dart';
-import 'package:savvy_bee_mobile/features/spend/domain/models/transaction.dart';
+import 'package:savvy_bee_mobile/features/spend/domain/models/wallet.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/spend_screen.dart';
+import 'package:savvy_bee_mobile/features/spend/presentation/screens/transactions/transaction_details_screen.dart';
 
 import '../../../../../core/utils/assets/assets.dart';
 
 class SendSuccessScreen extends StatelessWidget {
   static const String path = '/send-success';
 
-  final TransactionData? transaction;
+  final WalletTransaction? transaction;
 
   const SendSuccessScreen({super.key, this.transaction});
 
   bool get _isSuccess =>
       transaction == null ||
-      transaction!.status.toLowerCase() == 'success' ||
-      transaction!.status.toLowerCase() == 'pending';
+      transaction!.isSuccess ||
+      transaction!.isPending;
 
   @override
   Widget build(BuildContext context) {
@@ -46,9 +48,7 @@ class SendSuccessScreen extends StatelessWidget {
               Text(
                 _isSuccess
                     ? 'Your money is on its way'
-                    : (transaction?.message.isNotEmpty == true
-                        ? transaction!.message
-                        : 'Something went wrong. Please try again.'),
+                    : 'Something went wrong. Please try again.',
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 15, color: Colors.grey),
               ),
@@ -65,21 +65,23 @@ class SendSuccessScreen extends StatelessWidget {
                     children: [
                       _ReceiptRow(
                         label: 'Amount',
-                        value: double.tryParse(transaction!.amount)
-                                ?.formatCurrency(decimalDigits: 0) ??
-                            transaction!.amount,
+                        value: transaction!.amount.formatCurrency(
+                          decimalDigits: 0,
+                        ),
                       ),
                       const Gap(8),
                       _ReceiptRow(
                         label: 'Fee',
-                        value: double.tryParse(transaction!.fee)
-                                ?.formatCurrency(decimalDigits: 0) ??
-                            transaction!.fee,
+                        value: transaction!.charges.formatCurrency(
+                          decimalDigits: 0,
+                        ),
                       ),
                       const Gap(8),
                       _ReceiptRow(
                         label: 'Reference',
-                        value: transaction!.reference,
+                        value: transaction!.koraReferenceId.length > 6
+                            ? '...${transaction!.koraReferenceId.substring(transaction!.koraReferenceId.length - 6)}'
+                            : transaction!.koraReferenceId,
                       ),
                     ],
                   ),
@@ -89,7 +91,7 @@ class SendSuccessScreen extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: FilledButton(
-                  onPressed: () => context.go('/home'),
+                  onPressed: () => context.go(SpendScreen.path),
                   style: FilledButton.styleFrom(
                     backgroundColor: Colors.black,
                     minimumSize: const Size.fromHeight(52),
@@ -108,11 +110,14 @@ class SendSuccessScreen extends StatelessWidget {
                 ),
               ),
               const Gap(16),
-              if (_isSuccess)
+              if (_isSuccess && transaction != null)
                 SizedBox(
                   width: double.infinity,
                   child: OutlinedButton(
-                    onPressed: () {},
+                    onPressed: () => context.pushNamed(
+                      TransactionDetailScreen.path,
+                      extra: transaction,
+                    ),
                     style: OutlinedButton.styleFrom(
                       minimumSize: const Size.fromHeight(52),
                       side: const BorderSide(color: Colors.grey),

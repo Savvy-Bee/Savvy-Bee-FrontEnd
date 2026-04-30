@@ -203,6 +203,33 @@ enum WalletTransactionStatus {
   }
 }
 
+// Recipient / OtherDetails Model
+class OtherDetails {
+  final String name;
+  final String bankCode;
+  final String bankName;
+  final String acctNumber;
+  final String transferType;
+
+  OtherDetails({
+    required this.name,
+    required this.bankCode,
+    required this.bankName,
+    required this.acctNumber,
+    this.transferType = '',
+  });
+
+  factory OtherDetails.fromJson(Map<String, dynamic> json) {
+    return OtherDetails(
+      name: json['Name']?.toString() ?? '',
+      bankCode: json['BankCode']?.toString() ?? '',
+      bankName: json['Bankname']?.toString() ?? '',
+      acctNumber: json['AcctNumber']?.toString() ?? '',
+      transferType: json['TransferType']?.toString() ?? '',
+    );
+  }
+}
+
 // Transaction Model
 class WalletTransaction {
   final String id;
@@ -216,6 +243,7 @@ class WalletTransaction {
   final String narration;
   final DateTime createdAt;
   final DateTime updatedAt;
+  final OtherDetails? otherDetails;
 
   WalletTransaction({
     required this.id,
@@ -229,6 +257,7 @@ class WalletTransaction {
     required this.narration,
     required this.createdAt,
     required this.updatedAt,
+    this.otherDetails,
   });
 
   factory WalletTransaction.fromJson(Map<String, dynamic> json) {
@@ -240,7 +269,7 @@ class WalletTransaction {
       type: WalletTransactionType.fromString(json['Type'] ?? 'Credit'),
       status: WalletTransactionStatus.fromString(json['Status'] ?? 'Pending'),
       transactionFor: json['For'] ?? '',
-      koraReferenceId: json['KoraReferenceID'] ?? '',
+      koraReferenceId: json['ReferenceId'] ?? json['KoraReferenceID'] ?? '',
       narration: json['Narration'] ?? '',
       createdAt: DateTime.parse(
         json['createdAt'] ?? DateTime.now().toIso8601String(),
@@ -248,6 +277,9 @@ class WalletTransaction {
       updatedAt: DateTime.parse(
         json['updatedAt'] ?? DateTime.now().toIso8601String(),
       ),
+      otherDetails: json['OtherDetails'] != null
+          ? OtherDetails.fromJson(json['OtherDetails'] as Map<String, dynamic>)
+          : null,
     );
   }
 
@@ -279,6 +311,7 @@ class WalletTransaction {
     String? narration,
     DateTime? createdAt,
     DateTime? updatedAt,
+    OtherDetails? otherDetails,
   }) {
     return WalletTransaction(
       id: id ?? this.id,
@@ -292,6 +325,7 @@ class WalletTransaction {
       narration: narration ?? this.narration,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      otherDetails: otherDetails ?? this.otherDetails,
     );
   }
 
@@ -302,6 +336,8 @@ class WalletTransaction {
   bool get isPending => status == WalletTransactionStatus.pending;
   bool get isFailed => status == WalletTransactionStatus.failed;
   double get totalAmount => amount + charges;
+  String get recipientName =>
+      otherDetails?.name.isNotEmpty == true ? otherDetails!.name : transactionFor;
 }
 
 // ─── Transactions Budget models ──────────────────────────────────────────────

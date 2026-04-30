@@ -22,8 +22,8 @@ class TransactionData {
         (inner?['attributes'] as Map<String, dynamic>?) ?? json;
 
     return TransactionData(
-      amount: (attributes['amount'] ?? '').toString(),
-      fee: (attributes['fee'] ?? '0').toString(),
+      amount: ((double.tryParse((attributes['amount'] ?? 0).toString()) ?? 0) / 100).toString(),
+      fee: ((double.tryParse((attributes['fee'] ?? 0).toString()) ?? 0) / 100).toString(),
       currency: attributes['currency'] as String? ?? '',
       status: attributes['status'] as String? ?? '',
       reference: attributes['reference'] as String? ?? '',

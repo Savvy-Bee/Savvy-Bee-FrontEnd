@@ -6,24 +6,10 @@ import 'package:go_router/go_router.dart';
 import 'package:savvy_bee_mobile/core/utils/currency_input_formatter.dart';
 import 'package:savvy_bee_mobile/core/utils/num_extensions.dart';
 import 'package:savvy_bee_mobile/features/spend/presentation/providers/wallet_provider.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/providers/budget_provider.dart';
+import 'package:savvy_bee_mobile/features/tools/presentation/screens/budget/budgets_screen.dart';
 
 import 'internal_review_screen.dart';
-
-const List<String> _transferForCategories = [
-  'Auto & transport',
-  'Childcare & education',
-  'Drinks & dining',
-  'Entertainment',
-  'Financial',
-  'Groceries',
-  'Healthcare',
-  'Household',
-  'Other',
-  'Personal care',
-  'Shopping',
-  'Income',
-  'Bills & Utilities',
-];
 
 String _getCategoryIconPath(String categoryName) {
   switch (categoryName.trim().toLowerCase()) {
@@ -342,13 +328,15 @@ class _InternalEnterAmountScreenState
   }
 }
 
-class _CategoryPickerSheet extends StatelessWidget {
+class _CategoryPickerSheet extends ConsumerWidget {
   final String? selected;
 
   const _CategoryPickerSheet({this.selected});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final budgets = ref.watch(existingBudgetCategoriesProvider);
+
     return Padding(
       padding: const EdgeInsets.only(top: 20, bottom: 24),
       child: Column(
@@ -375,39 +363,98 @@ class _CategoryPickerSheet extends StatelessWidget {
           ),
           const Gap(8),
           const Divider(),
-          Flexible(
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: _transferForCategories.length,
-              itemBuilder: (context, index) {
-                final category = _transferForCategories[index];
-                final isSelected = category == selected;
-                return ListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: Colors.grey.shade100,
-                    radius: 20,
-                    child: Image.asset(
-                      _getCategoryIconPath(category),
-                      width: 28,
-                      height: 28,
-                      errorBuilder: (_, __, ___) => const Icon(
-                        Icons.category_outlined,
-                        size: 20,
+          if (budgets.isEmpty)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 32),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(
+                    Icons.pie_chart_outline,
+                    size: 48,
+                    color: Colors.grey,
+                  ),
+                  const Gap(12),
+                  const Text(
+                    "You haven't set up any budgets yet.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const Gap(4),
+                  const Text(
+                    'Add a budget category to categorise your transfers.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 13, color: Colors.grey),
+                  ),
+                  const Gap(20),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        context.pushNamed(BudgetsScreen.path);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFFFFC107),
+                        foregroundColor: Colors.black,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        elevation: 0,
+                      ),
+                      child: const Text(
+                        'Set up a budget',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ),
-                  title: Text(
-                    category,
-                    style: const TextStyle(fontSize: 15),
-                  ),
-                  trailing: isSelected
-                      ? const Icon(Icons.check_circle, color: Color(0xFFFFC107))
-                      : null,
-                  onTap: () => Navigator.of(context).pop(category),
-                );
-              },
+                ],
+              ),
+            )
+          else
+            Flexible(
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: budgets.length,
+                itemBuilder: (context, index) {
+                  final category = budgets[index].budgetName;
+                  final isSelected = category == selected;
+                  return ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: Colors.grey.shade100,
+                      radius: 20,
+                      child: Image.asset(
+                        _getCategoryIconPath(category),
+                        width: 28,
+                        height: 28,
+                        errorBuilder: (_, __, ___) => const Icon(
+                          Icons.category_outlined,
+                          size: 20,
+                        ),
+                      ),
+                    ),
+                    title: Text(
+                      category,
+                      style: const TextStyle(fontSize: 15),
+                    ),
+                    trailing: isSelected
+                        ? const Icon(
+                            Icons.check_circle,
+                            color: Color(0xFFFFC107),
+                          )
+                        : null,
+                    onTap: () => Navigator.of(context).pop(category),
+                  );
+                },
+              ),
             ),
-          ),
         ],
       ),
     );

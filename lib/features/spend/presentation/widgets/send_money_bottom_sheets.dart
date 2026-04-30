@@ -19,6 +19,7 @@ import '../../../../core/widgets/dial_pad_widget.dart';
 import '../../../../core/widgets/dot.dart';
 import '../../../../features/spend/domain/models/internal_transfer.dart';
 import '../../../../features/spend/domain/models/transaction.dart';
+import '../../../../features/spend/domain/models/wallet.dart';
 import '../providers/wallet_provider.dart';
 import '../providers/transfer_provider.dart';
 
@@ -191,7 +192,7 @@ class EnterPinBottomSheet extends ConsumerStatefulWidget {
   final String category;
   final String narration;
   final RecipientAccountInfo recipientAccountInfo;
-  final void Function(TransactionData transaction)? onSuccess;
+  final void Function(WalletTransaction transaction)? onSuccess;
 
   const EnterPinBottomSheet({
     super.key,
@@ -212,7 +213,7 @@ class EnterPinBottomSheet extends ConsumerStatefulWidget {
     required String category,
     required String narration,
     required RecipientAccountInfo recipientAccountInfo,
-    void Function(TransactionData transaction)? onSuccess,
+    void Function(WalletTransaction transaction)? onSuccess,
   }) {
     showModalBottomSheet(
       isScrollControlled: true,
@@ -307,20 +308,38 @@ class _EnterPinBottomSheetState extends ConsumerState<EnterPinBottomSheet> {
       final transferState = ref.read(transferNotifierProvider);
 
       if (transferState.transaction != null) {
-        final transaction = transferState.transaction!;
+        final txData = transferState.transaction!;
+        final walletTx = WalletTransaction(
+          id: txData.reference,
+          userId: '',
+          amount: double.tryParse(txData.amount) ?? 0,
+          charges: double.tryParse(txData.fee) ?? 0,
+          type: WalletTransactionType.debit,
+          status: WalletTransactionStatus.fromString(txData.status),
+          transactionFor: widget.category,
+          koraReferenceId: txData.reference,
+          narration: widget.narration,
+          createdAt: DateTime.now(),
+          updatedAt: DateTime.now(),
+          otherDetails: OtherDetails(
+            name: widget.recipientAccountInfo.accountName,
+            bankCode: widget.recipientAccountInfo.bankCode,
+            bankName: widget.recipientAccountInfo.bankName,
+            acctNumber: widget.recipientAccountInfo.accountNumber,
+          ),
+        );
         if (widget.onSuccess != null) {
           context.pop();
-          widget.onSuccess!(transaction);
+          widget.onSuccess!(walletTx);
         } else {
           final nav = Navigator.of(context);
-          final recipientName = widget.recipientAccountInfo.accountName;
           context.pop();
           context.pop();
           WidgetsBinding.instance.addPostFrameCallback((_) {
             TransactionCompletionBottomSheet.show(
               nav.context,
-              transaction: transaction,
-              recipientName: recipientName,
+              transaction: txData,
+              recipientName: widget.recipientAccountInfo.accountName,
             );
           });
         }
@@ -467,7 +486,7 @@ class _EnterPinBottomSheetState extends ConsumerState<EnterPinBottomSheet> {
                           Text(
                             double.tryParse(
                                   (transferState.initializeResult?['fee'] ??
-                                          '10')
+                                          '0')
                                       .toString(),
                                 )?.formatCurrency(decimalDigits: 0) ??
                                 10.formatCurrency(decimalDigits: 0),

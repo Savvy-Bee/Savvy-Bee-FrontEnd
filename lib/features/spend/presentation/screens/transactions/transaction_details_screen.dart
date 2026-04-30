@@ -505,21 +505,53 @@ class TransactionDetailScreen extends StatelessWidget {
                 icon: Icons.person_outline,
                 iconColor: Colors.grey.shade700,
                 label: 'To',
+                value: transaction.recipientName.isNotEmpty
+                    ? transaction.recipientName
+                    : '—',
+              ),
+
+              if (transaction.otherDetails?.bankName.isNotEmpty == true) ...[
+                const Gap(12),
+                _buildInfoCard(
+                  icon: Icons.account_balance_outlined,
+                  iconColor: Colors.grey.shade700,
+                  label: 'Bank',
+                  value: transaction.otherDetails!.bankName,
+                ),
+              ],
+
+              if (transaction.otherDetails?.acctNumber.isNotEmpty == true) ...[
+                const Gap(12),
+                _buildInfoCard(
+                  icon: Icons.credit_card_outlined,
+                  iconColor: Colors.grey.shade700,
+                  label: 'Account Number',
+                  value: transaction.otherDetails!.acctNumber,
+                ),
+              ],
+
+              const Gap(12),
+
+              // Category / For Card
+              _buildInfoCard(
+                icon: Icons.pie_chart_outline,
+                iconColor: const Color(0xFF8B5CF6),
+                label: 'Category',
                 value: transaction.transactionFor.isNotEmpty
                     ? transaction.transactionFor
-                    : 'Bolu Adeyemi',
+                    : '—',
               ),
 
               const Gap(12),
 
-              // Intent Card
+              // Narration / Intent Card
               _buildInfoCard(
                 icon: Icons.diamond_outlined,
                 iconColor: const Color(0xFF8B5CF6),
-                label: 'Intent',
+                label: 'Narration',
                 value: transaction.narration.isNotEmpty
                     ? transaction.narration
-                    : 'Rent',
+                    : '—',
               ),
 
               const Gap(12),
@@ -531,8 +563,8 @@ class TransactionDetailScreen extends StatelessWidget {
                 label: 'Reference',
                 value: transaction.koraReferenceId.isNotEmpty
                     ? transaction.koraReferenceId
-                    : 'TXN-28264884523',
-                isCopyable: true,
+                    : '—',
+                isCopyable: transaction.koraReferenceId.isNotEmpty,
                 onCopy: () {
                   if (transaction.koraReferenceId.isNotEmpty) {
                     Clipboard.setData(ClipboardData(text: transaction.koraReferenceId));

@@ -736,7 +736,7 @@ final GoRouter appRouter = GoRouter(
       name: SendSuccessScreen.path,
       builder: (BuildContext context, GoRouterState state) {
         return SendSuccessScreen(
-          transaction: state.extra as TransactionData?,
+          transaction: state.extra as WalletTransaction?,
         );
       },
     ),
